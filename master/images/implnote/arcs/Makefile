@@ -1,21 +1,23 @@
 # Makefile for generating SVGs and PNGs from the MathML documents in this directory.
 
-SVG2PNG=java -jar ../../../../../../tools/batik/batik-rasterizer.jar
+THISDIR=$(abspath .)
+TARGETDIR=$(abspath ../../../../build/publish/images/implnote/arcs)
+TOOLSDIR=$(abspath ../../../../../svg2-tools)
 
-# This directory relative to tools/math/.
-THISDIR=../../profiles/1.1F2/master/images/implnote/arcs
+SVG2PNG=java -jar $(TOOLSDIR)/batik/batik-rasterizer.jar
 
 MML_FILES=$(wildcard *.mml)
 
-all : $(MML_FILES:%.mml=%.png)
+all : $(MML_FILES:%.mml=$(TARGETDIR)/%.png)
 
-%.svg : %.mml
-	cd ../../../../../../tools/math && ./math2svg.py -o $(THISDIR)/$@ $(THISDIR)/$<
+$(TARGETDIR)/%.svg : %.mml
+	mkdir -p $(TARGETDIR)
+	cd $(TOOLSDIR)/math && ./math2svg.py -o $@ $(THISDIR)/$<
 
-%.png : %.svg
+$(TARGETDIR)/%.png : $(TARGETDIR)/%.svg
 	$(SVG2PNG) -cssUser 'data:text/css,svg{text-rendering:geometricPrecision}' -d $@ $<
 clean :
-	rm -f $(MML_FILES:%.mml=%.png) $(MML_FILES:%.mml=%.svg)
+	rm -f $(MML_FILES:%.mml=$(TARGETDIR)/%.png) $(MML_FILES:%.mml=$(TARGETDIR)/%.svg)
 
-.PRECIOUS : %.svg
+.PRECIOUS : $(TARGETDIR)/%.svg
 .PHONY : all clean
