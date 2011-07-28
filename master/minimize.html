@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Minimizing SVG File Sizes</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="style/svg-style.css"/>
+</head>
+<body>
+
+<h1>Minimizing SVG File Sizes</h1>
+
+<p class="normativity"><em>This appendix is informative, not normative.</em></p>
+
+    <p>Considerable effort has been made to make SVG file sizes as
+    small as possible while still retaining the benefits of XML and
+    achieving compatibility and leverage with other W3C
+    specifications.</p>
+    <p>Here are some of the features in SVG that promote small file
+    sizes:</p>
+    <ul>
+      <li>SVG's path data definition was defined to produce a
+      compact data stream for vector graphics data: all commands
+      are one character in length; relative coordinates are
+      available; separator characters do not have to be supplied
+      when tokens can be identified implicitly; smooth curve
+      formulations are available (cubic B&eacute;ziers, quadratic
+      B&eacute;ziers and elliptical arcs) to prevent the need to
+      tesselate into polylines; and shortcut formulations exist for
+      common forms of cubic B&eacute;zier segments, quadratic
+      B&eacute;zier segments, and horizontal and vertical straight
+      line segments so that the minimum number of coordinates need
+      to be specified.</li>
+      <li>Text can be specified using XML character data — no need
+      to convert to outlines.</li>
+      <li>SVG contains a facility for defining symbols once and
+      referencing them multiple times using different visual
+      attributes and different sizing, positioning, clipping and
+      client-side filter effects</li>
+      <li>User agents that support <a
+      href="styling.html#StylingWithCSS">styling with CSS</a> can
+      use CSS selectors and property inheritance to define commonly
+      used sets of attributes once as named styles.</li>
+      <li>Filter effects allow for compelling visual results and
+      effects typically found only in image-authoring tools using
+      small amounts of vector and/or raster data</li>
+    </ul>
+    <p>Additionally, HTTP/1.1 allows for compressed data to be
+    passed from server to client, which can result in significant
+    file size reduction. Here are some sample compression results
+    using <a href="http://www.ietf.org/rfc/rfc1952.txt">gzip
+    compression</a> on SVG documents [<a href="refs.html#ref-RFC1952">RFC1952</a>]:</p>
+    <table class='vert' summary="gzip compression results on SVG file sizes">
+      <tr style="text-align: center">
+        <th>Uncompressed
+         SVG</th>
+        <th>With gzip
+         compression</th>
+        <th>Compression
+         ratio</th>
+      </tr>
+      <tr style="text-align: right">
+        <td>12,912</td>
+        <td>2,463</td>
+        <td>81%</td>
+      </tr>
+      <tr style="text-align: right">
+        <td>12,164</td>
+        <td>2,553</td>
+        <td>79%</td>
+      </tr>
+      <tr style="text-align: right">
+        <td>11,613</td>
+        <td>2,617</td>
+        <td>77%</td>
+      </tr>
+      <tr style="text-align: right">
+        <td>18,689</td>
+        <td>4,077</td>
+        <td>78%</td>
+      </tr>
+      <tr style="text-align: right">
+        <td>13,024</td>
+        <td>2,041</td>
+        <td>84%</td>
+      </tr>
+    </table>
+    <p>A related issue is progressive rendering. Some SVG viewers
+    will support:</p>
+    <ul>
+      <li>the ability to display the first parts of an SVG document
+      fragments as the remainder of the document is downloaded from
+      the server; thus, the user will see part of the SVG drawing
+      right away and interact with it, even if the SVG file size is
+      large.</li>
+      <li>delayed downloading of images and fonts. Just like some
+      HTML browsers, some SVG viewers will download images and
+      <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#q1">WebFonts</a>
+      ([<a href="refs.html#ref-CSS2">CSS2</a>], section 15.1)
+      last, substituting a temporary image and system fonts,
+      respectively, until the given image and/or font is
+      available.</li>
+    </ul>
+    <p>Here are techniques for minimizing SVG file sizes and
+    minimizing the time before the user is able to start
+    interacting with the SVG document fragments:</p>
+    <ul>
+      <li>Construct the SVG file such that any links which the user
+      might want to click on are included at the beginning of the
+      SVG file</li>
+      <li>Use default values whenever possible rather than defining
+      all attributes and properties explicitly.</li>
+      <li>Take advantage of the <a href="paths.html#PathData">path
+      data</a> data compaction facilities: use relative
+      coordinates; use <em>h</em> and <em>v</em> for horizontal and
+      vertical lines; use <em>s</em> or <em>t</em> for cubic and
+      quadratic B&eacute;zier segments whenever possible; eliminate
+      extraneous white space and separators.</li>
+      <li>Utilize symbols if the same graphic appears multiple
+      times in the document</li>
+      <li>For user agents that support <a
+      href="styling.html#StylingWithCSS">styling with CSS</a>,
+      utilize CSS property inheritance and selectors to consolidate
+      commonly used properties into named styles or to assign the
+      properties to a parent <a>'g'</a> element.</li>
+      <li>Utilize filter effects to help construct graphics via
+      client-side graphics operations.</li>
+    </ul>
+
+</body>
+</html>

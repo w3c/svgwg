@@ -1,0 +1,945 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Gradients and Patterns</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="style/svg-style.css"/>
+</head>
+<body>
+
+<h1>Gradients and Patterns</h1>
+
+<h2 id="Introduction">Introduction</h2>
+
+<p>With SVG, you can fill (i.e., paint the interior) or stroke (i.e.,
+paint the outline) of shapes and text using one of the following:</p>
+
+<ul>
+  <li><a href="color.html">color</a> (using &lt;color&gt;)</li>
+
+  <li><a href="#Gradients">gradients</a> (linear or radial)</li>
+
+  <li><a href="#Patterns">patterns</a> (vector or image, possibly tiled)</li>
+</ul>
+
+<p>SVG uses the general notion of a <strong>paint server</strong>.
+Gradients and patterns are just specific types of built-in paint
+servers.</p>
+
+<p>Paint servers are referenced using an
+<a href="linking.html#IRIReference">IRI reference</a> on a <a>'fill'</a> or
+<a>'stroke'</a> property.</p>
+
+<h2 id="Gradients">Gradients</h2>
+
+<h3 id="GradientsIntroduction">Introduction</h3>
+
+<p>Gradients consist of continuously smooth color transitions
+along a vector from one color to another, possibly
+followed by additional transitions along the same vector
+to other colors. SVG provides for two types of gradients:
+<a href="pservers.html#LinearGradients"><strong>linear
+gradients</strong></a> and <a
+href="pservers.html#RadialGradients"><strong>radial
+gradients</strong></a>.</p>
+
+<p>Once defined, gradients are then referenced using <a>'fill'</a> or
+<a>'stroke'</a> properties on a given
+<a href="intro.html#TermGraphicsElement">graphics element</a> to indicate that
+the given element shall be filled or stroked with the referenced gradient.</p>
+
+<p>
+The angle of the color transitions along the gradient vector is defined by the
+gradient normal. Before any transforms are applied to the gradient or its
+referencing <a href="intro.html#TermGraphicsElement">graphics element</a>, the
+gradient normal is perpendicular with the gradient vector. If a
+<a href="intro.html#TermGraphicsElement">graphics element</a> references a
+gradient, conceptually the <a href="intro.html#TermGraphicsElement">graphics
+element</a> should take a copy of the gradient vector and gradient normal and
+treat it as part of its own geometry. Any transformations applied to the
+<a href="intro.html#TermGraphicsElement">graphics element</a> geometry also
+apply to the copied gradient vector and gradient normal. Any gradient transforms
+that are specified on the reference gradient are applied before any
+<a href="intro.html#TermGraphicsElement">graphics element</a> transformations
+are applied to the gradient.
+</p>
+
+<img src="images/pservers/gradient_vector_and_normal.png"
+    alt="linear and radial gradient vectors and normals" width="1000"
+    height="500" />
+
+<h3 id="LinearGradients">Linear gradients</h3>
+
+<edit:with element='linearGradient'>
+
+<p id="LinearGradientElement">Linear gradients are defined by a
+<a>'linearGradient'</a> element.</p>
+
+<edit:elementsummary name='linearGradient'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="LinearGradientElementGradientUnitsAttribute"><span
+        class="adef">gradientUnits</span> =
+        "<em>userSpaceOnUse</em> | <em>objectBoundingBox</em>"</dt>
+        <dd>Defines the coordinate system for attributes <a>'x1'</a>,
+        <a>'y1'</a>, <a>'x2'</a> and <a>'y2'</a>.<br />
+         If <span
+        class="attr-value">gradientUnits="userSpaceOnUse"</span>,
+        <a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a> and <a>'y2'</a> represent
+        values in the coordinate system that results from taking
+        the current user coordinate system in place at the time
+        when the gradient element is referenced (i.e., the user
+        coordinate system for the element referencing the gradient
+        element via a <a>'fill'</a> or <a>'stroke'</a> property) and then
+        applying the transform specified by attribute <a>'gradientTransform'</a>.<br />
+         If <span
+        class="attr-value">gradientUnits="objectBoundingBox"</span>,
+        the user coordinate system for attributes
+        <a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a> and <a>'y2'</a> is established
+        using the bounding box of the element to which the gradient
+        is applied (see <a
+        href="coords.html#ObjectBoundingBox">Object bounding box
+        units</a>) and then applying the transform specified by
+        attribute <a>'gradientTransform'</a>.<br />
+         When <span class="attr-value">gradientUnits="objectBoundingBox"</span>
+        and <a>'gradientTransform'</a> is the
+        identity matrix, the normal of the linear gradient is
+        perpendicular to the gradient vector in object bounding box
+        space (i.e., the abstract coordinate system where (0,0) is
+        at the top/left of the object bounding box and (1,1) is at
+        the bottom/right of the object bounding box). When the object's bounding
+        box is not square, the gradient normal which is initially perpendicular
+        to the gradient vector within object bounding box space may render
+        non-perpendicular relative to the gradient vector in user space. If the
+        gradient vector is parallel to one of the axes of the bounding box, the
+        gradient normal will remain perpendicular. This transformation is due to
+        application of the non-uniform scaling transformation from bounding box
+        space to user space.<br />
+         If attribute <a>'gradientUnits'</a>
+        is not specified, then the effect is as if a value of <span
+        class="attr-value">'objectBoundingBox'</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="LinearGradientElementGradientTransformAttribute"><span
+        class="adef">gradientTransform</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeTransformList">&lt;transform-list&gt;</a></span>"</dt>
+        <dd>Contains the definition of an optional additional
+        transformation from the gradient coordinate system onto the
+        target coordinate system (i.e., userSpaceOnUse or
+        objectBoundingBox). This allows for things such as skewing
+        the gradient. This additional transformation matrix is
+        post-multiplied to (i.e., inserted to the right of) any
+        previously defined transformations, including the implicit
+        transformation necessary to convert from <a
+        href="coords.html#ObjectBoundingBox">object bounding box
+        units</a> to user space.<br />
+         If attribute <a>'gradientTransform'</a> is not
+        specified, then the effect is as if an identity transform
+        were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="LinearGradientElementX1Attribute"><span
+        class="adef">x1</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd><a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a> and <a>'y2'</a> define a <em>gradient
+        vector</em> for the linear gradient. This <em>gradient
+        vector</em> provides starting and ending points onto which
+        the <a href="#GradientStops">gradient stops</a> are mapped.
+        The values of <a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a> and <a>'y2'</a> can be either
+        numbers or percentages.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'0%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="LinearGradientElementY1Attribute"><span
+        class="adef">y1</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>See <a>'x1'</a>.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'0%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="LinearGradientElementX2Attribute"><span
+        class="adef">x2</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>See <a>'x1'</a>.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'100%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="LinearGradientElementY2Attribute"><span
+        class="adef">y2</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>See <a>'x1'</a>.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'0%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="LinearGradientElementSpreadMethodAttribute"><span
+        class="adef">spreadMethod</span> = "pad | reflect |
+        repeat"</dt>
+        <dd>Indicates what happens if the gradient starts or ends
+        inside the bounds of the <em>target rectangle</em>.
+        Possible values are: <span class='attr-value'>'pad'</span>, which says to use the
+        terminal colors of the gradient to fill the remainder of
+        the target region, <span class='attr-value'>'reflect'</span>, which says to reflect
+        the gradient pattern start-to-end, end-to-start,
+        start-to-end, etc. continuously until the <em>target
+        rectangle</em> is filled, and <span class='attr-value'>repeat</span>, which says
+        to repeat the gradient pattern start-to-end, start-to-end,
+        start-to-end, etc. continuously until the target region is
+        filled.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'pad'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="LinearGradientElementHrefAttribute"><span
+        class="adef">xlink:href</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeIRI">&lt;iri&gt;</a></span>"</dt>
+        <dd>An <a href="linking.html#IRIReference">IRI
+        reference</a> to a different <a>'linearGradient'</a> or
+        <a>'radialGradient'</a> element within
+        the current SVG document fragment. Any <a>'linearGradient'</a> attributes
+        which are defined on the referenced element which are not
+        defined on this element are inherited by this element. If
+        this element has no defined gradient stops, and the
+        referenced element does (possibly due to its own <a>'xlink:href'</a>
+        attribute), then this element
+        inherits the gradient stop from the referenced element.
+        Inheritance can be indirect to an arbitrary level; thus, if
+        the referenced element inherits attribute or gradient stops
+        due to its own <a>'xlink:href'</a>
+        attribute, then the current element can inherit those
+        attributes or gradient stops.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+
+<p>Percentages are allowed for <a>'x1'</a>,
+<a>'y1'</a>, <a>'x2'</a> and <a>'y2'</a>. For
+<span class='attr-value'>gradientUnits="userSpaceOnUse"</span>,
+percentages represent values relative to the current viewport. For
+<span class='attr-value'>gradientUnits="objectBoundingBox"</span>,
+percentages represent values relative to the bounding box for the
+object.</p>
+
+<p>If <a>'x1'</a> = <a>'x2'</a> and <a>'y1'</a> =
+<a>'y2'</a>, then the area to be painted will be painted as
+a single color using the color and opacity of the last
+<a href="pservers.html#GradientStops">gradient stop</a>.</p>
+
+<p><a href="styling.html#SVGStylingProperties">Properties</a> inherit
+into the <a>'linearGradient'</a> element from its ancestors;
+properties do <em>not</em> inherit from the element referencing the
+<a>'linearGradient'</a> element.</p>
+
+<p><a>'linearGradient'</a> elements are never rendered directly;
+their only usage is as something that can be referenced using the
+<a>'fill'</a> and <a>'stroke'</a> properties. The <a>'display'</a>
+property does not apply to the <a>'linearGradient'</a> element; thus,
+<a>'linearGradient'</a> elements are not directly rendered even if
+the <a>'display'</a> property is set to a value other than
+<span class="prop-value">none</span>, and <a>'linearGradient'</a>
+elements are available for referencing even when the <a>'display'</a>
+property on the <a>'linearGradient'</a> element or any of its ancestors
+is set to <span class="prop-value">none</span>.</p>
+
+<p id="ExampleLinGrad01"><span class="example-ref">Example lingrad01</span>
+shows how to fill a rectangle by referencing a linear gradient paint
+server.</p>
+
+<edit:example href='images/pservers/lingrad01.svg' name='lingrad01' description='fill a rectangle using a linear gradient paint server' image='yes' link='yes'/>
+
+</edit:with>
+
+<h3 id="RadialGradients">Radial gradients</h3>
+
+<edit:with element='radialGradient'>
+
+<p id="RadialGradientElement">Radial gradients are defined by a
+<a>'radialGradient'</a> element.</p>
+
+<edit:elementsummary name='radialGradient'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="RadialGradientElementGradientUnitsAttribute"><span
+        class="adef">gradientUnits</span> =
+        "<em>userSpaceOnUse</em> | <em>objectBoundingBox</em>"</dt>
+        <dd>Defines the coordinate system for attributes
+        <a>'cx'</a>, <a>'cy'</a>, <a>'r'</a>, <a>'fx'</a> and <a>'fy'</a>.<br/>
+         If <span
+        class="attr-value">gradientUnits="userSpaceOnUse"</span>,
+        <a>'cx'</a>, <a>'cy'</a>, <a>'r'</a>, <a>'fx'</a> and <a>'fy'</a>
+        represent values in the coordinate system that results from taking
+        the current user coordinate system in place at the time
+        when the gradient element is referenced (i.e., the user
+        coordinate system for the element referencing the gradient
+        element via a <a>'fill'</a> or <a>'stroke'</a> property) and then
+        applying the transform specified by attribute <a>'gradientTransform'</a>.<br />
+         If <span
+        class="attr-value">gradientUnits="objectBoundingBox"</span>,
+        the user coordinate system for attributes
+        <a>'cx'</a>, <a>'cy'</a>, <a>'r'</a>, <a>'fx'</a> and <a>'fy'</a>
+         is established
+        using the bounding box of the element to which the gradient
+        is applied (see <a
+        href="coords.html#ObjectBoundingBox">Object bounding box
+        units</a>) and then applying the transform specified by
+        attribute <a>'gradientTransform'</a>.<br />
+         When <span
+        class="attr-value">gradientUnits="objectBoundingBox"</span>
+        and <a>'gradientTransform'</a> is the
+        identity matrix, then the rings of the radial gradient are
+        circular with respect to the object bounding box space
+        (i.e., the abstract coordinate system where (0,0) is at the
+        top/left of the object bounding box and (1,1) is at the
+        bottom/right of the object bounding box). When the object's
+        bounding box is not square, the rings that are conceptually
+        circular within object bounding box space will render as
+        elliptical due to application of the non-uniform scaling
+        transformation from bounding box space to user space.<br />
+         If attribute <a>'gradientUnits'</a>
+        is not specified, then the effect is as if a value of <span
+        class="attr-value">'objectBoundingBox'</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="RadialGradientElementGradientTransformAttribute"><span
+        class="adef">gradientTransform</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeTransformList">&lt;transform-list&gt;</a></span>"</dt>
+        <dd>Contains the definitions of an optional additional
+        transformation from the gradient coordinate system onto the
+        target coordinate system (i.e., userSpaceOnUse or
+        objectBoundingBox). This allows for things such as skewing
+        the gradient. This additional transformation matrix is
+        post-multiplied to (i.e., inserted to the right of) any
+        previously defined transformations, including the implicit
+        transformation necessary to convert from <a
+        href="coords.html#ObjectBoundingBox">object bounding box
+        units</a> to user space.<br />
+         If attribute <a>'gradientTransform'</a> is not
+        specified, then the effect is as if an identity transform
+        were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="RadialGradientElementCXAttribute"><span
+        class="adef">cx</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd><a>'cx'</a>, <a>'cy'</a> and <a>'r'</a> define the largest (i.e.,
+        outermost) circle for the radial gradient. The gradient
+        will be drawn such that the 100% <a
+        href="#GradientStops">gradient stop</a> is mapped to the
+        perimeter of this largest (i.e., outermost) circle.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'50%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="RadialGradientElementCYAttribute"><span
+        class="adef">cy</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>See <a>'cx'</a>.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'50%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="RadialGradientElementRAttribute"><span
+        class="adef">r</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+        <dd>See <a>'cx'</a>.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero will cause the area to be painted as a
+        single color using the color and opacity of the last <a
+        href="pservers.html#GradientStops">gradient stop</a>.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'50%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="RadialGradientElementFXAttribute"><span
+        class="adef">fx</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd><a>'fx'</a> and <a>'fy'</a> define the focal point for the
+        radial gradient. The gradient will be drawn such that the
+        0% <a href="#GradientStops">gradient stop</a> is mapped to
+        (fx, fy).<br />
+         If attribute <a>'fx'</a> is not specified, <a>'fx'</a> will coincide
+        with the presentational value of <a>'cx'</a> for the element whether the
+        value for 'cx' was inherited or not. If the element references an
+        element that specifies a value for 'fx', then the value of 'fx' is
+        inherited from the referenced element.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="RadialGradientElementFYAttribute"><span
+        class="adef">fy</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>See <a>'fx'</a>.<br />
+         If attribute <a>'fy'</a> is not specified, <a>'fy'</a> will coincide
+        with the presentational vlaue of <a>'cy'</a> for the element whether the
+        value for 'cy' was inherited or not. If the element references an
+        element that specifies a value for 'fy', then the value of 'fy' is
+        inherited from the referenced element.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="RadialGradientElementSpreadMethodAttribute"><span
+        class="adef">spreadMethod</span> = "pad | reflect |
+        repeat"</dt>
+        <dd>Indicates what happens if the gradient starts or ends
+        inside the bounds of the object(s) being painted by the
+        gradient. Has the same values and meanings as the <a>'spreadMethod'</a>
+        attribute on <a>'linearGradient'</a> element.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="RadialGradientElementHrefAttribute"><span
+        class="adef">xlink:href</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeIRI">&lt;iri&gt;</a></span>"</dt>
+        <dd>An <a href="linking.html#IRIReference">IRI
+        reference</a> to a different <a>'linearGradient'</a> or
+        <a>'radialGradient'</a> element within
+        the current SVG document fragment. Any <a>'radialGradient'</a> attributes
+        which are defined on the referenced element which are not
+        defined on this element are inherited by this element. If
+        this element has no defined gradient stops, and the
+        referenced element does (possibly due to its own <a>'xlink:href'</a>
+        attribute), then this element inherits the gradient stop from the referenced element.
+        Inheritance can be indirect to an arbitrary level; thus, if
+        the referenced element inherits attribute or gradient stops
+        due to its own <a>'xlink:href'</a>
+        attribute, then the current element can inherit those
+        attributes or gradient stops.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+
+<p>Percentages are allowed for attributes <a>'cx'</a>, <a>'cy'</a>,
+<a>'r'</a>, <a>'fx'</a> and <a>'fy'</a>. For
+<span class="attr-value">gradientUnits="userSpaceOnUse"</span>, percentages
+represent values relative to the current viewport.  For
+<span class="attr-value">gradientUnits="objectBoundingBox"</span>, percentages
+represent values relative to the bounding box for the object.</p>
+
+<p>If the point defined by <a>'fx'</a> and <a>'fy'</a> lies outside the
+circle defined by <a>'cx'</a>, <a>'cy'</a> and <a>'r'</a>, then the user
+agent shall set the focal point to the intersection of the line from
+(<a>'cx'</a>, <a>'cy'</a>) to (<a>'fx'</a>, <a>'fy'</a>) with the circle
+defined by <a>'cx'</a>, <a>'cy'</a> and <a>'r'</a>.</p>
+
+<p><a href="styling.html#SVGStylingProperties">Properties</a>
+inherit into the <a>'radialGradient'</a> element from its ancestors;
+properties do <em>not</em> inherit from the element referencing the
+<a>'radialGradient'</a> element.</p>
+
+<p><a>'radialGradient'</a> elements are never rendered directly;
+their only usage is as something that can be referenced using the
+<a>'fill'</a> and <a>'stroke'</a> properties. The <a>'display'</a>
+property does not apply to the <a>'radialGradient'</a> element; thus,
+<a>'radialGradient'</a> elements are not directly rendered even if
+the <a>'display'</a> property is set to a value other than
+<span class="prop-value">none</span>, and <a>'radialGradient'</a> elements
+are available for referencing even when the <a>'display'</a> property on
+the <a>'radialGradient'</a> element or any of its ancestors is set to
+<span class="prop-value">none</span>.</p>
+
+<p id="ExampleRadGrad01"><span class="example-ref">Example radgrad01</span>
+shows how to fill a rectangle by referencing a radial gradient paint
+server.</p>
+
+<edit:example href='images/pservers/radgrad01.svg' name='radgrad01' description='fill a rectangle by referencing a radial gradient paint server' image='yes' link='yes'/>
+
+</edit:with>
+
+<h3 id="GradientStops">Gradient stops</h3>
+
+<edit:with element='stop'>
+
+<p id="StopElement">The ramp of colors to use on a gradient is defined
+by the <a>'stop'</a> elements that are child elements to either the
+<a>'linearGradient'</a> element or the <a>'radialGradient'</a>
+element.</p>
+
+<edit:elementsummary name='stop'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="StopElementOffsetAttribute"><span
+        class="adef">offset</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a> | <a
+        href="types.html#DataTypePercentage">&lt;percentage&gt;</a></em>"</dt>
+        <dd>The <a>'offset'</a> attribute is
+        either a <a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a>
+        (usually ranging from 0 to 1) or a <a
+        href="types.html#DataTypePercentage">&lt;percentage&gt;</a>
+        (usually ranging from 0% to 100%) which indicates where the
+        gradient stop is placed. For linear gradients, the <a>'offset'</a> attribute represents a
+        location along the <em>gradient vector</em>. For radial
+        gradients, it represents a percentage distance from (fx,fy)
+        to the edge of the outermost/largest circle.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+
+<p>The <a>'stop-color'</a> property indicates what color to use at that
+gradient stop. The keyword <span class="attr-value">currentColor</span> and
+ICC colors can be specified in the same manner as within a
+<a href="painting.html#SpecifyingPaint">&lt;paint&gt;</a> specification for
+the <a>'fill'</a> and <a>'stroke'</a> properties.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="StopColorProperty"><span class="propdef-title prop-name">'stop-color'</span></dt>
+        <dd>
+          <table summary="stop-color property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>currentColor |<br />
+               <a href="types.html#DataTypeColor">&lt;color&gt;</a>
+               <a href="types.html#DataTypeICCColor">&lt;icccolor&gt;</a>
+              |<br />
+               <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>black</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a>'stop'</a> elements</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p>The <a>'stop-opacity'</a> property defines the opacity of a given
+gradient stop.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="StopOpacityProperty"><span class="propdef-title prop-name">'stop-opacity'</span></dt>
+        <dd>
+          <table summary="stop-opacity property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>&lt;opacity-value&gt; | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>1</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a>'stop'</a> elements</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p>Some notes on gradients:</p>
+
+<ul>
+  <li>Gradient offset values less than 0 (or less than 0%) are
+  rounded up to 0%. Gradient offset values greater than 1 (or
+  greater than 100%) are rounded down to 100%.</li>
+  <li>It is necessary that at least two stops defined to have a
+  gradient effect. If no stops are defined, then painting shall
+  occur as if 'none' were specified as the paint style. If one
+  stop is defined, then paint with the solid color fill using
+  the color defined for that gradient stop.</li>
+  <li>Each gradient offset value is required to be equal to or
+  greater than the previous gradient stop's offset value. If a
+  given gradient stop's offset value is not equal to or greater
+  than all previous offset values, then the offset value is
+  adjusted to be equal to the largest of all previous offset
+  values.</li>
+  <li>
+    If two gradient stops have the same offset value, then the
+    latter gradient stop controls the color value at the
+    overlap point. In particular: 
+<pre>
+&lt;stop offset="0" stop-color="white"/&gt;
+&lt;stop offset=".2" stop-color="red"/&gt;
+&lt;stop offset=".2" stop-color="blue"/&gt;
+&lt;stop offset="1" stop-color="black"/&gt;
+</pre>
+    will have approximately the same effect as: 
+<pre>
+&lt;stop offset="0" stop-color="white"/&gt;
+&lt;stop offset=".1999999999" stop-color="red"/&gt;
+&lt;stop offset=".2" stop-color="blue"/&gt;
+&lt;stop offset="1" stop-color="black"/&gt;
+</pre>
+    which is a gradient that goes smoothly from white to red,
+    then abruptly shifts from red to blue, and then goes
+    smoothly from blue to black.
+  </li>
+</ul>
+
+</edit:with>
+
+<h2 id="Patterns">Patterns</h2>
+
+<edit:with element='pattern'>
+
+<p id="PatternElement">A pattern is used to fill or stroke an object
+using a pre-defined graphic object which can be replicated ("tiled") at
+fixed intervals in <em>x</em> and <em>y</em> to cover the areas to be
+painted. Patterns are defined using a <a>'pattern'</a> element and then
+referenced by properties <a>'fill'</a> and <a>'stroke'</a> on a given
+<a href="intro.html#TermGraphicsElement">graphics element</a> to indicate
+that the given element shall be filled or stroked with the referenced
+pattern.</p>
+
+<p>Attributes <a>'x'</a>, <a>'y'</a>, <a>'width'</a>, <a>'height'</a>
+and <a>'patternUnits'</a> define a reference rectangle somewhere
+on the infinite canvas. The reference rectangle has its
+top/left at (<var>x</var>,&nbsp;<var>y</var>) and its bottom/right at
+(<var>x</var>&nbsp;+&nbsp;<var>width</var>,&nbsp;<var>y</var>&nbsp;+&nbsp;<var>height</var>). The tiling
+theoretically extends a series of such rectangles to infinity
+in X and Y (positive and negative), with rectangles starting at
+(<var>x</var>&nbsp;+&nbsp;m*<var>width</var>,&nbsp;<var>y</var>&nbsp;+&nbsp;n*
+<var>height</var>) for each possible integer value for <em>m</em> and
+<em>n</em>.</p>
+
+<edit:elementsummary name='pattern'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="PatternElementPatternUnitsAttribute"><span
+        class="adef">patternUnits</span> = "<em>userSpaceOnUse</em>
+        | <em>objectBoundingBox</em>"</dt>
+        <dd>Defines the coordinate system for attributes
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>.<br />
+         If <span
+        class="attr-value">patternUnits="userSpaceOnUse"</span>,
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
+        represent values in the coordinate system that results from
+        taking the current user coordinate system in place at the
+        time when the <a>'pattern'</a>
+        element is referenced (i.e., the user coordinate system for
+        the element referencing the <a>'pattern'</a> element via a
+        <a>'fill'</a> or <a>'stroke'</a> property) and then
+        applying the transform specified by attribute <a>'patternTransform'</a>.<br />
+         If <span
+        class="attr-value">patternUnits="objectBoundingBox"</span>,
+        the user coordinate system for attributes
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
+        is established
+        using the bounding box of the element to which the pattern
+        is applied (see <a
+        href="coords.html#ObjectBoundingBox">Object bounding box
+        units</a>) and then applying the transform specified by
+        attribute <a>'patternTransform'</a>.<br />
+         If attribute <a>'patternUnits'</a>
+        is not specified, then the effect is as if a value of <span
+        class="attr-value">'objectBoundingBox'</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="PatternElementPatternContentUnitsAttribute"><span
+        class="adef">patternContentUnits</span> =
+        "<em>userSpaceOnUse</em> | <em>objectBoundingBox</em>"</dt>
+        <dd>Defines the coordinate system for the contents of the
+        <a>'pattern'</a>. Note that this
+        attribute has no effect if attribute <a>'viewBox'</a> is specified.<br />
+         If <span class="attr-value">patternContentUnits="userSpaceOnUse"</span>,
+        the user coordinate system for the contents of the <a>'pattern'</a>
+        element is the coordinate system that results from taking
+        the current user coordinate system in place at the time
+        when the <a>'pattern'</a> element is referenced (i.e., the
+        user coordinate system for the element referencing the
+        <a>'pattern'</a> element via a <a>'fill'</a> or <a>'stroke'</a>
+        property) and then applying the transform specified by attribute
+        <a>'patternTransform'</a>.<br />
+         If <span
+        class="attr-value">patternContentUnits="objectBoundingBox"</span>,
+        the user coordinate system for the contents of the <a>'pattern'</a> element is
+        established using the bounding box of the element to which
+        the pattern is applied (see <a
+        href="coords.html#ObjectBoundingBox">Object bounding box
+        units</a>) and then applying the transform specified by
+        attribute <a>'patternTransform'</a>.<br />
+         If attribute <a>'patternContentUnits'</a> is not
+        specified, then the effect is as if a value of
+        <span class="attr-value">'userSpaceOnUse'</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="PatternElementPatternTransformAttribute"><span
+        class="adef">patternTransform</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeTransformList">&lt;transform-list&gt;</a></span>"</dt>
+        <dd>Contains the definition of an optional additional
+        transformation from the pattern coordinate system onto the
+        target coordinate system (i.e., <span class='attr-value'>'userSpaceOnUse'</span> or
+        <span class='attr-value'>'objectBoundingBox'</span>). This allows for things such as skewing
+        the pattern tiles. This additional transformation matrix is
+        post-multiplied to (i.e., inserted to the right of) any
+        previously defined transformations, including the implicit
+        transformation necessary to convert from <a
+        href="coords.html#ObjectBoundingBox">object bounding box
+        units</a> to user space.<br />
+         If attribute <a>'patternTransform'</a> is not specified,
+        then the effect is as if an identity transform were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="PatternElementXAttribute"><span
+        class="adef">x</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd><a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> indicate how the
+        pattern tiles are placed and spaced. These attributes
+        represent coordinates and values in the coordinate space
+        specified by the combination of attributes <a>'patternUnits'</a>
+        and <a>'patternTransform'</a>.<br />
+         If the attribute is not specified, the effect is as if a
+        value of zero were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="PatternElementYAttribute"><span
+        class="adef">y</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>See <a>'x'</a>.<br />
+         If the attribute is not specified, the effect is as if a
+        value of zero were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="PatternElementWidthAttribute"><span
+        class="adef">width</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+        <dd>See <a>'x'</a>.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables rendering of the element (i.e., no
+        paint is applied).<br />
+         If the attribute is not specified, the effect is as if a
+        value of zero were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="PatternElementHeightAttribute"><span
+        class="adef">height</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+        <dd>See <a>'x'</a>.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables rendering of the element (i.e., no
+        paint is applied).<br />
+         If the attribute is not specified, the effect is as if a
+        value of zero were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="PatternElementHrefAttribute"><span
+        class="adef">xlink:href</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeIRI">&lt;iri&gt;</a></span>"</dt>
+        <dd>An <a href="linking.html#IRIReference">IRI
+        reference</a> to a different <a>'pattern'</a> element within the
+        current SVG document fragment. Any attributes which are
+        defined on the referenced element which are not defined on
+        this element are inherited by this element. If this element
+        has no children, and the referenced element does (possibly
+        due to its own <a>'xlink:href'</a>
+        attribute), then this element inherits the children from
+        the referenced element. Inheritance can be indirect to an
+        arbitrary level; thus, if the referenced element inherits
+        attributes or children due to its own <a>'xlink:href'</a> attribute, then the current
+        element can inherit those attributes or children.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="PatternElementPreserveAspectRatioAttribute">
+          <span class="adef">preserveAspectRatio</span> = "<span class='attr-value'><a href="coords.html#PreserveAspectRatioAttribute">[defer] &lt;align&gt; [&lt;meetOrSlice&gt;]</a></span>"
+        </dt>
+        <dd>
+          <p>
+            See <a>'preserveAspectRatio'</a>.
+          </p>
+          <p>
+            If the attribute is not specified, then the effect is as if a value of <span class="attr-value">xMidYMid meet</span> were specified.
+          </p>
+          <p><span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: yes.</span></p>
+        </dd>
+      </dl>
+    </div>
+
+<p>SVG's <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
+the <a>'overflow'</a> property for <a>'pattern'</a> elements to
+<span class="prop-value">hidden</span>, which causes a rectangular clipping
+path to be created at the bounds of the pattern tile.  Unless the
+<a>'overflow'</a> property is overridden, any graphics within the pattern
+which goes outside of the pattern rectangle will be clipped.  Note that if
+the <a>'overflow'</a> property is set to <span class="prop-value">visible</span>
+the rendering behavior for the pattern is undefined. 
+<a href="pservers.html#ExamplePattern01">Example pattern01</a> below shows the
+effect of clipping to the pattern tile.</p>
+
+<p>The contents of the <a>'pattern'</a> are relative to a new coordinate
+system. If there is a <a>'viewBox'</a> attribute, then the new coordinate
+system is fitted into the region defined by the <a>'x'</a>, <a>'y'</a>,
+<a>'width'</a>, <a>'height'</a> and <a>'patternUnits'</a> attributes on the
+<a>'pattern'</a> element using the standard rules for <a>'viewBox'</a> and
+<a>'preserveAspectRatio'</a>. If there is no <a>'viewBox'</a> attribute, then
+the new coordinate system has its origin at (<var>x</var>,&nbsp;<var>y</var>),
+where <var>x</var> is established by the <a>'x'</a> attribute on the
+<a>'pattern'</a> element, and <var>y</var> is established by the <a>'y'</a>
+attribute on the <a>'pattern'</a> element. Thus, in the following example:</p>
+
+<pre>
+&lt;pattern x="10" y="10" width="20" height="20"&gt;
+   &lt;rect x="5" y="5" width="10" height="10"/&gt;
+&lt;/pattern&gt;
+</pre>
+
+<p>the rectangle has its top/left located 5 units to the right and 5
+units down from the origin of the pattern tile.</p>
+
+<p>The <a>'viewBox'</a> attribute introduces a supplemental transformation
+which is applied on top of any transformations necessary to create a new
+pattern coordinate system due to attributes <a>'x'</a>, <a>'y'</a>,
+<a>'width'</a>, <a>'height'</a> and <a>'patternUnits'</a>.</p>
+
+<p><a href="styling.html#SVGStylingProperties">Properties</a> inherit into the
+<a>'pattern'</a> element from its ancestors; properties do <em>not</em>
+inherit from the element referencing the <a>'pattern'</a> element.</p>
+
+<p><a>'pattern'</a> elements are never rendered directly; their only usage is
+as something that can be referenced using the <a>'fill'</a> and
+<a>'stroke'</a> properties. The <a>'display'</a> property does not apply to
+the <a>'pattern'</a> element; thus, <a>'pattern'</a> elements are not directly
+rendered even if the <a>'display'</a> property is set to a value other than
+<span class="prop-value">none</span>, and <a>'pattern'</a> elements are
+available for referencing even when the <a>'display'</a> property on the
+<a>'pattern'</a> element or any of its ancestors is set to
+<span class="prop-value">none</span>.</p>
+
+<p><a href="script.html#EventAttributes">Event attributes</a> and
+<a href="svgdom.html#EventListeners">event listeners</a> attached to the
+contents of a <a>'pattern'</a> element are not processed; only the rendering
+aspects of <a>'pattern'</a> elements are processed.</p>
+
+<p id="ExamplePattern01"><span class="example-ref">Example pattern01</span>
+shows how to fill a rectangle by referencing a pattern paint server. Note how
+the blue stroke of each triangle has been clipped at the top and the left.
+This is due to SVG's <a href="styling.html#UAStyleSheet">user agent style sheet</a>
+setting the <a>'overflow'</a> property for <a>'pattern'</a> elements to
+<span class="prop-value">hidden</span>, which causes the pattern to be clipped
+to the bounds of the pattern tile.</p>
+
+<edit:example href='images/pservers/pattern01.svg' name='pattern01' description='fill a rectangle by referencing a pattern paint server' image='yes' link='yes'/>
+
+</edit:with>
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<h3 id="InterfaceSVGGradientElement">Interface SVGGradientElement</h3>
+
+<edit:interface name='::svg::SVGGradientElement'/>
+
+<h3 id="InterfaceSVGLinearGradientElement">Interface SVGLinearGradientElement</h3>
+
+<edit:with element='linearGradient'>
+<edit:interface name='::svg::SVGLinearGradientElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGRadialGradientElement">Interface SVGRadialGradientElement</h3>
+
+<edit:with element='radialGradient'>
+<edit:interface name='::svg::SVGRadialGradientElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGStopElement">Interface SVGStopElement</h3>
+
+<edit:with element='stop'>
+<edit:interface name='::svg::SVGStopElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGPatternElement">Interface SVGPatternElement</h3>
+
+<edit:with element='pattern'>
+<edit:interface name='::svg::SVGPatternElement'/>
+</edit:with>
+
+</body>
+</html>

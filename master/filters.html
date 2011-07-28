@@ -1,0 +1,3847 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Filter Effects</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" type="text/css" media="screen" href="style/svg-style.css"/>
+</head>
+<body>
+
+<h1>Filter Effects</h1>
+
+<h2 id="Introduction">Introduction</h2>
+
+    <p>This chapter describes SVG's declarative filter effects
+    feature set, which when combined with the 2D power of SVG can
+    describe much of the common artwork on the Web in such a way
+    that client-side generation and alteration can be performed
+    easily. In addition, the ability to apply filter effects to SVG
+    <a href="intro.html#TermGraphicsElement">graphics elements</a>
+    and <a href="intro.html#TermContainerElement">container
+    elements</a> helps to maintain the semantic structure of the
+    document, instead of resorting to images which aside from
+    generally being a fixed resolution tend to obscure the original
+    semantics of the elements they replace. This is especially true
+    for effects applied to text.</p>
+    <p>A filter effect consists of a series of graphics operations
+    that are applied to a given <span id="TermSourceGraphic" class="SVG-Term">source
+    graphic</span> to produce a modified graphical result. The
+    result of the filter effect is rendered to the target device
+    instead of the original source graphic. The following
+    illustrates the process:</p>
+    <p><img
+    alt="Image showing source graphic transformed by filter effect"
+    src="images/filters/filters00.png" width="401"
+    height="78" /></p>
+    <p class="view-as-svg"><a
+    href="images/filters/filters00.svg">View this example as SVG
+    (SVG-enabled browsers only)</a></p>
+    <p>Filter effects are defined by <a>'filter element'</a> elements. To apply a
+    filter effect to a <a
+    href="intro.html#TermGraphicsElement">graphics element</a> or a
+    <a href="intro.html#TermContainerElement">container
+    element</a>, you set the value of the <a>'filter property'</a> property on the given
+    element such that it references the filter effect.</p>
+    <p>Each <a>'filter element'</a> element contains a set
+    of <span id="TermFilterPrimitive" class="SVG-Term">filter primitives</span> as its children.
+    Each filter primitive performs a single fundamental graphical
+    operation (e.g., a blur or a lighting effect) on one or more
+    inputs, producing a graphical result. Because most of the
+    filter primitives represent some form of image processing, in
+    most cases the output from a filter primitive is a single RGBA
+    image.</p>
+    <p>The original source graphic or the result from a filter
+    primitive can be used as input into one or more other filter
+    primitives. A common application is to use the source graphic
+    multiple times. For example, a simple filter could replace one
+    graphic by two by adding a black copy of original source
+    graphic offset to create a drop shadow. In effect, there are
+    now two layers of graphics, both with the same original source
+    graphics.</p>
+    <p>When applied to <a
+    href="intro.html#TermContainerElement">container elements</a>
+    such as <a>'g'</a>, the <a>'filter property'</a> property applies to the
+    contents of the group as a whole. The group's children do not
+    render to the screen directly; instead, the graphics commands
+    necessary to render the children are stored temporarily.
+    Typically, the graphics commands are executed as part of the
+    processing of the referenced <a>'filter element'</a> element via use of the
+    keywords <a href="filters.html#SourceGraphic"><span
+    class="attr-value">SourceGraphic</span></a> or <a
+    href="filters.html#SourceAlpha"><span
+    class="attr-value">SourceAlpha</span></a>. Filter effects can
+    be applied to <a
+    href="intro.html#TermContainerElement">container elements</a>
+    with no content (e.g., an empty <a>'g'</a> element), in which case the
+    <a href="filters.html#SourceGraphic"><span
+    class="attr-value">SourceGraphic</span></a> or <a
+    href="filters.html#SourceAlpha"><span
+    class="attr-value">SourceAlpha</span></a> consist of a
+    transparent black rectangle that is the size of the <a
+    href="filters.html#FilterEffectsRegion"><span
+    class="attr-value">filter effects region</span></a>.</p>
+    <p>Sometimes filter primitives result in undefined pixels. For
+    example, filter primitive <a>'feOffset'</a> can shift an image
+    down and to the right, leaving undefined pixels at the top and
+    left. In these cases, the undefined pixels are set to
+    transparent black.</p>
+
+    <h2 id="AnExample">An example</h2>
+    <p>The following shows an example of a filter effect.</p>
+    <p><span class="example-ref">Example filters01</span> -
+    introducing filter effects.</p>
+
+<edit:example href='images/filters/filters01.svg' name='filters01' title='introducing filter effects' link='yes' image='yes'/>
+
+    <p>The filter effect used in the example above is repeated here
+    with reference numbers in the left column before each of the
+    six filter primitives:</p>
+    <table summary="filter example with reference numbers">
+      <tr>
+        <td valign="top">
+<pre style="color:black">
+ 
+ 
+1
+2
+3
+ 
+ 
+ 
+ 
+4
+5
+ 
+6
+ 
+ 
+ 
+</pre>
+        </td>
+        <td valign="top">
+<pre>
+&lt;filter id="MyFilter" filterUnits="userSpaceOnUse" x="0" y="0" width="200" height="120"&gt;
+  &lt;desc&gt;Produces a 3D lighting effect.&lt;/desc&gt;
+  &lt;feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/&gt;
+  &lt;feOffset in="blur" dx="4" dy="4" result="offsetBlur"/&gt;
+  &lt;feSpecularLighting in="blur" surfaceScale="5" specularConstant=".75" 
+                      specularExponent="20" lighting-color="#bbbbbb" 
+                      result="specOut"&gt;
+    &lt;fePointLight x="-5000" y="-10000" z="20000"/&gt;
+  &lt;/feSpecularLighting&gt;
+  &lt;feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut"/&gt;
+  &lt;feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" 
+               k1="0" k2="1" k3="1" k4="0" result="litPaint"/&gt;
+  &lt;feMerge&gt;
+    &lt;feMergeNode in="offsetBlur"/&gt;
+    &lt;feMergeNode in="litPaint"/&gt;
+  &lt;/feMerge&gt;
+&lt;/filter&gt;
+</pre>
+        </td>
+      </tr>
+    </table>
+    <p>The following pictures show the intermediate image results
+    from each of the six filter elements:</p>
+    <table summary="filter example intermediate results">
+      <tr>
+        <td>
+          <p><img width="115" height="70"
+          alt="filters01 - original source graphic"
+          src="images/filters/filters01-0.png" /><br />
+           Source graphic</p>
+        </td>
+        <td>&nbsp;</td>
+        <td>
+          <p><img width="115" height="70"
+          alt="filters01 - after filter element 1"
+          src="images/filters/filters01-1.png" /><br />
+           After filter primitive 1</p>
+        </td>
+        <td>&nbsp;</td>
+        <td>
+          <p><img width="115" height="70"
+          alt="filters01 - after filter element 2"
+          src="images/filters/filters01-2.png" /><br />
+           After filter primitive 2</p>
+        </td>
+        <td>&nbsp;</td>
+        <td>
+          <p><img width="115" height="70"
+          alt="filters01 - after filter element 3"
+          src="images/filters/filters01-3.png" /><br />
+           After filter primitive 3</p>
+        </td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>
+          <p><img width="115" height="70"
+          alt="filters01 - after filter element 4"
+          src="images/filters/filters01-4.png" /><br />
+           After filter primitive 4</p>
+        </td>
+        <td>&nbsp;</td>
+        <td>
+          <p><img width="115" height="70"
+          alt="filters01 - after filter element 5"
+          src="images/filters/filters01-5.png" /><br />
+           After filter primitive 5</p>
+        </td>
+        <td>&nbsp;</td>
+        <td>
+          <p><img width="115" height="70"
+          alt="filters01 - after filter element 6"
+          src="images/filters/filters01-6.png" /><br />
+           After filter primitive 6</p>
+        </td>
+      </tr>
+    </table>
+    <ol>
+      <li>Filter primitive <a>'feGaussianBlur'</a> takes input
+      <a href="filters.html#SourceAlpha"><span
+      class="attr-value">SourceAlpha</span></a>, which is the alpha
+      channel of the source graphic. The result is stored in a
+      temporary buffer named "blur". Note that "blur" is used as
+      input to both filter primitives 2 and 3.</li>
+      <li>Filter primitive <a>'feOffset'</a> takes buffer
+      "blur", shifts the result in a positive direction in both x
+      and y, and creates a new buffer named "offsetBlur". The
+      effect is that of a drop shadow.</li>
+      <li>Filter primitive <a>'feSpecularLighting'</a>, uses
+      buffer "blur" as a model of a surface elevation and generates
+      a lighting effect from a single point source. The result is
+      stored in buffer "specOut".</li>
+      <li>Filter primitive <a>'feComposite'</a> masks out the
+      result of filter primitive 3 by the original source graphics
+      alpha channel so that the intermediate result is no bigger
+      than the original source graphic.</li>
+      <li>Filter primitive <a>'feComposite'</a> composites the
+      result of the specular lighting with the original source
+      graphic.</li>
+      <li>Filter primitive <a>'feMerge'</a> composites two
+      layers together. The lower layer consists of the drop shadow
+      result from filter primitive 2. The upper layer consists of
+      the specular lighting result from filter primitive 5.</li>
+    </ol>
+
+<h2 id="FilterElement">The <span class="element-name">'filter'</span> element</h2>
+
+<edit:with element='filter'>
+
+<p>The description of the <a>'filter element'</a> element follows:</p>
+
+<edit:elementsummary name='filter'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="FilterElementFilterUnitsAttribute"><span
+        class="adef">filterUnits</span> = "<em>userSpaceOnUse</em>
+        | <em>objectBoundingBox</em>"</dt>
+        <dd>See <a href="#FilterEffectsRegion">Filter effects
+        region</a>.</dd>
+        <dt id="FilterElementPrimitiveUnitsAttribute"><span
+        class="adef">primitiveUnits</span> =
+        "<em>userSpaceOnUse</em> | <em>objectBoundingBox</em>"</dt>
+        <dd>Specifies the coordinate system for the various length
+        values within the filter primitives and for the attributes
+        that define the <a
+        href="filters.html#FilterPrimitiveSubRegion">filter
+        primitive subregion</a>.<br />
+         If <span class='attr-value'>primitiveUnits="userSpaceOnUse"</span>, any
+        length values within the filter definitions represent
+        values in the current user coordinate system in place at
+        the time when the <a>'filter element'</a> element is
+        referenced (i.e., the user coordinate system for the
+        element referencing the <a>'filter element'</a> element via a <a>'filter property'</a> property).<br />
+         If <span class='attr-value'>primitiveUnits="objectBoundingBox"</span>,
+        then any length values within the filter definitions
+        represent fractions or percentages of the bounding box on
+        the referencing element (see <a
+        href="coords.html#ObjectBoundingBox">Object bounding box
+        units</a>). Note that if only one number was specified in a <a href="types.html#DataTypeNumberOptionalNumber">&lt;number-optional-number&gt;</a> value
+		this number is expanded out before the <a>'primitiveUnits'</a> computation takes place.
+		<br />
+         If attribute <a>'primitiveUnits'</a>
+        is not specified, then the effect is as if a value of <span
+        class="attr-value">userSpaceOnUse</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="FilterElementXAttribute"><span
+        class="adef">x</span> = "<em><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></em>"</dt>
+        <dd>See <a href="#FilterEffectsRegion">Filter effects
+        region</a>.</dd>
+        <dt id="FilterElementYAttribute"><span
+        class="adef">y</span> = "<em><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></em>"</dt>
+        <dd>See <a href="#FilterEffectsRegion">Filter effects
+        region</a>.</dd>
+        <dt id="FilterElementWidthAttribute"><span
+        class="adef">width</span> = "<em><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></em>"</dt>
+        <dd>See <a href="#FilterEffectsRegion">Filter effects
+        region</a>.</dd>
+        <dt id="FilterElementHeightAttribute"><span
+        class="adef">height</span> = "<em><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></em>"</dt>
+        <dd>See <a href="#FilterEffectsRegion">Filter effects
+        region</a>.</dd>
+        <dt id="FilterElementFilterResAttribute"><span
+        class="adef">filterRes</span> = "<em><a
+        href="types.html#DataTypeNumberOptionalNumber">&lt;number-optional-number&gt;</a></em>"</dt>
+        <dd>See <a href="#FilterEffectsRegion">Filter effects
+        region</a>.</dd>
+        <dt id="FilterElementHrefAttribute"><span
+        class="adef">xlink:href</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeIRI">&lt;iri&gt;</a></span>"</dt>
+        <dd>An <a href="linking.html#IRIReference">IRI
+        reference</a> to another <a>'filter element'</a> element within the
+        current SVG document fragment. Any attributes which are
+        defined on the referenced <a>'filter element'</a> element which are not
+        defined on this element are inherited by this element. If
+        this element has no defined filter nodes, and the
+        referenced element has defined filter nodes (possibly due
+        to its own <a>'xlink:href'</a> attribute),
+        then this element inherits the filter nodes defined from
+        the referenced <a>'filter element'</a>
+        element. Inheritance can be indirect to an arbitrary level;
+        thus, if the referenced <a>'filter element'</a> element inherits
+        attributes or its filter node specification due to its own
+        <a>'xlink:href'</a> attribute, then the
+        current element can inherit those attributes or filter node
+        specifications.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+    <p><a href="styling.html#SVGStylingProperties">Properties</a>
+    inherit into the <a>'filter element'</a>
+    element from its ancestors; properties do <em>not</em> inherit
+    from the element referencing the <a>'filter element'</a> element.</p>
+    <p><a>'filter element'</a> elements are
+    never rendered directly; their only usage is as something that
+    can be referenced using the <a>'filter property'</a> property. The <a>'display'</a> property does not apply
+    to the <a>'filter element'</a> element;
+    thus, <a>'filter element'</a> elements are
+    not directly rendered even if the <a>'display'</a> property is set to a
+    value other than <span class="prop-value">none</span>, and
+    <a>'filter element'</a> elements are
+    available for referencing even when the <a>'display'</a> property on the <a>'filter element'</a> element or any of its
+    ancestors is set to <span class="prop-value">none</span>.</p>
+
+    <h2 id="FilterProperty">The <span class="prop-name">'filter'</span>
+    property</h2>
+    <p>The description of the <a>'filter property'</a> property is as follows:</p>
+    <div class="propdef">
+      <dl>
+        <dt><span class="propdef-title prop-name">'filter'</span></dt>
+        <dd>
+          <table summary="filter property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a> | none | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>none</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a
+              href="intro.html#TermContainerElement">container
+              elements</a> (except <a>'mask element'</a>) and <a
+              href="intro.html#TermGraphicsElement">graphics
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+    <dl>
+      <dt><span class="prop-value">&lt;funciri&gt;</span></dt>
+      <dd>An <a href="types.html#DataTypeFuncIRI">Functional IRI
+      reference</a> to a <a>'filter element'</a> element which
+      defines the filter effects that shall be applied to this
+      element.</dd>
+      <dt><span class="prop-value">none</span></dt>
+      <dd>Do not apply any filter effects to this element.</dd>
+    </dl>
+
+    <h2 id="FilterEffectsRegion">Filter effects region</h2>
+    <p>A <a>'filter element'</a> element can define a
+    region on the canvas to which a given filter effect applies and
+    can provide a resolution for any intermediate continuous tone
+    images used to process any raster-based filter primitives. The
+    <a>'filter element'</a> element has the
+    following attributes which work together to define the filter
+    effects region:</p>
+
+    <dl class='definitions unemphasized-names'>
+      <dt id="FilterUnitsAttribute"><a>'filterUnits'</a></dt>
+      <dd>
+        <p>Defines the coordinate system for attributes <a>'x'</a>, <a>'y'</a>,
+        <a>'width'</a> and <a>'height'</a>.</p>
+
+        <p>If <span class="attr-value">filterUnits="userSpaceOnUse"</span>,
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> represent
+        values in the current user coordinate system in place at the time
+        when the <a>'filter element'</a> is referenced (i.e., the user
+        coordinate system for the element referencing the <a>'filter element'</a>
+        via a <a>'filter property'</a> property).</p>
+
+        <p>If <span class='attr-value'>filterUnits="objectBoundingBox"</span>,
+        then <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
+        represent fractions or percentages of the bounding box on the referencing
+        element (see <a href="coords.html#ObjectBoundingBox">Object bounding box units</a>).</p>
+        
+        <p>If attribute <a>'filterUnits'</a> is not specified, then the effect
+        is if a value of <span class='attr-value'>'objectBoundingBox'</span>
+        were specified.</p>
+
+        <p><span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: yes.</span></p>
+      </dd>
+
+      <dt id="FilterRegionXYWidthHeightAttributes"><a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a></dt>
+      <dd>
+        <p>These attributes define a rectangular region on the canvas to
+        which this filter applies.</p>
+
+        <p>The amount of memory and processing time required to apply
+        the filter are related to the size of this rectangle and the
+        <a>'filterRes'</a> attribute of the filter.</p>
+
+        <p>The coordinate system for these attributes depends on the
+        value for attribute <a>'filterUnits'</a>.</p>
+
+        <p>Negative values for <a>'width'</a> or <a>'height'</a> are an error
+        (see <a href="implnote.html#ErrorProcessing">Error processing</a>).
+        Zero values disable rendering of the element which referenced
+        the filter.</p>
+
+        <p>The bounds of this rectangle act as a hard clipping region for each
+        <a href="filters.html#FilterPrimitivesOverview">filter primitive</a>
+        included with a given <a>'filter element'</a> element; thus, if
+        the effect of a given filter primitive would extend beyond
+        the bounds of the rectangle (this sometimes happens when
+        using a <a>'feGaussianBlur'</a> filter
+        primitive with a very large <a>'feGaussianBlur/stdDeviation'</a>),
+        parts of the effect will get clipped.</p>
+
+        <p>If <a>'x'</a> or <a>'y'</a> is not specified, the effect is as if a
+        value of <span class="attr-value">-10%</span> were specified.</p>
+
+        <p>If <a>'width'</a> or <a>'height'</a> is not specified, the effect is as if a
+        value of <span class="attr-value">120%</span> were specified.</p>
+
+        <p><span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: yes.</span></p>
+      </dd>
+
+      <dt><a>'filterRes'</a></dt>
+      <dd>
+        <p>This attribute takes the form <code>x-pixels [y-pixels]</code>,
+        and indicates the width and height of the intermediate images in
+        pixels. If not provided, then the user agent will use reasonable values 
+        to produce a high-quality result on the output device.
+        </p>
+
+        <p>Care should be taken when assigning a non-default value to
+        this attribute. Too small of a value may result in unwanted
+        pixelation in the result. Too large of a value may result in
+        slow processing and large memory usage.</p>
+
+        <p>Negative values are an error (see
+        <a href="implnote.html#ErrorProcessing">Error processing</a>).
+        Zero values disable rendering of the element which referenced
+        the filter.</p>
+        
+        <p>Non-integer values are truncated, i.e rounded to the closest integer value towards zero.</p>
+
+        <p><span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: yes.</span></p>
+      </dd>
+    </dl>
+
+    <p>Note that both of the two possible value for <a>'filterUnits'</a>
+    (i.e., <span class="attr-value">'objectBoundingBox'</span> and
+    <span class="attr-value">'userSpaceOnUse'</span>) result in a filter
+    region whose coordinate system has its X-axis and Y-axis each
+    parallel to the X-axis and Y-axis, respectively, of the user
+    coordinate system for the element to which the filter will be
+    applied.</p>
+    <p>Sometimes implementers can achieve faster performance when
+    the <a>filter region</a> can be mapped directly to device pixels;
+    thus, for best performance on display devices, it is suggested
+    that authors define their region such that SVG user agent can
+    align the <a>filter region</a> pixel-for-pixel with the background. In
+    particular, for best filter effects performance, avoid rotating
+    or skewing the user coordinate system. Explicit values for
+    attribute <a>'filterRes'</a> can either
+    help or harm performance. If <a>'filterRes'</a> is smaller than the
+    automatic (i.e., default) filter resolution, then filter effect
+    might have faster performance (usually at the expense of
+    quality). If <a>'filterRes'</a> is larger
+    than the automatic (i.e., default) filter resolution, then
+    filter effects performance will usually be slower.</p>
+    <p>It is often necessary to provide padding space because the
+    filter effect might impact bits slightly outside the
+    tight-fitting bounding box on a given object. For these
+    purposes, it is possible to provide negative percentage values
+    for <a>'x'</a> and <a>'y'</a>, and percentages values greater than
+    100% for <a>'width'</a> and <a>'height'</a>. This, for example, is
+    why the defaults for the filter effects region are <span class='attr-value'>x="-10%"
+    y="-10%" width="120%" height="120%"</span>.</p>
+
+</edit:with>
+
+    <h2 id="AccessingBackgroundImage">Accessing the background image</h2>
+    <p>Two possible pseudo input images for filter effects are <a
+    href="#BackgroundImage">BackgroundImage</a> and <a
+    href="#BackgroundAlpha">BackgroundAlpha</a>, which each
+    represent an image snapshot of the canvas under the filter
+    region at the time that the <a>'filter element'</a> element is invoked. <a
+    href="#BackgroundImage">BackgroundImage</a> represents both the
+    color values and alpha channel of the canvas (i.e., RGBA pixel
+    values), whereas <a href="#BackgroundAlpha">BackgroundAlpha</a>
+    represents only the alpha channel.</p>
+    <p>Implementations of SVG user agents often will need to
+    maintain supplemental background image buffers in order to
+    support the <a href="#BackgroundImage">BackgroundImage</a> and
+    <a href="#BackgroundAlpha">BackgroundAlpha</a> pseudo input
+    images. Sometimes, the background image buffers will contain an
+    in-memory copy of the accumulated painting operations on the
+    current canvas.</p>
+    <p>Because in-memory image buffers can take up significant
+    system resources, SVG content must explicitly indicate to the
+    SVG user agent that the document needs access to the background
+    image before <a href="#BackgroundImage">BackgroundImage</a> and
+    <a href="#BackgroundAlpha">BackgroundAlpha</a> pseudo input
+    images can be used. The property which enables access to the
+    background image is <a>'enable-background'</a>, defined below:</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="EnableBackgroundProperty"><span class="propdef-title prop-name">'enable-background'</span></dt>
+        <dd>
+          <table summary="enable-background property"
+          class="propinfo" cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>accumulate | new [ &lt;x&gt; &lt;y&gt;
+              &lt;width&gt; &lt;height&gt; ] | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>accumulate</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a
+              href="intro.html#TermContainerElement">container
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+    <p><a>'enable-background'</a> is only
+    applicable to <a
+    href="intro.html#TermContainerElement">container elements</a>
+    and specifies how the SVG user agents manages the accumulation
+    of the background image.</p>
+    <p>A value of <span class='prop-value'>new</span> indicates two things:</p>
+    <ul>
+      <li>It enables the ability of children of the current <a
+      href="intro.html#TermContainerElement">container element</a>
+      to access the background image.</li>
+      <li>It indicates that a new (i.e., initially transparent
+      black) background image canvas is established and that (in
+      effect) all children of the current <a
+      href="intro.html#TermContainerElement">container element</a>
+      shall be rendered into the new background image canvas in
+      addition to being rendered onto the target device.</li>
+    </ul>
+    <p>A meaning of <span class='prop-value'>enable-background:&nbsp;accumulate</span>
+    (the initial/default value) depends on context:</p>
+    <ul>
+      <li>If an ancestor <a
+      href="intro.html#TermContainerElement">container element</a>
+      has a property value of <span class='prop-value'>enable-background: new</span>, then all <a
+      href="intro.html#TermGraphicsElement">graphics elements</a>
+      within the current <a
+      href="intro.html#TermContainerElement">container element</a>
+      are rendered both onto the parent <a
+      href="intro.html#TermContainerElement">container
+      element</a>'s background image canvas and onto the target
+      device.</li>
+      <li>Otherwise, there is no current background image canvas,
+      so it is only necessary to render <a
+      href="intro.html#TermGraphicsElement">graphics elements</a>
+      onto the target device. (No need to render to the background
+      image canvas.)</li>
+    </ul>
+    <p>If a filter effect specifies either the <a
+    href="#BackgroundImage">BackgroundImage</a> or the <a
+    href="#BackgroundAlpha">BackgroundAlpha</a> pseudo input images
+    and no ancestor <a
+    href="intro.html#TermContainerElement">container element</a>
+    has a property value of <span class='prop-value'>enable-background: new</span>, then the
+    background image request is technically in error. Processing
+    will proceed without interruption (i.e., no error message) and
+    a transparent black image shall be provided in response to the
+    request.</p>
+    <p>The optional
+    <span class='prop-value'>&lt;x&gt;,&lt;y&gt;,&lt;width&gt;,&lt;height&gt;</span>
+    parameters on the <span class='prop-value'>new</span> value are
+    <a>&lt;number&gt;</a> values that indicate the
+    subregion of the <a
+    href="intro.html#TermContainerElement">container element</a>'s
+    <a href="intro.html#TermUserSpace">user space</a> where access
+    to the background image is allowed to happen. These parameters
+    enable the SVG user agent potentially to allocate smaller
+    temporary image buffers than the default values. Thus, the values
+    <span class='prop-value'>&lt;x&gt;,&lt;y&gt;,&lt;width&gt;,&lt;height&gt;</span> act as a
+    clipping rectangle on the background image canvas. Negative
+    values for <span class='prop-value'>&lt;width&gt;</span> or <span class='prop-value'>&lt;height&gt;</span> are an error (see <a
+    href="implnote.html#ErrorProcessing">Error processing</a>). If
+    more than zero but less than four of the values
+    <span class='prop-value'>&lt;x&gt;,&lt;y&gt;,&lt;width&gt;</span> and <span class='prop-value'>&lt;height&gt;</span> are
+    specified or if zero values are specified for <span class='prop-value'>&lt;width&gt;</span> or
+    <span class='prop-value'>&lt;height&gt;</span>, <a href="#BackgroundImage">BackgroundImage</a>
+    and <a href="#BackgroundAlpha">BackgroundAlpha</a> are
+    processed as if background image processing were not
+    enabled.</p>
+    <p>Assume you have an element E in the document and that E has
+    a series of ancestors A<sub>1</sub> (its immediate parent),
+    A<sub>2</sub>, etc. (Note: A<sub>0</sub> is E.) Each ancestor
+    A<sub>i</sub> will have a corresponding temporary background
+    image offscreen buffer BUF<sub>i</sub>. The contents of the
+    <em>background image</em> available to a <a>'filter element'</a> referenced by E is
+    defined as follows:</p>
+    <ul>
+      <li>Find the element A<sub>i</sub> with the smallest
+      subscript i (including A<sub>0</sub>=E) for which the <a>'enable-background'</a> property has
+      the value <span class="prop-value">new</span>. (Note: if
+      there is no such ancestor element, then there is no
+      background image available to E, in which case a transparent
+      black image will be used as E's background image.)</li>
+      <li>For each A<sub>i</sub> (from i=n to 1), initialize
+      BUF<sub>i</sub> to transparent black. Render all children of
+      A<sub>i</sub> up to but not including A<sub>i-1</sub> into
+      BUF<sub>i</sub>. The children are painted, then filtered,
+      clipped, masked and composited using the various painting,
+      filtering, clipping, masking and object opacity settings on
+      the given child. Any filter effects, masking and group
+      opacity that might be set on A<sub>i</sub> do <em>not</em>
+      apply when rendering the children of A<sub>i</sub> into
+      BUF<sub>i</sub>.<br />
+       (Note that for the case of A<sub>0</sub>=E, the graphical
+      contents of E are not rendered into BUF<sub>1</sub> and thus
+      are not part of the background image available to E. Instead,
+      the graphical contents of E are available via the <a
+      href="filters.html#SourceGraphic">SourceGraphic</a> and <a
+      href="filters.html#SourceAlpha">SourceAlpha</a> pseudo input
+      images.)</li>
+      <li>Then, for each A<sub>i</sub> (from i=1 to n-1), composite
+      BUF<sub>i</sub> into BUF<sub>i+1</sub>.</li>
+      <li>The accumulated result (i.e., BUF<sub>n</sub>) represents
+      the background image available to E.</li>
+    </ul>
+    <p><span class="example-ref">Example
+    enable-background-01</span> illustrates the rules for
+    background image processing.</p>
+
+<edit:example href='images/filters/enable-background-01.svg' name='enable-background-01' description='illustrate the rules for background image processing' image='yes' link='yes'/>
+
+    <p>The example above contains five parts, described as
+    follows:</p>
+    <ol>
+      <li>The first set is the reference graphic. The reference
+      graphic consists of a red rectangle followed by a 50%
+      transparent <a>'g'</a> element. Inside the <a>'g'</a> is a green circle that
+      partially overlaps the rectangle and a a blue triangle that
+      partially overlaps the circle. The three objects are then
+      outlined by a rectangle stroked with a thin blue line. No
+      filters are applied to the reference graphic.</li>
+      <li>The second set enables background image processing and
+      adds an empty <a>'g'</a> element which invokes the
+      ShiftBGAndBlur filter. This filter takes the current
+      accumulated background image (i.e., the entire reference
+      graphic) as input, shifts its offscreen down, blurs it, and
+      then writes the result to the canvas. Note that the offscreen
+      for the filter is initialized to transparent black, which
+      allows the already rendered rectangle, circle and triangle to
+      show through after the filter renders its own result to the
+      canvas.</li>
+      <li>The third set enables background image processing and
+      instead invokes the ShiftBGAndBlur filter on the inner <a>'g'</a> element. The accumulated
+      background at the time the filter is applied contains only
+      the red rectangle. Because the children of the inner <a>'g'</a> (i.e., the circle and
+      triangle) are not part of the inner <a>'g'</a> element's background and
+      because ShiftBGAndBlur ignores SourceGraphic, the children of
+      the inner <a>'g'</a> do not appear in the
+      result.</li>
+      <li>The fourth set enables background image processing and
+      invokes the ShiftBGAndBlur on the <a>'polygon'</a> element that draws
+      the triangle. The accumulated background at the time the
+      filter is applied contains the red rectangle plus the green
+      circle ignoring the effect of the <a>'opacity'</a> property on the inner
+      <a>'g'</a> element. (Note that the
+      blurred green circle at the bottom does not let the red
+      rectangle show through on its left side. This is due to
+      ignoring the effect of the <a>'opacity'</a> property.) Because the
+      triangle itself is not part of the accumulated background and
+      because ShiftBGAndBlur ignores SourceGraphic, the triangle
+      does not appear in the result.</li>
+      <li>The fifth set is the same as the fourth except that
+      filter ShiftBGAndBlur_WithSourceGraphic is invoked instead of
+      ShiftBGAndBlur. ShiftBGAndBlur_WithSourceGraphic performs the
+      same effect as ShiftBGAndBlur, but then renders the
+      SourceGraphic on top of the shifted, blurred background
+      image. In this case, SourceGraphic is the blue triangle;
+      thus, the result is the same as in the fourth case except
+      that the blue triangle now appears.</li>
+    </ol>
+
+    <h2 id="FilterPrimitivesOverview">Filter primitives overview</h2>
+
+    <h3 id="FilterPrimitivesOverviewIntro">Overview</h3>
+
+    <p>This section describes the various filter primtives that can
+    be assembled to achieve a particular filter effect.</p>
+    <p>Unless otherwise stated, all image filters operate on
+    premultiplied RGBA samples. Filters which work more naturally
+    on non-premultiplied data (feColorMatrix and
+    feComponentTransfer) will temporarily undo and redo
+    premultiplication as specified. All raster effect filtering
+    operations take 1 to N input RGBA images, additional attributes
+    as parameters, and produce a single output RGBA image.</p>
+    <p>The RGBA result from each filter primitive will be clamped
+    into the allowable ranges for colors and opacity values. Thus,
+    for example, the result from a given filter primitive will have
+    any negative color values or opacity values adjusted up to
+    color/opacity of zero.</p>
+    <p>The color space in which a particular filter primitive
+    performs its operations is determined by the value of property
+    <a>'color-interpolation-filters'</a> on
+    the given filter primitive. A different property, <a>'color-interpolation'</a> determines
+    the color space for other color operations. Because these two
+    properties have different initial values (<a>'color-interpolation-filters'</a> has
+    an initial value of <span class="prop-value">linearRGB</span>
+    whereas <a>'color-interpolation'</a> has an
+    initial value of <span class="prop-value">sRGB</span>), in some
+    cases to achieve certain results (e.g., when coordinating
+    gradient interpolation with a filtering operation) it will be
+    necessary to explicitly set <a>'color-interpolation'</a> to <span
+    class="prop-value">linearRGB</span> or <a>'color-interpolation-filters'</a> to
+    <span class="prop-value">sRGB</span> on particular elements.
+    Note that the examples below do not explicitly set either <a>'color-interpolation'</a> or <a>'color-interpolation-filters'</a>, so
+    the initial values for these properties apply to the
+    examples.</p>
+
+<h3 id="CommonAttributes">Common attributes</h3>
+
+<p>With the exception of the <a>'feTile/in'</a> attribute, all of the following
+attributes are available on all filter primitive elements:</p>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="FilterPrimitiveXAttribute"><span class="adef">x</span> = "<em><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></em>"</dt>
+        <dd>The minimum x coordinate for the subregion which
+        restricts calculation and rendering of the given filter
+        primitive. See <a
+        href="filters.html#FilterPrimitiveSubRegion">filter
+        primitive subregion</a>.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="FilterPrimitiveYAttribute"><span class="adef">y</span> = "<em><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></em>"</dt>
+        <dd>The minimum y coordinate for the subregion which
+        restricts calculation and rendering of the given filter
+        primitive. See <a
+        href="filters.html#FilterPrimitiveSubRegion">filter
+        primitive subregion</a>.<br /><span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="FilterPrimitiveWidthAttribute"><span class="adef">width</span> = "<em><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></em>"</dt>
+        <dd>The width of the subregion which restricts calculation
+        and rendering of the given filter primitive. See <a
+        href="filters.html#FilterPrimitiveSubRegion">filter
+        primitive subregion</a>.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables the effect of the given filter
+        primitive (i.e., the result is a transparent black
+        image).<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="FilterPrimitiveHeightAttribute"><span class="adef">height</span> = "<em><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></em>"</dt>
+        <dd>The height of the subregion which restricts calculation
+        and rendering of the given filter primitive. See <a
+        href="filters.html#FilterPrimitiveSubRegion">filter
+        primitive subregion</a>.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables the effect of the given filter
+        primitive (i.e., the result is a transparent black
+        image).<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="FilterPrimitiveResultAttribute"><span class="adef">result</span> =
+        "<em>&lt;filter-primitive-reference&gt;</em>"</dt>
+        <dd>Assigned name for this filter primitive. If supplied,
+        then graphics that result from processing this filter
+        primitive can be referenced by an <a>'feTile/in'</a> attribute on a subsequent
+        filter primitive within the same <a>'filter element'</a> element. If no
+        value is provided, the output will only be available for
+        re-use as the implicit input into the next filter primitive
+        if that filter primitive provides no value for its <a>'feTile/in'</a> attribute.<br />
+         Note that a <em>&lt;filter-primitive-reference&gt;</em> is
+        not an XML ID; instead, a
+        <em>&lt;filter-primitive-reference&gt;</em> is only
+        meaningful within a given <a>'filter element'</a> element and thus
+        have only local scope. It is legal for the same
+        <em>&lt;filter-primitive-reference&gt;</em> to appear
+        multiple times within the same <a>'filter element'</a> element. When
+        referenced, the <em>&lt;filter-primitive-reference&gt;</em>
+        will use the closest preceding filter primitive with the
+        given result.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="FilterPrimitiveInAttribute"><span class="adef">in</span> = "<em><a
+        href="filters.html#SourceGraphic">SourceGraphic</a> | <a
+        href="filters.html#SourceAlpha">SourceAlpha</a> | <a
+        href="filters.html#BackgroundImage">BackgroundImage</a> |
+        <a href="filters.html#BackgroundAlpha">BackgroundAlpha</a>
+        | <a href="filters.html#FillPaint">FillPaint</a> | <a
+        href="filters.html#StrokePaint">StrokePaint</a> |
+        &lt;filter-primitive-reference&gt;</em>"</dt>
+        <dd>
+          Identifies input for the given filter primitive. The
+          value can be either one of six keywords or can be a
+          string which matches a previous <a>'feTile/result'</a> attribute value
+          within the same <a>'filter element'</a> element. If no
+          value is provided and this is the first filter primitive,
+          then this filter primitive will use <a
+          href="filters.html#SourceGraphic"><span
+          class="attr-value">SourceGraphic</span></a> as its input.
+          If no value is provided and this is a subsequent filter
+          primitive, then this filter primitive will use the result
+          from the previous filter primitive as its input.<br />
+          <br />
+          If the value for <a>'feTile/result'</a>
+          appears multiple times within a given <a>'filter element'</a> element, then a
+          reference to that result will use the closest preceding
+          filter primitive with the given value for attribute <a>'feTile/result'</a>. Forward references to
+          results are <a href="implnote.html#ErrorProcessing">an
+          error</a>.<br />
+          <br />
+           Definitions for the six keywords: 
+          <dl>
+            <dt id="SourceGraphic"><span class="attr-value">SourceGraphic</span></dt>
+            <dd>This keyword represents the <a
+            href="intro.html#TermGraphicsElement">graphics
+            elements</a> that were the original input into the <a>'filter element'</a> element. For
+            raster effects filter primitives, the <a
+            href="intro.html#TermGraphicsElement">graphics
+            elements</a> will be rasterized into an initially clear
+            RGBA raster in image space. Pixels left untouched by
+            the original graphic will be left clear. The image is
+            specified to be rendered in linear RGBA pixels. The
+            alpha channel of this image captures any anti-aliasing
+            specified by SVG. (Since the raster is linear, the
+            alpha channel of this image will represent the exact
+            percent coverage of each pixel.)</dd>
+            <dt id="SourceAlpha"><span class="attr-value">SourceAlpha</span></dt>
+            <dd>This keyword represents the <a
+            href="intro.html#TermGraphicsElement">graphics
+            elements</a> that were the original input into the <a>'filter element'</a> element. <span
+            class="attr-value">SourceAlpha</span> has all of the
+            same rules as <a
+            href="filters.html#SourceGraphic"><span
+            class="attr-value">SourceGraphic</span></a> except that
+            only the alpha channel is used. The input image is an
+            RGBA image consisting of implicitly black color values
+            for the RGB channels, but whose alpha channel is the
+            same as <a href="filters.html#SourceGraphic"><span
+            class="attr-value">SourceGraphic</span></a>. If this
+            option is used, then some implementations might need to
+            rasterize the <a
+            href="intro.html#TermGraphicsElement">graphics
+            elements</a> in order to extract the alpha
+            channel.</dd>
+            <dt id="BackgroundImage"><span class="attr-value">BackgroundImage</span></dt>
+            <dd>This keyword represents an image snapshot of the
+            canvas under the <a>filter region</a> at the time that the <a>'filter element'</a> element was
+            invoked. See <a
+            href="#AccessingBackgroundImage">Accessing the
+            background image</a>.</dd>
+            <dt id="BackgroundAlpha"><span class="attr-value">BackgroundAlpha</span></dt>
+            <dd>Same as <a
+            href="#BackgroundImage">BackgroundImage</a> except only
+            the alpha channel is used. See <a
+            href="filters.html#SourceAlpha"><span
+            class="attr-value">SourceAlpha</span></a> and <a
+            href="#AccessingBackgroundImage">Accessing the
+            background image</a>.</dd>
+            <dt id="FillPaint"><span class="attr-value">FillPaint</span></dt>
+            <dd>This keyword represents the value of the <a>'fill'</a> property on the
+            target element for the filter effect. The FillPaint
+            image has conceptually infinite extent. Frequently this
+            image is opaque everywhere, but it might not be if the
+            "paint" itself has alpha, as in the case of a gradient
+            or pattern which itself includes transparent or
+            semi-transparent parts.</dd>
+            <dt id="StrokePaint"><span class="attr-value">StrokePaint</span></dt>
+            <dd>This keyword represents the value of the <a>'stroke'</a> property on the
+            target element for the filter effect. The StrokePaint
+            image has conceptually infinite extent. Frequently this
+            image is opaque everywhere, but it might not be if the
+            "paint" itself has alpha, as in the case of a gradient
+            or pattern which itself includes transparent or
+            semi-transparent parts.</dd>
+          </dl>
+          <p>The <a>'feTile/in'</a> attribute is available on all filter
+          primitive elements that require an input.</p>
+          <span class="anim-target"><a
+          href="animate.html#Animatable">Animatable</a>:
+          yes.</span>
+        </dd>
+      </dl>
+    </div>
+
+    <h3 id="FilterPrimitiveSubRegion">Filter primitive subregion</h3>
+
+<edit:with element='feTile'>
+
+    <p>All filter primitives have attributes <a>'x'</a>,
+    <a>'y'</a>, <a>'width'</a> and
+    <a>'height'</a> which identify a subregion which
+    restricts calculation and rendering of the given filter
+    primitive. These attributes are defined according to the same
+    rules as other filter primitives' coordinate and length
+    attributes and thus represent values in the coordinate system
+    established by attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element.</p>
+    <p><a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> default to
+    the union (i.e., tightest fitting bounding box) of the
+    subregions defined for all referenced nodes. If there are no
+    referenced nodes (e.g., for <a>'feImage'</a> or <a>'feTurbulence'</a>), or one or more
+    of the referenced nodes is a standard input (one of <a
+    href="filters.html#SourceGraphic"><span
+    class="attr-value">SourceGraphic</span></a>, <a
+    href="filters.html#SourceAlpha"><span
+    class="attr-value">SourceAlpha</span></a>, <a
+    href="filters.html#BackgroundImage"><span
+    class="attr-value">BackgroundImage</span></a>, <a
+    href="filters.html#BackgroundAlpha"><span
+    class="attr-value">BackgroundAlpha</span></a>, <a
+    href="filters.html#FillPaint"><span
+    class="attr-value">FillPaint</span></a> or <a
+    href="filters.html#StrokePaint"><span
+    class="attr-value">StrokePaint</span></a>), or for <a>'feTile'</a> (which is special
+    because its principal function is to replicate the referenced
+    node in X and Y and thereby produce a usually larger result),
+    the default subregion is <span class="attr-value">0%</span>,<span class="attr-value">0%</span>,<span class="attr-value">100%</span>,<span class="attr-value">100%</span>, 
+    where as a special-case the percentages are relative to the dimensions of the <a>filter region</a>, thus making the 
+    the default <a>filter primitive subregion</a> equal to the <a>filter region</a>.</p>
+    <p><a>'x'</a>, <a>'y'</a>,
+    <a>'width'</a> and <a>'height'</a> act as a
+    hard clip clipping rectangle on both the filter primitive's input image(s) and the filter primitive result.</p>
+    <p>All intermediate offscreens are defined to not exceed the
+    intersection of <a>'x'</a>, <a>'y'</a>,
+    <a>'width'</a> and <a>'height'</a> with the <a>filter region</a>. The
+    <a>filter region</a> and any of the <a>'x'</a>,
+    <a>'y'</a>, <a>'width'</a> and
+    <a>'height'</a> subregions are to be set up such that
+    all offscreens are made big enough to accommodate any pixels
+    which even partly intersect with either the <a>filter region</a> or
+    the x,y,width,height subregions.</p>
+    <p><a>'feTile'</a> references a previous
+    filter primitive and then stitches the tiles together based on
+    the <a>'x'</a>, <a>'y'</a>,
+    <a>'width'</a> and <a>'height'</a> values of
+    the referenced filter primitive in order to fill its own 
+    <a>filter primitive subregion</a>.</p>
+
+</edit:with>
+
+<p><span class='example-ref'>Example primitive-subregion-01</span> demonstrates the effect
+of specifying a filter primitive subregion:</p>
+
+<edit:example href='images/filters/primitive-subregion-01.svg' name='primitive-subregion-01' image='yes' link='yes'/>
+
+    <p>
+      In the example above there are three rects that each have a cross and a circle in them. 
+      The circle element in each one has a different filter applied, but with the same <a>filter primitive subregion</a>. 
+      The filter output should be limited to the <a>filter primitive subregion</a>, so you should never see the circles themselves, 
+      just the rects that make up the <a>filter primitive subregion</a>. 
+    </p>
+    <ul>
+      <li>
+        The upper left rect shows an <a>'feFlood'</a> with <span class="attr-value">flood-opacity="75%"</span> so the cross should be visible through the green rect in the middle.
+      </li>
+      <li>
+        The lower left rect shows an <a>'feMerge'</a> that merges <span class="attr-value">SourceGraphic</span> with <span class="attr-value">FillPaint</span>. Since the circle has <span class="attr-value">fill-opacity="0.5"</span> it will also be transparent so that the cross is visible through the green rect in the middle.
+      </li>
+      <li>
+        The upper right rect shows an <a>'feBlend'</a> that has <span class="attr-value">mode="multiply"</span>. Since the circle in this case isn't transparent the result is totally opaque. The rect should be dark green and the cross should not be visible through it.
+      </li>
+    </ul>
+
+    <h2 id="LightSourceDefinitions">Light source elements and properties</h2>
+
+    <h3 id="LightSourceIntro">Introduction</h3>
+
+    <p>The following sections define the elements that define a
+    light source, <a>'feDistantLight'</a>, <a>'fePointLight'</a> and <a>'feSpotLight'</a>, and property <a>'lighting-color'</a>, which defines
+    the color of the light.</p>
+
+<h3 id="feDistantLightElement">Light source <span class="element-name">'feDistantLight'</span></h3>
+
+<edit:with element='feDistantLight'>
+
+<edit:elementsummary name='feDistantLight'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feDistantLightAzimuthAttribute"><span
+        class="adef">azimuth</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Direction angle for the light source on the XY plane (clockwise),
+        in degrees from the x axis.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feDistantLightElevationAttribute"><span
+        class="adef">elevation</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Direction angle for the light source from the XY plane towards the z
+        axis, in degrees. Note the positive Z-axis points towards the viewer of
+        the content.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+      <p>
+        The following diagram illustrates the angles which <a>'azimuth'</a>
+        and <a>'elevation'</a> represent in an XYZ coordinate system.
+      </p>
+      <img src="images/filters/azimuth-elevation.png"
+        alt="Angles which azimuth and elevation represent" width="480" height="360" />
+    </div>
+
+</edit:with>
+
+<h3 id="fePointLightElement">Light source <span class="element-name">'fePointLight'</span></h3>
+
+<edit:with element='fePointLight'>
+
+<edit:elementsummary name='fePointLight'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="fePointLightXAttribute"><span
+        class="adef">x</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>X location for the light source in the coordinate
+        system established by attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="fePointLightYAttribute"><span
+        class="adef">y</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Y location for the light source in the coordinate
+        system established by attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="fePointLightZAttribute"><span
+        class="adef">z</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Z location for the light source in the coordinate
+        system established by attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element, assuming
+        that, in the <a
+        href="coords.html#InitialCoordinateSystem">initial
+        coordinate system</a>, the positive Z-axis comes out
+        towards the person viewing the content and assuming that
+        one unit along the Z-axis equals <a href="coords.html#Units_viewport_percentage">one unit in X and Y</a>.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+
+</edit:with>
+
+<h3 id="feSpotLightElement">Light source <span class="element-name">'feSpotLight'</span></h3>
+
+<edit:with element='feSpotLight'>
+
+<edit:elementsummary name='feSpotLight'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feSpotLightXAttribute"><span
+        class="adef">x</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>X location for the light source in the coordinate
+        system established by attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feSpotLightYAttribute"><span
+        class="adef">y</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Y location for the light source in the coordinate
+        system established by attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feSpotLightZAttribute"><span
+        class="adef">z</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Z location for the light source in the coordinate
+        system established by attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element, assuming
+        that, in the <a
+        href="coords.html#InitialCoordinateSystem">initial
+        coordinate system</a>, the positive Z-axis comes out
+        towards the person viewing the content and assuming that
+        one unit along the Z-axis equals <a href="coords.html#Units_viewport_percentage">one unit in X and Y</a>.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feSpotLightPointsAtXAttribute"><span
+        class="adef">pointsAtX</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>X location in the coordinate system established by
+        attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element of the
+        point at which the light source is pointing.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feSpotLightPointsAtYAttribute"><span
+        class="adef">pointsAtY</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Y location in the coordinate system established by
+        attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element of the
+        point at which the light source is pointing.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feSpotLightPointsAtZAttribute"><span
+        class="adef">pointsAtZ</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Z location in the coordinate system established by
+        attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element of the
+        point at which the light source is pointing, assuming that, in the <a
+        href="coords.html#InitialCoordinateSystem">initial
+        coordinate system</a>, the positive Z-axis comes out
+        towards the person viewing the content and assuming that
+        one unit along the Z-axis equals <a href="coords.html#Units_viewport_percentage">one unit in X and Y</a>.
+        <br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feSpotLightSpecularExponentAttribute"><span
+        class="adef">specularExponent</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Exponent value controlling the focus for the light
+        source.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">1</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feSpotLightLimitingConeAngleAttribute"><span
+        class="adef">limitingConeAngle</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>A limiting cone which restricts the region where the
+        light is projected. No light is projected outside the cone.
+        <a>'limitingConeAngle'</a> represents
+        the angle in degrees between the spot light axis (i.e. the axis
+        between the light source and the point to which it is
+        pointing at) and the spot light cone. User agents should
+        apply a smoothing technique such as anti-aliasing at the
+        boundary of the cone.<br />
+         If no value is specified, then no limiting cone will be
+        applied.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+
+</edit:with>
+
+<h3 id="LightingColorProperty">The <span class="prop-name">'lighting-color'</span> property</h3>
+
+    <p>The <a>'lighting-color'</a> property
+    defines the color of the light source for filter primitives <a>'feDiffuseLighting'</a> and <a>'feSpecularLighting'</a>.</p>
+    <div class="propdef">
+      <dl>
+        <dt><span class="propdef-title prop-name">'lighting-color'</span></dt>
+        <dd>
+          <table summary="lighting-color property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>currentColor |<br />
+               <a href="types.html#DataTypeColor">&lt;color&gt;</a>
+               [<a href="types.html#DataTypeICCColor">&lt;icccolor&gt;</a>]
+              |<br />
+               <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>white</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a>'feDiffuseLighting'</a>
+              and <a>'feSpecularLighting'</a>
+              elements</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<h2 id="feBlendElement">Filter primitive <span class="element-name">'feBlend'</span></h2>
+
+<edit:with element='feBlend'>
+
+    <p>This filter composites two objects together using commonly
+    used imaging software blending modes. It performs a pixel-wise
+    combination of two input images.</p>
+
+<edit:elementsummary name='feBlend'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feBlendModeAttribute"><span
+        class="adef">mode</span> = "<em>normal | multiply | screen
+        | darken | lighten</em>"</dt>
+        <dd>One of the image blending modes (see <a
+        href="#BlendingTable">table</a> below). If attribute <a>'mode'</a> is not specified, then the effect is as if a value of <span class="attr-value">normal</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feBlendIn2Attribute"><span
+        class="adef">in2</span> = "<em>(see <a>'in'</a> attribute)</em>"</dt>
+        <dd>The second input image to the blending operation. This
+        attribute can take on the same values as the <a>'in'</a> attribute.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+    <p>For all feBlend modes, the result opacity is computed as
+    follows:</p>
+<pre>
+qr = 1 - (1-qa)*(1-qb)
+</pre>
+    <p>For the compositing formulas below, the following
+    definitions apply:</p>
+<pre>
+cr = Result color (RGB) - premultiplied 
+qa = Opacity value at a given pixel for image A 
+qb = Opacity value at a given pixel for image B 
+ca = Color (RGB) at a given pixel for image A - premultiplied 
+cb = Color (RGB) at a given pixel for image B - premultiplied 
+</pre>
+    <p id="BlendingTable">The following
+    table provides the list of available image blending modes:</p>
+    <table summary="blending modes" width="500" border="1">
+      <tr>
+        <td width="33%">Image Blending Mode</td>
+        <td width="67%">Formula for computing result color</td>
+      </tr>
+      <tr>
+        <td width="33%">normal</td>
+        <td width="67%">cr = (1 - qa) * cb + ca</td>
+      </tr>
+      <tr>
+        <td width="33%">multiply</td>
+        <td width="67%">cr = (1-qa)*cb + (1-qb)*ca + ca*cb</td>
+      </tr>
+      <tr>
+        <td width="33%">screen</td>
+        <td width="67%">cr = cb + ca - ca * cb</td>
+      </tr>
+      <tr>
+        <td width="33%">darken</td>
+        <td width="67%">cr = Min ((1 - qa) * cb + ca, (1 - qb) * ca
+        + cb)</td>
+      </tr>
+      <tr>
+        <td width="33%">lighten</td>
+        <td width="67%">cr = Max ((1 - qa) * cb + ca, (1 - qb) * ca
+        + cb)</td>
+      </tr>
+    </table>
+    <p><span class="attr-value">'normal'</span> blend mode is
+    equivalent to <a
+    href="filters.html#feCompositeOperatorAttribute"><span
+    class="attr-value">operator="over"</span></a> on the <a>'feComposite'</a> filter primitive,
+    matches the blending method used by <a>'feMerge'</a> and matches the <a
+    href="masking.html#SimpleAlphaBlending">simple alpha
+    compositing</a> technique used in SVG for all compositing
+    outside of filter effects.</p>
+    <p><span class="example-ref">Example feBlend</span> shows
+    examples of the five blend modes.</p>
+
+<edit:example href='images/filters/feBlend.svg' name='feBlend' description='Examples of feBlend modes' image='yes' link='yes'/>
+
+</edit:with>
+
+<h2 id="feColorMatrixElement">Filter primitive <span class="element-name">'feColorMatrix'</span></h2>
+
+<edit:with element='feColorMatrix'>
+
+    <p>This filter applies a matrix transformation:</p>
+<pre>
+| R' |     | a00 a01 a02 a03 a04 |   | R |
+| G' |     | a10 a11 a12 a13 a14 |   | G |
+| B' |  =  | a20 a21 a22 a23 a24 | * | B |
+| A' |     | a30 a31 a32 a33 a34 |   | A |
+| 1  |     |  0   0   0   0   1  |   | 1 |
+</pre>
+    <p>on the RGBA color and alpha values of every pixel on the
+    input graphics to produce a result with a new set of RGBA color
+    and alpha values.</p>
+    <p>The calculations are performed on non-premultiplied color
+    values. If the input graphics consists of premultiplied color
+    values, those values are automatically converted into
+    non-premultiplied color values for this operation.</p>
+    <p>These matrices often perform an identity mapping in the
+    alpha channel. If that is the case, an implementation can avoid
+    the costly undoing and redoing of the premultiplication for all
+    pixels with A = 1.</p>
+
+<edit:elementsummary name='feColorMatrix'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feColorMatrixTypeAttribute"><span
+        class="adef">type</span> = "<em>matrix | saturate |
+        hueRotate | luminanceToAlpha</em>"</dt>
+        <dd>Indicates the type of matrix operation. The keyword
+        <span class="attr-value">'matrix'</span> indicates that a full
+        5x4 matrix of values will be provided. The other keywords
+        represent convenience shortcuts to allow commonly used
+        color operations to be performed without specifying a
+        complete matrix. If attribute <a>'type'</a> is not specified, then the effect is as if a value of <span class="attr-value">matrix</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feColorMatrixValuesAttribute"><span
+        class="adef">values</span> = "<em>list of <a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a>s</em>"</dt>
+        <dd>
+          The contents of <a>'values'</a>
+          depends on the value of attribute <a>'type'</a>: 
+          <ul>
+            <li>
+              For <span class="attr-value">type="matrix"</span>,
+              <a>'values'</a> is a list of 20
+              matrix values (a00 a01 a02 a03 a04 a10 a11 ... a34),
+              separated by whitespace and/or a comma. For example,
+              the identity matrix could be expressed as: 
+<pre>
+type="matrix" 
+values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
+</pre>
+            </li>
+            <li>
+              For <span class="attr-value">type="saturate"</span>,
+              <a>'values'</a> is a single
+              real number value (0 to 1). A <span
+              class="attr-value">saturate</span> operation is
+              equivalent to the following matrix operation: 
+<pre>
+| R' |     |0.213+0.787s  0.715-0.715s  0.072-0.072s 0  0 |   | R |
+| G' |     |0.213-0.213s  0.715+0.285s  0.072-0.072s 0  0 |   | G |
+| B' |  =  |0.213-0.213s  0.715-0.715s  0.072+0.928s 0  0 | * | B |
+| A' |     |           0            0             0  1  0 |   | A |
+| 1  |     |           0            0             0  0  1 |   | 1 |
+</pre>
+            </li>
+            <li>
+              For <span class="attr-value">type="hueRotate"</span>,
+              <a>'values'</a> is a single one
+              real number value (degrees). A <span
+              class="attr-value">hueRotate</span> operation is
+              equivalent to the following matrix operation: 
+<pre>
+| R' |     | a00  a01  a02  0  0 |   | R |
+| G' |     | a10  a11  a12  0  0 |   | G |
+| B' |  =  | a20  a21  a22  0  0 | * | B |
+| A' |     | 0    0    0    1  0 |   | A |
+| 1  |     | 0    0    0    0  1 |   | 1 |
+</pre>
+              where the terms a00, a01, etc. are calculated as
+              follows: 
+<pre>
+| a00 a01 a02 |    [+0.213 +0.715 +0.072]
+| a10 a11 a12 | =  [+0.213 +0.715 +0.072] +
+| a20 a21 a22 |    [+0.213 +0.715 +0.072]
+                        [+0.787 -0.715 -0.072]
+cos(hueRotate value) *  [-0.213 +0.285 -0.072] +
+                        [-0.213 -0.715 +0.928]
+                        [-0.213 -0.715+0.928]
+sin(hueRotate value) *  [+0.143 +0.140-0.283]
+                        [-0.787 +0.715+0.072]
+</pre>
+              Thus, the upper left term of the hue matrix turns out
+              to be: 
+<pre>
+.213 + cos(hueRotate value)*.787 - sin(hueRotate value)*.213
+</pre>
+            </li>
+            <li>
+              For <span
+              class="attr-value">type="luminanceToAlpha"</span>,
+              <a>'values'</a> is not
+              applicable. A <span
+              class="attr-value">luminanceToAlpha</span> operation
+              is equivalent to the following matrix operation: 
+<pre>
+   | R' |     |      0        0        0  0  0 |   | R |
+   | G' |     |      0        0        0  0  0 |   | G |
+   | B' |  =  |      0        0        0  0  0 | * | B |
+   | A' |     | 0.2125   0.7154   0.0721  0  0 |   | A |
+   | 1  |     |      0        0        0  0  1 |   | 1 |
+</pre>
+            </li>
+          </ul>
+          If the attribute is not specified, then the default
+          behavior depends on the value of attribute <a>'type'</a>. If <span
+          class="attr-value">type="matrix"</span>, then this
+          attribute defaults to the identity matrix. If <span
+          class="attr-value">type="saturate"</span>, then this
+          attribute defaults to the value <span
+          class="attr-value">1</span>, which results in the
+          identity matrix. If <span
+          class="attr-value">type="hueRotate"</span>, then this
+          attribute defaults to the value <span
+          class="attr-value">0</span>, which results in the
+          identity matrix.<br />
+           <span class="anim-target"><a
+          href="animate.html#Animatable">Animatable</a>:
+          yes.</span>
+        </dd>
+      </dl>
+    </div>
+    <p><span class="example-ref">Example feColorMatrix</span> shows
+    examples of the four types of feColorMatrix operations.</p>
+
+<edit:example href='images/filters/feColorMatrix.svg' name='feColorMatrix' description='Examples of feColorMatrix operations' image='yes' link='yes'/>
+
+</edit:with>
+
+<h2 id="feComponentTransferElement">Filter primitive <span class="element-name">'feComponentTransfer'</span></h2>
+
+<edit:with element='feComponentTransfer'>
+
+    <p>This filter primitive performs component-wise remapping of
+    data as follows:</p>
+<pre>
+R' = <a href="filters.html#feFuncRElement">feFuncR</a>( R )
+G' = <a href="filters.html#feFuncGElement">feFuncG</a>( G )
+B' = <a href="filters.html#feFuncBElement">feFuncB</a>( B )
+A' = <a href="filters.html#feFuncAElement">feFuncA</a>( A )
+</pre>
+    <p>for every pixel. It allows operations like brightness
+    adjustment, contrast adjustment, color balance or
+    thresholding.</p>
+    <p>The calculations are performed on non-premultiplied color
+    values. If the input graphics consists of premultiplied color
+    values, those values are automatically converted into
+    non-premultiplied color values for this operation. (Note that
+    the undoing and redoing of the premultiplication can be avoided
+    if <a href="filters.html#feFuncAElement">feFuncA</a> is the
+    identity transform and all alpha values on the source graphic
+    are set to 1.)</p>
+
+<edit:elementsummary name='feComponentTransfer'/>
+
+<p>The child elements of a <a>'feComponentTransfer'</a> element specify the
+transfer functions for the four channels:</p>
+
+<ul id="transferFuncElements">
+  <li><a>'feFuncR'</a> — transfer function for the red component of the input graphic</li> 
+  <li><a>'feFuncG'</a> — transfer function for the green component of the input graphic</li> 
+  <li><a>'feFuncB'</a> — transfer function for the blue component of the input graphic</li> 
+  <li><a>'feFuncA'</a> — transfer function for the alpha component of the input graphic</li> 
+</ul>
+
+<p>The following rules apply to the processing of the <a>'feComponentTransfer'</a> element:</p>
+<ul>
+	<li>If more than one <a href="#transferFuncElements">transfer function element</a> of the same kind is specified, the last occurrence is to be used.</li>
+	<li>If any of the <a href="#transferFuncElements">transfer function elements</a> are unspecified, the <a>'feComponentTransfer'</a> must be processed as if those <a href="#transferFuncElements">transfer function elements</a> were specified with their <a>'type'</a> attributes set to <span class="attr-value">'identity'</span>.</li>
+</ul>
+	
+<edit:with element='feFuncR'>
+
+<div id='feFuncRElement'>
+<edit:elementsummary name='feFuncR'/>
+</div>
+
+<div id='feFuncGElement'>
+<edit:elementsummary name='feFuncG'/>
+</div>
+
+<div id='feFuncBElement'>
+<edit:elementsummary name='feFuncB'/>
+</div>
+
+<div id='feFuncAElement'>
+<edit:elementsummary name='feFuncA'/>
+</div>
+
+<p id="TransferFunctionElementAttributes">The attributes below are the
+<span class='SVG-TermDefine'>transfer function element attributes</span>,
+which apply to sub-elements <a>'feFuncR'</a>, <a>'feFuncG'</a>, <a>'feFuncB'</a>
+and <a>'feFuncA'</a> that define the transfer functions.</p>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feComponentTransferTypeAttribute"><span
+        class="adef">type</span> = "<em>identity | table | discrete
+        | linear | gamma</em>"</dt>
+        <dd>
+          <p>Indicates the type of component transfer function. The
+          type of function determines the applicability of the
+          other attributes.</p>
+	  <p>In the following, C is the initial component (e.g.,
+	  <a>'feFuncR'</a>), C' is the remapped component; both
+	  in the closed interval [0,1].</p>
+          <ul>
+            <li>
+              For <span class="attr-value">identity</span>: 
+<pre>
+C' = C
+</pre>
+            </li>
+            <li>
+              For <span class="attr-value">table</span>, the
+              function is defined by linear interpolation
+	      between values given in the attribute
+	      <a>'tableValues'</a>. The table has <em>n+1</em>
+	      values (i.e., v<sub>0</sub> to v<sub>n</sub>)
+	      specifying the start and end values for <em>n</em>
+	      evenly sized interpolation regions. Interpolations
+	      use the following formula:
+
+              <p>For a value <code>C &lt; 1</code> find <code>k</code>
+              such that:</p>
+
+              <p class="filterformula">k/n &lt;= C &lt; (k+1)/n</p>
+
+              <p>The result <code>C'</code> is given by:</p>
+
+              <p class="filterformula">C' = v<sub>k</sub> + (C -
+              k/n)*n * (v<sub>k+1</sub> - v<sub>k</sub>)</p>
+
+	      <p>If <code>C = 1</code> then:</p>
+
+	      <p class="filterformula">C' = v<sub>n</sub>.</p>
+
+            </li>
+            <li>
+              For <span class="attr-value">discrete</span>, the
+              function is defined by the step function given in the
+              attribute <a>'tableValues'</a>, which
+              provides a list of <em>n</em> values (i.e.,
+              v<sub>0</sub> to v<sub>n-1</sub>) in order to
+              identify a step function consisting of <em>n</em>
+              steps. The step function is defined by the following
+              formula:
+
+              <p>For a value <code>C &lt; 1</code> find <code>k</code>
+              such that:</p>
+
+              <p class="filterformula">k/n &lt;= C &lt; (k+1)/n</p>
+
+              <p>The result <code>C'</code> is given by:</p>
+
+
+              <p class="filterformula">C' = v<sub>k</sub></p>
+	      <p>If <code>C = 1</code> then:</p>
+
+	      <p class="filterformula">C' = v<sub>n-1</sub>.</p>
+
+            </li>
+            <li>
+              For <span class="attr-value">linear</span>, the
+              function is defined by the following linear equation:
+              
+              <p class="filterformula">C' = <a
+              href="filters.html#feComponentTransferSlopeAttribute">
+              <span class="attr-name">slope</span></a> * C + <a
+              href="filters.html#feComponentTransferInterceptAttribute">
+              <span class="attr-name">intercept</span></a></p>
+            </li>
+            <li>
+              For <span class="attr-value">gamma</span>, the
+              function is defined by the following exponential
+              function: 
+              <p class="filterformula">C' = <a
+              href="filters.html#feComponentTransferAmplitudeAttribute">
+              <span class="attr-name">amplitude</span></a> * pow(C,
+              <a
+              href="filters.html#feComponentTransferExponentAttribute">
+              <span class="attr-name">exponent</span></a>) + <a
+              href="filters.html#feComponentTransferOffsetAttribute">
+              <span class="attr-name">offset</span></a></p>
+            </li>
+          </ul>
+          <span class="anim-target"><a
+          href="animate.html#Animatable">Animatable</a>:
+          yes.</span>
+        </dd>
+        <dt id="feComponentTransferTableValuesAttribute"><span
+        class="adef">tableValues</span> = "<em>(list of <a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a>s)</em>"</dt>
+        <dd>When <span class="attr-value">type="table"</span>, the
+        list of <a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a>s
+        <em>v0,v1,...vn</em>, separated by white space and/or a
+        comma, which define the lookup table. An empty list results
+        in an identity transfer function.
+        If the attribute is not
+        specified, then the effect is as if an empty list were
+        provided.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feComponentTransferSlopeAttribute"><span
+        class="adef">slope</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>When <span class="attr-value">type="linear"</span>, the
+        slope of the linear function.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">1</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feComponentTransferInterceptAttribute"><span
+        class="adef">intercept</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>When <span class="attr-value">type="linear"</span>, the
+        intercept of the linear function.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feComponentTransferAmplitudeAttribute"><span
+        class="adef">amplitude</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>When <span class="attr-value">type="gamma"</span>, the
+        amplitude of the gamma function.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">1</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feComponentTransferExponentAttribute"><span
+        class="adef">exponent</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>When <span class="attr-value">type="gamma"</span>, the
+        exponent of the gamma function.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">1</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feComponentTransferOffsetAttribute"><span
+        class="adef">offset</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>When <span class="attr-value">type="gamma"</span>, the
+        offset of the gamma function.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+
+</edit:with>
+
+<p><span class="example-ref">Example feComponentTransfer</span> shows
+examples of the four types of feComponentTransfer operations.</p>
+
+<edit:example href='images/filters/feComponentTransfer.svg' name='feComponentTransfer' description='Examples of feComponentTransfer operations' image='yes' link='yes'/>
+
+</edit:with>
+
+<h2 id="feCompositeElement">Filter primitive <span class="element-name">'feComposite'</span></h2>
+
+<edit:with element='feComposite'>
+
+    <p>This filter performs the combination of the two input images
+    pixel-wise in image space using one of the Porter-Duff [<a
+    href="refs.html#ref-PORTERDUFF">PORTERDUFF</a>] compositing
+    operations: <em>over, in, atop, out, xor</em> [<a
+    href="refs.html#ref-SVG-COMPOSITING">SVG-COMPOSITING</a>]. Additionally, a
+    component-wise <em>arithmetic</em> operation (with the result
+    clamped between [0..1]) can be applied.</p>
+    <p>The <em>arithmetic</em> operation is useful for combining
+    the output from the <a>'feDiffuseLighting'</a> and <a>'feSpecularLighting'</a> filters
+    with texture data. It is also useful for implementing
+    <em>dissolve</em>. If the <em>arithmetic</em> operation is
+    chosen, each result pixel is computed using the following
+    formula:</p>
+<pre>
+result = k1*i1*i2 + k2*i1 + k3*i2 + k4
+</pre>
+where:
+  <ul>
+    <li>
+    <code>i1</code> and <code>i2</code> indicate the corresponding pixel channel values of the input image, which map to in and in2 respectively
+    </li>
+    <li>
+    <code>k1, k2, k3</code> and <code>k4</code> indicate the values of the attributes with the same name
+    </li>
+  </ul>
+    <p>For this filter primitive, the extent of the resulting image
+    might grow as described in the section that describes the <a
+    href="filters.html#FilterPrimitiveSubRegion">filter primitive
+    subregion</a>.</p>
+
+<edit:elementsummary name='feComposite'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feCompositeOperatorAttribute"><span
+        class="adef">operator</span> = "<em>over | in | out | atop
+        | xor | arithmetic</em>"</dt>
+        <dd>The compositing operation that is to be performed. All
+        of the <a>'operator'</a> types except
+        <span class="attr-value">arithmetic</span> match the
+        corresponding operation as described in [<a
+        href="refs.html#ref-PORTERDUFF">PORTERDUFF</a>]. The <span
+        class="attr-value">arithmetic</span> operator is described
+        above. If attribute <a>'operator'</a> is not specified, then the effect is as if a value of <span class="attr-value">over</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feCompositeK1Attribute"><span
+        class="adef">k1</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Only applicable if <span
+        class="attr-value">operator="arithmetic"</span>.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class="attr-value">0</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feCompositeK2Attribute"><span
+        class="adef">k2</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Only applicable if <span
+        class="attr-value">operator="arithmetic"</span>.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class="attr-value">0</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feCompositeK3Attribute"><span
+        class="adef">k3</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Only applicable if <span
+        class="attr-value">operator="arithmetic"</span>.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class="attr-value">0</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feCompositeK4Attribute"><span
+        class="adef">k4</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Only applicable if <span
+        class="attr-value">operator="arithmetic"</span>.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class="attr-value">0</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feCompositeIn2Attribute"><span
+        class="adef">in2</span> = "<em>(see <a>'in'</a> attribute)</em>"</dt>
+        <dd>The second input image to the compositing operation.
+        This attribute can take on the same values as the <a>'in'</a> attribute.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+    <p><span class="example-ref">Example feComposite</span> shows
+    examples of the six types of feComposite operations. It also
+    shows two different techniques to using the <a
+    href="#BackgroundImage">BackgroundImage</a> as part of the
+    compositing operation.</p>
+    <p>The first two rows render bluish triangles into the
+    background. A filter is applied which composites reddish
+    triangles into the bluish triangles using one of the
+    compositing operations. The result from compositing is drawn
+    onto an opaque white temporary surface, and then that result is
+    written to the canvas. (The opaque white temporary surface
+    obliterates the original bluish triangle.)</p>
+    <p>The last two rows apply the same compositing operations of
+    reddish triangles into bluish triangles. However, the
+    compositing result is directly blended into the canvas (the
+    opaque white temporary surface technique is not used). In some
+    cases, the results are different than when a temporary opaque
+    white surface is used. The original bluish triangle from the
+    background shines through wherever the compositing operation
+    results in completely transparent pixel. In other cases, the
+    result from compositing is blended into the bluish triangle,
+    resulting in a different final color value.</p>
+
+<edit:example href='images/filters/feComposite.svg' name='feComposite' description='Examples of feComposite operations' image='yes' link='yes'/>
+
+</edit:with>
+
+<h2 id="feConvolveMatrixElement">Filter primitive <span class="element-name">'feConvolveMatrix'</span></h2>
+
+<edit:with element='feConvolveMatrix'>
+
+    <p>feConvolveMatrix applies a matrix convolution filter effect.
+    A convolution combines pixels in the input image with
+    neighboring pixels to produce a resulting image. A wide variety
+    of imaging operations can be achieved through convolutions,
+    including blurring, edge detection, sharpening, embossing and
+    beveling.</p>
+    <p>A matrix convolution is based on an n-by-m matrix (the
+    convolution kernel) which describes how a given pixel value in
+    the input image is combined with its neighboring pixel values
+    to produce a resulting pixel value. Each result pixel is
+    determined by applying the kernel matrix to the corresponding
+    source pixel and its neighboring pixels. The basic convolution
+    formula which is applied to each color value for a given pixel
+    is:</p>
+    <p class="filterformula" id="feConvolveMatrixElementFormula">
+    COLOR<sub>X,Y</sub>&nbsp;=&nbsp;(&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUM
+    <sub>I=0&nbsp;to&nbsp;[<a
+    href="filters.html#feConvolveMatrixElementOrderAttribute">orderY</a>-1]</sub>&nbsp;{&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUM
+    <sub>J=0&nbsp;to&nbsp;[<a
+    href="filters.html#feConvolveMatrixElementOrderAttribute">orderX</a>-1]</sub>&nbsp;{&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOURCE
+    <sub>X-<a
+    href="filters.html#feConvolveMatrixElementTargetXAttribute">targetX</a>+J,&nbsp;Y-<a
+     href="filters.html#feConvolveMatrixElementTargetYAttribute">targetY</a>+I</sub>&nbsp;*&nbsp;
+    <a
+    href="filters.html#feConvolveMatrixElementKernelMatrixAttribute">
+    kernelMatrix</a><sub><a
+    href="filters.html#feConvolveMatrixElementOrderAttribute">orderX</a>-J-1,&nbsp;
+    <a
+    href="filters.html#feConvolveMatrixElementOrderAttribute">orderY</a>-I-1</sub>&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;/&nbsp;
+    <a
+    href="filters.html#feConvolveMatrixElementDivisorAttribute">divisor</a>&nbsp;+&nbsp;
+    <a href="filters.html#feConvolveMatrixElementBiasAttribute">bias</a>&nbsp;*&nbsp;ALPHA<sub>X,Y</sub>
+    <br />
+    </p>
+    <p>where "orderX" and "orderY" represent the X and Y values for
+    the <a>'order'</a> attribute, "targetX"
+    represents the value of the <a>'targetX'</a> attribute, "targetY"
+    represents the value of the <a>'targetY'</a> attribute, "kernelMatrix"
+    represents the value of the <a>'kernelMatrix'</a> attribute,
+    "divisor" represents the value of the <a>'divisor'</a> attribute, and "bias"
+    represents the value of the <a>'bias'</a> attribute.</p>
+    <p>Note in the above formulas that the values in the kernel
+    matrix are applied such that the kernel matrix is rotated 180
+    degrees relative to the source and destination images in order
+    to match convolution theory as described in many computer
+    graphics textbooks.</p>
+    <p>To illustrate, suppose you have a input image which is 5
+    pixels by 5 pixels, whose color values for one of the color
+    channels are as follows:</p>
+<pre>
+    0  20  40 235 235
+  100 120 140 235 235
+  200 220 240 235 235
+  225 225 255 255 255
+  225 225 255 255 255
+</pre>
+    <p>and you define a 3-by-3 convolution kernel as follows:</p>
+<pre>
+  1 2 3
+  4 5 6
+  7 8 9
+</pre>
+    <p>Let's focus on the color value at the second row and second
+    column of the image (source pixel value is 120). Assuming the
+    simplest case (where the input image's pixel grid aligns
+    perfectly with the kernel's pixel grid) and assuming default
+    values for attributes <a>'divisor'</a>,
+    <a>'targetX'</a> and <a>'targetY'</a>, then resulting color value
+    will be:</p>
+<pre>
+(9*  0 + 8* 20 + 7* 40 +
+6*100 + 5*120 + 4*140 +
+3*200 + 2*220 + 1*240) / (9+8+7+6+5+4+3+2+1)
+</pre>
+    <p>Because they operate on pixels, matrix convolutions are
+    inherently resolution-dependent. To make <a>'feConvolveMatrix'</a> produce
+    resolution-independent results, an explicit value should be
+    provided for either the <a>'filter/filterRes'</a> attribute on the <a>'filter element'</a> element and/or
+    attribute <a>'kernelUnitLength'</a>.</p>
+    <p><a>'kernelUnitLength'</a>, in
+    combination with the other attributes, defines an implicit
+    pixel grid in the filter effects coordinate system (i.e., the
+    coordinate system established by the <a>'filter/primitiveUnits'</a> attribute). If the
+    pixel grid established by <a>'kernelUnitLength'</a> is not
+    scaled to match the pixel grid established by attribute <a>'filter/filterRes'</a> (implicitly or
+    explicitly), then the input image will be temporarily rescaled
+    to match its pixels with <a>'kernelUnitLength'</a>. The
+    convolution happens on the resampled image. After applying the
+    convolution, the image is resampled back to the original
+    resolution.</p>
+    <p>When the image must be resampled to match the coordinate
+    system defined by <a>'kernelUnitLength'</a> prior to
+    convolution, or resampled to match the device coordinate system
+    after convolution, it is recommended that <a
+    href="conform.html#ConformingHighQualitySVGViewers">high
+    quality viewers</a> make use of appropriate interpolation
+    techniques, for example bilinear or bicubic. Depending on the
+    speed of the available interpolents, this choice may be
+    affected by the <a>'image-rendering'</a> property
+    setting. Note that implementations might choose approaches that
+    minimize or eliminate resampling when not necessary to produce
+    proper results, such as when the document is zoomed out such
+    that <a>'kernelUnitLength'</a> is
+    considerably smaller than a device pixel.</p>
+
+<edit:elementsummary name='feConvolveMatrix'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feConvolveMatrixElementOrderAttribute"><span
+        class="adef">order</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeNumberOptionalNumber">&lt;number-optional-number&gt;</a></span>"</dt>
+        <dd>Indicates the number of cells in each dimension for
+        <a>'kernelMatrix'</a>. The values
+        provided must be <a
+        href="types.html#DataTypeInteger">&lt;integer&gt;</a>s
+        greater than zero. The first number, &lt;orderX&gt;,
+        indicates the number of columns in the matrix. The second
+        number, &lt;orderY&gt;, indicates the number of rows in the
+        matrix. If &lt;orderY&gt; is not provided, it defaults to
+        &lt;orderX&gt;.<br />
+         A typical value is order="3". It is recommended that only
+        small values (e.g., 3) be used; higher values may result in
+        very high CPU overhead and usually do not produce results
+        that justify the impact on performance.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class="attr-value">3</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feConvolveMatrixElementKernelMatrixAttribute">
+        <span class="adef">kernelMatrix</span> = "<span
+        class="attr-value">&lt;list of numbers&gt;</span>"</dt>
+        <dd>The list of <a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a>s that
+        make up the kernel matrix for the convolution. Values are
+        separated by space characters and/or a comma. The number of
+        entries in the list must equal &lt;orderX&gt; times
+        &lt;orderY&gt;.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feConvolveMatrixElementDivisorAttribute"><span
+        class="adef">divisor</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>After applying the <a>'kernelMatrix'</a> to the input image to
+        yield a number, that number is divided by <a>'divisor'</a> to yield the final
+        destination color value. A divisor that is the sum of all
+        the matrix values tends to have an evening effect on the
+        overall color intensity of the result. It is an error to
+        specify a divisor of zero. The default value is the sum of
+        all values in kernelMatrix, with the exception that if the
+        sum is zero, then the divisor is set to 1.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feConvolveMatrixElementBiasAttribute"><span
+        class="adef">bias</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>After applying the <a>'kernelMatrix'</a> to the input image to
+        yield a number and applying the <a>'divisor'</a>, the <a>'bias'</a> attribute is added to each
+        component. One application of <a>'bias'</a> is when it is desirable to
+        have .5 gray value be the zero response of the filter. The bias property shifts
+        the range of the filter. This allows representation of values that would
+        otherwise be clamped to 0 or 1. If <a>'bias'</a> is not specified, then
+        the effect is as if a value of <span class="attr-value">0</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feConvolveMatrixElementTargetXAttribute"><span
+        class="adef">targetX</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeInteger">&lt;integer&gt;</a></span>"</dt>
+        <dd>Determines the positioning in X of the convolution
+        matrix relative to a given target pixel in the input image.
+        The leftmost column of the matrix is column number zero.
+        The value must be such that: 0 &lt;= targetX &lt; orderX.
+        By default, the convolution matrix is centered in X over
+        each pixel of the input image (i.e., targetX = floor (
+        orderX / 2 )).<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feConvolveMatrixElementTargetYAttribute"><span
+        class="adef">targetY</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeInteger">&lt;integer&gt;</a></span>"</dt>
+        <dd>Determines the positioning in Y of the convolution
+        matrix relative to a given target pixel in the input image.
+        The topmost row of the matrix is row number zero. The value
+        must be such that: 0 &lt;= targetY &lt; orderY. By default,
+        the convolution matrix is centered in Y over each pixel of
+        the input image (i.e., targetY = floor ( orderY / 2
+        )).<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feConvolveMatrixElementEdgeModeAttribute"><span
+        class="adef">edgeMode</span> = "<span
+        class="attr-value">duplicate | wrap | none</span>"</dt>
+        <dd>
+          <p>Determines how to extend the input image as necessary
+          with color values so that the matrix operations can be
+          applied when the kernel is positioned at or near the edge
+          of the input image.</p>
+          <p>"duplicate" indicates that the input image is extended
+          along each of its borders as necessary by duplicating the
+          color values at the given edge of the input image.</p>
+<pre>
+Original N-by-M image, where m=M-1 and n=N-1:
+          11 12 ... 1m 1M
+          21 22 ... 2m 2M
+          .. .. ... .. ..
+          n1 n2 ... nm nM
+          N1 N2 ... Nm NM
+Extended by two pixels using "duplicate":
+  11 11   11 12 ... 1m 1M   1M 1M
+  11 11   11 12 ... 1m 1M   1M 1M
+  11 11   11 12 ... 1m 1M   1M 1M
+  21 21   21 22 ... 2m 2M   2M 2M
+  .. ..   .. .. ... .. ..   .. ..
+  n1 n1   n1 n2 ... nm nM   nM nM
+  N1 N1   N1 N2 ... Nm NM   NM NM
+  N1 N1   N1 N2 ... Nm NM   NM NM
+  N1 N1   N1 N2 ... Nm NM   NM NM
+</pre>
+          <p>"wrap" indicates that the input image is extended by
+          taking the color values from the opposite edge of the
+          image.</p>
+<pre>
+Extended by two pixels using "wrap":
+  nm nM   n1 n2 ... nm nM   n1 n2
+  Nm NM   N1 N2 ... Nm NM   N1 N2
+  1m 1M   11 12 ... 1m 1M   11 12
+  2m 2M   21 22 ... 2m 2M   21 22
+  .. ..   .. .. ... .. ..   .. ..
+  nm nM   n1 n2 ... nm nM   n1 n2
+  Nm NM   N1 N2 ... Nm NM   N1 N2
+  1m 1M   11 12 ... 1m 1M   11 12
+  2m 2M   21 22 ... 2m 2M   21 22
+</pre>
+          <p>"none" indicates that the input image is extended with
+          pixel values of zero for R, G, B and A.</p>
+          <p>
+          If attribute <a>'edgeMode'</a> is not specified, then the effect is as if a value of <span class="attr-value">duplicate</span> were specified.
+          </p>
+          <p><span class="anim-target"><a
+          href="animate.html#Animatable">Animatable</a>:
+          yes.</span></p>
+        </dd>
+        <dt><a
+        id="feConvolveMatrixElementKernelUnitLengthAttribute"
+        name="feConvolveMatrixElementKernelUnitLengthAttribute"></a>
+        <span class="adef">kernelUnitLength</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumberOptionalNumber">&lt;number-optional-number&gt;</a></span>"</dt>
+        <dd>The first number is the &lt;dx&gt; value. The second
+        number is the &lt;dy&gt; value. If the &lt;dy&gt; value is
+        not specified, it defaults to the same value as &lt;dx&gt;.
+        Indicates the intended distance in current filter units
+        (i.e., units as determined by the value of attribute <a>'filter/primitiveUnits'</a>) between
+        successive columns and rows, respectively, in the <a>'kernelMatrix'</a>. By specifying
+        value(s) for <a>'kernelUnitLength'</a>, the kernel
+        becomes defined in a scalable, abstract coordinate system.
+        If <a>'kernelUnitLength'</a> is not
+        specified, the default value is one pixel in the offscreen
+        bitmap, which is a pixel-based coordinate system, and thus
+        potentially not scalable. For some level of consistency
+        across display media and user agents, it is necessary that
+        a value be provided for at least one of <a>'filter/filterRes'</a> and <a>'kernelUnitLength'</a>. In some
+        implementations, the most consistent results and the
+        fastest performance will be achieved if the pixel grid of
+        the temporary offscreen images aligns with the pixel grid
+        of the kernel.<br />
+         A negative or zero value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error
+        processing</a>).<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feConvolveMatrixElementPreserveAlphaAttribute">
+        <span class="adef">preserveAlpha</span> = "<span
+        class="attr-value">false | true</span>"</dt>
+        <dd>A value of <span class="attr-value">false</span>
+        indicates that the convolution will apply to all channels,
+        including the alpha channel. In this case the <code>ALPHA<sub>X,Y</sub></code>
+        of the <a href="#feConvolveMatrixElementFormula">convolution formula</a> for a given pixel is:
+        
+        <p class="filterformula">
+    ALPHA<sub>X,Y</sub>&nbsp;=&nbsp;(&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUM
+    <sub>I=0&nbsp;to&nbsp;[<a
+    href="filters.html#feConvolveMatrixElementOrderAttribute">orderY</a>-1]</sub>&nbsp;{&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUM
+    <sub>J=0&nbsp;to&nbsp;[<a
+    href="filters.html#feConvolveMatrixElementOrderAttribute">orderX</a>-1]</sub>&nbsp;{&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOURCE
+    <sub>X-<a
+    href="filters.html#feConvolveMatrixElementTargetXAttribute">targetX</a>+J,&nbsp;Y-<a
+     href="filters.html#feConvolveMatrixElementTargetYAttribute">targetY</a>+I</sub>&nbsp;*&nbsp;
+    <a
+    href="filters.html#feConvolveMatrixElementKernelMatrixAttribute">
+    kernelMatrix</a><sub><a
+    href="filters.html#feConvolveMatrixElementOrderAttribute">orderX</a>-J-1,&nbsp;
+    <a
+    href="filters.html#feConvolveMatrixElementOrderAttribute">orderY</a>-I-1</sub>&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;/&nbsp;
+    <a
+    href="filters.html#feConvolveMatrixElementDivisorAttribute">divisor</a>&nbsp;+&nbsp;
+    <a href="filters.html#feConvolveMatrixElementBiasAttribute">bias</a>&nbsp;
+    <br />
+    </p>
+        
+        <br />
+         A value of <span class="attr-value">true</span> indicates
+        that the convolution will only apply to the color channels.
+        In this case, the filter will temporarily unpremultiply the
+        color component values, apply the kernel, and then
+        re-premultiply at the end. In this case the <code>ALPHA<sub>X,Y</sub></code>
+        of the <a href="#feConvolveMatrixElementFormula">convolution formula</a> for a given pixel is:
+        <p class="filterformula">
+        ALPHA<sub>X,Y</sub>&nbsp;=&nbsp;SOURCE<sub>X,Y</sub>
+        <br />
+        </p>
+         If <a>'preserveAlpha'</a> is not
+        specified, then the effect is as if a value of <span
+        class="attr-value">false</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+
+</edit:with>
+
+<h2 id="feDiffuseLightingElement">Filter primitive <span class="element-name">'feDiffuseLighting'</span></h2>
+
+<edit:with element='feDiffuseLighting'>
+
+    <p>This filter primitive lights an image using the alpha
+    channel as a bump map. The resulting image is an RGBA opaque
+    image based on the light color with alpha = 1.0 everywhere. The
+    lighting calculation follows the standard diffuse component of
+    the Phong lighting model. The resulting image depends on the
+    light color, light position and surface geometry of the input
+    bump map.</p>
+    <p>The light map produced by this filter primitive can be
+    combined with a texture image using the multiply term of the
+    <em>arithmetic</em> <a>'feComposite'</a> compositing
+    method. Multiple light sources can be simulated by adding
+    several of these light maps together before applying it to the
+    texture image.</p>
+    <p>The formulas below make use of 3x3 filters. Because they
+    operate on pixels, such filters are inherently
+    resolution-dependent. To make <a>'feDiffuseLighting'</a> produce
+    resolution-independent results, an explicit value should be
+    provided for either the <a>'filter/filterRes'</a> attribute on the <a>'filter element'</a> element and/or
+    attribute <a>'kernelUnitLength'</a>.</p>
+    <p><a>'kernelUnitLength'</a>, in combination
+    with the other attributes, defines an implicit pixel grid in
+    the filter effects coordinate system (i.e., the coordinate
+    system established by the <a>'filter/primitiveUnits'</a> attribute). If the
+    pixel grid established by <a>'kernelUnitLength'</a> is not scaled to
+    match the pixel grid established by attribute <a>'filter/filterRes'</a> (implicitly or
+    explicitly), then the input image will be temporarily rescaled
+    to match its pixels with <a>'kernelUnitLength'</a>. The 3x3 filters
+    are applied to the resampled image. After applying the filter,
+    the image is resampled back to its original resolution.</p>
+    <p>When the image must be resampled, it is recommended that <a
+    href="conform.html#ConformingHighQualitySVGViewers">high
+    quality viewers</a> make use of appropriate interpolation
+    techniques, for example bilinear or bicubic. Depending on the
+    speed of the available interpolents, this choice may be
+    affected by the <a>'image-rendering'</a> property
+    setting. Note that implementations might choose approaches that
+    minimize or eliminate resampling when not necessary to produce
+    proper results, such as when the document is zoomed out such
+    that <a>'kernelUnitLength'</a> is
+    considerably smaller than a device pixel.</p>
+    <p>For the formulas that follow, the
+    <code>Norm(A<sub>x</sub>,A<sub>y</sub>,A<sub>z</sub>)</code>
+    function is defined as:</p>
+    <p class="filterformula">
+    Norm(A<sub>x</sub>,A<sub>y</sub>,A<sub>z</sub>) =
+    sqrt(A<sub>x</sub>^2+A<sub>y</sub>^2+A<sub>z</sub>^2)</p>
+    <p>The resulting RGBA image is computed as follows:</p>
+    <p class="filterformula">D<sub>r</sub> = k<sub>d</sub> * N.L *
+    L<sub>r</sub><br />
+     D<sub>g</sub> = k<sub>d</sub> * N.L * L<sub>g</sub><br />
+     D<sub>b</sub> = k<sub>d</sub> * N.L * L<sub>b</sub><br />
+     D<sub>a</sub> = 1.0</p>
+    <p>where</p>
+    <dl>
+      <dd>k<sub>d</sub> = diffuse lighting constant<br />
+       N = surface normal unit vector, a function of x and y<br />
+       L = unit vector pointing from surface to light, a function
+      of x and y in the point and spot light cases<br />
+       L<sub>r</sub>,L<sub>g</sub>,L<sub>b</sub> = RGB components
+      of light, a function of x and y in the spot light case</dd>
+    </dl>
+    <p>N is a function of x and y and depends on the surface
+    gradient as follows:</p>
+    <p>The surface described by the input alpha image
+    I(x,y) is:</p>
+    <p class="filterformula">Z (x,y) = surfaceScale *
+    I(x,y)</p>
+
+    <p id="SurfaceNormalCalculations">Surface normal is calculated using the Sobel gradient 3x3
+    filter. Different filter kernels are used depending on whether
+    the given pixel is on the interior or an edge. For each case,
+    the formula is:</p>
+    <p class="filterformula">N<sub>x</sub> (x,y)= - surfaceScale *
+    FACTOR<sub>x</sub> *<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(K<sub>x</sub>(0,0)*I(x-dx,y-dy)&nbsp;+
+    K<sub>x</sub>(1,0)*I(x,y-dy)&nbsp;+
+    K<sub>x</sub>(2,0)*I(x+dx,y-dy)&nbsp;+<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K<sub>x</sub>(0,1)*I(x-dx,y)&nbsp;&nbsp;&nbsp;&nbsp;+
+    K<sub>x</sub>(1,1)*I(x,y)&nbsp;&nbsp;&nbsp;&nbsp;+
+    K<sub>x</sub>(2,1)*I(x+dx,y)&nbsp;&nbsp;&nbsp;&nbsp;+<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K<sub>x</sub>(0,2)*I(x-dx,y+dy)&nbsp;+
+    K<sub>x</sub>(1,2)*I(x,y+dy)&nbsp;+
+    K<sub>x</sub>(2,2)*I(x+dx,y+dy))<br />
+     N<sub>y</sub> (x,y)= - surfaceScale * FACTOR<sub>y</sub>
+    *<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(K<sub>y</sub>(0,0)*I(x-dx,y-dy)&nbsp;+
+    K<sub>y</sub>(1,0)*I(x,y-dy)&nbsp;+
+    K<sub>y</sub>(2,0)*I(x+dx,y-dy)&nbsp;+<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K<sub>y</sub>(0,1)*I(x-dx,y)&nbsp;&nbsp;&nbsp;&nbsp;+
+    K<sub>y</sub>(1,1)*I(x,y)&nbsp;&nbsp;&nbsp;&nbsp;+
+    K<sub>y</sub>(2,1)*I(x+dx,y)&nbsp;&nbsp;&nbsp;&nbsp;+<br />
+     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K<sub>y</sub>(0,2)*I(x-dx,y+dy)&nbsp;+
+    K<sub>y</sub>(1,2)*I(x,y+dy)&nbsp;+
+    K<sub>y</sub>(2,2)*I(x+dx,y+dy))<br />
+     N<sub>z</sub> (x,y) = 1.0<br />
+    <br />
+     N = (N<sub>x</sub>, N<sub>y</sub>, N<sub>z</sub>) /
+    Norm((N<sub>x</sub>,N<sub>y</sub>,N<sub>z</sub>))</p>
+    <p>In these formulas, the <code>dx</code> and <code>dy</code>
+    values (e.g., <code>I(x-dx,y-dy)</code>), represent deltas
+    relative to a given <code>(x,y)</code> position for the purpose
+    of estimating the slope of the surface at that point. These
+    deltas are determined by the value (explicit or implicit) of
+    attribute <a>'kernelUnitLength'</a>.</p>
+    <table summary="feDiffuseLighting formulas" border="1">
+      <colgroup>
+        <col width="33.3%" />
+        <col width="33.3%" />
+        <col width="*" />
+      </colgroup>
+      <tr>
+        <td>
+          <p>Top/left corner:</p>
+          <p class="filterformula">
+          FACTOR<sub>x</sub>=2/(3*dx)<br />
+           K<sub>x</sub> =<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;-2&nbsp;&nbsp;2&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;-1&nbsp;&nbsp;1&nbsp;|<br />
+          <br />
+           FACTOR<sub>y</sub>=2/(3*dy)<br />
+           K<sub>y</sub>&nbsp;=&nbsp;&nbsp;<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;-2&nbsp;-1&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;2&nbsp;&nbsp;1&nbsp;|</p>
+        </td>
+        <td>
+          <p>Top row:</p>
+          <p class="filterformula">
+          FACTOR<sub>x</sub>=1/(3*dx)<br />
+           K<sub>x</sub> =<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-2&nbsp;&nbsp;0&nbsp;&nbsp;2&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;&nbsp;0&nbsp;&nbsp;1&nbsp;|<br />
+          <br />
+           FACTOR<sub>y</sub>=1/(2*dy)<br />
+           K<sub>y</sub>&nbsp;=&nbsp;&nbsp;<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;-2&nbsp;-1&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;1&nbsp;|</p>
+        </td>
+        <td>
+          <p>Top/right corner:</p>
+          <p class="filterformula">
+          FACTOR<sub>x</sub>=2/(3*dx)<br />
+           K<sub>x</sub> =<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-2&nbsp;&nbsp;2&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;&nbsp;1&nbsp;&nbsp;0&nbsp;|<br />
+          <br />
+           FACTOR<sub>y</sub>=2/(3*dy)<br />
+           K<sub>y</sub>&nbsp;=&nbsp;&nbsp;<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;-2&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;0&nbsp;|</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Left column:</p>
+          <p class="filterformula">
+          FACTOR<sub>x</sub>=1/(2*dx)<br />
+           K<sub>x</sub> =<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;0&nbsp;-1&nbsp;&nbsp;1&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;0&nbsp;-2&nbsp;&nbsp;2&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;0&nbsp;-1&nbsp;&nbsp;1&nbsp;|<br />
+          <br />
+           FACTOR<sub>y</sub>=1/(3*dy)<br />
+           K<sub>y</sub>&nbsp;=&nbsp;&nbsp;<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;-2&nbsp;-1&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;2&nbsp;&nbsp;1&nbsp;|</p>
+        </td>
+        <td>
+          <p>Interior pixels:</p>
+          <p class="filterformula">
+          FACTOR<sub>x</sub>=1/(4*dx)<br />
+           K<sub>x</sub> =<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;&nbsp;0&nbsp;&nbsp;1&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-2&nbsp;&nbsp;0&nbsp;&nbsp;2&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;&nbsp;0&nbsp;&nbsp;1&nbsp;|<br />
+          <br />
+           FACTOR<sub>y</sub>=1/(4*dy)<br />
+           K<sub>y</sub>&nbsp;=&nbsp;&nbsp;<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;-2&nbsp;-1&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;1&nbsp;|</p>
+        </td>
+        <td>
+          <p>Right column:</p>
+          <p class="filterformula">
+          FACTOR<sub>x</sub>=1/(2*dx)<br />
+           K<sub>x</sub> =<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;&nbsp;1&nbsp;&nbsp;0|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-2&nbsp;&nbsp;2&nbsp;&nbsp;0|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;&nbsp;1&nbsp;&nbsp;0|<br />
+          <br />
+           FACTOR<sub>y</sub>=1/(3*dy)<br />
+           K<sub>y</sub>&nbsp;=&nbsp;&nbsp;<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;-2&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;0&nbsp;|</p>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <p>Bottom/left corner:</p>
+          <p class="filterformula">
+          FACTOR<sub>x</sub>=2/(3*dx)<br />
+           K<sub>x</sub> =<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;0&nbsp;-1&nbsp;&nbsp;1&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;0&nbsp;-2&nbsp;&nbsp;2&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|<br />
+          <br />
+           FACTOR<sub>y</sub>=2/(3*dy)<br />
+           K<sub>y</sub>&nbsp;=&nbsp;&nbsp;<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;-2&nbsp;-1&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;2&nbsp;&nbsp;1&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|</p>
+        </td>
+        <td>
+          <p>Bottom row:</p>
+          <p class="filterformula">
+          FACTOR<sub>x</sub>=1/(3*dx)<br />
+           K<sub>x</sub> =<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;&nbsp;0&nbsp;&nbsp;1&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-2&nbsp;&nbsp;0&nbsp;&nbsp;2&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|<br />
+          <br />
+           FACTOR<sub>y</sub>=1/(2*dy)<br />
+           K<sub>y</sub>&nbsp;=&nbsp;&nbsp;<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;-2&nbsp;-1&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;1&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|</p>
+        </td>
+        <td>
+          <p>Bottom/right corner:</p>
+          <p class="filterformula">
+          FACTOR<sub>x</sub>=2/(3*dx)<br />
+           K<sub>x</sub> =<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;&nbsp;1&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-2&nbsp;&nbsp;2&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|<br />
+          <br />
+           FACTOR<sub>y</sub>=2/(3*dy)<br />
+           K<sub>y</sub>&nbsp;=&nbsp;&nbsp;<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;-1&nbsp;-2&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;0&nbsp;|<br />
+           &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;&nbsp;0&nbsp;|</p>
+        </td>
+      </tr>
+    </table>
+    <p>L, the unit vector from the image sample to the light, is
+    calculated as follows:</p>
+    <p>For Infinite light sources it is constant:</p>
+    <p class="filterformula">L<sub>x</sub> =
+    cos(azimuth)*cos(elevation)<br />
+     L<sub>y</sub> = sin(azimuth)*cos(elevation)<br />
+     L<sub>z</sub> = sin(elevation)</p>
+    <p>For Point and spot lights it is a function of position:</p>
+    <p class="filterformula">L<sub>x</sub> = Light<sub>x</sub> -
+    x<br />
+     L<sub>y</sub> = Light<sub>y</sub> - y<br />
+     L<sub>z</sub> = Light<sub>z</sub> - Z(x,y)<br />
+    <br />
+     L = (L<sub>x</sub>, L<sub>y</sub>, L<sub>z</sub>) /
+    Norm(L<sub>x</sub>, L<sub>y</sub>, L<sub>z</sub>)</p>
+    <p>where Light<sub>x</sub>, Light<sub>y</sub>, and
+    Light<sub>z</sub> are the input light position.</p>
+    <p>L<sub>r</sub>,L<sub>g</sub>,L<sub>b</sub>, the light color
+    vector, is a function of position in the spot light case
+    only:</p>
+    <p class="filterformula">L<sub>r</sub> =
+    Light<sub>r</sub>*pow((-L.S),specularExponent)<br />
+     L<sub>g</sub> =
+    Light<sub>g</sub>*pow((-L.S),specularExponent)<br />
+     L<sub>b</sub> =
+    Light<sub>b</sub>*pow((-L.S),specularExponent)</p>
+    <p>where S is the unit vector pointing from the light to the
+    point (pointsAtX, pointsAtY, pointsAtZ) in the x-y plane:</p>
+    <p class="filterformula">S<sub>x</sub> = pointsAtX -
+    Light<sub>x</sub><br />
+     S<sub>y</sub> = pointsAtY - Light<sub>y</sub><br />
+     S<sub>z</sub> = pointsAtZ - Light<sub>z</sub><br />
+    <br />
+     S = (S<sub>x</sub>, S<sub>y</sub>, S<sub>z</sub>) /
+    Norm(S<sub>x</sub>, S<sub>y</sub>, S<sub>z</sub>)</p>
+    <p>If L.S is positive, no light is present. (L<sub>r</sub> =
+    L<sub>g</sub> = L<sub>b</sub> = 0). If <a>'feSpotLight/limitingConeAngle'</a> is specified, -L.S &lt; cos(limitingConeAngle) also indicates that no light is present.</p>
+
+<edit:elementsummary name='feDiffuseLighting'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feDiffuseLightingSurfaceScaleAttribute"><span
+        class="adef">surfaceScale</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>height of surface when A<sub>in</sub> = 1.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">1</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feDiffuseLightingDiffuseConstantAttribute"><span
+        class="adef">diffuseConstant</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>kd in Phong lighting model. In SVG, this can be any
+        non-negative number.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">1</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feDiffuseLightingKernelUnitLengthAttribute">
+        <span class="adef">kernelUnitLength</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumberOptionalNumber">&lt;number-optional-number&gt;</a></span>"</dt>
+        <dd>The first number is the &lt;dx&gt; value. The second
+        number is the &lt;dy&gt; value. If the &lt;dy&gt; value is
+        not specified, it defaults to the same value as &lt;dx&gt;.
+        Indicates the intended distance in current filter units
+        (i.e., units as determined by the value of attribute <a>'filter/primitiveUnits'</a>) for
+        <code>dx</code> and <code>dy</code>, respectively, in the
+        <a href="filters.html#SurfaceNormalCalculations">surface
+        normal calculation formulas</a>. By specifying value(s) for
+        <a>'kernelUnitLength'</a>, the kernel
+        becomes defined in a scalable, abstract coordinate system.
+        If <a>'kernelUnitLength'</a> is not
+        specified, the <code>dx</code> and <code>dy</code> values
+        should represent very small deltas relative to a given
+        <code>(x,y)</code> position, which might be implemented in
+        some cases as one pixel in the intermediate image offscreen
+        bitmap, which is a pixel-based coordinate system, and thus
+        potentially not scalable. For some level of consistency
+        across display media and user agents, it is necessary that
+        a value be provided for at least one of <a>'filter/filterRes'</a> and <a>'kernelUnitLength'</a>. Discussion of
+        intermediate images are in the <a
+        href="filters.html#Introduction">Introduction</a> and in
+        the description of attribute <a>'filter/filterRes'</a>.<br />
+         A negative or zero value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error
+        processing</a>).<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+    <p>The light source is defined by one of the child elements <a>'feDistantLight'</a>, <a>'fePointLight'</a> or <a>'feSpotLight'</a>. The light color
+    is specified by property <a>'lighting-color'</a>.</p>
+
+</edit:with>
+
+<h2 id="feDisplacementMapElement">Filter primitive <span class="element-name">'feDisplacementMap'</span></h2>
+
+<edit:with element='feDisplacementMap'>
+
+    <p>This filter primitive uses the pixels values from the image
+    from <a>'in2'</a> to spatially displace the
+    image from <a>'in'</a>. This is the transformation to
+    be performed:</p>
+<pre>
+P'(x,y) &lt;- P( x + scale * (XC(x,y) - .5), y + scale * (YC(x,y) - .5))
+</pre>
+    <p>where P(x,y) is the input image, <a>'in'</a>, and P'(x,y) is the
+    destination. XC(x,y) and YC(x,y) are the component values of
+    the channel designated by the <em>xChannelSelector</em> and
+    <em>yChannelSelector</em>. For example, to use the R component
+    of <a>'in2'</a> to control displacement in x
+    and the G component of Image2 to control displacement in y, set
+    <em>xChannelSelector</em> to "R" and <em>yChannelSelector</em>
+    to "G".</p>
+    <p>The displacement map defines the inverse of the mapping
+    performed.</p>
+	<p>The input image in is to remain premultiplied for this filter primitive. The calculations using the pixel values from <a>'in2'</a> are performed using non-premultiplied color values. If the image from <a>'in2'</a> consists of premultiplied color values, those values are automatically converted into non-premultiplied color values before performing this operation.</p>
+    <p>This filter can have arbitrary non-localized effect on the
+    input which might require substantial buffering in the
+    processing pipeline. However with this formulation, any
+    intermediate buffering needs can be determined by
+    <em>scale</em> which represents the maximum range of
+    displacement in either x or y.</p>
+    <p>When applying this filter, the source pixel location will
+    often lie between several source pixels. In this case it is
+    recommended that <a
+    href="conform.html#ConformingHighQualitySVGViewers">high
+    quality viewers</a> apply an interpolent on the surrounding
+    pixels, for example bilinear or bicubic, rather than simply
+    selecting the nearest source pixel. Depending on the speed of
+    the available interpolents, this choice may be affected by the
+    <a>'image-rendering'</a> property
+    setting.</p>
+    <p>The <a>'color-interpolation-filters'</a>
+    property only applies to the <a>'in2'</a> source image and does not
+    apply to the <a>'in'</a> source image. The <a>'in'</a> source image must remain in its current color space.</p>
+
+<edit:elementsummary name='feDisplacementMap'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feDisplacementMapScaleAttribute"><span
+        class="adef">scale</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Displacement scale factor. The amount is expressed in
+        the coordinate system established by attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element.<br />
+         When the value of this attribute is <span
+        class="attr-value">0</span>, this operation has no effect
+        on the source image.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feDisplacementMapXChannelSelectorAttribute">
+        <span class="adef">xChannelSelector</span> = "<em>R | G | B
+        | A</em>"</dt>
+        <dd>Indicates which channel from <a>'in2'</a> to use to displace the
+        pixels in <a>'in'</a> along the x-axis.
+        If attribute <a>'xChannelSelector'</a> is not specified, then the effect is as if a value of <span class="attr-value">A</span> were specified.
+        <br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feDisplacementMapYChannelSelectorAttribute">
+        <span class="adef">yChannelSelector</span> = "<em>R | G | B
+        | A</em>"</dt>
+        <dd>Indicates which channel from <a>'in2'</a> to use to displace the
+        pixels in <a>'in'</a> along the y-axis.
+        If attribute <a>'yChannelSelector'</a> is not specified, then the effect is as if a value of <span class="attr-value">A</span> were specified.
+        <br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feDisplacementMapIn2Attribute"><span
+        class="adef">in2</span> = "<em>(see <a>'in'</a> attribute)</em>"</dt>
+        <dd>The second input image, which is used to displace the
+        pixels in the image from attribute <a>'in'</a>. This attribute can take on
+        the same values as the <a>'in'</a> attribute.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+
+</edit:with>
+
+<h2 id="feFloodElement">Filter primitive <span class="element-name">'feFlood'</span></h2>
+
+<edit:with element='feFlood'>
+
+    <p>This filter primitive creates a rectangle filled with the
+    color and opacity values from properties <a>'flood-color'</a> and <a>'flood-opacity'</a>. The rectangle is as
+    large as the <a
+    href="filters.html#FilterPrimitiveSubRegion">filter primitive
+    subregion</a> established by the <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> attributes on the <a>'feFlood'</a> element.</p>
+
+<edit:elementsummary name='feFlood'/>
+
+    <p>The <a>'flood-color'</a> property
+    indicates what color to use to flood the current <a
+    href="filters.html#FilterPrimitiveSubRegion">filter primitive
+    subregion</a>. The keyword <span
+    class="attr-value">currentColor</span> and ICC colors can be
+    specified in the same manner as within a <a
+    href="painting.html#SpecifyingPaint">&lt;paint&gt;</a>
+    specification for the <a>'fill'</a> and <a>'stroke'</a> properties.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="FloodColorProperty"><span class="propdef-title prop-name">'flood-color'</span></dt>
+        <dd>
+          <table summary="flood-color property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>currentColor |<br />
+               <a href="types.html#DataTypeColor">&lt;color&gt;</a>
+               [<a href="types.html#DataTypeICCColor">&lt;icccolor&gt;</a>]
+              |<br />
+               <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>black</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a>'feFlood'</a>
+              elements</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+    <p>The <a>'flood-opacity'</a> property
+    defines the opacity value to use across the entire <a
+    href="filters.html#FilterPrimitiveSubRegion">filter primitive
+    subregion</a>.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="FloodOpacityProperty"><span class="propdef-title prop-name">'flood-opacity'</span></dt>
+        <dd>
+          <table summary="flood-opacity property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>&lt;opacity-value&gt; | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>1</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a>'feFlood'</a>
+              elements</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+</edit:with>
+
+<h2 id="feGaussianBlurElement">Filter primitive <span class="element-name">'feGaussianBlur'</span></h2>
+
+<edit:with element='feGaussianBlur'>
+
+    <p>This filter primitive performs a Gaussian blur on the input
+    image.</p>
+    <p>The Gaussian blur kernel is an approximation of the
+    normalized convolution:</p>
+    <p class="filterformula">G(x,y) = H(x)I(y)</p>
+		<p>where</p>
+		<p class="filterformula">H(x) = exp(-x<sup>2</sup>/ (2s<sup>2</sup>)) / sqrt(2* pi*s<sup>2</sup>)</p>
+		<p>and</p> 
+		<p class="filterformula">I(y) = exp(-y<sup>2</sup>/ (2t<sup>2</sup>)) / sqrt(2* pi*t<sup>2</sup>)</p>
+		<p>with 's' being the standard deviation in the x direction
+		and 't' being the standard deviation in the y direction, as specified by <a>'stdDeviation'</a>.</p>
+    <p>The value of <a>'stdDeviation'</a> can be either one or
+    two numbers. If two numbers are provided, the first number
+    represents a standard deviation value along the x-axis of the
+    current coordinate system and the second value represents a
+    standard deviation in Y. If one number is provided, then that
+    value is used for both X and Y.</p>
+    <p>Even if only one value is provided for <a>'stdDeviation'</a>, this can be
+    implemented as a separable convolution.</p>
+    <p>For larger values of 's' (s &gt;= 2.0), an approximation can
+    be used: Three successive box-blurs build a piece-wise
+    quadratic convolution kernel, which approximates the Gaussian
+    kernel to within roughly 3%.</p>
+    <p class="filterformula">let d = floor(s * 3*sqrt(2*pi)/4 +
+    0.5)</p>
+    <p>... if d is odd, use three box-blurs of size 'd', centered
+    on the output pixel.</p>
+    <p>... if d is even, two box-blurs of size 'd' (the first one
+    centered on the pixel boundary between the output pixel and the
+    one to the left, the second one centered on the pixel boundary
+    between the output pixel and the one to the right) and one box
+    blur of size 'd+1' centered on the output pixel.</p>
+    <p class="note">Note: the approximation formula also applies correspondingly to 't'.</p>
+    <p>Frequently this operation will take place on alpha-only
+    images, such as that produced by the built-in input, <a
+    href="filters.html#SourceAlpha"><span
+    class="attr-value">SourceAlpha</span></a>. The implementation
+    may notice this and optimize the single channel case. If the
+    input has infinite extent and is constant (e.g <span class="attr-value"><a href="#FillPaint">FillPaint</a></span> 
+    where the fill is a solid color), this operation has
+    no effect. If the input has infinite extent and the filter result is the input to an <a>'feTile'</a>, the
+    filter is evaluated with periodic boundary conditions.</p>
+
+<edit:elementsummary name='feGaussianBlur'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feGaussianBlurStdDeviationAttribute"><span
+        class="adef">stdDeviation</span> = "<em><a
+        href="types.html#DataTypeNumberOptionalNumber">&lt;number-optional-number&gt;</a></em>"</dt>
+        <dd>The standard deviation for the blur operation. If two
+        <a href="types.html#DataTypeNumber">&lt;number&gt;</a>s are
+        provided, the first number represents a standard deviation
+        value along the x-axis of the coordinate system established
+        by attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element. The
+        second value represents a standard deviation in Y. If one
+        number is provided, then that value is used for both X and
+        Y.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables the effect of the given filter primitive (i.e., the result is the filter input image). If <a>'stdDeviation'</a> is <span class="attr-value">0</span> in only one of X or Y, 
+        then the effect is that the blur is only applied in the direction that has a non-zero value.
+        <br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+    <p><a href="filters.html#AnExample">The example</a> at the
+    start of this chapter makes use of the <a>'feGaussianBlur'</a> filter primitive to
+    create a drop shadow effect.</p>
+
+</edit:with>
+
+<h2 id="feImageElement">Filter primitive <span class="element-name">'feImage'</span></h2>
+
+<edit:with element='feImage'>
+
+    <p>This filter primitive refers to a graphic external to this
+    filter element, which is loaded or rendered into an RGBA raster
+    and becomes the result of the filter primitive.</p>
+    <p>This filter primitive can refer to an external image or can
+    be a reference to another piece of SVG. It produces an image
+    similar to the built-in image source <a
+    href="filters.html#SourceGraphic"><span
+    class="attr-value">SourceGraphic</span></a> except that the
+    graphic comes from an external source.</p>
+    <p>If the <a>'xlink:href'</a> references
+    a stand-alone image resource such as a JPEG, PNG or SVG file,
+    then the image resource is rendered according to the behavior
+    of the <a>'image'</a> element; otherwise, the
+    referenced resource is rendered according to the behavior of
+    the <a>'use'</a> element. In either case,
+    the current user coordinate system depends on the value of
+    attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element. The
+    processing of the <a>'preserveAspectRatio'</a> attribute on
+    the <a>'feImage'</a> element is
+    identical to that of the <a>'image'</a> element.</p>
+    <p>When the referenced image must be resampled to match the
+    device coordinate system, it is recommended that <a
+    href="conform.html#ConformingHighQualitySVGViewers">high
+    quality viewers</a> make use of appropriate interpolation
+    techniques, for example bilinear or bicubic. Depending on the
+    speed of the available interpolents, this choice may be
+    affected by the <a>'image-rendering'</a> property
+    setting.</p>
+
+<edit:elementsummary name='feImage'/>
+
+<div class="adef-list">
+  <p><em>Attribute definitions:</em></p>
+  <dl>
+    <dt id="feImageElementHrefAttribute"><span class="adef">xlink:href</span> = "<span class='attr-value'><a href="types.html#DataTypeIRI">&lt;iri&gt;</a></span>"</dt>
+    <dd>
+      <p>An <a href="linking.html#IRIReference">IRI reference</a> to the image
+      source.</p>
+      <p><span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: yes.</span></p>
+    </dd>
+    <dt id="feImageElementPreserveAspectRatioAttribute">
+      <span class="adef">preserveAspectRatio</span> = "<span class='attr-value'><a href="coords.html#PreserveAspectRatioAttribute">[defer] &lt;align&gt; [&lt;meetOrSlice&gt;]</a></span>"
+    </dt>
+    <dd>
+      <p>
+        See <a>'preserveAspectRatio'</a>.
+      </p>
+      <p>
+        If attribute <a>'preserveAspectRatio'</a> is not specified, then the effect is as if a value of <span class="attr-value">xMidYMid meet</span> were specified.
+      </p>
+      <p><span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: yes.</span></p>
+    </dd>
+  </dl>
+</div>
+
+<p><span class="example-ref">Example feImage</span> illustrates how images are placed relative
+to an object. From left to right:</p>
+<ul>
+  <li>
+    The default placement of an image. Note that the image is
+    centered in the <a>filter region</a> and has the maximum size that will
+    fit in the region consistent with preserving the aspect ratio.
+  </li>
+  <li>
+    The image stretched to fit the bounding box of an object.
+  </li>
+  <li>
+    The image placed using user coordinates. Note that the image is
+    first centered in a box the size of the <a>filter region</a> and has the
+    maximum size that will fit in the box consistent with preserving
+    the aspect ratio. This box is then shifted by the given 'x' and
+    'y' values relative to the viewport the object is in.
+  </li>
+</ul>
+
+<edit:example href='images/filters/feImage-01.svg' name='feImage' description='Examples of feImage use' image='yes' link='yes'/>
+
+</edit:with>
+
+<h2 id="feMergeElement">Filter primitive <span class="element-name">'feMerge'</span></h2>
+
+<edit:with element='feMerge'>
+
+    <p>This filter primitive composites input image layers on top
+    of each other using the <em>over</em> operator with
+    <em>Input1</em> (corresponding to the first <a>'feMergeNode'</a> child element) on
+    the bottom and the last specified input, <em>InputN</em>
+    (corresponding to the last <a>'feMergeNode'</a> child element),
+    on top.</p>
+    <p>Many effects produce a number of intermediate layers in
+    order to create the final output image. This filter allows us
+    to collapse those into a single image. Although this could be
+    done by using n-1 Composite-filters, it is more convenient to
+    have this common operation available in this form, and offers
+    the implementation some additional flexibility.</p>
+    <p>Each <a>'feMerge'</a> element can have any number of <a>'feMergeNode'</a>
+    subelements, each of which has an <a>'feMergeNode/in'</a> attribute.</p>
+    <p>The canonical implementation of feMerge is to render the
+    entire effect into one RGBA layer, and then render the
+    resulting layer on the output device. In certain cases (in
+    particular if the output device itself is a continuous tone
+    device), and since merging is associative, it might be a
+    sufficient approximation to evaluate the effect one layer at a
+    time and render each layer individually onto the output device
+    bottom to top.</p>
+    <p>If the topmost image input is <a
+    href="filters.html#SourceGraphic"><span
+    class="attr-value">SourceGraphic</span></a> and this <a>'feMerge'</a> is the last filter
+    primitive in the filter, the implementation is encouraged to
+    render the layers up to that point, and then render the <a
+    href="filters.html#SourceGraphic"><span
+    class="attr-value">SourceGraphic</span></a> directly from its
+    vector description on top.</p>
+
+<edit:elementsummary name='feMerge'/>
+
+<div id='feMergeNodeElement'>
+<edit:elementsummary name='feMergeNode'/>
+</div>
+
+<p><a href="filters.html#AnExample">The example</a> at the start of this
+chapter makes use of the <a>'feMerge'</a> filter primitive to composite
+two intermediate filter results together.</p>
+
+</edit:with>
+
+<h2 id="feMorphologyElement">Filter primitive <span class="element-name">'feMorphology'</span></h2>
+
+<edit:with element='feMorphology'>
+
+    <p>This filter primitive performs "fattening" or "thinning" of
+    artwork. It is particularly useful for fattening or thinning an
+    alpha channel.</p>
+    <p>The dilation (or erosion) kernel is a rectangle with a width
+    of 2*<em>x-radius</em> and a height of 2*<em>y-radius</em>. In
+    dilation, the output pixel is the individual component-wise
+    maximum of the corresponding R,G,B,A values in the input
+    image's kernel rectangle. In erosion, the output pixel is the
+    individual component-wise minimum of the corresponding R,G,B,A
+    values in the input image's kernel rectangle.</p>
+    <p>Frequently this operation will take place on alpha-only
+    images, such as that produced by the built-in input, <a
+    href="filters.html#SourceAlpha"><span
+    class="attr-value">SourceAlpha</span></a>. In that case, the
+    implementation might want to optimize the single channel
+    case.</p>
+    <p>If the input has infinite extent and is constant (e.g 
+    <span class="attr-value"><a href="#FillPaint">FillPaint</a></span> 
+    where the fill is a solid color), this operation has
+    no effect. If the input has infinite extent and the filter result 
+    is the input to an <a>'feTile'</a>, the filter is evaluated with 
+    periodic boundary conditions.
+    </p>
+    <p>Because <a>'feMorphology'</a>
+    operates on premultipied color values, it will always result in
+    color values less than or equal to the alpha channel.</p>
+
+<edit:elementsummary name='feMorphology'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feMorphologyOperatorAttribute"><span
+        class="adef">operator</span> = "<em>erode |
+        dilate</em>"</dt>
+        <dd>A keyword indicating whether to erode (i.e., thin) or
+        dilate (fatten) the source graphic.
+        If attribute <a>'operator'</a> is not specified, then the effect is as if a value of <span class="attr-value">erode</span> were specified.
+        <br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feMorphologyRadiusAttribute"><span
+        class="adef">radius</span> = "<em><a
+        href="types.html#DataTypeNumberOptionalNumber">&lt;number-optional-number&gt;</a></em>"</dt>
+        <dd>The radius (or radii) for the operation. If two <a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a>s are
+        provided, the first number represents a x-radius and the
+        second value represents a y-radius. If one number is
+        provided, then that value is used for both X and Y. The
+        values are in the coordinate system established by
+        attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables the effect of the given filter
+        primitive (i.e., the result is a transparent black
+        image).<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+    <p><span class="example-ref">Example feMorphology</span> shows
+    examples of the four types of feMorphology operations.</p>
+
+<edit:example href='images/filters/feMorphology.svg' name='feMorphology' description='Examples of erode and dilate' image='yes' link='yes'/>
+
+</edit:with>
+
+<h2 id="feOffsetElement">Filter primitive <span class="element-name">'feOffset'</span></h2>
+
+<edit:with element='feOffset'>
+
+    <p>This filter primitive offsets the input image relative to
+    its current position in the image space by the specified
+    vector.</p>
+    <p>This is important for effects like drop shadows.</p>
+    <p>When applying this filter, the destination location may be
+    offset by a fraction of a pixel in device space. In this case a
+    <a href="conform.html#ConformingHighQualitySVGViewers">high
+    quality viewer</a> should make use of appropriate interpolation
+    techniques, for example bilinear or bicubic. This is especially
+    recommended for dynamic viewers where this interpolation
+    provides visually smoother movement of images. For static
+    viewers this is less of a concern. Close attention should be
+    made to the <a>'image-rendering'</a> property setting
+    to determine the authors intent.</p>
+
+<edit:elementsummary name='feOffset'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feOffsetDxAttribute"><span
+        class="adef">dx</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>The amount to offset the input graphic along the
+        x-axis. The offset amount is expressed in the coordinate
+        system established by attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feOffsetDyAttribute"><span
+        class="adef">dy</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>The amount to offset the input graphic along the
+        y-axis. The offset amount is expressed in the coordinate
+        system established by attribute <a>'filter/primitiveUnits'</a> on the <a>'filter element'</a> element.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+    <p><a href="filters.html#AnExample">The example</a> at the
+    start of this chapter makes use of the <a>'feOffset'</a> filter primitive to offset
+    the drop shadow from the original source graphic.</p>
+
+</edit:with>
+
+<h2 id="feSpecularLightingElement">Filter primitive <span class="element-name">'feSpecularLighting'</span></h2>
+
+<edit:with element='feSpecularLighting'>
+
+    <p>This filter primitive lights a source graphic using the
+    alpha channel as a bump map. The resulting image is an RGBA
+    image based on the light color. The lighting calculation
+    follows the standard specular component of the Phong lighting
+    model. The resulting image depends on the light color, light
+    position and surface geometry of the input bump map. The result
+    of the lighting calculation is added. The filter primitive
+    assumes that the viewer is at infinity in the z direction
+    (i.e., the unit vector in the eye direction is (0,0,1)
+    everywhere).</p>
+    <p>This filter primitive produces an image which contains the
+    specular reflection part of the lighting calculation. Such a
+    map is intended to be combined with a texture using the
+    <em>add</em> term of the <em>arithmetic</em> <a>'feComposite'</a> method. Multiple
+    light sources can be simulated by adding several of these light
+    maps before applying it to the texture image.</p>
+    <p>The resulting RGBA image is computed as follows:</p>
+    <p class="filterformula">S<sub>r</sub> = k<sub>s</sub> *
+    pow(N.H, specularExponent) * L<sub>r<br />
+    </sub> S<sub>g</sub> = k<sub>s</sub> * pow(N.H,
+    specularExponent) * L<sub>g<br />
+    </sub> S<sub>b</sub> = k<sub>s</sub> * pow(N.H,
+    specularExponent) * L<sub>b<br />
+    </sub> S<sub>a</sub> = max(S<sub>r,</sub> S<sub>g,</sub>
+    S<sub>b</sub>)</p>
+    <p>where</p>
+    <dl>
+      <dd>k<sub>s</sub> = specular lighting constant<br />
+       N = surface normal unit vector, a function of x and y<br />
+       H = "halfway" unit vector between eye unit vector and light
+      unit vector<br />
+      <br />
+       L<sub>r</sub>,L<sub>g</sub>,L<sub>b</sub> = RGB components
+      of light</dd>
+    </dl>
+    <p>See <a>'feDiffuseLighting'</a> for
+    definition of N and (L<sub>r</sub>, L<sub>g</sub>,
+    L<sub>b</sub>).</p>
+    <p>The definition of H reflects our assumption of the constant
+    eye vector E = (0,0,1):</p>
+    <p class="filterformula">H = (L + E) / Norm(L+E)</p>
+    <p>where L is the light unit vector.</p>
+    <p>Unlike the <a>'feDiffuseLighting'</a>, the <a>'feSpecularLighting'</a> filter
+    produces a non-opaque image. This is due to the fact that the
+    specular result
+    (S<sub>r</sub>,S<sub>g</sub>,S<sub>b</sub>,S<sub>a</sub>) is
+    meant to be added to the textured image. The alpha channel of
+    the result is the max of the color components, so that where
+    the specular light is zero, no additional coverage is added to
+    the image and a fully white highlight will add opacity.</p>
+    <p>The <a>'feDiffuseLighting'</a> and <a>'feSpecularLighting'</a> filters will
+    often be applied together. An implementation may detect this
+    and calculate both maps in one pass, instead of two.</p>
+
+<edit:elementsummary name='feSpecularLighting'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feSpecularLightingSurfaceScaleAttribute"><span
+        class="adef">surfaceScale</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>height of surface when A<sub>in</sub> = 1.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">1</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feSpecularLightingSpecularConstantAttribute">
+        <span class="adef">specularConstant</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>ks in Phong lighting model. In SVG, this can be any
+        non-negative number.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">1</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feSpecularLightingSpecularExponentAttribute">
+        <span class="adef">specularExponent</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>Exponent for specular term, larger is more "shiny".
+        Range 1.0 to 128.0.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">1</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feSpecularLightingKernelUnitLengthAttribute">
+        <span class="adef">kernelUnitLength</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumberOptionalNumber">&lt;number-optional-number&gt;</a></span>"</dt>
+        <dd>The first number is the &lt;dx&gt; value. The second
+        number is the &lt;dy&gt; value. If the &lt;dy&gt; value is
+        not specified, it defaults to the same value as &lt;dx&gt;.
+        Indicates the intended distance in current filter units
+        (i.e., units as determined by the value of attribute <a>'filter/primitiveUnits'</a>) for
+        <code>dx</code> and <code>dy</code>, respectively, in the
+        <a href="filters.html#SurfaceNormalCalculations">surface
+        normal calculation formulas</a>. By specifying value(s) for
+        <a>'kernelUnitLength'</a>, the kernel
+        becomes defined in a scalable, abstract coordinate system.
+        If <a>'kernelUnitLength'</a> is not
+        specified, the <code>dx</code> and <code>dy</code> values
+        should represent very small deltas relative to a given
+        <code>(x,y)</code> position, which might be implemented in
+        some cases as one pixel in the intermediate image offscreen
+        bitmap, which is a pixel-based coordinate system, and thus
+        potentially not scalable. For some level of consistency
+        across display media and user agents, it is necessary that
+        a value be provided for at least one of <a>'filter/filterRes'</a> and <a>'kernelUnitLength'</a>. Discussion of
+        intermediate images are in the <a
+        href="filters.html#Introduction">Introduction</a> and in
+        the description of attribute <a>'filter/filterRes'</a>.<br />
+         A negative or zero value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error
+        processing</a>).<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+    <p>The light source is defined by one of the child elements <a>'feDistantLight'</a>, <a>'fePointLight'</a> or <a>'feDistantLight'</a>. The light
+    color is specified by property <a>'lighting-color'</a>.</p>
+    <p><a href="filters.html#AnExample">The example</a> at the
+    start of this chapter makes use of the <a>'feSpecularLighting'</a> filter primitive
+    to achieve a highly reflective, 3D glowing effect.</p>
+
+</edit:with>
+
+<h2 id="feTileElement">Filter primitive <span class="element-name">'feTile'</span></h2>
+
+<edit:with element='feTile'>
+
+    <p>This filter primitive fills a target rectangle with a
+    repeated, tiled pattern of an input image. The target rectangle
+    is as large as the <a
+    href="filters.html#FilterPrimitiveSubRegion">filter primitive
+    subregion</a> established by the <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> attributes on the <a>'feTile'</a> element.</p>
+    <p>Typically, the input image has been defined with its own <a
+    href="filters.html#FilterPrimitiveSubRegion">filter primitive
+    subregion</a> in order to define a reference tile. <a>'feTile'</a> replicates the reference
+    tile in both X and Y to completely fill the target rectangle.
+    The top/left corner of each given tile is at location
+    <code>(x+i*width,y+j*height)</code>, where <code>(x,y)</code>
+    represents the top/left of the input image's filter primitive
+    subregion, <code>width</code> and <code>height</code> represent
+    the width and height of the input image's filter primitive
+    subregion, and <code>i</code> and <code>j</code> can be any
+    integer value. In most cases, the input image will have a
+    smaller <a>filter primitive subregion</a> than the <a>'feTile'</a> in order to achieve a
+    repeated pattern effect.</p>
+    <p>Implementers must take appropriate measures in constructing
+    the tiled image to avoid artifacts between tiles, particularly
+    in situations where the user to device transform includes shear
+    and/or rotation. Unless care is taken, interpolation can lead
+    to edge pixels in the tile having opacity values lower or
+    higher than expected due to the interaction of painting
+    adjacent tiles which each have partial overlap with particular
+    pixels.</p>
+
+<edit:elementsummary name='feTile'/>
+
+</edit:with>
+
+<h2 id="feTurbulenceElement">Filter primitive <span class="element-name">'feTurbulence'</span></h2>
+
+<edit:with element='feTurbulence'>
+
+    <p>This filter primitive creates an image using the Perlin
+    turbulence function. It allows the synthesis of artificial
+    textures like clouds or marble. For a detailed description the
+    of the Perlin turbulence function, see "Texturing and
+    Modeling", Ebert et al, AP Professional, 1994. The resulting
+    image will fill the entire <a
+    href="filters.html#FilterPrimitiveSubRegion">filter primitive
+    subregion</a> for this filter primitive.</p>
+    <p>It is possible to create bandwidth-limited noise by
+    synthesizing only one octave.</p>
+    <p>The C code below shows the exact algorithm used for this
+    filter effect.</p>
+    <p>For fractalSum, you get a turbFunctionResult that is aimed
+    at a range of -1 to 1 (the actual result might exceed this
+    range in some cases). To convert to a color value, use the
+    formula <code>colorValue = ((turbFunctionResult * 255) + 255) /
+    2</code>, then clamp to the range 0 to 255.</p>
+    <p>For turbulence, you get a turbFunctionResult that is aimed
+    at a range of 0 to 1 (the actual result might exceed this range
+    in some cases). To convert to a color value, use the formula
+    <code>colorValue = (turbFunctionResult * 255)</code>, then
+    clamp to the range 0 to 255.</p>
+    <p>The following order is used for applying the pseudo random
+    numbers. An initial seed value is computed based on attribute
+    <a>'seed'</a>. Then the implementation
+    computes the lattice points for R, then continues getting
+    additional pseudo random numbers relative to the last generated
+    pseudo random number and computes the lattice points for G, and
+    so on for B and A.</p>
+    <p>The generated color and alpha values are in the color space
+    determined by the value of property <a>'color-interpolation-filters'</a>:</p>
+<pre class="svgsamplecompressed">
+/* Produces results in the range [1, 2**31 - 2].
+Algorithm is: r = (a * r) mod m
+where a = 16807 and m = 2**31 - 1 = 2147483647
+See [Park &amp; Miller], CACM vol. 31 no. 10 p. 1195, Oct. 1988
+To test: the algorithm should produce the result 1043618065
+as the 10,000th generated number if the original seed is 1.
+*/
+#define RAND_m 2147483647 /* 2**31 - 1 */
+#define RAND_a 16807 /* 7**5; primitive root of m */
+#define RAND_q 127773 /* m / a */
+#define RAND_r 2836 /* m % a */
+long setup_seed(long lSeed)
+{
+  if (lSeed &lt;= 0) lSeed = -(lSeed % (RAND_m - 1)) + 1;
+  if (lSeed &gt; RAND_m - 1) lSeed = RAND_m - 1;
+  return lSeed;
+}
+long random(long lSeed)
+{
+  long result;
+  result = RAND_a * (lSeed % RAND_q) - RAND_r * (lSeed / RAND_q);
+  if (result &lt;= 0) result += RAND_m;
+  return result;
+}
+#define BSize 0x100
+#define BM 0xff
+#define PerlinN 0x1000
+#define NP 12 /* 2^PerlinN */
+#define NM 0xfff
+static uLatticeSelector[BSize + BSize + 2];
+static double fGradient[4][BSize + BSize + 2][2];
+struct StitchInfo
+{
+  int nWidth; // How much to subtract to wrap for stitching.
+  int nHeight;
+  int nWrapX; // Minimum value to wrap.
+  int nWrapY;
+};
+static void init(long lSeed)
+{
+  double s;
+  int i, j, k;
+  lSeed = setup_seed(lSeed);
+  for(k = 0; k &lt; 4; k++)
+  {
+    for(i = 0; i &lt; BSize; i++)
+    {
+      uLatticeSelector[i] = i;
+      for (j = 0; j &lt; 2; j++)
+        fGradient[k][i][j] = (double)(((lSeed = random(lSeed)) % (BSize + BSize)) - BSize) / BSize;
+      s = double(sqrt(fGradient[k][i][0] * fGradient[k][i][0] + fGradient[k][i][1] * fGradient[k][i][1]));
+      fGradient[k][i][0] /= s;
+      fGradient[k][i][1] /= s;
+    }
+  }
+  while(--i)
+  {
+    k = uLatticeSelector[i];
+    uLatticeSelector[i] = uLatticeSelector[j = (lSeed = random(lSeed)) % BSize];
+    uLatticeSelector[j] = k;
+  }
+  for(i = 0; i &lt; BSize + 2; i++)
+  {
+    uLatticeSelector[BSize + i] = uLatticeSelector[i];
+    for(k = 0; k &lt; 4; k++)
+      for(j = 0; j &lt; 2; j++)
+        fGradient[k][BSize + i][j] = fGradient[k][i][j];
+  }
+}
+#define s_curve(t) ( t * t * (3. - 2. * t) )
+#define lerp(t, a, b) ( a + t * (b - a) )
+double noise2(int nColorChannel, double vec[2], StitchInfo *pStitchInfo)
+{
+  int bx0, bx1, by0, by1, b00, b10, b01, b11;
+  double rx0, rx1, ry0, ry1, *q, sx, sy, a, b, t, u, v;
+  register i, j;
+  t = vec[0] + PerlinN;
+  bx0 = (int)t;
+  bx1 = bx0+1;
+  rx0 = t - (int)t;
+  rx1 = rx0 - 1.0f;
+  t = vec[1] + PerlinN;
+  by0 = (int)t;
+  by1 = by0+1;
+  ry0 = t - (int)t;
+  ry1 = ry0 - 1.0f;
+  // If stitching, adjust lattice points accordingly.
+  if(pStitchInfo != NULL)
+  {
+    if(bx0 &gt;= pStitchInfo-&gt;nWrapX)
+      bx0 -= pStitchInfo-&gt;nWidth;
+    if(bx1 &gt;= pStitchInfo-&gt;nWrapX)
+      bx1 -= pStitchInfo-&gt;nWidth;
+    if(by0 &gt;= pStitchInfo-&gt;nWrapY)
+      by0 -= pStitchInfo-&gt;nHeight;
+    if(by1 &gt;= pStitchInfo-&gt;nWrapY)
+      by1 -= pStitchInfo-&gt;nHeight;
+  }
+  bx0 &amp;= BM;
+  bx1 &amp;= BM;
+  by0 &amp;= BM;
+  by1 &amp;= BM;
+  i = uLatticeSelector[bx0];
+  j = uLatticeSelector[bx1];
+  b00 = uLatticeSelector[i + by0];
+  b10 = uLatticeSelector[j + by0];
+  b01 = uLatticeSelector[i + by1];
+  b11 = uLatticeSelector[j + by1];
+  sx = double(s_curve(rx0));
+  sy = double(s_curve(ry0));
+  q = fGradient[nColorChannel][b00]; u = rx0 * q[0] + ry0 * q[1];
+  q = fGradient[nColorChannel][b10]; v = rx1 * q[0] + ry0 * q[1];
+  a = lerp(sx, u, v);
+  q = fGradient[nColorChannel][b01]; u = rx0 * q[0] + ry1 * q[1];
+  q = fGradient[nColorChannel][b11]; v = rx1 * q[0] + ry1 * q[1];
+  b = lerp(sx, u, v);
+  return lerp(sy, a, b);
+}
+double turbulence(int nColorChannel, double *point, double fBaseFreqX, double fBaseFreqY,
+          int nNumOctaves, bool bFractalSum, bool bDoStitching,
+          double fTileX, double fTileY, double fTileWidth, double fTileHeight)
+{
+  StitchInfo stitch;
+  StitchInfo *pStitchInfo = NULL; // Not stitching when NULL.
+  // Adjust the base frequencies if necessary for stitching.
+  if(bDoStitching)
+  {
+    // When stitching tiled turbulence, the frequencies must be adjusted
+    // so that the tile borders will be continuous.
+    if(fBaseFreqX != 0.0)
+    {
+      double fLoFreq = double(floor(fTileWidth * fBaseFreqX)) / fTileWidth;
+      double fHiFreq = double(ceil(fTileWidth * fBaseFreqX)) / fTileWidth;
+      if(fBaseFreqX / fLoFreq &lt; fHiFreq / fBaseFreqX)
+        fBaseFreqX = fLoFreq;
+      else
+        fBaseFreqX = fHiFreq;
+    }
+    if(fBaseFreqY != 0.0)
+    {
+      double fLoFreq = double(floor(fTileHeight * fBaseFreqY)) / fTileHeight;
+      double fHiFreq = double(ceil(fTileHeight * fBaseFreqY)) / fTileHeight;
+      if(fBaseFreqY / fLoFreq &lt; fHiFreq / fBaseFreqY)
+        fBaseFreqY = fLoFreq;
+      else
+        fBaseFreqY = fHiFreq;
+    }
+    // Set up initial stitch values.
+    pStitchInfo = &amp;stitch;
+    stitch.nWidth = int(fTileWidth * fBaseFreqX + 0.5f);
+    stitch.nWrapX = fTileX * fBaseFreqX + PerlinN + stitch.nWidth;
+    stitch.nHeight = int(fTileHeight * fBaseFreqY + 0.5f);
+    stitch.nWrapY = fTileY * fBaseFreqY + PerlinN + stitch.nHeight;
+  }
+  double fSum = 0.0f;
+  double vec[2];
+  vec[0] = point[0] * fBaseFreqX;
+  vec[1] = point[1] * fBaseFreqY;
+  double ratio = 1;
+  for(int nOctave = 0; nOctave &lt; nNumOctaves; nOctave++)
+  {
+    if(bFractalSum)
+      fSum += double(noise2(nColorChannel, vec, pStitchInfo) / ratio);
+    else
+      fSum += double(fabs(noise2(nColorChannel, vec, pStitchInfo)) / ratio);
+    vec[0] *= 2;
+    vec[1] *= 2;
+    ratio *= 2;
+    if(pStitchInfo != NULL)
+    {
+      // Update stitch values. Subtracting PerlinN before the multiplication and
+      // adding it afterward simplifies to subtracting it once.
+      stitch.nWidth *= 2;
+      stitch.nWrapX = 2 * stitch.nWrapX - PerlinN;
+      stitch.nHeight *= 2;
+      stitch.nWrapY = 2 * stitch.nWrapY - PerlinN;
+    }
+  }
+  return fSum;
+}
+</pre>
+
+<edit:elementsummary name='feTurbulence'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="feTurbulenceBaseFrequencyAttribute"><span
+        class="adef">baseFrequency</span> = "<em><a
+        href="types.html#DataTypeNumberOptionalNumber">&lt;number-optional-number&gt;</a></em>"</dt>
+        <dd>The base frequency (frequencies) parameter(s) for the
+        noise function. If two <a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a>s are
+        provided, the first number represents a base frequency in
+        the X direction and the second value represents a base
+        frequency in the Y direction. If one number is provided,
+        then that value is used for both X and Y.<br />
+         A negative value for base frequency is an error (see <a
+        href="implnote.html#ErrorProcessing">Error
+        processing</a>).<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feTurbulenceNumOctavesAttribute"><span
+        class="adef">numOctaves</span> = "<em><a
+        href="types.html#DataTypeInteger">&lt;integer&gt;</a></em>"</dt>
+        <dd>The numOctaves parameter for the noise function.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">1</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feTurbulenceSeedAttribute"><span
+        class="adef">seed</span> = "<em><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></em>"</dt>
+        <dd>The starting number for the pseudo random number
+        generator.<br />
+         If the attribute is not specified, then the effect is as
+        if a value of <span class="attr-value">0</span> were
+        specified. When the seed number is handed over to the algorithm above it must first be truncated, i.e. rounded to the closest integer value towards zero.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feTurbulenceStitchTilesAttribute"><span
+        class="adef">stitchTiles</span> = "<em>stitch |
+        noStitch</em>"</dt>
+        <dd>If <span
+        class="attr-value">stitchTiles="noStitch"</span>, no
+        attempt it made to achieve smooth transitions at the border
+        of tiles which contain a turbulence function. Sometimes the
+        result will show clear discontinuities at the tile
+        borders.<br />
+         If <span class="attr-value">stitchTiles="stitch"</span>,
+        then the user agent will automatically adjust
+        baseFrequency-x and baseFrequency-y values such that the
+        feTurbulence node's width and height (i.e., the width and
+        height of the current subregion) contains an integral
+        number of the Perlin tile width and height for the first
+        octave. The baseFrequency will be adjusted up or down
+        depending on which way has the smallest relative (not
+        absolute) change as follows: Given the frequency, calculate
+        <code>lowFreq=floor(width*frequency)/width</code> and
+        <code>hiFreq=ceil(width*frequency)/width</code>. If
+        frequency/lowFreq &lt; hiFreq/frequency then use lowFreq,
+        else use hiFreq. While generating turbulence values,
+        generate lattice vectors as normal for Perlin Noise, except
+        for those lattice points that lie on the right or bottom
+        edges of the active area (the size of the resulting tile).
+        In those cases, copy the lattice vector from the opposite
+        edge of the active area.
+        <p>
+          If attribute <a>'stitchTiles'</a> is not specified, then the effect is as if a value of <span class="attr-value">noStitch</span> were specified.
+        </p><br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="feTurbulenceTypeAttribute"><span
+        class="adef">type</span> = "<em>fractalNoise |
+        turbulence</em>"</dt>
+        <dd>Indicates whether the filter primitive should perform a
+        noise or turbulence function.
+        If attribute <a>'type'</a> is not specified, then the effect is as if a value of <span class="attr-value">turbulence</span> were specified.
+        <br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+    <p><span class="example-ref">Example feTurbulence</span> shows
+    the effects of various parameter settings for feTurbulence.</p>
+
+<edit:example href='images/filters/feTurbulence.svg' name='feTurbulence' description='Examples of feTurbulence operations' image='yes' link='yes'/>
+
+</edit:with>
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<h3 id="InterfaceSVGFilterElement">Interface SVGFilterElement</h3>
+
+<edit:with element='filter'>
+<edit:interface name='::svg::SVGFilterElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFilterPrimitiveStandardAttributes">Interface SVGFilterPrimitiveStandardAttributes</h3>
+
+<edit:with element='feTile'>
+<edit:interface name='::svg::SVGFilterPrimitiveStandardAttributes'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEBlendElement">Interface SVGFEBlendElement</h3>
+
+<edit:with element='feBlend'>
+<edit:interface name='::svg::SVGFEBlendElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEColorMatrixElement">Interface SVGFEColorMatrixElement</h3>
+
+<edit:with element='feColorMatrix'>
+<edit:interface name='::svg::SVGFEColorMatrixElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEComponentTransferElement">Interface SVGFEComponentTransferElement</h3>
+
+<edit:with element='feComponentTransfer'>
+<edit:interface name='::svg::SVGFEComponentTransferElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGComponentTransferFunctionElement">Interface SVGComponentTransferFunctionElement</h3>
+
+<edit:with element='feFuncR'>
+<edit:interface name='::svg::SVGComponentTransferFunctionElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEFuncRElement">Interface SVGFEFuncRElement</h3>
+
+<edit:with element='feFuncR'>
+<edit:interface name='::svg::SVGFEFuncRElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEFuncGElement">Interface SVGFEFuncGElement</h3>
+
+<edit:with element='feFuncG'>
+<edit:interface name='::svg::SVGFEFuncGElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEFuncBElement">Interface SVGFEFuncBElement</h3>
+
+<edit:with element='feFuncB'>
+<edit:interface name='::svg::SVGFEFuncBElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEFuncAElement">Interface SVGFEFuncAElement</h3>
+
+<edit:with element='feFuncA'>
+<edit:interface name='::svg::SVGFEFuncAElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFECompositeElement">Interface SVGFECompositeElement</h3>
+
+<edit:with element='feComposite'>
+<edit:interface name='::svg::SVGFECompositeElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEConvolveMatrixElement">Interface SVGFEConvolveMatrixElement</h3>
+
+<edit:with element='feConvolveMatrix'>
+<edit:interface name='::svg::SVGFEConvolveMatrixElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEDiffuseLightingElement">Interface SVGFEDiffuseLightingElement</h3>
+
+<edit:with element='feDiffuseLighting'>
+<edit:interface name='::svg::SVGFEDiffuseLightingElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEDistantLightElement">Interface SVGFEDistantLightElement</h3>
+
+<edit:with element='feDistantLight'>
+<edit:interface name='::svg::SVGFEDistantLightElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEPointLightElement">Interface SVGFEPointLightElement</h3>
+
+<edit:with element='fePointLight'>
+<edit:interface name='::svg::SVGFEPointLightElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFESpotLightElement">Interface SVGFESpotLightElement</h3>
+
+<edit:with element='feSpotLight'>
+<edit:interface name='::svg::SVGFESpotLightElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEDisplacementMapElement">Interface SVGFEDisplacementMapElement</h3>
+
+<edit:with element='feDisplacementMap'>
+<edit:interface name='::svg::SVGFEDisplacementMapElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEFloodElement">Interface SVGFEFloodElement</h3>
+
+<edit:with element='feFlood'>
+<edit:interface name='::svg::SVGFEFloodElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEGaussianBlurElement">Interface SVGFEGaussianBlurElement</h3>
+
+<edit:with element='feGaussianBlur'>
+<edit:interface name='::svg::SVGFEGaussianBlurElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEImageElement">Interface SVGFEImageElement</h3>
+
+<edit:with element='feImage'>
+<edit:interface name='::svg::SVGFEImageElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEMergeElement">Interface SVGFEMergeElement</h3>
+
+<edit:with element='feMerge'>
+<edit:interface name='::svg::SVGFEMergeElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEMergeNodeElement">Interface SVGFEMergeNodeElement</h3>
+
+<edit:with element='feMergeNode'>
+<edit:interface name='::svg::SVGFEMergeNodeElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEMorphologyElement">Interface SVGFEMorphologyElement</h3>
+
+<edit:with element='feMorphology'>
+<edit:interface name='::svg::SVGFEMorphologyElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFEOffsetElement">Interface SVGFEOffsetElement</h3>
+
+<edit:with element='feOffset'>
+<edit:interface name='::svg::SVGFEOffsetElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFESpecularLightingElement">Interface SVGFESpecularLightingElement</h3>
+
+<edit:with element='feSpecularLighting'>
+<edit:interface name='::svg::SVGFESpecularLightingElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFETileElement">Interface SVGFETileElement</h3>
+
+<edit:with element='feTile'>
+<edit:interface name='::svg::SVGFETileElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGFETurbulenceElement">Interface SVGFETurbulenceElement</h3>
+
+<edit:with element='feTurbulence'>
+<edit:interface name='::svg::SVGFETurbulenceElement'/>
+</edit:with>
+
+</body>
+</html>
