@@ -549,7 +549,7 @@ redefine them here." -->
     </dd>
   </dl>
 
-  <h4 id="LinearGradientNotes">Some notes on linear gradients</h4>
+  <h4 id="LinearGradientNotes">Notes on linear gradients</h4>
 
   <p>
     If <a>'x1'</a> = <a>'x2'</a> and <a>'y1'</a> =
@@ -602,10 +602,7 @@ redefine them here." -->
 
   <dl class="attrdef-list-svg2">
 
-    <dt id="RadialGradientElementGradientUnitsAttribute">
-      <span class="adef">gradientUnits</span> =
-      "<em>userSpaceOnUse</em> | <em>objectBoundingBox</em>"
-    </dt>
+    <dt id="RadialGradientElementGradientUnitsAttribute"></dt>
     <dd>
 
       <p>
@@ -615,7 +612,7 @@ redefine them here." -->
 
       <dl class="attrdef-svg2">
 
-<!--	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd> -->
+	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
 	<dt><a>Lacuna value</a></dt>  <dd>objectBoundingBox</dd>
 	<dt><a>Animatable</a></dt>    <dd>yes</dd>
 
@@ -963,7 +960,7 @@ redefine them here." -->
     </p>
   </div>
 
-  <h4 id="RadialGradientNotes">Some notes on radial gradients</h4>
+  <h4 id="RadialGradientNotes">Notes on radial gradients</h4>
 
   <p>
     If the point defined by <a>'fx'</a> and <a>'fy'</a> lies outside the
@@ -1053,6 +1050,13 @@ redefine them here." -->
     </p>
   </div>
 
+  <p class="annotation">
+    A Coons Patch is equivalent to a bi-cubic Ferguson patch where the
+    distance between a cubic Bézier end point and its nearest control
+    point is one-third the length of the corresponding Ferguson
+    tangent line.
+  </p>
+    
   <p>
     The corner colors are mapped to the patch area with a two step
     process.  First the colors are placed at the corners of a unit
@@ -1061,33 +1065,49 @@ redefine them here." -->
     points inside the patch using the following formula (u, and v are
     the coordinates inside the unit square):
   </p>
-  <p>
-    S=S_C+S_D-S_B, where<br/>
-    S_C(u,v) = (1-v)xC_1(u) + v*C_2(u),<br/>
-    S_D(u,v) = (1-u)xD_1(v) + u*D_2(v), and<br/>
-    S_B(u,v) = (1-v)*[(1-u)*C_1(0) + u*C_1(1)]
-              +   v *[(1-u)*C_2(0) + u*C_2(1)].
-  </p>
+  <div class="note">
+    <pre>
+    S = S<sub>C</sub> + S<sub>D</sub> &#x2212; S<sub>B</sub>, where
+    S<sub>C</sub>(u,v) = (1&#x2212;v)&times;C<sub>1</sub>(u) + v&times;C<sub>2</sub>(u),
+    S<sub>D</sub>(u,v) = (1&#x2212;u)&times;D<sub>1</sub>(v) + u&times;D<sub>2</sub>(v), and
+    S<sub>B</sub>(u,v) = (1&#x2212;v)&times;[(1-u)&times;C<sub>1</sub>(0) + u&times;C<sub>1</sub>(1)]
+               +  v&times;[(1&#x2212;u)&times;C<sub>2</sub>(0) + u&times;C<sub>2</sub>(1)].
+</pre>
+  </div>
   <p class="issue">
     MathML gets stripped out by build script.
   </p>
+  <pre><![CDATA[
   <math xmlns="http://www.w3.1998/Math/MathML">
     <mrow>
       <msup><mi>S</mi></msup><mo>=</mo><mi>S</mi><msub>C</msub><mo>+</mo><mi>S</mi><msub>D</msub>
     </mrow>
-  </math>
+  </math>]]>
+  </pre>
+
   <p class="issue">
-    Come up with better explanation of the mapping with diagram.
+    Come up with better explanation of the mapping with diagram. The
+    subtraction term in the above formula ensures that the boundary
+    conditions are met.
   </p>
-  <p class="note">
-    On method of rendering a patch is to "divide and conquer."  Check
-    if the four corner colors of the patch are the same within a
-    specified tolerance. If so, paint the patch with the average color
-    using the normal path filling routine. If not, divide the patch
-    into four smaller patches and repeat the color tolerance
-    check. Repeat the process as many times as necessary.
-  </p>
-    
+
+  <div class="note">
+    <p>
+      One method of rendering a patch is to "divide and conquer."  Check
+      if the four corner colors of the patch are the same within a
+      specified tolerance. If so, paint the patch with the average color
+      using the normal path filling routine. If not, divide the patch
+      into four smaller patches and repeat the color tolerance
+      check. Repeat the process as many times as necessary.
+    </p>
+    <p>
+      Another way to render a patch is to first divide the patch
+      vertically or horizontally into a series of smaller patches that
+      are each less than one pixel high or wide. Then each resulting
+      patch can be rendered as a path.
+    </p>
+  </div>
+
   <p>
     For a mesh, the individual patches are placed in an array. There
     are two reasons for using an array. The first is that an array of
@@ -1123,6 +1143,7 @@ redefine them here." -->
 &lt;/meshGradient&gt;
     </pre>
   </div>
+
   <div class="annotation">
     <p>
       Resolution: Mesh gradients are accepted by the WG for SVG 2.
@@ -1152,20 +1173,26 @@ redefine them here." -->
   </div>
 
 
-  <p id="MeshGradientElement">Mesh gradients are defined by a
-    <a>'meshGradient'</a> element.</p>
-
-
+  <p id="MeshGradientElement">
+    Mesh gradients are defined by a <a>'meshGradient'</a> element.
+  </p>
   <edit:elementsummary name='meshGradient'/>
 
 </edit:with>
+
 <edit:with element='meshRow'>
 
+  <p id="MeshRowElement">
+    Mesh rows are defined by a <a>'meshRow'</a> element.
+  </p>
   <edit:elementsummary name='meshRow'/>
 
 </edit:with>
 <edit:with element='meshPatch'>
 
+  <p id="MeshPatchElement">
+    Mesh patches are defined by a <a>'meshPatch'</a> element.
+  </p>
   <edit:elementsummary name='meshPatch'/>
 
 </edit:with>
@@ -1225,6 +1252,32 @@ redefine them here." -->
       </dl>
 
     </dd>
+
+    <dt id="StopElementPathAttribute">
+      <span class="adef">path</span>
+    </dt>
+    <dd>
+
+      <p>
+	Gives the path for one side of a mesh gradient patch.
+
+	This attribute applies only to mesh gradients.
+      </p>
+
+      <dl class="attrdef-svg2">
+
+	<dt>Value</dt>                <dd>mesh path data</dd>
+	<dt><a>Lacuna value</a></dt>  <dd>see notes below</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+
+      </dl>
+
+      <p>
+	A description of mesh path data.
+      </p>
+
+    </dd>
+
   </dl>
 
   <h4 id="StopColorProperties">Properties</h4>
@@ -1293,7 +1346,7 @@ redefine them here." -->
 
   </dl><!-- propdef-list -->
 
-  <h4 id="StopNotes">Some notes on gradient stops</h4>
+  <h4 id="StopNotes">Notes on gradient stops</h4>
 
   <ul>
     <li>
@@ -1643,7 +1696,7 @@ redefine them here." -->
     </dd>
   </dl>
 
-  <h3 id="PatternNotes">Some notes on patterns</h3>
+  <h3 id="PatternNotes">Notes on patterns</h3>
 
   <p>
     SVG's <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
