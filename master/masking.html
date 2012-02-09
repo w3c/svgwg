@@ -1,0 +1,962 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Clipping, Masking and Compositing</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>Clipping, Masking and Compositing</h1>
+
+<h2 id="Introduction">Introduction</h2>
+
+<p>SVG supports the following clipping/masking features:</p>
+
+<ul>
+  <li><a href="#ClippingPaths">clipping paths</a>, which uses
+  any combination of <a>'path'</a>, <a>'text'</a> and
+  <a href="intro.html#TermBasicShape">basic shapes</a> to serve as
+  the outline of a (in the absence of anti-aliasing) 1-bit
+  mask, where everything on the "inside" of the outline is
+  allowed to show through but everything on the outside is
+  masked out</li>
+
+  <li><a href="#Masking">masks</a>, which are
+  <a href="intro.html#TermContainerElement">container elements</a>
+  which can contain <a href="intro.html#TermGraphicsElement">graphics elements</a>
+  or other container elements which define a set of graphics
+  that is to be used as a semi-transparent mask for compositing
+  foreground objects into the current background.</li>
+</ul>
+
+<p>One key distinction between a <a href="#ClippingPaths">clipping path</a>
+and a <a href="#Masking">mask</a> is that clipping paths are hard masks
+(i.e., the silhouette consists of either fully opaque pixels or
+fully transparent pixels, with the possible exception of
+anti-aliasing along the edge of the silhouette) whereas masks
+consist of an image where each pixel value indicates the degree
+of transparency vs. opacity. In a mask, each pixel value can
+range from fully transparent to fully opaque.</p>
+
+<p>SVG supports only simple alpha blending compositing (see
+<a href="#SimpleAlphaBlending">Simple Alpha Compositing</a>).</p>
+
+<h2 id="SimpleAlphaBlending">Simple alpha compositing</h2>
+
+<p>Graphics elements are blended into the elements already
+rendered on the canvas using simple alpha compositing, in which
+the resulting color and opacity at any given pixel on the
+canvas is the result of the following formulas (all color
+values use premultiplied alpha):</p>
+
+<pre>
+Er, Eg, Eb    - Element color value
+Ea            - Element alpha value
+Cr, Cg, Cb    - Canvas color value (before blending)
+Ca            - Canvas alpha value (before blending)
+Cr', Cg', Cb' - Canvas color value (after blending)
+Ca'           - Canvas alpha value (after blending)
+Ca' = 1 - (1 - Ea) * (1 - Ca)
+Cr' = (1 - Ea) * Cr + Er
+Cg' = (1 - Ea) * Cg + Eg
+Cb' = (1 - Ea) * Cb + Eb
+</pre>
+
+<p>The following rendering properties, which provide
+information about the color space in which to perform the
+compositing operations, apply to compositing operations:</p>
+
+<ul>
+  <li><a>'color-interpolation'</a></li>
+  <li><a>'color-rendering'</a></li>
+</ul>
+
+<h2 id="ClippingPaths">Clipping paths</h2>
+
+<h3 id="ClippingPathsIntro">Introduction</h3>
+
+<p>The clipping path restricts the region to which paint can be
+applied. Conceptually, any parts of the drawing that lie
+outside of the region bounded by the currently active clipping
+path are not drawn. A clipping path can be thought of as a mask
+wherein those pixels outside the clipping path are black with
+an alpha value of zero and those pixels inside the clipping
+path are white with an alpha value of one (with the possible
+exception of anti-aliasing along the edge of the
+silhouette).</p>
+
+<h3 id="InitialClippingPath">The initial clipping path</h3>
+
+<p>When an <a>'svg'</a> element is either the root element in the
+document or is embedded within a document whose layout is determined
+according to the layout rules of CSS or XSL, then the user agent must
+establish an initial clipping path for the SVG document fragment. The
+<a>'overflow'</a> and <a>'clip'</a> properties along with additional SVG
+user agent processing rules determine the initial clipping path which
+the user agent establishes for the SVG document fragment:</p>
+
+<h3 id="OverflowAndClipProperties">The <span class="prop-name">'overflow'</span>
+and <span class="prop-name">'clip'</span> properties</h3>
+
+    <div class="propdef">
+      <dl>
+        <dt id="OverflowProperty"><span class="propdef-title prop-name">'overflow'</span></dt>
+        <dd>
+          <table summary="overflow property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>visible | hidden | scroll | auto | <a
+              class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>see prose</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a
+              href="coords.html#ElementsThatEstablishViewports">elements
+              which establish a new viewport</a>, <a>'pattern'</a> elements
+              and <a>'marker element'</a> elements</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p>The <a>'overflow'</a> property has the same parameter values and has the
+same meaning <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visufx.html#overflow">as defined in CSS2</a>
+([<a href="refs.html#ref-CSS2">CSS2</a>], section 11.1.1);
+however, the following additional points apply:</p>
+
+<ul>
+  <li>The <a>'overflow'</a> property applies to
+  <a href="coords.html#ElementsThatEstablishViewports">elements that establish new viewports</a>
+  (e.g., <a>'svg'</a> elements), <a>'pattern'</a> elements and <a>'marker element'</a>
+  elements. For all other elements, the property has no effect (i.e., a clipping
+  rectangle is not created).</li>
+
+  <li>For those elements to which the <a>'overflow'</a> property can apply, if
+  the <a>'overflow'</a> property has the value <span class='prop-value'>hidden</span> or <span class='prop-value'>scroll</span>,
+  the effect is that a new clipping path in the shape of a rectangle is created.
+  The result is equivalent to defining a <a>'clipPath'</a> element whose
+  content is a <a>'rect'</a> element which defines the equivalent rectangle,
+  and then specifying the &lt;uri&gt; of this <a>'clipPath'</a> element on the
+  <a>'clip-path'</a> property for the given element.</li>
+
+  <li>If the <a>'overflow'</a> property has a value other than
+  <span class='prop-value'>hidden</span> or <span class='prop-value'>scroll</span>,
+  the property has no effect (i.e., a clipping rectangle is not created).</li>
+
+  <li>Within SVG content, the value <span class='prop-value'>auto</span> is
+  equivalent to the value <span class='prop-value'>visible</span>.</li>
+
+  <li>When an <a>outermost svg element</a> is embedded inline within a
+  parent XML grammar which uses <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visuren.html">CSS layout</a>
+  ([<a href="refs.html#ref-CSS2">CSS2</a>], chapter 9)
+  or <a href="http://www.w3.org/TR/2006/REC-xsl11-20061205/">XSL formatting</a>
+  [<a href="refs.html#ref-XSL">XSL</a>], if the
+  <a>'overflow'</a> property has the value <span class='prop-value'>hidden</span>
+  or <span class='prop-value'>scroll</span>, then the user agent will
+  establish an initial clipping path equal to the bounds of the initial
+  <a href="coords.html#SVGViewport">viewport</a>; otherwise, the initial
+  clipping path is set according to the <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visufx.html#overflow">clipping rules as defined in CSS2</a>
+  ([<a href="refs.html#ref-CSS2">CSS2</a>], section 11.1.1).</li>
+
+  <li>When an <a>outermost svg element</a> is stand-alone or embedded
+  inline within a parent XML grammar which does not use CSS layout
+  or XSL formatting, the
+  <a>'overflow'</a> property on the <a>outermost svg element</a> is ignored
+  for the purposes of visual rendering and the initial clipping path is set to
+  the bounds of the initial <a href="coords.html#SVGViewport">viewport</a>.</li>
+
+  <li>The initial value for <span class="prop-name">'overflow'</span> as defined in [<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visufx.html#overflow">CSS2-overflow</a>] is 'visible', and this applies also to the root <a href="struct.html#SVGElement"><span class="element-name">'svg'</span></a> element;  however, for child elements of an SVG document, SVG's <a href="styling.html#UAStyleSheet">user agent style sheet</a> overrides this initial value and sets the <span class="prop-name">'overflow'</span> property on <a href="coords.html#ElementsThatEstablishViewports">elements that establish new viewports</a> (e.g., <a href="struct.html#SVGElement"><span class="element-name">'svg'</span></a> elements), <a href="pservers.html#PatternElement"><span class="element-name">'pattern'</span></a> elements and <a href="painting.html#MarkerElement"><span class="element-name">'marker'</span></a> elements to the value 'hidden'.</li>
+
+</ul>
+
+<p>As a result of the above, the default behavior of SVG user agents is to
+establish a clipping path to the bounds of the initial
+<a href="coords.html#SVGViewport">viewport</a> and to establish a new clipping
+path for each <a href="coords.html#ElementsThatEstablishViewports">element which
+establishes a new viewport</a> and each <a>'pattern'</a> and
+<a>'marker element'</a> element.</p>
+
+<p>For related information, see <a href="masking.html#AutoClipAtViewportNotViewBox">Clip
+to viewport vs. clip to <span class="attr-name">'viewBox'</span></a>.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="ClipProperty"><span class="propdef-title prop-name">'clip'</span></dt>
+        <dd>
+          <table summary="clip property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>&lt;shape&gt; | auto | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>auto</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a
+              href="coords.html#ElementsThatEstablishViewports">elements
+              which establish a new viewport</a>, <a>'pattern'</a> elements
+              and <a>'marker element'</a> elements</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p>The <a>'clip'</a> property has the same parameter values
+<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visufx.html#clipping">as defined in CSS2</a>
+([<a href="refs.html#ref-CSS2">CSS2</a>], section 11.1.2).
+Unitless values, which indicate current user coordinates, are
+permitted on the coordinate values on the &lt;shape&gt;. The
+value of <span class='prop-value'>auto</span> defines a clipping path along
+the bounds of the viewport created by the given element.</p>
+
+<h3 id="AutoClipAtViewportNotViewBox">Clip to viewport vs. clip to
+<span class="attr-name">'viewBox'</span></h3>
+
+<p>It is important to note that initial values for the <a>'overflow'</a> and
+<a>'clip'</a> properties and the <a href="styling.html#UAStyleSheet">user agent
+style sheet</a> will result in an initial clipping path that is set to the
+bounds of the initial viewport. When attributes <a>'viewBox'</a> and
+<a>'preserveAspectRatio'</a> attributes are specified, it is sometime
+desirable that the clipping path be set to the bounds of the <a>'viewBox'</a>
+instead of the viewport (or reference rectangle, in the case of
+<a>'marker element'</a> and <a>'pattern'</a> elements), particularly when
+<a>'preserveAspectRatio'</a> specifies uniform scaling and the aspect ratio of
+the <a>'viewBox'</a> does not match the aspect ratio of the viewport.</p>
+
+<p>To set the initial clipping path to the bounds of the <a>'viewBox'</a>, set
+the bounds of <a>'clip'</a> property to the same rectangle as specified on the
+<a>'viewBox'</a> attribute. (Note that the parameters do not match.
+<a>'clip'</a> takes values &lt;top&gt;, &lt;right&gt;,&lt;bottom&gt; and
+&lt;left&gt;, whereas <a>'viewBox'</a> takes values &lt;min-x&gt;,
+&lt;min-y&gt;, &lt;width&gt; and &lt;height&gt;.)</p>
+
+<h3 id="EstablishingANewClippingPath">Establishing a new clipping path: the <span class="element-name">'clipPath'</span> element</h3>
+
+<edit:with element='clipPath'>
+
+<p id="ClipPathElement">A clipping path is defined with a <a>'clipPath'</a>
+element. A clipping path is used/referenced using the <a>'clip-path'</a>
+property.</p>
+
+<p>A <a>'clipPath'</a> element can contain <a>'path'</a> elements,
+<a>'text'</a> elements, <a href="shapes.html">basic shapes</a> (such as
+<a>'circle'</a>) or a <a>'use'</a> element. If a <a>'use'</a> element is a
+child of a <a>'clipPath'</a> element, it must directly reference
+<a>'path'</a>, <a>'text'</a> or <a href="shapes.html">basic shape</a> elements.
+Indirect references are an error (see
+<a href="implnote.html#ErrorProcessing">Error processing</a>).</p>
+
+<p>The raw geometry of each child element exclusive of rendering properties
+such as <a>'fill'</a>, <a>'stroke'</a>, <a>'stroke-width'</a> within a
+<a>'clipPath'</a> conceptually defines a 1-bit mask (with the possible
+exception of anti-aliasing along the edge of the geometry) which represents
+the silhouette of the graphics associated with that element. Anything outside
+the outline of the object is masked out. If a child element is 
+made invisible by <a>'display'</a> or <a>'visibility'</a> it does not contribute
+to the clipping path. When the <a>'clipPath'</a> element
+contains multiple child elements, the silhouettes of the child elements are
+logically OR'd together to create a single silhouette which is then used to
+restrict the region onto which paint can be applied. Thus, a point is inside
+the clipping path if it is inside any of the children of the
+<a>'clipPath'</a>.</p>
+
+<p>For a given graphics element, the actual clipping path used
+will be the intersection of the clipping path specified by its
+<a>'clip-path'</a> property (if any) with any clipping paths on its
+ancestors, as specified by the <a>'clip-path'</a> property on the
+ancestor elements, or by the <a>'overflow'</a> property on ancestor
+<a href="coords.html#ElementsThatEstablishViewports">elements
+which establish a new viewport</a>. Also, see the discussion of
+<a href="masking.html#InitialClippingPath">the initial clipping path</a>.)</p>
+
+<p>A couple of notes:</p>
+
+<ul>
+  <li>The <a>'clipPath'</a> element itself and its child elements do
+  <em>not</em> inherit clipping paths from the ancestors of the
+  <a>'clipPath'</a> element.</li>
+
+  <li>The <a>'clipPath'</a> element or any of its children can specify
+  property <a>'clip-path'</a>.<br /> If a valid <a>'clip-path'</a> reference
+  is placed on a <a>'clipPath'</a> element, the resulting clipping path is the
+  intersection of the contents of the <a>'clipPath'</a> element with the
+  referenced clipping path.<br />
+  If a valid <a>'clip-path'</a> reference is placed on one of the children of
+  a <a>'clipPath'</a> element, then the given child element is clipped by the
+  referenced clipping path before OR'ing the silhouette of the child element
+  with the silhouettes of the other child elements.</li>
+	
+	<li>An empty clipping path will completely clip away the element that had the <a>'clip-path'</a> property applied.</li>
+  
+</ul>
+
+<edit:elementsummary name='clipPath'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="ClipPathElementClipPathUnitsAttribute"><span
+        class="adef">clipPathUnits</span> =
+        "<em>userSpaceOnUse</em> | <em>objectBoundingBox</em>"</dt>
+        <dd>Defines the coordinate system for the contents of the
+        <a>'clipPath'</a>.<br />
+         If <span class="attr-value">clipPathUnits="userSpaceOnUse"</span>,
+        the contents of the <a>'clipPath'</a> represent values in
+        the current user coordinate system in place at the time
+        when the <a>'clipPath'</a>
+        element is referenced (i.e., the user coordinate system for
+        the element referencing the <a>'clipPath'</a> element via the
+        <a>'clip-path'</a> property).<br />
+         If <span class="attr-value">clipPathUnits="objectBoundingBox"</span>,
+        then the user coordinate system for the contents of the
+        <a>'clipPath'</a> element is established using the bounding box of
+        the element to which the clipping path is applied (see <a
+        href="coords.html#ObjectBoundingBox">Object bounding box
+        units</a>).<br />
+         If attribute <a>'clipPathUnits'</a>
+        is not specified, then the effect is as if a value of <span
+        class="attr-value">'userSpaceOnUse'</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+
+<p><a href="styling.html#SVGStylingProperties">Properties</a> inherit into the
+<a>'clipPath'</a> element from its ancestors; properties do <em>not</em>
+inherit from the element referencing the <a>'clipPath'</a> element.</p>
+
+<p><a>'clipPath'</a> elements are never rendered directly; their only usage is
+as something that can be referenced using the <a>'clip-path'</a> property. The
+<a>'display'</a> property does not apply to the <a>'clipPath'</a> element;
+thus, <a>'clipPath'</a> elements are not directly rendered even if the
+<a>'display'</a> property is set to a value other than
+<span class="prop-value">none</span>, and <a>'clipPath'</a> elements are
+available for referencing even when the <a>'display'</a> property on the
+<a>'clipPath'</a> element or any of its ancestors is set to
+<span class="prop-value">none</span>.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="ClipPathProperty"><span class="propdef-title prop-name">'clip-path'</span></dt>
+        <dd>
+          <table summary="clip-path property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a>
+              | none | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>none</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a
+              href="intro.html#TermContainerElement">container
+              elements</a>, <a
+              href="intro.html#TermGraphicsElement">graphics
+              elements</a>
+              and <a>'clipPath'</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class="prop-value"><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a></span></dt>
+  <dd>An <a href="linking.html#IRIReference">IRI reference</a> to another
+  graphical object within the same SVG document fragment which will be used as
+  the clipping path. If the <a href="linking.html#IRIReference">IRI reference</a> is not valid 
+	(e.g it points to an object that doesn't exist or the object is not a <a>'clipPath'</a> element) the
+	<a>'clip-path'</a> property must be treated as if it hadn't been specified.</dd>
+</dl>
+
+    <div class="propdef">
+      <dl>
+        <dt id="ClipRuleProperty"><span class="propdef-title prop-name">'clip-rule'</span></dt>
+        <dd>
+          <table summary="clip-rule property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>nonzero | evenodd | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>nonzero</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td>graphics elements within a <a>'clipPath'</a>
+              element</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class="prop-value">nonzero</span></dt>
+  <dd>See description of <a>'fill-rule'</a> property.</dd>
+
+  <dt><span class="prop-value">evenodd</span></dt>
+  <dd>See description of <a>'fill-rule'</a> property.</dd>
+</dl>
+
+<p>The <a>'clip-rule'</a> property only applies to graphics elements that are
+contained within a <a>'clipPath'</a> element. The following fragment of code
+will cause an evenodd clipping rule to be applied to the clipping path because
+<a>'clip-rule'</a> is specified on the <a>'path'</a> element that defines the
+clipping shape:</p>
+
+<pre>
+&lt;g clip-rule="nonzero"&gt;
+  &lt;clipPath id="MyClip"&gt;
+    &lt;path d="..." clip-rule="evenodd" /&gt;
+  &lt;/clipPath&gt;
+  &lt;rect clip-path="url(#MyClip)" ... /&gt;
+&lt;/g&gt;
+</pre>
+
+<p>whereas the following fragment of code will <em>not</em> cause an
+evenodd clipping rule to be applied because the <a>'clip-rule'</a> is
+specified on the referencing element, not on the object defining the
+clipping shape:</p>
+
+<pre>
+&lt;g clip-rule="nonzero"&gt;
+  &lt;clipPath id="MyClip"&gt;
+    &lt;path d="..." /&gt;
+  &lt;/clipPath&gt;
+  &lt;rect clip-path="url(#MyClip)" clip-rule="evenodd" ... /&gt;
+&lt;/g&gt;
+</pre>
+
+<h3 id="clipPath-geometry">Clipping paths, geometry, and pointer events</h3>
+
+  <p>
+    A clipping path is conceptually equivalent to a custom viewport for
+    the referencing element.  Thus, it affects the rendering of an element,
+    but not the element's inherent geometry. The bounding box of a clipped
+    element (that is, an element which references a 
+    <span class="element-name">'clipPath'</span> element via a
+    <span class="prop-name">'clip-path'</span> property, or a child of the 
+    referencing element) must remain the same as if it were not clipped.
+  </p>
+
+  <p>By default, <a href="interact.html#PointerEventsProperty">pointer-events</a> must not be dispatched on the clipped (non-visible) regions of a shape.  For example, a circle with a radius of 10 which is clipped to a circle with a radius of 5 will not receive <span class="event-name">'click'</span> events outside the smaller radius.  Later versions of SVG may define new properties to enable fine-grained control over the interactions between hit testing and clipping.</p>
+
+</edit:with>
+
+<h2 id="Masking">Masking</h2>
+
+<edit:with element='mask'>
+
+<p id="MaskElement">In SVG, you can specify that any other graphics
+object or <a>'g'</a> element can be used as an alpha mask for
+compositing the current object into the background.</p>
+
+<p>A mask is defined with a <a>'mask element'</a> element. A mask is
+used/referenced using the <a>'mask property'</a> property.</p>
+
+<p>A <a>'mask element'</a> can contain any graphical elements or
+<a href="intro.html#TermContainerElement">container elements</a> such as
+a <a>'g'</a>.</p>
+
+<p>It is an error if the <a>'mask property'</a> property references a
+non-existent object or if the referenced object is not a <a>'mask element'</a>
+element (see <a href="implnote.html#ErrorProcessing">Error Processing</a>).</p>
+
+<p>The effect is as if the child elements of the <a>'mask element'</a> are
+rendered into an offscreen image which has been initialized to transparent
+black. Any graphical object which uses/references the given
+<a>'mask element'</a> element will be painted onto the background through the
+mask, thus completely or partially masking out parts of the graphical
+object.</p>
+
+<p>For any graphics object that is used as a mask, the mask value at any point
+is computed from the color channel values and alpha channel value as follows.
+First a luminance value is computed from the color channel values:
+</p>
+<ul>
+<li>If the computed value of <a>'color-interpolation'</a> on the <a>'mask element'</a> element is <span class="attr-value">linearRGB</span>, 
+first convert the original image color values (potentially in the sRGB color space) to the linear RGB color space (see
+<a href="painting.html#RenderingProperties">Rendering properties</a>). Then,
+using non-premultiplied linear RGB color values, apply the luminance-to-alpha
+coefficients (as defined in the <a>'feColorMatrix'</a> filter primitive) to
+convert the linear RGB color values to linear luminance values.
+</li>
+<li>
+If the computed value of <a>'color-interpolation'</a> on the <a>'mask element'</a> element is <span class="attr-value">sRGB</span> then the luminance value
+is calculated by taking the non-premultiplied RGB color values, applying the luminance-to-alpha
+coefficients (as defined in the <a>'feColorMatrix'</a> filter primitive) to
+convert the RGB color values to luminance values.</li>
+</ul>
+<p>Finally if the
+graphics object also includes an alpha channel, then the computed
+luminance value is multiplied by the corresponding alpha value to produce the
+mask value.
+</p>
+
+<p>For a four-channel RGBA graphics object that is used as a mask, both
+the color channels and the alpha channel of the mask contribute to the
+masking operation. The alpha mask that is used to composite the current
+object into the background represents the product of the luminance of
+the color channels (see previous paragraph) and the alpha channel from
+the mask.</p>
+
+<p>For a three-channel RGB graphics object that is used as a mask (e.g.,
+when referencing a 3-channel image file), the effect is as if the object
+were converted into a 4-channel RGBA image with the alpha channel
+uniformly set to 1.</p>
+
+<p>For a single-channel image that is used as a mask (e.g., when
+referencing a 1-channel grayscale image file), the effect is as if the
+object were converted into a 4-channel RGBA image, where the single
+channel from the referenced object is used to compute the three color
+channels and the alpha channel is uniformly set to 1. Note that when
+referencing a grayscale image file, the transfer curve relating the
+encoded grayscale values to linear light values must be taken into
+account when computing the color channels.</p>
+
+<p>The effect of a mask is identical to what would have happened if
+there were no mask but instead the alpha channel of the given object
+were multiplied with the mask's resulting alpha values (i.e., the
+product of the mask's luminance from its color channels multiplied by
+the mask's alpha channel).</p>
+
+<p>Note that SVG <a>'path'</a>s, shapes (e.g., <a>'circle'</a>) and
+<a>'text'</a> are all treated as four-channel RGBA images for the purposes
+of masking operations.</p>
+
+<p id="ExampleMask01"><span class="example-ref">Example mask01</span> uses
+an image to mask a rectangle.</p>
+
+<edit:example href='images/masking/mask01.svg' name='mask01' description='blue text masked with gradient against red background' image='yes' link='yes'/>
+
+<edit:elementsummary name='mask'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="MaskElementMaskUnitsAttribute"><span
+        class="adef">maskUnits</span> = "<em>userSpaceOnUse</em> |
+        <em>objectBoundingBox</em>"</dt>
+        <dd>Defines the coordinate system for attributes
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>.<br />
+         If <span
+        class="attr-value">maskUnits="userSpaceOnUse"</span>,
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
+        represent values in the current user coordinate system in place at
+        the time when the <a>'mask element'</a>
+        element is referenced (i.e., the user coordinate system for
+        the element referencing the <a>'mask element'</a> element via the
+        <a>'mask property'</a> property).<br />
+         If <span
+        class="attr-value">maskUnits="objectBoundingBox"</span>,
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
+        represent fractions or percentages of the bounding box of
+        the element to which the mask is applied. (See <a
+        href="coords.html#ObjectBoundingBox">Object bounding box
+        units</a>.)<br />
+         If attribute <a>'maskUnits'</a> is
+        not specified, then the effect is as if a value of <span
+        class="attr-value">'objectBoundingBox'</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="MaskElementMaskContentUnitsAttribute"><span
+        class="adef">maskContentUnits</span> =
+        "<em>userSpaceOnUse</em> | <em>objectBoundingBox</em>"</dt>
+        <dd>Defines the coordinate system for the contents of the
+        <a>'mask element'</a>.<br />
+         If <span
+        class="attr-value">maskContentUnits="userSpaceOnUse"</span>,
+        the user coordinate system for the contents of the
+        <a>'mask element'</a> element is the current
+        user coordinate system in place at the time when the
+        <a>'mask element'</a> element is referenced
+        (i.e., the user coordinate system for the element
+        referencing the <a>'mask element'</a>
+        element via the <a>'mask property'</a>
+        property).<br />
+         If <span
+        class="attr-value">maskContentUnits="objectBoundingBox"</span>,
+        the user coordinate system for the contents of the <a>'mask element'</a> is established using the
+        bounding box of the element to which the mask is applied.
+        (See <a href="coords.html#ObjectBoundingBox">Object
+        bounding box units</a>.)<br />
+         If attribute <a>'maskContentUnits'</a> is not specified,
+        then the effect is as if a value of <span
+        class="attr-value">'userSpaceOnUse'</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="MaskElementXAttribute"><span
+        class="adef">x</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>The x-axis coordinate of one corner of the rectangle
+        for the largest possible offscreen buffer. Note that the
+        clipping path used to render any graphics within the mask
+        will consist of the intersection of the current clipping
+        path associated with the given object and the rectangle
+        defined by 
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'-10%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="MaskElementYAttribute"><span
+        class="adef">y</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>The y-axis coordinate of one corner of the rectangle
+        for the largest possible offscreen buffer.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'-10%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="MaskElementWidthAttribute"><span
+        class="adef">width</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+        <dd>The width of the largest possible offscreen buffer.
+        Note that the clipping path used to render any graphics
+        within the mask will consist of the intersection of the
+        current clipping path associated with the given object and
+        the rectangle defined by
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables rendering of the element.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'120%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="MaskElementHeightAttribute"><span
+        class="adef">height</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+        <dd>The height of the largest possible offscreen
+        buffer.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables rendering of the element.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'120%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+
+<p><a href="styling.html#SVGStylingProperties">Properties</a> inherit into the
+<a>'mask element'</a> element from its ancestors; properties do <em>not</em>
+inherit from the element referencing the <a>'mask element'</a> element.</p>
+
+<p><a>'mask element'</a> elements are never rendered directly; their only
+usage is as something that can be referenced using the <a>'mask property'</a>
+property. The <a>'opacity'</a>, <a>'filter property'</a> and <a>'display'</a> properties do not apply to the
+<a>'mask element'</a> element; thus, <a>'mask element'</a> elements are not
+directly rendered even if the <a>'display'</a> property is set to a value
+other than <span class="prop-value">none</span>, and <a>'mask element'</a>
+elements are available for referencing even when the <a>'display'</a> property
+on the <a>'mask element'</a> element or any of its ancestors is set to
+<span class="prop-value">none</span>.</p>
+
+<p>The following is a description of the <a>'mask property'</a> property.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="MaskProperty"><span class="propdef-title prop-name">'mask'</span></dt>
+        <dd>
+          <table summary="mask property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a> | none | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>none</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a
+              href="intro.html#TermContainerElement">container
+              elements</a> and <a
+              href="intro.html#TermGraphicsElement">graphics
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class="prop-value"><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a></span></dt>
+  <dd>A <a href="linking.html#IRIReference">IRI reference</a> to another
+  graphical object which will be used as the mask.</dd>
+</dl>
+
+</edit:with>
+
+<h2 id="ObjectAndGroupOpacityProperties">Object and group opacity: the
+<span class="prop-name">'opacity'</span> property</h2>
+
+<p>There are several opacity properties within SVG:</p>
+
+<ul>
+  <li><a>'fill-opacity'</a>, which specifies the opacity of a fill
+  operation;</li>
+
+  <li><a>'stroke-opacity'</a>, which specifies the opacity of a stroking
+  operation;</li>
+
+  <li><a>'stop-opacity'</a>, which specifies the opacity of a gradient stop; and</li>
+
+  <li><a>'opacity'</a>, which specifies object/group opacity and which is
+  described in this section.</li>
+</ul>
+
+<p>Except for object/group opacity (described just below), all other opacity
+properties are involved in intermediate rendering operations. Object/group
+opacity can be thought of conceptually as a postprocessing operation.
+Conceptually, after the object/group is rendered into an RGBA offscreen image,
+the object/group opacity setting specifies how to blend the offscreen image
+into the current background.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="OpacityProperty"><span class="propdef-title prop-name">'opacity'</span></dt>
+        <dd>
+          <table summary="opacity property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>&lt;opacity-value&gt; | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>1</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a
+                href="intro.html#TermContainerElement">container
+              elements</a> (except <a>'mask element'</a>) and <a
+              href="intro.html#TermGraphicsElement">graphics
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class="prop-value">&lt;opacity-value&gt;</span></dt>
+  <dd>The uniform opacity setting to be applied across an
+  entire object, as a <a>&lt;number&gt;</a>. Any values outside the range 0.0 (fully
+  transparent) to 1.0 (fully opaque) will be clamped to this
+  range. (See <a href="implnote.html#RangeClamping">Clamping
+  values which are restricted to a particular range</a>.) If
+  the object is a container element such as a <a>'g'</a>, then
+  the effect is as if the contents of the <a>'g'</a> were
+  blended against the current background using a mask where the
+  value of each pixel of the mask is &lt;opacity-value&gt;.
+  (See <a href="masking.html#SimpleAlphaBlending">Simple alpha
+  compositing</a>.)</dd>
+</dl>
+
+<p id="ExampleOpacity01"><span class="example-ref">Example opacity01</span>
+illustrates various usage of the <a>'opacity'</a> property on elements and
+groups.</p>
+
+<edit:example href='images/masking/opacity01.svg' name='opacity01' description='opacity property' image='yes' link='yes'/>
+
+<p>In the example above, the top row of circles have differing opacities,
+ranging from 1.0 to 0.2. The bottom row illustrates five <a>'g'</a> elements,
+each of which contains overlapping red and green circles, as follows:</p>
+
+<ul>
+  <li>The first group shows the opaque case for reference. The group has
+  opacity of 1, as do the circles.</li>
+
+  <li>The second group shows group opacity when the elements in the group are
+  opaque.</li>
+
+  <li>The third and fourth group show that opacity is not commutative. In the
+  third group (which has opacity of 1), a semi-transparent green circle is
+  drawn on top of a semi-transparent red circle, whereas in the fourth group a
+  semi-transparent red circle is drawn on top of a semi-transparent green
+  circle. Note that area where the two circles intersect display different
+  colors. The third group shows more green color in the intersection area,
+  whereas the fourth group shows more red color.</li>
+
+  <li>The fifth group shows the multiplicative effect of opacity settings.
+  Both the circles and the group itself have opacity settings of .5. The
+  result is that the portion of the red circle which does not overlap with the
+  green circle (i.e., the top/right of the red circle) will blend into the
+  blue rectangle with accumulative opacity of .25 (i.e., .5*.5), which, after
+  blending into the blue rectangle, results in a blended color which is 25%
+  red and 75% blue.</li>
+</ul>
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<h3 id="InterfaceSVGClipPathElement">Interface SVGClipPathElement</h3>
+
+<edit:with element='clipPath'>
+<edit:interface name='::svg::SVGClipPathElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGMaskElement">Interface SVGMaskElement</h3>
+
+<edit:with element='mask'>
+<edit:interface name='::svg::SVGMaskElement'/>
+</edit:with>
+
+</body>
+</html>

@@ -1,0 +1,2213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Painting: Filling, Stroking and Marker Symbols</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>Painting: Filling, Stroking and Marker Symbols</h1>
+
+<h2 id="Introduction">Introduction</h2>
+
+<p><a>'path'</a> elements, <a>'text'</a> elements and <a href="shapes.html">basic shapes</a> can be
+<strong>filled</strong> (which means painting the interior of
+the object) and <strong>stroked</strong> (which means painting
+along the outline of the object). Filling and stroking both can
+be thought of in more general terms as
+<strong>painting</strong> operations.</p>
+
+<p>Certain elements (i.e., <a>'path'</a>, <a>'polyline'</a>, <a>'polygon'</a>
+and <a>'line'</a> elements) can also have
+<a href="painting.html#Markers">marker symbols</a> drawn at their vertices.</p>
+
+<p>With SVG, you can paint (i.e., fill or stroke) with:</p>
+
+<ul>
+  <li>a single color</li>
+  <li>a gradient (linear or radial)</li>
+  <li>a pattern (vector or image, possibly tiled)</li>
+  <li>custom paints available via <a href="extend.html">extensibility</a></li>
+</ul>
+
+<p>SVG uses the general notion of a <strong>paint server</strong>. Paint
+servers are specified using a <a href="linking.html#IRIReference">IRI reference</a>
+on a <a>'fill'</a> or <a>'stroke'</a> property.
+<a href="pservers.html">Gradients and patterns</a> are just specific types of
+paint servers.</p>
+
+<h2 id="SpecifyingPaint">Specifying paint</h2>
+
+<p>Properties <a>'fill'</a> and <a>'stroke'</a> take on a value of type
+<span class="prop-value">&lt;paint&gt;</span>, which is specified as follows:</p>
+
+    <table summary="paint specification" cellspacing="0"
+    cellpadding="0">
+      <tr valign="baseline">
+        <td><span
+        class="prop-name">&lt;paint&gt;</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td><span class="prop-value">none |<br />
+         currentColor |<br />
+         <a href="types.html#DataTypeColor">&lt;color&gt;</a>
+         [<a href="types.html#DataTypeICCColor">&lt;icccolor&gt;</a>] |<br />
+          <a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a> [ none | currentColor | <a href="types.html#DataTypeColor">&lt;color&gt;</a>
+         [<a href="types.html#DataTypeICCColor">&lt;icccolor&gt;</a>] ] |<br />
+         <a class="noxref"
+        href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+        <span
+        class="value-inst-inherit noxref">inherit</span></a></span></td>
+      </tr>
+    </table>
+    <dl>
+      <dt><strong>none</strong></dt>
+      <dd>Indicates that no paint is applied.</dd>
+      <dt><strong>currentColor</strong></dt>
+      <dd>Indicates that painting is done using the current animated value of the color specified
+      by the <a>'color'</a> property. This
+      mechanism is provided to facilitate sharing of color
+      attributes between parent grammars such as other (non-SVG)
+      XML. This mechanism allows you to define a style in your HTML
+      which sets the <span class='prop-name'>'color'</span> property and then pass that style to
+      the SVG user agent so that your SVG text will draw in the
+      same color.</dd>
+      <dt><strong>&lt;color&gt; [&lt;icccolor&gt;]</strong></dt>
+      <dd><a href="types.html#DataTypeColor">&lt;color&gt;</a> is
+      the explicit color (in the sRGB color space [<a href='refs.html#ref-SRGB'>SRGB</a>])
+      to be used to paint the current object. SVG supports all of
+      the syntax alternatives for &lt;color&gt;
+      <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/syndata.html#value-def-color">defined in CSS2</a>
+      ([<a href="refs.html#ref-CSS2">CSS2</a>], section 4.3.6), with the
+      exception that SVG contains an expanded list of <a
+      href="types.html#ColorKeywords">recognized color keywords
+      names</a>. If an optional ICC color specification [<a href='refs.html#ref-ICC42'>ICC42</a>] is
+      provided, then the user agent searches the color profile
+      description database for a <a
+      href="color.html#ColorProfileDescriptions">color profile
+      description</a> entry whose name descriptor matches
+      the &lt;name&gt; part of the <a href="types.html#DataTypeICCColor">&lt;icccolor&gt;</a>
+      and uses the last matching entry that is found.
+      (If no match is found, then the ICC color specification is
+      ignored.) The comma and/or whitespace separated list
+      of <a href="types.html#DataTypeNumber">&lt;number&gt;</a>s
+      is a set of ICC-profile-specific color values.
+      (In most cases, the <a href="types.html#DataTypeNumber">&lt;number&gt;</a>s will
+      be in the range 0 to 1.) On platforms which support ICC-based
+      color management, the <a href="types.html#DataTypeICCColor">&lt;icccolor&gt;</a> gets
+      precedence over the <a href="types.html#DataTypeColor">&lt;color&gt;</a> (which is in the sRGB color
+      space). Note that color interpolation occurs in an RGB color
+      space even if an ICC-based color specification is provided
+      (see <a>'color-interpolation'</a> and <a>'color-interpolation-filters'</a>).
+      For more on ICC-based colors, refer to <a
+      href="color.html#ColorProfileDescriptions">Color profile
+      descriptions</a>.</dd>
+      <dt><strong><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a><br />
+       &nbsp;&nbsp;&nbsp;[ none |<br />
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentColor |<br />
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;color&gt;
+      [&lt;icccolor&gt;] ]</strong></dt>
+      <dd>The <a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a> is used to identify a <a
+      href="pservers.html">paint server</a> such as a gradient, a
+      pattern or a custom paint defined by an extension (see <a
+      href="extend.html">Extensibility</a>). The &lt;funciri&gt;
+      points to the paint server (e.g., a <a
+      href="pservers.html#Gradients">gradient</a> or <a
+      href="pservers.html#Patterns">pattern</a>) to be
+      used to paint the current object. If the <a
+      href="linking.html#IRIReference">IRI reference</a>
+      is not valid (e.g., it points to an object that doesn't exist
+      or the object is not a valid paint server), then the paint
+      method following the &lt;funciri&gt; (i.e., <span class='prop-value'>none |
+      currentColor | &lt;color&gt; [&lt;icccolor&gt;]</span>
+      is used if provided; otherwise, the document is in error (see
+      <a href="implnote.html#ErrorProcessing">Error
+      processing</a>).</dd>
+    </dl>
+
+<h2 id="FillProperties">Fill Properties</h2>
+
+    <div class="propdef">
+      <dl>
+        <dt id="FillProperty"><span class="propdef-title prop-name">'fill'</span></dt>
+        <dd>
+          <table summary="fill property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>&lt;paint&gt; (See <a
+              href="painting.html#SpecifyingPaint">Specifying
+              paint</a>)</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>black</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a href="intro.html#TermShape">shapes</a> and <a
+              href="intro.html#TermTextContentElement">text content
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p>The <a>'fill'</a> property paints the interior of the given graphical
+element. The area to be painted consists of any areas inside the outline
+of the shape. To determine the inside of the shape, all subpaths are
+considered, and the interior is determined according to the rules
+associated with the current value of the <a>'fill-rule'</a> property.
+The zero-width geometric outline of a shape is included in the area to
+be painted.</p>
+
+<p>The fill operation fills open subpaths by performing the fill
+operation as if an additional "closepath" command were added to the
+path to connect the last point of the subpath with the first point of
+the subpath. Thus, fill operations apply to both open subpaths within
+<a>'path'</a> elements (i.e., subpaths without a closepath command) and
+<a>'polyline'</a> elements.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="FillRuleProperty"><span class="propdef-title prop-name">'fill-rule'</span></dt>
+        <dd>
+          <table summary="fill-rule property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>nonzero | evenodd | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>nonzero</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a href="intro.html#TermShape">shapes</a> and <a
+              href="intro.html#TermTextContentElement">text content
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p>The <a>'fill-rule'</a> property indicates the algorithm which is to
+be used to determine what parts of the canvas are included inside the
+shape. For a simple, non-intersecting path, it is intuitively clear
+what region lies "inside"; however, for a more complex path, such as a
+path that intersects itself or where one subpath encloses another, the
+interpretation of "inside" is not so obvious.</p>
+
+<p>The <a>'fill-rule'</a> property provides two options for how the
+inside of a shape is determined:</p>
+
+<dl>
+  <dt><span class='prop-value'>nonzero</span></dt>
+  <dd>
+    This rule determines the "insideness" of a point on the
+    canvas by drawing a ray from that point to infinity in any
+    direction and then examining the places where a segment of
+    the shape crosses the ray. Starting with a count of zero,
+    add one each time a path segment crosses the ray from left
+    to right and subtract one each time a path segment crosses
+    the ray from right to left. After counting the crossings,
+    if the result is zero then the point is <em>outside</em>
+    the path. Otherwise, it is <em>inside</em>. The following
+    drawing illustrates the <span class='prop-value'>nonzero</span> rule: 
+    <p><img alt="Image showing nonzero fill rule"
+    src="images/painting/fillrule-nonzero.png" width="426"
+    height="142" /></p>
+    <p class="view-as-svg"><a
+    href="images/painting/fillrule-nonzero.svg">View this
+    example as SVG (SVG-enabled browsers only)</a></p>
+  </dd>
+  <dt><span class='prop-value'>evenodd</span></dt>
+  <dd>
+    This rule determines the "insideness" of a point on the
+    canvas by drawing a ray from that point to infinity in any
+    direction and counting the number of path segments from the
+    given shape that the ray crosses. If this number is odd,
+    the point is inside; if even, the point is outside. The
+    following drawing illustrates the <span class='prop-value'>evenodd</span>
+    rule: 
+    <p><img alt="Image showing evenodd fill rule"
+    src="images/painting/fillrule-evenodd.png" width="426"
+    height="142" /></p>
+    <p class="view-as-svg"><a
+    href="images/painting/fillrule-evenodd.svg">View this
+    example as SVG (SVG-enabled browsers only)</a></p>
+  </dd>
+</dl>
+
+<p>(Note: the above explanations do not specify what to do if a path
+segment coincides with or is tangent to the ray. Since any ray will do,
+one may simply choose a different ray that does not have such problem
+intersections.)</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="FillOpacityProperty"><span class="propdef-title prop-name">'fill-opacity'</span></dt>
+        <dd>
+          <table summary="fill-opacity property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>&lt;opacity-value&gt; | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>1</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a href="intro.html#TermShape">shapes</a> and <a
+              href="intro.html#TermTextContentElement">text content
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p><a>'fill-opacity'</a> specifies the
+opacity of the painting operation used to paint the interior
+the current object. (See <a
+href="render.html#PaintingShapesAndText">Painting shapes and
+text</a>.)</p>
+
+<dl>
+  <dt><span class='prop-value'>&lt;opacity-value&gt;</span></dt>
+  <dd>The opacity of the painting operation used to fill the current
+  object, as a <a>&lt;number&gt;</a>. Any values outside the range 0.0 (fully transparent)
+  to 1.0 (fully opaque) will be clamped to this range. (See
+  <a href="implnote.html#RangeClamping">Clamping values which are
+  restricted to a particular range</a>.)</dd>
+</dl>
+
+<p>Related properties: <a>'stroke-opacity'</a> and <a>'opacity'</a>.</p>
+
+<h2 id="StrokeProperties">Stroke Properties</h2>
+
+<p>The following are the properties which affect how an element is stroked.</p>
+
+<p>In all cases, all stroking properties which are affected by
+directionality, such as those having to do with dash patterns, must be
+rendered such that the stroke operation starts at the same point at
+which the graphics element starts. In particular, for <a>'path'</a>
+elements, the start of the path is the first point of the initial
+"moveto" command.</p>
+
+<p>For stroking properties such as dash patterns whose computations
+are dependent on progress along the outline of the graphics element,
+distance calculations are required to utilize the SVG user agent's
+standard <a href="paths.html#DistanceAlongAPath">Distance along a path</a>
+algorithms.</p>
+
+<p>When stroking is performed using a complex paint server, such as a
+gradient or a pattern, the stroke operation must be identical to the
+result that would have occurred if the geometric shape defined by the
+geometry of the current graphics element and its associated stroking
+properties were converted to an equivalent <a>'path'</a> element and
+then filled using the given paint server.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="StrokeProperty"><span class="propdef-title prop-name">'stroke'</span></dt>
+        <dd>
+          <table summary="stroke property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>&lt;paint&gt; (See <a
+              href="painting.html#SpecifyingPaint">Specifying
+              paint</a>)</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>none</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a href="intro.html#TermShape">shapes</a> and <a
+              href="intro.html#TermTextContentElement">text content
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p>The <a>'stroke'</a> property paints along the outline of the given
+graphical element.</p>
+
+<p>A subpath (see <a href="paths.html">Paths</a>) consisting of
+a single <a href="paths.html#PathDataMovetoCommands">moveto</a>
+shall not be stroked. Any zero length subpath shall not be
+stroked if the <a>'stroke-linecap'</a> property has a value of
+<span class="prop-value">butt</span> but shall be stroked if the
+<a>'stroke-linecap'</a> property has a value of
+<span class="prop-value">round</span> or <span class="prop-value">square</span>,
+producing respectively a circle or a square centered at the given point.
+Examples of zero length subpaths include
+<span class="attr-value">'M 10,10 L 10,10'</span>,
+<span class="attr-value">'M 20,20 h 0'</span>,
+<span class="attr-value">'M 30,30 z'</span> and
+<span class="attr-value">'M 40,40 c 0,0 0,0 0,0'</span>.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="StrokeWidthProperty"><span class="propdef-title prop-name">'stroke-width'</span></dt>
+        <dd>
+          <table summary="stroke-width property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td><a>&lt;percentage&gt;</a> | <a>&lt;length&gt;</a> |
+              <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>1</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a href="intro.html#TermShape">shapes</a> and <a
+              href="intro.html#TermTextContentElement">text content
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>Yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p>This property specifies the width of the stroke on the current object.
+If a <a>&lt;percentage&gt;</a> is used, the value represents a percentage of
+the current viewport.  (See <a href="coords.html#Units">Units</a>.)</p>
+<p>A zero value causes no stroke to be painted. A negative value
+is an error (see <a href="implnote.html#ErrorProcessing">Error processing</a>).</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="StrokeLinecapProperty"><span class="propdef-title prop-name">'stroke-linecap'</span></dt>
+        <dd>
+          <table summary="stroke-linecap property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>butt | round | square | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>butt</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a href="intro.html#TermShape">shapes</a> and <a
+              href="intro.html#TermTextContentElement">text content
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p><a>'stroke-linecap'</a> specifies the shape to be used at the end of
+open subpaths when they are stroked. For further details see the <a href="implnote.html#PathElementImplementationNotes">path implementation notes</a>.</p>
+
+<dl>
+  <dt><span class='prop-value'>butt</span></dt>
+  <dd>See drawing below.</dd>
+  <dt><span class='prop-value'>round</span></dt>
+  <dd>See drawing below.</dd>
+  <dt><span class='prop-value'>square</span></dt>
+  <dd>See drawing below.</dd>
+</dl>
+
+<p><img alt="Image showing stroke-linecap alternatives" src="images/painting/linecap.png" width="454" height="76" /></p>
+<p class="view-as-svg"><a href="images/painting/linecap.svg">View this example as SVG (SVG- and CSS-enabled browsers only)</a></p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="StrokeLinejoinProperty"><span class="propdef-title prop-name">'stroke-linejoin'</span></dt>
+        <dd>
+          <table summary="stroke-linejoin property"
+          class="propinfo" cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>miter | round | bevel | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>miter</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a href="intro.html#TermShape">shapes</a> and <a
+              href="intro.html#TermTextContentElement">text content
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p><a>'stroke-linejoin'</a> specifies the shape to be used at the
+corners of paths or basic shapes when they are stroked. For further details see the <a href="implnote.html#PathElementImplementationNotes">path implementation notes</a>.</p>
+
+<dl>
+  <dt><span class='prop-value'>miter</span></dt>
+  <dd>See drawing below.</dd>
+  <dt><span class='prop-value'>round</span></dt>
+  <dd>See drawing below.</dd>
+  <dt><span class='prop-value'>bevel</span></dt>
+  <dd>See drawing below.</dd>
+</dl>
+
+<p><img alt="Image showing stroke-linejoin alternatives" src="images/painting/linejoin.png" width="454" height="133" /></p>
+<p class="view-as-svg"><a href="images/painting/linejoin.svg">View this example as SVG (SVG- and CSS-enabled browsers only)</a></p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="StrokeMiterlimitProperty"><span class="propdef-title prop-name">'stroke-miterlimit'</span></dt>
+        <dd>
+          <table summary="stroke-miterlimit property"
+          class="propinfo" cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>&lt;miterlimit&gt; | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>4</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a href="intro.html#TermShape">shapes</a> and <a
+              href="intro.html#TermTextContentElement">text content
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p>When two line segments meet at a sharp angle and <span
+class='prop-value'>miter</span> joins have been specified for
+<a>'stroke-linejoin'</a>, it is possible for the miter to extend
+far beyond the thickness of the line stroking the path. The
+<a>'stroke-miterlimit'</a> imposes a limit on the ratio of the miter
+length to the <a>'stroke-width'</a>. When the limit is exceeded, the
+join is converted from a miter to a bevel.</p>
+
+<dl>
+  <dt><span class='prop-value'>&lt;miterlimit&gt;</span></dt>
+  <dd>The limit on the ratio of the miter length to the <a>'stroke-width'</a>.
+  The value of <span class='prop-value'>&lt;miterlimit&gt;</span> must be a
+  <a>&lt;number&gt;</a> greater than or equal to 1. Any other value is an error (see
+  <a href="implnote.html#ErrorProcessing">Error processing</a>).</dd>
+</dl>
+
+<p>The ratio of miter length (distance between the outer tip and
+the inner corner of the miter) to <a>'stroke-width'</a> is directly
+related to the angle (theta) between the segments in user space by the
+formula:</p>
+
+<pre>
+miterLength / stroke-width = 1 / sin ( theta / 2 )
+</pre>
+
+<p>For example, a miter limit of 1.414 converts miters to bevels for
+theta less than 90 degrees, a limit of 4.0 converts them for theta less
+than approximately 29 degrees, and a limit of 10.0 converts them for
+theta less than approximately 11.5 degrees.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="StrokeDasharrayProperty"><span class="propdef-title prop-name">'stroke-dasharray'</span></dt>
+        <dd>
+          <table summary="stroke-dasharray property"
+          class="propinfo" cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>none | &lt;dasharray&gt; | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>none</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a href="intro.html#TermShape">shapes</a> and <a
+              href="intro.html#TermTextContentElement">text content
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>yes (see below)</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes (<a
+              href="animate.html#AdditionAttributes">non-additive</a>)</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p><span class="prop-name">'stroke-dasharray'</span> controls
+the pattern of dashes and gaps used to stroke paths.
+<span class='prop-value'>&lt;dasharray&gt;</span> contains a
+list of comma and/or white space separated
+<a href="types.html#DataTypeLength">&lt;length&gt;</a>s and
+<a>&lt;percentage&gt;</a>s that specify the
+lengths of alternating dashes and gaps. If an odd number of values
+is provided, then the list of values is repeated to yield an even
+number of values. Thus, <span class="prop-value">stroke-dasharray: 5,3,2</span>
+is equivalent to <span class="prop-value">stroke-dasharray: 5,3,2,5,3,2</span>.</p>
+
+<dl>
+  <dt><span class='prop-value'>none</span></dt>
+  <dd>Indicates that no dashing is used. If stroked, the line is drawn
+  solid.</dd>
+
+  <dt><span class='prop-value'>&lt;dasharray&gt;</span></dt>
+  <dd>
+    <p>A list of comma and/or white space separated
+    <a href="types.html#DataTypeLength">&lt;length&gt;</a>s
+    (which can have a <a href="coords.html#Units">unit identifier</a>)
+    and <a>&lt;percentage&gt;</a>s.  A percentage represents a distance as a
+    percentage of the current viewport (see <a href="coords.html#Units">Units</a>).
+    A negative value is an error (see
+    <a href="implnote.html#ErrorProcessing">Error processing</a>). If the
+    sum of the values
+    is zero, then the stroke is rendered as if a value of
+    <span class='prop-value'>none</span> were specified. For further details see the <a href="implnote.html#PathElementImplementationNotes">path implementation notes</a>.</p>
+  
+    <p>The grammar for &lt;dasharray&gt; is as follows:</p>
+
+    <pre class='grammar'><span id='DashArray'>dasharray</span> ::= (<a href='types.html#Length'>length</a> | <a href='types.html#Percentage'>percentage</a>) (<a href='types.html#CommaWSP'>comma-wsp</a> <a href='#DashArray'>dasharray</a>)?</pre>
+  </dd>
+</dl>
+
+    <div class="propdef">
+      <dl>
+        <dt id="StrokeDashoffsetProperty"><span class="propdef-title prop-name">'stroke-dashoffset'</span></dt>
+        <dd>
+          <table summary="stroke-dashoffset property"
+          class="propinfo" cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td><a>&lt;percentage&gt;</a> | <a>&lt;length&gt;</a> |
+              <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>0</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a href="intro.html#TermShape">shapes</a> and <a
+              href="intro.html#TermTextContentElement">text content
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>see prose</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p><a>'stroke-dashoffset'</a> specifies the distance into the dash
+pattern to start the dash.</p>
+
+<p>If a <a>&lt;percentage&gt;</a> is used, the value represents a
+percentage of the current viewport (see <a href="coords.html#Units">Units</a>).</p>
+
+<p>Values can be negative.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="StrokeOpacityProperty"><span class="propdef-title prop-name">'stroke-opacity'</span></dt>
+        <dd>
+          <table summary="stroke-opacity property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>&lt;opacity-value&gt; | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>1</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a href="intro.html#TermShape">shapes</a> and <a
+              href="intro.html#TermTextContentElement">text content
+              elements</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p><a>'stroke-opacity'</a> specifies the opacity of the
+painting operation used to stroke the current object. (See
+<a href="render.html#PaintingShapesAndText">Painting shapes and text</a>.)</p>
+
+<dl>
+  <dt><span class='prop-value'>&lt;opacity-value&gt;</span></dt>
+  <dd>The opacity of the painting operation used to stroke the current
+  object, as a <a>&lt;number&gt;</a>. Any values outside the range 0.0 (fully transparent)
+  to 1.0 (fully opaque) will be clamped to this range. (See
+  <a href="implnote.html#RangeClamping">Clamping values which are
+  restricted to a particular range</a>.)</dd>
+</dl>
+
+<p>Related properties: <a>'fill-opacity'</a> and <a>'opacity'</a>.</p>
+
+<h2 id="VisibilityControl">Controlling visibility</h2>
+
+<p>SVG uses two properties, <a>'display'</a> and <a>'visibility'</a>, to
+control the visibility of graphical elements or (in the case of the
+<a>'display'</a> property) container elements.</p>
+
+<p>The differences between the two properties are as follows:</p>
+
+<ul>
+  <li>When applied to a container element, setting <a>'display'</a>
+  to <span class="prop-value">none</span> causes the container and
+  all of its children to be invisible; thus, it acts on groups of
+  elements as a group. <a>'visibility'</a>, however, only applies
+  to individual graphics elements. Setting <a>'visibility'</a>
+  to <span class="prop-value">hidden</span> on a <a>'g'</a>
+  will make its children invisible as long as the children do
+  not specify their own <a>'visibility'</a> properties as <span
+  class="prop-value">visible</span>. Note that <a>'visibility'</a> is
+  <em>not</em> an inheritable property.</li>
+
+  <li>When the <a>'display'</a> property is set to <span
+  class="prop-value">none</span>, then the given element does not
+  become part of the rendering tree. With <a>'visibility'</a> set
+  to <span class="prop-value">hidden</span>, however, processing
+  occurs as if the element were part of the rendering tree and still
+  taking up space, but not actually rendered onto the canvas. This
+  distinction has implications for the <a>'tspan'</a>, <a>'tref'</a> and
+  <a>'altGlyph'</a> elements, <a href="interact.html#UIEvents">event processing</a>,
+  for <a href="coords.html#ObjectBoundingBox">bounding box calculations</a>
+  and for calculation of <a href="masking.html#ClippingPaths">clipping paths</a>.
+  If <a>'display'</a> is set to <span class="prop-value">none</span> on a
+  <a>'tspan'</a>, <a>'tref'</a> or <a>'altGlyph'</a> element, then the
+  text string is ignored for the purposes of text layout; however, if
+  <a>'visibility'</a> is set to <span class="prop-value">hidden</span>,
+  the text string is used for text layout (i.e., it takes up space)
+  even though it is not rendered on the canvas. Regarding events, if
+  <a>'display'</a> is set to <span class="prop-value">none</span>,
+  the element receives no events; however, if <a>'visibility'</a>
+  is set to <span class="prop-value">hidden</span>, the element
+  might still receive events, depending on the value of property
+  <a>'pointer-events'</a>. The geometry of a graphics element with
+  <a>'display'</a> set to <span class="prop-value">none</span> is
+  not included in <a href="coords.html#ObjectBoundingBox">bounding box</a>
+  and <a href="masking.html#ClippingPaths">clipping paths</a>
+  calculations; however, even if <a>'visibility'</a> is to
+  <span class="prop-value">hidden</span>, the geometry of the graphics element
+  still contributes to bounding box and clipping path calculations.</li>
+</ul>
+
+    <div class="propdef">
+      <dl>
+        <dt id="DisplayProperty"><span class="propdef-title prop-name">'display'</span></dt>
+        <dd>
+          <table summary="display property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>inline | block | list-item |<br />
+               run-in | compact | marker |<br />
+               table | inline-table | table-row-group |
+              table-header-group |<br />
+               table-footer-group | table-row | table-column-group
+              | table-column |<br />
+               table-cell | table-caption | none | <a
+              class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>inline</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a>'svg'</a>, <a>'g'</a>, <a>'switch'</a>, <a>'a'</a>,
+              <a>'foreignObject'</a>, graphics elements (including the
+              <a>'text'</a> element) and text sub-elements (i.e.,
+              <a>'tspan'</a>, <a>'tref'</a>, <a>'altGlyph'</a>,
+              <a>'textPath'</a>)</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>all</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p>A value of <span class="prop-value">display: none</span> indicates
+that the given element and its children shall not be rendered directly
+(i.e., those elements are not present in the rendering tree). Any
+value other than <span class="prop-value">none</span> or
+<span class="prop-value">inherit</span> indicates that the given element
+shall be rendered by the SVG user agent.</p>
+
+<p>The <a>'display'</a> property only affects the direct rendering
+of a given element, whereas it does not prevent elements from
+being referenced by other elements. For example, setting
+<span class="prop-value">display: none</span> on a <a>'path'</a> element
+will prevent that element from getting rendered directly onto the
+canvas, but the <a>'path'</a> element can still be referenced by a
+<a>'textPath'</a> element; furthermore, its geometry will be used
+in text-on-a-path processing even if the <a>'path'</a> has
+<span class="prop-value">display: none</span>.</p>
+
+<p>The <a>'display'</a> property affects direct rendering into
+offscreen canvases also, such as occurs with the implementation model
+for <a href="masking.html#Masking">masks</a>. Thus, setting
+<span class="prop-value">display: none</span> on a child of a <a>'mask element'</a>
+will prevent the given child element from being rendered as part of the
+mask. Similarly, setting <span class="prop-value">display: none</span>
+on a child of a <a>'clipPath element'</a> element will prevent the given child
+element from contributing to the clipping path.</p>
+
+<p>Elements with <span class="prop-value">display: none</span> do not
+take up space in text layout operations, do not receive events, and
+do not contribute to
+<a href="coords.html#ObjectBoundingBox">bounding box</a> and
+<a href="masking.html#ClippingPaths">clipping paths</a> calculations.</p>
+
+<p>Except for any additional information provided in this specification, the
+normative definition of the <a>'display'</a> property is
+<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visuren.html#propdef-display">the CSS2 definition</a>
+([<a href="refs.html#ref-CSS2">CSS2</a>], section 9.2.6).</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="VisibilityProperty"><span class="propdef-title prop-name">'visibility'</span></dt>
+        <dd>
+          <table summary="visibility property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>visible | hidden | collapse | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>visible</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td>graphics elements (including the <a>'text'</a> element) and
+              text sub-elements (i.e., <a>'tspan'</a>, <a>'tref'</a>,
+              <a>'altGlyph'</a>, <a>'textPath'</a> and <a>'a'</a>)</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class='prop-value'>visible</span></dt>
+  <dd>The current graphics element is visible.</dd>
+  <dt><span class='prop-value'>hidden</span> or <span class='prop-value'>collapse</span></dt>
+  <dd>The current graphics element is invisible (i.e., nothing is painted on
+  the canvas).</dd>
+</dl>
+
+<p>Note that if the <a>'visibility'</a> property is set to
+<span class="prop-value">hidden</span> on a <a>'tspan'</a>, <a>'tref'</a> or
+<a>'altGlyph'</a> element, then the text is invisible but still takes up
+space in text layout calculations.</p>
+
+<p>Depending on the value of property <a>'pointer-events'</a>, graphics
+elements which have their <a>'visibility'</a> property set to
+<span class="prop-value">hidden</span> still might receive events.</p>
+
+<p>Except for any additional information provided in this specification, the
+normative definition of the <a>'visibility'</a> property is
+<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visufx.html#propdef-visibility">the CSS2 definition</a>
+([<a href="refs.html#ref-CSS2">CSS2</a>], section 11.2).</p>
+
+
+<h2 id="Markers">Markers</h2>
+
+<edit:with element='marker'>
+
+<h3 id="MarkersIntroduction">Introduction</h3>
+
+<p>A marker is a symbol which is attached to one or more vertices of
+<a>'path'</a>, <a>'line'</a>, <a>'polyline'</a> and <a>'polygon'</a>
+elements. Typically, markers are used to make arrowheads or polymarkers.
+Arrowheads can be defined by attaching a marker to the start or end
+vertices of <a>'path'</a>, <a>'line'</a> or <a>'polyline'</a> elements.
+Polymarkers can be defined by attaching a marker to all vertices of a
+<a>'path'</a>, <a>'line'</a>, <a>'polyline'</a> or <a>'polygon'</a>
+element.</p>
+
+<p>The graphics for a marker are defined by a <a>'marker element'</a> element.
+To indicate that a particular <a>'marker element'</a> element should be
+rendered at the vertices of a particular <a>'path'</a>, <a>'line'</a>,
+<a>'polyline'</a> or <a>'polygon'</a> element, set one or more marker
+properties (<a>'marker property'</a>, <a>'marker-start'</a>, <a>'marker-mid'</a>
+or <a>'marker-end'</a>) to reference the given <a>'marker element'</a>
+element.</p>
+
+<p><span class="example-ref">Example Marker</span> draws a triangular marker
+symbol as an arrowhead at the end of a path.</p>
+
+<edit:example href='images/painting/marker.svg' name='Marker' description="Triangular marker at the end of a path" image='yes' link='yes'/>
+
+<p>Markers can be animated. The animated effects will show on all current uses
+of the markers within the document.</p>
+
+<h3 id="MarkerElement">The <span class="element-name">'marker'</span> element</h3>
+
+<p>The <a>'marker element'</a> element defines the graphics that is to
+be used for drawing arrowheads or polymarkers on a given <a>'path'</a>,
+<a>'line'</a>, <a>'polyline'</a> or <a>'polygon'</a> element.</p>
+
+<edit:elementsummary name='marker'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="MarkerUnitsAttribute"><span
+        class="adef">markerUnits</span> = "<span
+        class="attr-value">strokeWidth |
+        userSpaceOnUse</span>"</dt>
+        <dd>Defines the coordinate system for attributes
+        <a>'markerWidth'</a>, <a>'markerHeight'</a> and the
+        contents of the <a>'marker element'</a>.<br />
+        If <span class="attr-value">markerUnits="strokeWidth"</span>,
+        <a>'markerWidth'</a>, <a>'markerHeight'</a> and the contents
+        of the <a>'marker element'</a> represent values in a coordinate system
+        which has a single unit equal the size in user units of the
+        current stroke width (see the <a>'stroke-width'</a> property) in
+        place for the graphic object referencing the marker.<br />
+        If <span class="attr-value">markerUnits="userSpaceOnUse"</span>,
+        <a>'markerWidth'</a>, <a>'markerHeight'</a> and the contents
+        of the <a>'marker element'</a> represent values in the current
+        user coordinate system in place for the graphic object
+        referencing the marker (i.e., the user coordinate system for
+        the element referencing the <a>'marker element'</a> element via a
+        <a>'marker property'</a>, <a>'marker-start'</a>, <a>'marker-mid'</a>
+        or <a>'marker-end'</a> property).<br />
+        If attribute <a>'markerUnits'</a> is not specified, then the effect
+        is as if a value of <span class="attr-value">'strokeWidth'</span>
+        were specified.<br />
+        <span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: yes.</span></dd>
+        <dt id="MarkerElementRefXAttribute"><span
+        class="adef">refX</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>The x-axis coordinate of the reference point which is
+        to be aligned exactly at the marker position. The
+        coordinate is defined in the coordinate system after
+        application of the <a>'viewBox'</a> and <a>'preserveAspectRatio'</a>
+        attributes.<br />
+         If the attribute is not specified, the effect is as if a
+        value of "0" were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="MarkerElementRefYAttribute"><span
+        class="adef">refY</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>The y-axis coordinate of the reference point which is
+        to be aligned exactly at the marker position. The
+        coordinate is defined in the coordinate system after
+        application of the <a>'viewBox'</a> and <a>'preserveAspectRatio'</a>
+        attributes.<br />
+         If the attribute is not specified, the effect is as if a
+        value of "0" were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="MarkerWidthAttribute"><span
+        class="adef">markerWidth</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+        <dd>Represents the width of the viewport into which the
+        marker is to be fitted when it is rendered.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables rendering of the element.<br />
+         If the attribute is not specified, the effect is as if a
+        value of "3" were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="MarkerHeightAttribute"><span
+        class="adef">markerHeight</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+        <dd>Represents the height of the viewport into which the
+        marker is to be fitted when it is rendered.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables rendering of the element.<br />
+         If the attribute is not specified, the effect is as if a
+        value of "3" were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="OrientAttribute"><span class="adef">orient</span> = "<span
+        class="attr-value">auto | <a
+        href="types.html#DataTypeAngle">&lt;angle&gt;</a></span>"</dt>
+        <dd>
+          Indicates how the marker is rotated.<br />
+          <br />
+           A value of <span class='attr-value'>'auto'</span> indicates that the marker is
+          oriented such that its positive x-axis is pointing as
+          follows:
+          <ol type="a">
+            <li>
+              If there is a path segment coming into the
+              vertex and another path segment going out of the vertex,
+              the marker's positive x-axis should point toward the
+              angle bisector for the angle at the given vertex, where
+              that angle has one side consisting of tangent vector for
+              the path segment going into the vertex and the other side
+              the tangent vector for the path segment going out of the
+              vertex. Note:
+              <ul>
+                <li>If the tangent vectors are the same, the angle bisector equals the two tangent vectors.</li>
+                <li>If an incoming and an outgoing vertex produce a zero vector the direction of marker is undefined.</li>
+              </ul>
+            </li>
+            <li>
+              If there is only a path segment going into the vertex (e.g.,
+              the last vertex on an open path), the marker's positive
+              x-axis should point in the same direction as the tangent
+              vector for the path segment going into the vertex.
+            </li>
+            <li>
+              If there is only a path segment going out of the vertex
+              (e.g., the first vertex on an open path), the marker's
+              positive x-axis should point in the same direction as the
+              tangent vector for the path segment going out of the
+              vertex. (Refer to <a href="implnote.html#PathElementImplementationNotes"><span class='element-name'>'path'</span>
+              element implementation notes</a> for a more thorough
+              discussion of the directionality of path segments.)
+            </li>
+          </ol>
+          <br />
+           In all cases for closed subpaths (e.g., subpaths which
+          end with a <a
+          href="paths.html#PathDataClosePathCommand">'closepath'</a>
+          command), the orientation of the marker corresponding to
+          the initial point of the subpath is calculated assuming
+          that: 
+          <ul>
+            <li>the path segment going into the vertex is the path
+            segment corresponding to the closepath</li>
+            <li>the path segment coming out of the vertex is the
+            first path segment in the subpath</li>
+          </ul>
+          <br />
+           When a <a
+          href="paths.html#PathDataClosePathCommand">'closepath'</a>
+          command is followed by a command other than a <a
+          href="paths.html#PathDataMovetoCommands">'moveto'</a>
+          command, then the orientation of the marker corresponding
+          to the <a
+          href="paths.html#PathDataClosePathCommand">'closepath'</a>
+          command is calculated assuming that: 
+          <ul>
+            <li>the path segment going into the vertex is the path
+            segment corresponding to the closepath</li>
+            <li>the path segment coming out of the vertex is the
+            first path segment of the subsequent subpath</li>
+          </ul>
+          <br />
+          A <a>&lt;angle&gt;</a> value represents a
+          particular orientation in the user space of the graphic
+          object referencing the marker. For example, if a value of
+          "0" is given, then the marker will be drawn such that its
+          x-axis will align with the x-axis of the user space of
+          the graphic object referencing the marker. If the
+          attribute is not specified, the effect is as if a value
+          of "0" were specified.<br />
+           <span class="anim-target"><a
+          href="animate.html#Animatable">Animatable</a>: yes
+          (non-additive).</span>
+        </dd>
+      </dl>
+    </div>
+
+<p>Markers are drawn such that their reference point (i.e.,
+attributes <a>'refX'</a> and <a>'refY'</a>) is positioned at the
+given vertex. In other words, a translation transformation is
+constructed by the user agent to achieve the effect of having point
+(<a>'refX'</a> and <a>'refY'</a>) within the marker content's coordinate
+system (after any transformations due to the <a>'viewBox'</a> and
+<a>'preserveAspectRatio'</a> attributes) align exactly with the given
+vertex.</p>
+
+<p>SVG's <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
+the <a>'overflow'</a> property for <a>'marker element'</a> elements to
+<span class="prop-value">hidden</span>, which causes a rectangular clipping
+path to be created at the bounds of the marker tile.  Unless the
+<a>'overflow'</a> property is overridden, any graphics within the marker which
+goes outside of the marker rectangle will be clipped.</p>
+
+<p>The contents of the <a>'marker element'</a> are relative to a new
+coordinate system. Attribute <a>'markerUnits'</a> determines an initial
+scale factor for transforming the graphics in the marker into the user
+coordinate system for the referencing element. An additional set of
+transformations might occur if there is a <a>'viewBox'</a> attribute, in
+which case the coordinate system for the contents of the <a>'marker element'</a>
+will be transformed due to the processing of attributes <a>'viewBox'</a>
+and <a>'preserveAspectRatio'</a>. If there is no <a>'viewBox'</a>
+attribute, then the assumed default value for the the <a>'viewBox'</a>
+attribute has the origin of the viewBox coincident with the origin
+of the viewport and the width/height of the viewBox the same as the
+width/height of the viewport.</p>
+
+<p><a href="styling.html#SVGStylingProperties">Properties</a> inherit into the
+<a>'marker element'</a> element from its ancestors; properties do <em>not</em>
+inherit from the element referencing the <a>'marker element'</a> element.</p>
+
+<p><a>'marker element'</a> elements are never rendered directly;
+their only usage is as something that can be referenced using the
+<a>'marker property'</a>, <a>'marker-start'</a>, <a>'marker-end'</a> and
+<a>'marker-mid'</a> properties. The <a>'display'</a> property does not
+apply to the <a>'marker element'</a> element; thus, <a>'marker element'</a> elements
+are not directly rendered even if the <a>'display'</a> property is
+set to a value other than <span class="prop-value">none</span>, and
+<a>'marker element'</a> elements are available for referencing even when the
+<a>'display'</a> property on the <a>'marker element'</a> element or any of its
+ancestors is set to <span class="prop-value">none</span>.</p>
+
+<p><a href="script.html#EventAttributes">Event attributes</a> and
+<a href="svgdom.html#EventListeners">event listeners</a> attached
+to the contents of a <a>'marker element'</a> element are not processed;
+only the rendering aspects of <a>'marker element'</a> elements are
+processed.</p>
+
+<h3 id="MarkerProperties">Marker properties</h3>
+
+<p><a>'marker-start'</a> defines the arrowhead or polymarker that shall
+be drawn at the first vertex of the given <a>'path'</a> element or
+<a href="shapes.html">basic shape</a>. <a>'marker-end'</a> defines
+the arrowhead or polymarker that shall be drawn at the final vertex.
+<a>'marker-mid'</a> defines the arrowhead or polymarker that shall be
+drawn at every other vertex (i.e., every vertex except the first and
+last). Note that for a <a>'path'</a> element which ends with a closed
+sub-path, the last vertex is the same as the initial vertex on the given
+sub-path. In this case, if <a>'marker-end'</a> does not equal
+<span class="prop-value">none</span>, then it is possible that two markers
+will be rendered on the given vertex. One way to prevent this is to set
+<a>'marker-end'</a> to <span class="prop-value">none</span>. (Note that
+the same comment applies to <a>'polygon'</a> elements.)</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="MarkerStartProperty"><span class='propdef-title prop-name'>'marker-start'</span></dt>
+        <dt id="MarkerMidProperty"><span class='propdef-title prop-name'>'marker-mid'</span></dt>
+        <dt id="MarkerEndProperty"><span class='propdef-title prop-name'>'marker-end'</span></dt>
+        <dd>
+          <table summary="marker properties" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>none | &lt;funciri&gt; |
+              <a class="noxref" href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit"><span class="value-inst-inherit noxref">inherit</span></a>
+              </td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>none</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a>'path'</a>, <a>'line'</a>, <a>'polyline'</a> and
+              <a>'polygon'</a> elements</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class='prop-value'>none</span></dt>
+  <dd>Indicates that no marker symbol shall be drawn at the given
+  vertex (vertices).</dd>
+
+  <dt><span class='prop-value'>&lt;funciri&gt;</span></dt>
+  <dd>The &lt;funciri&gt; is a <a href="types.html#DataTypeFuncIRI">Functional IRI reference</a>
+  to the <a>'marker element'</a> element which shall be used as the arrowhead
+  symbol or polymarker at the given vertex or vertices. If the
+  <a href="linking.html#IRIReference">IRI reference</a> is not valid (e.g.,
+  it points to an object that is undefined or the object is not a
+  <a>'marker element'</a> element), then the marker(s) shall not
+  be drawn.</dd>
+</dl>
+
+<p id="MarkerProperty">The <a>'marker property'</a> property specifies
+the marker symbol that shall be used for all points on the sets the
+value for all vertices on the given <a>'path'</a> element or
+<a href="shapes.html">basic shape</a>. It is a short-hand for the three
+individual marker properties:</p>
+
+    <div class="propdef">
+      <dl>
+        <dt><span class="propdef-title prop-name">'marker'</span></dt>
+        <dd>
+          <table summary="marker property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>see individual properties</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>see individual properties</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a>'path'</a>, <a>'line'</a>, <a>'polyline'</a> and
+              <a>'polygon'</a> elements</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<h3 id="MarkerAlgorithm">Details on how markers are rendered</h3>
+
+<p>Markers are drawn after the given object is filled and stroked.</p>
+
+<p>For each marker that is drawn, a temporary new user coordinate
+system is established so that the marker will be positioned and sized
+correctly, as follows:</p>
+
+<ul>
+  <li>The axes of the temporary new user coordinate system are aligned
+  according to the <a>'orient'</a> attribute on the
+  <a>'marker element'</a> element and the slope of the curve at the given vertex.
+  (Note: if there is a discontinuity at a vertex, the slope is the
+  average of the slopes of the two segments of the curve that join
+  at the given vertex. If a slope cannot be determined, the slope is
+  assumed to be zero.)</li>
+
+  <li>A temporary new coordinate system is established by attribute
+  <a>'markerUnits'</a>. If <a>'markerUnits'</a> equals
+  <span class="attr-value">'strokeWidth'</span>, then the temporary new
+  user coordinate system is the result of scaling the current
+  user coordinate system by the current value of property
+  <a>'stroke-width'</a>. If <a>'markerUnits'</a> equals
+  <span class="attr-value">'userSpaceOnUse'</span>, then no extra scale
+  transformation is applied.</li>
+
+  <li>An additional set of transformations might occur if the
+  <a>'marker element'</a> element includes a <a>'viewBox'</a> attribute, in
+  which case additional transformations are set up to produce the necessary
+  result due to attributes <a>'viewBox'</a> and <a>'preserveAspectRatio'</a>.</li>
+
+  <li>If the <a>'overflow'</a> property on the <a>'marker element'</a> element
+  indicates that the marker needs to be clipped to its viewport, then an
+  implicit clipping path is established at the bounds of the viewport.</li>
+</ul>
+
+<p>The rendering effect of a marker is as if the contents of the
+referenced <a>'marker element'</a> element were deeply cloned
+into a separate non-exposed DOM tree for each instance of the
+marker. Because the cloned DOM tree is non-exposed, the SVG DOM
+does not show the cloned instance of the marker.</p> <p>For user
+agents that support <a href="styling.html#StylingWithCSS">Styling
+with CSS</a>, the conceptual deep cloning of the referenced
+<a>'marker element'</a> element into a non-exposed DOM tree also
+copies any property values resulting from
+<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html">the CSS cascade</a>
+([<a href="refs.html#ref-CSS2">CSS2</a>], chapter 6) and
+property inheritance on the referenced element and its contents. CSS2
+selectors can be applied to the original (i.e., referenced) elements
+because they are part of the formal document structure. CSS2 selectors
+cannot be applied to the (conceptually) cloned DOM tree because its
+contents are not part of the formal document structure.</p>
+
+<p>For illustrative purposes, we'll repeat the marker example shown earlier:</p>
+
+<pre>
+&lt;?xml version="1.0" standalone="no"?&gt;
+&lt;!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"&gt;
+&lt;svg width="4in" height="2in" 
+     viewBox="0 0 4000 2000" version="1.1"
+     xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;defs&gt;
+    &lt;marker id="Triangle"
+      viewBox="0 0 10 10" refX="0" refY="5" 
+      markerUnits="strokeWidth"
+      markerWidth="4" markerHeight="3"
+      orient="auto"&gt;
+      &lt;path d="M 0 0 L 10 5 L 0 10 z" /&gt;
+    &lt;/marker&gt;
+  &lt;/defs&gt;
+  &lt;rect x="10" y="10" width="3980" height="1980"
+       fill="none" stroke="blue" stroke-width="10" /&gt;
+  &lt;desc&gt;Placing an arrowhead at the end of a path.
+  &lt;/desc&gt;
+  &lt;path d="M 1000 750 L 2000 750 L 2500 1250"
+        fill="none" stroke="black" stroke-width="100" 
+        marker-end="url(#Triangle)"  /&gt;
+&lt;/svg&gt;
+</pre>
+
+<p>The rendering effect of the above file will be visually identical to
+the following:</p>
+
+<pre>
+&lt;?xml version="1.0" standalone="no"?&gt;
+&lt;!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"&gt;
+&lt;svg width="4in" height="2in" 
+     viewBox="0 0 4000 2000" version="1.1"
+     xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;desc&gt;File which produces the same effect
+      as the marker example file, but without
+      using markers.
+  &lt;/desc&gt;
+  &lt;rect x="10" y="10" width="3980" height="1980"
+       fill="none" stroke="blue" stroke-width="10" /&gt;
+  &lt;!-- The path draws as before, but without the marker properties --&gt;
+  &lt;path d="M 1000 750 L 2000 750 L 2500 1250"
+        fill="none" stroke="black" stroke-width="100"  /&gt;
+  &lt;!-- The following logic simulates drawing a marker 
+       at final vertex of the path. --&gt;
+  &lt;!-- First off, move the origin of the user coordinate system
+       so that the origin is now aligned with the end point of the path. --&gt;
+  <strong>&lt;g transform="translate(2500,1250)" &gt;</strong>
+    &lt;!-- Rotate the coordinate system 45 degrees because
+         the marker specified orient="auto" and the final segment
+         of the path is going in the direction of 45 degrees. --&gt;
+    <strong>&lt;g transform="rotate(45)" &gt;</strong>
+      &lt;!-- Scale the coordinate system to match the coordinate system
+           indicated by the 'markerUnits' attributes, which in this case has
+           a value of 'strokeWidth'. Therefore, scale the coordinate system
+           by the current value of the 'stroke-width' property, which is 100. --&gt;
+      <strong>&lt;g transform="scale(100)" &gt;</strong>
+        &lt;!-- Translate the coordinate system by 
+             (-refX*viewBoxToMarkerUnitsScaleX, -refY*viewBoxToMarkerUnitsScaleY)
+             in order that (refX,refY) within the marker will align with the vertex.
+             In this case, we use the default value for preserveAspectRatio
+             ('xMidYMid meet'), which means find a uniform scale factor
+             (i.e., viewBoxToMarkerUnitsScaleX=viewBoxToMarkerUnitsScaleY)
+             such that the viewBox fits entirely within the viewport ('meet') and 
+             is center-aligned ('xMidYMid'). In this case, the uniform scale factor
+             is markerHeight/viewBoxHeight=3/10=.3. Therefore, translate by
+             (-refX*.3,-refY*.3)=(0*.3,-5*.3)=(0,-1.5). --&gt;
+        <strong>&lt;g transform="translate(0,-1.5)" &gt;</strong>
+          &lt;!-- There is an implicit clipping path because the user agent style
+               sheet says that the 'overflow' property for markers has the value
+               'hidden'. To achieve this, create a clipping path at the bounds
+               of the viewport. Note that in this case the viewport extends
+               0.5 units to the left and right of the viewBox due to 
+               a uniform scale factor, different ratios for markerWidth/viewBoxWidth
+               and markerHeight/viewBoxHeight, and 'xMidYMid' alignment --&gt;
+          <strong>&lt;clipPath id="cp1" &gt;
+            &lt;rect x="-0.5" y="0" width="4" height="3" /&gt;
+          &lt;/clipPath&gt;</strong>
+          <strong>&lt;g clip-path="url(#cp1)" &gt;</strong>
+            &lt;!-- Scale the coordinate system by the uniform scale factor
+                 markerHeight/viewBoxHeight=3/10=.3 to set the coordinate
+                 system to viewBox units. --&gt;
+            <strong>&lt;g transform="scale(.3)" &gt;</strong>
+              &lt;!-- This 'g' element carries all property values that result from
+                   cascading and inheritance of properties on the original 'marker' element.
+                   In this example, neither fill nor stroke was specified on the 'marker'
+                   element or any ancestors of the 'marker', so the initial values of
+                   "black" and "none" are used, respectively. --&gt;
+             <strong>&lt;g fill="black" stroke="none" &gt;</strong>
+                &lt;!-- Expand out the contents of the 'marker' element. --&gt;
+                <strong>&lt;path d="M 0 0 L 10 5 L 0 10 z" /&gt;</strong>
+              <strong>&lt;/g&gt;</strong>
+            <strong>&lt;/g&gt;</strong>
+          <strong>&lt;/g&gt;</strong>
+        <strong>&lt;/g&gt;</strong>
+      <strong>&lt;/g&gt;</strong>
+    <strong>&lt;/g&gt;</strong>
+  <strong>&lt;/g&gt;</strong>
+&lt;/svg&gt;
+</pre>
+<p class="view-as-svg"><a href="images/painting/marker-simulated.svg">View this example as SVG (SVG-enabled browsers only)</a></p>
+
+</edit:with>
+
+<h2 id="RenderingProperties">Rendering properties</h2>
+
+<h3 id="ColorInterpolationProperties">Color interpolation properties:
+<span class="prop-name">'color-interpolation'</span> and
+<span class="prop-name">'color-interpolation-filters'</span></h3>
+
+<p>The SVG user agent performs color interpolations and compositing
+at various points as it processes SVG content. Two properties,
+<a>'color-interpolation'</a> and <a>'color-interpolation-filters'</a>,
+control which color space is used for particular categories of graphics
+operations. The following table shows which property applies to which
+graphics operations:</p>
+
+    <table class='vert' summary="applicability of color interpolation properties">
+      <tr>
+        <th>Graphics operation</th>
+        <th>Corresponding property</th>
+      </tr>
+      <tr>
+        <td>interpolating between gradient stops (see <a
+        href="pservers.html#Gradients">Gradient</a>)</td>
+        <td><a>'color-interpolation'</a></td>
+      </tr>
+      <tr>
+        <td>interpolating color when performing color
+        animations with either <a>'animate'</a> or <a>'animateColor'</a></td>
+        <td><a>'color-interpolation'</a></td>
+      </tr>
+      <tr>
+        <td><a href="masking.html#SimpleAlphaBlending">alpha
+        compositing</a> of <a
+        href="intro.html#TermGraphicsElement">graphics elements</a>
+        into the current background</td>
+        <td><a>'color-interpolation'</a></td>
+      </tr>
+      <tr>
+        <td><a href="filters.html">filter effects</a></td>
+        <td><a>'color-interpolation-filters'</a></td>
+      </tr>
+    </table>
+
+<p>Both properties choose between color operations occurring in the
+sRGB color space or in a (light
+energy linear) linearized RGB color space. Having chosen the appropriate
+color space, component-wise linear interpolation is used.</p>
+
+<p id="sRGBlinearRGBConversionFormulas">The conversion formulas between the
+sRGB color space (i.e., nonlinear with 2.2 gamma curve) and the linearized RGB
+color space (i.e., color values expressed as sRGB tristimulus values without a
+gamma curve) can be found in <a href="http://webstore.iec.ch/webstore/webstore.nsf/artnum/025408">the sRGB specification</a>
+[<a href="refs.html#ref-SRGB">SRGB</a>].
+For illustrative purposes, the following formula shows the conversion from
+sRGB to linearized RGB:</p>
+
+<pre>
+  R[sRGB] = R[sRGB-8bit] / 255
+  G[sRGB] = G[sRGB-8bit] / 255
+  B[sRGB] = B[sRGB-8bit] / 255
+If R[sRGB], G[sRGB], B[sRGB] &lt;= 0.04045
+  R[linearRGB] = R[sRGB] / 12.92
+  G[linearRGB] = G[sRGB] / 12.92
+  B[linearRGB] = B[sRGB] / 12.92
+else if R[sRGB], G[sRGB], B[sRGB] &gt; 0.04045
+  R[linearRGB] = ((R[sRGB] + 0.055) / 1.055) ^ 2.4
+  G[linearRGB] = ((G[sRGB] + 0.055) / 1.055) ^ 2.4
+  B[linearRGB] = ((B[sRGB] + 0.055) / 1.055) ^ 2.4
+  R[linearRGB-8bit] = R[linearRGB] * 255
+  G[linearRGB-8bit] = G[linearRGB] * 255
+  B[linearRGB-8bit] = B[linearRGB] * 255
+</pre>
+
+<p>Out-of-range color values, if supported by the user agent, also are
+converted using the above formulas. (See
+<a href="implnote.html#RangeClamping">Clamping values which are restricted to a particular range</a>.)</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="ColorInterpolationProperty"><span class="propdef-title prop-name">'color-interpolation'</span></dt>
+        <dd>
+          <table summary="color-interpolation property"
+          class="propinfo" cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>auto | sRGB | linearRGB | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>sRGB</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a
+              href="intro.html#TermContainerElement">container
+              elements</a>, <a
+              href="intro.html#TermGraphicsElement">graphics
+              elements</a>, <a>'animate'</a> and <a>'animateColor'</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class='prop-value'>auto</span></dt>
+  <dd>Indicates that the user agent can choose either the
+  <span class='prop-value'>sRGB</span> or
+  <span class='prop-value'>linearRGB</span> spaces for color interpolation.
+  This option indicates that the author doesn't require that color
+  interpolation occur in a particular color space.</dd>
+
+  <dt><span class='prop-value'>sRGB</span></dt>
+  <dd>Indicates that color interpolation should occur in the sRGB
+  color space.</dd>
+
+  <dt><span class='prop-value'>linearRGB</span></dt>
+  <dd>Indicates that color interpolation should occur in the
+  linearized RGB color space as described above.</dd>
+</dl>
+
+<p>The <a>'color-interpolation'</a> property specifies the color space for
+gradient interpolations, color animations and alpha compositing.</p>
+
+<p>When a child element is blended into a background, the value of the
+<a>'color-interpolation'</a> property on the child determines the type of
+blending, not the value of the <a>'color-interpolation'</a> on the parent.
+For <a href="pservers.html#Gradients">gradients</a> which make use of the
+<span class='attr-name'>'xlink:href'</span> attribute to reference another
+gradient, the gradient uses the <a>'color-interpolation'</a> property value
+from the gradient element which is directly referenced by the <a>'fill'</a> or
+<a>'stroke'</a> property. When animating colors, color interpolation is
+performed according to the value of the <a>'color-interpolation'</a> property
+on the element being animated.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="ColorInterpolationFiltersProperty"><span class="propdef-title prop-name">'color-interpolation-filters'</span></dt>
+        <dd>
+          <table summary="color-interpolation-filters property"
+          class="propinfo" cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>auto | sRGB | linearRGB | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>linearRGB</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a href="filters.html#TermFilterPrimitive">filter
+              primitives</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class='prop-value'>auto</span></dt>
+  <dd>Indicates that the user agent can choose either the
+  <span class='prop-value'>sRGB</span> or
+  <span class='prop-value'>linearRGB</span> spaces for filter effects color
+  operations. This option indicates that the author doesn't require that color
+  operations occur in a particular color space.</dd>
+
+  <dt><span class='prop-value'>sRGB</span></dt>
+  <dd>Indicates that filter effects color operations should occur in the sRGB
+  color space.</dd>
+
+  <dt><span class='prop-value'>linearRGB</span></dt>
+  <dd>Indicates that filter effects color operations should occur in the
+  linearized RGB color space.</dd>
+</dl>
+
+<p>The <a>'color-interpolation-filters'</a> property specifies the color space
+for imaging operations performed via <a href="filters.html">filter effects</a>.</p>
+
+<p>Note that <a>'color-interpolation-filters'</a> has a different initial
+value than <a>'color-interpolation'</a>. <a>'color-interpolation-filters'</a>
+has an initial value of <span class="prop-value">linearRGB</span>, whereas
+<a>'color-interpolation'</a> has an initial value of
+<span class="prop-value">sRGB</span>.  Thus, in the default case, filter
+effects operations occur in the linearRGB color space, whereas all other color
+interpolations occur by default in the sRGB color space.</p>
+
+<h3 id="ColorRenderingProperty">The <span class="prop-name">'color-rendering'</span> property</h3>
+
+<p>The creator of SVG content might want to provide a hint
+to the implementation about how to make speed vs. quality
+tradeoffs as it performs color interpolation and compositing. The
+<a>'color-rendering'</a> property provides a hint to the SVG user
+agent about how to optimize its color interpolation and compositing
+operations.</p>
+
+<p><a>'color-rendering'</a> takes precedence over
+<a>'color-interpolation-filters'</a>. For example, assume
+<span class="prop-value">color-rendering: optimizeSpeed</span> and
+<span class="prop-value">color-interpolation-filters: linearRGB</span>.
+In this case, the SVG user agent should perform color operations in a way that
+optimizes performance, which might mean sacrificing the color interpolation
+precision as specified by <span class="prop-value">color-interpolation-filters: linearRGB</span>.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt><span class="propdef-title prop-name">'color-rendering'</span></dt>
+        <dd>
+          <table summary="color-rendering property"
+          class="propinfo" cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>auto | optimizeSpeed | optimizeQuality | <a
+              class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>auto</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a
+              href="intro.html#TermContainerElement">container
+              elements</a>, <a
+              href="intro.html#TermGraphicsElement">graphics
+              elements</a>, <a>'animate'</a> and <a>'animateColor'</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class='prop-value'>auto</span></dt>
+  <dd>Indicates that the user agent shall make appropriate
+  tradeoffs to balance speed and quality, but quality shall be
+  given more importance than speed.</dd>
+
+  <dt><span class='prop-value'>optimizeSpeed</span></dt>
+  <dd>Indicates that the user agent shall emphasize rendering
+  speed over quality. For RGB display devices, this option will
+  sometimes cause the user agent to perform color interpolation
+  and compositing in the device RGB color space.</dd>
+
+  <dt><span class='prop-value'>optimizeQuality</span></dt>
+  <dd>Indicates that the user agent shall emphasize quality
+  over rendering speed.</dd>
+</dl>
+
+<h3 id="ShapeRenderingProperty">The <span class="prop-name">'shape-rendering'</span> property</h3>
+
+<p>The creator of SVG content might want to provide a hint to the
+implementation about what tradeoffs to make as it renders vector graphics
+elements such as <a>'path'</a> elements and <a href="shapes.html">basic shapes</a>
+such as circles and rectangles. The <a>'shape-rendering'</a> property provides
+these hints.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt><span class="propdef-title prop-name">'shape-rendering'</span></dt>
+        <dd>
+          <table summary="shape-rendering property"
+          class="propinfo" cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>auto | optimizeSpeed | crispEdges |<br />
+               geometricPrecision | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>auto</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a href="intro.html#TermShape">shapes</a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class='prop-value'>auto</span></dt>
+  <dd>Indicates that the user agent shall make appropriate
+  tradeoffs to balance speed, crisp edges and geometric
+  precision, but with geometric precision given more importance
+  than speed and crisp edges.</dd>
+
+  <dt><span class='prop-value'>optimizeSpeed</span></dt>
+  <dd>Indicates that the user agent shall emphasize rendering
+  speed over geometric precision and crisp edges. This option
+  will sometimes cause the user agent to turn off shape
+  anti-aliasing.</dd>
+
+  <dt><span class='prop-value'>crispEdges</span></dt>
+  <dd>Indicates that the user agent shall attempt to emphasize
+  the contrast between clean edges of artwork over rendering
+  speed and geometric precision. To achieve crisp edges, the
+  user agent might turn off anti-aliasing for all lines and
+  curves or possibly just for straight lines which are close to
+  vertical or horizontal. Also, the user agent might adjust
+  line positions and line widths to align edges with device
+  pixels.</dd>
+
+  <dt><span class='prop-value'>geometricPrecision</span></dt>
+  <dd>Indicates that the user agent shall emphasize geometric
+  precision over speed and crisp edges.</dd>
+</dl>
+
+<h3 id="TextRenderingProperty">The <span class="prop-name">'text-rendering'</span> property</h3>
+
+<p>The creator of SVG content might want to provide a hint to the
+implementation about what tradeoffs to make as it renders text. The
+<a>'text-rendering'</a> property provides these hints.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt><span class="propdef-title prop-name">'text-rendering'</span></dt>
+        <dd>
+          <table summary="text-rendering property" class="propinfo"
+          cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>auto | optimizeSpeed | optimizeLegibility |<br />
+               geometricPrecision | <a class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>auto</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td><a>'text'</a> elements</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class='prop-value'>auto</span></dt>
+  <dd>Indicates that the user agent shall make appropriate
+  tradeoffs to balance speed, legibility and geometric
+  precision, but with legibility given more importance than
+  speed and geometric precision.</dd>
+
+  <dt><span class='prop-value'>optimizeSpeed</span></dt>
+  <dd>Indicates that the user agent shall emphasize rendering
+  speed over legibility and geometric precision. This option
+  will sometimes cause the user agent to turn off text
+  anti-aliasing.</dd>
+
+  <dt><span class='prop-value'>optimizeLegibility</span></dt>
+  <dd>Indicates that the user agent shall emphasize legibility
+  over rendering speed and geometric precision. The user agent
+  will often choose whether to apply anti-aliasing techniques,
+  built-in font hinting or both to produce the most legible
+  text.</dd>
+
+  <dt><span class='prop-value'>geometricPrecision</span></dt>
+  <dd>Indicates that the user agent shall emphasize geometric
+  precision over legibility and rendering speed. This option
+  will usually cause the user agent to suspend the use of
+  hinting so that glyph outlines are drawn with comparable
+  geometric precision to the rendering of path data.</dd>
+</dl>
+
+<h3 id="ImageRenderingProperty">The <span class="prop-name">'image-rendering'</span> property</h3>
+
+<p>The creator of SVG content might want to provide a hint to the
+implementation about how to make speed vs. quality tradeoffs as it performs
+image processing. The <a>'image-rendering'</a> property provides a hint to the
+SVG user agent about how to optimize its image rendering.</p>
+
+    <div class="propdef">
+      <dl>
+        <dt><span class="propdef-title prop-name">'image-rendering'</span></dt>
+        <dd>
+          <table summary="image-rendering property"
+          class="propinfo" cellspacing="0" cellpadding="0">
+            <tr valign="baseline">
+              <td><em>Value:</em>&nbsp;&nbsp;</td>
+              <td>auto | optimizeSpeed | optimizeQuality | <a
+              class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Initial:</em>&nbsp;&nbsp;</td>
+              <td>auto</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
+              <td>images</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
+              <td>N/A</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em>Media:</em>&nbsp;&nbsp;</td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>yes</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class='prop-value'>auto</span></dt>
+  <dd>Indicates that the user agent shall make appropriate
+  tradeoffs to balance speed and quality, but quality shall be
+  given more importance than speed. The user agent shall employ
+  a resampling algorithm at least as good as nearest neighbor
+  resampling, but bilinear resampling is strongly preferred.
+  For <a href="conform.html#ConformingHighQualitySVGViewers">Conforming
+  High-Quality SVG Viewers</a>, the user agent shall employ a
+  resampling algorithm at least as good as bilinear
+  resampling.</dd>
+
+  <dt><span class='prop-value'>optimizeQuality</span></dt>
+  <dd>Indicates that the user agent shall emphasize quality
+  over rendering speed. The user agent shall employ a
+  resampling algorithm at least as good as bilinear
+  resampling.</dd>
+
+  <dt><span class='prop-value'>optimizeSpeed</span></dt>
+  <dd>Indicates that the user agent shall emphasize rendering
+  speed over quality. The user agent should use a resampling
+  algorithm which achieves the goal of fast rendering, with the
+  requirement that the resampling algorithm shall be at least
+  as good as nearest neighbor resampling. If performance goals
+  can be achieved with higher quality algorithms, then the user
+  agent should use the higher quality algorithms instead of
+  nearest neighbor resampling.</dd>
+</dl>
+
+<p>In all cases, resampling must be done in a truecolor (e.g.,
+24-bit) color space even if the original data and/or the target
+device is indexed color.</p>
+
+<h2 id="InheritanceOfPaintingProperties">Inheritance of painting properties</h2>
+
+<p>The values of any of the painting properties described in this chapter can
+be inherited from a given object's parent.  Painting, however, is always done
+on each <a href="intro.html#TermGraphicsElement">graphics element</a>
+individually, never at the <a href="intro.html#TermContainerElement">container element</a>
+(e.g., a <a>'g'</a>) level. Thus, for the following SVG, even though the
+gradient fill is specified on the <a>'g'</a>, the gradient is simply inherited
+through the <a>'g'</a> element down into each rectangle, each of which is
+rendered such that its interior is painted with the gradient.</p>
+
+<p><span class="example-ref">Example Inheritance</span></p>
+
+<edit:example href='images/painting/inheritance.svg' name='Inheritance' image='yes' link='yes'/>
+
+<p>Any painting properties defined in terms of the
+<a href="coords.html#ObjectBoundingBoxUnits">object's bounding box</a> use the
+bounding box of the <a href="intro.html#TermGraphicsElement">graphics element</a>
+to which the operation applies. Note that <a href="text.html">text elements</a>
+are defined such that any painting operations defined in terms of the
+<a href="coords.html#ObjectBoundingBoxUnits">object's bounding box</a> use the
+bounding box of the entire <a>'text'</a> element. (See the discussion of
+<a href="text.html#ObjectBoundingBoxUnitsTextObjects">object bounding box units and text elements</a>.)</p>
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<h3 id="InterfaceSVGPaint">Interface SVGPaint</h3>
+
+<edit:interface name='::svg::SVGPaint'/>
+
+<h3 id="InterfaceSVGMarkerElement">Interface SVGMarkerElement</h3>
+
+<edit:with element='marker'>
+<edit:interface name='::svg::SVGMarkerElement'/>
+</edit:with>
+
+</body>
+</html>

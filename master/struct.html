@@ -1,0 +1,1390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Document Structure</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>Document Structure</h1>
+
+<h2 id="NewDocument">Defining an SVG document fragment: the <span class='element-name'>'svg'</span> element</h2>
+
+<edit:with element='svg'>
+
+<h3 id="NewDocumentOverview">Overview</h3>
+
+<p>An <a>SVG document fragment</a> consists of any number of SVG elements
+contained within an <a>'svg'</a> element.</p>
+
+<p>An SVG document fragment can range from an empty fragment (i.e.,
+no content inside of the <a>'svg'</a> element), to a very simple SVG
+document fragment containing a single SVG <a>graphics element</a>
+such as a <a>'rect'</a>, to a complex, deeply nested collection of
+<a>container elements</a> and <a>graphics elements</a>.</p>
+
+<p>An SVG document fragment can stand by itself as a self-contained
+file or resource, in which case the SVG document fragment is an <a>SVG
+document</a>, or it can be embedded inline as a fragment within a parent
+XML document.</p>
+
+<p id="EmbeddedSVGExample">The following example shows simple SVG
+content embedded inline as a fragment within a parent XML document.
+Note the use of XML namespaces to indicate that the <a>'svg'</a> and
+<a>'ellipse'</a> elements belong to the SVG namespace:</p>
+
+<pre class='xml'><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<parent xmlns="http://example.org"
+        xmlns:svg="http://www.w3.org/2000/svg">
+   <!-- parent contents here -->
+   <svg:svg width="4cm" height="8cm" version="1.1">
+      <svg:ellipse cx="2cm" cy="4cm" rx="2cm" ry="1cm" />
+   </svg:svg>
+   <!-- ... -->
+</parent>
+]]></pre>
+
+<p>This example shows a slightly more complex (i.e., it contains
+multiple rectangles) stand-alone, self-contained SVG document:</p>
+
+<edit:example href='images/struct/StandAlone01.svg' image='no'/>
+
+<p><a>'svg'</a> elements can appear in the middle of SVG content. This
+is the mechanism by which SVG document fragments can be embedded within
+other SVG document fragments.</p>
+
+<p>Another use for <a>'svg'</a> elements within the middle
+of SVG content is to establish a new viewport. (See
+<a href="coords.html#EstablishingANewViewport">Establishing a new
+viewport</a>.)</p>
+
+<p>In all cases, for compliance with the
+<a href="http://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a> Recommendation
+[<a href="refs.html#ref-XML-NS">XML-NS</a>], an SVG namespace
+declaration must be provided so that all SVG elements are identified
+as belonging to the SVG namespace. The following are possible ways to
+provide a namespace declaration. An <span class='attr-name'>'xmlns'</span>
+attribute without a namespace prefix could be specified on an
+<a>'svg'</a> element, which means that SVG is the default namespace
+for all elements within the scope of the element with the <span class='attr-name'>'xmlns'</span> attribute:</p>
+
+<pre class='xml'><![CDATA[
+<svg xmlns="http://www.w3.org/2000/svg" …>
+  <rect …/>
+</svg>
+]]></pre>
+
+<p>If a namespace prefix is specified on the <span class='attr-name'>'xmlns'</span>
+attribute (e.g., <code class='xml'>xmlns:svg="http://www.w3.org/2000/svg"</code>),
+then the corresponding namespace is not the default namespace, so an
+explicit namespace prefix must be assigned to the elements:</p>
+
+<pre class='xml'><![CDATA[
+<svg:svg xmlns:svg="http://www.w3.org/2000/svg" …>
+  <svg:rect …/>
+</svg:svg>
+]]></pre>
+
+<p>Namespace prefixes can be specified on ancestor elements (illustrated
+in the <a href="#EmbeddedSVGExample">above example</a>). For more
+information, refer to the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a> Recommendation
+[<a href="refs.html#ref-XML-NS">XML-NS</a>].</p>
+
+<h3 id="SVGElement">The <span class='element-name'>'svg'</span> element</h3>
+
+<edit:elementsummary name='svg'/>
+
+  <!--
+  <dt>DOM interface:</dt>
+  <dd>
+    <a>SVGSVGElement</a><span class="expanding">, which inherits from:
+    <a>DocumentCSS</a>,
+    <a>DocumentEvent</a>,
+    <a>Element</a>,
+    <a>EventTarget</a>,
+    <a>Node</a>,
+    <a>SVGElement</a>,
+    <a>SVGExternalResourcesRequired</a>,
+    <a>SVGFitToViewBox</a>,
+    <a>SVGLangSpace</a>,
+    <a>SVGLocatable</a>,
+    <a>SVGStylable</a>,
+    <a>SVGTests</a>,
+    <a>SVGZoomAndPan</a></span>
+  </dd>
+  -->
+
+<div class="adef-list">
+  <p><em>Attribute definitions:</em></p>
+  <dl>
+    <dt id="SVGElementVersionAttribute"><span
+    class="adef">version</span> = "<span class="attr-value"><a
+    href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+    <dd>Indicates the SVG language version to which this
+    document fragment conforms.<br />
+    In <a href='http://www.w3.org/TR/2001/REC-SVG-20010904/'>SVG 1.0</a> [<a href='refs.html#ref-SVG10'>SVG10</a>],
+    this attribute was fixed to the value <span class='attr-value'>'1.0'</span>.
+    For SVG 1.1, the attribute should have the value
+    <span class='attr-value'>'1.1'</span>.<br />
+     <span class="anim-target"><a
+    href="animate.html#Animatable">Animatable</a>:
+    no.</span></dd>
+    <dt id="SVGElementBaseProfileAttribute"><span
+    class="adef">baseProfile</span> = profile-name</dt>
+    <dd>Describes the minimum SVG language profile that the
+    author believes is necessary to correctly render the
+    content. The attribute does not specify any processing
+    restrictions; It can be considered metadata. For example,
+    the value of the attribute could be used by an authoring
+    tool to warn the user when they are modifying the document
+    beyond the scope of the specified base profile. Each SVG
+    profile should define the text that is appropriate for this
+    attribute.<br />
+     If the attribute is not specified, the effect is as if a
+    value of <span class='attr-value'>'none'</span> were specified.<br />
+     <span class="anim-target"><a
+    href="animate.html#Animatable">Animatable</a>:
+    no.</span></dd>
+    <dt id="SVGElementXAttribute"><span
+    class="adef">x</span> = "<span class="attr-value"><a
+    href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+    <dd>(Has no meaning or effect on <a>outermost svg
+     elements</a>.)<br />
+     The x-axis coordinate of one corner of the rectangular
+    region into which an embedded <a>'svg'</a> element is placed.<br />
+     If the attribute is not specified, the effect is as if a
+    value of <span class='attr-value'>'0'</span> were specified.<br />
+     <span class="anim-target"><a
+    href="animate.html#Animatable">Animatable</a>:
+    yes.</span></dd>
+    <dt id="SVGElementYAttribute"><span
+    class="adef">y</span> = "<span class="attr-value"><a
+    href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+    <dd>(Has no meaning or effect on <a>outermost svg
+     elements</a>.)<br />
+     The y-axis coordinate of one corner of the rectangular
+    region into which an embedded <a>'svg'</a> element is placed.<br />
+     If the attribute is not specified, the effect is as if a
+    value of <span class='attr-value'>'0'</span> were specified.<br />
+     <span class="anim-target"><a
+    href="animate.html#Animatable">Animatable</a>:
+    yes.</span></dd>
+    <dt id="SVGElementWidthAttribute"><span
+    class="adef">width</span> = "<span class="attr-value"><a
+    href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+    <dd>For <a>outermost svg elements</a>,
+    the intrinsic width of the SVG document fragment.
+    For embedded <a>'svg'</a>
+    elements, the width of the rectangular region into which
+    the <a>'svg'</a> element is
+    placed.<br />
+     A negative value is an error (see <a
+    href="implnote.html#ErrorProcessing">Error processing</a>).
+    A value of zero disables rendering of the element.<br />
+     If the attribute is not specified, the effect is as if a
+    value of <span class='attr-value'>'100%'</span> were specified.<br />
+     <span class="anim-target"><a
+    href="animate.html#Animatable">Animatable</a>:
+    yes.</span></dd>
+    <dt id="SVGElementHeightAttribute"><span
+    class="adef">height</span> = "<span class="attr-value"><a
+    href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+    <dd>For <a>outermost svg elements</a>,
+    the intrinsic height of the SVG document
+    fragment. For embedded <a>'svg'</a> elements, the height of
+    the rectangular region into which the <a>'svg'</a> element is placed.<br />
+     A negative value is an error (see <a
+    href="implnote.html#ErrorProcessing">Error processing</a>).
+    A value of zero disables rendering of the element.<br />
+     If the attribute is not specified, the effect is as if a
+    value of <span class='attr-value'>'100%'</span> were specified.<br />
+     <span class="anim-target"><a
+    href="animate.html#Animatable">Animatable</a>:
+    yes.</span></dd>
+    <dt id="SVGElementPreserveAspectRatioAttribute">
+      <span class="adef">preserveAspectRatio</span> = "<span class='attr-value'><a href="coords.html#PreserveAspectRatioAttribute">[defer] &lt;align&gt; [&lt;meetOrSlice&gt;]</a></span>"
+    </dt>
+    <dd>
+      <p>
+        See <a>'preserveAspectRatio'</a>.
+      </p>
+      <p>
+        If the attribute is not specified, then the effect is as if a value of <span class="attr-value">'xMidYMid meet'</span> were specified.
+      </p>
+      <p><span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: yes.</span></p>
+    </dd>
+    <dt id="SVGElementContentScriptTypeAttribute">
+      <span class="adef">contentScriptType</span> = "<span class='attr-value'><a href="script.html#ContentScriptTypeAttribute"><em>content-type</em></a></span>"
+    </dt>
+    <dd>
+      <p>
+        See <span class="attr"><a href="script.html#ContentScriptTypeAttribute">'contentScriptType'</a></span>.
+      </p>
+    </dd>
+    <dt id="SVGElementContentStyleTypeAttribute">
+      <span class="adef">contentStyleType</span> = "<span class='attr-value'><a href="styling.html#ContentStyleTypeAttribute"><em>content-type</em></a></span>"
+    </dt>
+    <dd>
+      <p>
+        See <span class="attr"><a href="styling.html#ContentStyleTypeAttribute">'contentStyleType'</a></span>.
+      </p>
+    </dd>
+    <dt id="SVGElementZoomAndPanAttribute">
+      <span class="adef">zoomAndPan</span> = "<span class='attr-value'><a href="interact.html#ZoomAndPanAttribute">disable | magnify</a></span>"
+    </dt>
+    <dd>
+      <p>
+        See <span class="attr"><a href="interact.html#ZoomAndPanAttribute">'zoomAndPan'</a></span>.
+      </p>
+    </dd>
+  </dl>
+</div>
+
+<p>If an SVG document is likely to be referenced as a component
+of another document, the author will often want to include a
+<a>'viewBox'</a> attribute on the <a>outermost svg element</a> of the
+referenced document. This attribute provides a convenient way to design
+SVG documents to scale-to-fit into an arbitrary viewport.</p>
+
+</edit:with>
+
+<h2 id="Groups">Grouping: the <span class='element-name'>'g'</span> element</h2>
+
+<h3 id="GroupsOverview">Overview</h3>
+
+<p>The <a>'g'</a> element is a <a>container element</a> for grouping together
+related <a>graphics elements</a>.</p>
+
+<p>Grouping constructs, when used in conjunction with the <a>'desc'</a>
+and <a>'title'</a> elements, provide information about document
+structure and semantics. Documents that are rich in structure may be
+rendered graphically, as speech, or as braille, and thus promote
+<a href="access.html">accessibility</a>.</p>
+
+<p>A group of elements, as well as individual objects, can be given
+a name using the <a>'id'</a> attribute. Named groups are needed for
+several purposes such as animation and re-usable objects.</p>
+
+<p>An example:</p>
+
+<edit:example href='images/struct/grouping01.svg' image='no' link='yes'/>
+
+<p>A <a>'g'</a> element can contain other <a>'g'</a> elements nested
+within it, to an arbitrary depth. Thus, the following is possible:</p>
+
+<pre class='xml'><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="4in" height="3in">
+  <desc>Groups can nest</desc>
+  <g>
+     <g>
+       <g>
+       </g>
+     </g>
+   </g>
+</svg>
+]]></pre>
+
+<p>Any element that is not contained within a <a>'g'</a> is treated (at
+least conceptually) as if it were in its own group.</p>
+
+<h3 id="GElement">The <span class='element-name'>'g'</span> element</h3>
+
+<edit:elementsummary name='g'/>
+
+<h2 id="Head">Defining content for reuse, and the <span class='element-name'>'defs'</span> element</h2>
+
+<h3 id="Overview">Overview</h3>
+
+<p>SVG allows graphical objects to be defined for later reuse.
+To do this, it makes extensive use of <a>IRI references</a>
+[<a href="refs.html#ref-RFC3987">RFC3987</a>] to these other objects.
+For example, to fill a rectangle with a linear gradient, you first
+define a <a>'linearGradient'</a> element and give it an ID, as in:</p>
+
+<pre class='xml'><![CDATA[
+<linearGradient id="MyGradient">...</linearGradient>
+]]></pre>
+
+<p>You then reference the linear gradient as the value of the
+<a>'fill'</a> property for the rectangle, as in:</p>
+
+<pre class='xml'><![CDATA[
+<rect style="fill:url(#MyGradient)"/>
+]]></pre>
+
+<p>Some types of element, such as gradients, will not by themselves produce a graphical result. They can therefore be placed anywhere convenient. However, sometimes it is desired to define a graphical object and prevent it from being directly rendered. it is only there to be referenced elsewhere. To do this, and to allow convenient grouping defined content, SVG provides the <span class='element-name'>'defs'</span> element.</p>
+
+<p>It is recommended that, wherever possible, referenced elements be defined
+inside of a <a>'defs'</a> element. Among the elements that are always
+referenced: <a>'altGlyphDef'</a>, <a>'clipPath'</a>, <a>'cursor element'</a>,
+<a>'filter element'</a>, <a>'linearGradient'</a>, <a>'marker element'</a>,
+<a>'mask element'</a>, <a>'pattern'</a>, <a>'radialGradient'</a> and
+<a>'symbol'</a>. Defining these elements inside of a <a>'defs'</a> element
+promotes understandability of the SVG content and thus promotes
+accessibility.</p>
+
+<h3 id="DefsElement">The <span class='element-name'>'defs'</span> element</h3>
+
+<edit:elementsummary name='defs'/>
+
+<p>The <a>'defs'</a> element is a container element for
+<a href="struct.html#Head">referenced elements</a>. For understandability and
+<a href="access.html">accessibility</a> reasons, it is recommended
+that, whenever possible, referenced elements be defined inside
+of a <a>'defs'</a>.</p>
+
+<p>The content model for <a>'defs'</a> is the same as for the
+<a>'g'</a> element; thus, any element that can be a child of a
+<a>'g'</a> can also be a child of a <a>'defs'</a>, and vice versa.</p>
+
+<p>Elements that are descendants of a <a>'defs'</a> are not rendered directly;
+they are prevented from becoming part of the rendering tree
+just as if the <a>'defs'</a> element were a <a>'g'</a> element and the
+<a>'display'</a> property were set to <span class="prop-value">none</span>.
+Note, however, that the descendants of a <a>'defs'</a> are
+always present in the source tree and thus can always be
+referenced by other elements; thus, the value of the <a>'display'</a>
+property on the <a>'defs'</a> element or any of its descendants does not
+prevent those elements from being referenced by other elements.</p>
+
+<p>To provide some SVG user agents with an opportunity to
+implement efficient implementations in streaming environments,
+creators of SVG content are encouraged to place all elements
+which are targets of local IRI references within a <a>'defs'</a>
+element which is a direct child of one of the ancestors of the
+referencing element. For example:</p>
+
+<edit:example href='images/struct/defs01.svg' link='yes'/>
+
+<p>In the document above, the linear gradient is defined within
+a <a>'defs'</a> element which is the direct child of the <a>'svg'</a>
+element, which in turn is an ancestor of the <a>'rect'</a> element which
+references the linear gradient. Thus, the above document conforms to the
+guideline.</p>
+
+<h2 id="DescriptionAndTitleElements">The <span class='element-name'>'desc'</span>
+and <span class='element-name'>'title'</span> elements</h2>
+
+<div id='DescElement'>
+<edit:elementsummary name='desc'/>
+</div>
+
+<div id='TitleElement'>
+<edit:elementsummary name='title'/>
+</div>
+
+<p>Each <a>container element</a> or <a>graphics element</a> in an SVG drawing
+can supply a <a>'desc'</a> and/or a <a>'title'</a> description string where
+the description is text-only. When the current SVG document fragment is
+rendered as SVG on visual media, <a>'desc'</a> and <a>'title'</a> elements are
+not rendered as part of the graphics. User agents may, however, for example,
+display the <a>'title'</a> element as a tooltip, as the pointing device moves
+over particular elements. Alternate presentations are possible, both visual and
+aural, which display the <a>'desc'</a> and <a>'title'</a> elements but do not
+display <a>'path'</a> elements or other <a>graphics elements</a>.  This is
+readily achieved by using a different (perhaps user) style sheet. For deep
+hierarchies, and for following <a>'use'</a> element references, it is
+sometimes desirable to allow the user to control how deep they drill down into
+descriptive text.</p>
+
+<p>In conforming SVG document fragments, any <a>'title'</a> element should be
+the first child element of its parent.  Note that those implementations that do
+use <a>'title'</a> to display a tooltip often will only do so if the
+<a>'title'</a> is indeed the first child element of its parent.</p>
+
+<p>The following is an example. In typical operation, the SVG user agent would
+not render the <a>'desc'</a> and <a>'title'</a> elements but would render the
+remaining contents of the <a>'g'</a> element.</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg SYSTEM "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="4in" height="3in">
+  <g>
+    <title>Company sales by region</title>
+    <desc>
+      This is a bar chart which shows 
+      company sales by region.
+    </desc>
+    <!-- Bar chart defined as vector data -->
+  </g>
+</svg>
+]]></pre>
+
+<p>Description and title elements can contain marked-up text
+from other namespaces. Here is an example:</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="4in" height="3in">
+  <desc xmlns:mydoc="http://example.org/mydoc">
+    <mydoc:title>This is an example SVG file</mydoc:title>
+    <mydoc:para>The global description uses markup from the 
+      <mydoc:emph>mydoc</mydoc:emph> namespace.</mydoc:para>
+  </desc>
+  <g>
+    <!-- the picture goes here -->
+  </g>
+</svg>
+]]></pre>
+
+<p>Authors should always provide a <a>'title'</a> child element to the
+<a>outermost svg element</a> within a stand-alone SVG document. The
+<a>'title'</a> child element to an <a>'svg'</a> element serves the
+purposes of identifying the content of the given SVG document
+fragment. Since users often consult documents out of context,
+authors should provide context-rich titles. Thus, instead of a
+title such as "Introduction", which doesn't provide much
+contextual background, authors should supply a title such as
+"Introduction to Medieval Bee-Keeping" instead. For reasons of
+accessibility, user agents should always make the content of
+the <a>'title'</a> child element to the <a>outermost svg element</a>
+available to users. The mechanism for doing so depends on the user agent
+(e.g., as a caption, spoken).</p>
+
+<p>The DTD definitions of many of SVG's elements (particularly,
+container and text elements) place no restriction on the
+placement or number of the <a>'desc'</a> and <a>'title'</a> sub-elements.
+This flexibility is only present so that there will be a consistent
+content model for container elements, because some container
+elements in SVG allow for mixed content, and because
+<a href="http://www.w3.org/TR/2008/REC-xml-20081126/#sec-mixed-content">the mixed content rules for XML</a>
+([<a href="refs.html#ref-XML10">XML10</a>], section 3.2.2)
+do not permit the desired restrictions. Representations of
+future versions of the SVG language might use more expressive
+representations than DTDs which allow for more restrictive
+mixed content rules. It is strongly recommended that at most
+one <a>'desc'</a> and at most one <a>'title'</a> element appear as a
+child of any particular element, and that these elements appear
+before any other child elements (except possibly
+<a>'metadata'</a> elements) or character data content. If user agents need to
+choose among multiple <a>'desc'</a> or <a>'title'</a> elements for processing
+(e.g., to decide which string to use for a tooltip), the user
+agent shall choose the first one.</p>
+
+<h2 id="SymbolElement">The <span class='element-name'>'symbol'</span> element</h2>
+
+<edit:elementsummary name='symbol'/>
+
+<p>The <a>'symbol'</a> element is used to define graphical template objects
+which can be instantiated by a <a>'use'</a> element.</p>
+
+<p>The use of <a>'symbol'</a> elements for graphics that are used multiple
+times in the same document adds structure and semantics. Documents that are rich
+in structure may be rendered graphically, as speech, or as
+braille, and thus promote <a href="access.html">accessibility</a>.</p>
+
+<p>The key distinctions between a <a>'symbol'</a> and a <a>'g'</a> are:</p>
+
+<ul>
+  <li>A <a>'symbol'</a> element itself is not rendered. Only instances of a
+  <a>'symbol'</a> element (i.e., a reference to a <a>'symbol'</a> by
+  a <a>'use'</a> element) are rendered.</li>
+
+  <li>A <a>'symbol'</a> element has attributes <a>'viewBox'</a> and
+  <a>'preserveAspectRatio'</a> which allow a <a>'symbol'</a> to scale-to-fit
+  within a rectangular viewport defined by the referencing
+  <a>'use'</a> element.</li>
+</ul>
+
+<p>Closely related to the <a>'symbol'</a> element are the
+<a>'marker element'</a> and <a>'pattern'</a> elements.</p>
+
+<p><a>'symbol'</a> elements are never rendered directly; their only usage is
+as something that can be referenced using the
+<a>'use'</a> element. The <a>'display'</a> property does not apply
+to the <a>'symbol'</a> element; thus, <a>'symbol'</a> elements are
+not directly rendered even if the <a>'display'</a> property is set to a
+value other than <span class="prop-value">none</span>, and <a>'symbol'</a>
+elements are available for referencing even when the
+<a>'display'</a> property on the <a>'symbol'</a> element or any of its
+ancestors is set to <span class="prop-value">none</span>.</p>
+
+<h2 id="UseElement">The <span class='element-name'>'use'</span> element</h2>
+
+<edit:with element='use'>
+
+<edit:elementsummary name='use'/>
+
+    <p>Any <a>'svg'</a>, <a>'symbol'</a>, <a>'g'</a>, <a
+    href="intro.html#TermGraphicsElement">graphics element</a> or
+    other <a>'use'</a> is potentially a
+    template object that can be re-used (i.e., "instanced") in the
+    SVG document via a <a>'use'</a>
+    element. The <a>'use'</a> element
+    references another element and indicates that the graphical
+    contents of that element is included/drawn at that given point
+    in the document.</p>
+    <p>Unlike <a>'image'</a>, the <a>'use'</a> element cannot reference
+    entire files.</p>
+    <p>The <a>'use'</a> element has
+    optional attributes <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a> and <a>'use/height'</a> which are used to map the
+    graphical contents of the referenced element onto a rectangular
+    region within the current coordinate system.</p>
+    <p>The effect of a <a>'use'</a>
+    element is as if the contents of the referenced element were
+    deeply cloned into a separate non-exposed DOM tree which had
+    the <a>'use'</a> element as its
+    parent and all of the <a>'use'</a>
+    element's ancestors as its higher-level ancestors. Because the
+    cloned DOM tree is non-exposed, the SVG Document Object Model
+    (DOM) only contains the <a>'use'</a>
+    element and its attributes. The SVG DOM does not show the
+    referenced element's contents as children of <a>'use'</a> element.</p>
+    <p>For user agents that support <a
+    href="styling.html#StylingWithCSS">Styling with CSS</a>, the
+    conceptual deep cloning of the referenced element into a
+    non-exposed DOM tree also copies any property values resulting
+    from <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html">the CSS cascade</a>
+    ([<a href="refs.html#ref-CSS2">CSS2</a>], chapter 6)
+    on the referenced element and its contents. CSS2 selectors can
+    be applied to the original (i.e., referenced) elements because
+    they are part of the formal document structure. CSS2 selectors
+    cannot be applied to the (conceptually) cloned DOM tree because
+    its contents are not part of the formal document structure.</p>
+    <p>Property inheritance, however, works as if the referenced
+    element had been textually included as a deeply cloned child of
+    the <a>'use'</a> element. The
+    referenced element inherits properties from the <a>'use'</a> element and the <a>'use'</a> element's ancestors. An
+    instance of a referenced element does not inherit properties
+    from the referenced element's original parents.</p>
+    <p>If event attributes are assigned to referenced elements,
+    then the actual target for the event will be the
+    <a>SVGElementInstance</a> object
+    within the "instance tree" corresponding to the given
+    referenced element.</p>
+    <p>The event handling for the non-exposed tree works as if the
+    referenced element had been textually included as a deeply
+    cloned child of the <a>'use'</a>
+    element, except that events are dispatched to the <a>SVGElementInstance</a> objects. The
+    event's target and currentTarget attributes are set to the
+    <a>SVGElementInstance</a> that
+    corresponds to the target and current target elements in the
+    referenced subtree. An event propagates through the exposed and
+    non-exposed portions of the tree in the same manner as it would
+    in the regular document tree: first going from the root element
+    to the <a>'use'</a> element and then
+    through non-exposed tree elements in the capture phase,
+    followed by the target phase at the target of the event, then
+    bubbling back through non-exposed tree to the use element and
+    then back through regular tree to the root element in bubbling
+    phase.</p>
+    <p>An element and all its corresponding <a>SVGElementInstance</a> objects
+    share an event listener list. The currentTarget attribute of
+    the event can be used to determine through which object an
+    event listener was invoked.</p>
+    <p>The behavior of the <a>'visibility'</a> property conforms to
+    this model of property inheritance. Thus, specifying <span
+    class="prop-value">'visibility:hidden'</span> on a <a>'use'</a> element does not guarantee
+    that the referenced content will not be rendered. If the <a>'use'</a> element specifies <span
+    class="prop-value">'visibility:hidden'</span> and the element
+    it references specifies <span
+    class="prop-value">'visibility:hidden'</span> or <span
+    class="prop-value">'visibility:inherit'</span>, then that one
+    element will be hidden. However, if the referenced element
+    instead specifies <span
+    class="prop-value">'visibility:visible'</span>, then that
+    element will be visible even if the <a>'use'</a> element specifies <span
+    class="prop-value">'visibility:hidden'</span>.</p>
+    <p>Animations on a referenced element will cause the instances
+    to also be animated.</p>
+    <p>A <a>'use'</a> element has the
+    same visual effect as if the <a>'use'</a> element were replaced by the
+    following generated content:</p>
+    <ul>
+      <li><strong>If the <a>'use'</a>
+      element references a <a>'symbol'</a>
+      element</strong>:<br />
+      <br />
+       In the generated content, the <a>'use'</a> will be replaced by <a>'g'</a>, where all attributes
+      from the <a>'use'</a> element
+      except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>, <a>'use/height'</a> and <a>'use/xlink:href'</a> are transferred to
+      the generated <a>'g'</a> element. An additional
+      transformation <span class="attr-value">translate(x,y)</span>
+      is appended to the end (i.e., right-side) of the <a>'transform'</a> attribute on the
+      generated <a>'g'</a>, where <span
+      class="attr-value">x</span> and <span
+      class="attr-value">y</span> represent the values of the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a> element. The referenced <a>'symbol'</a> and its contents are
+      deep-cloned into the generated tree, with the exception that
+      the <a>'symbol'</a> is replaced by an <a>'svg'</a>. This generated <a>'svg'</a> will always have
+      explicit values for attributes <a>'svg/width'</a> and <a>'svg/height'</a>. If attributes <a>'use/width'</a> and/or <a>'use/height'</a> are provided on the <a>'use'</a> element, then these
+      attributes will be transferred to the generated <a>'svg'</a>. If attributes <a>'use/width'</a> and/or <a>'use/height'</a> are not specified, the
+      generated <a>'svg'</a> element will use values
+      of <span class='attr-value'>'100%'</span> for these attributes.<br />
+      <br />
+      </li>
+      <li><strong>If the <a>'use'</a>
+      element references an <a>'svg'</a> element:</strong><br />
+      <br />
+       In the generated content, the <a>'use'</a> will be replaced by <a>'g'</a>, where all attributes
+      from the <a>'use'</a> element
+      except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>, <a>'use/height'</a> and <a>'use/xlink:href'</a> are transferred to
+      the generated <a>'g'</a> element. An additional
+      transformation <span class="attr-value">translate(x,y)</span>
+      is appended to the end (i.e., right-side) of the <a>'transform'</a> attribute on the
+      generated <a>'g'</a>, where <span
+      class="attr-value">x</span> and <span
+      class="attr-value">y</span> represent the values of the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a> element. The referenced <a>'svg'</a> and its contents are
+      deep-cloned into the generated tree. If attributes <a>'use/width'</a> and/or <a>'use/height'</a> are provided on the <a>'use'</a> element, then these values
+      will override the corresponding attributes on the <a>'svg'</a> in the generated
+      tree.<br />
+      <br />
+      </li>
+      <li><strong>Otherwise:</strong><br />
+      <br />
+       In the generated content, the <a>'use'</a> will be replaced by <a>'g'</a>, where all attributes
+      from the <a>'use'</a> element
+      except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>, <a>'use/height'</a> and <a>'use/xlink:href'</a> are transferred to
+      the generated <a>'g'</a> element. An additional
+      transformation <span class="attr-value">translate(x,y)</span>
+      is appended to the end (i.e., right-side) of the <a>'transform'</a> attribute on the
+      generated <a>'g'</a>, where <span
+      class="attr-value">x</span> and <span
+      class="attr-value">y</span> represent the values of the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a> element. The referenced
+      object and its contents are deep-cloned into the generated
+      tree.</li>
+    </ul>
+    <p>For user agents that support <a
+    href="styling.html#StylingWithCSS">Styling with CSS</a>, the
+    generated <a>'g'</a> element carries along with
+    it the "cascaded" property values on the <a>'use'</a> element which result from
+    <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html">the CSS cascade</a>
+    ([<a href="refs.html#ref-CSS2">CSS2</a>], chapter 6).
+    Additionally, the copy (deep clone) of the referenced resource
+    carries along with it the "cascaded" property values resulting
+    from the CSS cascade on the original (i.e., referenced)
+    elements. Thus, the result of various CSS selectors in
+    combination with the <a>'class'</a> and <a>'style attribute'</a> attributes are, in effect,
+    replaced by the functional equivalent of a <a>'style attribute'</a> attribute in the generated
+    content which conveys the "cascaded" property values.</p>
+
+<p><span class="example-ref">Example Use01</span> below has a
+simple <a>'use'</a> on a <a>'rect'</a>.</p>
+
+<edit:example href='images/struct/Use01.svg' name='Use01' description="Simple case of 'use' on a 'rect'" link='yes' image='yes'/>
+
+<p>The visual effect would be equivalent to the following document:</p>
+
+<edit:example href='images/struct/Use01-GeneratedContent.svg' link='yes'/>
+
+<p><span class="example-ref">Example Use02</span> below has a
+<a>'use'</a> on a <a>'symbol'</a>.</p>
+
+<edit:example href='images/struct/Use02.svg' name='Use02' description="'use' on a 'symbol'" link='yes' image='yes'/>
+
+<p>The visual effect would be equivalent to the following document:</p>
+
+<edit:example href='images/struct/Use02-GeneratedContent.svg' link='yes'/>
+
+<p><span class="example-ref">Example Use03</span> illustrates
+what happens when a <a>'use'</a> has
+a <a>'transform'</a> attribute.</p>
+
+<edit:example href='images/struct/Use03.svg' name='Use03' description="'use' with a 'transform' attribute" link='yes' image='yes'/>
+
+<p>The visual effect would be equivalent to the following document:</p>
+
+<edit:example href='images/struct/Use03-GeneratedContent.svg' link='yes'/>
+
+<p><span class="example-ref">Example Use04</span> illustrates a
+<a>'use'</a> element with various
+methods of applying CSS styling.</p>
+
+<edit:example href='images/struct/Use04.svg' name='Use04' description="'use' with CSS styling" link='yes' image='yes'/>
+
+<p>The visual effect would be equivalent to the following
+document. Observe that some of the style rules above apply to
+the generated content (i.e., rules 1-6, 10-12), whereas others
+do not (i.e., rules 7-9). The rules which do not affect the
+generated content are:</p>
+
+<ul>
+  <li>Rules 7 and 8: CSS selectors only apply to the formal
+  document tree, not on the generated tree; thus, these
+  selectors will not yield a match.</li>
+
+  <li>Rule 9: The generated tree only inherits from the
+  ancestors of the <a>'use'</a>
+  element and does not inherit from the ancestors of the
+  referenced element; thus, this rule does not affect the
+  generated content.</li>
+</ul>
+
+<p>In the generated content below, the selectors that yield a
+match have been transferred into inline <a>'style attribute'</a> attributes for
+illustrative purposes.</p>
+
+<edit:example href='images/struct/Use04-GeneratedContent.svg' link='yes'/>
+
+<p>When a <a>'use'</a> references
+another element which is another <a>'use'</a> or whose content contains a
+<a>'use'</a> element, then the deep
+cloning approach described above is recursive. However, a set
+of references that directly or indirectly reference a element
+to create a circular dependency is an error, as described in <a
+href="#Head">References and the <span class='element-name'>'defs'</span> element</a>.</p>
+
+<div class="adef-list">
+  <p><em>Attribute definitions:</em></p>
+  <dl>
+    <dt id="UseElementXAttribute"><span
+    class="adef">x</span> = "<span class="attr-value"><a
+    href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+    <dd>The x-axis coordinate of one corner of the rectangular
+    region into which the referenced element is placed.<br />
+     If the attribute is not specified, the effect is as if a
+    value of "0" were specified.<br />
+     <span class="anim-target"><a
+    href="animate.html#Animatable">Animatable</a>:
+    yes.</span></dd>
+    <dt id="UseElementYAttribute"><span
+    class="adef">y</span> = "<span class="attr-value"><a
+    href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+    <dd>The y-axis coordinate of one corner of the rectangular
+    region into which the referenced element is placed.<br />
+     If the attribute is not specified, the effect is as if a
+    value of "0" were specified.<br />
+     <span class="anim-target"><a
+    href="animate.html#Animatable">Animatable</a>:
+    yes.</span></dd>
+    <dt id="UseElementWidthAttribute"><span
+    class="adef">width</span> = "<span class="attr-value"><a
+    href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+    <dd>The width of the rectangular region into which the
+    referenced element is placed. A negative value is an error
+    (see <a href="implnote.html#ErrorProcessing">Error
+    processing</a>). A value of zero disables rendering of this
+    element.<br />
+     <span class="anim-target"><a
+    href="animate.html#Animatable">Animatable</a>:
+    yes.</span></dd>
+    <dt id="UseElementHeightAttribute"><span
+    class="adef">height</span> = "<span class="attr-value"><a
+    href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+    <dd>The height of the rectangular region into which the
+    referenced element is placed. A negative value is an error
+    (see <a href="implnote.html#ErrorProcessing">Error
+    processing</a>). A value of zero disables rendering of this
+    element.<br />
+     <span class="anim-target"><a
+    href="animate.html#Animatable">Animatable</a>:
+    yes.</span></dd>
+    <dt id="UseElementHrefAttribute"><span
+    class="adef">xlink:href</span> = "<span
+    class="attr-value"><a
+    href="types.html#DataTypeIRI">&lt;iri&gt;</a></span>"</dt>
+    <dd>A <a href="linking.html#IRIReference">IRI
+    reference</a> to an element/fragment within an SVG
+    document.<br />
+     <span class="anim-target"><a
+    href="animate.html#Animatable">Animatable</a>:
+    yes.</span></dd>
+  </dl>
+</div>
+
+</edit:with>
+
+<h2 id="ImageElement">The <span class='element-name'>'image'</span> element</h2>
+
+<edit:with element='image'>
+
+<edit:elementsummary name='image'/>
+
+    <p>The <a>'image'</a> element
+    indicates that the contents of a complete file are to be
+    rendered into a given rectangle within the current user
+    coordinate system. The <a>'image'</a> element can refer to raster
+    image files such as PNG or JPEG or to files with MIME type of
+    "image/svg+xml". <a
+    href="conform.html#ConformingSVGViewers">Conforming SVG
+    viewers</a> need to support at least PNG, JPEG and SVG format
+    files.</p>
+    <p>The result of processing an <a>'image'</a> is always a four-channel
+    RGBA result. When an <a>'image'</a>
+    element references a raster image file such as PNG or JPEG
+    files which only has three channels (RGB), then the effect is
+    as if the object were converted into a 4-channel RGBA image
+    with the alpha channel uniformly set to 1. For a single-channel
+    raster image, the effect is as if the object were converted
+    into a 4-channel RGBA image, where the single channel from the
+    referenced object is used to compute the three color channels
+    and the alpha channel is uniformly set to 1.</p>
+    <p>An <a>'image'</a> element
+    establishes a new viewport for the referenced file as described
+    in <a href="coords.html#EstablishingANewViewport">Establishing
+    a new viewport</a>.  The bounds for the new viewport are
+    defined by attributes <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>. The placement and scaling
+    of the referenced image are controlled by the <a>'preserveAspectRatio'</a> attribute on
+    the <a>'image'</a> element.</p>
+    <p>When an <a>'image'</a> element
+    references an SVG image, the <a>'clip'</a> and <a>'overflow'</a> properties on the root element in
+    the referenced SVG image are ignored (in the same manner as the
+    <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> attributes are ignored). Unless the value of
+    <a>'preserveAspectRatio'</a> on the <a>'image'</a> element starts with 'defer', 
+    the <a>'preserveAspectRatio'</a> attribute on the root element in
+    the referenced SVG image is also ignored (see <a>'preserveAspectRatio'</a>
+    for details).
+    
+    Instead, the <a>'preserveAspectRatio'</a> attribute on
+    the referencing <a>'image'</a>
+    element defines how the SVG image content is fitted into the
+    viewport and the <a>'clip'</a> and <a>'overflow'</a> properties on the <a>'image'</a> element define how the SVG
+    image content is clipped (or not) relative to the viewport.</p>
+    <p>The value of the <a>'viewBox'</a> attribute to use when
+    evaluating the <a>'preserveAspectRatio'</a> attribute is
+    defined by the referenced content. For content that clearly
+    identifies a viewBox (e.g. an SVG file with the <a>'viewBox'</a> attribute on the
+    <a>outermost svg element</a>) that value should be used. For most
+    raster content (PNG, JPEG) the bounds of the image should be
+    used (i.e. the <a>'image'</a>
+    element has an implicit <a>'viewBox'</a> of <span class='attr-value'>'0 0 raster-image-width
+    raster-image-height'</span>). Where no value is readily available
+    (e.g. an SVG file with no <a>'viewBox'</a> attribute on the
+    <a>outermost svg element</a>) the <a>'preserveAspectRatio'</a> attribute is
+    ignored, and only the translation due to the <a>'x'</a> &amp; <a>'y'</a> attributes of the viewport is
+    used to display the content.</p>
+    <p>For example, if the image element referenced a PNG or JPEG
+    and <span class="attr-value">preserveAspectRatio="xMinYMin
+    meet"</span>, then the aspect ratio of the raster would be
+    preserved (which means that the scale factor from image's
+    coordinates to current user space coordinates would be the same
+    for both X and Y), the raster would be sized as large as
+    possible while ensuring that the entire raster fits within the
+    viewport, and the top/left of the raster would be aligned with
+    the top/left of the viewport as defined by the attributes <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> on the <a>'image'</a> element.  If the value
+    of <a>'preserveAspectRatio'</a> was <span class='attr-value'>'none'</span>
+    then aspect ratio of the image would not be preserved. The
+    image would be fitted such that the top/left corner of the
+    raster exactly aligns with coordinate (<a>'x'</a>, <a>'y'</a>) and the bottom/right corner of
+    the raster exactly aligns with coordinate (<a>'x'</a>+<a>'width'</a>, <a>'y'</a>+<a>'height'</a>).</p>
+
+    <p>The resource referenced by the <a>'image'</a> element represents a
+    separate document which generates its own parse tree and
+    document object model (if the resource is XML). Thus, there is
+    no inheritance of properties into the image.</p>
+    <p>Unlike <a>'use'</a>, the <a>'image'</a> element cannot reference
+    elements within an SVG file.</p>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="ImageElementXAttribute"><span
+        class="adef">x</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>The x-axis coordinate of one corner of the rectangular
+        region into which the referenced document is placed.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class="attr-value">'0'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="ImageElementYAttribute"><span
+        class="adef">y</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>The y-axis coordinate of one corner of the rectangular
+        region into which the referenced document is placed.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class="attr-value">'0'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="ImageElementWidthAttribute"><span
+        class="adef">width</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+        <dd>The width of the rectangular region into which the
+        referenced document is placed.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables rendering of the element.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="ImageElementHeightAttribute"><span
+        class="adef">height</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+        <dd>The height of the rectangular region into which the
+        referenced document is placed.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables rendering of the element.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="ImageElementHrefAttribute"><span
+        class="adef">xlink:href</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeIRI">&lt;iri&gt;</a></span>"</dt>
+        <dd>A <a href="linking.html#IRIReference">IRI
+        reference</a>.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="ImageElementPreserveAspectRatioAttribute">
+          <span class="adef">preserveAspectRatio</span> = "<span class='attr-value'><a href="coords.html#PreserveAspectRatioAttribute">[defer] &lt;align&gt; [&lt;meetOrSlice&gt;]</a></span>"
+        </dt>
+        <dd>
+          <p>
+            See <a>'preserveAspectRatio'</a>.
+          </p>
+          <p>
+            If attribute <a>'preserveAspectRatio'</a> is not specified, then the effect is as if a value of <span class="attr-value">xMidYMid meet</span> were specified.
+          </p>
+          <p><span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: yes.</span></p>
+        </dd>
+      </dl>
+    </div>
+
+    <p>An example:</p>
+<pre>
+&lt;?xml version="1.0" standalone="no"?&gt;
+&lt;!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"&gt;
+&lt;svg width="4in" height="3in" version="1.1"
+     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+  &lt;desc&gt;This graphic links to an external image
+  &lt;/desc&gt;
+  &lt;image x="200" y="200" width="100px" height="100px"
+         xlink:href="myimage.png"&gt;
+    &lt;title&gt;My image&lt;/title&gt;
+  &lt;/image&gt;
+&lt;/svg&gt;
+</pre>
+
+</edit:with>
+
+    <h2 id="ConditionalProcessing">Conditional processing</h2>
+
+    <!--
+    <a id="ConditionalProcessingConditional.attrib" name="ConditionalProcessingConditional.attrib" class="indexref-conditional_processing::test_attributes"></a>
+    <a id="Conditional.attrib" name="Conditional.attrib" class="indexref-test_attributes"></a> 
+    -->
+    <h3 id="ConditionalProcessingOverview">Conditional processing overview</h3>
+    <p>SVG contains a <a>'switch'</a> element along with
+    attributes <a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> to provide an
+    ability to specify alternate viewing depending on the
+    capabilities of a given user agent or the user's language.</p>
+    <p>Attributes <a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> act as tests and
+    return either true or false results. The <a>'switch'</a> renders the first of
+    its children for which all of these attributes test true. If
+    the given attribute is not specified, then a true value is
+    assumed.</p>
+    <p>Similar to the <a>'display'</a> property, conditional processing
+    attributes only affect the direct rendering of elements and do
+    not prevent elements from being successfully referenced by
+    other elements (such as via a <a>'use'</a>).</p>
+    <p>In consequence:</p>
+    <ul>
+      <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes affect
+      <a>'a'</a>, <a>'altGlyph'</a>, <a>'foreignObject'</a>, <a>'textPath'</a>, <a>'tref'</a>, and <a>'tspan'</a> elements.</li>
+      <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes will
+      have no effect on <a>'mask element'</a>,
+      <a>'clipPath'</a>, and <a>'pattern'</a> elements.</li>
+      <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes do not
+      apply to the <a>'defs'</a>, and
+      <a>'cursor element'</a> elements because
+      they are not part of the rendering tree.</li>
+      <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes affect
+      <a>'animate'</a>, <a>'animateColor'</a>, <a>'animateMotion'</a>, <a>'animateTransform'</a>, and <a>'set'</a> elements. If the
+      conditional statement on these animation elements fails, the
+      animation will never be triggered.</li>
+    </ul>
+
+<h3 id="SwitchElement">The <span class='element-name'>'switch'</span> element</h3>
+
+<edit:elementsummary name='switch'/>
+
+<p>The <a>'switch'</a> element evaluates
+the <a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and
+<a>'systemLanguage'</a> attributes on its direct child elements in
+order, and then processes and renders the first child for which these
+attributes evaluate to true. All others will be bypassed and therefore
+not rendered. If the child element is a container element such as a
+<a>'g'</a>, then the entire subtree is either processed/rendered or
+bypassed/not rendered.</p>
+
+<p>Note that the values of properties <a>'display'</a> and
+<a>'visibility'</a> have no effect on <a>'switch'</a> element
+processing. In particular, setting <a>'display'</a> to
+<span class="prop-value">none</span> on a child of a <a>'switch'</a> element
+has no effect on true/false testing associated with <a>'switch'</a>
+element processing.</p>
+
+<p>For more information and an example, see
+<a href="extend.html#ForeignObjectElement">Embedding foreign
+object types</a>.</p>
+
+    <h3 id="ConditionalProcessingRequiredFeaturesAttribute">The <span class='attr-name'>'requiredFeatures'</span>
+    attribute</h3>
+    <div class="adef-list">
+      <p>Definition of <span
+      class="adef">requiredFeatures</span>:</p>
+      <dl>
+        <dt id="RequiredFeaturesAttribute"><span class="adef">requiredFeatures</span> =
+        <em>list-of-features</em></dt>
+        <dd>The value is a list of feature strings, with the
+        individual values separated by white space. Determines
+        whether all of the named <em>features</em> are supported by
+        the user agent. Only feature strings defined in the <a
+        href="feature.html">Feature String</a> appendix are
+        allowed. If all of the given features are supported, then
+        the attribute evaluates to true; otherwise, the current
+        element and its children are skipped and thus will not be
+        rendered.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+      </dl>
+    </div>
+    <p>If the attribute is not present, then its implicit return
+    value is "true". If a null string or empty string value is
+    given to attribute <a>'requiredFeatures'</a>, the attribute
+    returns "false".</p>
+    <p><a>'requiredFeatures'</a> is often
+    used in conjunction with the <a>'switch'</a> element. If the <a>'requiredFeatures'</a> is used in other
+    situations, then it represents a simple switch on the given
+    element whether to render the element or not.</p>
+    <h3 id="ConditionalProcessingRequiredExtensionsAttribute">The <span class='attr-name'>'requiredExtensions'</span>
+    attribute</h3>
+    <p>The <a>'requiredExtensions'</a>
+    attribute defines a list of required language extensions.
+    Language extensions are capabilities within a user agent that
+    go beyond the feature set defined in this specification. Each
+    extension is identified by an <a
+    href="linking.html#IRIReference">IRI reference</a>.</p>
+    <div class="adef-list">
+      <p>Definition of <span
+      class="adef">requiredExtensions</span>:</p>
+      <dl>
+        <dt id="RequiredExtensionsAttribute"><span class="adef">requiredExtensions</span> =
+        <em>list-of-extensions</em></dt>
+        <dd>The value is a list of <a
+        href="linking.html#IRIReference">IRI reference</a>s which
+        identify the required extensions, with the individual
+        values separated by white space. Determines whether all of
+        the named <em>extensions</em> are supported by the user
+        agent. If all of the given extensions are supported, then
+        the attribute evaluates to true; otherwise, the current
+        element and its children are skipped and thus will not be
+        rendered.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+      </dl>
+    </div>
+    <p>If a given <a href="linking.html#IRIReference">IRI
+    reference</a> contains white space within itself, that white
+    space must be escaped.</p>
+    <p>If the attribute is not present, then its implicit return
+    value is "true". If a null string or empty string value is
+    given to attribute <a>'requiredExtensions'</a>, the attribute
+    returns "false".</p>
+    <p><a>'requiredExtensions'</a> is often
+    used in conjunction with the <a>'switch'</a> element. If the <a>'requiredExtensions'</a> is used in other
+    situations, then it represents a simple switch on the given
+    element whether to render the element or not.</p>
+    <p>The IRI names for the extension should include versioning
+    information, such as "http://example.org/SVGExtensionXYZ/1.0",
+    so that script writers can distinguish between different
+    versions of a given extension.</p>
+
+    <h3 id="ConditionalProcessingSystemLanguageAttribute">The <span class="attr-name">'systemLanguage'</span> attribute</h3>
+    <p id="SystemLanguageAttribute">The attribute value is a comma-separated list of language
+    names as defined in <a href="http://www.ietf.org/rfc/bcp/bcp47.txt">BCP 47</a>
+    [<a href="refs.html#ref-BCP47">BCP47</a>].</p>
+    <p>Evaluates to "true" if one of the languages indicated by
+    user preferences exactly equals one of the languages given in
+    the value of this parameter, or if one of the languages
+    indicated by user preferences exactly equals a prefix of one of
+    the languages given in the value of this parameter such that
+    the first tag character following the prefix is "-".</p>
+    <p>Evaluates to "false" otherwise.</p>
+    <p>Note: This use of a prefix matching rule does not imply that
+    language tags are assigned to languages in such a way that it
+    is always true that if a user understands a language with a
+    certain tag, then this user will also understand all languages
+    with tags for which this tag is a prefix.</p>
+    <p>The prefix rule simply allows the use of prefix tags if this
+    is the case.</p>
+    <p>Implementation note: When making the choice of linguistic
+    preference available to the user, implementers should take into
+    account the fact that users are not familiar with the details
+    of language matching as described above, and should provide
+    appropriate guidance. As an example, users may assume that on
+    selecting "en-gb", they will be served any kind of English
+    document if British English is not available. The user
+    interface for setting user preferences should guide the user to
+    add "en" to get the best matching behavior.</p>
+    <p>Multiple languages MAY be listed for content that is
+    intended for multiple audiences. For example, content that is
+    presented simultaneously in the original Maori and English
+    versions, would call for:</p>
+    <center>
+      <code>&lt;text systemLanguage="mi, en"&gt;&lt;!-- content
+      goes here --&gt;&lt;/text&gt;</code>
+    </center>
+    <p>However, just because multiple languages are present within
+    the object on which the <a>'systemLanguage'</a> test
+    attribute is placed, this does not mean that it is intended for
+    multiple linguistic audiences. An example would be a beginner's
+    language primer, such as "A First Lesson in Latin," which is
+    clearly intended to be used by an English-literate audience. In
+    this case, the <a>'systemLanguage'</a> test attribute
+    should only include "en".</p>
+    <p>Authoring note: Authors should realize that if several
+    alternative language objects are enclosed in a <a>'switch'</a>, and none of them
+    matches, this may lead to situations where no content is
+    displayed. It is thus recommended to include a "catch-all"
+    choice at the end of such a <a>'switch'</a> which is acceptable in
+    all cases.</p>
+    <p>For the <a>'systemLanguage'</a>
+    attribute: <span class="anim-target"><a
+    href="animate.html#Animatable">Animatable</a>: no.</span></p>
+    <p>If the attribute is not present, then its implicit return
+    value is "true". If a null string or empty string value is
+    given to attribute <a>'systemLanguage'</a>, the attribute returns
+    "false".</p>
+    <p><a>'systemLanguage'</a> is often used
+    in conjunction with the <a>'switch'</a> element. If the <a>'systemLanguage'</a> is used in other
+    situations, then it represents a simple switch on the given
+    element whether to render the element or not.</p>
+
+    <h3 id="ApplicabilityOfTestAttributes">Applicability of test attributes</h3>
+    <p>The following list describes the applicability of the test
+    attributes to the elements that do not directly produce
+    rendering.</p>
+    <ul>
+      <li>the test attributes do not effect the
+      <a>'mask element'</a>, <a>'clipPath'</a>, <a>'linearGradient'</a>,
+      <a>'radialGradient'</a> and <a>'pattern'</a> elements. The
+      test attributes on a referenced element do not affect the
+      rendering of the referencing element.</li>
+      <li>the test attributes do not effect the <a>'defs'</a>, and <a>'cursor element'</a> elements as they are not
+      part of the rendering tree.</li>
+      <li>an animation element (<a>'animate'</a>, <a>'animateMotion'</a>, <a>'animateTransform'</a>, <a>'animateColor'</a> and <a>'set'</a>) will never be triggered if
+      it has a test attribute that evaluates to false.</li>
+    </ul>
+
+    <h2 id='ExternalResourcesRequired'>Specifying whether external resources are required for
+    proper rendering</h2>
+    <p>Documents often reference and use the contents of other
+    files (and other Web resources) as part of their rendering. In
+    some cases, authors want to specify that particular resources
+    are required for a document to be considered correct.</p>
+    <p>Attribute <a>'externalResourcesRequired'</a> is available
+    on all container elements and to all elements which potentially
+    can reference external resources. It specifies whether
+    referenced resources that are not part of the current document
+    are required for proper rendering of the given container
+    element or graphics element.</p>
+    <div class="adef-list">
+      <p>Attribute definition:</p>
+      <dl>
+        <dt id='ExternalResourcesRequiredAttribute'><span class="adef">externalResourcesRequired</span> =
+        "<span class="attr-value">false | true</span>"</dt>
+        <dd>
+          <dl>
+            <dt><span class="attr-value">false</span></dt>
+            <dd>(The default value.) Indicates that resources
+            external to the current document are optional. Document
+            rendering can proceed even if external resources are
+            unavailable to the current element and its
+            descendants.</dd>
+            <dt><span class="attr-value">true</span></dt>
+            <dd>Indicates that resources external to the current
+            document are required. If an external resource is not
+            available, progressive rendering is suspended, the
+            document's <a
+            href="interact.html#LoadEvent">SVGLoad</a> event is not
+            fired and the animation timeline does not begin until
+            that resource and all other required resources become
+            available, have been parsed and are ready to be
+            rendered. If a timeout event occurs on a required
+            resource, then the document goes into an error state
+            (see <a href="implnote.html#ErrorProcessing">Error
+            processing</a>). The document remains in an error state
+            until all required resources become available.</dd>
+          </dl>
+        </dd>
+      </dl>
+    </div>
+    <p>This attribute applies to all types of resource references,
+    including style sheets, color profiles (see <a
+    href="color.html#ColorProfileDescriptions">Color profile
+    descriptions</a>) and fonts specified by an <a
+    href="intro.html#TermIRIReference">IRI reference</a> using a <a>'font-face'</a> element or a CSS
+    @font-face specification. In particular, if an element sets
+    <span
+    class="attr-value">externalResourcesRequired="true"</span>,
+    then all style sheets must be available since any style sheet
+    might affect the rendering of that element.</p>
+    <p>Attribute <a>'externalResourcesRequired'</a> is not
+    inheritable (from a sense of attribute value inheritance), but
+    if set on a container element, its value will apply to all
+    elements within the container.</p>
+    <p>Because setting <span
+    class="attr-value">externalResourcesRequired="true"</span> on a
+    container element will have the effect of disabling progressive
+    display of the contents of that container, if that container
+    includes elements that reference external resources, tools that generate
+    SVG content are cautioned against simply setting <span
+    class="attr-value">externalResourcesRequired="true"</span> on
+    the <a>outermost svg element</a> on a universal
+    basis. Instead, it is better to specify <span
+    class="attr-value">externalResourcesRequired="true"</span> on
+    those particular graphics elements or container elements which
+    specifically need the availability of external resources in order to
+    render properly.</p>
+    <p>For <a>'externalResourcesRequired'</a>: <span
+    class="anim-target"><a
+    href="animate.html#Animatable">Animatable</a>: no.</span></p>
+
+    <h2 id="CommonAttributes">Common attributes</h2>
+
+    <h3 id="Core.attrib">Attributes common to all elements: <span class='attr-name'>'id'</span> and <span class='attr-name'>'xml:base'</span></h3>
+    <p>The <a>'id'</a> and <a>'xml:base'</a> attributes are available on
+    all SVG elements:</p>
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="IDAttribute"><span
+        class="adef">id</span> = "<span
+        class="attr-value">name</span>"</dt>
+        <dd>Standard XML attribute for assigning a unique
+        <em>name</em> to an element. Refer to the <a href="http://www.w3.org/TR/2008/REC-xml-20081126/"><cite>Extensible
+        Markup Language (XML) 1.0</cite></a> Recommendation [<a href="refs.html#ref-XML10">XML10</a>].<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="XMLBaseAttribute"><span
+        class="adef">xml:base</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeIRI">&lt;iri&gt;</a></span>"</dt>
+        <dd>Specifies a base IRI other than the base IRI of the
+        document or external entity. Refer to the <a href="http://www.w3.org/TR/2009/REC-xmlbase-20090128/"><cite>XML Base</cite></a>
+        specification [<a href="refs.html#ref-XML-BASE">XML-BASE</a>].<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+      </dl>
+    </div>
+
+    <h3 id="LangSpaceAttrs">The <span class='attr-name'>'xml:lang'</span> and
+    <span class='attr-name'>'xml:space'</span> attributes</h3>
+    Elements that might contain character data content have
+    attributes <a>'xml:lang'</a> and <a>'xml:space'</a>.
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="XMLLangAttribute"><span
+        class="adef">xml:lang</span> = "<span
+        class="attr-value">languageID</span>"</dt>
+        <dd>Standard XML attribute to specify the language (e.g.,
+        English) used in the contents and attribute values of
+        particular elements. Refer to the <a href="http://www.w3.org/TR/2008/REC-xml-20081126/"><cite>Extensible Markup
+        Language (XML) 1.0</cite></a> Recommendation [<a href="refs.html#ref-XML10">XML10</a>].<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="XMLSpaceAttribute"> <span
+        class="adef">xml:space</span> = "<span
+        class="attr-value">{default | preserve}</span>"</dt>
+        <dd>Standard XML attribute to specify whether white space
+        is preserved in character data. The only possible values
+        are <span class='attr-value'>'default'</span> and <span class='attr-value'>'preserve'</span>. Refer to the
+        <a href="http://www.w3.org/TR/2008/REC-xml-20081126/"><cite>Extensible Markup Language (XML) 1.0</cite></a>
+	Recommendation [<a href="refs.html#ref-XML10">XML10</a>] and to the
+        discussion <a href="text.html#WhiteSpace">white space
+        handling</a> in SVG.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+      </dl>
+    </div>
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<h3 id="InterfaceSVGDocument">Interface SVGDocument</h3>
+
+<edit:interface name='::svg::SVGDocument'/>
+
+<h3 id="InterfaceSVGSVGElement">Interface SVGSVGElement</h3>
+
+<edit:with element='svg'>
+<edit:interface name='::svg::SVGSVGElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGGElement">Interface SVGGElement</h3>
+
+<edit:with element='g'>
+<edit:interface name='::svg::SVGGElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGDefsElement">Interface SVGDefsElement</h3>
+
+<edit:with element='defs'>
+<edit:interface name='::svg::SVGDefsElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGDescElement">Interface SVGDescElement</h3>
+
+<edit:with element='desc'>
+<edit:interface name='::svg::SVGDescElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGTitleElement">Interface SVGTitleElement</h3>
+
+<edit:with element='title'>
+<edit:interface name='::svg::SVGTitleElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGSymbolElement">Interface SVGSymbolElement</h3>
+
+<edit:with element='symbol'>
+<edit:interface name='::svg::SVGSymbolElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGUseElement">Interface SVGUseElement</h3>
+
+<edit:with element='use'>
+<edit:interface name='::svg::SVGUseElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGElementInstance">Interface SVGElementInstance</h3>
+
+<edit:interface name='::svg::SVGElementInstance'/>
+
+<h3 id="InterfaceSVGElementInstanceList">Interface SVGElementInstanceList</h3>
+
+<edit:interface name='::svg::SVGElementInstanceList'/>
+
+<h3 id="InterfaceSVGImageElement">Interface SVGImageElement</h3>
+
+<edit:with element='image'>
+<edit:interface name='::svg::SVGImageElement'/>
+</edit:with>
+
+<h3 id="InterfaceSVGSwitchElement">Interface SVGSwitchElement</h3>
+
+<edit:with element='switch'>
+<edit:interface name='::svg::SVGSwitchElement'/>
+</edit:with>
+
+<h3 id="InterfaceGetSVGDocument">Interface GetSVGDocument</h3>
+
+<edit:interface name='::svg::GetSVGDocument'/>
+
+</body>
+</html>
