@@ -16,130 +16,151 @@
 
 <h2 id="Introduction">Introduction</h2>
 
-    <p>For all media, the <a>SVG canvas</a>
-    describes "the space where the SVG content is rendered." The
-    canvas is infinite for each dimension of the space, but
-    rendering occurs relative to a finite rectangular region of the
-    canvas. This finite rectangular region is called the <a>SVG viewport</a>.
-     For <a href='http://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group'>visual media</a>
-    ([<a href='refs.html#ref-CSS2'>CSS2</a>], section 7.3.1)
-    the SVG viewport is the viewing area where the user sees the SVG content.</p>
-    <p>The size of the SVG viewport (i.e., its width and height) is
-    determined by a negotiation process (see <a
-    href="#ViewportSpace">Establishing the size of the initial
-    viewport</a>) between the SVG document fragment and its parent
-    (real or implicit). Once that negotiation process is completed,
-    the SVG user agent is provided the following information:</p>
-    <ul>
-      <li>a number (usually an integer) that represents the width
-      in "pixels" of the viewport</li>
-      <li>a number (usually an integer) that represents the height
-      in "pixels" of the viewport</li>
-      <li>(highly desirable but not required) a real number value
-      that indicates the size in real world units, such as
-      millimeters, of a "pixel" (i.e., a <em>px</em> unit
-      <a href='http://www.w3.org/TR/2008/REC-CSS2-20080411/syndata.html#length-units'>as defined in CSS2</a>
-      ([<a href="refs.html#ref-CSS2">CSS2</a>], section 4.3.2)</li>
-    </ul>
-    <p id="SVGInitialUserCoordinateSystem">Using the above information, the SVG user agent determines
-    the <a>viewport</a>, an initial <a>viewport coordinate system</a> and an
-    initial <a>user coordinate system</a>
-    such that the two coordinates systems are identical. Both
-    coordinates systems are established such that the origin
-    matches the origin of the viewport (for the root viewport, the
-    viewport origin is at the top/left corner), and one unit in the
-    initial coordinate system equals one "pixel" in the viewport.
-    (See <a href="coords.html#InitialCoordinateSystem">Initial
-    coordinate system</a>.) The viewport coordinate system is also
-    called <a>viewport space</a> and the user coordinate system is also called
-    <a>user space</a>.</p>
-    <p id="LengthsInSVG">Lengths in SVG can be specified as:</p>
-    <ul>
-      <li>(if no unit identifier is provided) values in user space
-      — for example, "15"</li>
-      <li>(if a unit identifier is provided) a length expressed as
-      an absolute or relative unit measure — for example, "15mm"
-      or "5em"</li>
-    </ul>
-    <p>The supported length unit identifiers are: em, ex, px, pt,
-    pc, cm, mm, in, and percentages.</p>
-    <p>A new user space (i.e., a new current coordinate system) can
-    be established at any place within an SVG document fragment by
-    specifying <a>transformations</a> in the
-    form of <a>transformation matrices</a>
-    or simple transformation operations such as rotation, skewing,
-    scaling and translation. Establishing new user spaces via <a
-    href="#EstablishingANewUserSpace">coordinate system
-    transformations</a> are fundamental operations to 2D graphics
-    and represent the usual method of controlling the size,
-    position, rotation and skew of graphic objects.</p>
-    <p>New viewports also can be established. By <a
-    href="#EstablishingANewViewport">establishing a new
-    viewport</a>, you can redefine the meaning of percentages units
-    and provide a new reference rectangle for "fitting" a graphic
-    into a particular rectangular area. ("Fit" means that a given
-    graphic is transformed in such a way that its bounding box in
-    user space aligns exactly with the edges of a given
-    viewport.)</p>
-    <h2 id="ViewportSpace">The initial viewport</h2>
-    <p>The SVG user agent negotiates with its parent user agent to
-    determine the viewport into which the SVG user agent can render
-    the document. In some circumstances, SVG content will be
-    embedded (<a href="concepts.html#UsageOptions">by reference or
-    inline</a>) within a containing document. This containing
-    document might include attributes, properties and/or other
-    parameters (explicit or implicit) which specify or provide
-    hints about the dimensions of the viewport for the SVG content.
-    SVG content itself optionally can provide information about the
-    appropriate viewport region for the content via the <a>'svg/width'</a>
-    and <a>'svg/height'</a> XML attributes on the <a>outermost svg element</a>.
-    The negotiation process uses any information provided by the
-    containing document and the SVG content itself to choose the
-    viewport location and size.</p>
-    <p>The <a>'svg/width'</a> attribute on the
-    <a>outermost svg element</a>
-    establishes the viewport's width, unless the following
-    conditions are met:</p>
-    <ul>
-      <li>the SVG content is a separately stored resource that is
-      embedded by reference (such as the <span
-      class="element-name">'object'</span> element in XHTML [<a
-      href="refs.html#ref-XHTML">XHTML</a>]), or the SVG
-      content is embedded inline within a containing document;</li>
-      <li>and the referencing element or containing document is
-      styled using CSS [<a href="refs.html#ref-CSS2">CSS2</a>] or
-      XSL [<a href="refs.html#ref-XSL">XSL</a>];</li>
-      <li>and there are <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visuren.html#positioning-scheme">CSS-compatible positioning properties</a>
-      ([<a href="refs.html#ref-CSS2">CSS2</a>], section 9.3)
-       specified on the referencing element (e.g.,
-      the <span class="element-name">'object'</span> element) or on
-      the containing document's <a>outermost svg element</a> that are sufficient
-      to establish the width of the viewport.</li>
-    </ul>
-    <p>Under these conditions, the positioning properties establish
-    the viewport's width.</p>
-    <p>Similarly, if there are
-    <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visuren.html#positioning-scheme">positioning properties</a>
-    specified on the referencing element or on the
-    <a>outermost svg element</a> that are
-    sufficient to establish the height of the viewport, then these
-    positioning properties establish the viewport's height;
-    otherwise, the <a>'svg/height'</a> attribute
-    on the <a>outermost svg element</a>
-    establishes the viewport's height.</p>
-    <p>If the <a>'svg/width'</a> or <a>'svg/height'</a>
-     attributes on the <a>outermost svg element</a>
-    are in <a>user units</a> (i.e., no unit
-    identifier has been provided), then the value is assumed to be
-    equivalent to the same number of "px" units (see <a
-    href="coords.html#Units">Units</a>).</p>
-    <p>In the following example, an SVG graphic is embedded inline
-    within a parent XML document which is formatted using CSS
-    layout rules. Since CSS positioning properties are not provided
-    on the <a>outermost svg element</a>,
-    the <span class="attr-value">width="100px"</span> and
-    <span class="attr-value">height="200px"</span> attributes
-    determine the size of the initial viewport:</p>
+<p>For all media, the <a>SVG canvas</a>
+describes "the space where the SVG content is rendered." The
+canvas is infinite for each dimension of the space, but
+rendering occurs relative to a finite rectangular region of the
+canvas. This finite rectangular region is called the <a>SVG viewport</a>.
+For <a href='http://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group'>visual media</a>
+([<a href='refs.html#ref-CSS2'>CSS2</a>], section 7.3.1)
+the SVG viewport is the viewing area where the user sees the SVG content.</p>
+
+<p>The size of the SVG viewport (i.e., its width and height) is
+determined by a negotiation process (see <a
+href="#ViewportSpace">Establishing the size of the initial
+viewport</a>) between the SVG document fragment and its parent
+(real or implicit). Once that negotiation process is completed,
+the SVG user agent is provided the following information:</p>
+
+<ul>
+  <li>a number (usually an integer) that represents the width
+  in "pixels" of the viewport</li>
+
+  <li>a number (usually an integer) that represents the height
+  in "pixels" of the viewport</li>
+
+  <li>(highly desirable but not required) a real number value
+  that indicates the size in real world units, such as
+  millimeters, of a "pixel" (i.e., a <em>px</em> unit
+  <a href='http://www.w3.org/TR/2008/REC-CSS2-20080411/syndata.html#length-units'>as defined in CSS2</a>
+  ([<a href="refs.html#ref-CSS2">CSS2</a>], section 4.3.2)</li>
+</ul>
+
+<p id="SVGInitialUserCoordinateSystem">Using the above information, the SVG user agent determines
+the <a>viewport</a>, an initial <a>viewport coordinate system</a> and an
+initial <a>user coordinate system</a>
+such that the two coordinates systems are identical. Both
+coordinates systems are established such that the origin
+matches the origin of the viewport (for the root viewport, the
+viewport origin is at the top/left corner), and one unit in the
+initial coordinate system equals one "pixel" in the viewport.
+(See <a href="coords.html#InitialCoordinateSystem">Initial
+coordinate system</a>.) The viewport coordinate system is also
+called <a>viewport space</a> and the user coordinate system is also called
+<a>user space</a>.</p>
+
+<p id="LengthsInSVG">Lengths in SVG can be specified as:</p>
+
+<ul>
+  <li>(if no unit identifier is provided) values in user space
+  — for example, "15"</li>
+  <li>(if a unit identifier is provided) a length expressed as
+  an absolute or relative unit measure — for example, "15mm"
+  or "5em"</li>
+</ul>
+
+<p>The supported length unit identifiers are: em, ex, px, pt,
+pc, cm, mm, in, and percentages.</p>
+
+<p>A new user space (i.e., a new current coordinate system) can
+be established at any place within an SVG document fragment by
+specifying <a>transformations</a> in the
+form of <a>transformation matrices</a>
+or simple transformation operations such as rotation, skewing,
+scaling and translation. Establishing new user spaces via <a
+href="#EstablishingANewUserSpace">coordinate system
+transformations</a> are fundamental operations to 2D graphics
+and represent the usual method of controlling the size,
+position, rotation and skew of graphic objects.</p>
+
+<p>New viewports also can be established. By <a
+href="#EstablishingANewViewport">establishing a new
+viewport</a>, you can redefine the meaning of percentages units
+and provide a new reference rectangle for "fitting" a graphic
+into a particular rectangular area. ("Fit" means that a given
+graphic is transformed in such a way that its bounding box in
+user space aligns exactly with the edges of a given
+viewport.)</p>
+
+<h2 id="ViewportSpace">The initial viewport</h2>
+
+<p>The SVG user agent negotiates with its parent user agent to
+determine the viewport into which the SVG user agent can render
+the document. In some circumstances, SVG content will be
+embedded (<a href="concepts.html#UsageOptions">by reference or
+inline</a>) within a containing document. This containing
+document might include attributes, properties and/or other
+parameters (explicit or implicit) which specify or provide
+hints about the dimensions of the viewport for the SVG content.
+SVG content itself optionally can provide information about the
+appropriate viewport region for the content via the <a>'svg/width'</a>
+and <a>'svg/height'</a> XML attributes on the <a>outermost svg element</a>.
+The negotiation process uses any information provided by the
+containing document and the SVG content itself to choose the
+viewport location and size.</p>
+
+<p>The <a>'svg/width'</a> attribute on the
+<a>outermost svg element</a>
+establishes the viewport's width, unless the following
+conditions are met:</p>
+
+<ul>
+  <li>the SVG content is a separately stored resource that is
+  embedded by reference (such as the <span
+  class="element-name">'object'</span> element in XHTML [<a
+  href="refs.html#ref-XHTML">XHTML</a>]), or the SVG
+  content is embedded inline within a containing document;</li>
+
+  <li>and the referencing element or containing document is
+  styled using CSS [<a href="refs.html#ref-CSS2">CSS2</a>] or
+  XSL [<a href="refs.html#ref-XSL">XSL</a>];</li>
+
+  <li>and there are <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visuren.html#positioning-scheme">CSS-compatible positioning properties</a>
+  ([<a href="refs.html#ref-CSS2">CSS2</a>], section 9.3)
+   specified on the referencing element (e.g.,
+  the <span class="element-name">'object'</span> element) or on
+  the containing document's <a>outermost svg element</a> that are sufficient
+  to establish the width of the viewport.</li>
+</ul>
+
+<p>Under these conditions, the positioning properties establish
+the viewport's width.</p>
+
+<p>Similarly, if there are
+<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visuren.html#positioning-scheme">positioning properties</a>
+specified on the referencing element or on the
+<a>outermost svg element</a> that are
+sufficient to establish the height of the viewport, then these
+positioning properties establish the viewport's height;
+otherwise, the <a>'svg/height'</a> attribute
+on the <a>outermost svg element</a>
+establishes the viewport's height.</p>
+
+<p>If the <a>'svg/width'</a> or <a>'svg/height'</a>
+ attributes on the <a>outermost svg element</a>
+are in <a>user units</a> (i.e., no unit
+identifier has been provided), then the value is assumed to be
+equivalent to the same number of "px" units (see <a
+href="coords.html#Units">Units</a>).</p>
+
+<p>In the following example, an SVG graphic is embedded inline
+within a parent XML document which is formatted using CSS
+layout rules. Since CSS positioning properties are not provided
+on the <a>outermost svg element</a>,
+the <span class="attr-value">width="100px"</span> and
+<span class="attr-value">height="200px"</span> attributes
+determine the size of the initial viewport:</p>
+
 <pre>
 &lt;?xml version="1.0" standalone="yes"?&gt;
 &lt;parent xmlns="http://some.url"&gt;
@@ -153,299 +174,325 @@
    
 &lt;/parent&gt;
 </pre>
-    <p>The initial clipping path for the SVG document fragment is
-    established according to the rules described in <a
-    href="masking.html#InitialClippingPath">The initial clipping
-    path</a>.</p>
 
-    <h2 id="InitialCoordinateSystem">The initial coordinate system</h2>
-    <p>For the <a>outermost svg element</a>, the SVG user
-    agent determines an initial <a>viewport coordinate system</a> and an
-    initial <a>user coordinate system</a> such that the
-    two coordinates systems are identical. The origin of both
-    coordinate systems is at the origin of the viewport, and one
-    unit in the initial coordinate system equals one "pixel" (i.e.,
-    a <em>px</em> unit <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/syndata.html#length-units">as defined in CSS2</a>
-    ([<a href="refs.html#ref-CSS2">CSS2</a>], section 4.3.2)
-    in the viewport. In most cases, such as
-    stand-alone SVG documents or SVG document fragments embedded
-    (<a href="concepts.html#UsageOptions">by reference or
-    inline</a>) within XML parent documents where the parent's
-    layout is determined by CSS [<a href="refs.html#ref-CSS2">CSS2</a>] or
-    XSL [<a href="refs.html#ref-XSL">XSL</a>], the initial viewport
-    coordinate system (and therefore the initial user coordinate
-    system) has its origin at the top/left of the viewport, with
-    the positive x-axis pointing towards the right, the positive
-    y-axis pointing down, and text rendered with an "upright"
-    orientation, which means glyphs are oriented such that Roman
-    characters and full-size ideographic characters for Asian
-    scripts have the top edge of the corresponding glyphs oriented
-    upwards and the right edge of the corresponding glyphs oriented
-    to the right.</p>
-    <p>If the SVG implementation is part of a user agent which
-    supports styling XML documents using CSS2 compatible
-    <em>px</em> units, then the SVG user agent should get its
-    initial value for the size of a <em>px</em> unit in real world
-    units to match the value used for other XML styling operations;
-    otherwise, if the user agent can determine the size of a
-    <em>px</em> unit from its environment, it should use that
-    value; otherwise, it should choose an appropriate size for one
-    <em>px</em> unit. In all cases, the size of a <em>px</em> must
-    be in conformance with <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/syndata.html#length-units">the rules described in CSS2</a>
-    ([<a href="refs.html#ref-CSS2">CSS2</a>], section 4.3.2).</p>
+<p>The initial clipping path for the SVG document fragment is
+established according to the rules described in <a
+href="masking.html#InitialClippingPath">The initial clipping
+path</a>.</p>
 
-    <p id="ExampleInitialCoords"><span class="example-ref">Example InitialCoords</span> below
-    shows that the initial coordinate system has the origin at the
-    top/left with the x-axis pointing to the right and the y-axis
-    pointing down. The initial user coordinate system has one user
-    unit equal to the parent (implicit or explicit) user agent's
-    "pixel".</p>
+<h2 id="InitialCoordinateSystem">The initial coordinate system</h2>
+
+<p>For the <a>outermost svg element</a>, the SVG user
+agent determines an initial <a>viewport coordinate system</a> and an
+initial <a>user coordinate system</a> such that the
+two coordinates systems are identical. The origin of both
+coordinate systems is at the origin of the viewport, and one
+unit in the initial coordinate system equals one "pixel" (i.e.,
+a <em>px</em> unit <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/syndata.html#length-units">as defined in CSS2</a>
+([<a href="refs.html#ref-CSS2">CSS2</a>], section 4.3.2)
+in the viewport. In most cases, such as
+stand-alone SVG documents or SVG document fragments embedded
+(<a href="concepts.html#UsageOptions">by reference or
+inline</a>) within XML parent documents where the parent's
+layout is determined by CSS [<a href="refs.html#ref-CSS2">CSS2</a>] or
+XSL [<a href="refs.html#ref-XSL">XSL</a>], the initial viewport
+coordinate system (and therefore the initial user coordinate
+system) has its origin at the top/left of the viewport, with
+the positive x-axis pointing towards the right, the positive
+y-axis pointing down, and text rendered with an "upright"
+orientation, which means glyphs are oriented such that Roman
+characters and full-size ideographic characters for Asian
+scripts have the top edge of the corresponding glyphs oriented
+upwards and the right edge of the corresponding glyphs oriented
+to the right.</p>
+
+<p>If the SVG implementation is part of a user agent which
+supports styling XML documents using CSS2 compatible
+<em>px</em> units, then the SVG user agent should get its
+initial value for the size of a <em>px</em> unit in real world
+units to match the value used for other XML styling operations;
+otherwise, if the user agent can determine the size of a
+<em>px</em> unit from its environment, it should use that
+value; otherwise, it should choose an appropriate size for one
+<em>px</em> unit. In all cases, the size of a <em>px</em> must
+be in conformance with <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/syndata.html#length-units">the rules described in CSS2</a>
+([<a href="refs.html#ref-CSS2">CSS2</a>], section 4.3.2).</p>
+
+<p id="ExampleInitialCoords"><span class="example-ref">Example InitialCoords</span> below
+shows that the initial coordinate system has the origin at the
+top/left with the x-axis pointing to the right and the y-axis
+pointing down. The initial user coordinate system has one user
+unit equal to the parent (implicit or explicit) user agent's
+"pixel".</p>
 
 <edit:example href='images/coords/InitialCoords.svg' name='InitialCoords' description="SVG's initial coordinate system" image='yes' link='yes'/>
 
-    <h2 id="EstablishingANewUserSpace">Coordinate system transformations</h2>
-    <p>A new user space (i.e., a new current coordinate system) can
-    be established by specifying <a>transformations</a> in the form of a <a>'transform'</a>
-    attribute on a container element or graphics element or a
-    <a>'viewBox'</a> attribute on an
-    <a>'svg'</a>,
-    <a>'symbol'</a>,
-    <a>'marker element'</a>,
-    <a>'pattern'</a> and the
-    <a>'view'</a> element.
-    The <a>'transform'</a> and <a>'viewBox'</a> attributes transform user
-    space coordinates and lengths on sibling attributes on the
-    given element (see <a
-    href="coords.html#TransformAttributeEffectOnSiblingAttributes">effect
-    of the <span class="attr-name">'transform'</span> attribute on
-    sibling attributes</a> and <a
-    href="coords.html#ViewBoxAttributeEffectOnSiblingAttributes">effect
-    of the <span class="attr-name">'viewBox'</span> attribute on
-    sibling attributes</a>) and all of its descendants.
-    Transformations can be nested, in which case the effect of the
-    transformations are cumulative.</p>
-    <p id="ExampleOrigCoordSys"><span class="example-ref">Example OrigCoordSys</span> below
-    shows a document without transformations. The text string is
-    specified in the <a
-    href="coords.html#InitialCoordinateSystem">initial coordinate
-    system</a>.</p>
+<h2 id="EstablishingANewUserSpace">Coordinate system transformations</h2>
+
+<p>A new user space (i.e., a new current coordinate system) can
+be established by specifying <a>transformations</a> in the form of a <a>'transform'</a>
+attribute on a container element or graphics element or a
+<a>'viewBox'</a> attribute on an
+<a>'svg'</a>,
+<a>'symbol'</a>,
+<a>'marker element'</a>,
+<a>'pattern'</a> and the
+<a>'view'</a> element.
+The <a>'transform'</a> and <a>'viewBox'</a> attributes transform user
+space coordinates and lengths on sibling attributes on the
+given element (see <a
+href="coords.html#TransformAttributeEffectOnSiblingAttributes">effect
+of the <span class="attr-name">'transform'</span> attribute on
+sibling attributes</a> and <a
+href="coords.html#ViewBoxAttributeEffectOnSiblingAttributes">effect
+of the <span class="attr-name">'viewBox'</span> attribute on
+sibling attributes</a>) and all of its descendants.
+Transformations can be nested, in which case the effect of the
+transformations are cumulative.</p>
+
+<p id="ExampleOrigCoordSys"><span class="example-ref">Example OrigCoordSys</span> below
+shows a document without transformations. The text string is
+specified in the <a
+href="coords.html#InitialCoordinateSystem">initial coordinate
+system</a>.</p>
 
 <edit:example href='images/coords/OrigCoordSys.svg' name='OrigCoordSys' description="SVG's initial coordinate system" image='yes' link='yes'/>
 
-    <p id="ExampleNewCoordSys"><span class="example-ref">Example NewCoordSys</span>
-    establishes a new user coordinate system by specifying <span
-    class="attr-value">transform="translate(50,50)"</span> on the
-    third <a>'g'</a> element below. The
-    new user coordinate system has its origin at location (50,50)
-    in the original coordinate system. The result of this
-    transformation is that the coordinate (30,30) in the new user
-    coordinate system gets mapped to coordinate (80,80) in the
-    original coordinate system (i.e., the coordinates have been
-    translated by 50 units in X and 50 units in Y).</p>
+<p id="ExampleNewCoordSys"><span class="example-ref">Example NewCoordSys</span>
+establishes a new user coordinate system by specifying <span
+class="attr-value">transform="translate(50,50)"</span> on the
+third <a>'g'</a> element below. The
+new user coordinate system has its origin at location (50,50)
+in the original coordinate system. The result of this
+transformation is that the coordinate (30,30) in the new user
+coordinate system gets mapped to coordinate (80,80) in the
+original coordinate system (i.e., the coordinates have been
+translated by 50 units in X and 50 units in Y).</p>
 
 <edit:example href='images/coords/NewCoordSys.svg' name='NewCoordSys' description="New user coordinate system" image='yes' link='yes'/>
 
-    <p id="ExampleRotateScale"><span class="example-ref">Example RotateScale</span>
-    illustrates simple <strong>rotate</strong> and
-    <strong>scale</strong> transformations. The example defines two
-    new coordinate systems:</p>
-    <ul>
-      <li>one which is the result of a translation by 50 units in X
-      and 30 units in Y, followed by a rotation of 30 degrees</li>
-      <li>another which is the result of a translation by 200 units
-      in X and 40 units in Y, followed by a scale transformation of
-      1.5.</li>
-    </ul>
+<p id="ExampleRotateScale"><span class="example-ref">Example RotateScale</span>
+illustrates simple <strong>rotate</strong> and
+<strong>scale</strong> transformations. The example defines two
+new coordinate systems:</p>
+
+<ul>
+  <li>one which is the result of a translation by 50 units in X
+  and 30 units in Y, followed by a rotation of 30 degrees</li>
+
+  <li>another which is the result of a translation by 200 units
+  in X and 40 units in Y, followed by a scale transformation of
+  1.5.</li>
+</ul>
 
 <edit:example href='images/coords/RotateScale.svg' name='RotateScale' description="Rotate and scale transforms" image='yes' link='yes'/>
 
-    <p id="ExampleSkew"><span class="example-ref">Example Skew</span> defines two
-    coordinate systems which are <strong>skewed</strong> relative
-    to the origin coordinate system.</p>
+<p id="ExampleSkew"><span class="example-ref">Example Skew</span> defines two
+coordinate systems which are <strong>skewed</strong> relative
+to the origin coordinate system.</p>
 
 <edit:example href='images/coords/Skew.svg' name='Skew' description="Show effects of skewX and skewY" image='yes' link='yes'/>
 
-    <p id="TransformMatrixDefined">Mathematically, all transformations can be represented as
-    3x3 <a>transformation matrices</a> of
-    the following form:<br />
-     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-    src="images/coords/Matrix.png"
-    alt="3-by-3 transformation matrix" width="104"
-    height="83" /></p>
-    <p>Since only six values are used in the above 3x3 matrix, a
-    transformation matrix is also expressed as a vector: <strong>[a
-    b c d e f]</strong>.</p>
-    <p>Transformations map coordinates and lengths from a new
-    coordinate system into a previous coordinate system:<br />
-     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-    src="images/coords/MatrixMultiply.png"
-    alt="3-by-3 transformation matrix" width="408"
-    height="83" /></p>
-    <p>Simple transformations are represented in matrix form as
-    follows:</p>
-    <ul>
-      <li id="TranslationDefined">
-      Translation is equivalent to the matrix<br />
-       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-      src="images/coords/MatrixTranslate.png"
-      alt="Translation matrix" width="104" height="83" /><br />
-       or <strong>[1 0 0 1 tx ty]</strong>, where <em>tx</em> and
-      <em>ty</em> are the distances to translate coordinates in
-      <em>X</em> and <em>Y</em>, respectively.<br />
-      <br />
-      </li>
-      <li id="ScalingDefined"> Scaling is
-      equivalent to the matrix<br />
-       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-      src="images/coords/MatrixScale.png" alt="Scale matrix"
-      width="104" height="83" /><br />
-       or <strong>[sx 0 0 sy 0 0]</strong>. One unit in the
-      <em>X</em> and <em>Y</em> directions in the new coordinate
-      system equals <em>sx</em> and <em>sy</em> units in the
-      previous coordinate system, respectively.<br />
-      <br />
-      </li>
-      <li id="RotationDefined"> Rotation
-      about the origin is equivalent to the matrix<br />
-       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-      src="images/coords/MatrixRotate.png" alt="Rotation matrix"
-      width="169" height="83" /><br />
-       or <strong>[cos(a) sin(a) -sin(a) cos(a) 0 0]</strong>,
-      which has the effect of rotating the coordinate system axes
-      by angle <em>a</em>.<br />
-      <br />
-      </li>
-      <li id="SkewXDefined"> A skew
-      transformation along the x-axis is equivalent to the
-      matrix<br />
-       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-      src="images/coords/MatrixSkewX.png" alt="SkewX matrix"
-      width="131" height="83" /><br />
-       or <strong>[1 0 tan(a) 1 0 0]</strong>, which has the effect
-      of skewing X coordinates by angle <em>a</em>.<br />
-      <br />
-      </li>
-      <li id="SkewYDefined"> A skew
-      transformation along the y-axis is equivalent to the
-      matrix<br />
-       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-      src="images/coords/MatrixSkewY.png" alt="SkewY matrix"
-      width="131" height="83" /><br />
-       or <strong>[1 tan(a) 0 1 0 0]</strong>, which has the effect
-      of skewing Y coordinates by angle <em>a</em>.<br />
-      <br />
-      </li>
-    </ul>
+<p id="TransformMatrixDefined">Mathematically, all transformations can be represented as
+3x3 <a>transformation matrices</a> of
+the following form:<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
+src="images/coords/Matrix.png"
+alt="3-by-3 transformation matrix" width="104"
+height="83" /></p>
 
-    <h2 id="NestedTransformations">Nested transformations</h2>
-    <p>Transformations can be nested to any level. The effect of
-    nested transformations is to post-multiply (i.e., concatenate)
-    the subsequent transformation matrices onto previously defined
-    transformations:<br />
-     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-    src="images/coords/MatrixNested.png"
-    alt="3-by-3 matrix concatenation" width="359"
-    height="83" /></p>
-    <p>For each given element, the accumulation of all
-    transformations that have been defined on the given element and
-    all of its ancestors up to and including the element that
-    established the current viewport (usually, the <a>'svg'</a>
-     element which is the most
-    immediate ancestor to the given element) is called the
-    <a>current transformation matrix</a> or
-    <a>CTM</a>. The CTM thus represents the
-    mapping of current user coordinates to viewport
-    coordinates:<br />
-     <img src="images/coords/CTM.png"
-    alt="current transformation matrix: CTM" width="483"
-    height="179" /></p>
+<p>Since only six values are used in the above 3x3 matrix, a
+transformation matrix is also expressed as a vector: <strong>[a
+b c d e f]</strong>.</p>
 
-    <p id="ExampleNested"><span class="example-ref">Example Nested</span> illustrates
-    nested transformations.</p>
+<p>Transformations map coordinates and lengths from a new
+coordinate system into a previous coordinate system:<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
+src="images/coords/MatrixMultiply.png"
+alt="3-by-3 transformation matrix" width="408"
+height="83" /></p>
+
+<p>Simple transformations are represented in matrix form as
+follows:</p>
+
+<ul>
+  <li id="TranslationDefined">
+  Translation is equivalent to the matrix<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
+  src="images/coords/MatrixTranslate.png"
+  alt="Translation matrix" width="104" height="83" /><br />
+   or <strong>[1 0 0 1 tx ty]</strong>, where <em>tx</em> and
+  <em>ty</em> are the distances to translate coordinates in
+  <em>X</em> and <em>Y</em>, respectively.<br />
+  <br />
+  </li>
+
+  <li id="ScalingDefined"> Scaling is
+  equivalent to the matrix<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
+  src="images/coords/MatrixScale.png" alt="Scale matrix"
+  width="104" height="83" /><br />
+   or <strong>[sx 0 0 sy 0 0]</strong>. One unit in the
+  <em>X</em> and <em>Y</em> directions in the new coordinate
+  system equals <em>sx</em> and <em>sy</em> units in the
+  previous coordinate system, respectively.<br />
+  <br />
+  </li>
+
+  <li id="RotationDefined"> Rotation
+  about the origin is equivalent to the matrix<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
+  src="images/coords/MatrixRotate.png" alt="Rotation matrix"
+  width="169" height="83" /><br />
+   or <strong>[cos(a) sin(a) -sin(a) cos(a) 0 0]</strong>,
+  which has the effect of rotating the coordinate system axes
+  by angle <em>a</em>.<br />
+  <br />
+  </li>
+  <li id="SkewXDefined"> A skew
+  transformation along the x-axis is equivalent to the
+  matrix<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
+  src="images/coords/MatrixSkewX.png" alt="SkewX matrix"
+  width="131" height="83" /><br />
+   or <strong>[1 0 tan(a) 1 0 0]</strong>, which has the effect
+  of skewing X coordinates by angle <em>a</em>.<br />
+  <br />
+  </li>
+
+  <li id="SkewYDefined"> A skew
+  transformation along the y-axis is equivalent to the
+  matrix<br />
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
+  src="images/coords/MatrixSkewY.png" alt="SkewY matrix"
+  width="131" height="83" /><br />
+   or <strong>[1 tan(a) 0 1 0 0]</strong>, which has the effect
+  of skewing Y coordinates by angle <em>a</em>.<br />
+  <br />
+  </li>
+</ul>
+
+<h2 id="NestedTransformations">Nested transformations</h2>
+<p>Transformations can be nested to any level. The effect of
+nested transformations is to post-multiply (i.e., concatenate)
+the subsequent transformation matrices onto previously defined
+transformations:<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
+src="images/coords/MatrixNested.png"
+alt="3-by-3 matrix concatenation" width="359"
+height="83" /></p>
+
+<p>For each given element, the accumulation of all
+transformations that have been defined on the given element and
+all of its ancestors up to and including the element that
+established the current viewport (usually, the <a>'svg'</a>
+ element which is the most
+immediate ancestor to the given element) is called the
+<a>current transformation matrix</a> or
+<a>CTM</a>. The CTM thus represents the
+mapping of current user coordinates to viewport
+coordinates:<br />
+ <img src="images/coords/CTM.png"
+alt="current transformation matrix: CTM" width="483"
+height="179" /></p>
+
+<p id="ExampleNested"><span class="example-ref">Example Nested</span> illustrates
+nested transformations.</p>
 
 <edit:example href='images/coords/Nested.svg' name='Nested' description="Nested transformations" image='yes' link='yes'/>
 
-    <p>In the example above, the CTM within the third nested
-    transformation (i.e., the <span
-    class="attr-value">transform="translate(130,160)"</span>)
-    consists of the concatenation of the three transformations, as
-    follows:<br />
-     <img src="images/coords/NestedCalcs.png"
-    alt="Matrix concatenation" width="512" height="296" /></p>
-    <br />
-    <h2 id="TransformAttribute">The <span class="attr-name">'transform'</span>
-    attribute</h2>
-    <p id="TransformList">The value of the <a>'transform'</a>
-    attribute is a &lt;transform-list&gt;, which is defined as a
-    list of transform definitions, which are applied in the order
-    provided. The individual transform definitions are separated by
-    whitespace and/or a comma. The available types of transform
-    definitions include:</p>
-    <ul>
-      <li><span class="attr-value">matrix(&lt;a&gt; &lt;b&gt;
-      &lt;c&gt; &lt;d&gt; &lt;e&gt; &lt;f&gt;)</span>, which
-      specifies a transformation in the form of a <a
-      href="coords.html#TransformMatrixDefined">transformation
-      matrix</a> of six values. <span
-      class="attr-value">matrix(a,b,c,d,e,f)</span> is equivalent
-      to applying the transformation matrix <strong>[a b c d e
-      f]</strong>.<br />
-       &nbsp;</li>
-      <li><span class="attr-value">translate(&lt;tx&gt;
-      [&lt;ty&gt;])</span>, which specifies a <a
-      href="coords.html#TranslationDefined">translation</a> by
-      <em>tx</em> and <em>ty</em>. If <em>&lt;ty&gt;</em> is not
-      provided, it is assumed to be zero.<br />
-       &nbsp;</li>
-      <li><span class="attr-value">scale(&lt;sx&gt;
-      [&lt;sy&gt;])</span>, which specifies a <a
-      href="coords.html#ScalingDefined">scale</a> operation by
-      <em>sx</em> and <em>sy</em>. If <em>&lt;sy&gt;</em> is not
-      provided, it is assumed to be equal to
-      <em>&lt;sx&gt;</em>.<br />
-       &nbsp;</li>
-      <li><span class="attr-value">rotate(&lt;rotate-angle&gt;
-      [&lt;cx&gt; &lt;cy&gt;])</span>, which specifies a <a
-      href="coords.html#RotationDefined">rotation</a> by <span
-      class="attr-value">&lt;rotate-angle&gt;</span> degrees about
-      a given point.<br />
-       If optional parameters <span
-      class="attr-value">&lt;cx&gt;</span> and <span
-      class="attr-value">&lt;cy&gt;</span> are not supplied, the
-      rotate is about the origin of the current user coordinate
-      system. The operation corresponds to the matrix
-      <strong>[cos(a) sin(a) -sin(a) cos(a) 0 0]</strong>.<br />
-       If optional parameters <span
-      class="attr-value">&lt;cx&gt;</span> and <span
-      class="attr-value">&lt;cy&gt;</span> are supplied, the rotate
-      is about the point (<var>cx</var>, <var>cy</var>).
-      The operation represents the equivalent
-      of the following specification: <span
-      class="attr-value">translate(&lt;cx&gt;, &lt;cy&gt;)
-      rotate(&lt;rotate-angle&gt;) translate(-&lt;cx&gt;,
-      -&lt;cy&gt;)</span>.<br />
-       &nbsp;</li>
-      <li><span
-      class="attr-value">skewX(&lt;skew-angle&gt;)</span>, which
-      specifies a <a href="coords.html#SkewXDefined">skew
-      transformation along the x-axis</a>.<br />
-       &nbsp;</li>
-      <li><span
-      class="attr-value">skewY(&lt;skew-angle&gt;)</span>, which
-      specifies a <a href="coords.html#SkewYDefined">skew
-      transformation along the y-axis</a>.<br />
-       &nbsp;</li>
-    </ul>
-    <p>All numeric values are <a>&lt;number&gt;</a>s.</p>
-    <p>If a list of transforms is provided, then the net effect is
-    as if each transform had been specified separately in the order
-    provided. For example,</p>
+<p>In the example above, the CTM within the third nested
+transformation (i.e., the <span
+class="attr-value">transform="translate(130,160)"</span>)
+consists of the concatenation of the three transformations, as
+follows:<br />
+ <img src="images/coords/NestedCalcs.png"
+alt="Matrix concatenation" width="512" height="296" /></p>
+
+<h2 id="TransformAttribute">The <span class="attr-name">'transform'</span> attribute</h2>
+
+<p id="TransformList">The value of the <a>'transform'</a>
+attribute is a &lt;transform-list&gt;, which is defined as a
+list of transform definitions, which are applied in the order
+provided. The individual transform definitions are separated by
+whitespace and/or a comma. The available types of transform
+definitions include:</p>
+
+<ul>
+  <li><span class="attr-value">matrix(&lt;a&gt; &lt;b&gt;
+  &lt;c&gt; &lt;d&gt; &lt;e&gt; &lt;f&gt;)</span>, which
+  specifies a transformation in the form of a <a
+  href="coords.html#TransformMatrixDefined">transformation
+  matrix</a> of six values. <span
+  class="attr-value">matrix(a,b,c,d,e,f)</span> is equivalent
+  to applying the transformation matrix <strong>[a b c d e
+  f]</strong>.<br />
+   &nbsp;</li>
+
+  <li><span class="attr-value">translate(&lt;tx&gt;
+  [&lt;ty&gt;])</span>, which specifies a <a
+  href="coords.html#TranslationDefined">translation</a> by
+  <em>tx</em> and <em>ty</em>. If <em>&lt;ty&gt;</em> is not
+  provided, it is assumed to be zero.<br />
+   &nbsp;</li>
+
+  <li><span class="attr-value">scale(&lt;sx&gt;
+  [&lt;sy&gt;])</span>, which specifies a <a
+  href="coords.html#ScalingDefined">scale</a> operation by
+  <em>sx</em> and <em>sy</em>. If <em>&lt;sy&gt;</em> is not
+  provided, it is assumed to be equal to
+  <em>&lt;sx&gt;</em>.<br />
+   &nbsp;</li>
+
+  <li><span class="attr-value">rotate(&lt;rotate-angle&gt;
+  [&lt;cx&gt; &lt;cy&gt;])</span>, which specifies a <a
+  href="coords.html#RotationDefined">rotation</a> by <span
+  class="attr-value">&lt;rotate-angle&gt;</span> degrees about
+  a given point.<br />
+   If optional parameters <span
+  class="attr-value">&lt;cx&gt;</span> and <span
+  class="attr-value">&lt;cy&gt;</span> are not supplied, the
+  rotate is about the origin of the current user coordinate
+  system. The operation corresponds to the matrix
+  <strong>[cos(a) sin(a) -sin(a) cos(a) 0 0]</strong>.<br />
+   If optional parameters <span
+  class="attr-value">&lt;cx&gt;</span> and <span
+  class="attr-value">&lt;cy&gt;</span> are supplied, the rotate
+  is about the point (<var>cx</var>, <var>cy</var>).
+  The operation represents the equivalent
+  of the following specification: <span
+  class="attr-value">translate(&lt;cx&gt;, &lt;cy&gt;)
+  rotate(&lt;rotate-angle&gt;) translate(-&lt;cx&gt;,
+  -&lt;cy&gt;)</span>.<br />
+   &nbsp;</li>
+
+  <li><span
+  class="attr-value">skewX(&lt;skew-angle&gt;)</span>, which
+  specifies a <a href="coords.html#SkewXDefined">skew
+  transformation along the x-axis</a>.<br />
+   &nbsp;</li>
+
+  <li><span
+  class="attr-value">skewY(&lt;skew-angle&gt;)</span>, which
+  specifies a <a href="coords.html#SkewYDefined">skew
+  transformation along the y-axis</a>.<br />
+   &nbsp;</li>
+</ul>
+
+<p>All numeric values are <a>&lt;number&gt;</a>s.</p>
+
+<p>If a list of transforms is provided, then the net effect is
+as if each transform had been specified separately in the order
+provided. For example,</p>
+
 <pre>
 &lt;g transform="translate(-10,-20) scale(2) rotate(45) translate(5,10)"&gt;
   &lt;!-- graphics elements go here --&gt;
 &lt;/g&gt;
 </pre>
-    <p>is functionally equivalent to:</p>
+
+<p>is functionally equivalent to:</p>
+
 <pre>
 &lt;g transform="translate(-10,-20)"&gt;
   &lt;g transform="scale(2)"&gt;
@@ -457,36 +504,43 @@
   &lt;/g&gt;
 &lt;/g&gt;
 </pre>
-    <p id="TransformAttributeEffectOnSiblingAttributes">The <a>'transform'</a> attribute is
-    applied to an element before processing any other coordinate or
-    length values supplied for that element. In the element</p>
+
+<p id="TransformAttributeEffectOnSiblingAttributes">The <a>'transform'</a> attribute is
+applied to an element before processing any other coordinate or
+length values supplied for that element. In the element</p>
+
 <pre>
 &lt;rect x="10" y="10" width="20" height="20" transform="scale(2)"/&gt;
 </pre>
-    <p>the x, y, width and height values are processed after the
-    current coordinate system has been scaled uniformly by a factor
-    of 2 by the <a>'transform'</a> attribute.
-    Attributes x, y, width and height (and any other attributes or
-    properties) are treated as values in the new user coordinate
-    system, not the previous user coordinate system. Thus, the
-    above <a>'rect'</a> element is
-    functionally equivalent to:</p>
+
+<p>the x, y, width and height values are processed after the
+current coordinate system has been scaled uniformly by a factor
+of 2 by the <a>'transform'</a> attribute.
+Attributes x, y, width and height (and any other attributes or
+properties) are treated as values in the new user coordinate
+system, not the previous user coordinate system. Thus, the
+above <a>'rect'</a> element is
+functionally equivalent to:</p>
+
 <pre>
 &lt;g transform="scale(2)"&gt;
   &lt;rect x="10" y="10" width="20" height="20"/&gt;
 &lt;/g&gt;
 </pre>
-    <p>The following is the Backus-Naur Form (BNF) for values for
-    the <a>'transform'</a> attribute. The
-    following notation is used:</p>
-    <ul>
-      <li>*: 0 or more</li>
-      <li>+: 1 or more</li>
-      <li>?: 0 or 1</li>
-      <li>(): grouping</li>
-      <li>|: separates alternatives</li>
-      <li>double quotes surround literals</li>
-    </ul>
+
+<p>The following is the Backus-Naur Form (BNF) for values for
+the <a>'transform'</a> attribute. The
+following notation is used:</p>
+
+<ul>
+  <li>*: 0 or more</li>
+  <li>+: 1 or more</li>
+  <li>?: 0 or 1</li>
+  <li>(): grouping</li>
+  <li>|: separates alternatives</li>
+  <li>double quotes surround literals</li>
+</ul>
+
 <pre>
 transform-list:
     wsp* transforms? wsp*
@@ -545,46 +599,53 @@ digit:
 wsp:
     (#x20 | #x9 | #xD | #xA)
 </pre>
-    <p>For the <a>'transform'</a>
-    attribute:</p>
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="anim-target"><a
-    href="animate.html#Animatable">Animatable</a>: yes.</span></p>
-    <p>See the <a>'animateTransform'</a> element for
-    information on animating transformations.</p>
-    <h2 id="ViewBoxAttribute">The <span class="attr-name">'viewBox'</span>
-    attribute</h2>
-    <p>It is often desirable to specify that a given set of
-    graphics stretch to fit a particular container element. The
-    <a>'viewBox'</a> attribute provides this
-    capability.</p>
-    <p>All elements that establish a new viewport (see <a
-    href="coords.html#ElementsThatEstablishViewports">elements that
-    establish viewports</a>), plus the
-    <a>'marker element'</a>,
-    <a>'pattern'</a> and
-    <a>'view'</a>
-    elements have attribute
-    <a>'viewBox'</a>. The value of the <a>'viewBox'</a> attribute is a list of four
-    numbers <span class="attr-value">&lt;min-x&gt;</span>, <span
-    class="attr-value">&lt;min-y&gt;</span>, <span
-    class="attr-value">&lt;width&gt;</span> and <span
-    class="attr-value">&lt;height&gt;</span>, separated by
-    whitespace and/or a comma, which specify a rectangle in user
-    space which should be mapped to the bounds of the viewport
-    established by the given element, taking into account attribute
-    <a>'preserveAspectRatio'</a>. If specified,
-    an additional transformation is applied to all descendants of
-    the given element to achieve the specified effect.</p>
-    <p>A negative value for <span
-    class="attr-value">&lt;width&gt;</span> or <span
-    class="attr-value">&lt;height&gt;</span> is an error (see <a
-    href="implnote.html#ErrorProcessing">Error processing</a>). A
-    value of zero disables rendering of the element.</p>
-    <p id="ExampleViewBox"><span class="example-ref">Example ViewBox</span> illustrates
-    the use of the <a>'viewBox'</a> attribute
-    on the <a>outermost svg element</a> to specify that
-    the SVG content should stretch to fit bounds of the
-    viewport.</p>
+
+<p>For the <a>'transform'</a> attribute:</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="anim-target"><a
+href="animate.html#Animatable">Animatable</a>: yes.</span></p>
+
+<p>See the <a>'animateTransform'</a> element for
+information on animating transformations.</p>
+
+<h2 id="ViewBoxAttribute">The <span class="attr-name">'viewBox'</span> attribute</h2>
+
+<p>It is often desirable to specify that a given set of
+graphics stretch to fit a particular container element. The
+<a>'viewBox'</a> attribute provides this
+capability.</p>
+
+<p>All elements that establish a new viewport (see <a
+href="coords.html#ElementsThatEstablishViewports">elements that
+establish viewports</a>), plus the
+<a>'marker element'</a>,
+<a>'pattern'</a> and
+<a>'view'</a>
+elements have attribute
+<a>'viewBox'</a>. The value of the <a>'viewBox'</a> attribute is a list of four
+numbers <span class="attr-value">&lt;min-x&gt;</span>, <span
+class="attr-value">&lt;min-y&gt;</span>, <span
+class="attr-value">&lt;width&gt;</span> and <span
+class="attr-value">&lt;height&gt;</span>, separated by
+whitespace and/or a comma, which specify a rectangle in user
+space which should be mapped to the bounds of the viewport
+established by the given element, taking into account attribute
+<a>'preserveAspectRatio'</a>. If specified,
+an additional transformation is applied to all descendants of
+the given element to achieve the specified effect.</p>
+
+<p>A negative value for <span
+class="attr-value">&lt;width&gt;</span> or <span
+class="attr-value">&lt;height&gt;</span> is an error (see <a
+href="implnote.html#ErrorProcessing">Error processing</a>). A
+value of zero disables rendering of the element.</p>
+
+<p id="ExampleViewBox"><span class="example-ref">Example ViewBox</span> illustrates
+the use of the <a>'viewBox'</a> attribute
+on the <a>outermost svg element</a> to specify that
+the SVG content should stretch to fit bounds of the
+viewport.</p>
+
 <pre>
 &lt;?xml version="1.0" standalone="no"?&gt;
 &lt;!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
@@ -610,44 +671,48 @@ wsp:
   &lt;/text&gt;
 &lt;/svg&gt;
 </pre>
-    <table summary="Example ViewBox">
-      <caption align="bottom">
-        Example ViewBox
-      </caption>
-      <tr>
-        <th>Rendered into<br />
-         viewport with<br />
-         width=300px,<br />
-         height=200px</th>
-        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-        <th>Rendered into<br />
-         viewport with<br />
-         width=150px,<br />
-         height=200px</th>
-      </tr>
-      <tr>
-        <td><img alt="Example ViewBox - stretch to fit 300 by 200"
-        src="images/coords/ViewBox.png" width="300"
-        height="200" /></td>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-        <td><img alt="Example ViewBox - stretch to fit 150 by 200"
-        src="images/coords/ViewBox-Width150.png" width="150"
-        height="200" /></td>
-      </tr>
-    </table>
-    <p class="view-as-svg"><a href="images/coords/ViewBox.svg">View
-    this example as SVG (SVG-enabled browsers only)</a><br />
-     &nbsp;</p>
-    <p>The effect of the <a>'viewBox'</a>
-    attribute is that the user agent automatically supplies the
-    appropriate transformation matrix to map the specified
-    rectangle in user space to the bounds of a designated region
-    (often, the viewport). To achieve the effect of the example on
-    the left, with viewport dimensions of 300 by 200 pixels, the
-    user agent needs to automatically insert a transformation which
-    scales both X and Y by 0.2. The effect is equivalent to having
-    a viewport of size 300px by 200px and the following
-    supplemental transformation in the document, as follows:</p>
+
+<table summary="Example ViewBox">
+  <caption align="bottom">
+    Example ViewBox
+  </caption>
+  <tr>
+    <th>Rendered into<br />
+     viewport with<br />
+     width=300px,<br />
+     height=200px</th>
+    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+    <th>Rendered into<br />
+     viewport with<br />
+     width=150px,<br />
+     height=200px</th>
+  </tr>
+  <tr>
+    <td><img alt="Example ViewBox - stretch to fit 300 by 200"
+    src="images/coords/ViewBox.png" width="300"
+    height="200" /></td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td><img alt="Example ViewBox - stretch to fit 150 by 200"
+    src="images/coords/ViewBox-Width150.png" width="150"
+    height="200" /></td>
+  </tr>
+</table>
+
+<p class="view-as-svg"><a href="images/coords/ViewBox.svg">View
+this example as SVG (SVG-enabled browsers only)</a><br />
+ &nbsp;</p>
+
+<p>The effect of the <a>'viewBox'</a>
+attribute is that the user agent automatically supplies the
+appropriate transformation matrix to map the specified
+rectangle in user space to the bounds of a designated region
+(often, the viewport). To achieve the effect of the example on
+the left, with viewport dimensions of 300 by 200 pixels, the
+user agent needs to automatically insert a transformation which
+scales both X and Y by 0.2. The effect is equivalent to having
+a viewport of size 300px by 200px and the following
+supplemental transformation in the document, as follows:</p>
+
 <pre>
 &lt;?xml version="1.0" standalone="no"?&gt;
 &lt;!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
@@ -659,12 +724,14 @@ wsp:
   <strong>&lt;/g&gt;</strong>
 &lt;/svg&gt;
 </pre>
-    To achieve the effect of the example on the right, with
-    viewport dimensions of 150 by 200 pixels, the user agent needs
-    to automatically insert a transformation which scales X by 0.1
-    and Y by 0.2. The effect is equivalent to having a viewport of
-    size 150px by 200px and the following supplemental
-    transformation in the document, as follows: 
+
+<p>To achieve the effect of the example on the right, with
+viewport dimensions of 150 by 200 pixels, the user agent needs
+to automatically insert a transformation which scales X by 0.1
+and Y by 0.2. The effect is equivalent to having a viewport of
+size 150px by 200px and the following supplemental
+transformation in the document, as follows:</p>
+
 <pre>
 &lt;?xml version="1.0" standalone="no"?&gt;
 &lt;!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
@@ -676,264 +743,299 @@ wsp:
   <strong>&lt;/g&gt;</strong>
 &lt;/svg&gt;
 </pre>
-    <p>(Note: in some cases the user agent will need to supply a
-    <strong>translate</strong> transformation in addition to a
-    <strong>scale</strong> transformation. For example, on an
-    <a>outermost svg element</a>, a
-    <strong>translate</strong> transformation will be needed if the
-    <a>'viewBox'</a> attributes specifies
-    values other than zero for <span
-    class="attr-value">&lt;min-x&gt;</span> or <span
-    class="attr-value">&lt;min-y&gt;</span>.)</p>
-    <p id="ViewBoxAttributeEffectOnSiblingAttributes">Unlike the
-    <a>'transform'</a> attribute (see <a
-    href="coords.html#TransformAttributeEffectOnSiblingAttributes">effect
-    of the <span class="attr-name">'transform'</span> on sibling
-    attributes</a>), the automatic transformation that is created
-    due to a <a>'viewBox'</a> does not affect
-    the <span class="attr-name">'x'</span>, <span
-    class="attr-name">'y'</span>, <span
-    class="attr-name">'width'</span> and <span
-    class="attr-name">'height'</span> attributes (or in the case of
-    the <a>'marker element'</a> element, the
-    <a>'marker/markerWidth'</a> and <a>'marker/markerHeight'</a> attributes) on the
-    element with the <a>'viewBox'</a>
-    attribute. Thus, in the example above which shows an
-    <a>'svg'</a> element which has attributes
-    <a>'svg/width'</a>,
-    <a>'svg/height'</a> and <a>'viewBox'</a>,
-    the <a>'svg/width'</a> and <a>'svg/height'</a> attributes
-    represent values in the coordinate system that exists <em>before</em> the
-    <a>'viewBox'</a> transformation is applied. On
-    the other hand, like the <a>'transform'</a> attribute, it does
-    establish a new coordinate system for all other attributes and
-    for descendant elements.</p>
-    <p>For the <a>'viewBox'</a>
-    attribute:</p>
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="anim-target"><a
-    href="animate.html#Animatable">Animatable</a>:
-    yes.</span></p>
-    <h2 id="PreserveAspectRatioAttribute">The <span class="attr-name">'preserveAspectRatio'</span>
-    attribute</h2>
-    <p>In some cases, typically when using the
-    <a>'viewBox'</a> attribute, it is desirable that the graphics stretch to
-    fit non-uniformly to take up the
-    entire viewport. In other cases, it is desirable that uniform
-    scaling be used for the purposes of preserving the aspect ratio
-    of the graphics.</p>
-    <p>Attribute <span
-    class="attr-value">preserveAspectRatio="[defer] &lt;align&gt;
-    [&lt;meetOrSlice&gt;]"</span>, which is available for all
-    elements that establish a new viewport (see <a
-    href="coords.html#ElementsThatEstablishViewports">elements that
-    establish viewports</a>), plus the
-    <a>'image'</a>,
-    <a>'marker element'</a>,
-    <a>'pattern'</a> and
-    <a>'view'</a> elements,
-    indicates whether or not to force uniform scaling.</p>
-    <p>For elements that establish a new viewport (see <a
-    href="coords.html#ElementsThatEstablishViewports">elements that
-    establish viewports</a>), plus the
-    <a>'marker element'</a>,
-    <a>'pattern'</a> and
-    <a>'view'</a> elements,
-    <a>'preserveAspectRatio'</a> only applies when
-    a value has been provided for <a>'viewBox'</a>
-    on the same element. For these elements, if attribute
-    <a>'viewBox'</a> is not provided, then
-    <a>'preserveAspectRatio'</a> is ignored.</p>
-    <p>For <a>'image'</a> elements,
-    <a>'preserveAspectRatio'</a> indicates how
-    referenced images should be fitted with respect to the
-    reference rectangle and whether the aspect ratio of the
-    referenced image should be preserved with respect to the
-    current user coordinate system.</p>
-    <p>If the value of <a>'preserveAspectRatio'</a> on an
-    <a>'image'</a> element starts with <span class='attr-value'>'defer'</span> then the value of the
-    <a>'preserveAspectRatio'</a> attribute on the
-    referenced content if present should be used. If the
-    referenced content lacks a value for
-    <a>'preserveAspectRatio'</a> then the
-    <a>'preserveAspectRatio'</a> attribute should
-    be processed as normal (ignoring <span class='attr-value'>'defer'</span>).
-    For <a>'preserveAspectRatio'</a> on all other
-    elements the <span class='attr-value'>'defer'</span> portion of the attribute is ignored.</p>
-    <p>The <span class="attr-value">&lt;align&gt;</span> parameter
-    indicates whether to force uniform scaling and, if so, the
-    alignment method to use in case the aspect ratio of the <a>'viewBox'</a>
-     doesn't match the aspect ratio of the viewport. The <span
-    class="attr-value">&lt;align&gt;</span> parameter must be one
-    of the following strings:</p>
+
+<p>(Note: in some cases the user agent will need to supply a
+<strong>translate</strong> transformation in addition to a
+<strong>scale</strong> transformation. For example, on an
+<a>outermost svg element</a>, a
+<strong>translate</strong> transformation will be needed if the
+<a>'viewBox'</a> attributes specifies
+values other than zero for <span
+class="attr-value">&lt;min-x&gt;</span> or <span
+class="attr-value">&lt;min-y&gt;</span>.)</p>
+
+<p id="ViewBoxAttributeEffectOnSiblingAttributes">Unlike the
+<a>'transform'</a> attribute (see <a
+href="coords.html#TransformAttributeEffectOnSiblingAttributes">effect
+of the <span class="attr-name">'transform'</span> on sibling
+attributes</a>), the automatic transformation that is created
+due to a <a>'viewBox'</a> does not affect
+the <span class="attr-name">'x'</span>, <span
+class="attr-name">'y'</span>, <span
+class="attr-name">'width'</span> and <span
+class="attr-name">'height'</span> attributes (or in the case of
+the <a>'marker element'</a> element, the
+<a>'marker/markerWidth'</a> and <a>'marker/markerHeight'</a> attributes) on the
+element with the <a>'viewBox'</a>
+attribute. Thus, in the example above which shows an
+<a>'svg'</a> element which has attributes
+<a>'svg/width'</a>,
+<a>'svg/height'</a> and <a>'viewBox'</a>,
+the <a>'svg/width'</a> and <a>'svg/height'</a> attributes
+represent values in the coordinate system that exists <em>before</em> the
+<a>'viewBox'</a> transformation is applied. On
+the other hand, like the <a>'transform'</a> attribute, it does
+establish a new coordinate system for all other attributes and
+for descendant elements.</p>
+
+<p>For the <a>'viewBox'</a>
+attribute:</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="anim-target"><a
+href="animate.html#Animatable">Animatable</a>:
+yes.</span></p>
+
+<h2 id="PreserveAspectRatioAttribute">The <span class="attr-name">'preserveAspectRatio'</span>
+attribute</h2>
+
+<p>In some cases, typically when using the
+<a>'viewBox'</a> attribute, it is desirable that the graphics stretch to
+fit non-uniformly to take up the
+entire viewport. In other cases, it is desirable that uniform
+scaling be used for the purposes of preserving the aspect ratio
+of the graphics.</p>
+
+<p>Attribute <span
+class="attr-value">preserveAspectRatio="[defer] &lt;align&gt;
+[&lt;meetOrSlice&gt;]"</span>, which is available for all
+elements that establish a new viewport (see <a
+href="coords.html#ElementsThatEstablishViewports">elements that
+establish viewports</a>), plus the
+<a>'image'</a>,
+<a>'marker element'</a>,
+<a>'pattern'</a> and
+<a>'view'</a> elements,
+indicates whether or not to force uniform scaling.</p>
+
+<p>For elements that establish a new viewport (see <a
+href="coords.html#ElementsThatEstablishViewports">elements that
+establish viewports</a>), plus the
+<a>'marker element'</a>,
+<a>'pattern'</a> and
+<a>'view'</a> elements,
+<a>'preserveAspectRatio'</a> only applies when
+a value has been provided for <a>'viewBox'</a>
+on the same element. For these elements, if attribute
+<a>'viewBox'</a> is not provided, then
+<a>'preserveAspectRatio'</a> is ignored.</p>
+
+<p>For <a>'image'</a> elements,
+<a>'preserveAspectRatio'</a> indicates how
+referenced images should be fitted with respect to the
+reference rectangle and whether the aspect ratio of the
+referenced image should be preserved with respect to the
+current user coordinate system.</p>
+
+<p>If the value of <a>'preserveAspectRatio'</a> on an
+<a>'image'</a> element starts with <span class='attr-value'>'defer'</span> then the value of the
+<a>'preserveAspectRatio'</a> attribute on the
+referenced content if present should be used. If the
+referenced content lacks a value for
+<a>'preserveAspectRatio'</a> then the
+<a>'preserveAspectRatio'</a> attribute should
+be processed as normal (ignoring <span class='attr-value'>'defer'</span>).
+For <a>'preserveAspectRatio'</a> on all other
+elements the <span class='attr-value'>'defer'</span> portion of the attribute is ignored.</p>
+
+<p>The <span class="attr-value">&lt;align&gt;</span> parameter
+indicates whether to force uniform scaling and, if so, the
+alignment method to use in case the aspect ratio of the <a>'viewBox'</a>
+ doesn't match the aspect ratio of the viewport. The <span
+class="attr-value">&lt;align&gt;</span> parameter must be one
+of the following strings:</p>
+
+<ul>
+  <li><span class="attr-value">none</span> - Do not force
+  uniform scaling. Scale the graphic content of the given
+  element non-uniformly if necessary such that the element's
+  bounding box exactly matches the viewport rectangle.<br />
+   (Note: if <span class="attr-value">&lt;align&gt;</span> is
+  <span class="attr-value">none</span>, then the optional <span
+  class="attr-value">&lt;meetOrSlice&gt;</span> value is
+  ignored.)</li>
+
+  <li><span class="attr-value">xMinYMin</span> - Force uniform
+  scaling.<br />
+   Align the <span class="attr-value">&lt;min-x&gt;</span> of
+  the element's <a>'viewBox'</a> with the smallest X
+  value of the viewport.<br />
+   Align the <span class="attr-value">&lt;min-y&gt;</span> of
+  the element's <a>'viewBox'</a> with the smallest Y
+  value of the viewport.</li>
+
+  <li><span class="attr-value">xMidYMin</span> - Force uniform
+  scaling.<br />
+   Align the midpoint X value of the element's
+   <a>'viewBox'</a> with the midpoint X value of the viewport.<br />
+   Align the <span class="attr-value">&lt;min-y&gt;</span> of
+  the element's <a>'viewBox'</a> with the smallest Y
+  value of the viewport.</li>
+
+  <li><span class="attr-value">xMaxYMin</span> - Force uniform
+  scaling.<br />
+   Align the <span
+  class="attr-value">&lt;min-x&gt;+&lt;width&gt;</span> of the
+  element's <a>'viewBox'</a> with the maximum X value
+  of the viewport.<br />
+   Align the <span class="attr-value">&lt;min-y&gt;</span> of
+  the element's <a>'viewBox'</a> with the smallest Y
+  value of the viewport.</li>
+
+  <li><span class="attr-value">xMinYMid</span> - Force uniform
+  scaling.<br />
+   Align the <span class="attr-value">&lt;min-x&gt;</span> of
+  the element's <a>'viewBox'</a> with the smallest X
+  value of the viewport.<br />
+   Align the midpoint Y value of the element's <a>'viewBox'</a>
+   with the midpoint Y
+  value of the viewport.</li>
+
+  <li><span class="attr-value">xMidYMid</span> (the default) -
+  Force uniform scaling.<br />
+   Align the midpoint X value of the element's <a>'viewBox'</a>
+   with the midpoint X value of the viewport.<br />
+   Align the midpoint Y value of the element's <a>'viewBox'</a>
+   with the midpoint Y value of the viewport.</li>
+
+  <li><span class="attr-value">xMaxYMid</span> - Force uniform
+  scaling.<br />
+   Align the <span
+  class="attr-value">&lt;min-x&gt;+&lt;width&gt;</span> of the
+  element's <a>'viewBox'</a>
+   with the maximum X value of the viewport.<br />
+   Align the midpoint Y value of the element's <a>'viewBox'</a>
+   with the midpoint Y
+  value of the viewport.</li>
+
+  <li><span class="attr-value">xMinYMax</span> - Force uniform
+  scaling.<br />
+   Align the <span class="attr-value">&lt;min-x&gt;</span> of
+  the element's <a>'viewBox'</a> with the smallest X
+  value of the viewport.<br />
+   Align the <span
+  class="attr-value">&lt;min-y&gt;+&lt;height&gt;</span> of the
+  element's <a>'viewBox'</a> with the maximum Y value
+  of the viewport.</li>
+
+  <li><span class="attr-value">xMidYMax</span> - Force uniform
+  scaling.<br />
+   Align the midpoint X value of the element's <a>'viewBox'</a>
+   with the midpoint X value of the viewport.<br />
+   Align the <span
+  class="attr-value">&lt;min-y&gt;+&lt;height&gt;</span> of the
+  element's <a>'viewBox'</a> with the maximum Y value
+  of the viewport.</li>
+
+  <li><span class="attr-value">xMaxYMax</span> - Force uniform
+  scaling.<br />
+   Align the <span
+  class="attr-value">&lt;min-x&gt;+&lt;width&gt;</span> of the
+  element's <a>'viewBox'</a> with the maximum X value
+  of the viewport.<br />
+   Align the <span
+  class="attr-value">&lt;min-y&gt;+&lt;height&gt;</span> of the
+  element's <a>'viewBox'</a> with the maximum Y value
+  of the viewport.</li>
+</ul>
+
+<p>The <span class="attr-value">&lt;meetOrSlice&gt;</span>
+parameter is optional and, if provided, is separated from the
+<span class="attr-value">&lt;align&gt;</span> value by one or
+more spaces and then must be one of the following strings:</p>
+
+<ul>
+  <li>
+    <p><span class="attr-value">meet</span> (the default) - Scale
+    the graphic such that:</p>
+
     <ul>
-      <li><span class="attr-value">none</span> - Do not force
-      uniform scaling. Scale the graphic content of the given
-      element non-uniformly if necessary such that the element's
-      bounding box exactly matches the viewport rectangle.<br />
-       (Note: if <span class="attr-value">&lt;align&gt;</span> is
-      <span class="attr-value">none</span>, then the optional <span
-      class="attr-value">&lt;meetOrSlice&gt;</span> value is
-      ignored.)</li>
-      <li><span class="attr-value">xMinYMin</span> - Force uniform
-      scaling.<br />
-       Align the <span class="attr-value">&lt;min-x&gt;</span> of
-      the element's <a>'viewBox'</a> with the smallest X
-      value of the viewport.<br />
-       Align the <span class="attr-value">&lt;min-y&gt;</span> of
-      the element's <a>'viewBox'</a> with the smallest Y
-      value of the viewport.</li>
-      <li><span class="attr-value">xMidYMin</span> - Force uniform
-      scaling.<br />
-       Align the midpoint X value of the element's
-       <a>'viewBox'</a> with the midpoint X value of the viewport.<br />
-       Align the <span class="attr-value">&lt;min-y&gt;</span> of
-      the element's <a>'viewBox'</a> with the smallest Y
-      value of the viewport.</li>
-      <li><span class="attr-value">xMaxYMin</span> - Force uniform
-      scaling.<br />
-       Align the <span
-      class="attr-value">&lt;min-x&gt;+&lt;width&gt;</span> of the
-      element's <a>'viewBox'</a> with the maximum X value
-      of the viewport.<br />
-       Align the <span class="attr-value">&lt;min-y&gt;</span> of
-      the element's <a>'viewBox'</a> with the smallest Y
-      value of the viewport.</li>
-      <li><span class="attr-value">xMinYMid</span> - Force uniform
-      scaling.<br />
-       Align the <span class="attr-value">&lt;min-x&gt;</span> of
-      the element's <a>'viewBox'</a> with the smallest X
-      value of the viewport.<br />
-       Align the midpoint Y value of the element's <a>'viewBox'</a>
-       with the midpoint Y
-      value of the viewport.</li>
-      <li><span class="attr-value">xMidYMid</span> (the default) -
-      Force uniform scaling.<br />
-       Align the midpoint X value of the element's <a>'viewBox'</a>
-       with the midpoint X value of the viewport.<br />
-       Align the midpoint Y value of the element's <a>'viewBox'</a>
-       with the midpoint Y value of the viewport.</li>
-      <li><span class="attr-value">xMaxYMid</span> - Force uniform
-      scaling.<br />
-       Align the <span
-      class="attr-value">&lt;min-x&gt;+&lt;width&gt;</span> of the
-      element's <a>'viewBox'</a>
-       with the maximum X value of the viewport.<br />
-       Align the midpoint Y value of the element's <a>'viewBox'</a>
-       with the midpoint Y
-      value of the viewport.</li>
-      <li><span class="attr-value">xMinYMax</span> - Force uniform
-      scaling.<br />
-       Align the <span class="attr-value">&lt;min-x&gt;</span> of
-      the element's <a>'viewBox'</a> with the smallest X
-      value of the viewport.<br />
-       Align the <span
-      class="attr-value">&lt;min-y&gt;+&lt;height&gt;</span> of the
-      element's <a>'viewBox'</a> with the maximum Y value
-      of the viewport.</li>
-      <li><span class="attr-value">xMidYMax</span> - Force uniform
-      scaling.<br />
-       Align the midpoint X value of the element's <a>'viewBox'</a>
-       with the midpoint X value of the viewport.<br />
-       Align the <span
-      class="attr-value">&lt;min-y&gt;+&lt;height&gt;</span> of the
-      element's <a>'viewBox'</a> with the maximum Y value
-      of the viewport.</li>
-      <li><span class="attr-value">xMaxYMax</span> - Force uniform
-      scaling.<br />
-       Align the <span
-      class="attr-value">&lt;min-x&gt;+&lt;width&gt;</span> of the
-      element's <a>'viewBox'</a> with the maximum X value
-      of the viewport.<br />
-       Align the <span
-      class="attr-value">&lt;min-y&gt;+&lt;height&gt;</span> of the
-      element's <a>'viewBox'</a> with the maximum Y value
-      of the viewport.</li>
+      <li>aspect ratio is preserved</li>
+      <li>the entire <a>'viewBox'</a> is visible within
+      the viewport</li>
+      <li>the <a>'viewBox'</a> is scaled up as much
+      as possible, while still meeting the other criteria</li>
     </ul>
-    <p>The <span class="attr-value">&lt;meetOrSlice&gt;</span>
-    parameter is optional and, if provided, is separated from the
-    <span class="attr-value">&lt;align&gt;</span> value by one or
-    more spaces and then must be one of the following strings:</p>
+
+    <p>In this case, if the aspect ratio of the graphic does not
+    match the viewport, some of the viewport will extend beyond
+    the bounds of the <a>'viewBox'</a> (i.e., the area into
+    which the <a>'viewBox'</a> will draw will be
+    smaller than the viewport).</p>
+  </li>
+
+  <li>
+    <p><span class="attr-value">slice</span> - Scale the graphic
+    such that:</p>
+
     <ul>
-      <li>
-        <span class="attr-value">meet</span> (the default) - Scale
-        the graphic such that: 
-        <ul>
-          <li>aspect ratio is preserved</li>
-          <li>the entire <a>'viewBox'</a> is visible within
-          the viewport</li>
-          <li>the <a>'viewBox'</a> is scaled up as much
-          as possible, while still meeting the other criteria</li>
-        </ul>
-        In this case, if the aspect ratio of the graphic does not
-        match the viewport, some of the viewport will extend beyond
-        the bounds of the <a>'viewBox'</a> (i.e., the area into
-        which the <a>'viewBox'</a> will draw will be
-        smaller than the viewport).
-      </li>
-      <li>
-        <span class="attr-value">slice</span> - Scale the graphic
-        such that: 
-        <ul>
-          <li>aspect ratio is preserved</li>
-          <li>the entire viewport is covered by the <a>'viewBox'</a></li>
-          <li>the <a>'viewBox'</a> is scaled down as
-          much as possible, while still meeting the other
-          criteria</li>
-        </ul>
-        In this case, if the aspect ratio of the <a>'viewBox'</a> does not match the
-        viewport, some of the <a>'viewBox'</a> will extend beyond the
-        bounds of the viewport (i.e., the area into which the <a>'viewBox'</a> will draw is larger
-        than the viewport).
-      </li>
+      <li>aspect ratio is preserved</li>
+      <li>the entire viewport is covered by the <a>'viewBox'</a></li>
+      <li>the <a>'viewBox'</a> is scaled down as
+      much as possible, while still meeting the other
+      criteria</li>
     </ul>
-    <p id="ExamplePreserveAspectRatio"><span class="example-ref">Example PreserveAspectRatio</span>
-    illustrates the various options on <a>'preserveAspectRatio'</a>. To save space,
-    XML entities have been defined for the three repeated graphic
-    objects, the rectangle with the smile inside and the outlines
-    of the two rectangles which have the same dimensions as the
-    target viewports. The example creates several new viewports by
-    including <a>'svg'</a> sub-elements embedded
-    inside the <a>outermost svg element</a> (see <a
-    href="coords.html#EstablishingANewViewport">Establishing a new
-    viewport</a>).</p>
+
+    <p>In this case, if the aspect ratio of the <a>'viewBox'</a> does not match the
+    viewport, some of the <a>'viewBox'</a> will extend beyond the
+    bounds of the viewport (i.e., the area into which the <a>'viewBox'</a> will draw is larger
+    than the viewport).</p>
+  </li>
+</ul>
+
+<p id="ExamplePreserveAspectRatio"><span class="example-ref">Example PreserveAspectRatio</span>
+illustrates the various options on <a>'preserveAspectRatio'</a>. To save space,
+XML entities have been defined for the three repeated graphic
+objects, the rectangle with the smile inside and the outlines
+of the two rectangles which have the same dimensions as the
+target viewports. The example creates several new viewports by
+including <a>'svg'</a> sub-elements embedded
+inside the <a>outermost svg element</a> (see <a
+href="coords.html#EstablishingANewViewport">Establishing a new
+viewport</a>).</p>
 
 <edit:example href='images/coords/PreserveAspectRatio.svg' name='PreserveAspectRatio' description="demonstrate available options" image='yes' link='yes'/>
 
-    <p>For the <a>'preserveAspectRatio'</a>
-    attribute:</p>
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="anim-target"><a
-    href="animate.html#Animatable">Animatable</a>: yes.</span></p>
-    <h2 id="EstablishingANewViewport">Establishing a new viewport</h2>
-    <p>At any point in an SVG drawing, you can establish a new
-    viewport into which all contained graphics is drawn by
-    including an <a>'svg'</a> element
-    inside SVG content. By establishing a new viewport, you also
-    implicitly establish a new viewport coordinate system, a new
-    user coordinate system, and, potentially, a new clipping path
-    (see the definition of the <a>'overflow'</a> property).
-    Additionally, there is a new meaning for percentage units
-    defined to be relative to the current viewport since a new
-    viewport has been established (see <a
-    href="coords.html#Units">Units</a>).</p>
-    <p>The bounds of the new viewport are defined by the <span
-    class="attr-name">'x'</span>, <span class="attr-name">'y'</span>,
-    <span class="attr-name">'width'</span> and <span
-    class="attr-name">'height'</span> attributes on the element
-    establishing the new viewport, such as an <a>'svg'</a> element. Both the new
-    viewport coordinate system and the new user coordinate system
-    have their origins at (<span class="attr-name">'x'</span>, <span
-    class="attr-name">'y'</span>), where <span
-    class="attr-name">'x'</span> and <span class="attr-name">'y'</span>
-    represent the value of the corresponding attributes on the
-    element establishing the viewport. The orientation of the new
-    viewport coordinate system and the new user coordinate system
-    correspond to the orientation of the current user coordinate
-    system for the element establishing the viewport. A single unit
-    in the new viewport coordinate system and the new user
-    coordinate system are the same size as a single unit in the
-    current user coordinate system for the element establishing the
-    viewport.</p>
-    <p>Here is an example:</p>
+<p>For the <a>'preserveAspectRatio'</a>
+attribute:</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="anim-target"><a
+href="animate.html#Animatable">Animatable</a>: yes.</span></p>
+
+<h2 id="EstablishingANewViewport">Establishing a new viewport</h2>
+
+<p>At any point in an SVG drawing, you can establish a new
+viewport into which all contained graphics is drawn by
+including an <a>'svg'</a> element
+inside SVG content. By establishing a new viewport, you also
+implicitly establish a new viewport coordinate system, a new
+user coordinate system, and, potentially, a new clipping path
+(see the definition of the <a>'overflow'</a> property).
+Additionally, there is a new meaning for percentage units
+defined to be relative to the current viewport since a new
+viewport has been established (see <a
+href="coords.html#Units">Units</a>).</p>
+
+<p>The bounds of the new viewport are defined by the <span
+class="attr-name">'x'</span>, <span class="attr-name">'y'</span>,
+<span class="attr-name">'width'</span> and <span
+class="attr-name">'height'</span> attributes on the element
+establishing the new viewport, such as an <a>'svg'</a> element. Both the new
+viewport coordinate system and the new user coordinate system
+have their origins at (<span class="attr-name">'x'</span>, <span
+class="attr-name">'y'</span>), where <span
+class="attr-name">'x'</span> and <span class="attr-name">'y'</span>
+represent the value of the corresponding attributes on the
+element establishing the viewport. The orientation of the new
+viewport coordinate system and the new user coordinate system
+correspond to the orientation of the current user coordinate
+system for the element establishing the viewport. A single unit
+in the new viewport coordinate system and the new user
+coordinate system are the same size as a single unit in the
+current user coordinate system for the element establishing the
+viewport.</p>
+
+<p>Here is an example:</p>
+
 <pre>
 &lt;?xml version="1.0" standalone="no"?&gt;
 &lt;!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
@@ -950,385 +1052,410 @@ wsp:
   &lt;/svg&gt;
 &lt;/svg&gt;
 </pre>
-    <p>For an extensive example of creating new viewports, see <a
-    href="coords.html#ExamplePreserveAspectRatio">Example
-    PreserveAspectRatio</a>.</p>
-    <p id="ElementsThatEstablishViewports">The following elements establish new viewports:</p>
-    <ul>
-      <li>The <a>'svg'</a> element</li>
-      <li>A <a>'symbol'</a> element define new
-      viewports whenever they are instanced by a <a>'use'</a> element.</li>
-      <li>An <a>'image'</a> element that
-      references an SVG file will result in the establishment of a
-      temporary new viewport since the referenced resource by
-      definition will have an <a>'svg'</a> element.</li>
-      <li>A <a>'foreignObject'</a> element
-      creates a new viewport for rendering the content that is
-      within the element.</li>
-    </ul>
-    <p>Whether a new viewport also establishes a new additional
-    clipping path is determined by the value of the <a>'overflow'</a> property on the element
-    that establishes the new viewport. If a clipping path is
-    created to correspond to the new viewport, the clipping path's
-    geometry is determined by the value of the <a>'clip'</a> property. Also, see <a
-    href="masking.html#AutoClipAtViewportNotViewBox">Clip to
-    viewport vs. clip to <span
-    class="attr-name">'viewBox'</span></a>.</p>
 
-    <h2 id="Units">Units</h2>
-    <p>All coordinates and lengths in SVG can be specified with or
-    without a unit identifier.</p>
-    <p class="issue">
-      This is misleading – path data for example takes values that look
-      like coordinates and lengths yet does not allow units.
-    </p>
-    <p>When a coordinate or length value is a number without a unit
-    identifier (e.g., "25"), then the given coordinate or length is
-    assumed to be in user units (i.e., a value in the current user
-    coordinate system). For example:</p>
+<p>For an extensive example of creating new viewports, see <a
+href="coords.html#ExamplePreserveAspectRatio">Example
+PreserveAspectRatio</a>.</p>
+
+<p id="ElementsThatEstablishViewports">The following elements establish new viewports:</p>
+
+<ul>
+  <li>The <a>'svg'</a> element</li>
+
+  <li>A <a>'symbol'</a> element define new
+  viewports whenever they are instanced by a <a>'use'</a> element.</li>
+
+  <li>An <a>'image'</a> element that
+  references an SVG file will result in the establishment of a
+  temporary new viewport since the referenced resource by
+  definition will have an <a>'svg'</a> element.</li>
+
+  <li>A <a>'foreignObject'</a> element
+  creates a new viewport for rendering the content that is
+  within the element.</li>
+</ul>
+
+<p>Whether a new viewport also establishes a new additional
+clipping path is determined by the value of the <a>'overflow'</a> property on the element
+that establishes the new viewport. If a clipping path is
+created to correspond to the new viewport, the clipping path's
+geometry is determined by the value of the <a>'clip'</a> property. Also, see <a
+href="masking.html#AutoClipAtViewportNotViewBox">Clip to
+viewport vs. clip to <span
+class="attr-name">'viewBox'</span></a>.</p>
+
+<h2 id="Units">Units</h2>
+
+<p>All coordinates and lengths in SVG can be specified with or
+without a unit identifier.</p>
+
+<p class="issue">
+  This is misleading – path data for example takes values that look
+  like coordinates and lengths yet does not allow units.
+</p>
+
+<p>When a coordinate or length value is a number without a unit
+identifier (e.g., "25"), then the given coordinate or length is
+assumed to be in user units (i.e., a value in the current user
+coordinate system). For example:</p>
+
 <pre>
 &lt;text font-size="50"&gt;Text size is 50 user units&lt;/text&gt;
 </pre>
-    <p>Alternatively, a coordinate or length value can be expressed
-    as a number followed by a unit identifier (e.g., "25cm" or
-    "15em").
-    (Note that CSS defined <a>properties</a> used in a CSS style sheet
-    or the <a>'style attribute'</a> attribute require units for
-    non-zero lengths, see <a
-    href="styling.html#SVGStylingProperties">SVG's styling
-    properties</a>.)
-    The list of unit identifiers in SVG matches the list
-    of unit identifiers in CSS: em, ex, px, pt, pc, cm, mm and in.
-    The <a>&lt;length&gt;</a> type can also have
-    a percentage unit identifier.  The following describes how the various unit
-    identifiers are processed:</p>
+
+<p>Alternatively, a coordinate or length value can be expressed
+as a number followed by a unit identifier (e.g., "25cm" or
+"15em").
+(Note that CSS defined <a>properties</a> used in a CSS style sheet
+or the <a>'style attribute'</a> attribute require units for
+non-zero lengths, see <a
+href="styling.html#SVGStylingProperties">SVG's styling
+properties</a>.)
+The list of unit identifiers in SVG matches the list
+of unit identifiers in CSS: em, ex, px, pt, pc, cm, mm and in.
+The <a>&lt;length&gt;</a> type can also have
+a percentage unit identifier.  The following describes how the various unit
+identifiers are processed:</p>
+
+<ul>
+  <li>As in CSS, the <em>em</em> and <em>ex</em> unit
+  identifiers are relative to the current font's
+  <em>font-size</em> and <em>x-height</em>, respectively.</li>
+
+  <li>
+    <p>One <em>px</em> unit is defined to be equal to one user
+    unit. Thus, a length of "5px" is the same as a length of
+    "5".</p>
+
+    <p>Note that at initialization, a user unit in the <a
+    href="coords.html#InitialCoordinateSystem">the initial
+    coordinate system</a> is equivalenced to the parent
+    environment's notion of a <em>px</em> unit. Thus, in the <a
+    href="coords.html#InitialCoordinateSystem">the initial
+    coordinate system</a>, because the user coordinate system
+    aligns exactly with the parent's coordinate system, and
+    because often the parent's coordinate system aligns with
+    the device pixel grid, "5px" might actually map to 5
+    devices pixels. However, if there are any coordinate system
+    transformation due to the use of <a>'transform'</a> or
+    <a>'viewBox'</a> attributes, because
+    "5px" maps to 5 user units and because the coordinate
+    system transformations have resulted in a revised user
+    coordinate system, "5px" likely will not map to 5 device
+    pixels. As a result, in most circumstances, "px" units will
+    not map to the device pixel grid.</p>
+  </li>
+
+  <li>
+    <p>The other absolute unit identifiers from CSS (i.e., pt,
+    pc, cm, mm, in) are all defined as an appropriate multiple
+    of one <em>px</em> unit (which, according to the previous
+    item, is defined to be equal to one user unit), based on
+    what the SVG user agent determines is the size of a
+    <em>px</em> unit (possibly passed from the parent processor
+    or environment at initialization time). For example,
+    suppose that the user agent can determine from its
+    environment that "1px" corresponds to "0.2822222mm" (i.e.,
+    90dpi). Then, for all processing of SVG content:</p>
+
     <ul>
-      <li>
-        <p>As in CSS, the <em>em</em> and <em>ex</em> unit
-        identifiers are relative to the current font's
-        <em>font-size</em> and <em>x-height</em>, respectively.</p>
-      </li>
-      <li>
-        <p>One <em>px</em> unit is defined to be equal to one user
-        unit. Thus, a length of "5px" is the same as a length of
-        "5".</p>
-        <p>Note that at initialization, a user unit in the <a
-        href="coords.html#InitialCoordinateSystem">the initial
-        coordinate system</a> is equivalenced to the parent
-        environment's notion of a <em>px</em> unit. Thus, in the <a
-        href="coords.html#InitialCoordinateSystem">the initial
-        coordinate system</a>, because the user coordinate system
-        aligns exactly with the parent's coordinate system, and
-        because often the parent's coordinate system aligns with
-        the device pixel grid, "5px" might actually map to 5
-        devices pixels. However, if there are any coordinate system
-        transformation due to the use of <a>'transform'</a> or
-        <a>'viewBox'</a> attributes, because
-        "5px" maps to 5 user units and because the coordinate
-        system transformations have resulted in a revised user
-        coordinate system, "5px" likely will not map to 5 device
-        pixels. As a result, in most circumstances, "px" units will
-        not map to the device pixel grid.</p>
-      </li>
-      <li>
-        <p>The other absolute unit identifiers from CSS (i.e., pt,
-        pc, cm, mm, in) are all defined as an appropriate multiple
-        of one <em>px</em> unit (which, according to the previous
-        item, is defined to be equal to one user unit), based on
-        what the SVG user agent determines is the size of a
-        <em>px</em> unit (possibly passed from the parent processor
-        or environment at initialization time). For example,
-        suppose that the user agent can determine from its
-        environment that "1px" corresponds to "0.2822222mm" (i.e.,
-        90dpi). Then, for all processing of SVG content:</p>
-        <ul>
-          <li>"1pt" equals "1.25px" (and therefore 1.25 user
-          units)</li>
-          <li>"1pc" equals "15px" (and therefore 15 user
-          units)</li>
-          <li>"1mm" would be "3.543307px" (3.543307 user
-          units)</li>
-          <li>"1cm" equals "35.43307px" (and therefore 35.43307
-          user units)</li>
-          <li>"1in" equals "90px" (and therefore 90 user
-          units)</li>
-        </ul>
-      </li>
+      <li>"1pt" equals "1.25px" (and therefore 1.25 user units)</li>
+      <li>"1pc" equals "15px" (and therefore 15 user units)</li>
+      <li>"1mm" would be "3.543307px" (3.543307 user units)</li>
+      <li>"1cm" equals "35.43307px" (and therefore 35.43307 user units)</li>
+      <li>"1in" equals "90px" (and therefore 90 user units)</li>
     </ul>
-    <p>Note that use of <em>px</em> units or any other absolute
-    unit identifiers can cause inconsistent visual results on
-    different viewing environments since the size of "1px" may map
-    to a different number of user units on different systems; thus,
-    absolute units identifiers are only recommended for the
-    <a>'svg/width'</a> and the <a>'svg/height'</a> on
-    <a>' outermost svg elements'</a> and situations
-    where the content contains no transformations and it is
-    desirable to specify values relative to the device pixel grid
-    or to a particular real world unit size.</p>
-    <p>For percentage values that are defined to be relative to the
-    size of viewport:</p>
-    <ul>
-      <li>For any x-coordinate value or width value expressed as a
-      percentage of the viewport, the value to use is the specified
-      percentage of the <em>actual-width</em> in user units for the
-      nearest containing viewport, where <em>actual-width</em> is
-      the width dimension of the viewport element within the user
-      coordinate system for the viewport element.</li>
-      <li>For any y-coordinate value or height value expressed as a
-      percentage of the viewport, the value to use is the specified
-      percentage of the <em>actual-height</em> in user units for
-      the nearest containing viewport, where <em>actual-height</em>
-      is the height dimension of the viewport element within the
-      user coordinate system for the viewport element.</li>
-      <li id="Units_viewport_percentage">For any other length value expressed as a percentage of
-      the viewport, the percentage is calculated as the specified
-      percentage of <code>sqrt((<em>actual-width</em>)**2 +
-      (<em>actual-height</em>)**2))/sqrt(2)</code>.</li>
-    </ul>
-    <p id="ExampleUnits"><span class="example-ref">Example Units</span> below
-    illustrates some of the processing rules for different types of
-    units.</p>
+  </li>
+</ul>
+
+<p>Note that use of <em>px</em> units or any other absolute
+unit identifiers can cause inconsistent visual results on
+different viewing environments since the size of "1px" may map
+to a different number of user units on different systems; thus,
+absolute units identifiers are only recommended for the
+<a>'svg/width'</a> and the <a>'svg/height'</a> on
+<a>' outermost svg elements'</a> and situations
+where the content contains no transformations and it is
+desirable to specify values relative to the device pixel grid
+or to a particular real world unit size.</p>
+
+<p>For percentage values that are defined to be relative to the
+size of viewport:</p>
+
+<ul>
+  <li>For any x-coordinate value or width value expressed as a
+  percentage of the viewport, the value to use is the specified
+  percentage of the <em>actual-width</em> in user units for the
+  nearest containing viewport, where <em>actual-width</em> is
+  the width dimension of the viewport element within the user
+  coordinate system for the viewport element.</li>
+  <li>For any y-coordinate value or height value expressed as a
+  percentage of the viewport, the value to use is the specified
+  percentage of the <em>actual-height</em> in user units for
+  the nearest containing viewport, where <em>actual-height</em>
+  is the height dimension of the viewport element within the
+  user coordinate system for the viewport element.</li>
+  <li id="Units_viewport_percentage">For any other length value expressed as a percentage of
+  the viewport, the percentage is calculated as the specified
+  percentage of <code>sqrt((<em>actual-width</em>)**2 +
+  (<em>actual-height</em>)**2))/sqrt(2)</code>.</li>
+</ul>
+
+<p id="ExampleUnits"><span class="example-ref">Example Units</span> below
+illustrates some of the processing rules for different types of
+units.</p>
 
 <edit:example href='images/coords/Units.svg' name='Units' description='demonstrate available options' image='yes' link='yes'/>
 
-    <p>The three rectangles on the left demonstrate the use of one
-    of the absolute unit identifiers, the "in" unit (inch). The
-    reference image above was generated on a 96dpi system (i.e., 1
-    inch = 96 pixels). Therefore, the topmost rectangle, which is
-    specified in inches, is exactly the same size as the middle
-    rectangle, which is specified in user units such that there are
-    96 user units for each corresponding inch in the topmost
-    rectangle. (Note: on systems with different screen resolutions,
-    the top and middle rectangles will likely be rendered at
-    different sizes.) The bottom rectangle of the group illustrates
-    what happens when values specified in inches are scaled.</p>
-    <p>The three rectangles in the middle demonstrate the use of
-    one of the relative unit identifiers, the "em" unit. Because
-    the <a>'font-size'</a> property has been set
-    to <span class="prop-value">150</span> on the outermost <a>'g'</a> element, each "em" unit is
-    equal to 150 user units. The topmost rectangle, which is
-    specified in "em" units, is exactly the same size as the middle
-    rectangle, which is specified in user units such that there are
-    150 user units for each corresponding "em" unit in the topmost
-    rectangle. The bottom rectangle of the group illustrates what
-    happens when values specified in "em" units are scaled.</p>
-    <p>The three rectangles on the right demonstrate the use of
-    percentages. Note that the width and height of the viewport in
-    the user coordinate system for the viewport element (in this
-    case, the <a>outermost svg element</a>) are 4000 and
-    2000, respectively, because processing the <a>'viewBox'</a> attribute results in a
-    transformed user coordinate system. The topmost rectangle,
-    which is specified in percentage units, is exactly the same
-    size as the middle rectangle, which is specified in equivalent
-    user units. In particular, note that the <a>'stroke-width'</a> property in the
-    middle rectangle is set to 1% of the
-    <code>sqrt((<em>actual-width</em>)**2 +
-    (<em>actual-height</em>)**2)) / sqrt(2)</code>, which in this
-    case is .01*sqrt(4000*4000+2000*2000)/sqrt(2), or 31.62. The
-    bottom rectangle of the group illustrates what happens when
-    values specified in percentage units are scaled.</p>
+<p>The three rectangles on the left demonstrate the use of one
+of the absolute unit identifiers, the "in" unit (inch). The
+reference image above was generated on a 96dpi system (i.e., 1
+inch = 96 pixels). Therefore, the topmost rectangle, which is
+specified in inches, is exactly the same size as the middle
+rectangle, which is specified in user units such that there are
+96 user units for each corresponding inch in the topmost
+rectangle. (Note: on systems with different screen resolutions,
+the top and middle rectangles will likely be rendered at
+different sizes.) The bottom rectangle of the group illustrates
+what happens when values specified in inches are scaled.</p>
 
-    <h2 id="ObjectBoundingBoxUnits">Object bounding box units</h2>
-    <p id="ObjectBoundingBox">The following elements offer the option of expressing
-    coordinate values and lengths as fractions (and, in some cases,
-    percentages) of the <a>bounding box</a>,
-    by setting a specified attribute to <span class="attr-value">'objectBoundingBox'</span>
-    on the given element:</p>
-    <table class='vert' summary="Object bounding box units rules">
-      <tr>
-        <th>Element</th>
-        <th>Attribute</th>
-        <th>Effect</th>
-      </tr>
-      <tr>
-        <edit:with element='linearGradient'>
-          <td><a>'linearGradient'</a></td>
-          <td><a>'gradientUnits'</a></td>
-          <td>Indicates that the attributes which specify the
-          gradient vector (<a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a>, <a>'y2'</a>) represent fractions or
-          percentages of the bounding box of the element to which the
-          gradient is applied.</td>
-        </edit:with>
-      </tr>
-      <tr>
-        <edit:with element='radialGradient'>
-          <td><a>'radialGradient'</a></td>
-          <td><a>'gradientUnits'</a></td>
-          <td>Indicates that the attributes which specify the center
-          (<a>'cx'</a>, <a>'cy'</a>), the radius (<a>'r'</a>) and focus
-          (<a>'fx'</a>, <a>'fy'</a>) represent fractions or
-          percentages of the bounding box of the element to which the
-          gradient is applied.</td>
-        </edit:with>
-      </tr>
-      <edit:with element='pattern'>
-        <tr>
-          <td><a>'pattern'</a></td>
-          <td><a>'patternUnits'</a></td>
-          <td>Indicates that the attributes which define how to tile the pattern
-          (<a>'x'</a>, <a>'y'</a>, <a>'width'</a>, <a>'height'</a>) are
-          established using the bounding box of the element to which the pattern
-          is applied.</td>
-        </tr>
-        <tr>
-          <td><a>'pattern'</a></td>
-          <td><a>'patternContentUnits'</a></td>
-          <td>Indicates that the user coordinate system for the
-          contents of the pattern is established using the bounding
-          box of the element to which the pattern is applied.</td>
-        </tr>
-      </edit:with>
-      <tr>
-        <td><a>'clipPath'</a></td>
-        <td><a>'clipPath/clipPathUnits'</a></td>
-        <td>Indicates that the user coordinate system for the contents of the
-        <a>'clipPath'</a> element is established using the bounding box of the
-        element to which the clipping path is applied.</td>
-      </tr>
-      <edit:with element='mask'>
-        <tr>
-          <td><a>'mask element'</a></td>
-          <td><a>'maskUnits'</a></td>
-          <td>Indicates that the attributes which define the masking region
-          (<a>'x'</a>, <a>'y'</a>, <a>'width'</a>, <a>'height'</a>) is
-          established using the bounding box of the element to which the mask
-          is applied.</td>
-        </tr>
-        <tr>
-          <td><a>'mask element'</a></td>
-          <td><a>'maskContentUnits'</a></td>
-          <td>Indicates that the user coordinate system for the contents of
-          the <a>'mask element'</a> element are established using the bounding box of
-          the element to which the mask is applied.</td>
-        </tr>
-      </edit:with>
-      <edit:with element='filter'>
-        <tr>
-          <td><a>'filter element'</a></td>
-          <td><a>'filterUnits'</a></td>
-          <td>Indicates that the attributes which define the
-          <a href="filters.html#FilterEffectsRegion">filter effects region</a>
-          (<a>'x'</a>, <a>'y'</a>, <a>'width'</a>, <a>'height'</a>) represent
-          fractions or percentages of the bounding box of the element to which
-          the filter is applied.</td>
-        </tr>
-        <tr>
-          <td><a>'filter element'</a></td>
-          <td><a>'primitiveUnits'</a></td>
-          <td>Indicates that the various length values within the filter
-          primitives represent fractions or percentages of the bounding box of
-          the element to which the filter is applied.</td>
-        </tr>
-      </edit:with>
-    </table>
-    <p>In the discussion that follows, the term <em>applicable element</em>
-    is the element to which the given effect applies. For gradients and
-    patterns, the applicable element is the <a>graphics element</a>
-    which has its <a>'fill'</a> or <a>'stroke'</a> property referencing the
-    given gradient or pattern. (See <a
-    href="painting.html#InheritanceOfPaintingProperties">Inheritance
-    of Painting Properties</a>. For special rules concerning <a
-    href="text.html">text elements</a>, see the discussion of <a
-    href="text.html#ObjectBoundingBoxUnitsTextObjects">object
-    bounding box units and text elements</a>.) For clipping paths,
-    masks and filters, the applicable element can be either a
-    <a>container element</a> or a <a>graphics element</a>.</p>
-    <p>When keyword <span
-    class="attr-value">objectBoundingBox</span> is used, then the
-    effect is as if a supplemental transformation matrix were
-    inserted into the list of nested transformation matrices to
-    create a new user coordinate system.</p>
-    <p>First, the (<strong>minx</strong>,<strong>miny</strong>) and
-    (<strong>maxx</strong>,<strong>maxy</strong>) coordinates are
-    determined for the applicable element and all of its
-    descendants. The values <strong>minx</strong>,
-    <strong>miny</strong>, <strong>maxx</strong> and
-    <strong>maxy</strong> are determined by computing the maximum
-    extent of the shape of the element in X and Y with respect to
-    the user coordinate system for the applicable element. The
-    bounding box is the tightest fitting rectangle aligned with the
-    axes of the applicable element's user coordinate system that
-    entirely encloses the applicable element and its descendants.
-    The bounding box is computed exclusive of any values for
-    clipping, masking, filter effects, opacity and stroke-width.
-    For curved shapes, the bounding box encloses all portions of
-    the shape, not just end points. For <a
-    href="text.html#TextElement"><span
-    class="element-name">'text'</span></a> elements, for the
-    purposes of the bounding box calculation, each glyph is treated
-    as a separate graphics element. The calculations assume that
-    all glyphs occupy the full glyph cell. For example, for
-    horizontal text, the calculations assume that each glyph
-    extends vertically to the full ascent and descent values for
-    the font.</p>
-    <p>Then, coordinate (0,0) in the new user coordinate system is
-    mapped to the (minx,miny) corner of the tight bounding box
-    within the user coordinate system of the applicable element and
-    coordinate (1,1) in the new user coordinate system is mapped to
-    the (maxx,maxy) corner of the tight bounding box of the
-    applicable element. In most situations, the following
-    transformation matrix produces the correct effect:</p>
+<p>The three rectangles in the middle demonstrate the use of
+one of the relative unit identifiers, the "em" unit. Because
+the <a>'font-size'</a> property has been set
+to <span class="prop-value">150</span> on the outermost <a>'g'</a> element, each "em" unit is
+equal to 150 user units. The topmost rectangle, which is
+specified in "em" units, is exactly the same size as the middle
+rectangle, which is specified in user units such that there are
+150 user units for each corresponding "em" unit in the topmost
+rectangle. The bottom rectangle of the group illustrates what
+happens when values specified in "em" units are scaled.</p>
+
+<p>The three rectangles on the right demonstrate the use of
+percentages. Note that the width and height of the viewport in
+the user coordinate system for the viewport element (in this
+case, the <a>outermost svg element</a>) are 4000 and
+2000, respectively, because processing the <a>'viewBox'</a> attribute results in a
+transformed user coordinate system. The topmost rectangle,
+which is specified in percentage units, is exactly the same
+size as the middle rectangle, which is specified in equivalent
+user units. In particular, note that the <a>'stroke-width'</a> property in the
+middle rectangle is set to 1% of the
+<code>sqrt((<em>actual-width</em>)**2 +
+(<em>actual-height</em>)**2)) / sqrt(2)</code>, which in this
+case is .01*sqrt(4000*4000+2000*2000)/sqrt(2), or 31.62. The
+bottom rectangle of the group illustrates what happens when
+values specified in percentage units are scaled.</p>
+
+<h2 id="ObjectBoundingBoxUnits">Object bounding box units</h2>
+
+<p id="ObjectBoundingBox">The following elements offer the option of expressing
+coordinate values and lengths as fractions (and, in some cases,
+percentages) of the <a>bounding box</a>,
+by setting a specified attribute to <span class="attr-value">'objectBoundingBox'</span>
+on the given element:</p>
+
+<table class='vert' summary="Object bounding box units rules">
+  <tr>
+    <th>Element</th>
+    <th>Attribute</th>
+    <th>Effect</th>
+  </tr>
+  <tr>
+    <edit:with element='linearGradient'>
+      <td><a>'linearGradient'</a></td>
+      <td><a>'gradientUnits'</a></td>
+      <td>Indicates that the attributes which specify the
+      gradient vector (<a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a>, <a>'y2'</a>) represent fractions or
+      percentages of the bounding box of the element to which the
+      gradient is applied.</td>
+    </edit:with>
+  </tr>
+  <tr>
+    <edit:with element='radialGradient'>
+      <td><a>'radialGradient'</a></td>
+      <td><a>'gradientUnits'</a></td>
+      <td>Indicates that the attributes which specify the center
+      (<a>'cx'</a>, <a>'cy'</a>), the radius (<a>'r'</a>) and focus
+      (<a>'fx'</a>, <a>'fy'</a>) represent fractions or
+      percentages of the bounding box of the element to which the
+      gradient is applied.</td>
+    </edit:with>
+  </tr>
+  <edit:with element='pattern'>
+    <tr>
+      <td><a>'pattern'</a></td>
+      <td><a>'patternUnits'</a></td>
+      <td>Indicates that the attributes which define how to tile the pattern
+      (<a>'x'</a>, <a>'y'</a>, <a>'width'</a>, <a>'height'</a>) are
+      established using the bounding box of the element to which the pattern
+      is applied.</td>
+    </tr>
+    <tr>
+      <td><a>'pattern'</a></td>
+      <td><a>'patternContentUnits'</a></td>
+      <td>Indicates that the user coordinate system for the
+      contents of the pattern is established using the bounding
+      box of the element to which the pattern is applied.</td>
+    </tr>
+  </edit:with>
+  <tr>
+    <td><a>'clipPath'</a></td>
+    <td><a>'clipPath/clipPathUnits'</a></td>
+    <td>Indicates that the user coordinate system for the contents of the
+    <a>'clipPath'</a> element is established using the bounding box of the
+    element to which the clipping path is applied.</td>
+  </tr>
+  <edit:with element='mask'>
+    <tr>
+      <td><a>'mask element'</a></td>
+      <td><a>'maskUnits'</a></td>
+      <td>Indicates that the attributes which define the masking region
+      (<a>'x'</a>, <a>'y'</a>, <a>'width'</a>, <a>'height'</a>) is
+      established using the bounding box of the element to which the mask
+      is applied.</td>
+    </tr>
+    <tr>
+      <td><a>'mask element'</a></td>
+      <td><a>'maskContentUnits'</a></td>
+      <td>Indicates that the user coordinate system for the contents of
+      the <a>'mask element'</a> element are established using the bounding box of
+      the element to which the mask is applied.</td>
+    </tr>
+  </edit:with>
+  <edit:with element='filter'>
+    <tr>
+      <td><a>'filter element'</a></td>
+      <td><a>'filterUnits'</a></td>
+      <td>Indicates that the attributes which define the
+      <a href="filters.html#FilterEffectsRegion">filter effects region</a>
+      (<a>'x'</a>, <a>'y'</a>, <a>'width'</a>, <a>'height'</a>) represent
+      fractions or percentages of the bounding box of the element to which
+      the filter is applied.</td>
+    </tr>
+    <tr>
+      <td><a>'filter element'</a></td>
+      <td><a>'primitiveUnits'</a></td>
+      <td>Indicates that the various length values within the filter
+      primitives represent fractions or percentages of the bounding box of
+      the element to which the filter is applied.</td>
+    </tr>
+  </edit:with>
+</table>
+
+<p>In the discussion that follows, the term <em>applicable element</em>
+is the element to which the given effect applies. For gradients and
+patterns, the applicable element is the <a>graphics element</a>
+which has its <a>'fill'</a> or <a>'stroke'</a> property referencing the
+given gradient or pattern. (See <a
+href="painting.html#InheritanceOfPaintingProperties">Inheritance
+of Painting Properties</a>. For special rules concerning <a
+href="text.html">text elements</a>, see the discussion of <a
+href="text.html#ObjectBoundingBoxUnitsTextObjects">object
+bounding box units and text elements</a>.) For clipping paths,
+masks and filters, the applicable element can be either a
+<a>container element</a> or a <a>graphics element</a>.</p>
+
+<p>When keyword <span
+class="attr-value">objectBoundingBox</span> is used, then the
+effect is as if a supplemental transformation matrix were
+inserted into the list of nested transformation matrices to
+create a new user coordinate system.</p>
+
+<p>First, the (<strong>minx</strong>,<strong>miny</strong>) and
+(<strong>maxx</strong>,<strong>maxy</strong>) coordinates are
+determined for the applicable element and all of its
+descendants. The values <strong>minx</strong>,
+<strong>miny</strong>, <strong>maxx</strong> and
+<strong>maxy</strong> are determined by computing the maximum
+extent of the shape of the element in X and Y with respect to
+the user coordinate system for the applicable element. The
+bounding box is the tightest fitting rectangle aligned with the
+axes of the applicable element's user coordinate system that
+entirely encloses the applicable element and its descendants.
+The bounding box is computed exclusive of any values for
+clipping, masking, filter effects, opacity and stroke-width.
+For curved shapes, the bounding box encloses all portions of
+the shape, not just end points. For <a
+href="text.html#TextElement"><span
+class="element-name">'text'</span></a> elements, for the
+purposes of the bounding box calculation, each glyph is treated
+as a separate graphics element. The calculations assume that
+all glyphs occupy the full glyph cell. For example, for
+horizontal text, the calculations assume that each glyph
+extends vertically to the full ascent and descent values for
+the font.</p>
+
+<p>Then, coordinate (0,0) in the new user coordinate system is
+mapped to the (minx,miny) corner of the tight bounding box
+within the user coordinate system of the applicable element and
+coordinate (1,1) in the new user coordinate system is mapped to
+the (maxx,maxy) corner of the tight bounding box of the
+applicable element. In most situations, the following
+transformation matrix produces the correct effect:</p>
+
 <pre>
 [ (maxx-minx) 0 0 (maxy-miny) minx miny ]
 </pre>
-    <p>&nbsp;</p>
-    <p>When percentages are used with attributes that define the
-    gradient vector, the pattern tile, the filter region or the
-    masking region, a percentage represents the same value as the
-    corresponding decimal value (e.g., 50% means the same as 0.5).
-    If percentages are used within the content of a <a>'pattern'</a>,
-    <a>'clipPath'</a>, <a>'mask element'</a> or <a>'filter element'</a> element, these values
-    are treated according to the processing rules for percentages
-    as defined in <a href="coords.html#Units">Units</a>.</p>
-    <p>Any numeric value can be specified for values expressed as a
-    fraction or percentage of object bounding box units. In
-    particular, fractions less are zero or greater than one and
-    percentages less than 0% or greater than 100% can be
-    specified.</p>
-    <p>Keyword <span class="attr-value">objectBoundingBox</span>
-    should not be used when the geometry of the applicable element
-    has no width or no height, such as the case of a horizontal or
-    vertical line, even when the line has actual thickness when
-    viewed due to having a non-zero stroke width since stroke width
-    is ignored for bounding box calculations. When the geometry of
-    the applicable element has no width or height and <span
-    class="attr-value">objectBoundingBox</span> is specified, then
-    the given effect (e.g., a gradient or a filter) will be
-    ignored.</p>
-    
 
+<p>When percentages are used with attributes that define the
+gradient vector, the pattern tile, the filter region or the
+masking region, a percentage represents the same value as the
+corresponding decimal value (e.g., 50% means the same as 0.5).
+If percentages are used within the content of a <a>'pattern'</a>,
+<a>'clipPath'</a>, <a>'mask element'</a> or <a>'filter element'</a> element, these values
+are treated according to the processing rules for percentages
+as defined in <a href="coords.html#Units">Units</a>.</p>
+
+<p>Any numeric value can be specified for values expressed as a
+fraction or percentage of object bounding box units. In
+particular, fractions less are zero or greater than one and
+percentages less than 0% or greater than 100% can be
+specified.</p>
+
+<p>Keyword <span class="attr-value">objectBoundingBox</span>
+should not be used when the geometry of the applicable element
+has no width or no height, such as the case of a horizontal or
+vertical line, even when the line has actual thickness when
+viewed due to having a non-zero stroke width since stroke width
+is ignored for bounding box calculations. When the geometry of
+the applicable element has no width or height and <span
+class="attr-value">objectBoundingBox</span> is specified, then
+the given effect (e.g., a gradient or a filter) will be
+ignored.</p>
 
 <h2 id="IntrinsicSizing">Intrinsic sizing properties of the viewport of SVG content</h2>
+
 <p>SVG needs to specify how to calculate some intrinsic sizing properties  to
 enable inclusion within other languages. The intrinsic width and height
-of the <a>viewport</a> of SVG content must be determined from the <a href="struct.html#SVGElementWidthAttribute"><span class="attr-name">'width'</span></a> and <a href="struct.html#SVGElementHeightAttribute"><span
-class="attr-name">'height'</span></a>
-    attributes. If either of these are not specified, a
-    value of <span class="attr-value">'100%'</span> must
-    be assumed. <em>Note:</em> the  <a href="struct.html#SVGElementWidthAttribute"><span class="attr-name">'width'</span></a> and <a href="struct.html#SVGElementHeightAttribute"><span
-  class="attr-name">'height'</span></a>
- attributes are <em>not the same</em> as the CSS width and height properties. Specifically, percentage values <em>do not
-provide an intrinsic width or height, and do not indicate a percentage of the containing block</em>. Rather, once the viewport is established, they indicate the portion of the viewport that is actually covered by image data.</p>
+of the <a>viewport</a> of SVG content must be determined from the <a>'svg/width'</a>
+and <a>'svg/height'</a> attributes.  If either of these are not specified, a
+value of <span class="attr-value">'100%'</span> must be assumed.
+<em>Note:</em> the <a>'svg/width'</a> and <a>'svg/height'</a>
+attributes are <em>not the same</em> as the CSS width and height properties.
+Specifically, percentage values <em>do not provide an intrinsic width or height,
+and do not indicate a percentage of the containing block</em>. Rather, once the
+viewport is established, they indicate the portion of the viewport that is
+actually covered by image data.</p>
 
 <p>The intrinsic aspect ratio of the <a>viewport</a> of SVG content is necessary
 for example, when including SVG from an <span class="element-name">'object'</span> element in HTML styled with
 CSS.  It is possible (indeed, common) for an SVG graphic to have an intrinsic aspect ratio but not to have an intrinsic width or height.
 The intrinsic aspect ratio must be calculated based upon the
 following rules:</p>
+
 <ul>
-<li><p>The aspect ratio is calculated by dividing a width by a height.</p></li>
-<li><p>If the <a href="struct.html#SVGElementWidthAttribute"><span class="attr-name">'width'</span></a> and <a href="struct.html#SVGElementHeightAttribute"><span
-class="attr-name">'height'</span></a> of the <a>rootmost 'svg' element</a> are both specified with 
-unit identifiers (in, mm, cm, pt, pc, px, em, ex) or in <a>user units</a>, then the aspect ratio is
-calculated from the <a href="struct.html#SVGElementWidthAttribute"><span class="attr-name">'width'</span></a> and <a href="struct.html#SVGElementHeightAttribute"><span
-class="attr-name">'height'</span></a> attributes after resolving both values to user units.</p></li>
-<li><p>If either/both of the <a href="struct.html#SVGElementWidthAttribute"><span class="attr-name">'width'</span></a> and <a href="struct.html#SVGElementHeightAttribute"><span
-class="attr-name">'height'</span></a> of the <a>rootmost 'svg' element</a> are in
-percentage units (or omitted), the aspect ratio is calculated from the width and
-height values of the <a href="coords.html#ViewBoxAttribute"><span
-    class="attr-name">'viewBox'</span></a> specified for the <a>current SVG document fragment</a>. If the <a href="coords.html#ViewBoxAttribute"><span
-    class="attr-name">'viewBox'</span></a> is not correctly specified, or set to <span class="attr-value">'none'</span>,
-the intrinsic aspect ratio cannot be calculated and is considered unspecified.</p></li>
+  <li>The aspect ratio is calculated by dividing a width by a height.</li>
+
+  <li>If the <a>'svg/width'</a> and <a>'svg/height'</a>
+  of the <a>rootmost 'svg' element</a> are both specified with 
+  unit identifiers (in, mm, cm, pt, pc, px, em, ex) or in <a>user units</a>, then the aspect ratio is
+  calculated from the <a>'svg/width'</a> and <a>'svg/height'</a> attributes after resolving both values to user units.</li>
+
+  <li>If either/both of the <a>'svg/width'</a> and <a>'svg/height'</a> of the <a>rootmost 'svg' element</a> are in
+  percentage units (or omitted), the aspect ratio is calculated from the width and
+  height values of the <a>'svg/viewBox'</a> specified for the <a>current SVG document fragment</a>.
+  If the <a>'svg/viewBox'</a> is not correctly specified, or set to <span class="attr-value">'none'</span>,
+  the intrinsic aspect ratio cannot be calculated and is considered unspecified.</li>
 </ul>
 
 <p>Examples:</p>
@@ -1481,16 +1608,16 @@ applied</em> to the data when being encoded in SVG.</p>
 global attribute. These are described below and used in the examples.</p>
 
 <ul>
-  <li><p>Most ProjectedCRS have the north direction represented by
+  <li>Most ProjectedCRS have the north direction represented by
   positive values of the second axis and conversely SVG has a
   <var>y</var>-down coordinate system. That's why, in order to follow the
   usual way to represent a map with the north at its top, it is
   recommended for that kind of ProjectedCRS to use the
   <a href='#SVGGlobalTransformAttribute'><span class='attr-name'>'svg:transform'</span></a>
   global attribute with a <span class='attr-value'>'scale(1, -1)'</span> value as in the
-  third example below.</p></li>
+  third example below.</li>
 
-  <li><p>Most Geographic2dCRS have the latitude as their first
+  <li>Most Geographic2dCRS have the latitude as their first
   axis rather than the longitude, which means that the
   south-north axis would be represented by the <var>x</var>-axis in SVG
   instead of the usual <var>y</var>-axis. That's why, in order to follow
@@ -1499,9 +1626,9 @@ global attribute. These are described below and used in the examples.</p>
   <a href='#SVGGlobalTransformAttribute'><span class='attr-name'>'svg:transform'</span></a>
   global attribute with a <span class='attr-value'>'rotate(-90)'</span> value as in the
   first example (while also adding the <span class='attr-value'>'scale(1, -1)'</span> as for
-  ProjectedCRS).</p></li>
+  ProjectedCRS).</li>
 
-  <li><p>In addition, when converting for profiles which place
+  <li>In addition, when converting for profiles which place
   restrictions on precision of real number values, it may be
   useful to add an additional scaling factor to retain good
   precision for a specific area. When generating an SVG
@@ -1511,7 +1638,7 @@ global attribute. These are described below and used in the examples.</p>
   global attribute with a <span class='attr-value'>'rotate(-90) scale(100)'</span>
   value (shown in the second example).
   Different scaling values may be required depending on the
-  particular CRS.</p></li>
+  particular CRS.</li>
 </ul>
 
 <p>Below is a simple example of the coordinate metadata, which
