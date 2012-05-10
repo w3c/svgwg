@@ -557,156 +557,166 @@ ancestors is set to <span class="prop-value">none</span>.</p>
 
 <edit:elementsummary name='use'/>
 
-    <p>Any <a>'svg'</a>, <a>'symbol'</a>, <a>'g'</a>, <a>graphics element</a> or
-    other <a>'use'</a> is potentially a
-    template object that can be re-used (i.e., "instanced") in the
-    SVG document via a <a>'use'</a>
-    element. The <a>'use'</a> element
-    references another element and indicates that the graphical
-    contents of that element is included/drawn at that given point
-    in the document.</p>
-    <p>Unlike <a>'image'</a>, the <a>'use'</a> element cannot reference
-    entire files.</p>
-    <p>The <a>'use'</a> element has
-    optional attributes <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a> and <a>'use/height'</a> which are used to map the
-    graphical contents of the referenced element onto a rectangular
-    region within the current coordinate system.</p>
-    <p>The effect of a <a>'use'</a>
-    element is as if the contents of the referenced element were
-    deeply cloned into a separate non-exposed DOM tree which had
-    the <a>'use'</a> element as its
-    parent and all of the <a>'use'</a>
-    element's ancestors as its higher-level ancestors. Because the
-    cloned DOM tree is non-exposed, the SVG Document Object Model
-    (DOM) only contains the <a>'use'</a>
-    element and its attributes. The SVG DOM does not show the
-    referenced element's contents as children of <a>'use'</a> element.</p>
-    <p>For user agents that support <a
-    href="styling.html#StylingWithCSS">Styling with CSS</a>, the
-    conceptual deep cloning of the referenced element into a
-    non-exposed DOM tree also copies any property values resulting
-    from <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html">the CSS cascade</a>
-    ([<a href="refs.html#ref-CSS2">CSS2</a>], chapter 6)
-    on the referenced element and its contents. CSS2 selectors can
-    be applied to the original (i.e., referenced) elements because
-    they are part of the formal document structure. CSS2 selectors
-    cannot be applied to the (conceptually) cloned DOM tree because
-    its contents are not part of the formal document structure.</p>
-    <p>Property inheritance, however, works as if the referenced
-    element had been textually included as a deeply cloned child of
-    the <a>'use'</a> element. The
-    referenced element inherits properties from the <a>'use'</a> element and the <a>'use'</a> element's ancestors. An
-    instance of a referenced element does not inherit properties
-    from the referenced element's original parents.</p>
-    <p>If event attributes are assigned to referenced elements,
-    then the actual target for the event will be the
-    <a>SVGElementInstance</a> object
-    within the "instance tree" corresponding to the given
-    referenced element.</p>
-    <p>The event handling for the non-exposed tree works as if the
-    referenced element had been textually included as a deeply
-    cloned child of the <a>'use'</a>
-    element, except that events are dispatched to the <a>SVGElementInstance</a> objects. The
-    event's target and currentTarget attributes are set to the
-    <a>SVGElementInstance</a> that
-    corresponds to the target and current target elements in the
-    referenced subtree. An event propagates through the exposed and
-    non-exposed portions of the tree in the same manner as it would
-    in the regular document tree: first going from the root element
-    to the <a>'use'</a> element and then
-    through non-exposed tree elements in the capture phase,
-    followed by the target phase at the target of the event, then
-    bubbling back through non-exposed tree to the use element and
-    then back through regular tree to the root element in bubbling
-    phase.</p>
-    <p>An element and all its corresponding <a>SVGElementInstance</a> objects
-    share an event listener list. The currentTarget attribute of
-    the event can be used to determine through which object an
-    event listener was invoked.</p>
-    <p>The behavior of the <a>'visibility'</a> property conforms to
-    this model of property inheritance. Thus, specifying <span
-    class="prop-value">'visibility:hidden'</span> on a <a>'use'</a> element does not guarantee
-    that the referenced content will not be rendered. If the <a>'use'</a> element specifies <span
-    class="prop-value">'visibility:hidden'</span> and the element
-    it references specifies <span
-    class="prop-value">'visibility:hidden'</span> or <span
-    class="prop-value">'visibility:inherit'</span>, then that one
-    element will be hidden. However, if the referenced element
-    instead specifies <span
-    class="prop-value">'visibility:visible'</span>, then that
-    element will be visible even if the <a>'use'</a> element specifies <span
-    class="prop-value">'visibility:hidden'</span>.</p>
-    <p>Animations on a referenced element will cause the instances
-    to also be animated.</p>
-    <p>A <a>'use'</a> element has the
-    same visual effect as if the <a>'use'</a> element were replaced by the
-    following generated content:</p>
-    <ul>
-      <li><strong>If the <a>'use'</a>
-      element references a <a>'symbol'</a>
-      element</strong>:<br />
-      <br />
-       In the generated content, the <a>'use'</a> will be replaced by <a>'g'</a>, where all attributes
-      from the <a>'use'</a> element
-      except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>, <a>'use/height'</a> and <a>'use/xlink:href'</a> are transferred to
-      the generated <a>'g'</a> element. An additional
-      transformation <span class="attr-value">translate(x,y)</span>
-      is appended to the end (i.e., right-side) of the <a>'transform'</a> attribute on the
-      generated <a>'g'</a>, where <span
-      class="attr-value">x</span> and <span
-      class="attr-value">y</span> represent the values of the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a> element. The referenced <a>'symbol'</a> and its contents are
-      deep-cloned into the generated tree, with the exception that
-      the <a>'symbol'</a> is replaced by an <a>'svg'</a>. This generated <a>'svg'</a> will always have
-      explicit values for attributes <a>'svg/width'</a> and <a>'svg/height'</a>. If attributes <a>'use/width'</a> and/or <a>'use/height'</a> are provided on the <a>'use'</a> element, then these
-      attributes will be transferred to the generated <a>'svg'</a>. If attributes <a>'use/width'</a> and/or <a>'use/height'</a> are not specified, the
-      generated <a>'svg'</a> element will use values
-      of <span class='attr-value'>'100%'</span> for these attributes.<br />
-      <br />
-      </li>
-      <li><strong>If the <a>'use'</a>
-      element references an <a>'svg'</a> element:</strong><br />
-      <br />
-       In the generated content, the <a>'use'</a> will be replaced by <a>'g'</a>, where all attributes
-      from the <a>'use'</a> element
-      except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>, <a>'use/height'</a> and <a>'use/xlink:href'</a> are transferred to
-      the generated <a>'g'</a> element. An additional
-      transformation <span class="attr-value">translate(x,y)</span>
-      is appended to the end (i.e., right-side) of the <a>'transform'</a> attribute on the
-      generated <a>'g'</a>, where <span
-      class="attr-value">x</span> and <span
-      class="attr-value">y</span> represent the values of the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a> element. The referenced <a>'svg'</a> and its contents are
-      deep-cloned into the generated tree. If attributes <a>'use/width'</a> and/or <a>'use/height'</a> are provided on the <a>'use'</a> element, then these values
-      will override the corresponding attributes on the <a>'svg'</a> in the generated
-      tree.<br />
-      <br />
-      </li>
-      <li><strong>Otherwise:</strong><br />
-      <br />
-       In the generated content, the <a>'use'</a> will be replaced by <a>'g'</a>, where all attributes
-      from the <a>'use'</a> element
-      except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>, <a>'use/height'</a> and <a>'use/xlink:href'</a> are transferred to
-      the generated <a>'g'</a> element. An additional
-      transformation <span class="attr-value">translate(x,y)</span>
-      is appended to the end (i.e., right-side) of the <a>'transform'</a> attribute on the
-      generated <a>'g'</a>, where <span
-      class="attr-value">x</span> and <span
-      class="attr-value">y</span> represent the values of the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a> element. The referenced
-      object and its contents are deep-cloned into the generated
-      tree.</li>
-    </ul>
-    <p>For user agents that support <a
-    href="styling.html#StylingWithCSS">Styling with CSS</a>, the
-    generated <a>'g'</a> element carries along with
-    it the "cascaded" property values on the <a>'use'</a> element which result from
-    <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html">the CSS cascade</a>
-    ([<a href="refs.html#ref-CSS2">CSS2</a>], chapter 6).
-    Additionally, the copy (deep clone) of the referenced resource
-    carries along with it the "cascaded" property values resulting
-    from the CSS cascade on the original (i.e., referenced)
-    elements. Thus, the result of various CSS selectors in
-    combination with the <a>'class'</a> and <a>'style attribute'</a> attributes are, in effect,
-    replaced by the functional equivalent of a <a>'style attribute'</a> attribute in the generated
-    content which conveys the "cascaded" property values.</p>
+<p>Any <a>'svg'</a>, <a>'symbol'</a>, <a>'g'</a>, <a>graphics element</a> or
+other <a>'use'</a> is potentially a
+template object that can be re-used (i.e., "instanced") in the
+SVG document via a <a>'use'</a>
+element. The <a>'use'</a> element
+references another element and indicates that the graphical
+contents of that element is included/drawn at that given point
+in the document.</p>
+
+<p>Unlike <a>'image'</a>, the <a>'use'</a> element cannot reference
+entire files.</p>
+
+<p>The <a>'use'</a> element has
+optional attributes <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a> and <a>'use/height'</a> which are used to map the
+graphical contents of the referenced element onto a rectangular
+region within the current coordinate system.</p>
+
+<p>The effect of a <a>'use'</a>
+element is as if the contents of the referenced element were
+deeply cloned into a separate non-exposed DOM tree which had
+the <a>'use'</a> element as its
+parent and all of the <a>'use'</a>
+element's ancestors as its higher-level ancestors. Because the
+cloned DOM tree is non-exposed, the SVG Document Object Model
+(DOM) only contains the <a>'use'</a>
+element and its attributes. The SVG DOM does not show the
+referenced element's contents as children of <a>'use'</a> element.</p>
+
+<p>For user agents that support <a
+href="styling.html#StylingWithCSS">Styling with CSS</a>, the
+conceptual deep cloning of the referenced element into a
+non-exposed DOM tree also copies any property values resulting
+from <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html">the CSS cascade</a>
+([<a href="refs.html#ref-CSS2">CSS2</a>], chapter 6)
+on the referenced element and its contents. CSS2 selectors can
+be applied to the original (i.e., referenced) elements because
+they are part of the formal document structure. CSS2 selectors
+cannot be applied to the (conceptually) cloned DOM tree because
+its contents are not part of the formal document structure.</p>
+
+<p>Property inheritance, however, works as if the referenced
+element had been textually included as a deeply cloned child of
+the <a>'use'</a> element. The
+referenced element inherits properties from the <a>'use'</a> element and the <a>'use'</a> element's ancestors. An
+instance of a referenced element does not inherit properties
+from the referenced element's original parents.</p>
+
+<p>If event attributes are assigned to referenced elements,
+then the actual target for the event will be the
+<a>SVGElementInstance</a> object
+within the "instance tree" corresponding to the given
+referenced element.</p>
+
+<p>The event handling for the non-exposed tree works as if the
+referenced element had been textually included as a deeply
+cloned child of the <a>'use'</a>
+element, except that events are dispatched to the <a>SVGElementInstance</a> objects. The
+event's target and currentTarget attributes are set to the
+<a>SVGElementInstance</a> that
+corresponds to the target and current target elements in the
+referenced subtree. An event propagates through the exposed and
+non-exposed portions of the tree in the same manner as it would
+in the regular document tree: first going from the root element
+to the <a>'use'</a> element and then
+through non-exposed tree elements in the capture phase,
+followed by the target phase at the target of the event, then
+bubbling back through non-exposed tree to the use element and
+then back through regular tree to the root element in bubbling
+phase.</p>
+
+<p>An element and all its corresponding <a>SVGElementInstance</a> objects
+share an event listener list. The currentTarget attribute of
+the event can be used to determine through which object an
+event listener was invoked.</p>
+
+<p>The behavior of the <a>'visibility'</a> property conforms to
+this model of property inheritance. Thus, specifying <span
+class="prop-value">'visibility:hidden'</span> on a <a>'use'</a> element does not guarantee
+that the referenced content will not be rendered. If the <a>'use'</a> element specifies <span
+class="prop-value">'visibility:hidden'</span> and the element
+it references specifies <span
+class="prop-value">'visibility:hidden'</span> or <span
+class="prop-value">'visibility:inherit'</span>, then that one
+element will be hidden. However, if the referenced element
+instead specifies <span
+class="prop-value">'visibility:visible'</span>, then that
+element will be visible even if the <a>'use'</a> element specifies <span
+class="prop-value">'visibility:hidden'</span>.</p>
+
+<p>Animations on a referenced element will cause the instances
+to also be animated.</p>
+
+<p>A <a>'use'</a> element has the
+same visual effect as if the <a>'use'</a> element were replaced by the
+following generated content:</p>
+
+<ul>
+  <li>
+    <p><strong>If the <a>'use'</a> element references a <a>'symbol'</a> element</strong>:</p>
+
+    <p>In the generated content, the <a>'use'</a> will be replaced by <a>'g'</a>, where all attributes
+    from the <a>'use'</a> element
+    except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>, <a>'use/height'</a> and <a>'use/xlink:href'</a> are transferred to
+    the generated <a>'g'</a> element. An additional
+    transformation <span class="attr-value">translate(x,y)</span>
+    is appended to the end (i.e., right-side) of the <a>'transform'</a> attribute on the
+    generated <a>'g'</a>, where <span
+    class="attr-value">x</span> and <span
+    class="attr-value">y</span> represent the values of the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a> element. The referenced <a>'symbol'</a> and its contents are
+    deep-cloned into the generated tree, with the exception that
+    the <a>'symbol'</a> is replaced by an <a>'svg'</a>. This generated <a>'svg'</a> will always have
+    explicit values for attributes <a>'svg/width'</a> and <a>'svg/height'</a>. If attributes <a>'use/width'</a> and/or <a>'use/height'</a> are provided on the <a>'use'</a> element, then these
+    attributes will be transferred to the generated <a>'svg'</a>. If attributes <a>'use/width'</a> and/or <a>'use/height'</a> are not specified, the
+    generated <a>'svg'</a> element will use values
+    of <span class='attr-value'>'100%'</span> for these attributes.</p>
+  </li>
+  <li>
+    <p><strong>If the <a>'use'</a> element references an <a>'svg'</a> element:</strong></p>
+    <p>In the generated content, the <a>'use'</a> will be replaced by <a>'g'</a>, where all attributes
+    from the <a>'use'</a> element
+    except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>, <a>'use/height'</a> and <a>'use/xlink:href'</a> are transferred to
+    the generated <a>'g'</a> element. An additional
+    transformation <span class="attr-value">translate(x,y)</span>
+    is appended to the end (i.e., right-side) of the <a>'transform'</a> attribute on the
+    generated <a>'g'</a>, where <span
+    class="attr-value">x</span> and <span
+    class="attr-value">y</span> represent the values of the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a> element. The referenced <a>'svg'</a> and its contents are
+    deep-cloned into the generated tree. If attributes <a>'use/width'</a> and/or <a>'use/height'</a> are provided on the <a>'use'</a> element, then these values
+    will override the corresponding attributes on the <a>'svg'</a> in the generated
+    tree.</p>
+  </li>
+  <li>
+    <p><strong>Otherwise:</strong></p>
+    <p>In the generated content, the <a>'use'</a> will be replaced by <a>'g'</a>, where all attributes
+    from the <a>'use'</a> element
+    except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>, <a>'use/height'</a> and <a>'use/xlink:href'</a> are transferred to
+    the generated <a>'g'</a> element. An additional
+    transformation <span class="attr-value">translate(x,y)</span>
+    is appended to the end (i.e., right-side) of the <a>'transform'</a> attribute on the
+    generated <a>'g'</a>, where <span
+    class="attr-value">x</span> and <span
+    class="attr-value">y</span> represent the values of the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a> element. The referenced
+    object and its contents are deep-cloned into the generated
+    tree.</p>
+  </li>
+</ul>
+
+<p>For user agents that support <a
+href="styling.html#StylingWithCSS">Styling with CSS</a>, the
+generated <a>'g'</a> element carries along with
+it the "cascaded" property values on the <a>'use'</a> element which result from
+<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html">the CSS cascade</a>
+([<a href="refs.html#ref-CSS2">CSS2</a>], chapter 6).
+Additionally, the copy (deep clone) of the referenced resource
+carries along with it the "cascaded" property values resulting
+from the CSS cascade on the original (i.e., referenced)
+elements. Thus, the result of various CSS selectors in
+combination with the <a>'class'</a> and <a>'style attribute'</a> attributes are, in effect,
+replaced by the functional equivalent of a <a>'style attribute'</a> attribute in the generated
+content which conveys the "cascaded" property values.</p>
 
 <p><span class="example-ref">Example Use01</span> below has a
 simple <a>'use'</a> on a <a>'rect'</a>.</p>
@@ -840,134 +850,107 @@ href="#Head">References and the <span class='element-name'>'defs'</span> element
 
 <edit:elementsummary name='image'/>
 
-    <p>The <a>'image'</a> element
-    indicates that the contents of a complete file are to be
-    rendered into a given rectangle within the current user
-    coordinate system. The <a>'image'</a> element can refer to raster
-    image files such as PNG or JPEG or to files with MIME type of
-    "image/svg+xml". <a
-    href="conform.html#ConformingSVGViewers">Conforming SVG
-    viewers</a> need to support at least PNG, JPEG and SVG format
-    files.</p>
-    <p>The result of processing an <a>'image'</a> is always a four-channel
-    RGBA result. When an <a>'image'</a>
-    element references a raster image file such as PNG or JPEG
-    files which only has three channels (RGB), then the effect is
-    as if the object were converted into a 4-channel RGBA image
-    with the alpha channel uniformly set to 1. For a single-channel
-    raster image, the effect is as if the object were converted
-    into a 4-channel RGBA image, where the single channel from the
-    referenced object is used to compute the three color channels
-    and the alpha channel is uniformly set to 1.</p>
-    <p>An <a>'image'</a> element
-    establishes a new viewport for the referenced file as described
-    in <a href="coords.html#EstablishingANewViewport">Establishing
-    a new viewport</a>.  The bounds for the new viewport are
-    defined by attributes <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>. The placement and scaling
-    of the referenced image are controlled by the <a>'preserveAspectRatio'</a> attribute on
-    the <a>'image'</a> element.</p>
-    <p>When an <a>'image'</a> element
-    references an SVG image, the <a>'clip'</a> and <a>'overflow'</a> properties on the root element in
-    the referenced SVG image are ignored (in the same manner as the
-    <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> attributes are ignored). Unless the value of
-    <a>'preserveAspectRatio'</a> on the <a>'image'</a> element starts with 'defer', 
-    the <a>'preserveAspectRatio'</a> attribute on the root element in
-    the referenced SVG image is also ignored (see <a>'preserveAspectRatio'</a>
-    for details).
-    
-    Instead, the <a>'preserveAspectRatio'</a> attribute on
-    the referencing <a>'image'</a>
-    element defines how the SVG image content is fitted into the
-    viewport and the <a>'clip'</a> and <a>'overflow'</a> properties on the <a>'image'</a> element define how the SVG
-    image content is clipped (or not) relative to the viewport.</p>
-    <p>The value of the <a>'viewBox'</a> attribute to use when
-    evaluating the <a>'preserveAspectRatio'</a> attribute is
-    defined by the referenced content. For content that clearly
-    identifies a viewBox (e.g. an SVG file with the <a>'viewBox'</a> attribute on the
-    <a>outermost svg element</a>) that value should be used. For most
-    raster content (PNG, JPEG) the bounds of the image should be
-    used (i.e. the <a>'image'</a>
-    element has an implicit <a>'viewBox'</a> of <span class='attr-value'>'0 0 raster-image-width
-    raster-image-height'</span>). Where no value is readily available
-    (e.g. an SVG file with no <a>'viewBox'</a> attribute on the
-    <a>outermost svg element</a>) the <a>'preserveAspectRatio'</a> attribute is
-    ignored, and only the translation due to the <a>'x'</a> &amp; <a>'y'</a> attributes of the viewport is
-    used to display the content.</p>
-    <p>For example, if the image element referenced a PNG or JPEG
-    and <span class="attr-value">preserveAspectRatio="xMinYMin
-    meet"</span>, then the aspect ratio of the raster would be
-    preserved (which means that the scale factor from image's
-    coordinates to current user space coordinates would be the same
-    for both X and Y), the raster would be sized as large as
-    possible while ensuring that the entire raster fits within the
-    viewport, and the top/left of the raster would be aligned with
-    the top/left of the viewport as defined by the attributes <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> on the <a>'image'</a> element.  If the value
-    of <a>'preserveAspectRatio'</a> was <span class='attr-value'>'none'</span>
-    then aspect ratio of the image would not be preserved. The
-    image would be fitted such that the top/left corner of the
-    raster exactly aligns with coordinate (<a>'x'</a>, <a>'y'</a>) and the bottom/right corner of
-    the raster exactly aligns with coordinate (<a>'x'</a>+<a>'width'</a>, <a>'y'</a>+<a>'height'</a>).</p>
+<p>The <a>'image'</a> element
+indicates that the contents of a complete file are to be
+rendered into a given rectangle within the current user
+coordinate system. The <a>'image'</a> element can refer to raster
+image files such as PNG or JPEG or to files with MIME type of
+"image/svg+xml". <a
+href="conform.html#ConformingSVGViewers">Conforming SVG
+viewers</a> need to support at least PNG, JPEG and SVG format
+files.</p>
 
-    <p>The resource referenced by the <a>'image'</a> element represents a
-    separate document which generates its own parse tree and
-    document object model (if the resource is XML). Thus, there is
-    no inheritance of properties into the image.</p>
-    <p>Unlike <a>'use'</a>, the <a>'image'</a> element cannot reference
-    elements within an SVG file.</p>
+<p>The result of processing an <a>'image'</a> is always a four-channel
+RGBA result. When an <a>'image'</a>
+element references a raster image file such as PNG or JPEG
+files which only has three channels (RGB), then the effect is
+as if the object were converted into a 4-channel RGBA image
+with the alpha channel uniformly set to 1. For a single-channel
+raster image, the effect is as if the object were converted
+into a 4-channel RGBA image, where the single channel from the
+referenced object is used to compute the three color channels
+and the alpha channel is uniformly set to 1.</p>
 
-    <div class="annotation">
-      <p>
-	SVG2 Requirement: Auto-size image.
-      </p>
-      <p>
-	Resolution: We will allow auto-sized images in SVG2.
-      </p>
-      <p>
-	<a href="http://www.w3.org/2011/10/27-svg-irc#T18-52-24">Pre-TPAC F2F Day 1</a>.
-      </p>
-      <p>
-	Purpose: Allow raster images to use own size without the need to set width and height.
-      </p>
-      <p>
-	Owner: Cameron.
-      </p>
-    </div>
+<p>An <a>'image'</a> element
+establishes a new viewport for the referenced file as described
+in <a href="coords.html#EstablishingANewViewport">Establishing
+a new viewport</a>.  The bounds for the new viewport are
+defined by attributes <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>. The placement and scaling
+of the referenced image are controlled by the <a>'preserveAspectRatio'</a> attribute on
+the <a>'image'</a> element.</p>
 
-    <div class="annotation">
-      <p>
-	SVG2 Requirement: Have a method for &gt;image&lt; to select a part of an image to display, maybe by allowing viewBox on it.
-      </p>
-      <p>
-	Resolution: We will have a method for &lt;image&gt; to select a part of an image to display, maybe by allowing viewBox on it.
-      </p>
-      <p>
-	<a href="http://www.w3.org/2011/10/27-svg-irc#T18-45-13">Pre-TPAC F2F Day 1</a>.
-      </p>
-      <p>
-	Purpose: Allow selection of part of an image.
-      </p>
-      <p>
-	Owner: ?.
-      </p>
-    </div>
+<p>When an <a>'image'</a> element
+references an SVG image, the <a>'clip'</a> and <a>'overflow'</a> properties on the root element in
+the referenced SVG image are ignored (in the same manner as the
+<a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> attributes are ignored). Unless the value of
+<a>'preserveAspectRatio'</a> on the <a>'image'</a> element starts with 'defer', 
+the <a>'preserveAspectRatio'</a> attribute on the root element in
+the referenced SVG image is also ignored (see <a>'preserveAspectRatio'</a>
+for details).  Instead, the <a>'preserveAspectRatio'</a> attribute on
+the referencing <a>'image'</a>
+element defines how the SVG image content is fitted into the
+viewport and the <a>'clip'</a> and <a>'overflow'</a> properties on the <a>'image'</a> element define how the SVG
+image content is clipped (or not) relative to the viewport.</p>
 
-    <div class="annotation">
-      <p>
-	SVG2 Requirement: Support CSS3 image-fit.
-      </p>
-      <p>
-	Resolution: SVG2 will depend on CSS3 Image Values and CSS4 Image Values.
-      </p>
-      <p>
-	<a href="http://www.w3.org/Graphics/SVG/WG/wiki/SVG2_Resolutions#CSS_Spec_dependencies">Seattle 2011 F2F Day 3</a>.
-      </p>
-      <p>
-	Purpose: Align with CSS WG preserveAspectRatio.
-      </p>
-      <p>
-	Owner: Erik.
-      </p>
-    </div>
+<p>The value of the <a>'viewBox'</a> attribute to use when
+evaluating the <a>'preserveAspectRatio'</a> attribute is
+defined by the referenced content. For content that clearly
+identifies a viewBox (e.g. an SVG file with the <a>'viewBox'</a> attribute on the
+<a>outermost svg element</a>) that value should be used. For most
+raster content (PNG, JPEG) the bounds of the image should be
+used (i.e. the <a>'image'</a>
+element has an implicit <a>'viewBox'</a> of <span class='attr-value'>'0 0 raster-image-width
+raster-image-height'</span>). Where no value is readily available
+(e.g. an SVG file with no <a>'viewBox'</a> attribute on the
+<a>outermost svg element</a>) the <a>'preserveAspectRatio'</a> attribute is
+ignored, and only the translation due to the <a>'x'</a> &amp; <a>'y'</a> attributes of the viewport is
+used to display the content.</p>
+
+<p>For example, if the image element referenced a PNG or JPEG
+and <span class="attr-value">preserveAspectRatio="xMinYMin
+meet"</span>, then the aspect ratio of the raster would be
+preserved (which means that the scale factor from image's
+coordinates to current user space coordinates would be the same
+for both X and Y), the raster would be sized as large as
+possible while ensuring that the entire raster fits within the
+viewport, and the top/left of the raster would be aligned with
+the top/left of the viewport as defined by the attributes <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> on the <a>'image'</a> element.  If the value
+of <a>'preserveAspectRatio'</a> was <span class='attr-value'>'none'</span>
+then aspect ratio of the image would not be preserved. The
+image would be fitted such that the top/left corner of the
+raster exactly aligns with coordinate (<a>'x'</a>, <a>'y'</a>) and the bottom/right corner of
+the raster exactly aligns with coordinate (<a>'x'</a>+<a>'width'</a>, <a>'y'</a>+<a>'height'</a>).</p>
+
+<p>The resource referenced by the <a>'image'</a> element represents a
+separate document which generates its own parse tree and
+document object model (if the resource is XML). Thus, there is
+no inheritance of properties into the image.</p>
+<p>Unlike <a>'use'</a>, the <a>'image'</a> element cannot reference
+elements within an SVG file.</p>
+
+<div class="annotation">
+  <p>SVG2 Requirement: Auto-size image.</p>
+  <p>Resolution: We will allow auto-sized images in SVG2.</p>
+  <p><a href="http://www.w3.org/2011/10/27-svg-irc#T18-52-24">Pre-TPAC F2F Day 1</a>.</p>
+  <p>Purpose: Allow raster images to use own size without the need to set width and height.</p>
+  <p>Owner: Cameron.</p>
+</div>
+
+<div class="annotation">
+  <p>SVG2 Requirement: Have a method for &gt;image&lt; to select a part of an image to display, maybe by allowing viewBox on it.</p>
+  <p>Resolution: We will have a method for &lt;image&gt; to select a part of an image to display, maybe by allowing viewBox on it.</p>
+  <p><a href="http://www.w3.org/2011/10/27-svg-irc#T18-45-13">Pre-TPAC F2F Day 1</a>.</p>
+  <p>Purpose: Allow selection of part of an image.</p>
+  <p>Owner: ?.</p>
+</div>
+
+<div class="annotation">
+  <p>SVG2 Requirement: Support CSS3 image-fit.</p>
+  <p>Resolution: SVG2 will depend on CSS3 Image Values and CSS4 Image Values.</p>
+  <p><a href="http://www.w3.org/Graphics/SVG/WG/wiki/SVG2_Resolutions#CSS_Spec_dependencies">Seattle 2011 F2F Day 3</a>.</p>
+  <p>Purpose: Align with CSS WG preserveAspectRatio.</p>
+  <p>Owner: Erik.</p>
+</div>
 
     <div class="adef-list">
       <p><em>Attribute definitions:</em></p>
@@ -1038,7 +1021,8 @@ href="#Head">References and the <span class='element-name'>'defs'</span> element
       </dl>
     </div>
 
-    <p>An example:</p>
+<p>An example:</p>
+
 <pre>
 &lt;?xml version="1.0" standalone="no"?&gt;
 &lt;!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
@@ -1056,42 +1040,46 @@ href="#Head">References and the <span class='element-name'>'defs'</span> element
 
 </edit:with>
 
-    <h2 id="ConditionalProcessing">Conditional processing</h2>
+<h2 id="ConditionalProcessing">Conditional processing</h2>
 
-    <!--
-    <a id="ConditionalProcessingConditional.attrib" name="ConditionalProcessingConditional.attrib" class="indexref-conditional_processing::test_attributes"></a>
-    <a id="Conditional.attrib" name="Conditional.attrib" class="indexref-test_attributes"></a> 
-    -->
-    <h3 id="ConditionalProcessingOverview">Conditional processing overview</h3>
-    <p>SVG contains a <a>'switch'</a> element along with
-    attributes <a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> to provide an
-    ability to specify alternate viewing depending on the
-    capabilities of a given user agent or the user's language.</p>
-    <p>Attributes <a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> act as tests and
-    return either true or false results. The <a>'switch'</a> renders the first of
-    its children for which all of these attributes test true. If
-    the given attribute is not specified, then a true value is
-    assumed.</p>
-    <p>Similar to the <a>'display'</a> property, conditional processing
-    attributes only affect the direct rendering of elements and do
-    not prevent elements from being successfully referenced by
-    other elements (such as via a <a>'use'</a>).</p>
-    <p>In consequence:</p>
-    <ul>
-      <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes affect
-      <a>'a'</a>, <a>'altGlyph'</a>, <a>'foreignObject'</a>, <a>'textPath'</a>, <a>'tref'</a>, and <a>'tspan'</a> elements.</li>
-      <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes will
-      have no effect on <a>'mask element'</a>,
-      <a>'clipPath'</a>, and <a>'pattern'</a> elements.</li>
-      <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes do not
-      apply to the <a>'defs'</a>, and
-      <a>'cursor element'</a> elements because
-      they are not part of the rendering tree.</li>
-      <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes affect
-      <a>'animate'</a>, <a>'animateColor'</a>, <a>'animateMotion'</a>, <a>'animateTransform'</a>, and <a>'set'</a> elements. If the
-      conditional statement on these animation elements fails, the
-      animation will never be triggered.</li>
-    </ul>
+<h3 id="ConditionalProcessingOverview">Conditional processing overview</h3>
+
+<p>SVG contains a <a>'switch'</a> element along with
+attributes <a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> to provide an
+ability to specify alternate viewing depending on the
+capabilities of a given user agent or the user's language.</p>
+
+<p>Attributes <a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> act as tests and
+return either true or false results. The <a>'switch'</a> renders the first of
+its children for which all of these attributes test true. If
+the given attribute is not specified, then a true value is
+assumed.</p>
+
+<p>Similar to the <a>'display'</a> property, conditional processing
+attributes only affect the direct rendering of elements and do
+not prevent elements from being successfully referenced by
+other elements (such as via a <a>'use'</a>).</p>
+
+<p>In consequence:</p>
+
+<ul>
+  <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes affect
+  <a>'a'</a>, <a>'altGlyph'</a>, <a>'foreignObject'</a>, <a>'textPath'</a>, <a>'tref'</a>, and <a>'tspan'</a> elements.</li>
+
+  <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes will
+  have no effect on <a>'mask element'</a>,
+  <a>'clipPath'</a>, and <a>'pattern'</a> elements.</li>
+
+  <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes do not
+  apply to the <a>'defs'</a>, and
+  <a>'cursor element'</a> elements because
+  they are not part of the rendering tree.</li>
+
+  <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes affect
+  <a>'animate'</a>, <a>'animateColor'</a>, <a>'animateMotion'</a>, <a>'animateTransform'</a>, and <a>'set'</a> elements. If the
+  conditional statement on these animation elements fails, the
+  animation will never be triggered.</li>
+</ul>
 
 <h3 id="SwitchElement">The <span class='element-name'>'switch'</span> element</h3>
 
@@ -1117,8 +1105,8 @@ element processing.</p>
 <a href="extend.html#ForeignObjectElement">Embedding foreign
 object types</a>.</p>
 
-    <h3 id="ConditionalProcessingRequiredFeaturesAttribute">The <span class='attr-name'>'requiredFeatures'</span>
-    attribute</h3>
+<h3 id="ConditionalProcessingRequiredFeaturesAttribute">The <span class='attr-name'>'requiredFeatures'</span> attribute</h3>
+
     <div class="adef-list">
       <p>Definition of <span
       class="adef">requiredFeatures</span>:</p>
@@ -1139,22 +1127,26 @@ object types</a>.</p>
         no.</span></dd>
       </dl>
     </div>
-    <p>If the attribute is not present, then its implicit return
-    value is "true". If a null string or empty string value is
-    given to attribute <a>'requiredFeatures'</a>, the attribute
-    returns "false".</p>
-    <p><a>'requiredFeatures'</a> is often
-    used in conjunction with the <a>'switch'</a> element. If the <a>'requiredFeatures'</a> is used in other
-    situations, then it represents a simple switch on the given
-    element whether to render the element or not.</p>
-    <h3 id="ConditionalProcessingRequiredExtensionsAttribute">The <span class='attr-name'>'requiredExtensions'</span>
-    attribute</h3>
-    <p>The <a>'requiredExtensions'</a>
-    attribute defines a list of required language extensions.
-    Language extensions are capabilities within a user agent that
-    go beyond the feature set defined in this specification. Each
-    extension is identified by an <a
-    href="linking.html#IRIReference">IRI reference</a>.</p>
+
+<p>If the attribute is not present, then its implicit return
+value is "true". If a null string or empty string value is
+given to attribute <a>'requiredFeatures'</a>, the attribute
+returns "false".</p>
+
+<p><a>'requiredFeatures'</a> is often
+used in conjunction with the <a>'switch'</a> element. If the <a>'requiredFeatures'</a> is used in other
+situations, then it represents a simple switch on the given
+element whether to render the element or not.</p>
+
+<h3 id="ConditionalProcessingRequiredExtensionsAttribute">The <span class='attr-name'>'requiredExtensions'</span> attribute</h3>
+
+<p>The <a>'requiredExtensions'</a>
+attribute defines a list of required language extensions.
+Language extensions are capabilities within a user agent that
+go beyond the feature set defined in this specification. Each
+extension is identified by an <a
+href="linking.html#IRIReference">IRI reference</a>.</p>
+
     <div class="adef-list">
       <p>Definition of <span
       class="adef">requiredExtensions</span>:</p>
@@ -1175,111 +1167,134 @@ object types</a>.</p>
         no.</span></dd>
       </dl>
     </div>
-    <p>If a given <a href="linking.html#IRIReference">IRI
-    reference</a> contains white space within itself, that white
-    space must be escaped.</p>
-    <p>If the attribute is not present, then its implicit return
-    value is "true". If a null string or empty string value is
-    given to attribute <a>'requiredExtensions'</a>, the attribute
-    returns "false".</p>
-    <p><a>'requiredExtensions'</a> is often
-    used in conjunction with the <a>'switch'</a> element. If the <a>'requiredExtensions'</a> is used in other
-    situations, then it represents a simple switch on the given
-    element whether to render the element or not.</p>
-    <p>The IRI names for the extension should include versioning
-    information, such as "http://example.org/SVGExtensionXYZ/1.0",
-    so that script writers can distinguish between different
-    versions of a given extension.</p>
 
-    <h3 id="ConditionalProcessingSystemLanguageAttribute">The <span class="attr-name">'systemLanguage'</span> attribute</h3>
-    <p id="SystemLanguageAttribute">The attribute value is a comma-separated list of language
-    names as defined in <a href="http://www.ietf.org/rfc/bcp/bcp47.txt">BCP 47</a>
-    [<a href="refs.html#ref-BCP47">BCP47</a>].</p>
-    <p>Evaluates to "true" if one of the languages indicated by
-    user preferences exactly equals one of the languages given in
-    the value of this parameter, or if one of the languages
-    indicated by user preferences exactly equals a prefix of one of
-    the languages given in the value of this parameter such that
-    the first tag character following the prefix is "-".</p>
-    <p>Evaluates to "false" otherwise.</p>
-    <p>Note: This use of a prefix matching rule does not imply that
-    language tags are assigned to languages in such a way that it
-    is always true that if a user understands a language with a
-    certain tag, then this user will also understand all languages
-    with tags for which this tag is a prefix.</p>
-    <p>The prefix rule simply allows the use of prefix tags if this
-    is the case.</p>
-    <p>Implementation note: When making the choice of linguistic
-    preference available to the user, implementers should take into
-    account the fact that users are not familiar with the details
-    of language matching as described above, and should provide
-    appropriate guidance. As an example, users may assume that on
-    selecting "en-gb", they will be served any kind of English
-    document if British English is not available. The user
-    interface for setting user preferences should guide the user to
-    add "en" to get the best matching behavior.</p>
-    <p>Multiple languages MAY be listed for content that is
-    intended for multiple audiences. For example, content that is
-    presented simultaneously in the original Maori and English
-    versions, would call for:</p>
-    <center>
-      <code>&lt;text systemLanguage="mi, en"&gt;&lt;!-- content
-      goes here --&gt;&lt;/text&gt;</code>
-    </center>
-    <p>However, just because multiple languages are present within
-    the object on which the <a>'systemLanguage'</a> test
-    attribute is placed, this does not mean that it is intended for
-    multiple linguistic audiences. An example would be a beginner's
-    language primer, such as "A First Lesson in Latin," which is
-    clearly intended to be used by an English-literate audience. In
-    this case, the <a>'systemLanguage'</a> test attribute
-    should only include "en".</p>
-    <p>Authoring note: Authors should realize that if several
-    alternative language objects are enclosed in a <a>'switch'</a>, and none of them
-    matches, this may lead to situations where no content is
-    displayed. It is thus recommended to include a "catch-all"
-    choice at the end of such a <a>'switch'</a> which is acceptable in
-    all cases.</p>
-    <p>For the <a>'systemLanguage'</a>
-    attribute: <span class="anim-target"><a
-    href="animate.html#Animatable">Animatable</a>: no.</span></p>
-    <p>If the attribute is not present, then its implicit return
-    value is "true". If a null string or empty string value is
-    given to attribute <a>'systemLanguage'</a>, the attribute returns
-    "false".</p>
-    <p><a>'systemLanguage'</a> is often used
-    in conjunction with the <a>'switch'</a> element. If the <a>'systemLanguage'</a> is used in other
-    situations, then it represents a simple switch on the given
-    element whether to render the element or not.</p>
+<p>If a given <a href="linking.html#IRIReference">IRI
+reference</a> contains white space within itself, that white
+space must be escaped.</p>
 
-    <h3 id="ApplicabilityOfTestAttributes">Applicability of test attributes</h3>
-    <p>The following list describes the applicability of the test
-    attributes to the elements that do not directly produce
-    rendering.</p>
-    <ul>
-      <li>the test attributes do not effect the
-      <a>'mask element'</a>, <a>'clipPath'</a>, <a>'linearGradient'</a>,
-      <a>'radialGradient'</a> and <a>'pattern'</a> elements. The
-      test attributes on a referenced element do not affect the
-      rendering of the referencing element.</li>
-      <li>the test attributes do not effect the <a>'defs'</a>, and <a>'cursor element'</a> elements as they are not
-      part of the rendering tree.</li>
-      <li>an animation element (<a>'animate'</a>, <a>'animateMotion'</a>, <a>'animateTransform'</a>, <a>'animateColor'</a> and <a>'set'</a>) will never be triggered if
-      it has a test attribute that evaluates to false.</li>
-    </ul>
+<p>If the attribute is not present, then its implicit return
+value is "true". If a null string or empty string value is
+given to attribute <a>'requiredExtensions'</a>, the attribute
+returns "false".</p>
 
-    <h2 id='ExternalResourcesRequired'>Specifying whether external resources are required for
-    proper rendering</h2>
-    <p>Documents often reference and use the contents of other
-    files (and other Web resources) as part of their rendering. In
-    some cases, authors want to specify that particular resources
-    are required for a document to be considered correct.</p>
-    <p>Attribute <a>'externalResourcesRequired'</a> is available
-    on all container elements and to all elements which potentially
-    can reference external resources. It specifies whether
-    referenced resources that are not part of the current document
-    are required for proper rendering of the given container
-    element or graphics element.</p>
+<p><a>'requiredExtensions'</a> is often
+used in conjunction with the <a>'switch'</a> element. If the <a>'requiredExtensions'</a> is used in other
+situations, then it represents a simple switch on the given
+element whether to render the element or not.</p>
+
+<p>The IRI names for the extension should include versioning
+information, such as "http://example.org/SVGExtensionXYZ/1.0",
+so that script writers can distinguish between different
+versions of a given extension.</p>
+
+<h3 id="ConditionalProcessingSystemLanguageAttribute">The <span class="attr-name">'systemLanguage'</span> attribute</h3>
+
+<p id="SystemLanguageAttribute">The attribute value is a comma-separated list of language
+names as defined in <a href="http://www.ietf.org/rfc/bcp/bcp47.txt">BCP 47</a>
+[<a href="refs.html#ref-BCP47">BCP47</a>].</p>
+
+<p>Evaluates to "true" if one of the languages indicated by
+user preferences exactly equals one of the languages given in
+the value of this parameter, or if one of the languages
+indicated by user preferences exactly equals a prefix of one of
+the languages given in the value of this parameter such that
+the first tag character following the prefix is "-".</p>
+
+<p>Evaluates to "false" otherwise.</p>
+
+<p>Note: This use of a prefix matching rule does not imply that
+language tags are assigned to languages in such a way that it
+is always true that if a user understands a language with a
+certain tag, then this user will also understand all languages
+with tags for which this tag is a prefix.</p>
+
+<p>The prefix rule simply allows the use of prefix tags if this
+is the case.</p>
+
+<p>Implementation note: When making the choice of linguistic
+preference available to the user, implementers should take into
+account the fact that users are not familiar with the details
+of language matching as described above, and should provide
+appropriate guidance. As an example, users may assume that on
+selecting "en-gb", they will be served any kind of English
+document if British English is not available. The user
+interface for setting user preferences should guide the user to
+add "en" to get the best matching behavior.</p>
+
+<p>Multiple languages MAY be listed for content that is
+intended for multiple audiences. For example, content that is
+presented simultaneously in the original Maori and English
+versions, would call for:</p>
+
+<center>
+  <code>&lt;text systemLanguage="mi, en"&gt;&lt;!-- content
+  goes here --&gt;&lt;/text&gt;</code>
+</center>
+
+<p>However, just because multiple languages are present within
+the object on which the <a>'systemLanguage'</a> test
+attribute is placed, this does not mean that it is intended for
+multiple linguistic audiences. An example would be a beginner's
+language primer, such as "A First Lesson in Latin," which is
+clearly intended to be used by an English-literate audience. In
+this case, the <a>'systemLanguage'</a> test attribute
+should only include "en".</p>
+
+<p>Authoring note: Authors should realize that if several
+alternative language objects are enclosed in a <a>'switch'</a>, and none of them
+matches, this may lead to situations where no content is
+displayed. It is thus recommended to include a "catch-all"
+choice at the end of such a <a>'switch'</a> which is acceptable in
+all cases.</p>
+
+<p>For the <a>'systemLanguage'</a>
+attribute: <span class="anim-target"><a
+href="animate.html#Animatable">Animatable</a>: no.</span></p>
+
+<p>If the attribute is not present, then its implicit return
+value is "true". If a null string or empty string value is
+given to attribute <a>'systemLanguage'</a>, the attribute returns
+"false".</p>
+
+<p><a>'systemLanguage'</a> is often used
+in conjunction with the <a>'switch'</a> element. If the <a>'systemLanguage'</a> is used in other
+situations, then it represents a simple switch on the given
+element whether to render the element or not.</p>
+
+<h3 id="ApplicabilityOfTestAttributes">Applicability of test attributes</h3>
+
+<p>The following list describes the applicability of the test
+attributes to the elements that do not directly produce
+rendering.</p>
+
+<ul>
+  <li>the test attributes do not effect the
+  <a>'mask element'</a>, <a>'clipPath'</a>, <a>'linearGradient'</a>,
+  <a>'radialGradient'</a> and <a>'pattern'</a> elements. The
+  test attributes on a referenced element do not affect the
+  rendering of the referencing element.</li>
+
+  <li>the test attributes do not effect the <a>'defs'</a>, and <a>'cursor element'</a> elements as they are not
+  part of the rendering tree.</li>
+
+  <li>an animation element (<a>'animate'</a>, <a>'animateMotion'</a>, <a>'animateTransform'</a>, <a>'animateColor'</a> and <a>'set'</a>) will never be triggered if
+  it has a test attribute that evaluates to false.</li>
+</ul>
+
+<h2 id='ExternalResourcesRequired'>Specifying whether external resources are required for proper rendering</h2>
+
+<p>Documents often reference and use the contents of other
+files (and other Web resources) as part of their rendering. In
+some cases, authors want to specify that particular resources
+are required for a document to be considered correct.</p>
+
+<p>Attribute <a>'externalResourcesRequired'</a> is available
+on all container elements and to all elements which potentially
+can reference external resources. It specifies whether
+referenced resources that are not part of the current document
+are required for proper rendering of the given container
+element or graphics element.</p>
+
     <div class="adef-list">
       <p>Attribute definition:</p>
       <dl>
@@ -1311,41 +1326,46 @@ object types</a>.</p>
         </dd>
       </dl>
     </div>
-    <p>This attribute applies to all types of resource references,
-    including style sheets, color profiles (see <a
-    href="color.html#ColorProfileDescriptions">Color profile
-    descriptions</a>) and fonts specified by an <a>IRI reference</a> using a <a>'font-face'</a> element or a CSS
-    @font-face specification. In particular, if an element sets
-    <span
-    class="attr-value">externalResourcesRequired="true"</span>,
-    then all style sheets must be available since any style sheet
-    might affect the rendering of that element.</p>
-    <p>Attribute <a>'externalResourcesRequired'</a> is not
-    inheritable (from a sense of attribute value inheritance), but
-    if set on a container element, its value will apply to all
-    elements within the container.</p>
-    <p>Because setting <span
-    class="attr-value">externalResourcesRequired="true"</span> on a
-    container element will have the effect of disabling progressive
-    display of the contents of that container, if that container
-    includes elements that reference external resources, tools that generate
-    SVG content are cautioned against simply setting <span
-    class="attr-value">externalResourcesRequired="true"</span> on
-    the <a>outermost svg element</a> on a universal
-    basis. Instead, it is better to specify <span
-    class="attr-value">externalResourcesRequired="true"</span> on
-    those particular graphics elements or container elements which
-    specifically need the availability of external resources in order to
-    render properly.</p>
-    <p>For <a>'externalResourcesRequired'</a>: <span
-    class="anim-target"><a
-    href="animate.html#Animatable">Animatable</a>: no.</span></p>
 
-    <h2 id="CommonAttributes">Common attributes</h2>
+<p>This attribute applies to all types of resource references,
+including style sheets, color profiles (see <a
+href="color.html#ColorProfileDescriptions">Color profile
+descriptions</a>) and fonts specified by an <a>IRI reference</a> using a <a>'font-face'</a> element or a CSS
+@font-face specification. In particular, if an element sets
+<span
+class="attr-value">externalResourcesRequired="true"</span>,
+then all style sheets must be available since any style sheet
+might affect the rendering of that element.</p>
 
-    <h3 id="Core.attrib">Attributes common to all elements: <span class='attr-name'>'id'</span> and <span class='attr-name'>'xml:base'</span></h3>
-    <p>The <a>'id'</a> and <a>'xml:base'</a> attributes are available on
-    all SVG elements:</p>
+<p>Attribute <a>'externalResourcesRequired'</a> is not
+inheritable (from a sense of attribute value inheritance), but
+if set on a container element, its value will apply to all
+elements within the container.</p>
+
+<p>Because setting <span
+class="attr-value">externalResourcesRequired="true"</span> on a
+container element will have the effect of disabling progressive
+display of the contents of that container, if that container
+includes elements that reference external resources, tools that generate
+SVG content are cautioned against simply setting <span
+class="attr-value">externalResourcesRequired="true"</span> on
+the <a>outermost svg element</a> on a universal
+basis. Instead, it is better to specify <span
+class="attr-value">externalResourcesRequired="true"</span> on
+those particular graphics elements or container elements which
+specifically need the availability of external resources in order to
+render properly.</p>
+
+<p>For <a>'externalResourcesRequired'</a>: <span
+class="anim-target"><a
+href="animate.html#Animatable">Animatable</a>: no.</span></p>
+
+<h2 id="CommonAttributes">Common attributes</h2>
+
+<h3 id="Core.attrib">Attributes common to all elements: <span class='attr-name'>'id'</span> and <span class='attr-name'>'xml:base'</span></h3>
+
+<p>The <a>'id'</a> and <a>'xml:base'</a> attributes are available on all SVG elements:</p>
+
     <div class="adef-list">
       <p><em>Attribute definitions:</em></p>
       <dl>
@@ -1370,28 +1390,19 @@ object types</a>.</p>
       </dl>
     </div>
 
-    <h3 id="LangSpaceAttrs">The <span class='attr-name'>'xml:lang'</span> and
-    <span class='attr-name'>'xml:space'</span> attributes</h3>
-    Elements that might contain character data content have
-    attributes <a>'xml:lang'</a> and <a>'xml:space'</a>.
+<h3 id="LangSpaceAttrs">The <span class='attr-name'>'xml:lang'</span> and
+<span class='attr-name'>'xml:space'</span> attributes</h3>
 
-    <div class="annotation">
-      <p>
-	SVG2 Requirement: Deprecate the use of xml:space to effect layout and will use the CSS white-space property.
-      </p>
-      <p>
-	Resolution: We drop xml:space from SVG 2 and remove the relating tests from the SVG 1.1. test suite.
-      </p>
-      <p>
-	<a href="http://www.w3.org/2011/03/03-svg-minutes.html#item04">Auckland F2F Day 5</a>.
-      </p>
-      <p>
-	Purpose: Align with CSS.
-      </p>
-      <p>
-	Owner: Chris/Jonathan (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3004">Action 3004</a> and <a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3005"> Action 3005)</a>.
-      </p>
-    </div>
+<p>Elements that might contain character data content have
+attributes <a>'xml:lang'</a> and <a>'xml:space'</a>.</p>
+
+<div class="annotation">
+<p>SVG2 Requirement: Deprecate the use of xml:space to effect layout and will use the CSS white-space property.</p>
+<p>Resolution: We drop xml:space from SVG 2 and remove the relating tests from the SVG 1.1. test suite.</p>
+<p><a href="http://www.w3.org/2011/03/03-svg-minutes.html#item04">Auckland F2F Day 5</a>.</p>
+<p>Purpose: Align with CSS.</p>
+<p>Owner: Chris/Jonathan (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3004">Action 3004</a> and <a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3005">Action 3005)</a>.</p>
+</div>
 
     <div class="adef-list">
       <p><em>Attribute definitions:</em></p>
@@ -1413,7 +1424,7 @@ object types</a>.</p>
         is preserved in character data. The only possible values
         are <span class='attr-value'>'default'</span> and <span class='attr-value'>'preserve'</span>. Refer to the
         <a href="http://www.w3.org/TR/2008/REC-xml-20081126/"><cite>Extensible Markup Language (XML) 1.0</cite></a>
-	Recommendation [<a href="refs.html#ref-XML10">XML10</a>] and to the
+        Recommendation [<a href="refs.html#ref-XML10">XML10</a>] and to the
         discussion <a href="text.html#WhiteSpace">white space
         handling</a> in SVG.<br />
          <span class="anim-target"><a
