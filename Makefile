@@ -1,5 +1,10 @@
 # Makefile for SVG 1.1 Second Edition.
 
+all-with-tools-check : tools-check all
+
+tools-check :
+	@bash -c "REMOTE_REV=$$(hg id -i http://svgwg.org/hg/svg2-tools); [ \$$? = 0 -o \"\$$REMOTE_REV\" != \"\" ] || exit 0; LOCAL_REV=$$(hg id -i ../svg2-tools); [ \"\$$LOCAL_REV\" = \"\$$REMOTE_REV\" ] || (echo \"You must update your svg2-tools repository! (Remote repository has revision \$$REMOTE_REV, but you are at \$$LOCAL_REV.)\"; exit 1)"
+
 all :
 	$(MAKE) -C master/images/implnote/arcs/
 	@../svg2-tools/build.py
