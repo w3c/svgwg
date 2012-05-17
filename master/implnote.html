@@ -14,228 +14,251 @@
 
 <h1>Implementation Requirements</h1>
 
-    <p class="normativity"><strong>This appendix is normative.</strong></p>
-    <h2 id="Introduction">Introduction</h2>
-    <p>The following are notes about implementation requirements
-    corresponding to various features in the SVG language.</p>
+<p class="normativity"><strong>This appendix is normative.</strong></p>
+
+<h2 id="Introduction">Introduction</h2>
+
+<p>The following are notes about implementation requirements
+corresponding to various features in the SVG language.</p>
 
 <h2 id="ErrorProcessing">Error processing</h2>
 
-    <p>There are various scenarios where an SVG document fragment
-    is technically <em>in error</em>:</p>
+<p>There are various scenarios where an SVG document fragment
+is technically <em>in error</em>:</p>
+
+<ul>
+  <li>When the content does not conform to the <a href="http://www.w3.org/TR/2008/REC-xml-20081126/">XML 1.0
+  specification</a> [<a href="refs.html#ref-XML10">XML10</a>], such as the
+  use of incorrect XML syntax</li>
+
+  <li>When an element or attribute is encountered in the
+  document which is not part of the <a href="svgdtd.html">SVG DTD</a>
+  and which is not properly identified as being part of
+  another namespace (see <a href="http://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a>
+  [<a href="refs.html#ref-XML-NS">XML-NS</a>])</li>
+
+  <li>When an element has an attribute or property value which
+  is not permissible according to this specification</li>
+
+  <li>Other situations that are described as being <em>in error</em> in this
+  specification</li>
+</ul>
+
+<p>A document can go in and out of error over time. For
+example, document changes from the <a href="svgdom.html">SVG DOM</a>
+or from <a href="animate.html">animation</a> can cause
+a document to become <em>in error</em> and a further change can
+cause the document to become correct again.</p>
+
+<p>The following error processing shall occur when a document
+is in error:</p>
+
+<ul>
+  <li>
+    The document shall be rendered up to, but not including,
+    the first element which has an error. Exceptions: 
     <ul>
-      <li>When the content does not conform to the <a href="http://www.w3.org/TR/2008/REC-xml-20081126/">XML 1.0
-      specification</a> [<a href="refs.html#ref-XML10">XML10</a>], such as the
-      use of incorrect XML syntax</li>
-      <li>When an element or attribute is encountered in the
-      document which is not part of the <a href="svgdtd.html">SVG
-      DTD</a> and which is not properly identified as being part of
-      another namespace (see <a href="http://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a>
-      [<a href="refs.html#ref-XML-NS">XML-NS</a>])</li>
-      <li>When an element has an attribute or property value which
-      is not permissible according to this specification</li>
-      <li>Other situations that are described as being <em>in
-      error</em> in this specification</li>
+      <li>If a <a>'path'</a> element is the
+      first element which has an error and the only errors are
+      in the <a href="paths.html#PathData">path data</a>
+      specification, then render the <a>'path'</a> up to the point of the
+      path data error. For related information, see <a
+      href="implnote.html#PathElementImplementationNotes"><span
+      class="element-name">'path'</span> element implementation
+      notes</a>.</li>
+
+      <li>If a <a>'polyline'</a> or <a>'polygon'</a> element is the
+      first element which has an error and the only errors are
+      within the <a>'polyline/points'</a> attribute, then render
+      the <a>'polyline'</a> or <a>'polygon'</a> up to the segment
+      with the error.</li>
     </ul>
-    <p>A document can go in and out of error over time. For
-    example, document changes from the <a href="svgdom.html">SVG
-    DOM</a> or from <a href="animate.html">animation</a> can cause
-    a document to become <em>in error</em> and a further change can
-    cause the document to become correct again.</p>
-    <p>The following error processing shall occur when a document
-    is in error:</p>
-    <ul>
-      <li>
-        The document shall be rendered up to, but not including,
-        the first element which has an error. Exceptions: 
-        <ul>
-          <li>If a <a>'path'</a> element is the
-          first element which has an error and the only errors are
-          in the <a href="paths.html#PathData">path data</a>
-          specification, then render the <a>'path'</a> up to the point of the
-          path data error. For related information, see <a
-          href="implnote.html#PathElementImplementationNotes"><span
-          class="element-name">'path'</span> element implementation
-          notes</a>.</li>
-          <li>If a <a>'polyline'</a> or <a>'polygon'</a> element is the
-          first element which has an error and the only errors are
-          within the <a>'polyline/points'</a> attribute, then render
-          the <a>'polyline'</a> or <a>'polygon'</a> up to the segment
-          with the error.</li>
-        </ul>
-        This approach will provide a visual clue to the user or
-        developer about where the error might be in the document.
-      </li>
-      <li>If the document has animations, the animations shall stop
-      at the point at which an error is encountered and the visual
-      presentation of the document shall reflect the animated
-      status of the document at the point the error was
-      encountered.</li>
-      <li>A highly perceivable indication of error shall occur. For
-      visual rendering situations, an example of an indication of
-      error would be to render a translucent colored pattern such
-      as a checkerboard on top of the area where the SVG content is
-      rendered.</li>
-      <li>If the user agent has access to an error reporting
-      capability such as status bar, it is recommended that the
-      user agent provide whatever additional detail it can to
-      enable the user or developer to quickly find the source of
-      the error. For example, the user agent might provide an error
-      message along with a line number and character number at
-      which the error was encountered.</li>
-    </ul>
-    <p>Because of situations where a block of scripting changes
-    might cause a given SVG document fragment to go into and out of
-    error, error processing shall occur only at times when document
-    presentation (e.g., rendering to the display device) is
-    updated. In particular, error processing shall be disabled
-    whenever redraw has been suspended via DOM calls to
-    <a>SVGSVGElement::suspendRedraw</a>.</p>
+    This approach will provide a visual clue to the user or
+    developer about where the error might be in the document.
+  </li>
+
+  <li>If the document has animations, the animations shall stop
+  at the point at which an error is encountered and the visual
+  presentation of the document shall reflect the animated
+  status of the document at the point the error was
+  encountered.</li>
+
+  <li>A highly perceivable indication of error shall occur. For
+  visual rendering situations, an example of an indication of
+  error would be to render a translucent colored pattern such
+  as a checkerboard on top of the area where the SVG content is
+  rendered.</li>
+
+  <li>If the user agent has access to an error reporting
+  capability such as status bar, it is recommended that the
+  user agent provide whatever additional detail it can to
+  enable the user or developer to quickly find the source of
+  the error. For example, the user agent might provide an error
+  message along with a line number and character number at
+  which the error was encountered.</li>
+</ul>
+
+<p>Because of situations where a block of scripting changes
+might cause a given SVG document fragment to go into and out of
+error, error processing shall occur only at times when document
+presentation (e.g., rendering to the display device) is
+updated. In particular, error processing shall be disabled
+whenever redraw has been suspended via DOM calls to
+<a>SVGSVGElement::suspendRedraw</a>.</p>
 
 <h2 id="VersionControl">Version control</h2>
 
-    <p>The SVG user agent must verify the reference to the PUBLIC
-    identifier in the <code>&lt;!DOCTYPE&gt;</code> statement or
-    the namespace reference in the <span class='attr-name'>'xmlns'</span> attribute on
-    the <a>'svg'</a> element to ensure that
-    the given document (or document fragment) identifies a version
-    of the SVG language which the SVG user agent supports. If the
-    version information is missing or the version information
-    indicates a version of the SVG language which the SVG user
-    agent does not support, then the SVG user agent is not required
-    to render that document or fragment. In particular, it is not
-    required that an SVG user agent attempt to render future
-    versions of the SVG language. If the user environment provides
-    such an option, the user agent should alert or otherwise notify
-    the user that the version of the file is not supported and
-    suggest an alternate processing option (e.g., installing an
-    updated version of the user agent) if such an option
-    exists.</p>
-    <p>An SVG user agent which supports the SVG Recommendation
-    should alert or otherwise notify the user whenever it
-    encounters an SVG document (or document fragment) whose
-    <code>&lt;!DOCTYPE&gt;</code> statement or corresponding
-    <span class='attr-name'>'xmlns'</span> attribute corresponds to a working draft
-    version of the SVG specification. All content based on working
-    drafts of this specification should be updated to the SVG
-    Recommendation.</p>
+<p>The SVG user agent must verify the reference to the PUBLIC
+identifier in the <code>&lt;!DOCTYPE&gt;</code> statement or
+the namespace reference in the <span class='attr-name'>'xmlns'</span> attribute on
+the <a>'svg'</a> element to ensure that
+the given document (or document fragment) identifies a version
+of the SVG language which the SVG user agent supports. If the
+version information is missing or the version information
+indicates a version of the SVG language which the SVG user
+agent does not support, then the SVG user agent is not required
+to render that document or fragment. In particular, it is not
+required that an SVG user agent attempt to render future
+versions of the SVG language. If the user environment provides
+such an option, the user agent should alert or otherwise notify
+the user that the version of the file is not supported and
+suggest an alternate processing option (e.g., installing an
+updated version of the user agent) if such an option
+exists.</p>
+
+<p>An SVG user agent which supports the SVG Recommendation
+should alert or otherwise notify the user whenever it
+encounters an SVG document (or document fragment) whose
+<code>&lt;!DOCTYPE&gt;</code> statement or corresponding
+<span class='attr-name'>'xmlns'</span> attribute corresponds to a working draft
+version of the SVG specification. All content based on working
+drafts of this specification should be updated to the SVG
+Recommendation.</p>
 
 <h2 id="RangeClamping">Clamping values which are restricted to a particular range</h2>
 
-    <p>Some numeric attribute and property values have restricted
-    ranges, such as color component values. When out-of-range
-    values are provided, the user agent shall defer any error
-    checking until after presentation time, as composited actions
-    might produce intermediate values which are out-of-range but
-    final values which are within range.</p>
-    <p>Color values are not in error if they are out-of-range, even
-    if final computations produce an out-of-range color value at
-    presentation time. It is recommended that user agents clamp
-    color values to the nearest color value (possibly determined by
-    simple clipping) which the system can process as late as
-    possible (e.g., presentation time), although it is acceptable
-    for user agents to clamp color values as early as parse time.
-    Thus, implementation dependencies might preclude consistent
-    behavior across different systems when out-of-range color
-    values are used.</p>
-    <p>Opacity values out-of-range are not in error and should be
-    clamped to the range 0 to 1 at the time which opacity values
-    have to be processed (e.g., at presentation time or when it is
-    necessary to perform intermediate filter effect
-    calculations).</p>
+<p>Some numeric attribute and property values have restricted
+ranges, such as color component values. When out-of-range
+values are provided, the user agent shall defer any error
+checking until after presentation time, as composited actions
+might produce intermediate values which are out-of-range but
+final values which are within range.</p>
+
+<p>Color values are not in error if they are out-of-range, even
+if final computations produce an out-of-range color value at
+presentation time. It is recommended that user agents clamp
+color values to the nearest color value (possibly determined by
+simple clipping) which the system can process as late as
+possible (e.g., presentation time), although it is acceptable
+for user agents to clamp color values as early as parse time.
+Thus, implementation dependencies might preclude consistent
+behavior across different systems when out-of-range color
+values are used.</p>
+
+<p>Opacity values out-of-range are not in error and should be
+clamped to the range 0 to 1 at the time which opacity values
+have to be processed (e.g., at presentation time or when it is
+necessary to perform intermediate filter effect
+calculations).</p>
 
 <h2 id="PathElementImplementationNotes"><span class="element-name">'path'</span> element implementation notes</h2>
 
-    <p>A conforming SVG user agent must implement path rendering as
-    follows:</p>
+<p>A conforming SVG user agent must implement path rendering as follows:</p>
+
+<ul>
+  <li>
+    Error handling: 
     <ul>
-      <li>
-        Error handling: 
-        <ul>
-          <li>The general rule for error handling in path data is
-          that the SVG user agent shall render a <a>'path'</a> element up
-          to (but not including) the path command containing the
-          first error in the path data specification. This will
-          provide a visual clue to the user or developer about
-          where the error might be in the path data specification.
-          This rule will greatly discourage generation of invalid
-          SVG path data.</li>
-          <li>If a path data command contains an incorrect set of
-          parameters, then the given path data command is rendered
-          up to and including the last correctly defined path
-          segment, even if that path segment is a sub-component of
-          a compound path data command, such as a "lineto" with
-          several pairs of coordinates. For example, for the path
-          data string <span class='attr-value'>'M 10,10 L 20,20,30'</span>,
-          there is an odd number of parameters for the "L" command, which requires an even
-          number of parameters. The user agent is required to draw
-          the line from (10,10) to (20,20) and then perform error
-          reporting since <span class='attr-value'>'L 20 20'</span>
-          is the last correctly defined segment of the path data specification.</li>
-          <li>Wherever possible, all SVG user agents shall report
-          all errors to the user.</li>
-        </ul>
-      </li>
-      <li>
-        Markers, directionality and zero-length path segments: 
-        <ul>
-          <li>If markers are specified, then a marker is drawn on
-          every applicable vertex, even if the given vertex is the
-          end point of a zero-length path segment and even if
-          "moveto" commands follow each other.</li>
-          <li>Certain line-capping and line-joining situations and
-          markers require that a path segment have directionality
-          at its start and end points. Zero-length path segments
-          have no directionality. In these cases, the following
-          algorithm is used to establish directionality: to
-          determine the directionality of the start point of a
-          zero-length path segment, go backwards in the path data
-          specification within the current subpath until you find a
-          segment which has directionality at its end point (e.g.,
-          a path segment with non-zero length) and use its ending
-          direction; otherwise, temporarily consider the start
-          point to lack directionality. Similarly, to determine the
-          directionality of the end point of a zero-length path
-          segment, go forwards in the path data specification
-          within the current subpath until you find a segment which
-          has directionality at its start point (e.g., a path
-          segment with non-zero length) and use its starting
-          direction; otherwise, temporarily consider the end point
-          to lack directionality. If the start point has
-          directionality but the end point doesn't, then the end
-          point uses the start point's directionality. If the end
-          point has directionality but the start point doesn't,
-          then the start point uses the end point's directionality.
-          Otherwise, set the directionality for the path segment's
-          start and end points to align with the positive x-axis in
-          user space.</li>
-          <li>As mentioned in <a href="painting.html#StrokeProperties">Stroke Properties</a>,
-          linecaps must be painted for zero length subpaths when
-          <a>'stroke-linecap'</a> has a value of
-          <span class='prop-value'>round</span> or
-          <span class='prop-value'>square</span>.</li>
-        </ul>
-      </li>
-      <li>
-        The S/s commands indicate that the first control point of
-        the given cubic B&eacute;zier segment is calculated by
-        reflecting the previous path segments second control point
-        relative to the current point. The exact math is as
-        follows. If the current point is (<var>curx</var>, <var>cury</var>) and the
-        second control point of the previous path segment is
-        (<var>oldx2</var>, <var>oldy2</var>), then the reflected point (i.e., (<var>newx1</var>,
-        <var>newy1</var>), the first control point of the current path
-        segment) is: 
+      <li>The general rule for error handling in path data is
+      that the SVG user agent shall render a <a>'path'</a> element up
+      to (but not including) the path command containing the
+      first error in the path data specification. This will
+      provide a visual clue to the user or developer about
+      where the error might be in the path data specification.
+      This rule will greatly discourage generation of invalid
+      SVG path data.</li>
+
+      <li>If a path data command contains an incorrect set of
+      parameters, then the given path data command is rendered
+      up to and including the last correctly defined path
+      segment, even if that path segment is a sub-component of
+      a compound path data command, such as a "lineto" with
+      several pairs of coordinates. For example, for the path
+      data string <span class='attr-value'>'M 10,10 L 20,20,30'</span>,
+      there is an odd number of parameters for the "L" command, which requires an even
+      number of parameters. The user agent is required to draw
+      the line from (10,10) to (20,20) and then perform error
+      reporting since <span class='attr-value'>'L 20 20'</span>
+      is the last correctly defined segment of the path data specification.</li>
+
+      <li>Wherever possible, all SVG user agents shall report
+      all errors to the user.</li>
+    </ul>
+  </li>
+  <li>
+    Markers, directionality and zero-length path segments: 
+    <ul>
+      <li>If markers are specified, then a marker is drawn on
+      every applicable vertex, even if the given vertex is the
+      end point of a zero-length path segment and even if
+      "moveto" commands follow each other.</li>
+
+      <li>Certain line-capping and line-joining situations and
+      markers require that a path segment have directionality
+      at its start and end points. Zero-length path segments
+      have no directionality. In these cases, the following
+      algorithm is used to establish directionality: to
+      determine the directionality of the start point of a
+      zero-length path segment, go backwards in the path data
+      specification within the current subpath until you find a
+      segment which has directionality at its end point (e.g.,
+      a path segment with non-zero length) and use its ending
+      direction; otherwise, temporarily consider the start
+      point to lack directionality. Similarly, to determine the
+      directionality of the end point of a zero-length path
+      segment, go forwards in the path data specification
+      within the current subpath until you find a segment which
+      has directionality at its start point (e.g., a path
+      segment with non-zero length) and use its starting
+      direction; otherwise, temporarily consider the end point
+      to lack directionality. If the start point has
+      directionality but the end point doesn't, then the end
+      point uses the start point's directionality. If the end
+      point has directionality but the start point doesn't,
+      then the start point uses the end point's directionality.
+      Otherwise, set the directionality for the path segment's
+      start and end points to align with the positive x-axis in
+      user space.</li>
+
+      <li>As mentioned in <a href="painting.html#StrokeProperties">Stroke Properties</a>,
+      linecaps must be painted for zero length subpaths when
+      <a>'stroke-linecap'</a> has a value of
+      <span class='prop-value'>round</span> or
+      <span class='prop-value'>square</span>.</li>
+    </ul>
+  </li>
+  <li>
+    The S/s commands indicate that the first control point of
+    the given cubic B&eacute;zier segment is calculated by
+    reflecting the previous path segments second control point
+    relative to the current point. The exact math is as
+    follows. If the current point is (<var>curx</var>, <var>cury</var>) and the
+    second control point of the previous path segment is
+    (<var>oldx2</var>, <var>oldy2</var>), then the reflected point (i.e., (<var>newx1</var>,
+    <var>newy1</var>), the first control point of the current path
+    segment) is: 
 <pre>
 (newx1, newy1) = (curx - (oldx2 - curx), cury - (oldy2 - cury))
                = (2*curx - oldx2, 2*cury - oldy2)
 </pre>
-      </li>
-      <li>A non-positive radius value is an error.</li>
-      <li>Unrecognized contents within a path data stream (i.e.,
-      contents that are not part of the path data grammar) is an
-      error.</li>
-    </ul>
+  </li>
+
+  <li>A non-positive radius value is an error.</li>
+
+  <li>Unrecognized contents within a path data stream (i.e.,
+  contents that are not part of the path data grammar) is an
+  error.</li>
+</ul>
 
 <h2 id="ArcImplementationNotes">Elliptical arc implementation notes</h2>
 
@@ -243,119 +266,144 @@
 
 <h3 id="ArcSyntax">Elliptical arc syntax</h3>
 
-    <p>An elliptical arc is a particular path command. As
-    such, it is described by the following parameters in order:</p>
-    <p>(<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>) are the absolute coordinates of the
-    current point on the path, obtained from the last two
-    parameters of the previous path command.</p>
-    <p><var>r<sub>x</sub></var>
-    and <var>r<sub>y</sub></var>
-    are the radii of the ellipse (also known as its semi-major and
-    semi-minor axes).</p>
-    <p><var>φ</var> is the angle from the x-axis of the current coordinate
-    system to the x-axis of the ellipse.</p>
-    <p><var>f<sub>A</sub></var> is
-    the large arc flag, and is 0
-    if an arc spanning less than or equal to 180 degrees is chosen, or 1
-    if an arc spanning greater than 180 degrees is chosen.</p>
-    <p><var>f<sub>S</sub></var> is
-    the sweep flag, and is 0 if
-    the line joining center to arc sweeps through decreasing
-    angles, or 1 if it sweeps
-    through increasing angles.</p>
-    <p>(<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>) are the absolute coordinates of the
-    final point of the arc.</p>
-    <p>This parameterization of elliptical arcs will be referred to
-    as <em>endpoint parameterization</em>. One of the
-    advantages of endpoint parameterization is that it permits a
-    consistent path syntax in which all path commands end in the
-    coordinates of the new "current point". The following
-    notes give rules and formulas to help implementers deal with
-    endpoint parameterization.</p>
+<p>An elliptical arc is a particular path command. As
+such, it is described by the following parameters in order:</p>
+
+<p>(<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>) are the absolute coordinates of the
+current point on the path, obtained from the last two
+parameters of the previous path command.</p>
+
+<p><var>r<sub>x</sub></var>
+and <var>r<sub>y</sub></var>
+are the radii of the ellipse (also known as its semi-major and
+semi-minor axes).</p>
+
+<p><var>φ</var> is the angle from the x-axis of the current coordinate
+system to the x-axis of the ellipse.</p>
+
+<p><var>f<sub>A</sub></var> is
+the large arc flag, and is 0
+if an arc spanning less than or equal to 180 degrees is chosen, or 1
+if an arc spanning greater than 180 degrees is chosen.</p>
+
+<p><var>f<sub>S</sub></var> is
+the sweep flag, and is 0 if
+the line joining center to arc sweeps through decreasing
+angles, or 1 if it sweeps
+through increasing angles.</p>
+
+<p>(<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>) are the absolute coordinates of the
+final point of the arc.</p>
+
+<p>This parameterization of elliptical arcs will be referred to
+as <em>endpoint parameterization</em>. One of the
+advantages of endpoint parameterization is that it permits a
+consistent path syntax in which all path commands end in the
+coordinates of the new "current point". The following
+notes give rules and formulas to help implementers deal with
+endpoint parameterization.</p>
 
 <h3 id="ArcOutOfRangeParameters">Out-of-range parameters</h3>
 
-    <p>Arbitrary numerical values are permitted for all elliptical
-    arc parameters, but where these values are invalid or
-    out-of-range, an implementation must make sense of them as
-    follows:</p>
-    <p>If the endpoints (<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>)
-    and (<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>) are identical, then this is
-    equivalent to omitting the elliptical arc segment entirely.</p>
-    <p>If <var>r<sub>x</sub></var>&nbsp;=&nbsp;0 or
-    <var>r<sub>y</sub></var>&nbsp;=&nbsp;0
-    then this arc is treated as a straight line segment
-    (a "lineto") joining the endpoints.</p>
-    <p>If <var>r<sub>x</sub></var> or <var>r<sub>y</sub></var>
-    have negative signs, these are dropped; the absolute value is
-    used instead.</p>
-    <p>If <var>r<sub>x</sub></var>, <var>r<sub>y</sub></var>
-    and <var>φ</var> are such that there is no solution
-    (basically, the ellipse is not big enough to reach
-    from (<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>)
-    to (<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>))
-    then the ellipse is scaled up
-    uniformly until there is exactly one solution (until the
-    ellipse is just big enough).</p>
-    <p><var>φ</var> is taken mod 360 degrees.</p>
-    <p>Any nonzero value for either of the flags <var>f<sub>A</sub></var>
-    or <var>f<sub>S</sub></var> is taken to mean the value 1.</p>
-    <p>This forgiving yet consistent treatment of out-of-range
-    values ensures that:</p>
-    <ul>
-      <li>The inevitable approximations arising from computer
-      arithmetic cannot cause a valid set of values written by one
-      SVG implementation to be treated as invalid when read by
-      another SVG implementation. This would otherwise be a
-      problem for common boundary cases such as a semicircular
-      arc.</li>
-      <li>Continuous animations that cause parameters to pass
-      through invalid values are not a problem. The motion
-      remains continuous.</li>
-    </ul>
+<p>Arbitrary numerical values are permitted for all elliptical
+arc parameters, but where these values are invalid or
+out-of-range, an implementation must make sense of them as
+follows:</p>
+
+<p>If the endpoints (<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>)
+and (<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>) are identical, then this is
+equivalent to omitting the elliptical arc segment entirely.</p>
+
+<p>If <var>r<sub>x</sub></var>&nbsp;=&nbsp;0 or
+<var>r<sub>y</sub></var>&nbsp;=&nbsp;0
+then this arc is treated as a straight line segment
+(a "lineto") joining the endpoints.</p>
+
+<p>If <var>r<sub>x</sub></var> or <var>r<sub>y</sub></var>
+have negative signs, these are dropped; the absolute value is
+used instead.</p>
+
+<p>If <var>r<sub>x</sub></var>, <var>r<sub>y</sub></var>
+and <var>φ</var> are such that there is no solution
+(basically, the ellipse is not big enough to reach
+from (<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>)
+to (<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>))
+then the ellipse is scaled up
+uniformly until there is exactly one solution (until the
+ellipse is just big enough).</p>
+
+<p><var>φ</var> is taken mod 360 degrees.</p>
+
+<p>Any nonzero value for either of the flags <var>f<sub>A</sub></var>
+or <var>f<sub>S</sub></var> is taken to mean the value 1.</p>
+
+<p>This forgiving yet consistent treatment of out-of-range
+values ensures that:</p>
+
+<ul>
+  <li>The inevitable approximations arising from computer
+  arithmetic cannot cause a valid set of values written by one
+  SVG implementation to be treated as invalid when read by
+  another SVG implementation. This would otherwise be a
+  problem for common boundary cases such as a semicircular
+  arc.</li>
+
+  <li>Continuous animations that cause parameters to pass
+  through invalid values are not a problem. The motion
+  remains continuous.</li>
+</ul>
 
 <h3 id="ArcParameterizationAlternatives">Parameterization alternatives</h3>
 
-    <p>An arbitrary point (<var>x</var>,&nbsp;<var>y</var>) on the elliptical
-    arc can be described by the 2-dimensional matrix equation</p>
-    <table summary="equation F.6.3.1" width="90%" border="0"
-    cellspacing="0" cellpadding="0">
-      <tr>
-        <td valign="top"><img
-        alt="equation F.6.3.1"
-        src="images/implnote/arcs/image002.png" /></td>
-        <td align="right">(F.6.3.1)</td>
-      </tr>
-    </table>
-    <p>(<var>c<sub>x</sub></var>,&nbsp;<var>c<sub>y</sub></var>) are
-    the coordinates of the center of the ellipse.</p>
-    <p><var>r<sub>x</sub></var> and <var>r<sub>y</sub></var>
-    are the radii of the ellipse (also known as its semi-major and
-    semi-minor axes).</p>
-    <p><var>θ</var> is the angle from the
-    x-axis of the current coordinate system to the x-axis of the
-    ellipse.</p>
-    <p><var>θ</var> ranges from:</p>
-    <ul>
-      <li><var>θ</var><sub>1</sub> which is
-      the start angle of the elliptical arc prior to the stretch and
-      rotate operations.</li>
-      <li><var>θ</var><sub>2</sub> which is
-      the end angle of the elliptical arc prior to the stretch and
-      rotate operations.</li>
-      <li>Δ<var>θ</var> which is the difference between these
-      two angles.</li>
-    </ul>
-    <p>If one thinks of an ellipse as a circle that has been
-    stretched and then rotated, then <var>θ</var><sub>1</sub>,
-    <var>θ</var><sub>2</sub> and Δ<var>θ</var>
-    are the start angle, end angle and sweep angle, respectively
-    of the arc prior to the stretch and rotate operations.
-    This leads to an alternate parameterization which is common
-    among graphics APIs, which will be referred to as <em>center
-    parameterization</em>. In the next sections, formulas are
-    given for mapping in both directions between center
-    parameterization and endpoint parameterization.</p>
+<p>An arbitrary point (<var>x</var>,&nbsp;<var>y</var>) on the elliptical
+arc can be described by the 2-dimensional matrix equation:</p>
+
+<table summary="equation F.6.3.1" width="90%" border="0"
+cellspacing="0" cellpadding="0">
+  <tr>
+    <td valign="top"><img
+    alt="equation F.6.3.1"
+    src="images/implnote/arcs/image002.png" /></td>
+    <td align="right">(F.6.3.1)</td>
+  </tr>
+</table>
+
+<p>(<var>c<sub>x</sub></var>,&nbsp;<var>c<sub>y</sub></var>) are
+the coordinates of the center of the ellipse.</p>
+
+<p><var>r<sub>x</sub></var> and <var>r<sub>y</sub></var>
+are the radii of the ellipse (also known as its semi-major and
+semi-minor axes).</p>
+
+<p><var>θ</var> is the angle from the
+x-axis of the current coordinate system to the x-axis of the
+ellipse.</p>
+
+<p><var>θ</var> ranges from:</p>
+
+<ul>
+  <li><var>θ</var><sub>1</sub> which is
+  the start angle of the elliptical arc prior to the stretch and
+  rotate operations.</li>
+
+  <li><var>θ</var><sub>2</sub> which is
+  the end angle of the elliptical arc prior to the stretch and
+  rotate operations.</li>
+
+  <li>Δ<var>θ</var> which is the difference between these
+  two angles.</li>
+</ul>
+
+<p>If one thinks of an ellipse as a circle that has been
+stretched and then rotated, then <var>θ</var><sub>1</sub>,
+<var>θ</var><sub>2</sub> and Δ<var>θ</var>
+are the start angle, end angle and sweep angle, respectively
+of the arc prior to the stretch and rotate operations.
+This leads to an alternate parameterization which is common
+among graphics APIs, which will be referred to as <em>center
+parameterization</em>. In the next sections, formulas are
+given for mapping in both directions between center
+parameterization and endpoint parameterization.</p>
 
 <h3 id="ArcConversionCenterToEndpoint">Conversion from center to endpoint parameterization</h3>
 
@@ -384,33 +432,33 @@
 
 <p>This can be achieved using the following formulas:</p>
 
-    <table summary="elliptical arc formulas" width="90%" border="0"
-    cellspacing="8" cellpadding="0">
-      <tr>
-        <td valign="top"><img
-        alt="Equation F.6.4.1"
-        src="images/implnote/arcs/image004.png" /></td>
-        <td align="right">(F.6.4.1)</td>
-      </tr>
-      <tr>
-        <td valign="top"><img
-        alt="Equation F.6.4.2"
-        src="images/implnote/arcs/image006.png" /></td>
-        <td align="right">(F.6.4.2)</td>
-      </tr>
-      <tr>
-        <td valign="top"><img
-        alt="Equation F.6.4.3"
-        src="images/implnote/arcs/image008.png" /></td>
-        <td align="right">(F.6.4.3)</td>
-      </tr>
-      <tr>
-        <td valign="top"><img
-        alt="Equation F.6.4.4"
-        src="images/implnote/arcs/image010.png" /></td>
-        <td align="right">(F.6.4.4)</td>
-      </tr>
-    </table>
+<table summary="elliptical arc formulas" width="90%" border="0"
+cellspacing="8" cellpadding="0">
+  <tr>
+    <td valign="top"><img
+    alt="Equation F.6.4.1"
+    src="images/implnote/arcs/image004.png" /></td>
+    <td align="right">(F.6.4.1)</td>
+  </tr>
+  <tr>
+    <td valign="top"><img
+    alt="Equation F.6.4.2"
+    src="images/implnote/arcs/image006.png" /></td>
+    <td align="right">(F.6.4.2)</td>
+  </tr>
+  <tr>
+    <td valign="top"><img
+    alt="Equation F.6.4.3"
+    src="images/implnote/arcs/image008.png" /></td>
+    <td align="right">(F.6.4.3)</td>
+  </tr>
+  <tr>
+    <td valign="top"><img
+    alt="Equation F.6.4.4"
+    src="images/implnote/arcs/image010.png" /></td>
+    <td align="right">(F.6.4.4)</td>
+  </tr>
+</table>
 
 <h3 id="ArcConversionEndpointToCenter">Conversion from endpoint to center parameterization</h3>
 
@@ -437,7 +485,6 @@
   Δ<var>θ</var>
 </p>
 
-
 <p>The equations simplify after a translation which
 places the origin at the midpoint of the line joining
 (<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>) to
@@ -461,6 +508,7 @@ following steps:</p>
       </tr>
     </table>
   </li>
+
   <li>
     <p><em>Step 2: Compute</em> (<var>c<sub>x</sub></var>′,&nbsp;<var>c<sub>y</sub></var>′)</p>
     <table summary="elliptical arc formulas" width="90%" border="0"
@@ -475,6 +523,7 @@ following steps:</p>
     <p>where the + sign is chosen if <var>f<sub>A</sub></var>&nbsp;≠&nbsp;<var>f<sub>S</sub></var>, and
     the − sign is chosen if <var>f<sub>A</sub></var>&nbsp;=&nbsp;<var>f<sub>S</sub></var>.</p>
   </li>
+
   <li>
     <p><em>Step 3: Compute</em> (<var>c<sub>x</sub></var>,&nbsp;<var>c<sub>y</sub></var>)
     <em>from</em> (<var>c<sub>x</sub></var>′,&nbsp;<var>c<sub>y</sub></var>′)</p>
@@ -488,6 +537,7 @@ following steps:</p>
       </tr>
     </table>
   </li>
+
   <li>
     <p><em>Step 4: Compute</em> <var>θ</var><sub>1</sub> and Δ<var>θ</var></p>
     <p>In general, the angle between two vectors
@@ -602,10 +652,10 @@ steps:</p>
   <li>
     <p><em>Step 4: Proceed with computations</em></p>
     <p>Proceed with the remaining elliptical arc computations, such
-    as those in section F.6.5.&nbsp; Note: As a consequence of the
+    as those in section F.6.5. Note: As a consequence of the
     radii corrections in this section, equation (F.6.5.2) for the
     center of the ellipse always has at least one solution (i.e.
-    the radicand is never negative).&nbsp; In the case that the
+    the radicand is never negative). In the case that the
     radii are scaled up using equation (F.6.6.3), the radicand of
     (F.6.5.2) is zero and there is exactly one solution for the
     center of the ellipse.</p>
@@ -616,95 +666,102 @@ steps:</p>
 
 <h2 id="TextSelectionImplementationNotes">Text selection implementation notes</h2>
 
-    <p>The following implementation notes describe the algorithm
-    for deciding which characters are selected during a <a
-    href="text.html#TextSelection">text selection</a>
-    operation.</p>
-    <p>As the text selection operation occurs (e.g., while the user
-    clicks and drags the mouse to identify the selection), the user
-    agent determines a <em>start selection position</em> and an
-    <em>end selection position</em>, each of which represents a
-    position in the text string between two characters. After
-    determining start selection position and end selection
-    position, the user agent selects the appropriate characters,
-    where the resulting text selection consists of either:</p>
-    <ul>
-      <li>no selection or</li>
-      <li>a <em>start character</em>, an <em>end character</em>
-      (possibly the same character), and all of the characters
-      within the same <a>'text'</a> element whose position
-      in the DOM is logically between the start character and end
-      character.</li>
-    </ul>
-    <p>On systems with pointer devices, to determine the <em>start
-    selection position</em>, the SVG user agent determines which
-    boundary between characters corresponding to rendered glyphs is
-    the best target (e.g., closest) based on the current pointer
-    location at the time of the event that initiates the selection
-    operation (e.g., the mouse down event). The user agent then
-    tracks the completion of the selection operation (e.g., the
-    mouse drag, followed ultimately by the mouse up). At the end of
-    the selection operation, the user agent determines which
-    boundary between characters is the best target (e.g., closest)
-    for the <em>end selection position</em>.</p>
-    <p>If no character reordering has occurred due to <a
-    href="text.html#RelationshipWithBiDirectionality">bidirectionality</a>,
-    then the selection consists of all characters between the
-    <em>start selection position</em> and <em>end selection
-    position</em>. For example, if a <a>'text'</a> element contains the
-    string "abcdef" and the start selection position and end
-    selection positions are 0 and 3 respectively (assuming the left
-    side of the "a" is position zero), then the selection will
-    consist of "abc".</p>
-    <p>When the user agent is implementing selection of
-    bidirectional text, and when the selection starts (or ends)
-    between characters which are not contiguous in logical order,
-    then there might be multiple potential combinations of
-    characters that can be considered part of the selection. The
-    algorithms to choose among the combinations of potential
-    selection options shall choose the selection option which most
-    closely matches the text string's visual rendering order.</p>
-    <p>When multiple characters map inseparably to a given set of
-    one or more glyphs, the user agent can either disallow the
-    selection to start in the middle of the glyph set or can
-    attempt to allocate portions of the area taken up by the glyph
-    set to the characters that correspond to the glyph.</p>
-    <p>For systems which support pointer devices such as a mouse,
-    the user agent is required to provide a mechanism for selecting
-    text even when the given text has associated event handlers or
-    links, which might block text selection due to event processing
-    precedence rules (see <a
-    href="interact.html#PointerEvents">Pointer events</a>). One
-    implementation option: For platforms which support a pointer
-    device such as a mouse, the user agent may provide for a small
-    additional region around character cells which initiates text
-    selection operations but does not initiate event handlers or
-    links.</p>
+<p>The following implementation notes describe the algorithm
+for deciding which characters are selected during a <a
+href="text.html#TextSelection">text selection</a>
+operation.</p>
+
+<p>As the text selection operation occurs (e.g., while the user
+clicks and drags the mouse to identify the selection), the user
+agent determines a <em>start selection position</em> and an
+<em>end selection position</em>, each of which represents a
+position in the text string between two characters. After
+determining start selection position and end selection
+position, the user agent selects the appropriate characters,
+where the resulting text selection consists of either:</p>
+
+<ul>
+  <li>no selection or</li>
+
+  <li>a <em>start character</em>, an <em>end character</em>
+  (possibly the same character), and all of the characters
+  within the same <a>'text'</a> element whose position
+  in the DOM is logically between the start character and end
+  character.</li>
+</ul>
+
+<p>On systems with pointer devices, to determine the <em>start
+selection position</em>, the SVG user agent determines which
+boundary between characters corresponding to rendered glyphs is
+the best target (e.g., closest) based on the current pointer
+location at the time of the event that initiates the selection
+operation (e.g., the mouse down event). The user agent then
+tracks the completion of the selection operation (e.g., the
+mouse drag, followed ultimately by the mouse up). At the end of
+the selection operation, the user agent determines which
+boundary between characters is the best target (e.g., closest)
+for the <em>end selection position</em>.</p>
+
+<p>If no character reordering has occurred due to <a
+href="text.html#RelationshipWithBiDirectionality">bidirectionality</a>,
+then the selection consists of all characters between the
+<em>start selection position</em> and <em>end selection
+position</em>. For example, if a <a>'text'</a> element contains the
+string "abcdef" and the start selection position and end
+selection positions are 0 and 3 respectively (assuming the left
+side of the "a" is position zero), then the selection will
+consist of "abc".</p>
+
+<p>When the user agent is implementing selection of
+bidirectional text, and when the selection starts (or ends)
+between characters which are not contiguous in logical order,
+then there might be multiple potential combinations of
+characters that can be considered part of the selection. The
+algorithms to choose among the combinations of potential
+selection options shall choose the selection option which most
+closely matches the text string's visual rendering order.</p>
+<p>When multiple characters map inseparably to a given set of
+one or more glyphs, the user agent can either disallow the
+selection to start in the middle of the glyph set or can
+attempt to allocate portions of the area taken up by the glyph
+set to the characters that correspond to the glyph.</p>
+
+<p>For systems which support pointer devices such as a mouse,
+the user agent is required to provide a mechanism for selecting
+text even when the given text has associated event handlers or
+links, which might block text selection due to event processing
+precedence rules (see <a href="interact.html#PointerEvents">Pointer events</a>).
+One implementation option: For platforms which support a pointer
+device such as a mouse, the user agent may provide for a small
+additional region around character cells which initiates text
+selection operations but does not initiate event handlers or
+links.</p>
 
 <h2 id="PrintingImplementationNotes">Printing implementation notes</h2>
 
-    <p>For user agents which support both zooming on display
-    devices and printing, it is recommended that the default
-    printing option produce printed output that reflects the
-    display device's current view of the current SVG document
-    fragment (assuming there is no media-specific styling), taking
-    into account any zooming and panning done by the user, the
-    current state of animation, and any document changes due to DOM
-    and scripting. Thus, if the user zooms into a particular area
-    of a map on the display device and then requests a hardcopy,
-    the hardcopy should show the same view of the map as appears on
-    the display device. If a user pauses an animation and prints,
-    the hardcopy should show the same graphics as the currently
-    paused picture on the display device. If scripting has added or
-    removed elements from the document, then the hardcopy should
-    reflect the same changes that would be reflected on the
-    display.</p>
-    <p>When an SVG document is rendered on a static-only device
-    such as a printer which does not support SVG's animation and
-    scripting and facilities, then the user agent shall ignore any
-    animation and scripting elements in the document and render the
-    remaining graphics elements according to the rules in this
-    specification.</p>
+<p>For user agents which support both zooming on display
+devices and printing, it is recommended that the default
+printing option produce printed output that reflects the
+display device's current view of the current SVG document
+fragment (assuming there is no media-specific styling), taking
+into account any zooming and panning done by the user, the
+current state of animation, and any document changes due to DOM
+and scripting. Thus, if the user zooms into a particular area
+of a map on the display device and then requests a hardcopy,
+the hardcopy should show the same view of the map as appears on
+the display device. If a user pauses an animation and prints,
+the hardcopy should show the same graphics as the currently
+paused picture on the display device. If scripting has added or
+removed elements from the document, then the hardcopy should
+reflect the same changes that would be reflected on the
+display.</p>
+
+<p>When an SVG document is rendered on a static-only device
+such as a printer which does not support SVG's animation and
+scripting and facilities, then the user agent shall ignore any
+animation and scripting elements in the document and render the
+remaining graphics elements according to the rules in this
+specification.</p>
 
 </body>
 </html>
