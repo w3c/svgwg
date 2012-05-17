@@ -197,8 +197,14 @@ however, the following additional points apply:</p>
   for the purposes of visual rendering and the initial clipping path is set to
   the bounds of the initial <a href="coords.html#SVGViewport">viewport</a>.</li>
 
-  <li>The initial value for <span class="property">'overflow'</span> as defined in [<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visufx.html#overflow">CSS2-overflow</a>] is 'visible', and this applies also to the root <a href="struct.html#SVGElement"><span class="element-name">'svg'</span></a> element;  however, for child elements of an SVG document, SVG's <a href="styling.html#UAStyleSheet">user agent style sheet</a> overrides this initial value and sets the <span class="property">'overflow'</span> property on <a href="coords.html#ElementsThatEstablishViewports">elements that establish new viewports</a> (e.g., <a href="struct.html#SVGElement"><span class="element-name">'svg'</span></a> elements), <a href="pservers.html#PatternElement"><span class="element-name">'pattern'</span></a> elements and <a href="painting.html#MarkerElement"><span class="element-name">'marker'</span></a> elements to the value 'hidden'.</li>
-
+  <li>The initial value for <a>'overflow'</a> as defined
+  in [<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visufx.html#overflow">CSS2-overflow</a>]
+  is 'visible', and this applies also to the <a>rootmost 'svg' element</a>; however,
+  for child elements of an SVG document, SVG's <a href="styling.html#UAStyleSheet">user agent style sheet</a>
+  overrides this initial value and sets the <a>'overflow'</a> property on
+  <a href="coords.html#ElementsThatEstablishViewports">elements that establish new viewports</a>
+  (e.g., <a>'svg'</a> elements), <a>'pattern'</a> elements and
+  <a>'marker element'</a> elements to the value 'hidden'.</li>
 </ul>
 
 <p>As a result of the above, the default behavior of SVG user agents is to
@@ -341,9 +347,9 @@ which establish a new viewport</a>. Also, see the discussion of
   a <a>'clipPath'</a> element, then the given child element is clipped by the
   referenced clipping path before OR'ing the silhouette of the child element
   with the silhouettes of the other child elements.</li>
-	
-	<li>An empty clipping path will completely clip away the element that had the <a>'clip-path'</a> property applied.</li>
-  
+
+  <li>An empty clipping path will completely clip away the element that had the
+  <a>'clip-path'</a> property applied.</li>
 </ul>
 
 <edit:elementsummary name='clipPath'/>
@@ -440,11 +446,11 @@ available for referencing even when the <a>'display'</a> property on the
 
 <dl>
   <dt><span class="prop-value"><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a></span></dt>
-  <dd>An <a href="linking.html#IRIReference">IRI reference</a> to another
-  graphical object within the same SVG document fragment which will be used as
-  the clipping path. If the <a href="linking.html#IRIReference">IRI reference</a> is not valid 
-	(e.g it points to an object that doesn't exist or the object is not a <a>'clipPath'</a> element) the
-	<a>'clip-path'</a> property must be treated as if it hadn't been specified.</dd>
+  <dd>An <a>IRI reference</a> to another graphical object within the same SVG
+  document fragment which will be used as the clipping path. If the
+  <a>IRI reference</a> is not valid (e.g it points to an object that doesn't
+  exist or the object is not a <a>'clipPath'</a> element) the <a>'clip-path'</a>
+  property must be treated as if it hadn't been specified.</dd>
 </dl>
 
     <div class="propdef">
@@ -505,42 +511,44 @@ will cause an evenodd clipping rule to be applied to the clipping path because
 <a>'clip-rule'</a> is specified on the <a>'path'</a> element that defines the
 clipping shape:</p>
 
-<pre>
-&lt;g clip-rule="nonzero"&gt;
-  &lt;clipPath id="MyClip"&gt;
-    &lt;path d="..." clip-rule="evenodd" /&gt;
-  &lt;/clipPath&gt;
-  &lt;rect clip-path="url(#MyClip)" ... /&gt;
-&lt;/g&gt;
-</pre>
+<pre><![CDATA[
+<g clip-rule="nonzero">
+  <clipPath id="MyClip">
+    <path d="..." clip-rule="evenodd" />
+  </clipPath>
+  <rect clip-path="url(#MyClip)" ... />
+</g>
+]]></pre>
 
 <p>whereas the following fragment of code will <em>not</em> cause an
 evenodd clipping rule to be applied because the <a>'clip-rule'</a> is
 specified on the referencing element, not on the object defining the
 clipping shape:</p>
 
-<pre>
-&lt;g clip-rule="nonzero"&gt;
-  &lt;clipPath id="MyClip"&gt;
-    &lt;path d="..." /&gt;
-  &lt;/clipPath&gt;
-  &lt;rect clip-path="url(#MyClip)" clip-rule="evenodd" ... /&gt;
-&lt;/g&gt;
-</pre>
+<pre><![CDATA[
+<g clip-rule="nonzero">
+  <clipPath id="MyClip">
+    <path d="..." />
+  </clipPath>
+  <rect clip-path="url(#MyClip)" clip-rule="evenodd" ... />
+</g>
+]]></pre>
 
 <h3 id="clipPath-geometry">Clipping paths, geometry, and pointer events</h3>
 
-  <p>
-    A clipping path is conceptually equivalent to a custom viewport for
-    the referencing element.  Thus, it affects the rendering of an element,
-    but not the element's inherent geometry. The bounding box of a clipped
-    element (that is, an element which references a 
-    <span class="element-name">'clipPath'</span> element via a
-    <span class="property">'clip-path'</span> property, or a child of the 
-    referencing element) must remain the same as if it were not clipped.
-  </p>
+<p>A clipping path is conceptually equivalent to a custom viewport for
+the referencing element.  Thus, it affects the rendering of an element,
+but not the element's inherent geometry. The bounding box of a clipped
+element (that is, an element which references a <a>'clipPath'</a>
+element via a <a>'clip-path'</a> property, or a child of the 
+referencing element) must remain the same as if it were not clipped.</p>
 
-  <p>By default, <a href="interact.html#PointerEventsProperty">pointer-events</a> must not be dispatched on the clipped (non-visible) regions of a shape.  For example, a circle with a radius of 10 which is clipped to a circle with a radius of 5 will not receive <span class="event-name">'click'</span> events outside the smaller radius.  Later versions of SVG may define new properties to enable fine-grained control over the interactions between hit testing and clipping.</p>
+<p>By default, <a href="interact.html#PointerEventsProperty">pointer events</a>
+must not be dispatched on the clipped (non-visible) regions of a shape.  For
+example, a circle with a radius of 10 which is clipped to a circle with a radius
+of 5 will not receive <span class="event-name">'click'</span> events outside the
+smaller radius.  Later versions of SVG may define new properties to enable
+fine-grained control over the interactions between hit testing and clipping.</p>
 
 </edit:with>
 
@@ -572,27 +580,27 @@ object.</p>
 
 <p>For any graphics object that is used as a mask, the mask value at any point
 is computed from the color channel values and alpha channel value as follows.
-First a luminance value is computed from the color channel values:
-</p>
+First a luminance value is computed from the color channel values:</p>
+
 <ul>
-<li>If the computed value of <a>'color-interpolation'</a> on the <a>'mask element'</a> element is <span class="attr-value">linearRGB</span>, 
-first convert the original image color values (potentially in the sRGB color space) to the linear RGB color space (see
-<a href="painting.html#RenderingProperties">Rendering properties</a>). Then,
-using non-premultiplied linear RGB color values, apply the luminance-to-alpha
-coefficients (as defined in the <a>'feColorMatrix'</a> filter primitive) to
-convert the linear RGB color values to linear luminance values.
-</li>
-<li>
-If the computed value of <a>'color-interpolation'</a> on the <a>'mask element'</a> element is <span class="attr-value">sRGB</span> then the luminance value
-is calculated by taking the non-premultiplied RGB color values, applying the luminance-to-alpha
-coefficients (as defined in the <a>'feColorMatrix'</a> filter primitive) to
-convert the RGB color values to luminance values.</li>
+  <li>If the computed value of <a>'color-interpolation'</a> on the <a>'mask element'</a>
+  element is <span class="attr-value">linearRGB</span>, first convert the
+  original image color values (potentially in the sRGB color space) to the linear
+  RGB color space (see <a href="painting.html#RenderingProperties">Rendering properties</a>).
+  Then, using non-premultiplied linear RGB color values, apply the luminance-to-alpha
+  coefficients (as defined in the <a>'feColorMatrix'</a> filter primitive) to
+  convert the linear RGB color values to linear luminance values.</li>
+
+  <li>If the computed value of <a>'color-interpolation'</a> on the <a>'mask element'</a>
+  element is <span class="attr-value">sRGB</span> then the luminance value is
+  calculated by taking the non-premultiplied RGB color values, applying the luminance-to-alpha
+  coefficients (as defined in the <a>'feColorMatrix'</a> filter primitive) to
+  convert the RGB color values to luminance values.</li>
 </ul>
-<p>Finally if the
-graphics object also includes an alpha channel, then the computed
+
+<p>Finally if the graphics object also includes an alpha channel, then the computed
 luminance value is multiplied by the corresponding alpha value to produce the
-mask value.
-</p>
+mask value.</p>
 
 <p>For a four-channel RGBA graphics object that is used as a mask, both
 the color channels and the alpha channel of the mask contribute to the
@@ -809,8 +817,8 @@ on the <a>'mask element'</a> element or any of its ancestors is set to
 
 <dl>
   <dt><span class="prop-value"><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a></span></dt>
-  <dd>A <a href="linking.html#IRIReference">IRI reference</a> to another
-  graphical object which will be used as the mask.</dd>
+  <dd>An <a>IRI reference</a> to another graphical object which will be used
+  as the mask.</dd>
 </dl>
 
 </edit:with>
@@ -860,7 +868,7 @@ into the current background.</p>
             <tr valign="baseline">
               <td><em>Applies to:</em>&nbsp;&nbsp;</td>
               <td><a>container elements</a> (except <a>'mask element'</a>) and
-	      <a>graphics elements</a></td>
+              <a>graphics elements</a></td>
             </tr>
             <tr valign="baseline">
               <td><em>Inherited:</em>&nbsp;&nbsp;</td>
