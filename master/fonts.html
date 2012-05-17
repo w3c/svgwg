@@ -16,189 +16,203 @@
 
 <h2 id="Introduction">Introduction</h2>
 
-    <p>Reliable delivery of fonts is a requirement for SVG.
-    Designers need to create SVG content with arbitrary fonts and
-    know that the same graphical result will appear when the
-    content is viewed by all end users, even when end users do not
-    have the necessary fonts installed on their computers. This
-    parallels the print world, where the designer uses a given font
-    when authoring a drawing for print, and the graphical content
-    appears exactly the same in the printed version as it appeared
-    on the designer's authoring system.</p>
-    <p>SVG utilizes the
-    <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#q1">WebFonts</a>
-    facility defined in CSS2
-    ([<a href="refs.html#ref-CSS2">CSS2</a>], section 15.1) as a key
-    mechanism for reliable delivery of font data to end users. In a
-    common scenario, SVG authoring applications generate
-    compressed, subsetted WebFonts
-    for all text elements used by a given SVG document fragment.
-    Typically, the WebFonts are saved in a location relative to the referencing
-    document.</p>
-    <p>One disadvantage to the WebFont
-    facility to date is that specifications such as CSS2 do not require
-    support of particular font formats. The result is that
-    different implementations support different Web font formats,
-    thereby making it difficult for Web site creators to post a
-    single Web site using WebFonts that work across all user
-    agents.</p>
-    <p>To provide a common font format for SVG that is guaranteed
-    to be supported by all <a
-    href="conform.html#ConformingSVGViewers">conforming SVG
-    viewers</a>, SVG provides a facility to define fonts in SVG.
-    This facility is called <em>SVG fonts</em>.</p>
+<p>Reliable delivery of fonts is a requirement for SVG.
+Designers need to create SVG content with arbitrary fonts and
+know that the same graphical result will appear when the
+content is viewed by all end users, even when end users do not
+have the necessary fonts installed on their computers. This
+parallels the print world, where the designer uses a given font
+when authoring a drawing for print, and the graphical content
+appears exactly the same in the printed version as it appeared
+on the designer's authoring system.</p>
 
-    <p id="SVGFonts">SVG fonts can improve the semantic richness of graphics that
-    represent text. For example, many company logos consist of the
-    company name drawn artistically. In some cases, <a href="access.html">accessibility</a> may be enhanced by
-    expressing the logo as a series of glyphs in an SVG font and
-    then rendering the logo as a <a>'text'</a> element which references
-    this font.</p>
+<p>SVG utilizes the
+<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#q1">WebFonts</a>
+facility defined in CSS2
+([<a href="refs.html#ref-CSS2">CSS2</a>], section 15.1) as a key
+mechanism for reliable delivery of font data to end users. In a
+common scenario, SVG authoring applications generate
+compressed, subsetted WebFonts
+for all text elements used by a given SVG document fragment.
+Typically, the WebFonts are saved in a location relative to the referencing
+document.</p>
+
+<p>One disadvantage to the WebFont
+facility to date is that specifications such as CSS2 do not require
+support of particular font formats. The result is that
+different implementations support different Web font formats,
+thereby making it difficult for Web site creators to post a
+single Web site using WebFonts that work across all user
+agents.</p>
+
+<p>To provide a common font format for SVG that is guaranteed
+to be supported by all <a
+href="conform.html#ConformingSVGViewers">conforming SVG
+viewers</a>, SVG provides a facility to define fonts in SVG.
+This facility is called <em>SVG fonts</em>.</p>
+
+<p id="SVGFonts">SVG fonts can improve the semantic richness of graphics that
+represent text. For example, many company logos consist of the
+company name drawn artistically. In some cases, <a href="access.html">accessibility</a> may be enhanced by
+expressing the logo as a series of glyphs in an SVG font and
+then rendering the logo as a <a>'text'</a> element which references
+this font.</p>
 
 <h2 id="SVGFontsOverview">Overview of SVG fonts</h2>
 
-    <p>An SVG font is a font defined
-    using SVG's <a>'font element'</a> element.</p>
-    <p>The purpose of SVG fonts is to allow for delivery of glyph
-    outlines in display-only environments. SVG fonts that accompany
-    Web pages must be supported only in browsing and viewing
-    situations. Graphics editing applications or file translation
-    tools must not attempt to convert SVG fonts into system fonts.
-    The intent is that SVG files be interchangeable between two
-    content creators, but not the SVG fonts that might accompany
-    these SVG files. Instead, each content creator will need to
-    license the given font before being able to successfully edit
-    the SVG file. The <a>'font-face-name'</a> element
-    indicates the name of licensed font to use for editing.</p>
-    <p>SVG fonts contain unhinted font outlines. Because of this,
-    on many implementations there will be limitations regarding the
-    quality and legibility of text in small font sizes. For
-    increased quality and legibility in small font sizes, content
-    creators may want to use an alternate font technology, such as
-    fonts that ship with operating systems or an alternate WebFont
-    format.</p>
-    <p>Because SVG fonts are expressed using SVG elements and
-    attributes, in some cases the SVG font will take up more space
-    than if the font were expressed in a different WebFont
-    format which was especially designed for compact expression of
-    font data. For the fastest delivery of Web pages, content
-    creators may want to use an alternate font technology.</p>
-    <p>A key value of SVG fonts is guaranteed availability in SVG
-    user agents. In some situations, it might be appropriate for an
-    SVG font to be the first choice for rendering some text. In
-    other situations, the SVG font might be an alternate, back-up
-    font in case the first choice font (perhaps a hinted system
-    font) is not available to a given user.</p>
-    <p>The characteristics and attributes of SVG fonts correspond
-    closely to the font characteristics and parameters described in
-    the <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html">Fonts chapter</a>
-    of the <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/"><cite>Cascading Style Sheets (CSS) level 2</cite></a>
-    specification ([<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/">CSS2</a>], chapter 15). In this model,
-    various font metrics, such as advance values and baseline
-    locations, and the glyph outlines themselves, are expressed in
-    units that are relative to an abstract square whose height is
-    the intended distance between lines of type in the same type
-    size. This square is called the <em>em square</em> and
-    it is the design grid on which the glyph
-    outlines are defined. The value of the <a>'font-face/units-per-em'</a>
-    attribute on the <a>'font-face'</a> element specifies how
-    many units the em square is divided into. Common values for
-    other font types are, for example, 250 (Intellifont), 1000
-    (Type 1) and 2048 (TrueType, TrueType GX and Open-Type). Unlike
-    standard graphics in SVG, where the initial coordinate system
-    has the y-axis pointing downward (see <a
-    href="coords.html#InitialCoordinateSystem">The initial
-    coordinate system</a>), the design grid for SVG fonts, along
-    with the initial coordinate system for the glyphs, has the
-    y-axis pointing upward for consistency with accepted industry
-    practice for many popular font formats.</p>
-    <p>SVG fonts and their associated glyphs do not specify
-    bounding box information. Because the glyph outlines are
-    expressed as SVG graphics elements, the implementation has the
-    option to render the glyphs either using standard graphics
-    calls or by using special-purpose font rendering technology, in
-    which case any necessary maximum bounding box and overhang
-    calculations can be performed from analysis of the graphics
-    elements contained within the glyph outlines.</p>
-    <p>An SVG font can be either embedded within the same document
-    that uses the font or saved as part of an external
-    resource.</p>
-    <p>Here is an example of how you might embed an SVG font inside
-    of an SVG document.</p>
-<pre>
-&lt;?xml version="1.0" standalone="yes"?&gt;
-&lt;svg width="400px" height="300px" version="1.1"
-  xmlns = 'http://www.w3.org/2000/svg'&gt;
-  &lt;defs&gt;
-    &lt;font id="Font1" horiz-adv-x="1000"&gt;
-      &lt;font-face font-family="Super Sans" font-weight="bold" font-style="normal"
+<p>An SVG font is a font defined
+using SVG's <a>'font element'</a> element.</p>
+
+<p>The purpose of SVG fonts is to allow for delivery of glyph
+outlines in display-only environments. SVG fonts that accompany
+Web pages must be supported only in browsing and viewing
+situations. Graphics editing applications or file translation
+tools must not attempt to convert SVG fonts into system fonts.
+The intent is that SVG files be interchangeable between two
+content creators, but not the SVG fonts that might accompany
+these SVG files. Instead, each content creator will need to
+license the given font before being able to successfully edit
+the SVG file. The <a>'font-face-name'</a> element
+indicates the name of licensed font to use for editing.</p>
+
+<p>SVG fonts contain unhinted font outlines. Because of this,
+on many implementations there will be limitations regarding the
+quality and legibility of text in small font sizes. For
+increased quality and legibility in small font sizes, content
+creators may want to use an alternate font technology, such as
+fonts that ship with operating systems or an alternate WebFont
+format.</p>
+
+<p>Because SVG fonts are expressed using SVG elements and
+attributes, in some cases the SVG font will take up more space
+than if the font were expressed in a different WebFont
+format which was especially designed for compact expression of
+font data. For the fastest delivery of Web pages, content
+creators may want to use an alternate font technology.</p>
+
+<p>A key value of SVG fonts is guaranteed availability in SVG
+user agents. In some situations, it might be appropriate for an
+SVG font to be the first choice for rendering some text. In
+other situations, the SVG font might be an alternate, back-up
+font in case the first choice font (perhaps a hinted system
+font) is not available to a given user.</p>
+
+<p>The characteristics and attributes of SVG fonts correspond
+closely to the font characteristics and parameters described in
+the <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html">Fonts chapter</a>
+of the <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/"><cite>Cascading Style Sheets (CSS) level 2</cite></a>
+specification ([<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/">CSS2</a>], chapter 15). In this model,
+various font metrics, such as advance values and baseline
+locations, and the glyph outlines themselves, are expressed in
+units that are relative to an abstract square whose height is
+the intended distance between lines of type in the same type
+size. This square is called the <em>em square</em> and
+it is the design grid on which the glyph
+outlines are defined. The value of the <a>'font-face/units-per-em'</a>
+attribute on the <a>'font-face'</a> element specifies how
+many units the em square is divided into. Common values for
+other font types are, for example, 250 (Intellifont), 1000
+(Type 1) and 2048 (TrueType, TrueType GX and Open-Type). Unlike
+standard graphics in SVG, where the initial coordinate system
+has the y-axis pointing downward (see <a
+href="coords.html#InitialCoordinateSystem">The initial
+coordinate system</a>), the design grid for SVG fonts, along
+with the initial coordinate system for the glyphs, has the
+y-axis pointing upward for consistency with accepted industry
+practice for many popular font formats.</p>
+
+<p>SVG fonts and their associated glyphs do not specify
+bounding box information. Because the glyph outlines are
+expressed as SVG graphics elements, the implementation has the
+option to render the glyphs either using standard graphics
+calls or by using special-purpose font rendering technology, in
+which case any necessary maximum bounding box and overhang
+calculations can be performed from analysis of the graphics
+elements contained within the glyph outlines.</p>
+
+<p>An SVG font can be either embedded within the same document
+that uses the font or saved as part of an external
+resource.</p>
+
+<p>Here is an example of how you might embed an SVG font inside
+of an SVG document.</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg width="400px" height="300px" version="1.1"
+  xmlns = 'http://www.w3.org/2000/svg'>
+  <defs>
+    <font id="Font1" horiz-adv-x="1000">
+      <font-face font-family="Super Sans" font-weight="bold" font-style="normal"
           units-per-em="1000" cap-height="600" x-height="400"
           ascent="700" descent="300"
-          alphabetic="0" mathematical="350" ideographic="400" hanging="500"&gt;
-        &lt;font-face-src&gt;
-          &lt;font-face-name name="Super Sans Bold"/&gt;
-        &lt;/font-face-src&gt;
-      &lt;/font-face&gt;
-      &lt;missing-glyph&gt;&lt;path d="M0,0h200v200h-200z"/&gt;&lt;/missing-glyph&gt;
-      &lt;glyph unicode="!" horiz-adv-x="300"&gt;&lt;!-- Outline of exclam. pt. glyph --&gt;&lt;/glyph&gt;
-      &lt;glyph unicode="@"&gt;&lt;!-- Outline of @ glyph --&gt;&lt;/glyph&gt;
-      &lt;!-- more glyphs --&gt;
-    &lt;/font&gt;
-  &lt;/defs&gt;
-  &lt;text x="100" y="100" 
+          alphabetic="0" mathematical="350" ideographic="400" hanging="500">
+        <font-face-src>
+          <font-face-name name="Super Sans Bold"/>
+        </font-face-src>
+      </font-face>
+      <missing-glyph><path d="M0,0h200v200h-200z"/></missing-glyph>
+      <glyph unicode="!" horiz-adv-x="300"><!-- Outline of exclam. pt. glyph --></glyph>
+      <glyph unicode="@"><!-- Outline of @ glyph --></glyph>
+      <!-- more glyphs -->
+    </font>
+  </defs>
+  <text x="100" y="100" 
            style="font-family: 'Super Sans', Helvetica, sans-serif;
-                  font-weight: bold; font-style: normal"&gt;Text 
-    using embedded font&lt;/text&gt;
-&lt;/svg&gt;
-</pre>
-    <p>Here is an example of how you might use the
-    <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#font-descriptions">CSS @font-face facility</a>
-    ([<a href="refs.html#ref-CSS2">CSS2</a>], section 15.3.1) to reference an SVG font which is saved
-    in an external file. First referenced SVG font file:</p>
-<pre>
-&lt;?xml version="1.0" standalone="yes"?&gt;
-&lt;svg width="100%" height="100%" version="1.1"
- xmlns = 'http://www.w3.org/2000/svg'&gt;
-  &lt;defs&gt;
-    &lt;font id="Font2" horiz-adv-x="1000"&gt;
-      &lt;font-face font-family="Super Sans" font-weight="normal" font-style="italic"
+                  font-weight: bold; font-style: normal">Text 
+    using embedded font</text>
+</svg>
+]]></pre>
+
+<p>Here is an example of how you might use the
+<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#font-descriptions">CSS @font-face facility</a>
+([<a href="refs.html#ref-CSS2">CSS2</a>], section 15.3.1) to reference an SVG font which is saved
+in an external file. First referenced SVG font file:</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg width="100%" height="100%" version="1.1"
+ xmlns = 'http://www.w3.org/2000/svg'>
+  <defs>
+    <font id="Font2" horiz-adv-x="1000">
+      <font-face font-family="Super Sans" font-weight="normal" font-style="italic"
           units-per-em="1000" cap-height="600" x-height="400"
           ascent="700" descent="300"
-          alphabetic="0" mathematical="350" ideographic="400" hanging="500"&gt;
-        &lt;font-face-src&gt;
-          &lt;font-face-name name="Super Sans Italic"/&gt;
-        &lt;/font-face-src&gt;
-      &lt;/font-face&gt;
-      &lt;missing-glyph&gt;&lt;path d="M0,0h200v200h-200z"/&gt;&lt;/missing-glyph&gt;
-      &lt;glyph unicode="!" horiz-adv-x="300"&gt;&lt;!-- Outline of exclam. pt. glyph --&gt;&lt;/glyph&gt;
-      &lt;glyph unicode="@"&gt;&lt;!-- Outline of @ glyph --&gt;&lt;/glyph&gt;
-      &lt;!-- more glyphs --&gt;
-    &lt;/font&gt;
-  &lt;/defs&gt;
-&lt;/svg&gt;
-</pre>
-    <p>The SVG file which uses/references the above SVG font</p>
-<pre>
-&lt;?xml version="1.0" standalone="yes"?&gt;
-&lt;svg width="400px" height="300px" version="1.1"
- xmlns = 'http://www.w3.org/2000/svg'&gt;  
-  &lt;defs&gt;
-    &lt;style type="text/css"&gt;
-      &lt;![CDATA[
-        @font-face {
-          font-family: 'Super Sans'; 
-          font-weight: normal;
-          font-style: italic;
-          src: url("myfont.svg#Font2") format("svg")
-        }
-      ]]&gt;
-   &lt;/style&gt;
-  &lt;/defs&gt;
-  &lt;text x="100" y="100"
+          alphabetic="0" mathematical="350" ideographic="400" hanging="500">
+        <font-face-src>
+          <font-face-name name="Super Sans Italic"/>
+        </font-face-src>
+      </font-face>
+      <missing-glyph><path d="M0,0h200v200h-200z"/></missing-glyph>
+      <glyph unicode="!" horiz-adv-x="300"><!-- Outline of exclam. pt. glyph --></glyph>
+      <glyph unicode="@"><!-- Outline of @ glyph --></glyph>
+      <!-- more glyphs -->
+    </font>
+  </defs>
+</svg>
+]]></pre>
+
+<p>The SVG file which uses/references the above SVG font</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg width="400px" height="300px" version="1.1"
+ xmlns = 'http://www.w3.org/2000/svg'>  
+  <defs>
+    <style type="text/css">
+      @font-face {
+        font-family: 'Super Sans'; 
+        font-weight: normal;
+        font-style: italic;
+        src: url("myfont.svg#Font2") format("svg")
+      }
+   </style>
+  </defs>
+  <text x="100" y="100"
            style="font-family: 'Super Sans'; font-weight:normal;
-                  font-style: italic"&gt;Text using referenced font&lt;/text&gt;
-&lt;/svg&gt;
-</pre>
+                  font-style: italic">Text using referenced font</text>
+</svg>
+]]></pre>
 
 <h2 id="FontElement">The <span class="element-name">'font'</span> element</h2>
 
@@ -292,16 +306,17 @@ child element which describes various characteristics of the font.</p>
 
 <edit:with element='glyph'>
 
-    <p>The <a>'glyph'</a> element
-    defines the graphics for a given glyph. The coordinate system
-    for the glyph is defined by the various attributes in the
-    <a>'font element'</a> element.</p>
-    <p>The graphics that make up the <a>'glyph'</a> can be  a single <a
-    href="paths.html#PathData">path data</a> specification within
-    the <a>'d'</a> attribute,  arbitrary SVG as
-    content within the <a>'glyph'</a>, or both.
-    These two alternatives are processed differently (see
-    below).</p>
+<p>The <a>'glyph'</a> element
+defines the graphics for a given glyph. The coordinate system
+for the glyph is defined by the various attributes in the
+<a>'font element'</a> element.</p>
+
+<p>The graphics that make up the <a>'glyph'</a> can be a single
+<a href="paths.html#PathData">path data</a> specification within
+the <a>'d'</a> attribute,  arbitrary SVG as
+content within the <a>'glyph'</a>, or both.
+These two alternatives are processed differently (see
+below).</p>
 
 <edit:elementsummary name='glyph'/>
 
@@ -452,90 +467,102 @@ child element which describes various characteristics of the font.</p>
         no.</span></dd>
       </dl>
     </div>
-    <p>The graphics for the <a>'glyph'</a> can be specified using
-    either the <a>'d'</a> attribute or arbitrary SVG as
-    content within the <a>'glyph'</a>.</p>
-    <p>If the <a>'d'</a> attribute is specified, then the
-    path data within this attribute is processed as follows:</p>
-    <ul>
-      <li>Any relative coordinates within the path data
-      specification are converted into equivalent absolute
-      coordinates</li>
-      <li>Each of these absolute coordinates is transformed from
-      the font coordinate system into the <a>'text'</a> element's current
-      coordinate system such that the origin of the font coordinate
-      system is properly positioned and rotated to align with the
-      <a href="text.html#CurrentTextPosition">current text
-      position</a> and orientation for the glyph, and scaled so
-      that the correct <a>'font-size'</a> is achieved.</li>
-      <li>The resulting, transformed path specification is rendered
-      as if it were a <a>'path'</a> element, using the
-      styling properties that apply to the characters which
-      correspond to the given glyph, and ignoring any styling
-      properties specified on the <a>'font element'</a> element or the
-      <a>'glyph'</a> element.</li>
-    </ul>
-    <p>If the <a>'glyph'</a> has child
-    elements, then those child elements are rendered in a manner
-    similar to how the <a>'use'</a> element renders a
-    referenced symbol. The rendering effect is as if the contents
-    of the referenced <a>'glyph'</a>
-    element were deeply cloned into a separate non-exposed DOM
-    tree. Because the cloned DOM tree is non-exposed, the SVG DOM
-    does not show the cloned instance.</p>
-    <p>For user agents that support <a
-    href="styling.html#StylingWithCSS">Styling with CSS</a>, the
-    conceptual deep cloning of the referenced <a>'glyph'</a> element into a non-exposed
-    DOM tree also copies any property values resulting from
-    <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html">the CSS cascade</a>
-    ([<a href="refs.html#ref-CSS2">CSS2</a>], chapter 6)
-    on the referenced <a>'glyph'</a> and
-    its contents, and also applies any property values on the
-    <a>'font element'</a> element. CSS2 selectors
-    can be applied to the original (i.e., referenced) elements
-    because they are part of the formal document structure. CSS2
-    selectors cannot be applied to the (conceptually) cloned DOM
-    tree because its contents are not part of the formal document
-    structure.</p>
-    <p>Property inheritance, however, works as if the referenced
-    <a>'glyph'</a> had been textually
-    included as a deeply cloned child within the document tree. The
-    referenced <a>'glyph'</a> inherits
-    properties from the element that contains the characters that
-    correspond to the <a>'glyph'</a>.
-    The <a>'glyph'</a> does not inherit
-    properties from the <a>'font element'</a> element's original
-    parents.</p>
-    <p>In the generated content, for each instance of a given <a>'glyph'</a>, a
-    <a>'g'</a> is created which carries
-    with it all property values resulting from the CSS cascade
-    on the <a>'font element'</a> element for the
-    referenced <a>'glyph'</a>. Within
-    this <a>'g'</a> is another <a>'g'</a> which carries with it all
-    property values resulting from the CSS cascade
-    on the <a>'glyph'</a> element. The
-    original contents of the <a>'glyph'</a> element are deep-cloned
-    within the inner <a>'g'</a> element.</p>
-    <p>If the <a>'glyph'</a> has both a
-    <a>'d'</a> attribute and child elements,
-    the <a>'d'</a> attribute is rendered first, and
-    then the child elements.</p>
-    <p>In general, the <a>'d'</a> attribute renders in the same
-    manner as system fonts. For example, a dashed pattern will
-    usually look the same if applied to a system font or to an SVG
-    font which defines its glyphs using the <a>'d'</a> attribute. Many implementations
-    will be able to render glyphs defined with the <a>'d'</a> attribute quickly and will be
-    able to use a font cache for further performance gains.</p>
-    <p>Defining a glyph by including child elements within the
-    <a>'glyph'</a> gives greater
-    flexibility but more complexity. Different fill and stroke
-    techniques can be used on different parts of the glyphs. For
-    example, the base of an "i" could be red, and the dot could be
-    blue. This approach has an inherent complexity with units. Any
-    properties specified on a text elements which represents a
-    length, such as the <a>'stroke-width'</a> property, might
-    produce surprising results since the length value will be
-    processed in the coordinate system of the glyph.</p>
+
+<p>The graphics for the <a>'glyph'</a> can be specified using
+either the <a>'d'</a> attribute or arbitrary SVG as
+content within the <a>'glyph'</a>.</p>
+
+<p>If the <a>'d'</a> attribute is specified, then the
+path data within this attribute is processed as follows:</p>
+
+<ul>
+  <li>Any relative coordinates within the path data
+  specification are converted into equivalent absolute
+  coordinates</li>
+
+  <li>Each of these absolute coordinates is transformed from
+  the font coordinate system into the <a>'text'</a> element's current
+  coordinate system such that the origin of the font coordinate
+  system is properly positioned and rotated to align with the
+  <a href="text.html#CurrentTextPosition">current text
+  position</a> and orientation for the glyph, and scaled so
+  that the correct <a>'font-size'</a> is achieved.</li>
+
+  <li>The resulting, transformed path specification is rendered
+  as if it were a <a>'path'</a> element, using the
+  styling properties that apply to the characters which
+  correspond to the given glyph, and ignoring any styling
+  properties specified on the <a>'font element'</a> element or the
+  <a>'glyph'</a> element.</li>
+</ul>
+
+<p>If the <a>'glyph'</a> has child
+elements, then those child elements are rendered in a manner
+similar to how the <a>'use'</a> element renders a
+referenced symbol. The rendering effect is as if the contents
+of the referenced <a>'glyph'</a>
+element were deeply cloned into a separate non-exposed DOM
+tree. Because the cloned DOM tree is non-exposed, the SVG DOM
+does not show the cloned instance.</p>
+
+<p>For user agents that support <a
+href="styling.html#StylingWithCSS">Styling with CSS</a>, the
+conceptual deep cloning of the referenced <a>'glyph'</a> element into a non-exposed
+DOM tree also copies any property values resulting from
+<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html">the CSS cascade</a>
+([<a href="refs.html#ref-CSS2">CSS2</a>], chapter 6)
+on the referenced <a>'glyph'</a> and
+its contents, and also applies any property values on the
+<a>'font element'</a> element. CSS2 selectors
+can be applied to the original (i.e., referenced) elements
+because they are part of the formal document structure. CSS2
+selectors cannot be applied to the (conceptually) cloned DOM
+tree because its contents are not part of the formal document
+structure.</p>
+
+<p>Property inheritance, however, works as if the referenced
+<a>'glyph'</a> had been textually
+included as a deeply cloned child within the document tree. The
+referenced <a>'glyph'</a> inherits
+properties from the element that contains the characters that
+correspond to the <a>'glyph'</a>.
+The <a>'glyph'</a> does not inherit
+properties from the <a>'font element'</a> element's original
+parents.</p>
+
+<p>In the generated content, for each instance of a given <a>'glyph'</a>, a
+<a>'g'</a> is created which carries
+with it all property values resulting from the CSS cascade
+on the <a>'font element'</a> element for the
+referenced <a>'glyph'</a>. Within
+this <a>'g'</a> is another <a>'g'</a> which carries with it all
+property values resulting from the CSS cascade
+on the <a>'glyph'</a> element. The
+original contents of the <a>'glyph'</a> element are deep-cloned
+within the inner <a>'g'</a> element.</p>
+
+<p>If the <a>'glyph'</a> has both a
+<a>'d'</a> attribute and child elements,
+the <a>'d'</a> attribute is rendered first, and
+then the child elements.</p>
+
+<p>In general, the <a>'d'</a> attribute renders in the same
+manner as system fonts. For example, a dashed pattern will
+usually look the same if applied to a system font or to an SVG
+font which defines its glyphs using the <a>'d'</a> attribute. Many implementations
+will be able to render glyphs defined with the <a>'d'</a> attribute quickly and will be
+able to use a font cache for further performance gains.</p>
+
+<p>Defining a glyph by including child elements within the
+<a>'glyph'</a> gives greater
+flexibility but more complexity. Different fill and stroke
+techniques can be used on different parts of the glyphs. For
+example, the base of an "i" could be red, and the dot could be
+blue. This approach has an inherent complexity with units. Any
+properties specified on a text elements which represents a
+length, such as the <a>'stroke-width'</a> property, might
+produce surprising results since the length value will be
+processed in the coordinate system of the glyph.</p>
 
 </edit:with>
 
@@ -569,52 +596,56 @@ the above glyph selection rules within an SVG font.</p>
 
 <h2 id="KernElements">The <span class="element-name">'hkern'</span> and <span class="element-name">'vkern'</span> elements</h2>
 
-    <p>The <a>'hkern'</a> and <a>'vkern'</a> elements define kerning
-    pairs for horizontally-oriented and vertically-oriented pairs
-    of glyphs, respectively.</p>
-    <p>Kern pairs identify pairs of glyphs within a single font
-    whose inter-glyph spacing is adjusted when the pair of glyphs
-    are rendered next to each other. In addition to the requirement
-    that the pair of glyphs are from the same font, SVG font
-    kerning happens only when the two glyphs correspond to
-    characters which have the same values for properties <a>'font-family'</a>,
-    <a>'font-size'</a>, <a>'font-style'</a>, <a>'font-weight'</a>,
-    <a>'font-variant'</a>, <a>'font-stretch'</a>, <a>'font-size-adjust'</a>
-    and <a>'font property'</a>.</p>
-    <p>An example of a kerning pair are the letters "Va", where the
-    typographic result might look better if the letters "V" and the
-    "a" were rendered slightly closer together.</p>
-    <p>Right-to-left and bidirectional text in SVG is laid out in a
-    two-step process, which is described in <a
-    href="text.html#RelationshipWithBiDirectionality">Relationship
-    with bidirectionality</a>. If SVG fonts are used, before
-    kerning is applied, characters are re-ordered into
-    left-to-right (or top-to-bottom, for vertical text) visual
-    rendering order. Kerning from SVG fonts is then applied on
-    pairs of glyphs which are rendered contiguously. The first
-    glyph in the kerning pair is the left (or top) glyph in visual
-    rendering order. The second glyph in the kerning pair is the
-    right (or bottom) glyph in the pair.</p>
-    <p>For convenience to font designers and to minimize file
-    sizes, a single <a>'hkern'</a> and
-    <a>'vkern'</a> can define a single
-    kerning adjustment value between one set of glyphs (e.g., a
-    range of Unicode characters) and another set of glyphs (e.g.,
-    another range of Unicode characters).</p>
+<p>The <a>'hkern'</a> and <a>'vkern'</a> elements define kerning
+pairs for horizontally-oriented and vertically-oriented pairs
+of glyphs, respectively.</p>
 
-    <p id="HKernElement">The <a>'hkern'</a> element
-    defines kerning pairs and adjustment values in the horizontal
-    advance value when drawing pairs of glyphs which the two glyphs
-    are contiguous and are both rendered horizontally (i.e.,
-    side-by-side). The spacing between characters is reduced by the
-    kerning adjustment. (Negative kerning adjustments increase the
-    spacing between characters.)</p>
+<p>Kern pairs identify pairs of glyphs within a single font
+whose inter-glyph spacing is adjusted when the pair of glyphs
+are rendered next to each other. In addition to the requirement
+that the pair of glyphs are from the same font, SVG font
+kerning happens only when the two glyphs correspond to
+characters which have the same values for properties <a>'font-family'</a>,
+<a>'font-size'</a>, <a>'font-style'</a>, <a>'font-weight'</a>,
+<a>'font-variant'</a>, <a>'font-stretch'</a>, <a>'font-size-adjust'</a>
+and <a>'font property'</a>.</p>
 
-    <p id="VKernElement">The <a>'vkern'</a> element
-    defines kerning pairs and adjustment values in the vertical
-    advance value when drawing pairs of glyphs together when
-    stacked vertically. The spacing between characters is reduced
-    by the kerning adjustment.</p>
+<p>An example of a kerning pair are the letters "Va", where the
+typographic result might look better if the letters "V" and the
+"a" were rendered slightly closer together.</p>
+
+<p>Right-to-left and bidirectional text in SVG is laid out in a
+two-step process, which is described in <a
+href="text.html#RelationshipWithBiDirectionality">Relationship
+with bidirectionality</a>. If SVG fonts are used, before
+kerning is applied, characters are re-ordered into
+left-to-right (or top-to-bottom, for vertical text) visual
+rendering order. Kerning from SVG fonts is then applied on
+pairs of glyphs which are rendered contiguously. The first
+glyph in the kerning pair is the left (or top) glyph in visual
+rendering order. The second glyph in the kerning pair is the
+right (or bottom) glyph in the pair.</p>
+
+<p>For convenience to font designers and to minimize file
+sizes, a single <a>'hkern'</a> and
+<a>'vkern'</a> can define a single
+kerning adjustment value between one set of glyphs (e.g., a
+range of Unicode characters) and another set of glyphs (e.g.,
+another range of Unicode characters).</p>
+
+<p id="HKernElement">The <a>'hkern'</a> element
+defines kerning pairs and adjustment values in the horizontal
+advance value when drawing pairs of glyphs which the two glyphs
+are contiguous and are both rendered horizontally (i.e.,
+side-by-side). The spacing between characters is reduced by the
+kerning adjustment. (Negative kerning adjustments increase the
+spacing between characters.)</p>
+
+<p id="VKernElement">The <a>'vkern'</a> element
+defines kerning pairs and adjustment values in the vertical
+advance value when drawing pairs of glyphs together when
+stacked vertically. The spacing between characters is reduced
+by the kerning adjustment.</p>
 
 <edit:with element='hkern'>
 
@@ -706,52 +737,57 @@ of <a>'u2'</a> or <a>'g2'</a> must be provided.</p>
 
 <h3 id="FontDescriptionsOverview">Overview of font descriptions</h3>
 
-    <p>A font description provides the bridge between an author's
-    font specification and the font data, which is the data needed
-    to format text and to render the abstract glyphs to which the
-    characters map — the actual scalable outlines or bitmaps. Fonts
-    are referenced by properties, such as the <a>'font-family'</a> property.</p>
-    <p>Each specified font description is added to the font
-    database and so that it can be used to select the relevant font
-    data. The font description contains descriptors such as the
-    location of the font data on the Web, and characterizations of
-    that font data. The font descriptors are also needed to match
-    the font properties to particular font data. The level of
-    detail of a font description can vary from just the name of the
-    font up to a list of glyph widths.</p>
-    <p>For more about font descriptions, refer to the <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html">Fonts chapter</a>
-    in the CSS2 specification ([<a href="refs.html#ref-CSS2">CSS2</a>], chapter 15).</p>
+<p>A font description provides the bridge between an author's
+font specification and the font data, which is the data needed
+to format text and to render the abstract glyphs to which the
+characters map — the actual scalable outlines or bitmaps. Fonts
+are referenced by properties, such as the <a>'font-family'</a> property.</p>
+
+<p>Each specified font description is added to the font
+database and so that it can be used to select the relevant font
+data. The font description contains descriptors such as the
+location of the font data on the Web, and characterizations of
+that font data. The font descriptors are also needed to match
+the font properties to particular font data. The level of
+detail of a font description can vary from just the name of the
+font up to a list of glyph widths.</p>
+
+<p>For more about font descriptions, refer to the <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html">Fonts chapter</a>
+in the CSS2 specification ([<a href="refs.html#ref-CSS2">CSS2</a>], chapter 15).</p>
 
 <h3 id="FontDescriptionsAlternatives">Alternative ways for providing a font description</h3>
 
-    <p>Font descriptions can be specified in either of the
-    following ways:</p>
-    <ul>
-      <li>a <a>'font-face'</a> element</li>
-      <li id="AtFontFace">an <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#font-descriptions">@font-face rule</a>
-      ([<a href="refs.html#ref-CSS2">CSS2</a>], section 15.3.1) within a CSS
-      style sheet (only applicable for user agents which support using CSS to
-      style the SVG content)</li>
-    </ul>
+<p>Font descriptions can be specified in either of the
+following ways:</p>
+
+<ul>
+  <li>a <a>'font-face'</a> element</li>
+
+  <li id="AtFontFace">an <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#font-descriptions">@font-face rule</a>
+  ([<a href="refs.html#ref-CSS2">CSS2</a>], section 15.3.1) within a CSS
+  style sheet (only applicable for user agents which support using CSS to
+  style the SVG content)</li>
+</ul>
 
 <h3 id="FontFaceElement">The <span class="element-name">'font-face'</span> element</h3>
 
 <edit:with element='font-face'>
 
-    <p>The <a>'font-face'</a> element
-    corresponds directly to the <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#font-descriptions">@font-face facility</a>
-    in CSS2 ([<a href="refs.html#ref-CSS2">CSS2</a>], section 15.3.1). It can be used to describe the
-    characteristics of any font, SVG font or otherwise.</p>
-    <p>When used to describe the characteristics of an SVG font
-    contained within the same document, it is recommended that the
-    <a>'font-face'</a> element be a
-    child of the <a>'font element'</a> element it is describing
-    so that the <a>'font element'</a> element can be
-    self-contained and fully-described. In this case, any
-    <a>'font-face-src'</a> elements within
-    the <a>'font-face'</a> element are
-    ignored as it is assumed that the <a>'font-face'</a> element is describing
-    the characteristics of its parent <a>'font element'</a> element.</p>
+<p>The <a>'font-face'</a> element
+corresponds directly to the <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#font-descriptions">@font-face facility</a>
+in CSS2 ([<a href="refs.html#ref-CSS2">CSS2</a>], section 15.3.1). It can be used to describe the
+characteristics of any font, SVG font or otherwise.</p>
+
+<p>When used to describe the characteristics of an SVG font
+contained within the same document, it is recommended that the
+<a>'font-face'</a> element be a
+child of the <a>'font element'</a> element it is describing
+so that the <a>'font element'</a> element can be
+self-contained and fully-described. In this case, any
+<a>'font-face-src'</a> elements within
+the <a>'font-face'</a> element are
+ignored as it is assumed that the <a>'font-face'</a> element is describing
+the characteristics of its parent <a>'font element'</a> element.</p>
 
 <edit:elementsummary name='font-face'/>
 
