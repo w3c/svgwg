@@ -113,7 +113,7 @@ paint servers.</p>
   precedence over the <a href="types.html#DataTypeColor">&lt;color&gt;</a> (which is in the sRGB color
   space). Note that color interpolation occurs in an RGB color
   space even if an ICC-based color specification is provided
-  (see <a>'color-interpolation'</a> and <a>'color-interpolation-filters'</a>).
+  (see <a>'color-interpolation'</a>).
   For more on ICC-based colors, refer to <a
   href="color.html#ColorProfileDescriptions">Color profile
   descriptions</a>.</dd>
@@ -1684,48 +1684,33 @@ the following:</p>
 
 <h2 id="RenderingProperties">Rendering properties</h2>
 
-<h3 id="ColorInterpolationProperties">Color interpolation properties:
-<span class="property">'color-interpolation'</span> and
-<span class="property">'color-interpolation-filters'</span></h3>
+<h3 id="ColorInterpolationProperties">Controlling color interpolation: the
+<span class="property">'color-interpolation'</span> property</h3>
 
+<div class="ready-for-wg-review">
 <p>The SVG user agent performs color interpolations and compositing
-at various points as it processes SVG content. Two properties,
-<a>'color-interpolation'</a> and <a>'color-interpolation-filters'</a>,
-control which color space is used for particular categories of graphics
-operations. The following table shows which property applies to which
-graphics operations:</p>
+at various points as it processes SVG content.  The <a>'color-interpolation'</a>
+property controls which color space is used for the following graphics operations:</p>
 
-    <table class='vert' summary="applicability of color interpolation properties">
-      <tr>
-        <th>Graphics operation</th>
-        <th>Corresponding property</th>
-      </tr>
-      <tr>
-        <td>interpolating between gradient stops (see <a
-        href="pservers.html#Gradients">Gradient</a>)</td>
-        <td><a>'color-interpolation'</a></td>
-      </tr>
-      <tr>
-        <td>interpolating color when performing color
-        animations with either <a>'animate'</a> or <a>'animateColor'</a></td>
-        <td><a>'color-interpolation'</a></td>
-      </tr>
-      <tr>
-        <td><a href="masking.html#SimpleAlphaBlending">alpha
-        compositing</a> of <a>graphics elements</a>
-        into the current background</td>
-        <td><a>'color-interpolation'</a></td>
-      </tr>
-      <tr>
-        <td><a href="filters.html">filter effects</a></td>
-        <td><a>'color-interpolation-filters'</a></td>
-      </tr>
-    </table>
+<ul>
+  <li>interpolating between <a href="pservers.html#Gradients">gradient</a> stops,</li>
 
-<p>Both properties choose between color operations occurring in the
-sRGB color space or in a (light
-energy linear) linearized RGB color space. Having chosen the appropriate
-color space, component-wise linear interpolation is used.</p>
+  <li>interpolating color when performing color animations with either
+  <a>'animate'</a> or <a>'animateColor'</a>,</li>
+
+  <li>and <a href="masking.html#SimpleAlphaBlending">alpha compositing</a> of
+  <a>graphics elements</a> into the current background.</li>
+</ul>
+
+<p class="note">For <a href="filters.html">filter effects</a>, the
+<a>'color-interpolation-filters'</a> property controls which color space is used.
+[<a href="refs.html#ref-FILTERS">FILTERS</a>]</p>
+</div>
+
+<p>The <a>'color-interpolation'</a> property chooses between color operations
+occurring in the sRGB color space or in a (light energy linear) linearized RGB
+color space. Having chosen the appropriate color space, component-wise linear
+interpolation is used.</p>
 
 <p id="sRGBlinearRGBConversionFormulas">The conversion formulas between the
 sRGB color space (i.e., nonlinear with 2.2 gamma curve) and the linearized RGB
@@ -1831,8 +1816,6 @@ performed according to the value of the <a>'color-interpolation'</a> property
 on the element being animated.</p>
 
 
-<div class="note">The definition of the 'color-interpolation-filters' property has been moved to the <a href="https://dvcs.w3.org/hg/FXTF/raw-file/tip/filters/index.html">Filter Effects spec</a>.</div>
-
 <h3 id="ColorRenderingProperty">The <span class="property">'color-rendering'</span> property</h3>
 
 <p>The creator of SVG content might want to provide a hint
@@ -1842,6 +1825,7 @@ tradeoffs as it performs color interpolation and compositing. The
 agent about how to optimize its color interpolation and compositing
 operations.</p>
 
+<!-- This paragraph should be moved to the Filters spec.
 <p><a>'color-rendering'</a> takes precedence over
 <a>'color-interpolation-filters'</a>. For example, assume
 <span class="prop-value">color-rendering: optimizeSpeed</span> and
@@ -1849,6 +1833,7 @@ operations.</p>
 In this case, the SVG user agent should perform color operations in a way that
 optimizes performance, which might mean sacrificing the color interpolation
 precision as specified by <span class="prop-value">color-interpolation-filters: linearRGB</span>.</p>
+-->
 
     <div class="propdef">
       <dl>
