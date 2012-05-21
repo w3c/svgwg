@@ -977,8 +977,179 @@ value is negative, then the effect is the same as dash offset <var>d</var>:</p>
 <a>graphics element</a>'s stroke is, taking into account the
 stroking properties above:</p>
 
-<p class="issue">Here will be steps that describe how exactly to handle
-dashing, line caps, line joins and stroke width.</p>
+<ol>
+  <li>Let <var>shape</var> be an empty shape.</li>
+  <li>Let <var>path</var> be the <a>equivalent path</a> of the <a>graphics element</a>.</li>
+  <!--
+  <li>Let <var>length</var> be the total length of <var>path</var>.</li>
+  -->
+  <li>Let <var>dashes</var> be the list of values of <a>'stroke-dasharray'</a> on the <a>graphics element</a>,
+    converted to user units, repeated if necessary so that it has an even number of elements; if the property
+    has the value <span class="prop-value">none</span>, then the list has a single value 0.</li>
+  <li>Let <var>dashcount</var> be the number of values in <var>dashes</var>.</li>
+  <li>Let <var>dashsum</var> be the sum of the values in <var>dashes</var>.</li>
+  <li>Let <var>dashing</var> be true if <var>dashsum</var> &gt; 0 and false otherwise.</li>
+  <!--
+  <li>Let <var>offset</var>, <var>width</var>, <var>cap</var> and <var>join</var> be the values of the <a>'stroke-dashoffset'</a>, <a>'stroke-width'</a>, <a>'stroke-linecap'</a> and <a>'stroke-linejoin'</a> properties on the <a>graphics element</a>.</li>
+  -->
+  <li>Let <var>offset</var> be the value of the <a>'stroke-dashoffset'</a> property on the <a>graphics element</a>.</li>
+  <li>If <var>offset</var> is negative, then set <var>offset</var> to <var>dashsum</var> − abs(<var>offset</var>).</li>
+  <li>Set <var>offset</var> to <var>offset</var> mod <var>dashsum</var>.</li>
+  <li>For each subpath of <var>path</var>:
+    <ol>
+      <li>Let <var>positions</var> be the <a>dash positions</a> for the subpath.</li>
+      <li>For each pair &lt;<var>startpos</var>, <var>endpos</var>&gt; in <var>positions</var>:
+        <ol>
+          <li>Let <var>dash</var> be the shape that includes, for all distances
+            between <var>startpos</var> and <var>endpos</var>
+            along the subpath, all points that lie on the line perpendicular to the subpath 
+            at that distance and which are within distance <a>'stroke-width'</a> of the
+            point on the subpath at that position.</li>
+          <li>Set <var>dash</var> to be the union of <var>dash</var> and the starting <a>cap shape</a> for the subpath at position <var>startpos</var>.</li>
+          <li>Set <var>dash</var> to be the union of <var>dash</var> and the ending <a>cap shape</a> for the subpath at position <var>endpos</var>.</li>
+          <li>Let <var>loseg</var> be the index of the path segment in the subpath at distance <var>position</var> along the subpath.</li>
+          <li>Let <var>hiseg</var> be the index of the path segment in the subpath at distance <var>endposition</var> along the subpath.
+            <p class="note">It does not matter whether any zero length segments are
+              included when choosing <var>loseg</var> and <var>hiseg</var>.</p>
+          </li>
+          <li>Let <var>segindex</var> be <var>loseg</var>.</li>
+          <li>While <var>segindex</var> &lt; <var>hiseg</var>:
+            <ol>
+              <li>Set <var>dash</var> to be the union of <var>dash</var> and the
+                <a>line join shape</a> for the subpath at segment index <var>segindex</var>.</li>
+              <li>Set <var>segindex</var> to <var>segindex</var> + 1.</li>
+            </ol>
+          </li>
+          <li>Set <var>shape</var> to be the union of <var>shape</var> and <var>stroke</var>.</li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+  <li>Return <var>shape</var>.</li>
+</ol>
+
+<p>The <dfn id="TermDashPositions">dash positions</dfn> for a given subpath of a <a>graphics element</a>'s
+<a>equivalent path</a> is a sequence of pairs of "starting distance along the subpath" and "ending distance
+along the subpath".  It is determined as follows:</p>
+
+<ol>
+  <li>Let <var>length</var> be the length of the subpath.</li>
+
+  <li>Let <var>dashes</var> be the list of values of <a>'stroke-dasharray'</a> on the <a>graphics element</a>,
+    converted to user units, repeated if necessary so that it has an even number of elements; if the property
+    has the value <span class="prop-value">none</span>, then the list has a single value 0.</li>
+  <li>Let <var>dashcount</var> be the number of values in <var>dashes</var>.</li>
+  <li>Let <var>dashsum</var> be the sum of the values in <var>dashes</var>.</li>
+  <li>If <var>dashsum</var> = 0, then return a sequence with the single pair &lt;0, <var>length</var>&gt;.</li>
+
+  <li>Let <var>positions</var> be an empty sequence.</li>
+  <li>Let <var>offset</var> be the value of the <a>'stroke-dashoffset'</a> property on the <a>graphics element</a>.</li>
+  <li>If <var>offset</var> is negative, then set <var>offset</var> to <var>dashsum</var> − abs(<var>offset</var>).</li>
+  <li>Set <var>offset</var> to <var>offset</var> mod <var>dashsum</var>.</li>
+
+  <li>Let <var>dashindex</var> be the smallest integer such that sum(<var>dashes<sub>i</sub></var>, 0 ≤ <var>i</var> ≤ <var>dashindex</var>) ≥ <var>offset</var>.</li>
+  <li>Let <var>dashlength</var> be min(sum(<var>dashes<sub>i</sub></var>, 0 ≤ <var>i</var> ≤ <var>dashindex</var>) − <var>offset</var>, <var>length</var>).</li>
+  <li>If <var>dashindex</var> mod 2 = 0, then append to <var>positions</var> the pair &lt;0, <var>dashlength</var>&gt;.</li>
+  <li>Let <var>position</var> be <var>dashlength</var>.</li>
+  <li>Set <var>dashindex</var> to (<var>dashindex</var> + 1) mod <var>dashcount</var>.</li>
+
+  <li>While <var>position</var> &lt; <var>length</var>:
+    <ol>
+      <li>Let <var>dashlength</var> be min(<var>dashes</var><sub><var>dashindex</var></sub>, <var>length</var> − <var>position</var>).</li>
+      <li>If <var>dashindex</var> mod 2 = 0, then append to <var>positions</var> the pair &lt;<var>position</var>, <var>position</var> + <var>dashlength</var>&gt;.</li>
+      <li>Set <var>dashindex</var> to (<var>dashindex</var> + 1) mod <var>dashcount</var>.</li>
+      <li>Set <var>position</var> to <var>position</var> + <var>dashlength</var>.</li>
+    </ol>
+  </li>
+
+  <li>Return <var>positions</var>.</li>
+</ol>
+
+<p>The starting and ending <dfn id="TermCapShape">cap shapes</dfn> at a given <var>position</var> along a subpath is determined as follows:</p>
+
+<ol>
+  <li>If <a>'stroke-linecap'</a> is <span class="prop-value">butt</span>, then return an empty shape.</li>
+  <li>Otherwise, if <a>'stroke-linecap'</a> is <span class="prop-value">round</span>, then:
+    <ol>
+      <li>If this is a starting cap, then return a semicircle of radius <a>'stroke-width'</a> positioned such that:
+        <ul>
+          <li>Its straight edge is parallel to the line perpendicular to the subpath at distance <var>position</var> along it.</li>
+          <li>The midpoint of its straight edge is at the point that is along the subpath at distance <var>position</var>.</li>
+          <li>The direction from the midpoint of its arc to the midpoint of its straight edge is the same as the direction of the subpath at distance <var>position</var> along it.</li>
+        </ul>
+      </li>
+      <li>Otherwise, this is an ending cap.  Return a semicircle of radius <a>'stroke-width'</a> positioned such that:
+        <ul>
+          <li>Its straight edge is parallel to the line perpendicular to the subpath at distance <var>position</var> along it.</li>
+          <li>The midpoint of its straight edge is at the point that is along the subpath at distance <var>position</var>.</li>
+          <li>The direction from the midpoint of its straight edge to the midpoint of its arc is the same as the direction of the subpath at distance <var>position</var> along it.</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+  <li>Otherwise, <a>'stroke-linecap'</a> is <span class="prop-value">square</span>:
+    <ol>
+      <li>If this is a starting cap, then return a rectangle with side lengths <a>'stroke-width'</a> and <a>'stroke-width'</a> / 2 positioned such that:
+        <ul>
+          <li>Its longer edges, <var>A</var> and <var>B</var>, are parallel to the line perpendicular to the subpath at distance <var>position</var> along it.</li>
+          <li>The midpoint of <var>A</var> is at <var>start</var>.</li>
+          <li>The direction from the midpoint of <var>B</var> to the midpoint of <var>A</var> is the same as the direction of the subpath at distance <var>position</var> along it.</li>
+        </ul>
+      </li>
+      <li>Otherwise, this is an ending cap.  Return a rectangle with side lengths <a>'stroke-width'</a> and <a>'stroke-width'</a> / 2 positioned such that:
+        <ul>
+          <li>Its longer edges, <var>A</var> and <var>B</var>, are parallel to the line perpendicular to the subpath at distance <var>endposition</var> along it.</li>
+          <li>The midpoint of <var>A</var> is at <var>end</var>.</li>
+          <li>The direction from the midpoint of <var>A</var> to the midpoint of <var>B</var> is the same as the direction of the subpath at distance <var>endposition</var> along it.</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<p>The <dfn id="TermLineJoinShape">line join shape</dfn> for a given segment of a subpath is determined as follows:</p>
+
+<ol>
+  <li>Let <var>P</var> be the point at the end of the segment.</li>
+  <li>Let <var>A</var> be the line parallel to the tangent at the end of the segment.</li>
+  <li>Let <var>B</var> be the line parallel to the tangent at the start of the following segment.</li>
+
+  <li>If <var>A</var> and <var>B</var> are the same line, then return an empty shape.</li>
+
+  <li>Let <var>A<sub>left</sub></var> and <var>A<sub>right</sub></var> be lines parallel to <var>A</var> at a distance of <a>'stroke-width'</a> / 2 to the left and to the right of <var>A</var>, respectively.</li>
+  <li>Let <var>B<sub>left</sub></var> and <var>B<sub>right</sub></var> be lines parallel to <var>B</var> at a distance of <a>'stroke-width'</a> / 2 to the left and to the right of <var>B</var>, respectively.</li>
+
+  <li>Let <var>P</var><sub>1</sub>, <var>P</var><sub>2</sub> and <var>P</var><sub>3</sub> be points determined as follows:
+    <ol>
+      <li>If the acute angle between <var>A</var> and <var>B</var> is on the right of these lines, considering the direction of the subpath, then
+        <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> are the points on
+        <var>A<sub>left</sub></var> and <var>B<sub>left</sub></var> closest to <var>P</var>,
+        and <var>P</var><sub>3</sub> is the intersection of <var>A<sub>left</sub></var> and <var>B<sub>left</sub></var>.</li>
+      <li>Otherwise, 
+        <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> are the points on
+        <var>A<sub>right</sub></var> and <var>B<sub>right</sub></var> closest to <var>P</var>,
+        and <var>P</var><sub>3</sub> is the intersection of <var>A<sub>right</sub></var> and <var>B<sub>right</sub></var>.</li>
+    </ol>
+  </li>
+
+  <li>Let <var>bevel</var> be the triangle formed from the three points <var>P</var>, <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub>.</li>
+
+  <li>If <a>'stroke-linejoin'</a> is <span class="prop-value">round</span>, then return the union
+    of <var>bevel</var> and a circular sector of radius <a>'stroke-width'</a>, centered on <var>P</var>,
+    and which has <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> as the two endpoints of the arc.</li>
+
+  <li>Let <var>angle</var> be the angle between <var>A</var> and <var>B</var>.</li>
+  <li>Let <var>miterlength</var> be <a>'stroke-width'</a> / sin(<var>angle</var> / 2).</li>
+  <li>If <a>'stroke-linejoin'</a> is <span class="prop-value">miter</span> and 1 / sin(<var>angle</var> / 2) ≤ <a>'stroke-miterlimit'</a>, then
+    return the union of <var>bevel</var> and the triangle formed from the three points <var>P</var><sub>1</sub>, <var>P</var><sub>2</sub> and <var>P</var><sub>3</sub>.</li>
+
+  <li>Return <var>bevel</var>.</li>
+</ol>
+
+<div class="figure">
+  <img src="images/painting/linejoin-construction.svg" style="border: 1px solid #888"/>
+  <p class="caption">Construction of a round line join shape.</p>
+</div>
 
 <h2 id="VisibilityControl">Controlling visibility</h2>
 
