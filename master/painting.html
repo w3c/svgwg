@@ -1760,6 +1760,97 @@ the following:</p>
 
 </edit:with>
 
+<div class="ready-for-wg-review">
+<h2 id="PaintOrder">Controlling paint operation order: the <span class="property">'paint-order'</span> property</h2>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="PaintOrderProperty">paint-order</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>normal | [ fill || stroke || markers ]</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>normal</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>graphics elements</a> and <a>text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="animate.html#Animatable">Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
+<p>The <a>'paint-order'</a> property controls the order that the three
+paint operations that <a>shapes</a> and text are rendered with:
+their fill, their stroke and any markers they might have.</p>
+
+<p class="issue">Is there a better name than <a>'paint-order'</a>?</p>
+
+<p>When the value of this property is <span class="prop-value">normal</span>,
+the element is painted with the standard order of painting operations:
+the fill is painted first, then its stroke and finally its markers.</p>
+
+<p>When any of the other keywords are used, the order of the paint
+operations for painting the element is as given, from left to right.  If any of
+the three keywords are omitted, they are painted last, in the order they
+would be painted with <span class="prop-value">paint-order: normal</span>.</p>
+
+<p class="note">This mean that, for example, <span class="prop-value">paint-order: stroke</span>
+has the same rendering behavior as <span class="prop-value">paint-order: stroke fill markers</span>.</p>
+
+<p class="issue">This does not affect interaction, but once the
+<a href="http://www.w3.org/Graphics/SVG/WG/wiki/Proposals/Marker_children">marker children proposal</a>
+is added to the spec, it will be possible for <a>'marker element'</a> elements to
+receive mouse events or not depending on the value of <a>'paint-order'</a>.</p>
+
+<p class="issue">The Rendering chapter will need some changes to accommodate
+<a>'paint-order'</a>, and should probably gain a more precise description of
+exactly how an SVG fragment is rendered.</p>
+
+<div class="example">
+  <p>The following example shows how the <a>'paint-order'</a> property can
+  be used to render stroked text in a more aesthetically pleasing manner.</p>
+
+  <pre><![CDATA[
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="600" height="150" viewBox="0 0 600 150">
+
+  <style>
+    text { font: 80px bold sans-serif; stroke-linejoin: round;
+           text-anchor: middle; fill: peachpuff; stroke: crimson; }
+  </style>
+
+  <text x="150" y="100" stroke-width="6px">pizazz</text>
+  <text x="450" y="100" stroke-width="12px" paint-order="stroke">pizazz</text>
+</svg>
+]]></pre>
+
+  <p style="text-align: center"><img src="images/painting/paintorder.svg" alt="Image showing text with the stroke painted below the fill." style="border: 1px solid #888"/></p>
+</div>
+</div>
+
 <h2 id="RenderingProperties">Rendering properties</h2>
 
 <h3 id="ColorInterpolationProperties">Controlling color interpolation: the
