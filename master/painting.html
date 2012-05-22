@@ -390,10 +390,6 @@ geometry of the current graphics element and its associated stroking
 properties were converted to an equivalent <a>'path'</a> element and
 then filled using the given paint server.</p>
 
-<p class="issue">We should have an algorithm here that computes the
-exact shape of a stroke.  This would make it clear how say <a>'stroke-dasharray'</a>
-and <a>'stroke-linejoin'</a> interact.</p>
-
 <h3 id="SpecifyingStrokePaint">Specifying stroke paint: the <span class="property">'stroke'</span> property</h3>
 
 <table class="propdef">
@@ -638,29 +634,17 @@ open subpaths when they are stroked.  The possible values are:</p>
   <dd>
     <p>This value indicates that at each end of each subpath, the shape
     representing the stroke will be extended by a half circle with a radius equal
-    to the stroke width.  The half circles are placed such that their center points,
-    were they full circles, lie at the start and end points of each subpath.
-    They are oriented such that their straight lines are perpendicular
-    to the tangent of the subpaths at their respective positions and their
-    semi-circular shapes point away from the other end of the subpath.</p>
-
-    <p>If a subpath has zero length, then the resulting effect is that the
-    stroke for that subpath consists solely of a full circle centered
-    at the subpath's point.</p>
+    to the stroke width.  If a subpath has zero length, then the resulting
+    effect is that the stroke for that subpath consists solely of a full circle
+    centered at the subpath's point.</p>
   </dd>
 
   <dt><span class='prop-value'>square</span></dt>
   <dd>
     <p>This value indicates that at the end of each subpath, the shape
-    representing the stroke will be extended by a rectangle whose width
-    is equal to the stroke width and whose height is half of the stroke width.
-    The rectangles are placed such that the mid-point of one of their longer
-    edges lies at the start and end points of each subpath.  They are oriented
-    such that their longer edges are perpendicular to the tangent of the
-    subpaths at their respective positions and their rectangular shapes
-    point away from the other end of the subpath.</p>
-
-    <p>If a subpath has zero length, then the resulting effect is that the
+    representing the stroke will be extended by a rectangle with the
+    same width as the stroke width and whose length is half of the stroke width.
+    If a subpath has zero length, then the resulting effect is that the
     stroke for that subpath consists solely of a square with side length
     equal to the stroke width, centered at the subpath's point, and oriented
     such that two of its sides are parallel to the effective tangent
@@ -671,20 +655,13 @@ open subpaths when they are stroked.  The possible values are:</p>
   </dd>
 </dl>
 
-<p class="issue">We should move all of the path implementation notes
-into here and the Paths chapter, rather than having it pushed out to
-an appendix.</p>
-
 <div class="figure">
-  <img alt="Image showing stroke-linecap alternatives" src="images/painting/linecap.svg" style="border: 1px solid #888"/>
-  <p class="caption">The three different <a>'stroke-linecap'</a> values used on
-  paths with a single, non-zero length subpath.  The white line is the path itself and
-  the thick gray area is the stroke.  On the top row, the green lines indicate the
-  perpendicular to the tangent at the path endpoints and the pink areas are the
-  caps.  The bottom row shows the stroke without the perpendicular and cap highlighting.</p>
+  <img alt="Image showing three paths, each with a different line cap." src="images/painting/linecap.svg" style="border: 1px solid #888"/>
+  <p class="caption">The three types of line caps.</p>
 </div>
 
-</div>
+<p>See the definition of the <a>cap shape</a> below for a more precise
+description of the shape a line cap will have.</p>
 
 <h3 id="LineJoin">Controlling line joins: the <span class="property">'stroke-linejoin'</span> and <span class="property">'stroke-miterlimit'</span> properties</h3>
 
@@ -732,15 +709,23 @@ corners of paths or basic shapes when they are stroked. For further details see 
 
 <dl>
   <dt><span class='prop-value'>miter</span></dt>
-  <dd>See drawing below.</dd>
+  <dd>This value indicates that a sharp corner is to be used to join path segments.
+  The corner is formed by extending the outer edges of the stroke at the tangents
+  of the path segments until they intersect.</dd>
+
   <dt><span class='prop-value'>round</span></dt>
-  <dd>See drawing below.</dd>
+  <dd>This value indicates that a round corner is to be used to join path segments.
+  The corner is a circular sector centered on the join point.</dd>
+
   <dt><span class='prop-value'>bevel</span></dt>
-  <dd>See drawing below.</dd>
+  <dd>This value indicates that a bevelled corner is to be used to join path segments.
+  The bevel shape is a triangle that fills the area between the two stroked segments.</dd>
 </dl>
 
-<p><img alt="Image showing stroke-linejoin alternatives" src="images/painting/linejoin.png" width="454" height="133" /></p>
-<p class="view-as-svg"><a href="images/painting/linejoin.svg">View this example as SVG (SVG- and CSS-enabled browsers only)</a></p>
+<div class="figure">
+  <img alt="Image showing three paths, each with a different line join." src="images/painting/linejoin.svg" style="border: 1px solid #888"/>
+  <p class="caption">The three types of line joins.</p>
+</div>
 
 <table class="propdef">
   <tr>
@@ -831,6 +816,9 @@ theta less than 90 degrees, a limit of 4.0 converts them for theta less
 than approximately 29 degrees, and a limit of 10.0 converts them for
 theta less than approximately 11.5 degrees.</p>
 
+<p>See the definition of the <a>line join shape</a> below for a more precise
+description of the shape a line join will have.</p>
+
 <h3 id="StrokeDashing">Dashing strokes: the <span class="property">'stroke-dasharray'</span> and <span class="property">'stroke-dashoffset'</span> properties</h3>
 
 <table class="propdef">
@@ -897,8 +885,8 @@ a path's stroke.</p>
     of <span class="prop-value">stroke-dasharray: 5,3,2</span>
     is equivalent to <span class="prop-value">stroke-dasharray: 5,3,2,5,3,2</span>.)</p>
 
-    <p>The resulting even-length dashing pattern is repeated along the
-    entire length of the path.</p>
+    <p>The resulting even-length dashing pattern is repeated along each subpath.
+    The dashing pattern is reset and begins again at the start of each subpath.</p>
 
     <p>If any value in the list is negative, the <a>&lt;dasharray&gt;</a> value is
     <a>invalid</a>.  If all of the values in the list are zero,
@@ -906,6 +894,12 @@ a path's stroke.</p>
     were specified.</p>
   </dd>
 </dl>
+
+<div class="figure">
+  <img src="images/painting/dashes.svg" alt="Image showing a thick, dashed stroke." style="border: 1px solid #888"/>
+  <p class="caption">A dashed stroke.  The dashing pattern is <span class="prop-value">20,10</span>.
+  The red line shows the actual path that is stroked.</p>
+</div>
 
 <table class="propdef">
   <tr>
@@ -969,9 +963,15 @@ value is negative, then the effect is the same as dash offset <var>d</var>:</p>
 
 <p>where <var>s</var> is the sum of the dash array values.</p>
 
-<p class="issue">An illustration of stroke dashing would be good here.</p>
+<div class="figure">
+  <img src="images/painting/dashoffset.svg" alt="Image showing a thick, dashed stroke with a non-zero dash offset." style="border: 1px solid #888"/>
+  <p class="caption">A dashed stroke with a non-zero dash offset.  The dashing pattern is <span class="prop-value">20,10</span>
+  and the dash offset is <span class="prop-value">15</span>.  The red line shows the actual path that is stroked.</p>
+</div>
 
-<div class="ready-for-wg-review">
+<p>See the definition of <a>dash positions</a> below for a more precise
+description of positions along a path that dashes will be placed.</p>
+
 <h3 id="StrokeShape">Computing the shape of the stroke</h3>
 
 <p>The following algorithm describes what the shape of a
@@ -981,18 +981,12 @@ stroking properties above:</p>
 <ol>
   <li>Let <var>shape</var> be an empty shape.</li>
   <li>Let <var>path</var> be the <a>equivalent path</a> of the <a>graphics element</a>.</li>
-  <!--
-  <li>Let <var>length</var> be the total length of <var>path</var>.</li>
-  -->
   <li>Let <var>dashes</var> be the list of values of <a>'stroke-dasharray'</a> on the <a>graphics element</a>,
     converted to user units, repeated if necessary so that it has an even number of elements; if the property
     has the value <span class="prop-value">none</span>, then the list has a single value 0.</li>
   <li>Let <var>dashcount</var> be the number of values in <var>dashes</var>.</li>
   <li>Let <var>dashsum</var> be the sum of the values in <var>dashes</var>.</li>
   <li>Let <var>dashing</var> be true if <var>dashsum</var> &gt; 0 and false otherwise.</li>
-  <!--
-  <li>Let <var>offset</var>, <var>width</var>, <var>cap</var> and <var>join</var> be the values of the <a>'stroke-dashoffset'</a>, <a>'stroke-width'</a>, <a>'stroke-linecap'</a> and <a>'stroke-linejoin'</a> properties on the <a>graphics element</a>.</li>
-  -->
   <li>Let <var>offset</var> be the value of the <a>'stroke-dashoffset'</a> property on the <a>graphics element</a>.</li>
   <li>If <var>offset</var> is negative, then set <var>offset</var> to <var>dashsum</var> − abs(<var>offset</var>).</li>
   <li>Set <var>offset</var> to <var>offset</var> mod <var>dashsum</var>.</li>
@@ -1031,7 +1025,7 @@ stroking properties above:</p>
 
 <p>The <dfn id="TermDashPositions">dash positions</dfn> for a given subpath of a <a>graphics element</a>'s
 <a>equivalent path</a> is a sequence of pairs of "starting distance along the subpath" and "ending distance
-along the subpath".  It is determined as follows:</p>
+along the subpath", which represent where dashes are placed on the subpath.  It is determined as follows:</p>
 
 <ol>
   <li>Let <var>length</var> be the length of the subpath.</li>
@@ -1065,7 +1059,7 @@ along the subpath".  It is determined as follows:</p>
   <li>Return <var>positions</var>.</li>
 </ol>
 
-<p>The starting and ending <dfn id="TermCapShape">cap shapes</dfn> at a given <var>position</var> along a subpath is determined as follows:</p>
+<p>The starting and ending <dfn id="TermCapShape">cap shapes</dfn> at a given <var>position</var> along a subpath are determined as follows:</p>
 
 <ol>
   <li>If <a>'stroke-linecap'</a> is <span class="prop-value">butt</span>, then return an empty shape.</li>
@@ -1107,6 +1101,15 @@ along the subpath".  It is determined as follows:</p>
   </li>
 </ol>
 
+<div class="figure">
+  <img alt="Image showing how to construct the three types of line caps" src="images/painting/linecap-construction.svg" style="border: 1px solid #888"/>
+  <p class="caption">The three different <a>'stroke-linecap'</a> values used on
+  paths with a single, non-zero length subpath.  The white line is the path itself and
+  the thick gray area is the stroke.  On the top row, the green lines indicate the
+  perpendicular to the tangent at the path endpoints and the pink areas are the
+  caps.  The bottom row shows the stroke without the perpendicular and cap highlighting.</p>
+</div>
+
 <p>The <dfn id="TermLineJoinShape">line join shape</dfn> for a given segment of a subpath is determined as follows:</p>
 
 <ol>
@@ -1138,9 +1141,9 @@ along the subpath".  It is determined as follows:</p>
     of <var>bevel</var> and a circular sector of radius <a>'stroke-width'</a>, centered on <var>P</var>,
     and which has <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> as the two endpoints of the arc.</li>
 
-  <li>Let <var>angle</var> be the angle between <var>A</var> and <var>B</var>.</li>
-  <li>Let <var>miterlength</var> be <a>'stroke-width'</a> / sin(<var>angle</var> / 2).</li>
-  <li>If <a>'stroke-linejoin'</a> is <span class="prop-value">miter</span> and 1 / sin(<var>angle</var> / 2) ≤ <a>'stroke-miterlimit'</a>, then
+  <li>Let <var>θ</var> be the angle between <var>A</var> and <var>B</var>.</li>
+  <li>Let <var>miterlength</var> be <a>'stroke-width'</a> / sin(<var>θ</var> / 2).</li>
+  <li>If <a>'stroke-linejoin'</a> is <span class="prop-value">miter</span> and 1 / sin(<var>θ</var> / 2) ≤ <a>'stroke-miterlimit'</a>, then
     return the union of <var>bevel</var> and the triangle formed from the three points <var>P</var><sub>1</sub>, <var>P</var><sub>2</sub> and <var>P</var><sub>3</sub>.</li>
 
   <li>Return <var>bevel</var>.</li>
@@ -1148,7 +1151,8 @@ along the subpath".  It is determined as follows:</p>
 
 <div class="figure">
   <img src="images/painting/linejoin-construction.svg" style="border: 1px solid #888"/>
-  <p class="caption">Construction of a round line join shape.</p>
+  <p class="caption">Construction of a round line join shape, shown in pink.  The white line is the original
+  path, which has two segments that come to a point, and the gray region is the stroke.</p>
 </div>
 </div>
 
