@@ -1146,117 +1146,44 @@ for each of the dashes that form the subpath's stroke.  It is determined as foll
   <p class="caption">Construction of a round line join shape, shown in pink.  The white line is the original
   path, which has two segments that come to a point, and the gray region is the stroke.</p>
 </div>
-</div>
 
-<h2 id="VisibilityControl">Controlling visibility</h2>
+<h2 id="VisibilityControl">Controlling visibility: the effect of the <span class="property">'display'</span> and <span class="property">'visibility'</span> properties</h2>
 
-<p>SVG uses two properties, <a>'display'</a> and <a>'visibility'</a>, to
-control the visibility of graphical elements or (in the case of the
-<a>'display'</a> property) container elements.  The differences between the two
-properties are as follows.</p>
+<p class="note">See the CSS 2.1 specification for the definitions
+of <a>'display'</a> and <a>'visibility'</a>.
+[<a href="refs.html#ref-CSS21">CSS21</a>]</p>
 
-<p>When applied to a container element, setting <a>'display'</a>
-to <span class="prop-value">none</span> causes the container and
-all of its children to be invisible; thus, it acts on groups of
-elements as a group. <a>'visibility'</a>, however, only applies
-to individual graphics elements. Setting <a>'visibility'</a>
-to <span class="prop-value">hidden</span> on a <a>'g'</a>
-will make its children invisible as long as the children do
-not specify their own <a>'visibility'</a> properties as <span
-class="prop-value">visible</span>. Note that <a>'display'</a> is
-<em>not</em> an inheritable property.</p>
+<p>SVG uses two properties to control the visibility of
+<a>container elements</a>, <a>graphics elements</a>
+and <a>text content elements</a>:
+<a>'display'</a> and <a>'visibility'</a>.</p>
 
-<p>When the <a>'display'</a> property is set to <span
-class="prop-value">none</span>, then the given element does not
-become part of the rendering tree. With <a>'visibility'</a> set
-to <span class="prop-value">hidden</span>, however, processing
-occurs as if the element were part of the rendering tree and still
-taking up space, but not actually rendered onto the canvas. This
-distinction has implications for the <a>'tspan'</a>, <a>'tref'</a> and
-<a>'altGlyph'</a> elements, <a href="interact.html#UIEvents">event processing</a>,
-for <a href="coords.html#ObjectBoundingBox">bounding box calculations</a>
-and for calculation of <a href="masking.html#ClippingPaths">clipping paths</a>.
-If <a>'display'</a> is set to <span class="prop-value">none</span> on a
-<a>'tspan'</a>, <a>'tref'</a> or <a>'altGlyph'</a> element, then the
-text string is ignored for the purposes of text layout; however, if
-<a>'visibility'</a> is set to <span class="prop-value">hidden</span>,
-the text string is used for text layout (i.e., it takes up space)
-even though it is not rendered on the canvas. Regarding events, if
-<a>'display'</a> is set to <span class="prop-value">none</span>,
-the element receives no events; however, if <a>'visibility'</a>
-is set to <span class="prop-value">hidden</span>, the element
-might still receive events, depending on the value of property
-<a>'pointer-events'</a>. The geometry of a graphics element with
-<a>'display'</a> set to <span class="prop-value">none</span> is
-not included in <a href="coords.html#ObjectBoundingBox">bounding box</a>
-and <a href="masking.html#ClippingPaths">clipping paths</a>
-calculations; however, even if <a>'visibility'</a> is to
-<span class="prop-value">hidden</span>, the geometry of the graphics element
-still contributes to bounding box and clipping path calculations.</p>
+<p>When applied to certain <a>container element</a>, <a>graphics element</a>
+or <a>text content element</a>, setting <a>'display'</a> to
+<span class="prop-value">none</span> results in the element not becoming part of
+the rendering tree.  Such elements and all of their descendants (regardless of
+their own <a>'display'</a> property value):</p>
 
-    <div class="propdef">
-      <dl>
-        <dt id="DisplayProperty"><span class="propdef-title property">'display'</span></dt>
-        <dd>
-          <table summary="display property" class="propinfo"
-          cellspacing="0" cellpadding="0">
-            <tr valign="baseline">
-              <td><em>Value:</em>&nbsp;&nbsp;</td>
-              <td>inline | block | list-item |<br />
-               run-in | compact | marker |<br />
-               table | inline-table | table-row-group |
-              table-header-group |<br />
-               table-footer-group | table-row | table-column-group
-              | table-column |<br />
-               table-cell | table-caption | none | <a
-              class="noxref"
-              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
-              <span
-              class="value-inst-inherit noxref">inherit</span></a></td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Initial:</em>&nbsp;&nbsp;</td>
-              <td>inline</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
-              <td><a>'svg'</a>, <a>'g'</a>, <a>'switch'</a>, <a>'a'</a>,
-              <a>'foreignObject'</a>, graphics elements (including the
-              <a>'text'</a> element) and text sub-elements (i.e.,
-              <a>'tspan'</a>, <a>'tref'</a>, <a>'altGlyph'</a>,
-              <a>'textPath'</a>)</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
-              <td>no</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
-              <td>N/A</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Media:</em>&nbsp;&nbsp;</td>
-              <td>all</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em><a
-              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
-              <td>yes</td>
-            </tr>
-          </table>
-        </dd>
-      </dl>
-    </div>
+<ul>
+  <li>are not rendered</li>
+  <li>are not sensitive to <a href="interact.html#UIEvents">pointer events</a></li>
+  <li>do not contribute to <a href="coords.html#ObjectBoundingBox">bounding box calculations</a></li>
+  <li>do not contribute to <a href="masking.html#Masking">masks</a> or <a href="masking.html#ClippingPaths">clipping paths</a>, when descendants of a <a>'mask element'</a> or <a>'clipPath'</a> element</li>
+  <li>are not considered when performing <a href="text.html#TextLayout">text layout</a></li>
+</ul>
 
-<p>A value of <span class="prop-value">display: none</span> indicates
-that the given element and its children shall not be rendered directly
-(i.e., those elements are not present in the rendering tree). Any
-value other than <span class="prop-value">none</span> or
-<span class="prop-value">inherit</span> indicates that the given element
-shall be rendered by the SVG user agent.</p>
+<p>Elements that have any other <a>'display'</a> value than
+<span class="prop-value">none</span> behave normally with
+respect to all of the above.</p>
 
-<p>The <a>'display'</a> property only affects the direct rendering
-of a given element, whereas it does not prevent elements from
+<p>The <a>'display'</a> property only applies to the following SVG elements:
+<a>'svg'</a>, <a>'g'</a>, <a>'switch'</a>, <a>'a'</a>,
+<a>'foreignObject'</a>, <a>graphics elements</a> and
+<a>text content elements</a>.  Note that <a>'display'</a>
+is not an inherited property.</p>
+
+<p>The <a>'display'</a> property affects the direct processing
+of a given element, but it does not prevent it from
 being referenced by other elements. For example, setting
 <span class="prop-value">display: none</span> on a <a>'path'</a> element
 will prevent that element from getting rendered directly onto the
@@ -1265,92 +1192,21 @@ canvas, but the <a>'path'</a> element can still be referenced by a
 in text-on-a-path processing even if the <a>'path'</a> has
 <span class="prop-value">display: none</span>.</p>
 
-<p>The <a>'display'</a> property affects direct rendering into
-offscreen canvases also, such as occurs with the implementation model
-for <a href="masking.html#Masking">masks</a>. Thus, setting
-<span class="prop-value">display: none</span> on a child of a <a>'mask element'</a>
-will prevent the given child element from being rendered as part of the
-mask. Similarly, setting <span class="prop-value">display: none</span>
-on a child of a <a>'clipPath element'</a> element will prevent the given child
-element from contributing to the clipping path.</p>
+<p>When applied to a <a>graphics element</a> or <a>text content element</a>,
+setting <a>'visibility'</a> to <span class="prop-value">hidden</span>
+or <span class="prop-value">collapse</span>
+results in the element not being painted.  It is, however,
+still part of the rendering tree, is sensitive
+to pointer events (depending on the value of <a>'pointer-events'</a>),
+contributes to bounding box calculations and clipping paths,
+and does affect text layout.</p>
 
-<p>Elements with <span class="prop-value">display: none</span> do not
-take up space in text layout operations, do not receive events, and
-do not contribute to
-<a href="coords.html#ObjectBoundingBox">bounding box</a> and
-<a href="masking.html#ClippingPaths">clipping paths</a> calculations.</p>
-
-<p>Except for any additional information provided in this specification, the
-normative definition of the <a>'display'</a> property is
-<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visuren.html#propdef-display">the CSS2 definition</a>
-([<a href="refs.html#ref-CSS2">CSS2</a>], section 9.2.6).</p>
-
-    <div class="propdef">
-      <dl>
-        <dt id="VisibilityProperty"><span class="propdef-title property">'visibility'</span></dt>
-        <dd>
-          <table summary="visibility property" class="propinfo"
-          cellspacing="0" cellpadding="0">
-            <tr valign="baseline">
-              <td><em>Value:</em>&nbsp;&nbsp;</td>
-              <td>visible | hidden | collapse | <a class="noxref"
-              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
-              <span
-              class="value-inst-inherit noxref">inherit</span></a></td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Initial:</em>&nbsp;&nbsp;</td>
-              <td>visible</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
-              <td>graphics elements (including the <a>'text'</a> element) and
-              text sub-elements (i.e., <a>'tspan'</a>, <a>'tref'</a>,
-              <a>'altGlyph'</a>, <a>'textPath'</a> and <a>'a'</a>)</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
-              <td>yes</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
-              <td>N/A</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Media:</em>&nbsp;&nbsp;</td>
-              <td>visual</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em><a
-              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
-              <td>yes</td>
-            </tr>
-          </table>
-        </dd>
-      </dl>
-    </div>
-
-<dl>
-  <dt><span class='prop-value'>visible</span></dt>
-  <dd>The current graphics element is visible.</dd>
-  <dt><span class='prop-value'>hidden</span> or <span class='prop-value'>collapse</span></dt>
-  <dd>The current graphics element is invisible (i.e., nothing is painted on
-  the canvas).</dd>
-</dl>
-
-<p>Note that if the <a>'visibility'</a> property is set to
-<span class="prop-value">hidden</span> on a <a>'tspan'</a>, <a>'tref'</a> or
-<a>'altGlyph'</a> element, then the text is invisible but still takes up
-space in text layout calculations.</p>
-
-<p>Depending on the value of property <a>'pointer-events'</a>, graphics
-elements which have their <a>'visibility'</a> property set to
-<span class="prop-value">hidden</span> still might receive events.</p>
-
-<p>Except for any additional information provided in this specification, the
-normative definition of the <a>'visibility'</a> property is
-<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/visufx.html#propdef-visibility">the CSS2 definition</a>
-([<a href="refs.html#ref-CSS2">CSS2</a>], section 11.2).</p>
+<p>The <a>'visibility'</a> property only applies to
+<a>graphics elements</a> and <a>text content elements</a>.
+Note that since <a>'visibility'</a> is an inherited property,
+although it has no effect on a <a>container element</a> itself,
+its inherited value can affect descendant elements.</p>
+</div>
 
 
 <h2 id="Markers">Markers</h2>
