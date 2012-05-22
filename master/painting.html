@@ -979,43 +979,32 @@ description of positions along a path that dashes will be placed.</p>
 stroking properties above:</p>
 
 <p class="issue">This talks about graphics elements, but it should
-include text content elementes too.</p>
+include text content elements too.</p>
 
 <ol>
   <li>Let <var>shape</var> be an empty shape.</li>
   <li>Let <var>path</var> be the <a>equivalent path</a> of the <a>graphics element</a>.</li>
-  <li>Let <var>dashes</var> be the list of values of <a>'stroke-dasharray'</a> on the <a>graphics element</a>,
-    converted to user units, repeated if necessary so that it has an even number of elements; if the property
-    has the value <span class="prop-value">none</span>, then the list has a single value 0.</li>
-  <li>Let <var>dashcount</var> be the number of values in <var>dashes</var>.</li>
-  <li>Let <var>dashsum</var> be the sum of the values in <var>dashes</var>.</li>
-  <li>Let <var>dashing</var> be true if <var>dashsum</var> &gt; 0 and false otherwise.</li>
-  <li>Let <var>offset</var> be the value of the <a>'stroke-dashoffset'</a> property on the <a>graphics element</a>.</li>
-  <li>If <var>offset</var> is negative, then set <var>offset</var> to <var>dashsum</var> − abs(<var>offset</var>).</li>
-  <li>Set <var>offset</var> to <var>offset</var> mod <var>dashsum</var>.</li>
   <li>For each subpath of <var>path</var>:
     <ol>
       <li>Let <var>positions</var> be the <a>dash positions</a> for the subpath.</li>
-      <li>For each pair &lt;<var>startpos</var>, <var>endpos</var>&gt; in <var>positions</var>:
+      <li>For each pair &lt;<var>start</var>, <var>end</var>&gt; in <var>positions</var>:
         <ol>
           <li>Let <var>dash</var> be the shape that includes, for all distances
-            between <var>startpos</var> and <var>endpos</var>
+            between <var>start</var> and <var>end</var>
             along the subpath, all points that lie on the line perpendicular to the subpath 
             at that distance and which are within distance <a>'stroke-width'</a> of the
             point on the subpath at that position.</li>
-          <li>Set <var>dash</var> to be the union of <var>dash</var> and the starting <a>cap shape</a> for the subpath at position <var>startpos</var>.</li>
-          <li>Set <var>dash</var> to be the union of <var>dash</var> and the ending <a>cap shape</a> for the subpath at position <var>endpos</var>.</li>
-          <li>Let <var>loseg</var> be the index of the path segment in the subpath at distance <var>position</var> along the subpath.</li>
-          <li>Let <var>hiseg</var> be the index of the path segment in the subpath at distance <var>endposition</var> along the subpath.
+          <li>Set <var>dash</var> to be the union of <var>dash</var> and the starting <a>cap shape</a> for the subpath at position <var>start</var>.</li>
+          <li>Set <var>dash</var> to be the union of <var>dash</var> and the ending <a>cap shape</a> for the subpath at position <var>end</var>.</li>
+          <li>Let <var>index</var> and <var>last</var> be the indexes of the path segments in the subpath at distance <var>start</var> and <var>end</var> along the subpath.
             <p class="note">It does not matter whether any zero length segments are
-              included when choosing <var>loseg</var> and <var>hiseg</var>.</p>
-          </li>
-          <li>Let <var>segindex</var> be <var>loseg</var>.</li>
-          <li>While <var>segindex</var> &lt; <var>hiseg</var>:
+              included when choosing <var>index</var> and <var>last</var>.</p>
+	  </li>
+          <li>While <var>index</var> &lt; <var>last</var>:
             <ol>
               <li>Set <var>dash</var> to be the union of <var>dash</var> and the
-                <a>line join shape</a> for the subpath at segment index <var>segindex</var>.</li>
-              <li>Set <var>segindex</var> to <var>segindex</var> + 1.</li>
+                <a>line join shape</a> for the subpath at segment index <var>index</var>.</li>
+              <li>Set <var>index</var> to <var>index</var> + 1.</li>
             </ol>
           </li>
           <li>Set <var>shape</var> to be the union of <var>shape</var> and <var>stroke</var>.</li>
@@ -1031,30 +1020,30 @@ include text content elementes too.</p>
 along the subpath", which represent where dashes are placed on the subpath.  It is determined as follows:</p>
 
 <ol>
-  <li>Let <var>length</var> be the length of the subpath.</li>
+  <li>Let <var>pathlength</var> be the length of the subpath.</li>
 
   <li>Let <var>dashes</var> be the list of values of <a>'stroke-dasharray'</a> on the <a>graphics element</a>,
     converted to user units, repeated if necessary so that it has an even number of elements; if the property
     has the value <span class="prop-value">none</span>, then the list has a single value 0.</li>
-  <li>Let <var>dashcount</var> be the number of values in <var>dashes</var>.</li>
-  <li>Let <var>dashsum</var> be the sum of the values in <var>dashes</var>.</li>
-  <li>If <var>dashsum</var> = 0, then return a sequence with the single pair &lt;0, <var>length</var>&gt;.</li>
+  <li>Let <var>count</var> be the number of values in <var>dashes</var>.</li>
+  <li>Let <var>sum</var> be the sum of the values in <var>dashes</var>.</li>
+  <li>If <var>sum</var> = 0, then return a sequence with the single pair &lt;0, <var>pathlength</var>&gt;.</li>
 
   <li>Let <var>positions</var> be an empty sequence.</li>
   <li>Let <var>offset</var> be the value of the <a>'stroke-dashoffset'</a> property on the <a>graphics element</a>.</li>
-  <li>If <var>offset</var> is negative, then set <var>offset</var> to <var>dashsum</var> − abs(<var>offset</var>).</li>
-  <li>Set <var>offset</var> to <var>offset</var> mod <var>dashsum</var>.</li>
+  <li>If <var>offset</var> is negative, then set <var>offset</var> to <var>sum</var> − abs(<var>offset</var>).</li>
+  <li>Set <var>offset</var> to <var>offset</var> mod <var>sum</var>.</li>
 
-  <li>Let <var>dashindex</var> be the smallest integer such that sum(<var>dashes<sub>i</sub></var>, 0 ≤ <var>i</var> ≤ <var>dashindex</var>) ≥ <var>offset</var>.</li>
-  <li>Let <var>dashlength</var> be min(sum(<var>dashes<sub>i</sub></var>, 0 ≤ <var>i</var> ≤ <var>dashindex</var>) − <var>offset</var>, <var>length</var>).</li>
-  <li>If <var>dashindex</var> mod 2 = 0, then append to <var>positions</var> the pair &lt;0, <var>dashlength</var>&gt;.</li>
+  <li>Let <var>index</var> be the smallest integer such that sum(<var>dashes<sub>i</sub></var>, 0 ≤ <var>i</var> ≤ <var>index</var>) ≥ <var>offset</var>.</li>
+  <li>Let <var>dashlength</var> be min(sum(<var>dashes<sub>i</sub></var>, 0 ≤ <var>i</var> ≤ <var>index</var>) − <var>offset</var>, <var>pathlength</var>).</li>
+  <li>If <var>index</var> mod 2 = 0, then append to <var>positions</var> the pair &lt;0, <var>dashlength</var>&gt;.</li>
   <li>Let <var>position</var> be <var>dashlength</var>.</li>
 
-  <li>While <var>position</var> &lt; <var>length</var>:
+  <li>While <var>position</var> &lt; <var>pathlength</var>:
     <ol>
-      <li>Set <var>dashindex</var> to (<var>dashindex</var> + 1) mod <var>dashcount</var>.</li>
-      <li>Let <var>dashlength</var> be min(<var>dashes</var><sub><var>dashindex</var></sub>, <var>length</var> − <var>position</var>).</li>
-      <li>If <var>dashindex</var> mod 2 = 0, then append to <var>positions</var> the pair &lt;<var>position</var>, <var>position</var> + <var>dashlength</var>&gt;.</li>
+      <li>Set <var>index</var> to (<var>index</var> + 1) mod <var>count</var>.</li>
+      <li>Let <var>dashlength</var> be min(<var>dashes</var><sub><var>index</var></sub>, <var>pathlength</var> − <var>position</var>).</li>
+      <li>If <var>index</var> mod 2 = 0, then append to <var>positions</var> the pair &lt;<var>position</var>, <var>position</var> + <var>dashlength</var>&gt;.</li>
       <li>Set <var>position</var> to <var>position</var> + <var>dashlength</var>.</li>
     </ol>
   </li>
