@@ -569,6 +569,13 @@ a <a>'g'</a>.</p>
 non-existent object or if the referenced object is not a <a>'mask element'</a>
 element (see <a href="implnote.html#ErrorProcessing">Error Processing</a>).</p>
 
+<p class="annotation">
+<a href="https://www.w3.org/Graphics/SVG/WG/track/actions/3256">ACTION-3256</a>
+will investigate lifting the above restriction, i.e. allowing the <a>'mask
+property'</a> property to target arbitrary graphics objects without the <a>'mask
+element'</a> element wrapper.
+</p>
+
 <p>The effect is as if the child elements of the <a>'mask element'</a> are
 rendered into an offscreen image which has been initialized to transparent
 black. Any graphical object which uses/references the given
@@ -576,60 +583,68 @@ black. Any graphical object which uses/references the given
 mask, thus completely or partially masking out parts of the graphical
 object.</p>
 
-<p>For any graphics object that is used as a mask, the mask value at any point
-is computed from the color channel values and alpha channel value as follows.
-First a luminance value is computed from the color channel values:</p>
+<p>The procedure for calculating the mask value is determined by the
+<a>'maskType'</a> attribute.
+If the <a>'maskType'</a> is <span class="attr-value">'luminance'</span> then the
+mask value at a given point is computed from the color channel values and alpha
+channel value.
+If the <a>'maskType'</a> is <span class="attr-value">'alpha'</span> then the
+mask value is computed from the alpha channel value only, the color channels do
+not contribute to the mask value.</p>
+
+<p>If the <a>'maskType'</a> is <span class="attr-value">'luminance'</span>, the
+procedure for calculating the mask value at a given point is as follows.
+First, compute a luminance value from the color channel values.</p>
 
 <ul>
-  <li>If the computed value of <a>'color-interpolation'</a> on the <a>'mask element'</a>
-  element is <span class="attr-value">linearRGB</span>, first convert the
-  original image color values (potentially in the sRGB color space) to the linear
-  RGB color space (see <a href="painting.html#RenderingProperties">Rendering properties</a>).
-  Then, using non-premultiplied linear RGB color values, apply the luminance-to-alpha
-  coefficients (as defined in the <a>'feColorMatrix'</a> filter primitive) to
-  convert the linear RGB color values to linear luminance values.</li>
-
-  <li>If the computed value of <a>'color-interpolation'</a> on the <a>'mask element'</a>
-  element is <span class="attr-value">sRGB</span> then the luminance value is
-  calculated by taking the non-premultiplied RGB color values, applying the luminance-to-alpha
-  coefficients (as defined in the <a>'feColorMatrix'</a> filter primitive) to
-  convert the RGB color values to luminance values.</li>
+  <li>
+  If the computed value of <a>'color-interpolation'</a> on the <a>'mask
+element'</a> element is <span class="attr-value">linearRGB</span>, convert the
+original image color values (potentially in the sRGB color space) to the linear
+RGB color space (see <a
+  href="painting.html#RenderingProperties">Rendering properties</a>).
+  </li>
+  <li>Then, using non-premultiplied RGB color values, apply the
+  luminance-to-alpha coefficients (as defined in the <a>'feColorMatrix'</a>
+  filter primitive) to convert the RGB color values to luminance
+  values.
+  </li>
 </ul>
 
-<p>Finally if the graphics object also includes an alpha channel, then the computed
-luminance value is multiplied by the corresponding alpha value to produce the
-mask value.</p>
+<p>Finally, multiply the computed luminance value by the corresponding alpha
+value to produce the mask value.</p>
 
-<p>For a four-channel RGBA graphics object that is used as a mask, both
-the color channels and the alpha channel of the mask contribute to the
-masking operation. The alpha mask that is used to composite the current
-object into the background represents the product of the luminance of
-the color channels (see previous paragraph) and the alpha channel from
-the mask.</p>
+<p>If the <a>'maskType'</a> is <span class="attr-value">'alpha'</span>, the mask
+value at a given point is simply the value of the alpha channel at that
+point.</p>
 
-<p>For a three-channel RGB graphics object that is used as a mask (e.g.,
-when referencing a 3-channel image file), the effect is as if the object
-were converted into a 4-channel RGBA image with the alpha channel
+<p>Regardless of the value of <a>'maskType'</a>, the procedure for calculating
+mask values assumes the content of the mask is a four-channel RGBA graphics
+object.
+For other types of graphics objects, special handling is required as
+follows.</p>
+
+<p>For a three-channel RGB graphics object that is used in a mask (e.g.,
+when referencing a three-channel image file), the effect is as if the object
+were converted into a four-channel RGBA image with the alpha channel
 uniformly set to 1.</p>
 
-<p>For a single-channel image that is used as a mask (e.g., when
-referencing a 1-channel grayscale image file), the effect is as if the
-object were converted into a 4-channel RGBA image, where the single
+<p>For a single-channel image that is used in a mask (e.g., when
+referencing a single-channel grayscale image file), the effect is as if the
+object were converted into a four-channel RGBA image, where the single
 channel from the referenced object is used to compute the three color
 channels and the alpha channel is uniformly set to 1. Note that when
 referencing a grayscale image file, the transfer curve relating the
 encoded grayscale values to linear light values must be taken into
 account when computing the color channels.</p>
 
-<p>The effect of a mask is identical to what would have happened if
-there were no mask but instead the alpha channel of the given object
-were multiplied with the mask's resulting alpha values (i.e., the
-product of the mask's luminance from its color channels multiplied by
-the mask's alpha channel).</p>
-
 <p>Note that SVG <a>'path'</a>s, shapes (e.g., <a>'circle'</a>) and
 <a>'text'</a> are all treated as four-channel RGBA images for the purposes
 of masking operations.</p>
+
+<p>The effect of a mask is identical to what would have happened if
+there were no mask but instead the alpha channel of the given object
+were multiplied with the mask's resulting mask values.</p>
 
 <p id="ExampleMask01"><span class="example-ref">Example mask01</span> uses
 an image to mask a rectangle.</p>
@@ -696,6 +711,27 @@ an image to mask a rectangle.</p>
          <span class="anim-target"><a
         href="animate.html#Animatable">Animatable</a>:
         yes.</span></dd>
+        <dt id="MaskElementMaskTypeAttribute"><span
+        class="adef">maskType</span> =
+        "<em>luminance</em> | <em>alpha</em>"</dt>
+        <dd>
+         Defines the procedure used for calculating mask values from the
+        contents of the mask as described in <a href="#Masking">Masking</a>.
+        <br />
+         If attribute <a>'maskType'</a> is not specified,
+        then the effect is as if a value of <span
+        class="attr-value">'luminance'</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span>
+        <div class="annotation">
+          Although authors will generally find <span
+          class="attr-value">'alpha'</span> more useful, the default value is
+          <span class="attr-value">'luminance'</span> to provide backwards
+          compatibility with SVG 1.1.
+        </div>
+        </dd>
         <dt id="MaskElementXAttribute"><span
         class="adef">x</span> = "<span class="attr-value"><a
         href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
