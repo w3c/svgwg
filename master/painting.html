@@ -975,15 +975,15 @@ description of positions along a path that dashes will be placed.</p>
 <h3 id="StrokeShape">Computing the shape of the stroke</h3>
 
 <p>The following algorithm describes what the shape of a
-<a>graphics element</a>'s stroke is, taking into account the
+<a>'path'</a> or <a>basic shape</a>'s stroke is, taking into account the
 stroking properties above:</p>
 
-<p class="issue">This talks about graphics elements, but it should
-include text content elements too.</p>
+<p class="issue">This should include text elements too, but should we
+keep stroke dashing on text?</p>
 
 <ol>
   <li>Let <var>shape</var> be an empty shape.</li>
-  <li>Let <var>path</var> be the <a>equivalent path</a> of the <a>graphics element</a>.</li>
+  <li>Let <var>path</var> be the <a>equivalent path</a> of the element.</li>
   <li>For each subpath of <var>path</var>:
     <ol>
       <li>Let <var>positions</var> be the <a>dash positions</a> for the subpath.</li>
@@ -1015,14 +1015,15 @@ include text content elements too.</p>
   <li>Return <var>shape</var>.</li>
 </ol>
 
-<p>The <dfn id="TermDashPositions">dash positions</dfn> for a given subpath of a <a>graphics element</a>'s
-<a>equivalent path</a> is a sequence of pairs of "starting distance along the subpath" and "ending distance
-along the subpath", which represent where dashes are placed on the subpath.  It is determined as follows:</p>
+<p>The <dfn id="TermDashPositions">dash positions</dfn> for a given subpath of the
+<a>equivalent path</a> of a <a>'path'</a> or <a>basic shape</a>
+is a sequence of pairs of values, which represent the starting and ending distance along the subpath
+for each of the dashes that form the subpath's stroke.  It is determined as follows:</p>
 
 <ol>
   <li>Let <var>pathlength</var> be the length of the subpath.</li>
 
-  <li>Let <var>dashes</var> be the list of values of <a>'stroke-dasharray'</a> on the <a>graphics element</a>,
+  <li>Let <var>dashes</var> be the list of values of <a>'stroke-dasharray'</a> on the element,
     converted to user units, repeated if necessary so that it has an even number of elements; if the property
     has the value <span class="prop-value">none</span>, then the list has a single value 0.</li>
   <li>Let <var>count</var> be the number of values in <var>dashes</var>.</li>
@@ -1030,7 +1031,7 @@ along the subpath", which represent where dashes are placed on the subpath.  It 
   <li>If <var>sum</var> = 0, then return a sequence with the single pair &lt;0, <var>pathlength</var>&gt;.</li>
 
   <li>Let <var>positions</var> be an empty sequence.</li>
-  <li>Let <var>offset</var> be the value of the <a>'stroke-dashoffset'</a> property on the <a>graphics element</a>.</li>
+  <li>Let <var>offset</var> be the value of the <a>'stroke-dashoffset'</a> property on the element.</li>
   <li>If <var>offset</var> is negative, then set <var>offset</var> to <var>sum</var> − abs(<var>offset</var>).</li>
   <li>Set <var>offset</var> to <var>offset</var> mod <var>sum</var>.</li>
 
