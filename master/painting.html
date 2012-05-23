@@ -1942,14 +1942,53 @@ exactly how an SVG fragment is rendered.</p>
          alt="Image showing text with the stroke painted below the fill."/>
   </p>
 </div>
-</div>
 
 <h2 id="RenderingProperties">Rendering properties</h2>
 
-<h3 id="ColorInterpolationProperties">Controlling color interpolation: the
+<h3 id="ColorInterpolationProperties">Color interpolation space: the
 <span class="property">'color-interpolation'</span> property</h3>
 
 <div class="ready-for-wg-review">
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="ColorInterpolationProperty">color-interpolation</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>auto | sRGB | linearRGB</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>sRGB</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>container elements</a>, <a>graphics elements</a>,
+    <a>gradient elements</a>, <a>'animate'</a> and <a>'animateColor'</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="animate.html#Animatable">Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
 <p>The SVG user agent performs color interpolations and compositing
 at various points as it processes SVG content.  The <a>'color-interpolation'</a>
 property controls which color space is used for the following graphics operations:</p>
@@ -1972,79 +2011,7 @@ property controls which color space is used for the following graphics operation
 <p>The <a>'color-interpolation'</a> property chooses between color operations
 occurring in the sRGB color space or in a (light energy linear) linearized RGB
 color space. Having chosen the appropriate color space, component-wise linear
-interpolation is used.</p>
-
-<p id="sRGBlinearRGBConversionFormulas">The conversion formulas between the
-sRGB color space (i.e., nonlinear with 2.2 gamma curve) and the linearized RGB
-color space (i.e., color values expressed as sRGB tristimulus values without a
-gamma curve) can be found in <a href="http://webstore.iec.ch/webstore/webstore.nsf/artnum/025408">the sRGB specification</a>
-[<a href="refs.html#ref-SRGB">SRGB</a>].
-For illustrative purposes, the following formula shows the conversion from
-sRGB to linearized RGB:</p>
-
-<pre>
-  R[sRGB] = R[sRGB-8bit] / 255
-  G[sRGB] = G[sRGB-8bit] / 255
-  B[sRGB] = B[sRGB-8bit] / 255
-If R[sRGB], G[sRGB], B[sRGB] &lt;= 0.04045
-  R[linearRGB] = R[sRGB] / 12.92
-  G[linearRGB] = G[sRGB] / 12.92
-  B[linearRGB] = B[sRGB] / 12.92
-else if R[sRGB], G[sRGB], B[sRGB] &gt; 0.04045
-  R[linearRGB] = ((R[sRGB] + 0.055) / 1.055) ^ 2.4
-  G[linearRGB] = ((G[sRGB] + 0.055) / 1.055) ^ 2.4
-  B[linearRGB] = ((B[sRGB] + 0.055) / 1.055) ^ 2.4
-  R[linearRGB-8bit] = R[linearRGB] * 255
-  G[linearRGB-8bit] = G[linearRGB] * 255
-  B[linearRGB-8bit] = B[linearRGB] * 255
-</pre>
-
-<p>Out-of-range color values, if supported by the user agent, also are
-converted using the above formulas. (See
-<a href="implnote.html#RangeClamping">Clamping values which are restricted to a particular range</a>.)</p>
-
-    <div class="propdef">
-      <dl>
-        <dt id="ColorInterpolationProperty"><span class="propdef-title property">'color-interpolation'</span></dt>
-        <dd>
-          <table summary="color-interpolation property"
-          class="propinfo" cellspacing="0" cellpadding="0">
-            <tr valign="baseline">
-              <td><em>Value:</em>&nbsp;&nbsp;</td>
-              <td>auto | sRGB | linearRGB | <a class="noxref"
-              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
-              <span
-              class="value-inst-inherit noxref">inherit</span></a></td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Initial:</em>&nbsp;&nbsp;</td>
-              <td>sRGB</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
-              <td><a>container elements</a>, <a>graphics elements</a>, <a>'animate'</a> and <a>'animateColor'</a></td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
-              <td>yes</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
-              <td>N/A</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Media:</em>&nbsp;&nbsp;</td>
-              <td>visual</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em><a
-              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
-              <td>yes</td>
-            </tr>
-          </table>
-        </dd>
-      </dl>
-    </div>
+interpolation is used.  Possible values for <a>'color-interpolation'</a> are:</p>
 
 <dl>
   <dt><span class='prop-value'>auto</span></dt>
@@ -2055,16 +2022,97 @@ converted using the above formulas. (See
   interpolation occur in a particular color space.</dd>
 
   <dt><span class='prop-value'>sRGB</span></dt>
-  <dd>Indicates that color interpolation should occur in the sRGB
+  <dd>Indicates that color interpolation occurs in the sRGB
   color space.</dd>
 
   <dt><span class='prop-value'>linearRGB</span></dt>
-  <dd>Indicates that color interpolation should occur in the
-  linearized RGB color space as described above.</dd>
+  <dd>Indicates that color interpolation occurs in the
+  linearized RGB color space as described below.</dd>
 </dl>
 
-<p>The <a>'color-interpolation'</a> property specifies the color space for
-gradient interpolations, color animations and alpha compositing.</p>
+<p id="sRGBlinearRGBConversionFormulas">The conversion formulas between the
+sRGB color space (i.e., nonlinear with 2.2 gamma curve) and the linearized RGB
+color space (i.e., color values expressed as sRGB tristimulus values without a
+gamma curve) can be found in <a href="http://webstore.iec.ch/webstore/webstore.nsf/artnum/025408">the sRGB specification</a>
+[<a href="refs.html#ref-SRGB">SRGB</a>].
+For illustrative purposes, the following formula shows the conversion from
+sRGB to linearized RGB, where <var>C<sub>srgb</sub></var> is one of the
+three sRGB color components, <var>C<sub>linear</sub></var> is the corresponding
+linearized RGB color component, and all color values are between 0 and 1:</p>
+
+<div role="math" aria-describedby="math-linearRGB">
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <mrow>
+      <msub>
+        <mi>C</mi>
+        <mi>linear</mi>
+      </msub>
+      <mo>=</mo>
+      <mo>{</mo>
+      <mtable columnalign="left">
+        <mtr>
+          <mtd>
+            <mfrac>
+              <msub>
+                <mi>C</mi>
+                <mi>srgb</mi>
+              </msub>
+              <mn>12.92</mn>
+            </mfrac>
+          </mtd>
+          <mtd>
+            <mtext>if&#160;</mtext>
+            <msub>
+              <mi>C</mi>
+              <mi>srgb</mi>
+            </msub>
+            <mo>≤</mo>
+            <mn>0.04045</mn>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <msup>
+              <mfenced>
+                <mfrac>
+                  <mrow>
+                    <msub>
+                      <mi>C</mi>
+                      <mi>srgb</mi>
+                    </msub>
+                    <mo>+</mo>
+                    <mn>0.055</mn>
+                  </mrow>
+                  <mn>1.055</mn>
+                </mfrac>
+              </mfenced>
+              <mn>2.4</mn>
+            </msup>
+          </mtd>
+          <mtd>
+            <mtext>if&#160;</mtext>
+            <msub>
+              <mi>C</mi>
+              <mi>srgb</mi>
+            </msub>
+            <mo>></mo>
+            <mn>0.04045</mn>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mrow>
+  </math>
+  <pre id="math-linearRGB">
+if C_srgb &lt;= 0.04045
+  C_linear = C_srgb / 12.92
+else if c_srgb &gt; 0.04045
+  C_linear = ((C_srgb + 0.055) / 1.055) ^ 2.4
+</pre>
+</div>
+
+<p>Out-of-range color values, if supported by the user agent, also are
+converted using the above formulas. (See
+<a href="implnote.html#RangeClamping">Clamping values which are restricted to a particular range</a>.)</p>
 
 <p>When a child element is blended into a background, the value of the
 <a>'color-interpolation'</a> property on the child determines the type of
@@ -2077,69 +2125,53 @@ from the gradient element which is directly referenced by the <a>'fill'</a> or
 performed according to the value of the <a>'color-interpolation'</a> property
 on the element being animated.</p>
 
-
 <h3 id="ColorRenderingProperty">The <span class="property">'color-rendering'</span> property</h3>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="ColorRenderingProperty">color-rendering</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>auto | optimizeSpeed | optimizeQuality</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>auto</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>container elements</a>, <a>graphics elements</a>, <a>gradient elements</a>, <a>'animate'</a> and <a>'animateColor'</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="animate.html#Animatable">Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
 
 <p>The creator of SVG content might want to provide a hint
 to the implementation about how to make speed vs. quality
 tradeoffs as it performs color interpolation and compositing. The
 <a>'color-rendering'</a> property provides a hint to the SVG user
 agent about how to optimize its color interpolation and compositing
-operations.</p>
-
-<!-- This paragraph should be moved to the Filters spec.
-<p><a>'color-rendering'</a> takes precedence over
-<a>'color-interpolation-filters'</a>. For example, assume
-<span class="prop-value">color-rendering: optimizeSpeed</span> and
-<span class="prop-value">color-interpolation-filters: linearRGB</span>.
-In this case, the SVG user agent should perform color operations in a way that
-optimizes performance, which might mean sacrificing the color interpolation
-precision as specified by <span class="prop-value">color-interpolation-filters: linearRGB</span>.</p>
--->
-
-    <div class="propdef">
-      <dl>
-        <dt><span class="propdef-title property">'color-rendering'</span></dt>
-        <dd>
-          <table summary="color-rendering property"
-          class="propinfo" cellspacing="0" cellpadding="0">
-            <tr valign="baseline">
-              <td><em>Value:</em>&nbsp;&nbsp;</td>
-              <td>auto | optimizeSpeed | optimizeQuality | <a
-              class="noxref"
-              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
-              <span
-              class="value-inst-inherit noxref">inherit</span></a></td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Initial:</em>&nbsp;&nbsp;</td>
-              <td>auto</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
-              <td><a>container elements</a>, <a>graphics elements</a>, <a>'animate'</a> and <a>'animateColor'</a></td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
-              <td>yes</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
-              <td>N/A</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Media:</em>&nbsp;&nbsp;</td>
-              <td>visual</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em><a
-              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
-              <td>yes</td>
-            </tr>
-          </table>
-        </dd>
-      </dl>
-    </div>
+operations.  Possible values are:</p>
 
 <dl>
   <dt><span class='prop-value'>auto</span></dt>
@@ -2158,57 +2190,60 @@ precision as specified by <span class="prop-value">color-interpolation-filters:�
   over rendering speed.</dd>
 </dl>
 
+<p><a>'color-rendering'</a> takes precedence over
+<a>'color-interpolation-filters'</a>. For example, assume
+<span class="prop-value">color-rendering: optimizeSpeed</span> and
+<span class="prop-value">color-interpolation-filters: linearRGB</span>.
+In this case, the SVG user agent should perform color operations in a way that
+optimizes performance, which might mean sacrificing the color interpolation
+precision as specified by <span class="prop-value">color-interpolation-filters: linearRGB</span>.</p>
+
 <h3 id="ShapeRenderingProperty">The <span class="property">'shape-rendering'</span> property</h3>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="ShapeRenderingProperty">shape-rendering</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>auto | optimizeSpeed | crispEdges | geometricPrecision</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>auto</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>shapes</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="animate.html#Animatable">Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
 
 <p>The creator of SVG content might want to provide a hint to the
 implementation about what tradeoffs to make as it renders vector graphics
 elements such as <a>'path'</a> elements and <a href="shapes.html">basic shapes</a>
 such as circles and rectangles. The <a>'shape-rendering'</a> property provides
-these hints.</p>
-
-    <div class="propdef">
-      <dl>
-        <dt><span class="propdef-title property">'shape-rendering'</span></dt>
-        <dd>
-          <table summary="shape-rendering property"
-          class="propinfo" cellspacing="0" cellpadding="0">
-            <tr valign="baseline">
-              <td><em>Value:</em>&nbsp;&nbsp;</td>
-              <td>auto | optimizeSpeed | crispEdges |<br />
-               geometricPrecision | <a class="noxref"
-              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
-              <span
-              class="value-inst-inherit noxref">inherit</span></a></td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Initial:</em>&nbsp;&nbsp;</td>
-              <td>auto</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
-              <td><a>shapes</a></td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
-              <td>yes</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
-              <td>N/A</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Media:</em>&nbsp;&nbsp;</td>
-              <td>visual</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em><a
-              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
-              <td>yes</td>
-            </tr>
-          </table>
-        </dd>
-      </dl>
-    </div>
+these hints.  Possible values are:</p>
 
 <dl>
   <dt><span class='prop-value'>auto</span></dt>
@@ -2240,53 +2275,49 @@ these hints.</p>
 
 <h3 id="TextRenderingProperty">The <span class="property">'text-rendering'</span> property</h3>
 
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="TextRenderingProperty">text-rendering</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>auto | optimizeSpeed | optimizeLegibility | geometricPrecision</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>auto</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>shapes</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="animate.html#Animatable">Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
 <p>The creator of SVG content might want to provide a hint to the
 implementation about what tradeoffs to make as it renders text. The
-<a>'text-rendering'</a> property provides these hints.</p>
-
-    <div class="propdef">
-      <dl>
-        <dt><span class="propdef-title property">'text-rendering'</span></dt>
-        <dd>
-          <table summary="text-rendering property" class="propinfo"
-          cellspacing="0" cellpadding="0">
-            <tr valign="baseline">
-              <td><em>Value:</em>&nbsp;&nbsp;</td>
-              <td>auto | optimizeSpeed | optimizeLegibility |<br />
-               geometricPrecision | <a class="noxref"
-              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
-              <span
-              class="value-inst-inherit noxref">inherit</span></a></td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Initial:</em>&nbsp;&nbsp;</td>
-              <td>auto</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
-              <td><a>'text'</a> elements</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
-              <td>yes</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
-              <td>N/A</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Media:</em>&nbsp;&nbsp;</td>
-              <td>visual</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em><a
-              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
-              <td>yes</td>
-            </tr>
-          </table>
-        </dd>
-      </dl>
-    </div>
+<a>'text-rendering'</a> property provides these hints.  Possible
+values are:</p>
 
 <dl>
   <dt><span class='prop-value'>auto</span></dt>
@@ -2318,54 +2349,49 @@ implementation about what tradeoffs to make as it renders text. The
 
 <h3 id="ImageRenderingProperty">The <span class="property">'image-rendering'</span> property</h3>
 
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="ImageRenderingProperty">image-rendering</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>auto | optimizeQuality | optimizeSpeed</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>auto</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>shapes</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="animate.html#Animatable">Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
 <p>The creator of SVG content might want to provide a hint to the
 implementation about how to make speed vs. quality tradeoffs as it performs
 image processing. The <a>'image-rendering'</a> property provides a hint to the
-SVG user agent about how to optimize its image rendering.</p>
-
-    <div class="propdef">
-      <dl>
-        <dt><span class="propdef-title property">'image-rendering'</span></dt>
-        <dd>
-          <table summary="image-rendering property"
-          class="propinfo" cellspacing="0" cellpadding="0">
-            <tr valign="baseline">
-              <td><em>Value:</em>&nbsp;&nbsp;</td>
-              <td>auto | optimizeSpeed | optimizeQuality | <a
-              class="noxref"
-              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
-              <span
-              class="value-inst-inherit noxref">inherit</span></a></td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Initial:</em>&nbsp;&nbsp;</td>
-              <td>auto</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Applies to:</em>&nbsp;&nbsp;</td>
-              <td>images</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Inherited:</em>&nbsp;&nbsp;</td>
-              <td>yes</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Percentages:</em>&nbsp;&nbsp;</td>
-              <td>N/A</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em>Media:</em>&nbsp;&nbsp;</td>
-              <td>visual</td>
-            </tr>
-            <tr valign="baseline">
-              <td><em><a
-              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
-              <td>yes</td>
-            </tr>
-          </table>
-        </dd>
-      </dl>
-    </div>
+SVG user agent about how to optimize its image rendering.  Possible values are:</p>
 
 <dl>
   <dt><span class='prop-value'>auto</span></dt>
@@ -2399,6 +2425,7 @@ SVG user agent about how to optimize its image rendering.</p>
 <p>In all cases, resampling must be done in a truecolor (e.g.,
 24-bit) color space even if the original data and/or the target
 device is indexed color.</p>
+</div>
 
 <div class="annotation">
  <p>
