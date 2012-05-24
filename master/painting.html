@@ -228,7 +228,7 @@ property</h3>
   </tr>
   <tr>
     <th>Computed&#160;value:</th>
-    <td>As specified.</td>
+    <td>as specified</td>
   </tr>
   <tr>
     <th><a href="animate.html#Animatable">Animatable</a>:</th>
@@ -516,7 +516,7 @@ property</h3>
   </tr>
   <tr>
     <th>Computed&#160;value:</th>
-    <td>As specified, but clamped to the range [0, 1].</td>
+    <td>as specified, but clamped to the range [0, 1]</td>
   </tr>
   <tr>
     <th><a href="animate.html#Animatable">Animatable</a>:</th>
@@ -1283,63 +1283,82 @@ and does affect text layout.</p>
 Note that since <a>'visibility'</a> is an inherited property,
 although it has no effect on a <a>container element</a> itself,
 its inherited value can affect descendant elements.</p>
-</div>
 
 
 <h2 id="Markers">Markers</h2>
 
 <div class="annotation">
- <p>
-   SVG2 Requirement: Improve markers
- </p>
- <p>
-   Resolution: We will improve markers for SVG2
- </p>
- <p>
-   <a href="http://www.w3.org/2011/10/27-svg-irc#T18-12-30">Pre-TPAC F2F Day 1</a>.
- </p>
- <p>
-   Purpose: To solve the common problems authors have with SVG markers
- </p>
- <p>
-   Owner: Cameron (ACTION-3286)
- </p>
+  <p>SVG2 Requirement: Improve markers</p>
+  <p>Resolution: We will improve markers for SVG2</p>
+  <p><a href="http://www.w3.org/2011/10/27-svg-irc#T18-12-30">Pre-TPAC F2F Day 1</a>.</p>
+  <p>Purpose: To solve the common problems authors have with SVG markers</p>
+  <p>Owner: Cameron (ACTION-3286)</p>
 </div>
+
+<p class="issue">Need to define a mechanism for setting back a stroke by a certain
+amount, and/or specifying a clip path for the stroke when a marker is used.</p>
 
 <edit:with element='marker'>
 
-<p>A marker is a symbol which is attached to one or more vertices of
-<a>'path'</a>, <a>'line'</a>, <a>'polyline'</a> and <a>'polygon'</a>
-elements. Typically, markers are used to make arrowheads or polymarkers.
-Arrowheads can be defined by attaching a marker to the start or end
-vertices of <a>'path'</a>, <a>'line'</a> or <a>'polyline'</a> elements.
-Polymarkers can be defined by attaching a marker to all vertices of a
-<a>'path'</a>, <a>'line'</a>, <a>'polyline'</a> or <a>'polygon'</a>
-element.</p>
+<p>A marker is a symbol that is painted at particular positions along
+a <a>'path'</a>, <a>'line'</a>, <a>'polyline'</a> or <a>'polygon'</a>
+element, together known as the <a>markable elements</a>.  There are four ways
+markers can be placed on these elements:</p>
+
+<ul>
+  <li>The <a>'marker-start'</a> and <a>'marker-end'</a> properties
+  can be used to place markers at the first and last vertex, and the
+  <a>'marker-mid'</a> property can be used to place markers at every
+  other vertex (aside from the first and last) or at the center of
+  every path segment.  The <a>'marker-start'</a> and <a>'marker-end'</a>
+  can be used for example to add arrowheads to paths.  Markers placed using
+  these properties are known as <dfn id="TermVertexMarkers">vertex markers</dfn>.</li>
+
+  <li>The <a>'marker-segment'</a> property can be used to place markers
+  at the center of every path segment.  These markers are known as
+  <dfn id="TermSegmentMarkers">segment markers</dfn>.</li>
+
+  <li>The <a>'marker-pattern'</a> property can be used to define
+  a regular repeating pattern of markers to place along the length of the
+  path.  Markers placed with <a>'marker-pattern'</a> are known as
+  <dfn id="TermRepeatingMarkers">repeating markers</dfn>.</li>
+
+  <li>A child <a>'marker element'</a> element with a <a>'position'</a> attribute
+  can be used to place a marker at a particular location along the path.
+  Such markers are known as <dfn id="TermPositionedMarkers">positioned
+  markers</dfn>.</li>
+</ul>
 
 <p>The graphics for a marker are defined by a <a>'marker element'</a> element.
-To indicate that a particular <a>'marker element'</a> element should be
-rendered at the vertices of a particular <a>'path'</a>, <a>'line'</a>,
-<a>'polyline'</a> or <a>'polygon'</a> element, set one or more marker
-properties (<a>'marker property'</a>, <a>'marker-start'</a>, <a>'marker-mid'</a>
-or <a>'marker-end'</a>) to reference the given <a>'marker element'</a>
-element.</p>
+The <a>'marker-start'</a>, <a>'marker-end'</a>, <a>'marker-mid'</a>,
+<a>'marker-segment'</a> and <a>'marker-pattern'</a> properties, together known
+as the <dfn id="TermMarkerProperties">marker properties</dfn>, reference
+<a>'marker element'</a> elements.</p>
 
-<p><span class="example-ref">Example Marker</span> draws a triangular marker
-symbol as an arrowhead at the end of a path.</p>
+<p>Markers can be animated, and as with <a>'use'</a> elements, the animated
+effects will show on all current uses of the markers within the document.</p>
 
-<edit:example href='images/painting/marker.svg' name='Marker' description="Triangular marker at the end of a path" image='yes' link='yes'/>
+<p>Markers on a given element are painted in the following order:</p>
 
-<p>Markers can be animated. The animated effects will show on all current uses
-of the markers within the document.</p>
+<ul>
+  <li>any marker specified by <a>'marker-start'</a></li>
+
+  <li>alternating <a>'marker-mid'</a> and <a>'marker-segment'</a> markers,
+  in order of their position along the path</li>
+
+  <li>any <a>repeating markers</a>, in order of their position along
+  the path</li>
+
+  <li>any <a>positioned markers</a>, in document order of the
+  <a>'marker element'</a> element children</li>
+</ul>
 
 <h3 id="MarkerElement">The <span class="element-name">'marker'</span> element</h3>
 
-<p>The <a>'marker element'</a> element defines the graphics that is to
-be used for drawing arrowheads or polymarkers on a given <a>'path'</a>,
-<a>'line'</a>, <a>'polyline'</a> or <a>'polygon'</a> element.</p>
-
 <edit:elementsummary name='marker'/>
+
+<p>The <a>'marker element'</a> element defines the graphics that are to
+be used for drawing markers on a <a>markable element</a>.</p>
 
 <p><em>Attribute definitions:</em></p>
 
@@ -1368,7 +1387,7 @@ table.attrdef td:first-child + td + td + td { width: 6em }
     <th>Animatable</th>
   </tr>
   <tr>
-    <td><dfn>markerUnits</dfn></td>
+    <td><dfn id="MarkerUnitsAttribute">markerUnits</dfn></td>
     <td>strokeWidth | userSpaceOnUse</td>
     <td>strokeWidth</td>
     <td>yes</td>
@@ -1394,8 +1413,7 @@ following meanings:</p>
   user coordinate system in place for the graphic object
   referencing the marker (i.e., the user coordinate system for
   the element referencing the <a>'marker element'</a> element via a
-  <a>'marker property'</a>, <a>'marker-start'</a>, <a>'marker-mid'</a>
-  or <a>'marker-end'</a> property).</dd>
+  <a>marker property</a>).</dd>
 </dl>
 
 <table class="propdef attrdef">
@@ -1406,27 +1424,8 @@ following meanings:</p>
     <th>Animatable</th>
   </tr>
   <tr>
-    <td><dfn>refX</dfn>, <dfn>refY</dfn></td>
-    <td><a>&lt;coordinate&gt;</a></td>
-    <td>0</td>
-    <td>yes</td>
-  </tr>
-</table>
-
-<p>The <a>'refX'</a> and <a>'refY'</a> attributes define the reference
-point which is to be aligned exactly at the marker position.  They
-are interpreted as being in the coordinate system after application
-of the <a>'viewBox'</a> and <a>'preserveAspectRatio'</a> attributes.</p>
-
-<table class="propdef attrdef">
-  <tr>
-    <th>Name</th>
-    <th>Value</th>
-    <th>Lacuna value</th>
-    <th>Animatable</th>
-  </tr>
-  <tr>
-    <td><dfn>markerWidth</dfn>, <dfn>markerHeight</dfn></td>
+    <td><dfn id="MarkerWidthAttribute">markerWidth</dfn>,
+    <dfn id="MarkerHeightAttribute">markerHeight</dfn></td>
     <td><a>&lt;length&gt;</a></td>
     <td>3</td>
     <td>yes</td>
@@ -1436,8 +1435,8 @@ of the <a>'viewBox'</a> and <a>'preserveAspectRatio'</a> attributes.</p>
 <p>The <a>'markerWidth'</a> and <a>'markerHeight'</a> attributes
 represent the size of the viewport into which the marker is to
 be fitted when it is rendered.  A value of zero for either
-attribute disables rendering of the element.  A negative value for either
-attribute is an error (see
+attribute results in nothing being rendered for the marker.  A negative value
+for either attribute is an error (see
 <a href="implnote.html#ErrorProcessing">Error processing</a>).</p>
 
 <table class="propdef attrdef">
@@ -1448,7 +1447,28 @@ attribute is an error (see
     <th>Animatable</th>
   </tr>
   <tr>
-    <td><dfn>orient</dfn></td>
+    <td><dfn id="RefXAttribute">refX</dfn>, <dfn id="RefYAttribute">refY</dfn></td>
+    <td><a>&lt;coordinate&gt;</a></td>
+    <td>0</td>
+    <td>yes</td>
+  </tr>
+</table>
+
+<p>The <a>'refX'</a> and <a>'refY'</a> attributes define the reference
+point of the marker which is to be aligned exactly at the marker's
+position on the <a>markable element</a>.  They are interpreted as being in the
+coordinate system of the marker contents, after application of the
+<a>'viewBox'</a> and <a>'preserveAspectRatio'</a> attributes.</p>
+
+<table class="propdef attrdef">
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Lacuna value</th>
+    <th>Animatable</th>
+  </tr>
+  <tr>
+    <td><dfn id="MarkerOrientAttribute">orient</dfn></td>
     <td>auto | <a>&lt;angle&gt;</a></td>
     <td>0</td>
     <td>yes&#160;(non-additive)</td>
@@ -1456,104 +1476,116 @@ attribute is an error (see
 </table>
 
 <p>The <a>'orient'</a> attribute indicates how the marker
-is rotated.  Values have the following meaning:</p>
+is rotated when it is placed at its position on the <a>markable element</a>.
+Values have the following meaning:</p>
 
 <dl>
   <dt><span class="attr-value">'auto'</span></dt>
   <dd>
     <p>A value of <span class="attr-value">'auto'</span>
     indicates that the marker is oriented such that its positive
-    x-axis is pointing as follows:</p>
-
-    <ol type="a">
-      <li>
-        If there is a path segment coming into the
-        vertex and another path segment going out of the vertex,
-        the marker's positive x-axis should point toward the
-        angle bisector for the angle at the given vertex, where
-        that angle has one side consisting of tangent vector for
-        the path segment going into the vertex and the other side
-        the tangent vector for the path segment going out of the
-        vertex. Note:
-        <ul>
-          <li>If the tangent vectors are the same, the angle bisector equals the two tangent vectors.</li>
-          <li>If an incoming and an outgoing vertex produce a zero vector the direction of marker is undefined.</li>
-        </ul>
-      </li>
-      <li>
-        If there is only a path segment going into the vertex (e.g.,
-        the last vertex on an open path), the marker's positive
-        x-axis should point in the same direction as the tangent
-        vector for the path segment going into the vertex.
-      </li>
-      <li>
-        If there is only a path segment going out of the vertex
-        (e.g., the first vertex on an open path), the marker's
-        positive x-axis should point in the same direction as the
-        tangent vector for the path segment going out of the
-        vertex. (Refer to <a href="implnote.html#PathElementImplementationNotes"><span class='element-name'>'path'</span>
-        element implementation notes</a> for a more thorough
-        discussion of the directionality of path segments.)
-      </li>
-    </ol>
-
-    <p>In all cases for closed subpaths (e.g., subpaths which end with a
-    <a href="paths.html#PathDataClosePathCommand">'closepath'</a> command),
-    the orientation of the marker corresponding to the initial point of the
-    subpath is calculated assuming that:</p>
-
+    x-axis is pointing in the direction of the path at the point
+    it is placed.</p>
+    
+    <p>If the marker is a <a>segment marker</a>, then
+    the direction the marker is oriented is, if considering the
+    incoming and outgoing directions as unit vectors, in the
+    direction of the sum of these two vectors.  If this sum
+    is zero, then the marker is oriented in the incoming direction.
+    If the marker is on the first or last vertex of a closed subpath, then the
+    incoming direction taken from the final path segment and the outgoing
+    direction is taken from:</p>
+    
     <ul>
-      <li>the path segment going into the vertex is the path segment
-      corresponding to the closepath</li>
-
-      <li>the path segment coming out of the vertex is the first path
-      segment in the subpath</li>
-    </ul>
-
-    <p>When a <a href="paths.html#PathDataClosePathCommand">'closepath'</a>
-    command is followed by a command other than a
-    <a href="paths.html#PathDataMovetoCommands">'moveto'</a> command, then the
-    orientation of the marker corresponding to the
-    <a href="paths.html#PathDataClosePathCommand">'closepath'</a> command is
-    calculated assuming that:</p>
-
-    <ul>
-      <li>the path segment going into the vertex is the path segment
-      corresponding to the closepath</li>
-
-      <li>the path segment coming out of the vertex is the first path
-      segment of the subsequent subpath</li>
+      <li>the first path segment of the <em>following</em> subpath,
+      if the following subpath does not begin with a
+      <a href="paths.html#PathDataMovetoCommands">'moveto'</a> command, and</li>
+      <li>the first path segment of the <em>current</em> subpath,
+      if the following subpath does begin with a
+      <a href="paths.html#PathDataMovetoCommands">'moveto'</a> command
+      or if there is no following subpath.</li>
     </ul>
   </dd>
 
   <dt><span class="attr-value"><a>&lt;angle&gt;</a></span></dt>
   <dd>
-    <p>An <a>&lt;angle&gt;</a> value represents a particular orientation
-    in the user space of the graphic object referencing the marker. For
-    example, if a value of <span class="attr-value">'0'</span> is given, then the
-    marker will be drawn such that its x-axis will align with the x-axis of the user
-    space of the graphic object referencing the marker.</p>
+    <p>An <a>&lt;angle&gt;</a> value represents the angle the marker's
+    positive x-axis makes with the positive x-axis in the user space
+    of the <a>markable element</a>.  For example, if a value of
+    <span class="attr-value">'0'</span> is given, then the marker will be drawn
+    such that its x-axis will align with the x-axis of the user
+    space of the graphic object referencing the marker.
+    A value of <span class="attr-value">'90'</span> will result in the
+    marker being drawn with its positive x-axis in the direction
+    of the positive y-axis of the <a>markable element</a>'s user space.</p>
   </dd>
 </dl>
 
-<p>Markers are drawn such that their reference point (i.e.,
-attributes <a>'refX'</a> and <a>'refY'</a>) is positioned at the
-given vertex. In other words, a translation transformation is
-constructed by the user agent to achieve the effect of having point
-(<a>'refX'</a> and <a>'refY'</a>) within the marker content's coordinate
-system (after any transformations due to the <a>'viewBox'</a> and
-<a>'preserveAspectRatio'</a> attributes) align exactly with the given
-vertex.</p>
+<table class="propdef attrdef">
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Lacuna value</th>
+    <th>Animatable</th>
+  </tr>
+  <tr>
+    <td><dfn id="PositionAttribute">position</dfn></td>
+    <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a></td>
+    <td>as&#160;if&#160;not&#160;specified</td>
+    <td>yes</td>
+  </tr>
+</table>
 
-<p>SVG's <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
-the <a>'overflow'</a> property for <a>'marker element'</a> elements to
-<span class="prop-value">hidden</span>, which causes a rectangular clipping
-path to be created at the bounds of the marker tile.  Unless the
-<a>'overflow'</a> property is overridden, any graphics within the marker which
-goes outside of the marker rectangle will be clipped.</p>
+<p>If the <a>'marker element'</a> element is a child of a <a>markable element</a>,
+then the presence of a <a>'position'</a> attribute indicates that the marker is
+a <a>positioned marker</a> and that it will be painted at the specified
+distance along the path.  If the value is negative or greater than the length
+of the path, then no marker will be painted.  If this attribute is specified on
+a <a>'marker element'</a> that is not a child of a <a>markable element</a>, then
+it has no effect beyond being exposed in the DOM.</p>
+
+<p class="issue">Should a negative or greater than path length value be
+an "in error" / "unsupported" value?</p>
+
+<table class="propdef attrdef">
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Lacuna value</th>
+    <th>Animatable</th>
+  </tr>
+  <tr>
+    <td><dfn id="HrefAttribute">href</dfn></td>
+    <td><a>&lt;iri&gt;</a></td>
+    <td>as&#160;if&#160;not&#160;specified</td>
+    <td>yes</td>
+  </tr>
+</table>
+
+<p>When a <a>'marker element'</a> element is being used as a <a>positioned marker</a>,
+the <a>'href'</a> attribute indicates that the <a>'marker element'</a>
+referenced by the attribute is to be used as the definition of the marker.  The
+graphical content of the referencing <a>'marker element'</a> element and any of
+its attributes that affect marker processing are ignored.  Authors must not
+place any child graphical content in the referencing <a>'marker element'</a> or
+specify the <a>'viewBox'</a>, <a>'preserveAspectRatio'</a>, <a>'refX'</a>,
+<a>'refY'</a>, <a>'markerUnits'</a>, <a>'markerWidth'</a>, <a>'markerHeight'</a>
+or <a>'orient'</a> attributes on it.</p>
+
+<p class="issue">We should say something about referencing <a>'marker element'</a>
+elements that have an <a>'href'</a> with the <a>marker properties</a>.
+I suspect we should just allow this.  Whether we want to allow the full
+element-referencing thing that you can do with gradients, with selective
+overriding of attributes, I'm not sure.</p>
+
+<style>
+hr.break { border: none; margin: 2em 0 }
+hr.break:before { display: block; text-align: center; content: "*\a0\a0\a0\a0*\a0\a0\a0\a0*"; }
+</style>
+<hr class="break"/>
 
 <p>The contents of the <a>'marker element'</a> are relative to a new
-coordinate system. Attribute <a>'markerUnits'</a> determines an initial
+coordinate system. The <a>'markerUnits'</a> attribute determines an initial
 scale factor for transforming the graphics in the marker into the user
 coordinate system for the referencing element. An additional set of
 transformations might occur if there is a <a>'viewBox'</a> attribute, in
@@ -1565,20 +1597,36 @@ attribute has the origin of the viewBox coincident with the origin
 of the viewport and the width/height of the viewBox the same as the
 width/height of the viewport.</p>
 
+<p>The <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
+the <a>'overflow'</a> property for <a>'marker element'</a> elements to
+<span class="prop-value">hidden</span>, which causes a rectangular clipping
+path to be created at the bounds of marker's viewport.  Unless the
+<a>'overflow'</a> property is overridden, any graphics within the marker which
+goes outside of the marker's viewport will be clipped.</p>
+
 <p><a href="styling.html#SVGStylingProperties">Properties</a> inherit into the
 <a>'marker element'</a> element from its ancestors; properties do <em>not</em>
 inherit from the element referencing the <a>'marker element'</a> element.</p>
 
-<p><a>'marker element'</a> elements are never rendered directly;
-their only usage is as something that can be referenced using the
-<a>'marker property'</a>, <a>'marker-start'</a>, <a>'marker-end'</a> and
-<a>'marker-mid'</a> properties. The <a>'display'</a> property does not
-apply to the <a>'marker element'</a> element; thus, <a>'marker element'</a> elements
-are not directly rendered even if the <a>'display'</a> property is
+<p class="issue">Mention the new paint keywords that allow referencing
+object fill/stroke, etc.</p>
+
+<p><a>'marker element'</a> elements are only rendered directly
+when they are used as children of a <a>markable element</a>
+and have a <a>'position'</a> attribute specified.  This causes the
+marker to be painted as a <a>positioned marker</a>.  All other
+<a>'marker element'</a> elements are not rendered directly
+and must be referenced by one of the <a>marker properties</a>
+to be rendered.  The <a>'display'</a> property does not apply to the
+<a>'marker element'</a> element; thus, <a>'marker element'</a> elements are not
+directly rendered even if the <a>'display'</a> property is
 set to a value other than <span class="prop-value">none</span>, and
 <a>'marker element'</a> elements are available for referencing even when the
 <a>'display'</a> property on the <a>'marker element'</a> element or any of its
-ancestors is set to <span class="prop-value">none</span>.</p>
+ancestors is set to <span class="prop-value">none</span>.  <a>'marker element'</a>
+elements that are used as <a>positioned markers</a> can simultaneously be referenced
+by the <a href='#markerProperties'>marker properties</a> to be used as
+<a>segment markers</a> and <a>repeating markers</a>.</p>
 
 <p><a href="script.html#EventAttributes">Event attributes</a> and
 <a href="svgdom.html#EventListeners">event listeners</a> attached
@@ -1586,7 +1634,51 @@ to the contents of a <a>'marker element'</a> element are not processed;
 only the rendering aspects of <a>'marker element'</a> elements are
 processed.</p>
 
-<h3 id="MarkerProperties">Marker properties: the <span class="property">'marker-start'</span>,
+<p class="issue">Make interaction work on <a>positioned markers</a>.</p>
+
+<div class="example">
+  <p>The following example shows the use of <a>positioned markers</a> to
+  place symbols at particular distances along a path.</p>
+
+  <pre><![CDATA[
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="600" height="200" viewBox="0 0 600 200">
+
+   <defs>
+     <marker id="Square" markerWidth="10" markerHeight="10"
+             refX="5" refY="5" orient="auto">
+       <path d="M 5,1 L 9,5 5,9 1,5 z" fill="#6a9100"/>
+     </marker>
+     <marker id="Circle" markerWidth="10" markerHeight="10"
+             refX="5" refY="5" orient="auto">
+       <circle cx="5" cy="5" r="2" fill="dodgerblue"/>
+     </marker>
+   </defs>
+
+   <path d="M 100,50 C 100,250 500,-50 300,150"
+         fill="none" stroke="deeppink" stroke-width="3">
+     <marker href="#Square" position="0"/>
+     <marker href="#Square" position="100%"/>
+     <marker href="#Circle" position="50px"/>
+     <marker href="#Circle" position="calc(100% - 50px)"/>
+     <marker position="50%">
+       <!-- the cross -->
+       <path d="M 3,3 L 7,7 M 3,7 L 7,3"
+             fill="none" stroke="black" stroke-width="2"/>
+     </marker>
+   </path>
+</svg>
+]]></pre>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/markers-positioned.svg"/>
+    <p class="caption">Child <a>'marker element'</a> elements are used to position
+    two square and two circular markers.  The cross marker is defined inline
+    and does not need an ID.</p>
+  </div>
+</div>
+
+<h3 id="VertexMarkerProperties">Vertex markers: the <span class="property">'marker-start'</span>,
 <span class="property">'marker-mid'</span> and <span class="property">'marker-end'</span>
 properties</h3>
 
@@ -1595,7 +1687,7 @@ properties</h3>
     <th>Name:</th>
     <td><dfn id="MarkerStartProperty">marker-start</dfn>,
         <dfn id="MarkerMidProperty">marker-mid</dfn>,
-	<dfn id="MarkerEndProperty">marker-end</dfn></td>
+        <dfn id="MarkerEndProperty">marker-end</dfn></td>
   </tr>
   <tr>
     <th>Value:</th>
@@ -1607,7 +1699,7 @@ properties</h3>
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td><a>'path'</a>, <a>'line'</a>, <a>'polyline'</a> and <a>'polygon'</a></td>
+    <td><a>markable elements</a></td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -1623,7 +1715,7 @@ properties</h3>
   </tr>
   <tr>
     <th>Computed&#160;value:</th>
-    <td>As specified.</td>
+    <td>as specified</td>
   </tr>
   <tr>
     <th><a href="animate.html#Animatable">Animatable</a>:</th>
@@ -1631,37 +1723,193 @@ properties</h3>
   </tr>
 </table>
 
-<p><a>'marker-start'</a> defines the arrowhead or polymarker that shall
-be drawn at the first vertex of the given <a>'path'</a> element or
-<a href="shapes.html">basic shape</a>. <a>'marker-end'</a> defines
-the arrowhead or polymarker that shall be drawn at the final vertex.
-<a>'marker-mid'</a> defines the arrowhead or polymarker that shall be
-drawn at every other vertex (i.e., every vertex except the first and
-last). Note that for a <a>'path'</a> element which ends with a closed
-sub-path, the last vertex is the same as the initial vertex on the given
-sub-path. In this case, if <a>'marker-end'</a> does not equal
-<span class="prop-value">none</span>, then it is possible that two markers
-will be rendered on the given vertex. One way to prevent this is to set
-<a>'marker-end'</a> to <span class="prop-value">none</span>. (Note that
-the same comment applies to <a>'polygon'</a> elements.)</p>
-
-<p>Possible values for <a>'marker-start'</a>, <a>'marker-mid'</a> and
+<p>The <a>'marker-start'</a> and <a>'marker-end'</a> properties are used
+to specify the marker that will be drawn at the first and last vertices
+of the given <a>markable element</a>, respectively.  <a>'marker-mid'</a>
+is used to specify the marker that will be drawn at all other vertices
+(i.e., every vertex except the first and last).
+Possible values for <a>'marker-start'</a>, <a>'marker-mid'</a> and
 <a>'marker-end'</a> are:</p>
 
 <dl>
   <dt><span class='prop-value'>none</span></dt>
-  <dd>Indicates that no marker symbol shall be drawn at the given
-  vertex (vertices).</dd>
+  <dd>Indicates that no marker symbol will be drawn at the given
+  vertex or vertices.</dd>
 
   <dt><span class='prop-value'>&lt;funciri&gt;</span></dt>
-  <dd>The &lt;funciri&gt; is a <a href="types.html#DataTypeFuncIRI">Functional IRI reference</a>
-  to the <a>'marker element'</a> element which shall be used as the arrowhead
-  symbol or polymarker at the given vertex or vertices. If the
+  <dd>Indicates that the <a>'marker element'</a> element referenced
+  by the <a>&lt;funciri&gt;</a> value will be drawn at the given
+  vertex or vertices.  If the
   <a href="linking.html#IRIReference">IRI reference</a> is not valid (e.g.,
   it points to an object that is undefined or the object is not a
-  <a>'marker element'</a> element), then the marker(s) shall not
-  be drawn.</dd>
+  <a>'marker element'</a> element), then no marker will be drawn
+  at the given vertex or vertices.</dd>
 </dl>
+
+<p>For <a>'polygon'</a> elements, the last vertex is the same as the first
+vertex, and for <a>'path'</a> elements that end with a closed subpath, the last
+vertex is the same as the first vertex of that final subpath.
+In this case, if the value of <a>'marker-end'</a> is not
+<span class="prop-value">none</span>, then it is possible that two markers
+will be rendered on that final vertex.</p>
+
+<p class="note">Note that <a>'marker-start'</a> and <a>'marker-end'</a>
+refer to the first and last vertex of the entire path, not each subpath.</p>
+
+<div class="example">
+  <p>The following example shows a triangular marker symbol used as a
+  <a>vertex marker</a> to form an arrowhead at the end of a path.</p>
+
+  <edit:includefile href='images/painting/marker.svg'/>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/marker.svg"/>
+    <p class="caption">The triangle is placed at the end of the path and
+    oriented automatically so that it points in the right direction.</p>
+  </div>
+</div>
+
+<h3 id="SegmentMarkers">Segment markers: the <span class="property">'marker-segment'</span>
+property</h3>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="MarkerSegmentProperty">marker-segment</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>none | <a>&lt;funciri&gt;</a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>markable elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="animate.html#Animatable">Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
+<p>The <a>'marker-segment'</a> property is used to specify the marker that will
+be drawn at the center of each path segment.  Possible values are:</p>
+
+<dl>
+  <dt><span class='prop-value'>none</span></dt>
+  <dd>Indicates that no marker symbol will be drawn at the given
+  vertex or vertices.</dd>
+
+  <dt><span class='prop-value'>&lt;funciri&gt;</span></dt>
+  <dd>Indicates that the <a>'marker element'</a> element referenced
+  by the <a>&lt;funciri&gt;</a> value will be drawn at the center
+  of each path segment.  If the
+  <a href="linking.html#IRIReference">IRI reference</a> is not valid (e.g.,
+  it points to an object that is undefined or the object is not a
+  <a>'marker element'</a> element), then no marker will be drawn
+  at the path segment centers.</dd>
+</dl>
+
+<p class="issue">Add an example.</p>
+
+<h3 id="RepeatingMarkers">Repeating markers: the <span class="property">'marker-pattern'</span>
+property</h3>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="MarkerPatternProperty">marker-pattern</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>none | [ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;funciri&gt;</a> ]+</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>markable elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>refer to the length of the path</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified, but with URLs made absolute</td>
+  </tr>
+  <tr>
+    <th><a href="animate.html#Animatable">Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
+<p>The <a>'marker-pattern'</a> property is used to specify a pattern
+of markers and gaps to be repeated along the length of the <a>markable element</a>.
+Values have the following meanings:</p>
+
+<dl>
+  <dt><span class="prop-value">none</span></dt>
+  <dd>Indicates that no <a>repeating markers</a> will be painted.</dd>
+
+  <dt><span class="prop-value"><a>&lt;length&gt;</a></span></dt>
+  <dt><span class="prop-value"><a>&lt;percentage&gt;</a></span></dt>
+  <dd>Indicates the length of a gap in the repeated
+  pattern of markers.</dd>
+
+  <dt><span class="prop-value"><a>&lt;funciri&gt;</a></span></dt>
+  <dd>A reference to a <a>'marker element'</a> that will be
+  placed at the current position along the path.  If the
+  <a href="linking.html#IRIReference">IRI reference</a> is not valid (e.g.,
+  it points to an object that is undefined or the object is not a
+  <a>'marker element'</a> element), then no marker will be drawn
+  at the current position.</dd>
+</dl>
+
+<p>If a value other than <span class="prop-value">none</span> is given,
+and the sum of the <a>&lt;length&gt;</a>s and <a>&lt;percentage&gt;</a>s
+is not positive, then it is an <a>invalid value</a>.</p>
+
+<p>Unlike <a>vertex markers</a>, the orientation of an <span class="attr-value">orient="auto"</span>
+<a>repeating marker</a> that happens to lie on a vertex does not take into
+account the incoming and outgoing directions.  Instead, it is simply oriented
+such that its positive x-axis is aligned with the direction of the path
+at its position.</p>
+
+<p class="issue">Add an example.</p>
+
+</edit:with>
+</div>
+<edit:with element='marker'>
 
 <h3 id="MarkerShorthand">Marker shorthand: the <span class="property">'marker'</span>
 property</h3>
@@ -1681,7 +1929,7 @@ property</h3>
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td><a>'path'</a>, <a>'line'</a>, <a>'polyline'</a> and <a>'polygon'</a></td>
+    <td><a>markable elements</a></td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -1704,6 +1952,10 @@ property</h3>
     <td>yes</td>
   </tr>
 </table>
+
+<p class="issue">Extend the shorthand so that it can set
+<a>'marker-start'</a>, <a>'marker-mid'</a> and <a>'marker-end'</a>
+separately, and also set <a>'marker-pattern'</a>.</p>
 
 <p>The <a>'marker property'</a> property specifies
 the marker symbol that shall be used for all points on the given
@@ -1947,6 +2199,10 @@ receive mouse events or not depending on the value of <a>'paint-order'</a>.</p>
 <p class="issue">The Rendering chapter will need some changes to accommodate
 <a>'paint-order'</a>, and should probably gain a more precise description of
 exactly how an SVG fragment is rendered.</p>
+
+<p class="issue">Should there be a way of addressing the individual types
+of markers – vertex &amp; segment, repeating, positioned – given they are currently
+specified to render in that order?</p>
 
 <div class="example">
   <p>The following example shows how the <a>'paint-order'</a> property can
