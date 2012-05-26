@@ -2109,6 +2109,259 @@ Values for have the following meanings:</p>
 </div>
 <edit:with element='marker'>
 
+<h3 id="MarkerKnockout">Knocking out the stroke: the
+<span class="property">'marker-knockout-left'</span> and
+<span class="property">'marker-knockout-right'</span> properties</h3>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="MarkerKnockoutLeftProperty">marker-knockout-left</dfn>, <dfn id="MarkerKnockoutRightProperty">marker-knockout-right</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a>&lt;knockout-offset&gt;</a> | <a>&lt;knockout-shape&gt;</a> [ at <a>&lt;knockout-offset&gt;</a> ]?</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>'marker element'</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>see prose</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="animate.html#Animatable">Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
+<p>where:</p>
+
+<p class="definition">
+  <dfn id="DataTypeKnockoutShape">&lt;knockout-offset&gt;</dfn> =
+  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]</div>
+</p>
+
+<p class="definition">
+  <dfn id="DataTypeKnockoutShape">&lt;knockout-shape&gt;</dfn> =
+  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ] inverted? circle |</div>
+  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]{2} inverted? ellipse |</div>
+  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]{1,2} inverted? [ rectangle | triangle ]</div>
+</p>
+
+<p>When specified on a <a>'marker element'</a> element, the
+<a>'marker-knockout-left'</a> and <a>'marker-knockout-right'</a> properties
+together specify a shape to clip away when when painting the stroke of an
+element that uses the marker.  <a>'marker-knockout-left'</a> specifies the
+left side of the shape and <a>'marker-knockout-right'</a> the right side.
+These two sides are joined together with straight lines.</p>
+
+<p>The <a>&lt;knockout-offset&gt;</a> part of the value, if specified,
+is the offset from the marker position, outwards, along the tangent,
+that the knockout shape side is placed at.  This is the <em>knockout shape
+side position</em>.  If it is omitted, then the offset is assumed to be zero.
+The value can be negative.  Percentage values refer to the width of the marker
+contents viewport.</p>
+
+<p>The <a>&lt;knockout-shape&gt;</a> part of the value, if specified,
+is the left or right side of the knockout shape.  Values have the
+following meanings:</p>
+
+<dl>
+  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]{2} inverted? ellipse</span></dt>
+  <dd>
+    <p>The knockout shape side is an arc.  The lengths or percentages specified
+    are the x-radius and y-radius of the ellipse from which the arc is taken.
+    A length is interpreted as being in the marker contents coordinate system.
+    If the first value is a percentage, then it refers to the width of the
+    marker contents viewport, and if the second value is a percentage then
+    it refers to the height of the marker contents viewport.</p>
+
+    <p>If the <span class="prop-value">inverted</span> keyword is not specified,
+    then the arc is constructed by placing the center of the ellipse at the knockout
+    shape side position.  First we consider only the 180° arc of the ellipse which
+    points in the direction of the start of the start of the path, if this is
+    the left knockout shape side, or the end of the path if this is the right knockout
+    shape side.  If the y-radius is less than or equal to half of the stroke width of
+    the path the marker is on, then this 180° arc is the final knockout shape side.
+    Otherwise, we intersect the arc with the two lines that are offset, by half
+    of the stroke width, from the tangent to the marker orientation.
+    The resulting arc with its start and end points on these two lines is the
+    final knockout shape side.</p>
+
+    <p>If the <span class="prop-value">inverted</span> keyword <em>is</em> specified,
+    then the arc is constructed by placing the center of the ellipse at a distance
+    of two times its x-radius along the tangent to the marker orientation,
+    in the direction of the start of the path if this is the left knockout shape
+    side, or the end of the path if this is the right knockout shape side.
+    We consider only the 180° arc of the ellipse that is pointing in the opposite
+    direction.  If the y-radius is less or equal to half of the stroke width
+    of the path the marker is on, then this 180° arc is the final knockout shape
+    side.  Otherwise, we intersect the arc with the two lines that are offset,
+    by half of the stroke width, from the tangent to the marker orientation.
+    The resulting arc with its side and end points on these two lines
+    is the final knockout shape side.</p>
+  </dd>
+
+  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ] inverted? circle</span></dt>
+  <dd>
+    <p>The knockout shape side is an arc.  The shape is computed in the same
+    way as the <span class="prop-value">ellipse</span> shape, but with
+    both radii of the ellipse being the specified length or percentage,
+    and with a percentage referring to the size of the marker contents viewport.</p>
+  </dd>
+
+  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]{1,2} inverted? rectangle</span></dt>
+  <dd>
+    <p>The knockout shape side comprises one or two rectangles.  These
+    rectangles are aligned such that their top and bottom edges are
+    parallel to the tangent to the marker orientation.
+    The length or percentage is a width and the second, if specified,
+    is a height.  Percentage values here refer to the width and height
+    of the marker contents viewport, respectively.</p>
+
+    <p>If the <span class="prop-value">inverted</span> keyword is not specified,
+    then the knockout shape side is a single rectangle.  The width of the
+    rectangle is the specified width value.  The height of the rectangle is the maximum
+    of the stroke width of the path on which the marker exists and the specified
+    height value, if it is specified.  If it is not specified, then the height of the
+    rectangle is just the stroke width.
+    The rectangle is posisioned such that the center of its right hand edge
+    is positioned at the knockout shape side position
+    and the extent of its width is in the direction of the start of the path,
+    if this is the left knockout shape side, or the end of the path if this
+    is the right knockout shape side.</p>
+
+    <p>If the <span class="prop-value">inverted</span> keyword is specified,
+    then the knockout shape side comprises two rectangles.  If the specified
+    height is greater than or equal to the stroke width, then the height
+    of these rectangles is zero; otherwise, their heights are half of the
+    difference between the stroke width and the specified height.  The
+    top edge of one of the rectangles is half of the stroke width away
+    from the marker orientation tangent line, with its bottom edge closer to the tangent line.
+    The other rectangle has its bottom edge half of the stroke width
+    away from the tangent line and its top edge closer to the tangent line.
+    The right edges of the rectangles are aligned with each other and
+    also with the line perpendicular to the marker orientation tangent line.
+    The extent of the widths of the rectangles is in the direction
+    of the start of the path, if this is the left knockout shape side,
+    or the end of the path if this is the right knockout shape side.</p>
+  </dd>
+
+  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]{1,2} inverted? rectangle</span></dt>
+  <dd>
+    <p>The knockout shape side comprises one or two rectangles.  These
+    rectangles are aligned such that their top and bottom edges are
+    parallel to the tangent to the marker orientation.
+    The length or percentage is a width and the second, if specified,
+    is a height.  Percentage values here refer to the width and height
+    of the marker contents viewport, respectively.</p>
+
+    <p>If the <span class="prop-value">inverted</span> keyword is not specified,
+    then the knockout shape side is a single rectangle.  The width of the
+    rectangle is the specified width value.  The height of the rectangle is the maximum
+    of the stroke width of the path on which the marker exists and the specified
+    height value, if it is specified.  If it is not specified, then the height of the
+    rectangle is just the stroke width.
+    The rectangle is posisioned such that the center of its right hand edge
+    is positioned at the knockout shape side position
+    and the extent of its width is in the direction of the start of the path,
+    if this is the left knockout shape side, or the end of the path if this
+    is the right knockout shape side.</p>
+
+    <p>If the <span class="prop-value">inverted</span> keyword is specified,
+    then the knockout shape side comprises two rectangles.  If the specified
+    height is greater than or equal to the stroke width, then the height
+    of these rectangles is zero; otherwise, their heights are half of the
+    difference between the stroke width and the specified height.  The
+    top edge of one of the rectangles is half of the stroke width away
+    from the marker orientation tangent line, with its bottom edge closer to the tangent line.
+    The other rectangle has its bottom edge half of the stroke width
+    away from the tangent line and its top edge closer to the tangent line.
+    The right edges of the rectangles are aligned with each other and
+    also with the line perpendicular to the marker orientation tangent line.
+    The extent of the widths of the rectangles is in the direction
+    of the start of the path, if this is the left knockout shape side,
+    or the end of the path if this is the right knockout shape side.</p>
+  </dd>
+
+  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]{1,2} inverted? triangle</span></dt>
+  <dd>
+    <p class="issue">...</p>
+  </dd>
+</dl>
+
+<p class="issue">A diagram showing the construction of these shapes
+would be helpful.</p>
+
+<p class="issue">Need to define how the two shape sides are joined together.
+It's taking the top and bottom points from both shapes, drawing vertical
+lines to the edge of the stroke shape, then drawing two horizontal lines
+to join them together.</p>
+
+<p>The two knockout shape sides must not intersect, although they may
+touch.  If they do intersect, then no knockout is performed for that
+marker when painting the stroke.</p>
+
+<p class="note">For example, using <span class="prop-value">8px inverted
+triangle at -4px</span> for <a>'marker-knockout-left'</a> and
+<span class="prop-value">8px triangle</span> for <a>'marker-knockout-right'</a>
+is allowed, as the two straight lines that form the left shape side do not intersect
+with either of the two straight lines that form the right shape side.
+However, using <span class="prop-value">8px triangle at -4px</span> for
+both properties would obviously cause an intersection, and so would not
+be allowed.</p>
+
+<div class="figure">
+  <img class="bordered" src="images/painting/knockout-shapes.svg" style="max-width: none"/>
+  <p class="caption">An illustration of the use of inverted and non-inverted circle,
+  rectangle and triangle knockout shapes, at both 0px and 10px offsets.
+  The value beneath each pink stroke is used for both <a>'marker-knockout-left'</a>
+  and <a>'marker-knockout-right'</a>.  (The marker itself here has no
+  content and does not render anything.)</p>
+</div>
+
+<div class="issue">
+  <p>While this is nice for straight line segments, if the
+  path is curved at the marker position then it might be preferable to
+  have the knockout shapes aligned with the tangent at the knockout shape
+  side position, rather than with the marker orientation.  Especially
+  if the knockout is being used as a fancy dash pattern.  Then we would
+  likely want to join the left and right sides of the shape with a curved
+  shape (along the stroke) and not just a rectangle.  If we allow this,
+  then computing that shape is going to be hard, and will mean that
+  determining whether the left and right sides of the knockout shape
+  intersect, and determining what the intersections of all of the knockout shapes
+  on a path are, is also going to be hard.  Perhaps that can be handled by
+  extending dashing line caps with these shapes rather than here?  Regardless of
+  whether it is handled by marker knockouts or new line caps, it's going
+  to be non-trivial to compute the right shapes.</p>
+
+  <p>Another thing to note is that knockouts here are like setting up
+  a clipping path to remove parts of the stroke when it's painted.  That
+  means that if the stroke intersects itself over the knockout areas,
+  it's going to be knocked out of all bits of the stroke that go
+  through those areas.  That may or may not be fine depending on
+  your use cases.</p>
+</div>
+
 <h3 id="MarkerAlgorithm">Details on how markers are rendered</h3>
 
 <p>Markers are drawn after the given object is filled and stroked.</p>
