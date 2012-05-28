@@ -619,6 +619,26 @@ placement and glyph advance.</p>
          <span class="anim-target"><a
         href="animate.html#Animatable">Animatable</a>:
         yes.</span></dd>
+        
+        <dl class="ready-for-wg-review">
+        <dt id="TextElementWidthAttribute"><span
+        class="adef">width</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+        <dd>Indicates the maximum length that the text is allowed to have 
+        before being subject to <a>'text-overflow'</a> handling.
+        Whenever the sum of advances (including properties <a>'kerning'</a>, <a>'letter-spacing'</a> and <a>'word-spacing'</a> and 
+        adjustments due to attributes <a>'dx'</a> and <a>'dy'</a> on <a>'tspan'</a> elements) computed by the user agent exceeds 
+        the given width the <a>'text'</a> element is subject to <a>'text-overflow'</a> processing.
+        <p>The given width does not affect SVG DOM methods for measuring text, but
+        does affect the boundingbox of the element.
+        </p>
+        <br />
+        The lacuna value for <a>'width'</a> is as if the attribute wasn't specified.
+        <br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        </dl>
       </dl>
     </div>
     <p id="ExampleText01"><span class="example-ref">Example text01</span> below
@@ -1956,6 +1976,76 @@ characters.</p>
 entirety (i.e., it is filled and stroked as specified by the <a>'fill'</a>
 and <a>'stroke'</a> properties) before the
 next glyph gets rendered.</p>
+
+<div class="ready-for-wg-review">
+<h3 id='TextOverflowProcessing'>Text overflow processing</h3>
+
+<p class="note">See the CSS3 UI specification for the definition
+of <a href="http://www.w3.org/TR/2012/WD-css3-ui-20120117/#text-overflow">'text-overflow'</a>.
+[<a href="refs.html#ref-CSS3UI">CSS3UI</a>]</p>
+
+<p>SVG uses the <a>'text-overflow'</a> property to control how <a>text content block elements</a>
+render when the text overflows a specified <a>'width'</a>.
+</p>
+
+<p>When applied to a <a>text content block element</a> setting <a>'text-overflow'</a> to
+<span class="attr-value">ellipsis</span> then if the text that is to be rendered
+overflows the specified <a>'width'</a> an ellipsis is rendered such that it fits
+within the given width. For the purposes of rendering the ellipsis is treated as if it replaced the characters at
+the point where it is inserted. The text positioning attributes 
+(<a>'text/x'</a>, <a>'text/y'</a>, <a>'text/dx'</a>, <a>'text/dy'</a>, <a>'text/rotate'</a>) apply to the ellipsis
+as if it was one character in the logical document order mapping to one glyph.
+In SVG <a>'text-overflow'</a> has an effect if there is a validly specified <a>'text/width'</a> attribute, regardless of the
+computed value of the <a>'overflow'</a> property on the <a>text content block element</a>.
+</p>
+
+<p>Any other value for <a>'text-overflow'</a> is treated as if it wasn't specified.</p>
+
+<p class="issue">SVG could allow the keyword 'clip' to work too. It's already possible to do clipping with clip-path, 
+but it's unconditional, where this would theoretically only clip if the text overflowed. It's mostly a convenient shorthand.</p>
+
+<p>Note that the effect of <a>'text-overflow'</a> is purely visual, the ellipsis itself does not become part of the DOM.
+For all the DOM methods it's as if <a>'text-overflow'</a> wasn't applied, and as if <a>'text/width'</a> didn't constrain the text. 
+</p>
+
+<div class="example">
+  <p>The following example shows the use of <a>'text-overflow'</a>. 
+  The top line shows text as it would normally be rendered, without any width restriction.
+  The middle line shows text with text-overflow=clip specified, and the bottom line shows
+  text with text-overflow=ellipsis.</p>
+
+  <pre><![CDATA[
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="180" height="120" viewBox="0 0 180 120">
+  <style>
+    text { font: 16px sans-serif; }
+    rect { fill: none; stroke: black; vector-effect: non-scaling-stroke; stroke-width: 1; }
+  </style>
+
+  <g>
+    <rect x="19.5" y="16.5" width="100" height="20"/>
+    <text x="20" y="2em" width="100">SVG is awesome</text>
+  </g>
+
+  <g transform="translate(0,30)">
+    <rect x="19.5" y="16.5" width="100" height="20"/>
+    <text x="20" y="2em" width="100" text-overflow="clip">SVG is awesome</text>
+  </g>
+
+  <g transform="translate(0,60)">
+    <rect x="19.5" y="16.5" width="100" height="20"/>
+    <text x="20" y="2em" width="100" text-overflow="ellipsis">SVG is awesome</text>
+  </g>
+</svg>
+]]></pre>
+
+  <div class="figure">
+    <img class="bordered" src="images/text/text-overflow-ref.svg"/>
+    <p class="caption">The <a>'text-overflow'</a> property used on text elements, the bottom line showing text with an ellipsis applied.</p>
+  </div>
+</div>
+
+</div>
 
 <h2 id='AlignmentProperties'>Alignment properties</h2>
 
