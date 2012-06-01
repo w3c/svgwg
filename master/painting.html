@@ -1293,12 +1293,9 @@ its inherited value can affect descendant elements.</p>
   <p>Owner: Cameron (ACTION-3286)</p>
 </div>
 
-<p class="issue">Need to define a mechanism for setting back a stroke by a certain
-amount, and/or specifying a clip path for the stroke when a marker is used.</p>
-
 <edit:with element='marker'>
 
-<p>A marker is a symbol that is painted at particular positions along
+<p>A marker is a graphical object that is painted at particular positions along
 a <a>'path'</a>, <a>'line'</a>, <a>'polyline'</a> or <a>'polygon'</a>
 element, together known as the <a>markable elements</a>.  There are four ways
 markers can be placed on these elements:</p>
@@ -1307,10 +1304,10 @@ markers can be placed on these elements:</p>
   <li>The <a>'marker-start'</a> and <a>'marker-end'</a> properties
   can be used to place markers at the first and last vertex, and the
   <a>'marker-mid'</a> property can be used to place markers at every
-  other vertex (aside from the first and last) or at the center of
-  every path segment.  The <a>'marker-start'</a> and <a>'marker-end'</a>
-  can be used for example to add arrowheads to paths.  Markers placed using
-  these properties are known as <dfn id="TermVertexMarkers">vertex markers</dfn>.</li>
+  other vertex (aside from the first and last).  The <a>'marker-start'</a> and
+  <a>'marker-end'</a> can be used for example to add arrowheads to paths.
+  Markers placed using these properties are known as
+  <dfn id="TermVertexMarkers">vertex markers</dfn>.</li>
 
   <li>The <a>'marker-segment'</a> property can be used to place markers
   at the center of every path segment.  These markers are known as
@@ -1340,7 +1337,8 @@ as the <dfn id="TermMarkerProperties">marker properties</dfn>, reference
 <p>Markers can be animated, and as with <a>'use'</a> elements, the animated
 effects will show on all current uses of the markers within the document.</p>
 
-<p>Markers on a given element are painted in the following order:</p>
+<p>Markers on a given element are painted in the following order, from
+bottom to top:</p>
 
 <ul>
   <li>any marker specified by <a>'marker-start'</a></li>
@@ -1448,7 +1446,8 @@ following meanings:</p>
 
 <p>The <a>'markerWidth'</a> and <a>'markerHeight'</a> attributes
 represent the size of the viewport into which the marker is to
-be fitted when it is rendered.  A value of zero for either
+be fitted according to the <a>'viewBox'</a> and <a>'preserveAspectRatio'</a>
+attributes.  A value of zero for either
 attribute results in nothing being rendered for the marker.  A negative value
 for either attribute is an error (see
 <a href="implnote.html#ErrorProcessing">Error processing</a>).</p>
@@ -1475,7 +1474,7 @@ for either attribute is an error (see
 <dd>
 
 <p>The <a>'refX'</a> and <a>'refY'</a> attributes define the reference
-point of the marker which is to be aligned exactly at the marker's
+point of the marker which is to be placed exactly at the marker's
 position on the <a>markable element</a>.  They are interpreted as being in the
 coordinate system of the marker contents, after application of the
 <a>'viewBox'</a> and <a>'preserveAspectRatio'</a> attributes.</p>
@@ -1517,8 +1516,9 @@ Values have the following meaning:</p>
     the direction the marker is oriented is, if considering the
     incoming and outgoing directions as unit vectors, in the
     direction of the sum of these two vectors.  If this sum
-    is zero, then the marker is oriented in the incoming direction.
-    If the marker is on the first or last vertex of a closed subpath, then the
+    is zero, then the marker is oriented in the incoming direction.</p>
+
+    <p>If the marker is on the first or last vertex of a closed subpath, then the
     incoming direction taken from the final path segment and the outgoing
     direction is taken from:</p>
     
@@ -1546,6 +1546,10 @@ Values have the following meaning:</p>
     of the positive y-axis of the <a>markable element</a>'s user space.</p>
   </dd>
 </dl>
+
+<p>The orientation occurs after the marker has been fitted into its
+viewport.  See the <a href="#MarkerAlgorithm">Details on how markers are rendered</a>
+section below for an illustrative example.</p>
 
 </dd>
 
@@ -1856,7 +1860,7 @@ property</h3>
 on path edges, as is common in for example line graphs.</p>
 
 <p>The <a>'marker-segment'</a> property is used to specify the marker that will
-be drawn at the center of each non-zero length path segment.  Possible values
+be drawn at the center of each length path segment.  Possible values
 are:</p>
 
 <dl>
@@ -1922,7 +1926,7 @@ property</h3>
   </tr>
   <tr>
     <th>Value:</th>
-    <td>none | [ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;funciri&gt;</a> ]+</td>
+    <td>[ none | <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;funciri&gt;</a> ]+</td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -1963,7 +1967,8 @@ Values have the following meanings:</p>
 
 <dl>
   <dt><span class="prop-value">none</span></dt>
-  <dd>Indicates that no <a>repeating markers</a> will be painted.</dd>
+  <dd>Indicates that no marker will be painted at the current
+  position along the path.</dd>
 
   <dt><span class="prop-value"><a>&lt;length&gt;</a></span></dt>
   <dt><span class="prop-value"><a>&lt;percentage&gt;</a></span></dt>
@@ -2099,7 +2104,7 @@ Values for have the following meanings:</p>
   specified, and sets <a>'marker-pattern'</a> to
   <span class="prop-value">none</span>.</dd>
 
-  <dt><span class="prop-value">[ none | <a>&lt;funciri&gt;</a> ]{4} / <a class="property" href="#MarkerPatternProperty">&lt;‘marker-pattern’&gt;</a></span></dt>
+  <dt><span class="prop-value">[ none | <a>&lt;funciri&gt;</a> ]{1,4} / <a class="property" href="#MarkerPatternProperty">&lt;‘marker-pattern’&gt;</a></span></dt>
   <dd>Sets <a>'marker-start'</a>, <a>'marker-segment'</a>, <a>'marker-mid'</a>
   and <a>'marker-end'</a> to the four <a>&lt;funciri&gt;</a> values
   specified before the slash, and sets <a>'marker-pattern'</a> to
@@ -2130,7 +2135,7 @@ Values for have the following meanings:</p>
   </tr>
   <tr>
     <th>Initial:</th>
-    <td>none</td>
+    <td>0</td>
   </tr>
   <tr>
     <th>Applies to:</th>
