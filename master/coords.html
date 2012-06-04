@@ -153,6 +153,7 @@ identifier has been provided), then the value is assumed to be
 equivalent to the same number of "px" units (see <a
 href="coords.html#Units">Units</a>).</p>
 
+<div class="example">
 <p>In the following example, an SVG graphic is embedded inline
 within a parent XML document which is formatted using CSS
 layout rules. Since CSS positioning properties are not provided
@@ -174,6 +175,7 @@ determine the size of the initial viewport:</p>
    
 &lt;/parent&gt;
 </pre>
+</div>
 
 <p>The initial clipping path for the SVG document fragment is
 established according to the rules described in <a
@@ -293,85 +295,6 @@ to the origin coordinate system.</p>
 
 <edit:example href='images/coords/Skew.svg' name='Skew' description="Show effects of skewX and skewY" image='yes' link='yes'/>
 
-<p id="TransformMatrixDefined">Mathematically, all transformations can be represented as
-3x3 <a>transformation matrices</a> of
-the following form:<br />
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-src="images/coords/Matrix.png"
-alt="3-by-3 transformation matrix" width="104"
-height="83" /></p>
-
-<p>Since only six values are used in the above 3x3 matrix, a
-transformation matrix is also expressed as a vector: <strong>[a
-b c d e f]</strong>.</p>
-
-<p>Transformations map coordinates and lengths from a new
-coordinate system into a previous coordinate system:<br />
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-src="images/coords/MatrixMultiply.png"
-alt="3-by-3 transformation matrix" width="408"
-height="83" /></p>
-
-<p>Simple transformations are represented in matrix form as
-follows:</p>
-
-<ul>
-  <li id="TranslationDefined">
-  Translation is equivalent to the matrix<br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-  src="images/coords/MatrixTranslate.png"
-  alt="Translation matrix" width="104" height="83" /><br />
-   or <strong>[1 0 0 1 tx ty]</strong>, where <em>tx</em> and
-  <em>ty</em> are the distances to translate coordinates in
-  <em>X</em> and <em>Y</em>, respectively.<br />
-  <br />
-  </li>
-
-  <li id="ScalingDefined"> Scaling is
-  equivalent to the matrix<br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-  src="images/coords/MatrixScale.png" alt="Scale matrix"
-  width="104" height="83" /><br />
-   or <strong>[sx 0 0 sy 0 0]</strong>. One unit in the
-  <em>X</em> and <em>Y</em> directions in the new coordinate
-  system equals <em>sx</em> and <em>sy</em> units in the
-  previous coordinate system, respectively.<br />
-  <br />
-  </li>
-
-  <li id="RotationDefined"> Rotation
-  about the origin is equivalent to the matrix<br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-  src="images/coords/MatrixRotate.png" alt="Rotation matrix"
-  width="169" height="83" /><br />
-   or <strong>[cos(a) sin(a) -sin(a) cos(a) 0 0]</strong>,
-  which has the effect of rotating the coordinate system axes
-  by angle <em>a</em>.<br />
-  <br />
-  </li>
-  <li id="SkewXDefined"> A skew
-  transformation along the x-axis is equivalent to the
-  matrix<br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-  src="images/coords/MatrixSkewX.png" alt="SkewX matrix"
-  width="131" height="83" /><br />
-   or <strong>[1 0 tan(a) 1 0 0]</strong>, which has the effect
-  of skewing X coordinates by angle <em>a</em>.<br />
-  <br />
-  </li>
-
-  <li id="SkewYDefined"> A skew
-  transformation along the y-axis is equivalent to the
-  matrix<br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img
-  src="images/coords/MatrixSkewY.png" alt="SkewY matrix"
-  width="131" height="83" /><br />
-   or <strong>[1 tan(a) 0 1 0 0]</strong>, which has the effect
-  of skewing Y coordinates by angle <em>a</em>.<br />
-  <br />
-  </li>
-</ul>
-
 <h2 id="NestedTransformations">Nested transformations</h2>
 <p>Transformations can be nested to any level. The effect of
 nested transformations is to post-multiply (i.e., concatenate)
@@ -409,204 +332,24 @@ follows:<br />
  <img src="images/coords/NestedCalcs.png"
 alt="Matrix concatenation" width="512" height="296" /></p>
 
+
 <h2 id="TransformAttribute">The <span class="attr-name">'transform'</span> attribute</h2>
+
+<div class="annotation">
+<p>The 'transform' attribute is now a property</p>
+</div>
 
 <p id="TransformList">The value of the <a>'transform'</a>
 attribute is a &lt;transform-list&gt;, which is defined as a
 list of transform definitions, which are applied in the order
-provided. The individual transform definitions are separated by
-whitespace and/or a comma. The available types of transform
-definitions include:</p>
+provided.</p>
 
-<ul>
-  <li><span class="attr-value">matrix(&lt;a&gt; &lt;b&gt;
-  &lt;c&gt; &lt;d&gt; &lt;e&gt; &lt;f&gt;)</span>, which
-  specifies a transformation in the form of a <a
-  href="coords.html#TransformMatrixDefined">transformation
-  matrix</a> of six values. <span
-  class="attr-value">matrix(a,b,c,d,e,f)</span> is equivalent
-  to applying the transformation matrix <strong>[a b c d e
-  f]</strong>.<br />
-   &nbsp;</li>
-
-  <li><span class="attr-value">translate(&lt;tx&gt;
-  [&lt;ty&gt;])</span>, which specifies a <a
-  href="coords.html#TranslationDefined">translation</a> by
-  <em>tx</em> and <em>ty</em>. If <em>&lt;ty&gt;</em> is not
-  provided, it is assumed to be zero.<br />
-   &nbsp;</li>
-
-  <li><span class="attr-value">scale(&lt;sx&gt;
-  [&lt;sy&gt;])</span>, which specifies a <a
-  href="coords.html#ScalingDefined">scale</a> operation by
-  <em>sx</em> and <em>sy</em>. If <em>&lt;sy&gt;</em> is not
-  provided, it is assumed to be equal to
-  <em>&lt;sx&gt;</em>.<br />
-   &nbsp;</li>
-
-  <li><span class="attr-value">rotate(&lt;rotate-angle&gt;
-  [&lt;cx&gt; &lt;cy&gt;])</span>, which specifies a <a
-  href="coords.html#RotationDefined">rotation</a> by <span
-  class="attr-value">&lt;rotate-angle&gt;</span> degrees about
-  a given point.<br />
-   If optional parameters <span
-  class="attr-value">&lt;cx&gt;</span> and <span
-  class="attr-value">&lt;cy&gt;</span> are not supplied, the
-  rotate is about the origin of the current user coordinate
-  system. The operation corresponds to the matrix
-  <strong>[cos(a) sin(a) -sin(a) cos(a) 0 0]</strong>.<br />
-   If optional parameters <span
-  class="attr-value">&lt;cx&gt;</span> and <span
-  class="attr-value">&lt;cy&gt;</span> are supplied, the rotate
-  is about the point (<var>cx</var>, <var>cy</var>).
-  The operation represents the equivalent
-  of the following specification: <span
-  class="attr-value">translate(&lt;cx&gt;, &lt;cy&gt;)
-  rotate(&lt;rotate-angle&gt;) translate(-&lt;cx&gt;,
-  -&lt;cy&gt;)</span>.<br />
-   &nbsp;</li>
-
-  <li><span
-  class="attr-value">skewX(&lt;skew-angle&gt;)</span>, which
-  specifies a <a href="coords.html#SkewXDefined">skew
-  transformation along the x-axis</a>.<br />
-   &nbsp;</li>
-
-  <li><span
-  class="attr-value">skewY(&lt;skew-angle&gt;)</span>, which
-  specifies a <a href="coords.html#SkewYDefined">skew
-  transformation along the y-axis</a>.<br />
-   &nbsp;</li>
-</ul>
-
-<p>All numeric values are <a>&lt;number&gt;</a>s.</p>
-
-<p>If a list of transforms is provided, then the net effect is
-as if each transform had been specified separately in the order
-provided. For example,</p>
-
-<pre>
-&lt;g transform="translate(-10,-20) scale(2) rotate(45) translate(5,10)"&gt;
-  &lt;!-- graphics elements go here --&gt;
-&lt;/g&gt;
-</pre>
-
-<p>is functionally equivalent to:</p>
-
-<pre>
-&lt;g transform="translate(-10,-20)"&gt;
-  &lt;g transform="scale(2)"&gt;
-    &lt;g transform="rotate(45)"&gt;
-      &lt;g transform="translate(5,10)"&gt;
-        &lt;!-- graphics elements go here --&gt;
-      &lt;/g&gt;
-    &lt;/g&gt;
-  &lt;/g&gt;
-&lt;/g&gt;
-</pre>
-
-<p id="TransformAttributeEffectOnSiblingAttributes">The <a>'transform'</a> attribute is
-applied to an element before processing any other coordinate or
-length values supplied for that element. In the element</p>
-
-<pre>
-&lt;rect x="10" y="10" width="20" height="20" transform="scale(2)"/&gt;
-</pre>
-
-<p>the x, y, width and height values are processed after the
-current coordinate system has been scaled uniformly by a factor
-of 2 by the <a>'transform'</a> attribute.
-Attributes x, y, width and height (and any other attributes or
-properties) are treated as values in the new user coordinate
-system, not the previous user coordinate system. Thus, the
-above <a>'rect'</a> element is
-functionally equivalent to:</p>
-
-<pre>
-&lt;g transform="scale(2)"&gt;
-  &lt;rect x="10" y="10" width="20" height="20"/&gt;
-&lt;/g&gt;
-</pre>
-
-<p>The following is the Backus-Naur Form (BNF) for values for
-the <a>'transform'</a> attribute. The
-following notation is used:</p>
-
-<ul>
-  <li>*: 0 or more</li>
-  <li>+: 1 or more</li>
-  <li>?: 0 or 1</li>
-  <li>(): grouping</li>
-  <li>|: separates alternatives</li>
-  <li>double quotes surround literals</li>
-</ul>
-
-<pre>
-transform-list:
-    wsp* transforms? wsp*
-transforms:
-    transform
-    | transform comma-wsp+ transforms
-transform:
-    matrix
-    | translate
-    | scale
-    | rotate
-    | skewX
-    | skewY
-matrix:
-    "matrix" wsp* "(" wsp*
-       number comma-wsp
-       number comma-wsp
-       number comma-wsp
-       number comma-wsp
-       number comma-wsp
-       number wsp* ")"
-translate:
-    "translate" wsp* "(" wsp* number ( comma-wsp number )? wsp* ")"
-scale:
-    "scale" wsp* "(" wsp* number ( comma-wsp number )? wsp* ")"
-rotate:
-    "rotate" wsp* "(" wsp* number ( comma-wsp number comma-wsp number )? wsp* ")"
-skewX:
-    "skewX" wsp* "(" wsp* number wsp* ")"
-skewY:
-    "skewY" wsp* "(" wsp* number wsp* ")"
-number:
-    sign? integer-constant
-    | sign? floating-point-constant
-comma-wsp:
-    (wsp+ comma? wsp*) | (comma wsp*)
-comma:
-    ","
-integer-constant:
-    digit-sequence
-floating-point-constant:
-    fractional-constant exponent?
-    | digit-sequence exponent
-fractional-constant:
-    digit-sequence? "." digit-sequence
-    | digit-sequence "."
-exponent:
-    ( "e" | "E" ) sign? digit-sequence
-sign:
-    "+" | "-"
-digit-sequence:
-    digit
-    | digit digit-sequence
-digit:
-    "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-wsp:
-    (#x20 | #x9 | #xD | #xA)
-</pre>
+<div class="note">See the CSS3 Transforms spec [<a href="refs.html#ref-CSS3TRANSFORMS">CSS3TRANSFORMS</a>].</div>
 
 <p>For the <a>'transform'</a> attribute:</p>
 
 <p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="anim-target"><a
 href="animate.html#Animatable">Animatable</a>: yes.</span></p>
-
-<p>See the <a>'animateTransform'</a> element for
-information on animating transformations.</p>
 
 <h2 id="ViewBoxAttribute">The <span class="attr-name">'viewBox'</span> attribute</h2>
 
