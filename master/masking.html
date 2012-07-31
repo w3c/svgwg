@@ -537,9 +537,7 @@ fine-grained control over the interactions between hit testing and clipping.</p>
 
 <h2 id="Masking">Masking</h2>
 
-<edit:with element='mask'>
-
-<p id="MaskElement">In SVG, you can specify that any other graphics
+<p>In SVG, you can specify that any other graphics
 object or <a>'g'</a> element can be used as an alpha mask for
 compositing the current object into the background.</p>
 
@@ -550,17 +548,6 @@ used/referenced using the <a>'mask property'</a> property.</p>
 <a>container elements</a> such as
 a <a>'g'</a>.</p>
 
-<p>It is an error if the <a>'mask property'</a> property references a
-non-existent object or if the referenced object is not a <a>'mask element'</a>
-element (see <a href="implnote.html#ErrorProcessing">Error Processing</a>).</p>
-
-<p class="annotation">
-<a href="https://www.w3.org/Graphics/SVG/WG/track/actions/3256">ACTION-3256</a>
-will investigate lifting the above restriction, i.e. allowing the <a>'mask
-property'</a> property to target arbitrary graphics objects without the <a>'mask
-element'</a> element wrapper.
-</p>
-
 <p>The effect is as if the child elements of the <a>'mask element'</a> are
 rendered into an offscreen image which has been initialized to transparent
 black. Any graphical object which uses/references the given
@@ -568,42 +555,48 @@ black. Any graphical object which uses/references the given
 mask, thus completely or partially masking out parts of the graphical
 object.</p>
 
-<p>The procedure for calculating the mask value is determined by the
-<a>'maskType'</a> attribute.
-If the <a>'maskType'</a> is <span class="attr-value">'luminance'</span> then the
-mask value at a given point is computed from the color channel values and alpha
-channel value.
-If the <a>'maskType'</a> is <span class="attr-value">'alpha'</span> then the
-mask value is computed from the alpha channel value only, the color channels do
-not contribute to the mask value.</p>
+<h3 id="MaskValues">Calculating mask values</h3>
 
-<p>If the <a>'maskType'</a> is <span class="attr-value">'luminance'</span>, the
-procedure for calculating the mask value at a given point is as follows.
-First, compute a luminance value from the color channel values.</p>
+<p>
+A mask source may be interpreted using one of two different methods with regards
+to calculating the mask values that will be multiplied with the target alpha
+values.
+</p>
 
-<ul>
-  <li>
-  If the computed value of <a>'color-interpolation'</a> on the <a>'mask
-element'</a> element is <span class="attr-value">linearRGB</span>, convert the
-original image color values (potentially in the sRGB color space) to the linear
-RGB color space (see <a
-  href="painting.html#RenderingProperties">Rendering properties</a>).
-  </li>
-  <li>Then, using non-premultiplied RGB color values, apply the
-  luminance-to-alpha coefficients (as defined in the <a>'feColorMatrix'</a>
-  filter primitive) to convert the RGB color values to luminance
-  values.
-  </li>
-</ul>
+<p>
+The first and simplest method of calculating the mask values is to use the alpha
+channel of the mask source.
+In this case the mask value at a given point is simply the value of the alpha channel at that point.
+The color channels do not contribute to the mask value.
+</p>
 
-<p>Finally, multiply the computed luminance value by the corresponding alpha
-value to produce the mask value.</p>
+<p>
+The second method of calculating the mask values is to use the luminance of the mask source.
+In this case the mask value at a given point is computed from the color channel values and alpha channel value using the following procedure.
+</p>
 
-<p>If the <a>'maskType'</a> is <span class="attr-value">'alpha'</span>, the mask
-value at a given point is simply the value of the alpha channel at that
-point.</p>
+<ol>
+<li>Compute a luminance value from the color channel values.
+  <ul>
+    <li>
+    If the computed value of <a>'color-interpolation'</a> on the <a>'mask
+  element'</a> element is <span class="attr-value">linearRGB</span>, convert the
+  original image color values (potentially in the sRGB color space) to the linear
+  RGB color space (see <a
+    href="painting.html#RenderingProperties">Rendering properties</a>).
+    </li>
+    <li>Then, using non-premultiplied RGB color values, apply the
+    luminance-to-alpha coefficients (as defined in the <a>'feColorMatrix'</a>
+    filter primitive) to convert the RGB color values to luminance
+    values.
+    </li>
+  </ul>
+</li>
+<li>Multiply the computed luminance value by the corresponding alpha
+value to produce the mask value.</li>
+</ol>
 
-<p>Regardless of the value of <a>'maskType'</a>, the procedure for calculating
+<p>Regardless of the method used, the procedure for calculating
 mask values assumes the content of the mask is a four-channel RGBA graphics
 object.
 For other types of graphics objects, special handling is required as
@@ -635,6 +628,10 @@ were multiplied with the mask's resulting mask values.</p>
 an image to mask a rectangle.</p>
 
 <edit:example href='images/masking/mask01.svg' name='mask01' description='blue text masked with gradient against red background' image='yes' link='yes'/>
+
+<h3 id="MaskElement">The <span class="element-name">'mask'</span> element</h3>
+
+<edit:with element='mask'>
 
 <edit:elementsummary name='mask'/>
 
@@ -701,9 +698,10 @@ an image to mask a rectangle.</p>
         "<em>luminance</em> | <em>alpha</em>"</dt>
         <dd>
          Defines the procedure used for calculating mask values from the
-        contents of the mask as described in <a href="#Masking">Masking</a>.
+        contents of the mask as described in <a href="#MaskValues">Calculating
+        mask values</a>.
         <br />
-         If attribute <a>'maskType'</a> is not specified,
+        If attribute <a>'maskType'</a> is not specified,
         then the effect is as if a value of <span
         class="attr-value">'luminance'</span> were
         specified.<br />
@@ -711,9 +709,9 @@ an image to mask a rectangle.</p>
         href="animate.html#Animatable">Animatable</a>:
         yes.</span>
         <div class="annotation">
-          Although authors will generally find <span
-          class="attr-value">'alpha'</span> more useful, the default value is
-          <span class="attr-value">'luminance'</span> to provide backwards
+          Although authors may find <span class="attr-value">'alpha'</span> more
+          intuitive, the default value is <span
+          class="attr-value">'luminance'</span> to provide backwards
           compatibility with SVG 1.1.
         </div>
         </dd>
@@ -789,7 +787,9 @@ elements are available for referencing even when the <a>'display'</a> property
 on the <a>'mask element'</a> element or any of its ancestors is set to
 <span class="prop-value">none</span>.</p>
 
-<p>The following is a description of the <a>'mask property'</a> property.</p>
+</edit:with>
+
+<h3 id="mask-property">The <span class="property">'mask'</span> property</h3>
 
 <table class="propdef">
   <tr>
@@ -798,7 +798,8 @@ on the <a>'mask element'</a> element or any of its ancestors is set to
   </tr>
   <tr>
     <th>Value:</th>
-    <td>&lt;funciri&gt; | none</td>
+    <td>[ <a>&lt;mask-source&gt;</a> [ luminance | alpha | auto ]? ]
+        | none </td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -822,25 +823,84 @@ on the <a>'mask element'</a> element or any of its ancestors is set to
   </tr>
   <tr>
     <th>Computed&#160;value:</th>
-    <td>as specified, but with <a>&lt;funciri&gt;</a> values made absolute</td>
+    <td>A <a>&lt;mask-source&gt;</a> followed by a mask type
+      (one of <span class="prop-value">luminance</span>,
+              <span class="prop-value">alpha</span>, or
+              <span class="prop-value">auto</span>),
+        or otherwise the keyword <span class="prop-value">none</span>.</td>
   </tr>
   <tr>
     <th><a>Animatable</a>:</th>
     <td>yes</td>
   </tr>
 </table>
+<p>Where:</p>
+<dl>
+  <dt id="DataTypeMaskSource"><span class="prop-value">&lt;mask-source&gt;</span> =</dt>
+  <dd>
+    <a>&lt;funciri&gt;</a> | child | element(<a>&lt;compound-selector&gt;</a>)
+  </dd>
+</dl>
+
+<p>
+The meaning of the different <a>&lt;mask-source&gt;</a> values is as follows:
+</p>
 
 <dl>
   <dt><span class="prop-value"><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a></span></dt>
   <dd>An <a>IRI reference</a> to another graphical object which will be used
   as the mask.</dd>
+  <dt><span class="prop-value">child</span></dt>
+  <dd>A keyword to indicate that the last child <a>'mask element'</a>
+  element should be used as the mask. It is equivalent to
+  <span class="prop-value">element(mask:last-of-type)</span>.</dd>
+  <dt><span class="prop-value">element (<a href="types.html#DataTypeCompoundSelector">&lt;compound-selector&gt;</a>)</span></dt>
+  <dd>A <a>&lt;compound-selector&gt;</a> scoped at the element to which the
+    <span class="property">'mask'</span> property is applied.
+    As a result, only children of the element may be used for the mask source.
+  </dd>
 </dl>
 
-<p class="issue">Even though this says "another graphical object",
-text in an earlier section says that <a>'mask property'</a> can
-only reference a <a>'mask element'</a> element.</p>
+<p>
+If a <a>&lt;mask-source&gt;</a> is provided, a mask type may also be specified.
+If a <a>&lt;mask-source&gt;</a> is provided without a mask type, the value <span class="prop-value">auto</span> is used.
+</p>
 
-</edit:with>
+<p>
+If a mask type other than <span class="prop-value">auto</span> is specified
+and the <a>&lt;mask-source&gt;</a> refers to a <a>'mask element'</a> element
+with a <a>'mask/maskType'</a> attribute, the mask type specified on the <a>'mask
+property'</a> property takes precedence.
+</p>
+
+<p>The possible values for the mask type are as follows:</p>
+
+<dl>
+  <dt><span class="prop-value">luminance</span></dt>
+  <dd>
+  Indicates the luminance values of the mask source should be used as the mask
+  values as described in <a href="#MaskValues">Calculating mask values</a>.
+  </dd>
+  <dt><span class="prop-value">alpha</span></dt>
+  <dd>
+  Indicates the alpha values of the mask source should be used as the mask
+  values as described in <a href="#MaskValues">Calculating mask values</a>.
+  </dd>
+  <dt><span class="prop-value">auto</span></dt>
+  <dd>
+  If the mask source is a <a>'mask element'</a> element, the type of mask is
+  determined by the <a>'mask/maskType'</a> attribute on the <a>'mask
+  element'</a> element.
+  Otherwise, the alpha values of the mask source should be used as the 
+  mask values as described in <a href="#MaskValues">Calculating mask values</a>.
+  </dd>
+</dl>
+
+<p>
+  The <a href="intro.html#TermLacunaValue"><span class="svg-term">lacuna value</span></a>
+  for the <span class="property">'mask'</span> property is <span
+  class="prop-value">'none'</span>.
+</p>
 
 <div class="ready-for-wg-review">
 <h2 id="ObjectAndGroupOpacityProperties">Object and group opacity: the
