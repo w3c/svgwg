@@ -537,25 +537,163 @@ fine-grained control over the interactions between hit testing and clipping.</p>
 
 <h2 id="Masking">Masking</h2>
 
-<p>In SVG, you can specify that any other graphics
-object or <a>'g'</a> element can be used as an alpha mask for
-compositing the current object into the background.</p>
+<p>In SVG, it is possible to specify another graphics element or file
+to be used as an alpha mask for compositing the current object into the
+background.</p>
 
-<p>A mask is defined with a <a>'mask element'</a> element. A mask is
-used/referenced using the <a>'mask property'</a> property.</p>
+<p>
+A mask is applied using the <a>'mask property'</a> property.
+The mask source may be defined using a <a>'mask element'</a> element.
+Alternatively, for many simple uses, the <a>'mask property'</a> property may
+refer directly to graphical elements or images to be used as the mask source
+content forgoing the need for an explicit <a>'mask element'</a> element.
+</p>
 
-<p>A <a>'mask element'</a> can contain any graphical elements or
-<a>container elements</a> such as
-a <a>'g'</a>.</p>
-
-<p>The effect is as if the child elements of the <a>'mask element'</a> are
+<p>
+The effect of applying a mask is as if the mask source elements are
 rendered into an offscreen image which has been initialized to transparent
-black. Any graphical object which uses/references the given
-<a>'mask element'</a> element will be painted onto the background through the
+black.
+The graphical object to which the mask is applied
+will be painted onto the background through the
 mask, thus completely or partially masking out parts of the graphical
 object.</p>
 
-<h3 id="MaskValues">Calculating mask values</h3>
+<p id="ExampleMask01"><span class="example-ref">Example mask01</span> uses
+an image to mask a rectangle.</p>
+
+<edit:example href='images/masking/mask01.svg' name='mask01' description='blue text masked with gradient against red background' image='yes' link='yes'/>
+
+<h3 id="mask-property">The <span class="property">'mask'</span> property</h3>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="MaskProperty">mask</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>[ <a>&lt;mask-source&gt;</a> [ luminance | alpha | auto ]? ]
+        | none </td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>container elements</a> and <a>graphics elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>A <a>&lt;mask-source&gt;</a> followed by a mask type
+      (one of <span class="prop-value">luminance</span>,
+              <span class="prop-value">alpha</span>, or
+              <span class="prop-value">auto</span>),
+        or otherwise the keyword <span class="prop-value">none</span>.</td>
+  </tr>
+  <tr>
+    <th><a>Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+<p>Where:</p>
+<dl>
+  <dt id="DataTypeMaskSource"><span class="prop-value">&lt;mask-source&gt;</span> =</dt>
+  <dd>
+    <a>&lt;funciri&gt;</a> | child | element(<a>&lt;compound-selector&gt;</a>)
+  </dd>
+</dl>
+
+<p>
+The meaning of the different <a>&lt;mask-source&gt;</a> values is as follows:
+</p>
+
+<dl>
+  <dt><span class="prop-value"><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a></span></dt>
+  <dd>An <a>IRI reference</a> to another graphical object which will be used
+  as the mask source.</dd>
+  <dt><span class="prop-value">child</span></dt>
+  <dd>A keyword to indicate that the last child <a>'mask element'</a>
+  element should be used as the mask source. It is equivalent to
+  <span class="prop-value">element(mask:last-of-type)</span>.</dd>
+  <dt><span class="prop-value">element (<a href="types.html#DataTypeCompoundSelector">&lt;compound-selector&gt;</a>)</span></dt>
+  <dd>A <a>&lt;compound-selector&gt;</a> scoped at the element to which the
+    <span class="property">'mask'</span> property is applied specifying the
+    element to use as the mask source.
+    As a result, only children of the target element may be used for the mask
+    source.
+  </dd>
+</dl>
+
+<p>
+If a <a>&lt;mask-source&gt;</a> is provided, a mask type may also be specified.
+The mask type determines which of the methods described in <a
+href="#MaskValues">Calculating mask values</a> should be used for calculating
+mask values from the mask source.
+</p>
+
+<p>
+If a <a>&lt;mask-source&gt;</a> is provided without a mask type, the value <span class="prop-value">auto</span> is used.
+</p>
+
+<p>
+If a mask type other than <span class="prop-value">auto</span> is specified
+and the <a>&lt;mask-source&gt;</a> refers to a <a>'mask element'</a> element
+with a <a>'mask/maskType'</a> attribute, the mask type specified on the <a>'mask
+property'</a> property takes precedence.
+</p>
+
+<p>The possible values for the mask type are as follows:</p>
+
+<dl>
+  <dt><span class="prop-value">luminance</span></dt>
+  <dd>
+  Indicates that the luminance values of the mask source should be used as the
+  mask values.
+  </dd>
+  <dt><span class="prop-value">alpha</span></dt>
+  <dd>
+  Indicates that the alpha values of the mask source should be used as the mask
+  values.
+  </dd>
+  <dt><span class="prop-value">auto</span></dt>
+  <dd>
+  If the mask source is a <a>'mask element'</a> element, the method used for
+  calculating the mask values is determined by the <a>'mask/maskType'</a>
+  attribute on the <a>'mask element'</a> element.
+  Otherwise, the alpha values of the mask source should be used as the 
+  mask values.
+  </dd>
+</dl>
+
+<p>
+  The <a href="intro.html#TermLacunaValue"><span class="svg-term">lacuna value</span></a>
+  for the <span class="property">'mask'</span> property is <span
+  class="prop-value">'none'</span>.
+</p>
+
+<h3 id="MaskSources">Mask source content</h3>
+
+<p>
+The content and behavior of a mask can be defined using a <a>'mask element'</a>
+element.
+Alternatively, for many simple uses, the <a>'mask property'</a> property can
+refer directly to a graphics element or file to use as the mask source.
+</p>
+
+<h4 id="MaskValues">Calculating mask values</h4>
 
 <p>
 A mask source may be interpreted using one of two different methods with regards
@@ -624,12 +762,7 @@ of masking operations.</p>
 there were no mask but instead the alpha channel of the given object
 were multiplied with the mask's resulting mask values.</p>
 
-<p id="ExampleMask01"><span class="example-ref">Example mask01</span> uses
-an image to mask a rectangle.</p>
-
-<edit:example href='images/masking/mask01.svg' name='mask01' description='blue text masked with gradient against red background' image='yes' link='yes'/>
-
-<h3 id="MaskElement">The <span class="element-name">'mask'</span> element</h3>
+<h4 id="MaskElement">Defining a mask source: the <span class="element-name">'mask'</span> element</h4>
 
 <edit:with element='mask'>
 
@@ -787,120 +920,134 @@ elements are available for referencing even when the <a>'display'</a> property
 on the <a>'mask element'</a> element or any of its ancestors is set to
 <span class="prop-value">none</span>.</p>
 
+<h4 id="DirectMaskSource">Directly referencing a mask source</h4>
+
+<p class="note">
+The ability to reference non-<a>'mask element'</a> content is new in SVG 2.
+</p>
+
+<p>
+In some cases the <a>'mask element'</a> element used to wrap mask source content
+is superfluous and it is more convenient to directly refer to the content to be
+used as a mask source instead.
+For example, when the the mask source is a raster image applied only once it is
+more convenient to refer directly to the image than first wrapping it in
+a <a>'mask element'</a> element.
+</p>
+
+<p>
+Besides a <a>'mask element'</a> element, the <a>'mask property'</a> property may
+refer the following types of mask source content:
+</p>
+
+<ul>
+  <li>any element that is permitted as a child of the <a>'mask element'</a>
+      element,</li>
+  <li>an <a>'svg'</a> element or external SVG document,</li>
+  <li>any raster image file supported by the <a>'image'</a> element.</li>
+</ul>
+
+<p>
+The effect of referring directly to content as a mask source depends on the
+type of the source content.
+</p>
+
+<dl>
+  <dt>
+    When the mask source content is a <a href="pservers.html">paint
+    server</a>,
+  </dt>
+  <dd>
+    <p>
+    The effect is as if the following steps were performed:
+    </p>
+    <ol>
+      <li>Create a new <a>'mask element'</a> element as a sibling of the
+          paint server element.</li>
+      <li>Let the <a>'maskUnits'</a> attribute be <span
+          class="attr-value">userSpaceOnUse</span>.</li>
+      <li>Let the dimensions of the mask 
+          (<a>'x'</a>, <a>'y'</a>, <a>'width'</a>, and <a>'height'</a>)
+          match the dimensions of the decorated bounding box of the mask
+          target.</li>
+      <li>Let the <a>'maskContentUnits'</a> attribute be <span
+          class="attr-value">objectBoundingBox</span>.</li>
+      <li>Create a new <a>'rect'</a> element as a child of the newly
+          created <a>'mask element'</a> element.</li>
+      <li>Let both the width and the height of the <a>'rect'</a> element be
+          <span class="attr-value">100%</span>.</li>
+      <li>Let the <a>'fill'</a> property of the <a>'rect'</a> element
+          refer to the paint server element.</li>
+      <li>Use the newly created <a>'mask element'</a> as the mask source.</li>
+    </ol>
+  </dd>
+  <dt>
+    When the mask source content is any other permitted SVG element
+    (including an SVG element in an external document),
+  </dt>
+  <dd>
+    <p>
+    The effect is as if the following steps were performed:
+    </p>
+    <ol>
+      <li>Create a new <a>'mask element'</a> element as a sibling of the
+          source element.</li>
+      <li>Let the <a>'maskUnits'</a> attribute be <span
+          class="attr-value">userSpaceOnUse</span>.</li>
+      <li>Let the dimensions of the mask 
+          (<a>'x'</a>, <a>'y'</a>, <a>'width'</a>, and <a>'height'</a>)
+          match the dimensions of the decorated bounding box of the mask
+          target.</li>
+      <li>Deep clone the source element and append it as a child of the newly
+          created <a>'mask element'</a> element.</li>
+      <li>Use the newly created <a>'mask element'</a> as the mask source.</li>
+    </ol>
+    <p>
+    One important result of this procedure is that the rendering of the
+    source content is unaffected by being referenced as a mask source.
+    </p>
+  </dd>
+  <dt>
+    When the mask source content is an external image resource (e.g. a raster
+    image file or an external SVG document),
+  </dt>
+  <dd>
+    The image is rendered into the mask buffer at 0,0 in the current user
+    coordinate space in place at the time when the <a>'mask property'</a>
+    property is applied.
+    The dimensions of the image is established by following the
+    <a href="http://www.w3.org/TR/css3-images/#object-negotiation">
+    CSS&#x21CB;Object Negotation algorithm</a> defined in 
+    [<a href="refs.html#ref-CSS3IMAGES">CSS3IMAGES</a>].
+    The dimensions of the mask are set to match the dimensions of the image.
+  </dd>
+  <dt>
+    Otherwise,
+  </dt>
+  <dd>
+    The type of source content is unsupported and the <a>'mask property'</a>
+    property is considered to have an unsupported value.
+  </dd>
+</dl>
+
+<p>
+Despite the ability to refer to mask source content directly, the <a>'mask
+element'</a> element still has many uses including the following:
+</p>
+
+<ul>
+  <li>To prevent the mask source content from rendering</li>
+  <li>To specify the bounds of the masking region</li>
+  <li>To make the coordinate system of the mask source content relative to the
+      bounds of the mask target (by setting
+      <a>'maskContentUnits'</a> to
+      <span class="attr-value">'objectBoundingBox'</span>)
+  </li>
+  <li>To add a level of semantic richness to the document by differentiating
+      mask source content from other graphical content</li>
+</ul>
+
 </edit:with>
-
-<h3 id="mask-property">The <span class="property">'mask'</span> property</h3>
-
-<table class="propdef">
-  <tr>
-    <th>Name:</th>
-    <td><dfn id="MaskProperty">mask</dfn></td>
-  </tr>
-  <tr>
-    <th>Value:</th>
-    <td>[ <a>&lt;mask-source&gt;</a> [ luminance | alpha | auto ]? ]
-        | none </td>
-  </tr>
-  <tr>
-    <th>Initial:</th>
-    <td>none</td>
-  </tr>
-  <tr>
-    <th>Applies to:</th>
-    <td><a>container elements</a> and <a>graphics elements</a></td>
-  </tr>
-  <tr>
-    <th>Inherited:</th>
-    <td>no</td>
-  </tr>
-  <tr>
-    <th>Percentages:</th>
-    <td>N/A</td>
-  </tr>
-  <tr>
-    <th>Media:</th>
-    <td>visual</td>
-  </tr>
-  <tr>
-    <th>Computed&#160;value:</th>
-    <td>A <a>&lt;mask-source&gt;</a> followed by a mask type
-      (one of <span class="prop-value">luminance</span>,
-              <span class="prop-value">alpha</span>, or
-              <span class="prop-value">auto</span>),
-        or otherwise the keyword <span class="prop-value">none</span>.</td>
-  </tr>
-  <tr>
-    <th><a>Animatable</a>:</th>
-    <td>yes</td>
-  </tr>
-</table>
-<p>Where:</p>
-<dl>
-  <dt id="DataTypeMaskSource"><span class="prop-value">&lt;mask-source&gt;</span> =</dt>
-  <dd>
-    <a>&lt;funciri&gt;</a> | child | element(<a>&lt;compound-selector&gt;</a>)
-  </dd>
-</dl>
-
-<p>
-The meaning of the different <a>&lt;mask-source&gt;</a> values is as follows:
-</p>
-
-<dl>
-  <dt><span class="prop-value"><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a></span></dt>
-  <dd>An <a>IRI reference</a> to another graphical object which will be used
-  as the mask.</dd>
-  <dt><span class="prop-value">child</span></dt>
-  <dd>A keyword to indicate that the last child <a>'mask element'</a>
-  element should be used as the mask. It is equivalent to
-  <span class="prop-value">element(mask:last-of-type)</span>.</dd>
-  <dt><span class="prop-value">element (<a href="types.html#DataTypeCompoundSelector">&lt;compound-selector&gt;</a>)</span></dt>
-  <dd>A <a>&lt;compound-selector&gt;</a> scoped at the element to which the
-    <span class="property">'mask'</span> property is applied.
-    As a result, only children of the element may be used for the mask source.
-  </dd>
-</dl>
-
-<p>
-If a <a>&lt;mask-source&gt;</a> is provided, a mask type may also be specified.
-If a <a>&lt;mask-source&gt;</a> is provided without a mask type, the value <span class="prop-value">auto</span> is used.
-</p>
-
-<p>
-If a mask type other than <span class="prop-value">auto</span> is specified
-and the <a>&lt;mask-source&gt;</a> refers to a <a>'mask element'</a> element
-with a <a>'mask/maskType'</a> attribute, the mask type specified on the <a>'mask
-property'</a> property takes precedence.
-</p>
-
-<p>The possible values for the mask type are as follows:</p>
-
-<dl>
-  <dt><span class="prop-value">luminance</span></dt>
-  <dd>
-  Indicates the luminance values of the mask source should be used as the mask
-  values as described in <a href="#MaskValues">Calculating mask values</a>.
-  </dd>
-  <dt><span class="prop-value">alpha</span></dt>
-  <dd>
-  Indicates the alpha values of the mask source should be used as the mask
-  values as described in <a href="#MaskValues">Calculating mask values</a>.
-  </dd>
-  <dt><span class="prop-value">auto</span></dt>
-  <dd>
-  If the mask source is a <a>'mask element'</a> element, the type of mask is
-  determined by the <a>'mask/maskType'</a> attribute on the <a>'mask
-  element'</a> element.
-  Otherwise, the alpha values of the mask source should be used as the 
-  mask values as described in <a href="#MaskValues">Calculating mask values</a>.
-  </dd>
-</dl>
-
-<p>
-  The <a href="intro.html#TermLacunaValue"><span class="svg-term">lacuna value</span></a>
-  for the <span class="property">'mask'</span> property is <span
-  class="prop-value">'none'</span>.
-</p>
 
 <div class="ready-for-wg-review">
 <h2 id="ObjectAndGroupOpacityProperties">Object and group opacity: the
