@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Scripting</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>Scripting</h1>
+
+<h2 id="ScriptElement">The <span class="element-name">'script'</span> element</h2>
+
+<div class="annotation">
+  <p>SVG 2 Requirement:  Consider allowing async/defer on &lt;svg:script&gt;</p>
+  <p>Resolution: SVG 2 will allow async/defer on &lt;svg:script&gt;</p>
+  <p><a href="http://www.w3.org/2012/01/05-svg-irc#T21-07-03">5 January 2012 SVG WG telcon</a>.</p>
+  <p>Purpose: To align with the HTML script element</p>
+  <p>Owner: Cameron (ACTION-3280)</p>
+</div>
+
+<div class="annotation">
+  <p>SVG 2 Requirement: Incorporate SVG Tiny 1.2 script processing model</p>
+  <p>Resolution: SVG 2 will define how inline scriptable content will be processed, in a compatible way to HTML5</p>
+  <p><a href="http://www.w3.org/2012/03/08-svg-irc#T21-09-09">8 March 2012 SVG WG telcon</a>.</p>
+  <p>Purpose: To have consistent script running behaviour across HTML and SVG</p>
+  <p>Owner: Cameron (ACTION-3282)</p>
+</div>
+
+<p>A <a>'script'</a> element is equivalent to the <a>'script'</a> element in
+HTML and thus is the place for scripts (e.g., ECMAScript). Any functions
+defined within any <a>'script'</a> element have a "global" scope across the
+entire current document.</p>
+
+<p id="ExampleScript01"><span class="example-ref">Example script01</span>
+defines a function <code>circle_click</code> which is called by the
+<a>'onclick'</a> event attribute on the <a>'circle'</a> element. The drawing
+below on the left is the initial image. The drawing below on the right shows
+the result after clicking on the circle.</p>
+
+<p>Note that this example demonstrates the use of the <a>'onclick'</a> event
+attribute for explanatory purposes. The example presupposes the presence of an
+input device with the same behavioral characteristics as a mouse, which will
+not always be the case. To support the widest range of users, the
+<a>'onactivate'</a> event attribute should be used instead of the
+<a>'onclick'</a> event attribute.</p>
+
+<p id="ScriptElementExecution">Before attempting to execute the <a>'script'</a>
+element the resolved media type value for <a>'script/type'</a> must be inspected.
+If the <a>SVG user agent</a> does not support the scripting language then the
+<a>'script'</a> element must not be executed.</p>
+
+<pre class="xml"><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<svg width="6cm" height="5cm" viewBox="0 0 600 500"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <desc>Example script01 - invoke an ECMAScript function from an onclick event
+  </desc>
+  <!-- ECMAScript to change the radius with each click -->
+  <script type="application/ecmascript"> ]]>&lt;![CDATA[<![CDATA[
+    function circle_click(evt) {
+      var circle = evt.target;
+      var currentRadius = circle.getAttribute("r");
+      if (currentRadius == 100)
+        circle.setAttribute("r", currentRadius*2);
+      else
+        circle.setAttribute("r", currentRadius*0.5);
+    }
+  ]]>]]&gt;<![CDATA[ </script>
+
+  <!-- Outline the drawing area with a blue line -->
+  <rect x="1" y="1" width="598" height="498" fill="none" stroke="blue"/>
+
+  <!-- Act on each click event -->
+  <circle onclick="circle_click(evt)" cx="300" cy="225" r="100"
+          fill="red"/>
+
+  <text x="300" y="480" 
+        font-family="Verdana" font-size="35" text-anchor="middle">
+
+    Click on circle to change its size
+  </text>
+</svg>
+]]></pre>
+
+<!--
+  It would be good to replace this markup with an <edit:example>, but that
+  currently doesn't support multiple images like this example needs.
+  -->
+<table summary="Example script01">
+  <caption align="bottom">Example script01</caption>
+  <tbody>
+    <tr>
+      <td><img alt="Example script01 — invoke an ECMAScript function from an onclick event — before first click" src="images/script/script01.png"/>&nbsp;<img alt="Example script01 — invoke an ECMAScript function from an onclick event — after first click" src="images/script/script01-AfterClick.png"/></td>
+    </tr>
+  </tbody>
+</table>
+<p class="view-as-svg"><a href="images/script/script01.svg">View this example as SVG (SVG-enabled browsers only)</a></p>
+
+
+<edit:elementsummary name='script'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="ScriptElementTypeAttribute"><span
+        class="adef">type</span> = "<span
+        class="attr-value"><em>content-type</em></span>"</dt>
+        <dd>Identifies the scripting language for the given <a>'script'</a> element. The value
+        <span class="attr-value"><em>content-type</em></span>
+        specifies a media type, per 
+        <a href="http://www.ietf.org/rfc/rfc2046.txt">Multipurpose Internet Mail Extensions
+        (MIME) Part Two</a> [<a href="refs.html#ref-RFC2046">RFC2046</a>].
+        If a <a>'script/type'</a> is not provided, then the default scripting
+	language assumed is ECMAScript, as if processed with the
+	<span class="attr-name">'application/ecmascript'</span> media type.
+        [<a href="refs.html#ref-RFC4329">RFC4329</a>]<br/>
+        <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+
+        <dt id="ScriptElementHrefAttribute"><span class="adef">xlink:href</span> =
+        "<span class="attr-value"><a href="types.html#DataTypeIRI">&lt;iri&gt;</a></span>"</dt>
+        <dd>An <a href="linking.html#IRIReference">IRI reference</a> to an external
+        resource containing the script code.<br/>
+        <span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: no.</span></dd>
+      </dl>
+    </div>
+
+<h2 id="EventHandling">Event handling</h2>
+
+<p>Events can cause scripts to execute when either of the following has
+occurred:</p>
+
+<ul>
+  <li><a href="script.html#EventAttributes">Event attributes</a> such as
+  <a>'onclick'</a> or <a>'g/onload'</a> are assigned to particular elements,
+  where the values of the event attributes are script which is executed
+  when the given event occurs.</li>
+
+  <li><a href="svgdom.html#EventListeners">Event listeners</a> as described in
+  <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Events-20001113/">DOM Level 2 Events</a>
+  [<a href="refs.html#ref-DOM2EVENTS">DOM2EVENTS</a>]
+  are defined which are invoked when a given event happens on a
+  given object.</li>
+</ul>
+
+<p>Related sections of the spec:</p>
+
+<ul>
+  <li><a href="interact.html#UIEvents">User interface events</a> describes how
+  an SVG user agent handles events such as pointer movements events (e.g.,
+  mouse movement) and activation events (e.g., mouse click).</li>
+
+  <li><a href="svgdom.html#RelationshipWithDOM2Events">Relationship with DOM2 events</a>
+  describes what parts of DOM are supported by SVG and how to register event
+  listeners.</li>
+</ul>
+
+<h2 id="EventAttributes">Event attributes</h2>
+
+<p>The following event attributes are available on many SVG elements.</p>
+
+<p>The complete list of events that are part of the SVG language and SVG DOM
+and descriptions of those events is provided in
+<a href="interact.html#SVGEvents">Complete list of supported events</a>.</p>
+
+<p>The contents of event attributes are always interpreted as ECMAScript,
+as if processed with the media type <span class="attr-value">'application/ecmascript'</span>.
+[<a href="refs.html#ref-RFC2046">RFC2046</a>][<a href='refs.html#ref-RFC4329'>RFC4329</a>]</p>
+
+<h3 id="LoadEvent">Event attribute for the SVGLoad event</h3>
+
+<p>Below is the definition for the <a>'g/onload'</a> event attribute.  It
+can be specified on all of the <a>animation elements</a> and most of the
+<a>graphics elements</a> and <a>container elements</a>.  The <a>'g/onload'</a>
+event attribute is classified as both a <a>graphical event attribute</a>
+and an <a>animation event attribute</a>.  (See the definition for each element
+to determine whether it can have a <a>graphical event attribute</a>
+specified on it.)</p>
+
+<div class="adef-list">
+  <p><em>Attribute definitions:</em></p>
+  <dl>
+    <dt id="OnLoadEventAttribute"><span class="adef">onload</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dd>Specifies some script to execute when "bubbling" or "at target"
+    phase listeners for the SVGLoad event are fired on the element
+    the attribute is specified on.<br/>
+    <span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: no.</span></dd>
+  </dl>
+</div>
+
+<h3 id="GraphicsEvents">Event attributes on graphics and container elements</h3>
+
+<p>Below are the definitions for the <a>graphical event attributes</a>.
+These can be specified on most <a>graphics elements</a> and
+<a>container elements</a>.  (See the definition for each element to
+determine whether it can have a <a>graphical event attribute</a>
+specified on it.)</p>
+
+<p>Note that <a>'g/onload'</a>, defined above, is also classified as a
+<a>graphical event attribute</a>.</p>
+
+<div class="adef-list">
+  <p><em>Attribute definitions:</em></p>
+  <dl>
+    <dt id="OnFocusInEventAttribute"><span class="adef">onfocusin</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnFocusOutEventAttribute"><span class="adef">onfocusout</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnActivateEventAttribute"><span class="adef">onactivate</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnClickEventAttribute"><span class="adef">onclick</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnMouseDownEventAttribute"><span class="adef">onmousedown</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnMouseUpEventAttribute"><span class="adef">onmouseup</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnMouseOverEventAttribute"><span class="adef">onmouseover</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnMouseMoveEventAttribute"><span class="adef">onmousemove</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnMouseOutEventAttribute"><span class="adef">onmouseout</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dd>Specifies some script to execute when "bubbling" or "at target"
+    phase listeners for the corresponding event are fired on the element
+    the attribute is specified on.  See the <a href='interact.html#SVGEvents'>Complete list of support events</a>
+    to determine which event each of these event attributes corresponds to.<br/>
+    <span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: no.</span></dd>
+  </dl>
+</div>
+
+<h3 id="DocumentEvents">Document-level event attributes</h3>
+
+<p>Below are the definitions for the <a>document event attributes</a>.
+These can be specified only on <a>'svg'</a> elements.</p>
+
+<p class="issue">The conformance class for the 'only-on-&lt;svg> elements'
+criteria needs to be clarified here (this is for document validation presumably,
+so perhaps <a href="conform.html#ConformingSVGDocuments">Conforming SVG Document Fragments</a>
+would be appropriate to mention), the <a>document event attributes</a> should be
+fine to specify on any element, they just don't do much in all such cases, and
+it makes sense to not encourage uses where it doesn't have any real meaning.
+For <a href="conform.html#ConformingDynamicSVGViewers">Conforming Dynamic SVG Viewers</a>:
+what the <a>document event attributes</a> should do is register an event listener
+for the event in question.</p>
+
+<p class="issue">'onerror' should be available on image, script and elements
+that load external resources.  This is related to issue
+<a href="http://www.w3.org/Graphics/SVG/WG/track/issues/2254">2254</a>.</p>
+
+<div class="adef-list">
+  <p><em>Attribute definitions:</em></p>
+  <dl>
+    <dt id="OnUnloadEventAttribute"><span class="adef">onunload</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnAbortEventAttribute"><span class="adef">onabort</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnErrorEventAttribute"><span class="adef">onerror</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnResizeEventAttribute"><span class="adef">onresize</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnScrollEventAttribute"><span class="adef">onscroll</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnZoomEventAttribute"><span class="adef">onzoom</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dd>Specifies some script to execute when "bubbling" or "at target"
+    phase listeners for the corresponding event are fired on the element
+    the attribute is specified on.  See the <a href='interact.html#SVGEvents'>Complete list of support events</a>
+    to determine which event each of these event attributes corresponds to.<br/>
+    <span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: no.</span></dd>
+  </dl>
+</div>
+
+<h3 id="AnimationEvents">Animation event attributes</h3>
+
+<p>Below are the definitions for the <a>animation event attributes</a>.
+These can be specified on the <a>animation elements</a>.</p>
+
+<p>Note that <a>'g/onload'</a>, defined above, is also classified as an
+<a>animation event attribute</a>.</p>
+
+<div class="adef-list">
+  <p><em>Attribute definitions:</em></p>
+  <dl>
+    <dt id="OnBeginEventAttribute"><span class="adef">onbegin</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnEndEventAttribute"><span class="adef">onend</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dt id="OnRepeatEventAttribute"><span class="adef">onrepeat</span> = "<span class="attr-value"><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dd>Specifies some script to execute when "bubbling" or "at target"
+    phase listeners for the corresponding event are fired on the element
+    the attribute is specified on.  See the <a href='interact.html#SVGEvents'>Complete list of support events</a>
+    to determine which event each of these event attributes corresponds to.<br/>
+    <span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: no.</span></dd>
+  </dl>
+</div>
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<h3 id="InterfaceSVGScriptElement">Interface SVGScriptElement</h3>
+
+
+<edit:with element='script'>
+
+The <a>SVGScriptElement</a> interface corresponds to the <a>'script'</a>
+element.
+<pre class="idl">interface <b>SVGScriptElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>,
+                             <a class="idlinterface" href="types.html#InterfaceSVGURIReference">SVGURIReference</a> {
+  attribute DOMString <a href="script.html#__svg__SVGScriptElement__type">type</a> setraises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGScriptElement__type" class="attribute first-child"><b>type</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'type'</a> on the given <a>'script'</a>
+element.
+
+
+</div>
+<dl class="attribute">
+<dt class="exceptions-header">Exceptions on setting</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
+</dt>
+<dd class="exception"> Raised on an attempt
+to change the value of a <a href="svgdom.html#ReadOnlyNodes">read only attribute</a>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGZoomEvent">Interface SVGZoomEvent</h3>
+
+
+
+<p>A DOM consumer can use the hasFeature of the DOMImplementation interface
+to determine whether the SVG zoom event set has been implemented by a DOM
+implementation. The feature string for this event set is "SVGZoomEvents".
+This string is also used with the createEvent method.
+</p>
+
+
+<p>The zoom event handler occurs before the zoom event is processed. The
+remainder of the DOM represents the previous state of the document. The
+document will be updated upon normal return from the event handler.
+</p>
+
+
+<p>The UI event type for a zoom event is:</p>
+
+
+<dl>
+
+<dt><strong>SVGZoom</strong></dt>
+
+<dd>
+The zoom event occurs when the user initiates an action
+which causes the current view of the SVG document fragment
+to be rescaled. Event handlers are only recognized on <a>'svg'</a> elements. See <a href="interact.html#ZoomEvent">SVGZoom event</a>. 
+
+<ul>
+
+<li>Bubbles: Yes</li>
+
+<li>Cancelable: No</li>
+
+<li>Context Info: zoomRectScreen, previousScale,
+previousTranslate, newScale, newTranslate, screenX,
+screenY, clientX, clientY, altKey, ctrlKey, shiftKey,
+metaKey, relatedNode.<br />
+(screenX, screenY, clientX and clientY indicate the
+center of the zoom area, with clientX and clientY in
+viewport coordinates for the corresponding <a>'svg'</a> element. relatedNode is
+the corresponding <a>'svg'</a>
+element.)
+</li>
+
+</ul>
+
+</dd>
+
+</dl>
+<pre class="idl">interface <b>SVGZoomEvent</b> : UIEvent {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="script.html#__svg__SVGZoomEvent__zoomRectScreen">zoomRectScreen</a>;
+  readonly attribute float <a href="script.html#__svg__SVGZoomEvent__previousScale">previousScale</a>;
+  readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a> <a href="script.html#__svg__SVGZoomEvent__previousTranslate">previousTranslate</a>;
+  readonly attribute float <a href="script.html#__svg__SVGZoomEvent__newScale">newScale</a>;
+  readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a> <a href="script.html#__svg__SVGZoomEvent__newTranslate">newTranslate</a>;
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGZoomEvent__zoomRectScreen" class="attribute first-child"><b>zoomRectScreen</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a>)</span></dt>
+<dd class="attribute">
+<div>
+
+<p>The specified zoom rectangle in screen units.</p>
+
+
+<p>The <a>SVGRect</a> object is read only.
+</p>
+
+</div>
+</dd>
+
+<dt id="__svg__SVGZoomEvent__previousScale" class="attribute"><b>previousScale</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
+<dd class="attribute">
+<div>
+The scale factor from previous zoom operations that was in place before
+the zoom operation occurred.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGZoomEvent__previousTranslate" class="attribute"><b>previousTranslate</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a>)</span></dt>
+<dd class="attribute">
+<div>
+
+<p>The translation values from previous zoom operations that were in
+place before the zoom operation occurred.
+</p>
+
+
+<p>The <a>SVGPoint</a> object is read only.
+</p>
+
+</div>
+</dd>
+
+<dt id="__svg__SVGZoomEvent__newScale" class="attribute"><b>newScale</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
+<dd class="attribute">
+<div>
+The scale factor that will be in place after the zoom operation has been processed.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGZoomEvent__newTranslate" class="attribute"><b>newTranslate</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a>)</span></dt>
+<dd class="attribute">
+<div>
+
+<p>The translation values that will be in place after the zoom
+operation has been processed.
+</p>
+
+
+<p>The <a>SVGPoint</a> object is read only.
+</p>
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</body>
+</html>

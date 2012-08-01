@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Java Language Binding</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>Java Language Binding</h1>
+
+<p class="normativity"><em>This appendix is informative, not normative.</em></p>
+
+<h2 id="JavaBinding">The Java language binding</h2>
+
+<p>The Java language binding for the SVG Document Object Model definitions
+is available at:</p>
+
+<pre><edit:locallink href="java-binding.zip"/></pre>
+
+<p>Note that this language binding is not normative. The IDL Definitions are
+the normative parts of the SVG DOM.</p>
+
+<h2 id="UsingSVGWithJava">Using SVG with the Java language</h2>
+
+<p>When scripting SVG with a language such as ECMAScript, it is
+possible to embed script code directly in the SVG content using
+the <a>'script'</a> element and the event attributes (e.g., <a>'image/onload'</a>
+or <a>'onclick'</a>). For programming languages with a binary delivery
+format, such as the Java language, it is not possible to embed
+the code into the <a>'script'</a> element or within the event
+attributes. Therefore there is a need to specify how such
+languages can bind to and handle events in the SVG document.
+The following technique describes how this should be done when
+using the Java language and what is expected of the User Agent
+that supports dynamic SVG content through the Java language.</p>
+
+<ul>
+  <li>The <a>'script'</a> element should reference a jar file containing
+  the compiled code to handle the events fired by the document. For
+  example:
+<pre><![CDATA[
+<script type="application/java-archive" xlink:href="myJavaHandlers.jar"/>
+]]></pre>
+  </li>
+
+  <li>The manifest in the referenced jar file contains an entry,
+  SVG-Handler-Class, defining the class responsible for initializing
+  the event listeners on the SVG document. The entry should be a fully
+  qualified class name. For example:
+<pre>
+Manifest-Version: 1.1
+SVG-Handler-Class: org.example.svg.SVGHandler
+</pre>
+  </li>
+  <li>The class referenced by SVG-Handler-Class implements the
+  EventListenerInitializer interface defined as:
+<pre>
+public interface EventListenerInitializer {
+  void initializeEventListeners(SVGDocument doc);
+}
+</pre>
+  </li>
+
+  <li>The method initializeEventListeners() will be called by
+  the User Agent before the onload event is triggered.</li>
+</ul>
+
+<p>The event binding of other binary programming languages is not specified.</p>
+
+</body>
+</html>

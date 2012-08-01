@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Metadata</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>Metadata</h1>
+
+<h2 id="Introduction">Introduction</h2>
+     
+<p>Metadata is structured data about data.</p>
+
+<p>In the computing industry, there are ongoing standardization
+efforts towards metadata with the goal of promoting industry
+interoperability and efficiency. Content creators should track
+these developments and include appropriate metadata in their
+SVG content which conforms to these various metadata standards
+as they emerge.</p>
+
+<p>The W3C has a <a href="http://www.w3.org/2001/sw/Activity">Semantic Web
+Activity</a> which has been established to serve a leadership
+role, in both the design of enabling specifications and the
+open, collaborative development of technologies that support
+the automation, integration and reuse of data across various
+applications. The Semantic Web Activity builds upon the earlier
+W3C Metadata Activity, including the definition of Resource
+Description Framework (RDF). The
+<a href="http://www.w3.org/TR/2004/REC-rdf-primer-20040210/"><cite>RDF Primer</cite></a>
+is the first in a set of six documents that define the Resource Description Framework
+[<a href="refs.html#ref-RDF-PRIMER">RDF-PRIMER</a>].</p>
+
+<p>Another activity relevant to most applications of metadata
+is the <a href="http://dublincore.org/">Dublin Core</a>
+[<a href="refs.html#ref-DCORE">DCORE</a>], which is
+a set of generally applicable core metadata properties (e.g.,
+Title, Creator/Author, Subject, Description, etc.).</p>
+
+<p>Individual industries or individual content creators are
+free to define their own metadata schema but are encouraged to
+follow existing metadata standards and use standard metadata
+schema wherever possible to promote interchange and
+interoperability. If a particular standard metadata schema does
+not meet your needs, then it is usually better to define an
+additional metadata schema in an existing framework such as RDF
+and to use custom metadata schema in combination with standard
+metadata schema, rather than totally ignore the standard
+schema.</p>
+
+<h2 id="MetadataElement">The <span class="element-name">'metadata'</span> element</h2>
+
+<p>Metadata which is included with SVG content should be
+specified within <a>'metadata'</a>
+elements. The contents of the <a>'metadata'</a> should be elements from
+other XML namespaces, with these elements from these namespaces
+expressed in a manner conforming with the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a> Recommendation
+[<a href="refs.html#ref-XML-NS">XML-NS</a>].</p>
+
+<p>Authors should provide a <a>'metadata'</a> child element to the
+<a>outermost svg element</a> within a
+stand-alone SVG document. The <a>'metadata'</a> child element to an <a>'svg'</a> element serves the
+purposes of identifying document-level metadata.</p>
+
+<p>The definitions of many of SVG's elements (particularly,
+container and text elements) place no restriction on the
+placement or number of the <a>'metadata'</a> sub-elements. This
+flexibility is only present so that there will be a consistent
+content model for container elements, because some container
+elements in SVG allow for mixed content, and because <a href="http://www.w3.org/TR/2008/REC-xml-20081126/#sec-mixed-content">the mixed
+content rules for XML</a> ([<a href="refs.html#ref-XML10">XML10</a>], section 3.2.2)
+do not permit the desired restrictions. Future
+versions of the SVG language might provide more restrictive
+mixed content rules. It is strongly recommended that at most
+one <a>'metadata'</a> element appear
+as a child of any particular element, and that this element
+appear before any other child elements (except possibly <a>'desc'</a> or
+<a>'title'</a> elements) or character
+data content. If metadata-processing user agents need to choose
+among multiple <a>'metadata'</a>
+elements for processing it should choose the first one.</p>
+
+<edit:elementsummary name='metadata'/>
+
+<h2 id="Example">An example</h2>
+
+<p>Here is an example of how metadata can be included in an SVG
+document. The example uses the Dublin Core version 1.1 schema.
+(Other XML-compatible metadata languages, including ones not
+based on RDF, can be used also.)</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg width="4in" height="3in" version="1.1"
+    xmlns = 'http://www.w3.org/2000/svg'>
+    <desc xmlns:myfoo="http://example.org/myfoo">
+      <myfoo:title>This is a financial report</myfoo:title>
+      <myfoo:descr>The global description uses markup from the
+        <myfoo:emph>myfoo</myfoo:emph> namespace.</myfoo:descr>
+      <myfoo:scene><myfoo:what>widget $growth</myfoo:what>
+      <myfoo:contains>$three $graph-bar</myfoo:contains>
+        <myfoo:when>1998 $through 2000</myfoo:when> </myfoo:scene>
+   </desc>
+    <metadata>
+      <rdf:RDF
+           xmlns:rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+           xmlns:rdfs = "http://www.w3.org/2000/01/rdf-schema#"
+           xmlns:dc = "http://purl.org/dc/elements/1.1/" >
+        <rdf:Description about="http://example.org/myfoo"
+             dc:title="MyFoo Financial Report"
+             dc:description="$three $bar $thousands $dollars $from 1998 $through 2000"
+             dc:publisher="Example Organization"
+             dc:date="2000-04-11"
+             dc:format="image/svg+xml"
+             dc:language="en" >
+          <dc:creator>
+            <rdf:Bag>
+              <rdf:li>Irving Bird</rdf:li>
+              <rdf:li>Mary Lambert</rdf:li>
+            </rdf:Bag>
+          </dc:creator>
+        </rdf:Description>
+      </rdf:RDF>
+    </metadata>
+</svg>
+]]></pre>
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<h3 id="InterfaceSVGMetadataElement">Interface SVGMetadataElement</h3>
+
+<edit:with element='metadata'>
+
+The <a>SVGMetadataElement</a> interface corresponds to the <a>'metadata'</a>
+element.
+<pre class="idl">interface <b>SVGMetadataElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+};</pre>
+
+</edit:with>
+
+</body>
+</html>

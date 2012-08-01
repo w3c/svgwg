@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Rendering Model</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<div class="annotation">
+  <p>
+    SVG 2 Requirement: Support the z-index.
+  </p>
+  <p>
+    Resolution: We will add Jonathan Watt's z-index proposal to SVG 2.
+  </p>
+  <p>
+    <a href="http://www.w3.org/2011/03/03-svg-minutes.html#item03">Auckland 2011 F2F day 5</a>.
+  </p>
+  <p>
+    Purpose: Allow reordering (such as when a planet orbits the sun). Reordering without script support (e.g. CSS :hover).
+  </p>
+  <p>
+    Owner: Jonathan (Action 3002).
+  </p>
+</div>
+
+<div class="annotation">
+  <p>
+    The SVG 2 rendering model will follow the rules defined by the <a href="https://dvcs.w3.org/hg/FXTF/rawfile/tip/compositing/index.html">Compositing and Blending specification</a>.
+  </p>
+  <p>
+    Resolution: <a href="http://www.w3.org/2012/07/24-svg-minutes.html#item09">Seattle/Paris 2012 F2F day 3</a>.
+  </p>
+  <p>
+    Owner: Nikos (Action 3332).
+  </p>
+  <p class="issue">
+    There is an unresolved incompatibility with filter-effects.
+    http://lists.w3.org/Archives/Public/public-svg-wg/2012JulSep/0050.html
+  </p>
+</div>
+
+<h1>Rendering Model</h1>
+
+<h2 id="Introduction">Introduction</h2>
+
+<p>Implementations of SVG are expected to behave as though they
+implement a rendering (or imaging) model corresponding to the
+one described in this chapter. A real implementation is not
+required to implement the model in this way, but the result on
+any device supported by the implementation shall match that
+described by this model.</p>
+
+<p>The appendix on <a href="conform.html">conformance
+requirements</a> describes the extent to which an actual
+implementation may deviate from this description. In practice
+an actual implementation will deviate slightly because of
+limitations of the output device (e.g. only a limited range of
+colors might be supported) and because of practical limitations
+in implementing a precise mathematical model (e.g. for
+realistic performance curves are approximated by straight
+lines, the approximation need only be sufficiently precise to
+match the conformance requirements).</p>
+
+<h2 id="PaintersModel">The painters model</h2>
+
+<p>SVG uses a "painters model" of rendering.  <a>Paint</a>
+is applied in successive operations to the output device such
+that each operation paints over some area of the output device.
+When the area overlaps a previously painted area the new paint
+partially or completely obscures the old. When the paint is not
+completely opaque the result on the output device is defined by
+the (mathematical) rules for compositing described under
+<a href="masking.html#SimpleAlphaBlending">Alpha Blending</a>.</p>
+
+<h2 id="RenderingOrder">Rendering order</h2>
+
+<p>Elements in an SVG document fragment have an implicit
+drawing order, with the first elements in the SVG document
+fragment getting "painted" first. Subsequent elements are
+painted on top of previously painted elements.</p>
+
+<h2 id="Grouping">How groups are rendered</h2>
+
+<p>Grouping elements such as the <a>'g'</a> element (see
+<a>container elements</a>)
+have the effect of producing a temporary separate canvas
+initialized to transparent black onto which child elements are
+painted. Upon the completion of the group, any
+<a href="render.html#FilteringPaintRegions">filter effects</a>
+specified for the group are applied to create a modified
+temporary canvas. The modified temporary canvas is composited
+into the background, taking into account any group-level
+<a href="masking.html#Masking">masking</a> and
+<a href="masking.html#OpacityProperty">opacity</a> settings on the
+group.</p>
+
+<h2 id="Elements">How elements are rendered</h2>
+
+<p>Individual <a>graphics elements</a> are rendered as if each graphics element
+represented its own group; thus, the effect is as if a
+temporary separate canvas is created for each graphics element.
+The element is first painted onto the temporary canvas (see
+<a href="render.html#PaintingShapesAndText">Painting shapes and text</a> and
+<a href="render.html#PaintingRasterImages">Painting raster images</a> below).
+Then any <a href="render.html#FilteringPaintRegions">filter effects</a>
+specified for the graphics element are applied to create a
+modified temporary canvas. The modified temporary canvas is
+then composited into the background, taking into account any
+<a href="render.html#ClippingMaskingObjectOpacity">clipping,
+masking and object opacity</a> settings on the graphics
+element.</p>
+
+<h2 id="TypesOfGraphicsElements">Types of graphics elements</h2>
+
+<p>SVG supports three fundamental types of <a>graphics elements</a>
+that can be rendered onto the canvas:</p>
+
+<ul>
+  <li><a>Shapes</a>, which represent some combination of straight line
+  and curves</li>
+  <li>Text, which represents some combination of character glyphs</li>
+  <li>Raster images, which represent an array of values that
+  specify the paint color and opacity (often termed alpha) at a
+  series of points on a rectangular grid. (SVG requires support
+  for specified raster image formats under
+  <a href="conform.html">conformance requirements</a>.)</li>
+</ul>
+
+<h3 id="PaintingShapesAndText">Painting shapes and text</h3>
+
+<p>Shapes and text can be <a>filled</a> (i.e., apply paint to the
+interior of the shape) and <a>stroked</a> (i.e., apply paint
+along the outline of the shape). A stroke operation is centered
+on the outline of the object; thus, in effect, half of the
+paint falls on the interior of the shape and half of the paint
+falls outside of the shape.</p>
+
+<p>For certain types of shapes, <a href="painting.html#Markers">marker
+symbols</a> (which themselves can consist of any combination of shapes,
+text and images) can be drawn at selected vertices. Each marker symbol
+is painted as if its graphical content were expanded into the
+SVG document tree just after the shape object which is using
+the given marker symbol. The graphical contents of a marker
+symbol are rendered using the same methods as graphics
+elements. Marker symbols are not applicable to text.</p>
+
+<p>The fill is painted first, then the stroke, and then the
+marker symbols. The marker symbols are rendered in order along
+the outline of the shape, from the start of the shape to the
+end of the shape.</p>
+
+<p>Each fill and stroke operation has its own opacity settings;
+thus, you can fill and/or stroke a shape with a
+semi-transparently drawn solid color, with different opacity
+values for the fill and stroke operations.</p>
+
+<p>The fill and stroke operations are entirely independent
+painting operations; thus, if you both fill and stroke a shape,
+half of the stroke will be painted on top of part of the
+fill.</p>
+
+<p>SVG supports the following built-in types of paint which can
+be used in fill and stroke operations:</p>
+
+<ul>
+  <li><a href="color.html#ColorIntroduction">solid color</a></li>
+  <li><a href="pservers.html#Gradients">gradients</a> (linear and radial)</li>
+  <li><a href="pservers.html#Patterns">patterns</a></li>
+</ul>
+
+<h3 id="PaintingRasterImages">Painting raster images</h3>
+
+<p>When a raster image is rendered, the original samples are
+"resampled" using standard algorithms to produce samples at the
+positions required on the output device. Resampling
+requirements are discussed under
+<a href="conform.html">conformance requirements</a>.</p>
+
+<h2 id="FilteringPaintRegions">Filtering painted regions</h2>
+
+<p>SVG allows any painting operation to be filtered. (See
+<a href="filters.html">Filter Effects</a>.)</p>
+
+<p>In this case the result must be as though the paint
+operations had been applied to an intermediate canvas
+initialized to transparent black, of a size determined by the
+rules given in <a href="filters.html">Filter Effects</a> then
+filtered by the processes defined in
+<a href="filters.html">Filter Effects</a>.</p>
+
+<h2 id="ClippingMaskingObjectOpacity">Clipping, masking and object opacity</h2>
+
+<p>SVG allows any painting operation to be limited to a
+subregion of the output device by clipping and masking. This is
+described in <a href="masking.html">Clipping, Masking and
+Compositing</a>.</p>
+
+<p>Clipping uses a path to define a region of the output device
+to which paint can be applied. Any painting operation executed
+within the scope of the clipping must be rendered such that
+only those parts of the device that fall within the clipping
+region are affected by the painting operation. A clipping path
+can be thought of as a mask wherein those pixels outside the
+clipping path are black with an alpha value of zero and those
+pixels inside the clipping path are white with an alpha value
+of one. "Within" is defined by the same rules used to determine
+the interior of a path for painting. The clipping path is
+typically anti-aliased on low-resolution devices (see
+<a>'shape-rendering'</a>. Clipping is
+described in
+<a href="masking.html#ClippingPaths">Clipping paths</a>.</p>
+
+<p>Masking uses the luminance of the color channels and alpha
+channel in a referenced SVG element to define a supplemental
+set of alpha values which are multiplied to the alpha values
+already present in the graphics to which the mask is applied.
+Masking is described in <a href="masking.html#Masking">Masking</a>.</p>
+
+<p>A supplemental masking operation may also be specified by
+applying a "global" opacity to a set of rendering operations.
+In this case the mask is infinite, with a color of white and an
+alpha channel of the given opacity value. (See the <a>'opacity'</a>
+property.)</p>
+
+<p>In all cases the SVG implementation must behave as though
+all painting and filtering is first performed to an
+intermediate canvas which has been initialized to transparent
+black. Then, alpha values on the intermediate canvas are
+multiplied by the implicit alpha values from the clipping path,
+the alpha values from the mask, and the alpha values from the
+<a>'opacity'</a> property. The resulting
+canvas is composited into the background using
+<a href="masking.html#SimpleAlphaBlending">simple alpha blending</a>.
+Thus if an area of the output device is painted
+with a group opacity of 50% using opaque red paint followed by
+opaque green paint the result is as though it had been painted
+with just 50% opaque green paint. This is because the opaque
+green paint completely obscures the red paint on the
+intermediate canvas before the intermediate as a whole is
+rendered onto the output device.</p>
+
+<h2 id="ParentCompositing">Parent Compositing</h2>
+
+<p>SVG document fragments can be semi-opaque. In many
+environments (e.g., Web browsers), the SVG document fragment
+has a final compositing step where the document as a whole is
+blended translucently into the background canvas.</p>
+
+</body>
+</html>
