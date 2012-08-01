@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Color</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>Color</h1>
+
+<p class="annotation">
+  This section should include an overall discussion of color in SVG as well as links to all the places color
+  is discussed in the specification: currentColor, SVG colors, etc.
+</p>
+
+<div class="annotation">
+  <p>SVG 2 Requirement: Add color management subject to deciding the exact conformance classes required.</p>
+  <p>Resolution: SVG color management becomes a chapter in SVG 2. (No longer an independent module.)</p>
+  <p><a href="http://www.w3.org/2011/10/28-svg-irc#T16-52-12">Conference call 2011-10-28</a>.</p>
+  <p>Purpose: Align with mainstream graphics use. Allow fluorescent colors, more than 8bit color, etc.</p>
+  <p>Owner: Chris.</p>
+</div>
+
+<div class="annotation">
+  <p>SVG 2 Requirement: Support CSS3 Color syntax.</p>
+  <p>Resolution: ?.</p>
+  <p><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item01">F2F Seattle 2011</a>.</p>
+  <p>Purpose: Align with CSS. Already widely implemented.</p>
+  <p>Owner: Chris.</p>
+</div>
+
+<div class="annotation">
+  <p>SVG 2 Requirement: Add new paint values currentFillPaint, currentStrokePaint.</p>
+  <p>Resolution: We will add new paint values currentFillPaint, currentStrokePaint etc. to SVG 2.</p>
+  <p><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item01">Seattle 2011 F2F Day 3</a>.</p>
+  <p>Purpose: Among other things, to provide an easy way to match marker color to stroke color.</p>
+  <p>Owner: Chris.</p>
+</div>
+
+
+<h2 id="ColorIntroduction">Introduction</h2>
+
+<p>All SVG colors are specified in the sRGB color space
+[<a href="refs.html#ref-SRGB">SRGB</a>]. At a minimum, SVG user
+agents shall conform to the color behavior requirements specified in the
+<a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/syndata.html#color-units">color units section</a>
+and the <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/colors.html#gamma-correction">minimal gamma correction rules</a>
+defined in the CSS2 specification.</p>
+
+<p>Additionally, SVG content can specify an alternate color specification
+using an ICC profile [<a href="refs.html#ref-ICC42">ICC42</a>]
+as described in <a href="painting.html#SpecifyingPaint">Specifying paint</a>.
+If ICC-based colors are provided and the SVG user agent supports ICC color,
+then the ICC-based color takes precedence over the sRGB color specification;
+otherwise, the RGB fallback colors must be used.
+Note that, in this specification, color interpolation occurs in an RGB color space even if an
+ICC-based color specification is provided (see <a>'color-interpolation'</a>).</p>
+
+<div class="ready-for-wg-review">
+<h2 id="ColorProperty">The effect of the <span class="property">'color'</span> property</h2>
+
+<p class="note">See the CSS Color Module Level 3 specification for the
+definition of <a>'color'</a>.
+[<a href="refs.html#ref-CSS3COLOR">CSS3COLOR</a>]</p>
+
+<p>The <a>'color'</a> property is used to provide a potential indirect value,
+<span class="prop-value">currentColor</span>, for the <a>'fill'</a>,
+<a>'stroke'</a>, <a>'solid-color'</a>, <a>'stop-color'</a>, <a>'flood-color'</a> and
+<a>'lighting-color'</a> properties.  The property has no other effect
+on SVG elements.</p>
+
+<div class="example">
+  <p>The following example shows how the inherited value of the
+  <a>'color'</a> property from an HTML document can be used to
+  set the color of SVG text in an inline SVG fragment.</p>
+
+  <pre><![CDATA[
+<!DOCTYPE html>
+<style>
+body { color: #468; font: 16px sans-serif }
+svg { border: 1px solid #888; background-color: #eee }
+</style>
+<p>Please see the diagram below:</p>
+<svg width="200" height="100">
+  <g fill="currentColor">
+    <text x="70" y="55" text-anchor="end">START</text>
+    <text x="130" y="55">STOP</text>
+    <path d="M 85,45 h 25 v -5 l 10,10 -10,10 v -5 h -25 z"/>
+  </g>
+</svg>
+]]></pre>
+
+  <div class="figure">
+    <div class="bordered" style="color: #468; font: 16px sans-serif; display: inline-block; text-align: left; padding: 32px 128px 32px 32px">
+      <p style="margin-top: 0; margin-bottom: 1em">Please see the diagram below:</p>
+      <svg xmlns="http://www.w3.org/2000/svg" width="200" height="100" style="border: 1px solid #888; background-color: #eee">
+        <g fill="currentColor">
+          <text x="70" y="55" text-anchor="end">START</text>
+          <text x="130" y="55">STOP</text>
+          <path d="M 85,45 h 25 v -5 l 10,10 -10,10 v -5 h -25 z"/>
+        </g>
+      </svg>
+    </div>
+    <p class="caption">The text and arrow in the SVG fragment are filled
+    with the same color as the inherited <a>'color'</a> property.</p>
+  </div>
+</div>
+</div>
+
+<h2 id="ColorProfileDescriptions">Color profile descriptions</h2>
+
+<h3 id="ColorProfileDescriptionsOverview">Overview of color profile descriptions</h3>
+
+<p>The <a href="http://www.color.org/">International Color
+Consortium</a> has established a standard, the ICC Profile
+[<a href="refs.html#ref-ICC42">ICC42</a>], for
+documenting the color characteristics of input and output
+devices. Using these profiles, it is possible to build a
+transform and correct visual data for viewing on different
+devices.</p>
+
+<p>A <dfn id='color-profile-description'>color profile description</dfn>
+provides the bridge between an ICC profile and references to
+that ICC profile within SVG content. The color profile
+description is added to the user agent's list of known color
+profiles and then used to select the relevant profile. The
+color profile description contains descriptors for the location
+of the color profile on the Web, a name to reference the
+profile and information about rendering intent.</p>
+
+<h3 id="ColorProfileAlternatives">Alternative ways of defining a color profile description</h3>
+
+<p>Color profile descriptions can be specified in either of the following ways:</p>
+
+<ul>
+  <li>a <a>'color-profile element'</a> element</li>
+
+  <li>an <em>@color-profile</em> rule within a CSS style sheet (only
+  applicable for user agents which support using CSS to style the SVG
+  content [<a href="refs.html#ref-CSS2">CSS2</a>])</li>
+</ul>
+
+<p>If a color profile with the same <em>name</em> value has
+been identified by both a <a>'color-profile element'</a> element and
+<em>@color-profile</em> rules within a CSS style sheet, then
+the user agent shall first attempt to locate the profile by
+using the specifications in the <em>@color-profile</em> rules
+first.</p>
+
+<h3 id="ColorProfileElement">The <span class="element-name">'color-profile'</span> element</h3>
+
+<edit:with element='color-profile'>
+
+<edit:elementsummary name='color-profile'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="ColorProfileElementHrefAttribute"><span class="adef">xlink:href</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeIRI">&lt;iri&gt;</a></span>"</dt>
+        <dd>The location of an ICC profile resource.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="ColorProfileElementLocalAttribute"><span class="adef">local</span> = "<span
+        class="attr-value">&lt;string&gt;</span>"</dt>
+        <dd>The unique ID for a locally stored color profile.
+        &lt;string&gt; is the profile's unique ID as specified by
+        <a href="http://www.color.org/">International Color
+        Consortium</a>. If both the <a>'xlink:href'</a> and the <a>'local'</a>
+        attributes are specified,
+        then the user agent shall search the local system for the
+        locally stored color profile first, and, if not available
+        locally, then attempt to use the resource identified by the
+        <a>'xlink:href'</a> attribute. (Note:
+        Profile description fields do <em>not</em> represent a
+        profile's unique ID. With current ICC proposals, the
+        profile's unique ID is an MD5-encoded value within the
+        profile header.)<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="ColorProfileElementNameAttribute"><span class="adef">name</span> = "<span
+        class="attr-value">&lt;author-ident&gt;</span>"</dt>
+        <dd>The name which is used as the first parameter for <span
+        class="prop-value">icc-color</span> specifications within
+        <a>'fill'</a>, <a>'stroke'</a>, <a>'stop-color'</a>,
+        <a>'flood-color'</a> and <a>'lighting-color'</a> property
+        values to identify the color profile to use for the ICC
+        color specification and the name which can be the value of
+        the <a>'color-profile element'</a> property. Note
+        that if 'name' is not provided, it will be impossible
+        to reference the given color profile description. The name
+        "sRGB" is predefined; any color profile descriptions with
+        <span class="attr-value">&lt;author-ident&gt;</span> set to "sRGB"
+        will be ignored. For consistency with <a
+        href="http://www.w3.org/TR/2008/REC-CSS2-20080411/grammar.html#q2">CSS
+        lexical scanning and parsing rules</a>
+        ([<a href="refs.html#ref-CSS2">CSS2</a>], section D.2), the keyword "sRGB"
+        is case-insensitive; however, it is recommended that the
+        mixed capitalization "sRGB" be used for consistency with
+        common industry practice.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="ColorProfileElementRenderingIntentAttribute"><span class="adef">rendering-intent</span> = "<span
+        class="attr-value">auto | perceptual |
+        relative-colorimetric | saturation |
+        absolute-colorimetric</span>"</dt>
+        <dd>
+          <p><a>'rendering-intent'</a>
+          permits the specification of a color profile rendering
+          intent other than the default. <a>'rendering-intent'</a> is applicable
+          primarily to color profiles corresponding to CMYK color
+          spaces. The different options cause different methods to
+          be used for translating colors to the color gamut of the
+          target rendering device:</p>
+          <dl>
+            <dt><span class='prop-value'>auto</span></dt>
+            <dd>This is the default behavior. The user agent
+            determines the best intent based on the content type.
+            For image content containing an embedded profile, it
+            shall be assumed that the intent specified within the
+            profile is the desired intent. Otherwise, the user
+            agent shall use the current profile and force the
+            intent, overriding any intent that might be stored in
+            the profile itself.</dd>
+            <dt><span class='prop-value'>perceptual</span></dt>
+            <dd>This method, often the preferred choice for images,
+            preserves the relationship between colors. It attempts
+            to maintain relative color values among the pixels as
+            they are mapped to the target device gamut. Sometimes
+            pixel values that were originally within the target
+            device gamut are changed in order to avoid hue shifts
+            and discontinuities and to preserve as much as possible
+            the overall appearance of the scene.</dd>
+            <dt><span class='prop-value'>saturation</span></dt>
+            <dd>Preserves the relative saturation (chroma) values
+            of the original pixels. Out of gamut colors are
+            converted to colors that have the same saturation but
+            fall just inside the gamut.</dd>
+            <dt><span class='prop-value'>relative-colorimetric</span></dt>
+            <dd>Leaves colors that fall inside the gamut unchanged.
+            This method usually converts out of gamut colors to
+            colors that have the same lightness but fall just
+            inside the gamut.</dd>
+            <dt><span class='prop-value'>absolute-colorimetric</span></dt>
+            <dd>Disables white point matching when converting
+            colors. This option is generally not recommended.</dd>
+          </dl>
+          <br />
+           <span class="anim-target"><a
+          href="animate.html#Animatable">Animatable</a>: no.</span>
+        </dd>
+      </dl>
+    </div>
+
+</edit:with>
+
+<h3 id="ColorProfileAtRule">The CSS <strong>@color-profile</strong> rule</h3>
+
+<p>When the document is styled using CSS, the
+<strong>@color-profile</strong> rule can be used to specify a color
+profile description. The general form is:</p>
+
+<pre>
+@color-profile { &lt;color-profile-description&gt; }
+</pre>
+
+<p>where the &lt;color-profile-description&gt; has the form:</p>
+
+<pre>
+descriptor: value;
+[...]
+descriptor: value;
+</pre>
+
+<p>Each @color-profile rule specifies a value for every color
+profile descriptor, either implicitly or explicitly. Those not
+given explicit values in the rule take the initial value listed
+with each descriptor in this specification. These descriptors
+apply solely within the context of the @color-profile rule in
+which they are defined, and do not apply to document language
+elements. Thus, there is no notion of which elements the
+descriptors apply to, or whether the values are inherited by
+child elements.</p>
+
+<p>The following are the descriptors for a &lt;color-profile-description&gt;:</p>
+
+    <div class="propdef">
+      <dl>
+        <dt id="ColorProfileSrcProperty"><span class="descdef-title property">'src'</span></dt>
+        <dd>
+          <table
+          summary="src descriptor definition for @color-profile"
+          class="propinfo" cellspacing="0" cellpadding="0">
+            <tr>
+              <td><em>Values:</em></td>
+              <td>sRGB | &lt;local-profile&gt; | <a
+              href="types.html#DataTypeIRI">&lt;iri&gt;</a> |
+              (&lt;local-profile&gt; <a
+              href="types.html#DataTypeIRI">&lt;iri&gt;</a>) | <a
+              class="noxref"
+              href="http://www.w3.org/TR/2008/REC-CSS2-20080411/cascade.html#value-def-inherit">
+              <span
+              class="value-inst-inherit noxref">inherit</span></a></td>
+            </tr>
+            <tr>
+              <td><em>Initial:</em></td>
+              <td>sRGB</td>
+            </tr>
+            <tr>
+              <td><em>Media:</em></td>
+              <td>visual</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class='prop-value'>sRGB</span></dt>
+  <dd>The source profile is the sRGB color space. For
+  consistency with
+  <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/grammar.html#q2">CSS lexical scanning and parsing rules</a>
+  ([<a href="refs.html#ref-CSS2">CSS2</a>], section D.2), the keyword "sRGB" is
+  case-insensitive; however, it is recommended that the mixed
+  capitalization "sRGB" be used for consistency with common
+  industry practice.</dd>
+
+  <dt><span class='prop-value'>&lt;local-profile&gt;</span></dt>
+  <dd>
+    <p>The source profile is a locally-stored profile. The syntax
+    for &lt;local-profile&gt; is:</p>
+
+<pre>
+"local(" + &lt;string&gt; + ")"
+</pre>
+
+    <p>where &lt;string&gt; is the profile's unique ID as
+    specified by <a href="http://www.color.org/">International
+    Color Consortium</a>. (Note: Profile description fields do
+    <em>not</em> represent a profile's unique ID. With current
+    ICC proposals, the profile's unique ID is an MD5-encoded
+    value within the profile header.)</p>
+  </dd>
+
+  <dt><span class='prop-value'><a
+  href="types.html#DataTypeIRI">&lt;iri&gt;</a></span></dt>
+  <dd>The source profile is an <a>IRI reference</a>
+  to a color profile.</dd>
+
+  <dt>(<span class='prop-value'>&lt;local-profile&gt; <a
+  href="types.html#DataTypeIRI">&lt;iri&gt;</a>)</span></dt>
+  <dd>Two profiles are specified. If &lt;local-profile&gt;
+  cannot be found on the local system, then the <a>&lt;iri&gt;</a>
+  is used.</dd>
+</dl>
+
+    <div class="propdef">
+      <dl>
+        <dt id="ColorProfileNameProperty"><span class="descdef-title property">'name'</span></dt>
+        <dd>
+          <table
+          summary="name descriptor definition for @color-profile"
+          class="propinfo" cellspacing="0" cellpadding="0">
+            <tr>
+              <td><em>Values:</em></td>
+              <td><a>&lt;author-ident&gt;</a></td>
+            </tr>
+            <tr>
+              <td><em>Initial:</em></td>
+              <td>undefined</td>
+            </tr>
+            <tr>
+              <td><em>Media:</em></td>
+              <td>visual</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<dl>
+  <dt><span class='prop-value'><a>&lt;author-ident&gt;</a></span></dt>
+  <dd>See the description for the <a>'color-profile/name'</a> attribute on the
+  <a>'color-profile element'</a> element. Note that if 'name' is not
+  provided, it will be impossible to reference the given @color-profile
+  definition.</dd>
+</dl>
+
+    <div class="propdef">
+      <dl>
+        <dt id="RenderingIntentProperty"><span class="descdef-title property">'rendering-intent'</span></dt>
+        <dd>
+          <table
+          summary="rendering-intent descriptor definition for @color-profile"
+           class="propinfo" cellspacing="0" cellpadding="0">
+            <tr>
+              <td><em>Values:</em></td>
+              <td>auto | perceptual | relative-colorimetric |<br />
+               saturation | absolute-colorimetric</td>
+            </tr>
+            <tr>
+              <td><em>Initial:</em></td>
+              <td>auto</td>
+            </tr>
+            <tr>
+              <td><em>Media:</em></td>
+              <td>visual</td>
+            </tr>
+            <tr valign="baseline">
+              <td><em><a
+              href="animate.html#Animatable">Animatable</a>:</em>&nbsp;&nbsp;</td>
+              <td>no</td>
+            </tr>
+          </table>
+        </dd>
+      </dl>
+    </div>
+
+<p>See the description for the <a>'color-profile/rendering-intent'</a> attribute on the
+<a>'color-profile element'</a> element.</p>
+
+<h3 id="ColorProfileProperty">The <span class="property">'color-profile'</span> property</h3>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="ColorProfileProperty">color-profile</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>auto | sRGB | <a>&lt;author-ident&gt;</a> | <a>&lt;funciri&gt;</a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>'image'</a> elements that refer to raster images</td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified, but with <a>&lt;funciri&gt;</a> values made absolute</td>
+  </tr>
+  <tr>
+    <th><a>Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
+<dl>
+  <dt><span class='prop-value'>auto</span></dt>
+  <dd>This is the default behavior. All colors are presumed to
+  be defined in the sRGB color space unless a more precise
+  embedded profile is specified within content data. For images
+  that do have a profile built into their data, that profile is
+  used. For images that do not have a profile, the sRGB profile
+  is used.</dd>
+
+  <dt><span class='prop-value'>sRGB</span></dt>
+  <dd>
+    <p>The source profile is assumed to be sRGB. This differs
+    from auto in that it overrides an embedded profile inside an
+    image.</p>
+
+    <p>For consistency with <a href="http://www.w3.org/TR/2008/REC-CSS2-20080411/grammar.html#q2">CSS lexical scanning and parsing rules</a>
+    ([<a href="refs.html#ref-CSS2">CSS2</a>], section D.2), the keyword "sRGB" is
+    case-insensitive; however, it is recommended that the mixed
+    capitalization "sRGB" be used for consistency with common
+    industry practice.</p>
+  </dd>
+
+  <dt><span class='prop-value'><a>&lt;author-ident&gt;</a></span></dt>
+  <dd>A name corresponding to a defined color profile that is
+  in the user agent's color profile description database. The
+  user agent searches the color profile description database
+  for a <a href="color.html#ColorProfileDescriptions">color
+  profile description</a> entry whose name descriptor matches
+  &lt;author-ident&gt; and uses the last matching entry that is found.
+  If a match is found, the corresponding profile overrides an
+  embedded profile inside an image. If no match is found, then
+  the embedded profile inside the image is used.</dd>
+
+  <dt><span class='prop-value'><a
+  href="types.html#DataTypeIRI">&lt;iri&gt;</a></span></dt>
+  <dd>An <a>IRI reference</a> to the source color profile. The referenced
+  color profile overrides an embedded profile inside the
+  image.</dd>
+</dl>
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<h3 id="InterfaceSVGColorProfileElement">Interface SVGColorProfileElement</h3>
+
+
+<edit:with element='color-profile'>
+
+The <a>SVGColorProfileElement</a> interface corresponds to the
+<a>'color-profile element'</a> element.
+<pre class="idl">interface <b>SVGColorProfileElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>,
+                                   <a class="idlinterface" href="types.html#InterfaceSVGURIReference">SVGURIReference</a>,
+                                   <a class="idlinterface" href="types.html#InterfaceSVGRenderingIntent">SVGRenderingIntent</a> {
+  attribute DOMString <a href="color.html#__svg__SVGColorProfileElement__local">local</a>;
+  attribute DOMString <a href="color.html#__svg__SVGColorProfileElement__name">name</a>;
+  attribute unsigned short <a href="color.html#__svg__SVGColorProfileElement__renderingIntent">renderingIntent</a>;
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGColorProfileElement__local" class="attribute first-child"><b>local</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'local'</a> on the given element.
+
+
+</div>
+</dd>
+
+<dt id="__svg__SVGColorProfileElement__name" class="attribute"><b>name</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'name'</a> on the given element.
+
+
+</div>
+</dd>
+
+<dt id="__svg__SVGColorProfileElement__renderingIntent" class="attribute"><b>renderingIntent</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'rendering-intent'</a> on the given element.
+The value of this attribute is the value of the the RENDERING_INTENT_*
+constant defined on <a>SVGRenderingIntent</a> that corresponds to the
+value of the <a>'rendering-intent'</a> attribute.
+
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGColorProfileRule">Interface SVGColorProfileRule</h3>
+
+
+
+<p>The <a>SVGColorProfileRule</a> interface represents an @color-profile
+rule in a CSS style sheet. An @color-profile rule identifies a ICC
+profile which can be referenced within a given document.
+</p>
+
+
+<p>Support for the <a>SVGColorProfileRule</a> interface is only required
+in user agents that support <a href="styling.html#StylingWithCSS">styling with CSS</a>.
+</p>
+<pre class="idl">interface <b>SVGColorProfileRule</b> : <a class="idlinterface" href="types.html#InterfaceSVGCSSRule">SVGCSSRule</a>,
+                                <a class="idlinterface" href="types.html#InterfaceSVGRenderingIntent">SVGRenderingIntent</a> {
+  attribute DOMString <a href="color.html#__svg__SVGColorProfileRule__src">src</a> setraises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+  attribute DOMString <a href="color.html#__svg__SVGColorProfileRule__name">name</a> setraises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+  attribute unsigned short <a href="color.html#__svg__SVGColorProfileRule__renderingIntent">renderingIntent</a> setraises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGColorProfileRule__src" class="attribute first-child"><b>src</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to descriptor <span class="property">src</span> within an
+@color-profile rule.
+
+
+</div>
+<dl class="attribute">
+<dt class="exceptions-header">Exceptions on setting</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
+</dt>
+<dd class="exception"> Raised on an attempt
+to change the value of a <a href="svgdom.html#ReadOnlyNodes">read only attribute</a>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGColorProfileRule__name" class="attribute"><b>name</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to descriptor <span class="property">'name'</span> within an
+@color-profile rule.
+
+
+</div>
+<dl class="attribute">
+<dt class="exceptions-header">Exceptions on setting</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
+</dt>
+<dd class="exception"> Raised on an attempt
+to change the value of a <a href="svgdom.html#ReadOnlyNodes">read only attribute</a>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGColorProfileRule__renderingIntent" class="attribute"><b>renderingIntent</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="attribute">
+<div>
+The type of rendering intent, identified by one of the
+<a>SVGRenderingIntent</a> constants.
+
+
+</div>
+<dl class="attribute">
+<dt class="exceptions-header">Exceptions on setting</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
+</dt>
+<dd class="exception"> Raised on an attempt
+to change the value of a <a href="svgdom.html#ReadOnlyNodes">read only attribute</a>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</body>
+</html>

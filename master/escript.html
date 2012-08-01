@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>ECMAScript Language Binding</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>ECMAScript Language Binding</h1>
+
+<p class="normativity"><strong>This appendix is normative.</strong></p>
+
+<p>This appendix describes how to expose the SVG DOM to an ECMAScript language
+environment [<a href="refs.html#ref-ECMA-262">ECMA-262</a>].</p>
+
+<p>For descriptions of how interfaces and exceptions defined in other
+specifications are to be exposed to an ECMAScript language environment,
+consult the relevant specification:</p>
+
+<ul>
+  <li>For DOM Level 2 Core interfaces and exceptions, see
+  <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/ecma-script-binding.html">the DOM Level 2 Core ECMAScript Language Binding appendix</a>
+  ([<a href="refs.html#ref-DOM2">DOM2</a>], appendix E).</li>
+  <li>For DOM Level 2 Events interfaces, see
+  <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Events-20001113/ecma-script-binding.html">the DOM Level 2 Events ECMAScript Language Binding appendix</a>
+  ([<a href="refs.html#ref-DOM2EVENTS">DOM2EVENTS</a>], appendix C).</li>
+  <li>For DOM Level 2 Views interfaces, see
+  <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Views-20001113/ecma-script-binding.html">the DOM Level 2 Views ECMAScript Language Binding appendix</a>
+  ([<a href="refs.html#ref-DOM2VIEWS">DOM2VIEWS</a>], appendix C).</li>
+  <li>For DOM Level 2 Style interfaces, see
+  <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/ecma-script-binding.html">the DOM Level 2 Style ECMAScript Language Binding appendix</a>
+  ([<a href="refs.html#ref-DOM2STYLE">DOM2STYLE</a>], appendix C).</li>
+</ul>
+
+<h2 id="Exceptions">Exceptions</h2>
+
+<p>The SVG DOM defines a single exception, <a>SVGException</a>, which is
+exposed to an ECMAScript language environment as follows.</p>
+
+<p>The ECMAScript global object has a property named <code>"SVGException"</code>
+whose value is an object with the following properties:</p>
+
+<ul>
+  <li>A read only property named <code>"SVG_WRONG_TYPE_ERR"</code>, whose value is the <span class='dom-attr-type'>Number</span> value 1.</li>
+  <li>A read only property named <code>"SVG_INVALID_VALUE_ERR"</code>, whose value is the <span class='dom-attr-type'>Number</span> value 2.</li>
+  <li>A read only property named <code>"SVG_MATRIX_NOT_INVERTABLE"</code>, whose value is the <span class='dom-attr-type'>Number</span> value 3.</li>
+</ul>
+
+<p>A host object that is an <a>SVGException</a> also has these three
+properties on itself, or somewhere in its prototype chain.  Every such host
+object also has a read only property named <code>"code"</code> whose value is a
+<span class='dom-attr-type'>Number</span>, corresponding to the
+<a>SVGException::code</a> exception member on <a>SVGException</a>.</p>
+
+<h2 id="Constants">Constants</h2>
+
+<p>For every interface defined in the SVG DOM that has one or more constants
+defined on it, there exists a property on the ECMAScript global object whose
+name is the name of the interface, and whose value is an object with a read
+only property for each of the constants.  The name of each of these read only
+properties is the name of the corresponding constant, and the value is
+a <span class='dom-attr-type'>Number</span> with the same value as that of
+the constant.</p>
+
+<p>A host object that implements an interface with constants defined on it
+has, on itself or somewhere in its prototype chain, these properties that
+correspond to the constants.</p>
+
+<h2 id="Types">Types</h2>
+
+<p>The following table gives the corresponding ECMAScript type for the IDL
+primitive types used in the SVG DOM.</p>
+
+<table class='vert' summary='Map of IDL types to ECMAScript types'>
+  <tr>
+    <th>IDL type</th>
+    <th>ECMAScript type</th>
+  </tr>
+  <tr>
+    <td>boolean</td>
+    <td><span class='dom-attr-type'>Boolean</span></td>
+  </tr>
+  <tr>
+    <td>float</td>
+    <td><span class='dom-attr-type'>Number</span></td>
+  </tr>
+  <tr>
+    <td>long</td>
+    <td><span class='dom-attr-type'>Number</span></td>
+  </tr>
+  <tr>
+    <td>unsigned short</td>
+    <td><span class='dom-attr-type'>Number</span></td>
+  </tr>
+  <tr>
+    <td>unsigned long</td>
+    <td><span class='dom-attr-type'>Number</span></td>
+  </tr>
+  <tr>
+    <td>DOMString</td>
+    <td><span class='dom-attr-type'>String</span></td>
+  </tr>
+</table>
+
+<p>When an ECMAScript <span class='dom-attr-type'>Number</span> is assigned to
+a property that corresponds to an attribute of an IDL integer type (long,
+unsigned short or unsigned long), or it is passed as an argument passed to an
+operation for which the argument type is an IDL integer type, then behavior is
+undefined if the <span class='dom-attr-type'>Number</span> value is not an
+integer within the range of that type.</p>
+
+<p>For an interface type, a host object that implements the given interface is
+used.</p>
+
+<h2 id="Objects">Objects</h2>
+
+<p>A host object that implements a given interface has properties on itself,
+or in its prototype chain, that correspond to the operations and attributes
+defined on that interface and all its superinterfaces.</p>
+
+<p>A property that corresponds to an attribute is read only if the attribute
+is read only, and has a name that is the same as the name of the attribute.
+When getting the property, a value of a type according to the <a href="#Types">Types</a>
+section above is returned.  When setting the property, if it is not read only,
+then behavior is defined only if a value of a type according to the
+<a href="#Types">Types</a> section is assigned to it.</p>
+
+<p>For example, if <var>a</var> is a host object that implements the
+<a>SVGLength</a> interface, then evaluating the statement:</p>
+
+<pre>a.valueAsString = "10";</pre>
+
+<p>has defined behavior, but evaluating the statement:</p>
+
+<pre>a.valueAsString = 10;</pre>
+
+<p>does not.</p>
+
+<p>A property that corresponds to an operation has a name that is the same
+as the name of the operation, and has a value that is a
+<span class='dom-attr-type'>Function</span> object.  The value returned
+from the <span class='dom-attr-type'>Function</span> is of a type according
+to the table in the <a href="#Types">Types</a> section above.  When calling
+the <span class='dom-attr-type'>Function</span>, behavior is only defined
+if the correct number of arguments is passed, and the type of each argument
+is the type according to the <a href="#Types">Types</a> table.  Also,
+behavior is only defined for invoking the <span class='dom-attr-type'>Function</span>
+with a <span class='dom-attr-type'>this</span> value that is equal to
+the object from which the <span class='dom-attr-type'>Function</span>
+was obtained.</p>
+
+<p>For example, if <var>L1</var> and <var>L2</var> are two distinct host objects that
+implement the <a>SVGPointList</a> interface and <var>p</var> is a host object
+that implements the <a>SVGPoint</a> interface, then evaluating the following
+statement has defined behavior:</p>
+
+<pre>L1.insertItemBefore(p, 0);</pre>
+
+<p>Evaluating any of the following statements, however, does not:</p>
+
+<pre>L1.insertItemBefore(p, '0');
+L1.insertItemBefore(p, -1);
+L1.insertItemBefore(p, 0.5);
+L1.insertItemBefore(p);
+L1.insertItemBefore(p, 0, 0);
+L1.insertItemBefore({ x: 10, y: 20 }, 0);
+L1.insertItemBefore.call([], p, 0);
+L1.insertItemBefore.call(L2, p, 0);</pre>
+
+</body>
+</html>
