@@ -1631,73 +1631,1561 @@ attributes <a>'xml:lang'</a> and <a>'xml:space'</a>.</p>
 
 <h3 id="InterfaceSVGDocument">Interface SVGDocument</h3>
 
-<edit:interface name='::svg::SVGDocument'/>
+
+
+<p>When an <a>'svg'</a> element is embedded inline as
+a component of a document from another namespace, such as when an
+<a>'svg'</a> element is embedded inline within an
+XHTML document [<a href="refs.html#ref-XHTML">XHTML</a>], then an
+<a>SVGDocument</a> object will not exist; instead, the root object in
+the document object hierarchy will be a Document object of a different
+type, such as an HTMLDocument object.
+</p>
+
+
+<p>However, an <a>SVGDocument</a> object will indeed exist when the
+root element of the XML document hierarchy is an
+<a>'svg'</a> element, such as when viewing a stand-alone SVG file (i.e., a
+file with MIME type "image/svg+xml"). In this case, the <a>SVGDocument</a>
+object will be the root object of the document object model hierarchy.
+</p>
+
+
+<p>In the case where an SVG document is embedded by reference,
+such as when an XHTML document has an <span class="element-name">'object'</span>
+element whose <span class="attr-name">'href'</span> attribute references an SVG
+document (i.e., a document whose MIME type is "image/svg+xml"
+and whose root element is thus an <a>'svg'</a> element), there will exist
+two distinct DOM hierarchies. The first DOM hierarchy will be for the
+referencing document (e.g., an XHTML document). The second DOM hierarchy
+will be for the referenced SVG document.  In this second DOM hierarchy, the
+root object of the document object model hierarchy is an
+<a>SVGDocument</a> object.
+</p>
+
+
+<p>The <a>SVGDocument</a> interface contains a similar list of attributes
+and methods to the HTMLDocument interface described in the
+<a href="http://www.w3.org/TR/REC-DOM-Level-1/level-one-html.html">Document
+Object Model (HTML) Level 1</a> chapter of the
+[<a href="refs.html#ref-DOM1">DOM1</a>] specification.
+</p>
+<pre class="idl">interface <b>SVGDocument</b> : <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#i-Document">Document</a>,
+                        <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-DocumentEvent">DocumentEvent</a> {
+  readonly attribute DOMString <a href="struct.html#__svg__SVGDocument__title">title</a>;
+  readonly attribute DOMString <a href="struct.html#__svg__SVGDocument__referrer">referrer</a>;
+  readonly attribute DOMString <a href="struct.html#__svg__SVGDocument__domain">domain</a>;
+  readonly attribute DOMString <a href="struct.html#__svg__SVGDocument__URL">URL</a>;
+  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGSVGElement">SVGSVGElement</a> <a href="struct.html#__svg__SVGDocument__rootElement">rootElement</a>;
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGDocument__title" class="attribute first-child"><b>title</b><span class="idl-type-parenthetical"> (readonly DOMString)</span></dt>
+<dd class="attribute">
+<div>
+The title of a document as specified by the <a>'title'</a> sub-element of
+the <a>'svg'</a> root element (i.e.,
+<span class="code-fragment">&lt;svg&gt;&lt;title&gt;Here is the title&lt;/title&gt;...&lt;/svg&gt;</span>)
+
+</div>
+</dd>
+
+<dt id="__svg__SVGDocument__referrer" class="attribute"><b>referrer</b><span class="idl-type-parenthetical"> (readonly DOMString)</span></dt>
+<dd class="attribute">
+<div>
+Returns the URI of the page that linked to this page. The value is an
+empty string if the user navigated to the page directly (not through a
+link, but, for example, via a bookmark).
+
+</div>
+</dd>
+
+<dt id="__svg__SVGDocument__domain" class="attribute"><b>domain</b><span class="idl-type-parenthetical"> (readonly DOMString)</span></dt>
+<dd class="attribute">
+<div>
+The domain name of the server that served the document, or a null string
+if the server cannot be identified by a domain name.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGDocument__URL" class="attribute"><b>URL</b><span class="idl-type-parenthetical"> (readonly DOMString)</span></dt>
+<dd class="attribute">
+<div>
+The complete URI of the document.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGDocument__rootElement" class="attribute"><b>rootElement</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGSVGElement">SVGSVGElement</a>)</span></dt>
+<dd class="attribute">
+<div>
+The root <a>'svg'</a> in the document hierarchy.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
 
 <h3 id="InterfaceSVGSVGElement">Interface SVGSVGElement</h3>
 
+
+
 <edit:with element='svg'>
-<edit:interface name='::svg::SVGSVGElement'/>
+
+<p>A key interface definition is the <a>SVGSVGElement</a> interface,
+which is the interface that corresponds to the <a>'svg'</a> element. This
+interface contains various miscellaneous commonly-used utility
+methods, such as matrix operations and the ability to control the
+time of redraw on visual rendering devices.
+</p>
+
+
+<p><a>SVGSVGElement</a> extends <a>ViewCSS</a> and <a>DocumentCSS</a> to
+provide access to the computed values of properties and the override style
+sheet as described in <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/"><cite>DOM Level 2 Style</cite></a>
+[<a href="refs.html#ref-DOM2STYLE">DOM2STYLE</a>].
+</p>
+<pre class="idl">interface <b>SVGSVGElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>,
+                          <a class="idlinterface" href="types.html#InterfaceSVGTests">SVGTests</a>,
+                          <a class="idlinterface" href="types.html#InterfaceSVGLangSpace">SVGLangSpace</a>,
+                          <a class="idlinterface" href="types.html#InterfaceSVGStylable">SVGStylable</a>,
+                          <a class="idlinterface" href="types.html#InterfaceSVGLocatable">SVGLocatable</a>,
+                          <a class="idlinterface" href="types.html#InterfaceSVGFitToViewBox">SVGFitToViewBox</a>,
+                          <a class="idlinterface" href="types.html#InterfaceSVGZoomAndPan">SVGZoomAndPan</a>,
+                          <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-DocumentEvent">DocumentEvent</a>,
+                          <a class="idlinterface"
+   href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/css.html#CSS-ViewCSS">ViewCSS</a>,
+                          <a class="idlinterface"
+   href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/css.html#CSS-DocumentCSS">DocumentCSS</a> {
+
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__y">y</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__width">width</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__height">height</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="struct.html#__svg__SVGSVGElement__viewport">viewport</a>;
+  readonly attribute float <a href="struct.html#__svg__SVGSVGElement__pixelUnitToMillimeterX">pixelUnitToMillimeterX</a>;
+  readonly attribute float <a href="struct.html#__svg__SVGSVGElement__pixelUnitToMillimeterY">pixelUnitToMillimeterY</a>;
+  readonly attribute float <a href="struct.html#__svg__SVGSVGElement__screenPixelToMillimeterX">screenPixelToMillimeterX</a>;
+  readonly attribute float <a href="struct.html#__svg__SVGSVGElement__screenPixelToMillimeterY">screenPixelToMillimeterY</a>;
+  readonly attribute boolean <a href="struct.html#__svg__SVGSVGElement__useCurrentView">useCurrentView</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGViewSpec">SVGViewSpec</a> <a href="struct.html#__svg__SVGSVGElement__currentView">currentView</a>;
+           attribute float <a href="struct.html#__svg__SVGSVGElement__currentScale">currentScale</a>;
+  readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a> <a href="struct.html#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>;
+
+  unsigned long <a href="struct.html#__svg__SVGSVGElement__suspendRedraw">suspendRedraw</a>(in unsigned long maxWaitMilliseconds);
+  void <a href="struct.html#__svg__SVGSVGElement__unsuspendRedraw">unsuspendRedraw</a>(in unsigned long suspendHandleID);
+  void <a href="struct.html#__svg__SVGSVGElement__unsuspendRedrawAll">unsuspendRedrawAll</a>();
+  void <a href="struct.html#__svg__SVGSVGElement__forceRedraw">forceRedraw</a>();
+  void <a href="struct.html#__svg__SVGSVGElement__pauseAnimations">pauseAnimations</a>();
+  void <a href="struct.html#__svg__SVGSVGElement__unpauseAnimations">unpauseAnimations</a>();
+  boolean <a href="struct.html#__svg__SVGSVGElement__animationsPaused">animationsPaused</a>();
+  float <a href="struct.html#__svg__SVGSVGElement__getCurrentTime">getCurrentTime</a>();
+  void <a href="struct.html#__svg__SVGSVGElement__setCurrentTime">setCurrentTime</a>(in float seconds);
+  <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <a href="struct.html#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a>(in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect, in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> referenceElement);
+  <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <a href="struct.html#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a>(in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect, in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> referenceElement);
+  boolean <a href="struct.html#__svg__SVGSVGElement__checkIntersection">checkIntersection</a>(in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> element, in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect);
+  boolean <a href="struct.html#__svg__SVGSVGElement__checkEnclosure">checkEnclosure</a>(in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> element, in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect);
+  void <a href="struct.html#__svg__SVGSVGElement__deselectAll">deselectAll</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGNumber">SVGNumber</a> <a href="struct.html#__svg__SVGSVGElement__createSVGNumber">createSVGNumber</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGLength">SVGLength</a> <a href="struct.html#__svg__SVGSVGElement__createSVGLength">createSVGLength</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGAngle">SVGAngle</a> <a href="struct.html#__svg__SVGSVGElement__createSVGAngle">createSVGAngle</a>();
+  <a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a> <a href="struct.html#__svg__SVGSVGElement__createSVGPoint">createSVGPoint</a>();
+  <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <a href="struct.html#__svg__SVGSVGElement__createSVGMatrix">createSVGMatrix</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="struct.html#__svg__SVGSVGElement__createSVGRect">createSVGRect</a>();
+  <a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransform">createSVGTransform</a>();
+  <a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>(in <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> matrix);
+  <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-745549614">Element</a> <a href="struct.html#__svg__SVGSVGElement__getElementById">getElementById</a>(in DOMString elementId);
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGSVGElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given <a>'svg'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given <a>'svg'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__width" class="attribute"><b>width</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'width'</a> on the given <a>'svg'</a>
+element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__height" class="attribute"><b>height</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'height'</a> on the given <a>'svg'</a>
+element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__viewport" class="attribute"><b>viewport</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a>)</span></dt>
+<dd class="attribute">
+<div>
+
+<p>The position and size of the viewport (implicit or explicit) that
+corresponds to this <a>'svg'</a> element. When the user agent is actually
+rendering the content, then the position and size values represent the
+actual values when rendering. The position and size values are unitless
+values in the coordinate system of the parent element. If no parent element
+exists (i.e., <a>'svg'</a> element represents the root of the document
+tree), if this SVG document is embedded as part of another document (e.g.,
+via the HTML <span class="element-name">'object'</span> element), then the
+position and size are unitless values in the coordinate system of the parent
+document. (If the parent uses CSS or XSL layout, then unitless values
+represent pixel units for the current CSS or XSL viewport, as described in
+the CSS2 specification.) If the parent element does not have a coordinate
+system, then the user agent should provide reasonable default values for
+this attribute.
+</p>
+
+
+<p>The <a>SVGRect</a> object is <a href="types.html#ReadOnlyRect">read only</a>.
+</p>
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__pixelUnitToMillimeterX" class="attribute"><b>pixelUnitToMillimeterX</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
+<dd class="attribute">
+<div>
+Size of a pixel units (as defined by CSS2) along the x-axis of
+the viewport, which represents a unit somewhere in the range
+of 70dpi to 120dpi, and, on systems that support this, might
+actually match the characteristics of the target medium. On
+systems where it is impossible to know the size of a pixel, a
+suitable default pixel size is provided.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__pixelUnitToMillimeterY" class="attribute"><b>pixelUnitToMillimeterY</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
+<dd class="attribute">
+<div>
+Corresponding size of a pixel unit along the y-axis of the viewport.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__screenPixelToMillimeterX" class="attribute"><b>screenPixelToMillimeterX</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
+<dd class="attribute">
+<div>
+User interface (UI) events in DOM Level 2 indicate the screen
+positions at which the given UI event occurred. When the user
+agent actually knows the physical size of a "screen unit", this
+attribute will express that information; otherwise, user agents
+will provide a suitable default value such as .28mm.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__screenPixelToMillimeterY" class="attribute"><b>screenPixelToMillimeterY</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
+<dd class="attribute">
+<div>
+Corresponding size of a screen pixel along the y-axis of the viewport.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__useCurrentView" class="attribute"><b>useCurrentView</b><span class="idl-type-parenthetical"> (readonly boolean)</span></dt>
+<dd class="attribute">
+<div>
+The initial view (i.e., before magnification and panning) of 
+the current innermost SVG document fragment can be either the 
+"standard" view (i.e., based on attributes on the <a>'svg'</a> 
+element such as <a>'svg/viewBox'</a>) or to a "custom" view (i.e., a
+hyperlink into a particular <a>'view'</a> or other element - see 
+<a href="linking.html#LinksIntoSVG">Linking into SVG content:
+IRI fragments and SVG views</a>). If the initial view is the
+"standard" view, then this attribute is false. If the initial
+view is a "custom" view, then this attribute is true.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__currentView" class="attribute"><b>currentView</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGViewSpec">SVGViewSpec</a>)</span></dt>
+<dd class="attribute">
+<div>
+
+<p>The definition of the initial view (i.e., before magnification
+and panning) of the current innermost SVG document fragment. The
+meaning depends on the situation:
+</p>
+
+<ul>
+
+<li>
+If the initial view was a "standard" view, then: 
+
+<ul>
+
+<li>the values for <a>SVGFitToViewBox::viewBox</a>,
+<a>SVGFitToViewBox::preserveAspectRatio</a> and
+<a>SVGZoomAndPan::zoomAndPan</a> within <a>currentView</a>
+will match the values for the corresponding DOM attributes
+that are on SVGSVGElement directly
+</li>
+
+
+<li>the values for <a>SVGViewSpec::transform</a> and
+<a>SVGViewSpec::viewTarget</a> within <a>currentView</a>
+will be null
+</li>
+
+</ul>
+
+</li>
+
+<li>
+If the initial view was a link into a <a>'view'</a> element, then: 
+
+<ul>
+
+<li>the values for <a>SVGFitToViewBox::viewBox</a>,
+<a>SVGFitToViewBox::preserveAspectRatio</a> and
+<a>SVGZoomAndPan::zoomAndPan</a> within <a>currentView</a>
+will correspond to the corresponding attributes for the
+given <a>'view'</a> element
+</li>
+
+
+<li>the values for <a>SVGViewSpec::transform</a> and
+<a>SVGViewSpec::viewTarget</a> within <a>currentView</a>
+will be null
+</li>
+
+</ul>
+
+</li>
+
+<li>
+If the initial view was a link into another element (i.e.,
+other than a <a>'view'</a>), then:
+
+<ul>
+
+<li>the values for <a>SVGFitToViewBox::viewBox</a>,
+<a>SVGFitToViewBox::preserveAspectRatio</a> and
+<a>SVGZoomAndPan::zoomAndPan</a> within <a>currentView</a>
+will match the values for the corresponding DOM attributes
+that are on SVGSVGElement directly for the closest ancestor
+<a>'svg'</a> element
+</li>
+
+
+<li>the values for <a>SVGViewSpec::transform</a> within
+<a>currentView</a> will be null
+</li>
+
+
+<li>the <a>SVGViewSpec::viewTarget</a> within
+<a>currentView</a> will represent the target of the
+link
+</li>
+
+</ul>
+
+</li>
+
+<li>
+If the initial view was a link into the SVG document fragment
+using an SVG view specification fragment identifier (i.e.,
+#svgView(...)), then:
+
+<ul>
+
+<li>the values for <a>SVGFitToViewBox::viewBox</a>,
+<a>SVGFitToViewBox::preserveAspectRatio</a>,
+<a>SVGZoomAndPan::zoomAndPan</a>,
+<a>SVGViewSpec::transform</a> and
+<a>SVGViewSpec::viewTarget</a> within <a>currentView</a>
+will correspond to the values from the SVG view
+specification fragment identifier
+</li>
+
+</ul>
+
+</li>
+
+</ul>
+
+
+<p>The object itself and its contents are both read only.</p>
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__currentScale" class="attribute"><b>currentScale</b><span class="idl-type-parenthetical"> (float)</span></dt>
+<dd class="attribute">
+<div>
+On an <a>outermost svg element</a>, this attribute indicates the
+current scale factor
+relative to the initial view to take into account user
+magnification and panning operations, as described under
+<a href="interact.html#ZoomAndPanAttribute">Magnification
+and panning</a>. DOM attributes <a>currentScale</a> and
+<a>currentTranslate</a>
+are equivalent to the 2x3 matrix [a b c d e f] =
+[currentScale 0 0 currentScale currentTranslate.x currentTranslate.y].
+If "magnification" is enabled (i.e., <span class="attr-value">zoomAndPan="magnify"</span>),
+then the effect is as if an extra transformation were placed at the
+outermost level on the SVG document fragment (i.e., outside the
+<a>outermost svg element</a>).
+
+<p>When accessed on an <a>'svg'</a> element that is not an
+<a>outermost svg element</a>, it is undefined what behavior
+this attribute has.
+</p>
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__currentTranslate" class="attribute"><b>currentTranslate</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a>)</span></dt>
+<dd class="attribute">
+<div>
+On an <a>outermost svg element</a>, the corresponding translation factor
+that takes into account user "magnification".
+
+<p>When accessed on an <a>'svg'</a> element that is not an
+<a>outermost svg element</a>, it is undefined what behavior
+this attribute has.
+</p>
+
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="operations-header">Operations:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGSVGElement__suspendRedraw" class="operation first-child">unsigned long <b>suspendRedraw</b>(in unsigned long <var>maxWaitMilliseconds</var>)
+</dt>
+<dd class="operation">
+<div>
+This method is deprecated, and is only kept due to
+compatibility with legacy content. Calling this method has no
+effect on redrawing.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>unsigned long <var>maxWaitMilliseconds</var></div> 
+<div> This parameter is ignored.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The returned value is always <span class="attr-value">1</span>.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__unsuspendRedraw" class="operation">void <b>unsuspendRedraw</b>(in unsigned long <var>suspendHandleID</var>)
+</dt>
+<dd class="operation">
+<div>
+This method is deprecated, and is only kept due to
+compatibility with legacy content. Calling this method has no
+effect on redrawing.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>unsigned long <var>suspendHandleID</var></div> 
+<div> This parameter is ignored.
+
+</div>
+</li>
+</ol>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__unsuspendRedrawAll" class="operation">void <b>unsuspendRedrawAll</b>()
+</dt>
+<dd class="operation">
+<div>
+This method is deprecated, and is only kept due to
+compatibility with legacy content. Calling this method has no
+effect on redrawing.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__forceRedraw" class="operation">void <b>forceRedraw</b>()
+</dt>
+<dd class="operation">
+<div>
+In rendering environments supporting interactivity, forces the user agent
+to immediately redraw all regions of the viewport that require updating. 
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__pauseAnimations" class="operation">void <b>pauseAnimations</b>()
+</dt>
+<dd class="operation">
+<div>
+Suspends (i.e., pauses) all currently running animations that are defined
+within the SVG document fragment corresponding to this <a>'svg'</a>
+element, causing the animation clock corresponding to this document
+fragment to stand still until it is unpaused.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__unpauseAnimations" class="operation">void <b>unpauseAnimations</b>()
+</dt>
+<dd class="operation">
+<div>
+Unsuspends (i.e., unpauses) currently running animations that are defined
+within the SVG document fragment, causing the animation clock to continue
+from the time at which it was suspended.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__animationsPaused" class="operation">boolean <b>animationsPaused</b>()
+</dt>
+<dd class="operation">
+<div>
+Returns true if this SVG document fragment is in a paused state.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> Boolean indicating whether this SVG document fragment is in a
+paused state.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__getCurrentTime" class="operation">float <b>getCurrentTime</b>()
+</dt>
+<dd class="operation">
+<div>
+Returns the current time in seconds relative to the start time for the
+current SVG document fragment.
+
+If <span class="dom-method-name">getCurrentTime</span> is called before
+the document timeline has begun (for example, by script running in a
+<a>'script'</a>  element before the document's
+<a href="interact.html#LoadEvent">SVGLoad</a> event is dispatched),
+then 0 is returned. 
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The current time in seconds, or 0 if the document timeline has not yet begun.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__setCurrentTime" class="operation">void <b>setCurrentTime</b>(in float <var>seconds</var>)
+</dt>
+<dd class="operation">
+<div>
+Adjusts the clock for this SVG document fragment, establishing a new
+current time.
+
+If <span class="dom-method-name">setCurrentTime</span> is called
+before the document timeline has begun (for example, by script running
+in a <a>'script'</a> element before the document's
+<a href="interact.html#LoadEvent">SVGLoad</a> event is dispatched),
+then the value of <var>seconds</var> in the last invocation of the method
+gives the time that the document will seek to once the document
+timeline has begun.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>float <var>seconds</var></div> 
+<div> The new current time in seconds relative to the start
+time for the current SVG document fragment.
+
+</div>
+</li>
+</ol>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__getIntersectionList" class="operation"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <b>getIntersectionList</b>(in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>, in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>referenceElement</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns the list of graphics elements whose rendered content intersects
+the supplied rectangle. Each candidate graphics element is to
+be considered a match only if the same graphics element can be a 
+<a href="interact.html#PointerEventsProperty">target of pointer events</a> 
+as defined in <a>'pointer-events'</a> processing.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var></div> 
+<div> The test rectangle. The values are in the <a>initial coordinate
+system</a> for the current <a>'svg'</a> element.
+
+</div>
+</li>
+<li class="parameter">
+<div><a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>referenceElement</var></div> 
+<div> If not null, then any intersected element that 
+doesn't have the referenceElement as ancestor must not be included 
+in the returned NodeList.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> A list of Elements whose content intersects the supplied
+rectangle.  This <a>NodeList</a> must be implemented identically to
+the <a>NodeList</a> interface as defined in DOM Level 2 Core
+([<a href="refs.html#ref-DOM2">DOM2</a>], section 1.2) with the
+exception that the interface is not
+<a
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#td-live">live</a>.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__getEnclosureList" class="operation"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <b>getEnclosureList</b>(in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>, in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>referenceElement</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns the list of graphics elements whose rendered content is entirely
+contained within the supplied rectangle. Each candidate graphics element is to
+be considered a match only if the same graphics element can be a 
+<a href="interact.html#PointerEventsProperty">target of pointer events</a> 
+as defined in <a>'pointer-events'</a> processing.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var></div> 
+<div> The test rectangle. The values are in the <a>initial coordinate
+system</a> for the current <a>'svg'</a> element.
+
+</div>
+</li>
+<li class="parameter">
+<div><a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>referenceElement</var></div> 
+<div> If not null, then any intersected element that 
+doesn't have the referenceElement as ancestor must not be included 
+in the returned NodeList.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> A list of Elements whose content is enclosed by the supplied
+rectangle.  This <a>NodeList</a> must be implemented identically to
+the <a>NodeList</a> interface as defined in DOM Level 2 Core
+([<a href="refs.html#ref-DOM2">DOM2</a>], section 1.2) with the
+exception that the interface is not
+<a
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#td-live">live</a>.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__checkIntersection" class="operation">boolean <b>checkIntersection</b>(in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var>, in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns true if the rendered content of the given element intersects the
+supplied rectangle. Each candidate graphics element is to
+be considered a match only if the same graphics element can be a 
+<a href="interact.html#PointerEventsProperty">target of pointer events</a> 
+as defined in <a>'pointer-events'</a> processing.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div><a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var></div> 
+<div> The element on which to perform the given test.
+
+</div>
+</li>
+<li class="parameter">
+<div><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var></div> 
+<div> The test rectangle. The values are in the <a>initial coordinate
+system</a> for the current <a>'svg'</a> element.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> True or false, depending on whether the given element intersects
+the supplied rectangle.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__checkEnclosure" class="operation">boolean <b>checkEnclosure</b>(in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var>, in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns true if the rendered content of the given element is entirely
+contained within the supplied rectangle. Each candidate graphics element is to
+be considered a match only if the same graphics element can be a 
+<a href="interact.html#PointerEventsProperty">target of pointer events</a> 
+as defined in <a>'pointer-events'</a> processing.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div><a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var></div> 
+<div> The element on which to perform the given test.
+
+</div>
+</li>
+<li class="parameter">
+<div><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var></div> 
+<div> The test rectangle. The values are in the <a>initial coordinate
+system</a> for the current <a>'svg'</a> element.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> True or false, depending on whether the given element is enclosed
+by the supplied rectangle.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__deselectAll" class="operation">void <b>deselectAll</b>()
+</dt>
+<dd class="operation">
+<div>
+Unselects any selected objects, including any selections of text strings
+and type-in bars.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGNumber" class="operation"><a class="idlinterface" href="types.html#InterfaceSVGNumber">SVGNumber</a> <b>createSVGNumber</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>SVGNumber</a> object outside of any document trees. The
+object is initialized to a value of zero.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGNumber</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGLength" class="operation"><a class="idlinterface" href="types.html#InterfaceSVGLength">SVGLength</a> <b>createSVGLength</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>SVGLength</a> object outside of any document trees. The
+object is initialized to the value of 0 user units. 
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGLength</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGAngle" class="operation"><a class="idlinterface" href="types.html#InterfaceSVGAngle">SVGAngle</a> <b>createSVGAngle</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>SVGAngle</a> object outside of any document trees. The
+object is initialized to the value 0 degrees (unitless). 
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGAngle</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGPoint" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a> <b>createSVGPoint</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>SVGPoint</a> object outside of any document trees. The
+object is initialized to the point (0,0) in the user coordinate system.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGPoint</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGMatrix" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <b>createSVGMatrix</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>SVGMatrix</a> object outside of any document trees. The
+object is initialized to the identity matrix.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGMatrix</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGRect" class="operation"><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <b>createSVGRect</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>SVGRect</a> object outside of any document trees. The
+object is initialized such that all values are set to 0 user units.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGRect</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGTransform" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <b>createSVGTransform</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>SVGTransform</a> object outside of any document trees. The
+object is initialized to an identity matrix transform
+(SVG_TRANSFORM_MATRIX).
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGTransform</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGTransformFromMatrix" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <b>createSVGTransformFromMatrix</b>(in <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <var>matrix</var>)
+</dt>
+<dd class="operation">
+<div>
+
+<p xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+Creates an <a>SVGTransform</a> object outside of any document trees. The
+object is initialized to the given matrix transform (i.e.,
+SVG_TRANSFORM_MATRIX).  The values from the parameter <var>matrix</var>
+are copied, the <var>matrix</var> parameter is not adopted as
+<a edit:format="expanded">SVGTransform::matrix</a>.
+
+</p>
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div><a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <var>matrix</var></div> 
+<div> The transform matrix.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGTransform</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__getElementById" class="operation"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-745549614">Element</a> <b>getElementById</b>(in DOMString <var>elementId</var>)
+</dt>
+<dd class="operation">
+<div>
+Searches this SVG document fragment (i.e., the search is restricted to a
+subset of the document tree) for an Element whose id is given by
+<var>elementId</var>. If an Element is found, that Element is returned. If
+no such element exists, returns null. Behavior is not defined if more
+than one element has this id.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>DOMString <var>elementId</var></div> 
+<div> The unique id value for an element.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The matching element.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
 </edit:with>
+
 
 <h3 id="InterfaceSVGGElement">Interface SVGGElement</h3>
 
+
 <edit:with element='g'>
-<edit:interface name='::svg::SVGGElement'/>
+
+The <a>SVGSVGElement</a> interface corresponds to the <a>'g'</a> element.
+<pre class="idl">interface <b>SVGGElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>,
+                        <a class="idlinterface" href="types.html#InterfaceSVGTests">SVGTests</a>,
+                        <a class="idlinterface" href="types.html#InterfaceSVGLangSpace">SVGLangSpace</a>,
+                        <a class="idlinterface" href="types.html#InterfaceSVGStylable">SVGStylable</a>,
+                        <a class="idlinterface" href="types.html#InterfaceSVGTransformable">SVGTransformable</a> {
+};</pre>
+
 </edit:with>
 
 <h3 id="InterfaceSVGDefsElement">Interface SVGDefsElement</h3>
 
+
 <edit:with element='defs'>
-<edit:interface name='::svg::SVGDefsElement'/>
+
+The <a>SVGDefsElement</a> interface corresponds to the <a>'defs'</a>
+element.
+<pre class="idl">interface <b>SVGDefsElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>,
+                           <a class="idlinterface" href="types.html#InterfaceSVGTests">SVGTests</a>,
+                           <a class="idlinterface" href="types.html#InterfaceSVGLangSpace">SVGLangSpace</a>,
+                           <a class="idlinterface" href="types.html#InterfaceSVGStylable">SVGStylable</a>,
+                           <a class="idlinterface" href="types.html#InterfaceSVGTransformable">SVGTransformable</a> {
+};</pre>
+
 </edit:with>
 
 <h3 id="InterfaceSVGDescElement">Interface SVGDescElement</h3>
 
+
 <edit:with element='desc'>
-<edit:interface name='::svg::SVGDescElement'/>
+
+The <a>SVGDescElement</a> interface corresponds to the <a>'desc'</a>
+element.
+<pre class="idl">interface <b>SVGDescElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>,
+                           <a class="idlinterface" href="types.html#InterfaceSVGLangSpace">SVGLangSpace</a>,
+                           <a class="idlinterface" href="types.html#InterfaceSVGStylable">SVGStylable</a> {
+};</pre>
+
 </edit:with>
 
 <h3 id="InterfaceSVGTitleElement">Interface SVGTitleElement</h3>
 
+
 <edit:with element='title'>
-<edit:interface name='::svg::SVGTitleElement'/>
+
+The <a>SVGTitleElement</a> interface corresponds to the <a>'title'</a>
+element.
+<pre class="idl">interface <b>SVGTitleElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>,
+                            <a class="idlinterface" href="types.html#InterfaceSVGLangSpace">SVGLangSpace</a>,
+                            <a class="idlinterface" href="types.html#InterfaceSVGStylable">SVGStylable</a> {
+};</pre>
+
 </edit:with>
+
 
 <h3 id="InterfaceSVGSymbolElement">Interface SVGSymbolElement</h3>
 
+
 <edit:with element='symbol'>
-<edit:interface name='::svg::SVGSymbolElement'/>
+
+The <a>SVGSymbolElement</a> interface corresponds to the <a>'symbol'</a>
+element.
+<pre class="idl">interface <b>SVGSymbolElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>,
+                             <a class="idlinterface" href="types.html#InterfaceSVGLangSpace">SVGLangSpace</a>,
+                             <a class="idlinterface" href="types.html#InterfaceSVGStylable">SVGStylable</a>,
+                             <a class="idlinterface" href="types.html#InterfaceSVGFitToViewBox">SVGFitToViewBox</a> {
+};</pre>
+
 </edit:with>
 
 <h3 id="InterfaceSVGUseElement">Interface SVGUseElement</h3>
 
+
 <edit:with element='use'>
-<edit:interface name='::svg::SVGUseElement'/>
+
+The <a>SVGUseElement</a> interface corresponds to the <a>'use'</a> element.
+<pre class="idl">interface <b>SVGUseElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>,
+                          <a class="idlinterface" href="types.html#InterfaceSVGURIReference">SVGURIReference</a>,
+                          <a class="idlinterface" href="types.html#InterfaceSVGTests">SVGTests</a>,
+                          <a class="idlinterface" href="types.html#InterfaceSVGLangSpace">SVGLangSpace</a>,
+                          <a class="idlinterface" href="types.html#InterfaceSVGStylable">SVGStylable</a>,
+                          <a class="idlinterface" href="types.html#InterfaceSVGTransformable">SVGTransformable</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__y">y</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__width">width</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__height">height</a>;
+  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGUseElement__instanceRoot">instanceRoot</a>;
+  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGUseElement__animatedInstanceRoot">animatedInstanceRoot</a>;
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGUseElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given <a>'use'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGUseElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given <a>'use'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGUseElement__width" class="attribute"><b>width</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'width'</a> on the given <a>'use'</a>
+element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGUseElement__height" class="attribute"><b>height</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'height'</a> on the given <a>'use'</a>
+element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGUseElement__instanceRoot" class="attribute"><b>instanceRoot</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
+<dd class="attribute">
+<div>
+The root of the "instance tree".  See description of
+<a>SVGElementInstance</a> for a discussion on the instance tree.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGUseElement__animatedInstanceRoot" class="attribute"><b>animatedInstanceRoot</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
+<dd class="attribute">
+<div>
+If the <a>'xlink:href'</a> attribute is being animated, contains the current
+animated root of the "instance tree".  If the <a>'xlink:href'</a> attribute
+is not currently being animated, contains the same value as
+<a>instanceRoot</a>.  See description of <a>SVGElementInstance</a>
+for a discussion on the instance tree.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
 </edit:with>
+
 
 <h3 id="InterfaceSVGElementInstance">Interface SVGElementInstance</h3>
 
-<edit:interface name='::svg::SVGElementInstance'/>
+
+
+<p>For each <a>'use'</a> element, the SVG DOM maintains a shadow tree (the
+"instance tree") of objects of type <a>SVGElementInstance</a>. An
+<a>SVGElementInstance</a> represents a single node in the instance tree.
+The root object in the instance tree is pointed to by the
+<a>SVGUseElement::instanceRoot</a> attribute on the
+<a>SVGUseElement</a> object for the corresponding <a>'use'</a> element.
+</p>
+
+
+<p>If the <a>'use'</a> element references a simple graphics element such as
+a <a>'rect'</a>, then there is only a single <a>SVGElementInstance</a>
+object, and the <a>correspondingElement</a> attribute on this
+<a>SVGElementInstance</a> object is the <a>SVGRectElement</a> that
+corresponds to the referenced <a>'rect'</a> element.
+</p>
+
+
+<p>If the <a>'use'</a> element references a <a>'g'</a> which contains two
+<a>'rect'</a> elements, then the instance tree contains three
+<a>SVGElementInstance</a> objects, a root <a>SVGElementInstance</a> object
+whose <a>correspondingElement</a> is the <a>SVGGElement</a> object for the
+<a>'g'</a>, and then two child <a>SVGElementInstance</a> objects, each of
+which has its <a>correspondingElement</a> that is an <a>SVGRectElement</a>
+object.
+</p>
+
+
+<p>If the referenced object is itself a <a>'use'</a>, or if there are
+<a>'use'</a> subelements within the referenced object, the instance tree
+will contain recursive expansion of the indirect references to form a
+complete tree. For example, if a <a>'use'</a> element references a
+<a>'g'</a>, and the <a>'g'</a> itself contains a <a>'use'</a>, and that
+<a>'use'</a> references a <a>'rect'</a>, then the instance tree for the
+original (outermost) <a>'use'</a> will consist of a hierarchy of
+<a>SVGElementInstance</a> objects, as follows:
+</p>
+
+<pre>SVGElementInstance #1 (parentNode=null, firstChild=#2, correspondingElement is the 'g')
+  SVGElementInstance #2 (parentNode=#1, firstChild=#3, correspondingElement is the other 'use')
+    SVGElementInstance #3 (parentNode=#2, firstChild=null, correspondingElement is the 'rect')
+</pre>
+<pre class="idl">interface <b>SVGElementInstance</b> : <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-EventTarget">EventTarget</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <a href="struct.html#__svg__SVGElementInstance__correspondingElement">correspondingElement</a>;
+  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGUseElement">SVGUseElement</a> <a href="struct.html#__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</a>;
+  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstance__parentNode">parentNode</a>;
+  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstanceList">SVGElementInstanceList</a> <a href="struct.html#__svg__SVGElementInstance__childNodes">childNodes</a>;
+  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstance__firstChild">firstChild</a>;
+  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstance__lastChild">lastChild</a>;
+  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstance__previousSibling">previousSibling</a>;
+  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstance__nextSibling">nextSibling</a>;
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGElementInstance__correspondingElement"
+    class="attribute first-child"><b>correspondingElement</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>)</span></dt>
+<dd class="attribute">
+<div>
+The corresponding element to which this object is an instance. For
+example, if a <a>'use'</a> element references a <a>'rect'</a> element,
+then an <a>SVGElementInstance</a> is created, with its
+<a>correspondingElement</a> being the <a>SVGRectElement</a> object
+for the <a>'rect'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGElementInstance__correspondingUseElement" class="attribute"><b>correspondingUseElement</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGUseElement">SVGUseElement</a>)</span></dt>
+<dd class="attribute">
+<div>
+The corresponding <a>'use'</a> element to which this
+<a>SVGElementInstance</a> object belongs. When <a>'use'</a> elements are
+nested (e.g., a <a>'use'</a> references another <a>'use'</a> which
+references a graphics element such as a <a>'rect'</a>), then the
+<a>correspondingUseElement</a> is the outermost <a>'use'</a> (i.e., the
+one which indirectly references the <a>'rect'</a>, not the one with the
+direct reference).
+
+</div>
+</dd>
+
+<dt id="__svg__SVGElementInstance__parentNode" class="attribute"><b>parentNode</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
+<dd class="attribute">
+<div>
+The parent of this <a>SVGElementInstance</a> within the instance tree.
+All <a>SVGElementInstance</a> objects have a parent except the
+<a>SVGElementInstance</a> which corresponds to the element which was
+directly referenced by the <a>'use'</a> element, in which case
+<a>parentNode</a> is null.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGElementInstance__childNodes" class="attribute"><b>childNodes</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstanceList">SVGElementInstanceList</a>)</span></dt>
+<dd class="attribute">
+<div>
+An <a>SVGElementInstanceList</a> that contains all children of this
+<a>SVGElementInstance</a> within the instance tree. If there are no
+children, this is an <a>SVGElementInstanceList</a> containing no entries
+(i.e., an empty list).
+
+</div>
+</dd>
+
+<dt id="__svg__SVGElementInstance__firstChild" class="attribute"><b>firstChild</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
+<dd class="attribute">
+<div>
+The first child of this <a>SVGElementInstance</a> within the instance
+tree. If there is no such <a>SVGElementInstance</a>, this returns null.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGElementInstance__lastChild" class="attribute"><b>lastChild</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
+<dd class="attribute">
+<div>
+The last child of this <a>SVGElementInstance</a> within the instance
+tree. If there is no such <a>SVGElementInstance</a>, this returns null.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGElementInstance__previousSibling" class="attribute"><b>previousSibling</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
+<dd class="attribute">
+<div>
+The <a>SVGElementInstance</a> immediately preceding this
+<a>SVGElementInstance</a>. If there is no such <a>SVGElementInstance</a>,
+this returns null.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGElementInstance__nextSibling" class="attribute"><b>nextSibling</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
+<dd class="attribute">
+<div>
+The <a>SVGElementInstance</a> immediately following this
+<a>SVGElementInstance</a>. If there is no such <a>SVGElementInstance</a>,
+this returns null.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
 
 <h3 id="InterfaceSVGElementInstanceList">Interface SVGElementInstanceList</h3>
 
-<edit:interface name='::svg::SVGElementInstanceList'/>
+
+The <a>SVGElementInstanceList</a> interface provides the abstraction of an
+ordered collection of <a>SVGElementInstance</a> objects, without defining
+or constraining how this collection is implemented.
+<pre class="idl">interface <b>SVGElementInstanceList</b> {
+
+  readonly attribute unsigned long <a href="struct.html#__svg__SVGElementInstanceList__length">length</a>;
+
+  <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstanceList__item">item</a>(in unsigned long index);
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGElementInstanceList__length" class="attribute first-child"><b>length</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
+<dd class="attribute">
+<div>
+The number of <a>SVGElementInstance</a> objects in the list. The range
+of valid child indices is 0 to <a>length</a>-1 inclusive.
+
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="operations-header">Operations:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGElementInstanceList__item" class="operation first-child"><a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <b>item</b>(in unsigned long <var>index</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns the <var>index</var>th item in the collection. If
+<var>index</var> is greater than or equal to the number of nodes in the
+list, this returns null.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>unsigned long <var>index</var></div> 
+<div> Index into the collection.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The <a>SVGElementInstance</a> object at the <var>index</var>th
+position in the <a>SVGElementInstanceList</a>, or null if that is not
+a valid index.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
 
 <h3 id="InterfaceSVGImageElement">Interface SVGImageElement</h3>
 
+
 <edit:with element='image'>
-<edit:interface name='::svg::SVGImageElement'/>
+
+The <a>SVGImageElement</a> interface corresponds to the <a>'image'</a>
+element.
+<pre class="idl">interface <b>SVGImageElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>,
+                            <a class="idlinterface" href="types.html#InterfaceSVGURIReference">SVGURIReference</a>,
+                            <a class="idlinterface" href="types.html#InterfaceSVGTests">SVGTests</a>,
+                            <a class="idlinterface" href="types.html#InterfaceSVGLangSpace">SVGLangSpace</a>,
+                            <a class="idlinterface" href="types.html#InterfaceSVGStylable">SVGStylable</a>,
+                            <a class="idlinterface" href="types.html#InterfaceSVGTransformable">SVGTransformable</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGImageElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGImageElement__y">y</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGImageElement__width">width</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGImageElement__height">height</a>;
+  readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedPreserveAspectRatio">SVGAnimatedPreserveAspectRatio</a> <a href="struct.html#__svg__SVGImageElement__preserveAspectRatio">preserveAspectRatio</a>;
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGImageElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given <a>'image'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGImageElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given <a>'image'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGImageElement__width" class="attribute"><b>width</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'width'</a> on the given <a>'image'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGImageElement__height" class="attribute"><b>height</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'height'</a> on the given <a>'image'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGImageElement__preserveAspectRatio" class="attribute"><b>preserveAspectRatio</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedPreserveAspectRatio">SVGAnimatedPreserveAspectRatio</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'preserveAspectRatio'</a> on the given <a>'image'</a> element.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
 </edit:with>
+
 
 <h3 id="InterfaceSVGSwitchElement">Interface SVGSwitchElement</h3>
 
+
 <edit:with element='switch'>
-<edit:interface name='::svg::SVGSwitchElement'/>
+
+The <a>SVGSwitchElement</a> interface corresponds to the <a>'switch'</a>
+element.
+<pre class="idl">interface <b>SVGSwitchElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>,
+                             <a class="idlinterface" href="types.html#InterfaceSVGTests">SVGTests</a>,
+                             <a class="idlinterface" href="types.html#InterfaceSVGLangSpace">SVGLangSpace</a>,
+                             <a class="idlinterface" href="types.html#InterfaceSVGStylable">SVGStylable</a>,
+                             <a class="idlinterface" href="types.html#InterfaceSVGTransformable">SVGTransformable</a> {
+};</pre>
+
 </edit:with>
 
 <h3 id="InterfaceGetSVGDocument">Interface GetSVGDocument</h3>
 
-<edit:interface name='::svg::GetSVGDocument'/>
+
+
+<p>This interface provides access to an SVG document embedded by reference
+in another DOM-based language. The expectation is that the interface is
+implemented on DOM objects that allow such SVG document references, such as
+the DOM <a>Element</a> object that corresponds to an HTML
+<span class="element-name">'object'</span> element. Such DOM objects are
+often also required to implement the <a>EmbeddingElement</a> defined in the
+Window specification [<a href="refs.html#ref-WINDOW">WINDOW</a>].
+</p>
+
+
+<p>This interface is deprecated and may be dropped from future versions of
+the SVG specification. Authors are suggested to use the
+<code>contentDocument</code> attribute on the <a>EmbeddingElement</a>
+interface to obtain a referenced SVG document, if that interface is
+available.
+</p>
+<pre class="idl">interface <b>GetSVGDocument</b> {
+  <a class="idlinterface" href="struct.html#InterfaceSVGDocument">SVGDocument</a> <a href="struct.html#__svg__GetSVGDocument__getSVGDocument">getSVGDocument</a>();
+};</pre><dl class="interface">
+<dt class="operations-header">Operations:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__GetSVGDocument__getSVGDocument" class="operation first-child"><a class="idlinterface" href="struct.html#InterfaceSVGDocument">SVGDocument</a> <b>getSVGDocument</b>()
+</dt>
+<dd class="operation">
+<div>
+
+<p> This method must return the <a>Document</a> object embedded content
+in an embedding element, or null if there is no document.
+</p>
+
+
+<p>Note that this is equivalent to fetching the value of the
+<code>EmbeddingElement::contentDocument</code> attribute of the embedding
+element, if the <a>EmbeddingElement</a> interface is also implemented.
+The author is advised to check that the document element of the returned
+<a>Document</a> is indeed an <a>'svg'</a> element instead of assuming
+that that will always be the case.
+</p>
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The <a>Document</a> object for the referenced document, or null
+if there is no document.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
 
 </body>
 </html>

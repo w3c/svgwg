@@ -4600,58 +4600,1035 @@ within SVG viewing applications such as Web browsers.</p>
 
 <h3 id="InterfaceSVGTextContentElement">Interface SVGTextContentElement</h3>
 
-<edit:interface name='::svg::SVGTextContentElement'/>
+
+
+<p>The <a>SVGTextContentElement</a> is inherited by various text-related
+interfaces, such as <a>SVGTextElement</a>, <a>SVGTSpanElement</a>,
+<a>SVGTRefElement</a>, <a>SVGAltGlyphElement</a> and
+<a>SVGTextPathElement</a>.
+</p>
+
+
+<p>For the methods on this interface that refer to an index to a character
+or a number of characters, these references are to be interpreted as an
+index to a UTF-16 code unit or a number of UTF-16 code units, respectively.
+This is for consistency with DOM Level 2 Core, where methods on the
+<a>CharacterData</a> interface use UTF-16 code units as indexes and counts
+within the character data. Thus for example, if the text content of a
+<a>'text'</a> element is a single non-BMP character, such as U+10000, then
+invoking <a>SVGTextContentElement::getNumberOfChars</a> on that element
+will return 2 since there are two UTF-16 code units (the surrogate pair)
+used to represent that one character.
+</p>
+<pre class="idl">interface <b>SVGTextContentElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>,
+                                  <a class="idlinterface" href="types.html#InterfaceSVGTests">SVGTests</a>,
+                                  <a class="idlinterface" href="types.html#InterfaceSVGLangSpace">SVGLangSpace</a>,
+                                  <a class="idlinterface" href="types.html#InterfaceSVGStylable">SVGStylable</a> {
+
+  // lengthAdjust Types
+  const unsigned short <a href="text.html#__svg__SVGTextContentElement__LENGTHADJUST_UNKNOWN">LENGTHADJUST_UNKNOWN</a> = 0;
+  const unsigned short <a href="text.html#__svg__SVGTextContentElement__LENGTHADJUST_SPACING">LENGTHADJUST_SPACING</a> = 1;
+  const unsigned short <a href="text.html#__svg__SVGTextContentElement__LENGTHADJUST_SPACINGANDGLYPHS">LENGTHADJUST_SPACINGANDGLYPHS</a> = 2;
+
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="text.html#__svg__SVGTextContentElement__textLength">textLength</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="text.html#__svg__SVGTextContentElement__lengthAdjust">lengthAdjust</a>;
+
+  long <a href="text.html#__svg__SVGTextContentElement__getNumberOfChars">getNumberOfChars</a>();
+  float <a href="text.html#__svg__SVGTextContentElement__getComputedTextLength">getComputedTextLength</a>();
+  float <a href="text.html#__svg__SVGTextContentElement__getSubStringLength">getSubStringLength</a>(in unsigned long charnum, in unsigned long nchars) raises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+  <a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a> <a href="text.html#__svg__SVGTextContentElement__getStartPositionOfChar">getStartPositionOfChar</a>(in unsigned long charnum) raises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+  <a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a> <a href="text.html#__svg__SVGTextContentElement__getEndPositionOfChar">getEndPositionOfChar</a>(in unsigned long charnum) raises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+  <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="text.html#__svg__SVGTextContentElement__getExtentOfChar">getExtentOfChar</a>(in unsigned long charnum) raises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+  float <a href="text.html#__svg__SVGTextContentElement__getRotationOfChar">getRotationOfChar</a>(in unsigned long charnum) raises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+  long <a href="text.html#__svg__SVGTextContentElement__getCharNumAtPosition">getCharNumAtPosition</a>(in <a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a> point);
+  void <a href="text.html#__svg__SVGTextContentElement__selectSubString">selectSubString</a>(in unsigned long charnum, in unsigned long nchars) raises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+};</pre><dl class="interface">
+<dt class="constants-header">Constants in group “lengthAdjust Types”:</dt>
+<dd>
+<dl class="constants">
+
+<dt id="__svg__SVGTextContentElement__LENGTHADJUST_UNKNOWN"
+    class="constant first-child"><b>LENGTHADJUST_UNKNOWN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+The enumeration was set to a value that is not one of predefined types.
+It is invalid to attempt to define a new value of this type or to
+attempt to switch an existing value to this type.
+
+
+</div>
+</dd>
+
+<dt id="__svg__SVGTextContentElement__LENGTHADJUST_SPACING" class="constant"><b>LENGTHADJUST_SPACING</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+Corresponds to value <span class="attr-value">'spacing'</span>.
+
+
+</div>
+</dd>
+
+<dt id="__svg__SVGTextContentElement__LENGTHADJUST_SPACINGANDGLYPHS"
+    class="constant"><b>LENGTHADJUST_SPACINGANDGLYPHS</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+Corresponds to value <span class="attr-value">'spacingAndGlyphs'</span>.
+
+
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGTextContentElement__textLength" class="attribute first-child"><b>textLength</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <span class="attr-name">'textLength'</span> on
+the given element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGTextContentElement__lengthAdjust" class="attribute"><b>lengthAdjust</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <span class="attr-name">'lengthAdjust'</span> on
+the given element.  The value must be one of the length adjust constants
+defined on this interface.
+
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="operations-header">Operations:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGTextContentElement__getNumberOfChars"
+    class="operation first-child">long <b>getNumberOfChars</b>()
+</dt>
+<dd class="operation">
+<div>
+Returns the total number of characters available for rendering within
+the current element, which includes referenced characters from
+<a>'tref'</a> reference, regardless of whether they will be rendered.
+Effectively, this is equivalent to the length of the
+<a
+   href="http://www.w3.org/TR/2004/REC-DOM-Level-3-Core-20040407/core.html#Node3-textContent">Node::textContent</a>
+attribute from DOM Level 3 Core ([<a href="refs.html#ref-DOM3">DOM3</a>],
+section 1.4), if that attribute also expanded <a>'tref'</a>
+elements.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> Total number of characters.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGTextContentElement__getComputedTextLength" class="operation">float <b>getComputedTextLength</b>()
+</dt>
+<dd class="operation">
+<div>
+The total sum of all of the advance values from rendering all of the
+characters within this element, including the advance value on the
+glyphs (horizontal or vertical), the effect of properties
+<a>'letter-spacing'</a> and <a>'word-spacing'</a> and
+adjustments due to attributes <a>'tspan/dx'</a> and <a>'tspan/dy'</a> on
+<a>'tspan'</a> elements. For non-rendering environments, the user agent
+shall make reasonable assumptions about glyph metrics. 
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The text advance distance.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGTextContentElement__getSubStringLength" class="operation">float <b>getSubStringLength</b>(in unsigned long <var>charnum</var>, in unsigned long <var>nchars</var>)
+</dt>
+<dd class="operation">
+<div>
+The total sum of all of the advance values from rendering the specified 
+substring of the characters, including the advance value on the glyphs 
+(horizontal or vertical), the effect of properties
+<a>'letter-spacing'</a> and <a>'word-spacing'</a> and adjustments due to 
+attributes <a>'tspan/dx'</a> and <a>'tspan/dy'</a> on <a>'tspan'</a> elements. For 
+non-rendering environments, the user agent shall make reasonable 
+assumptions about glyph metrics.  If multiple consecutive characters are 
+rendered inseparably (e.g., as a single glyph or a sequence of glyphs, 
+or because the range encompasses half of a surrogate pair), and nchars 
+is greater than 0 then the measured range shall be expanded so that each 
+of the inseparable characters are included. 
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>unsigned long <var>charnum</var></div> 
+<div> The index of the first character in the substring, where
+the first character has an index of 0.
+
+</div>
+</li>
+<li class="parameter">
+<div>unsigned long <var>nchars</var></div> 
+<div> The number of characters in the substring. If nchars 
+specifies more characters than are available, then the substring will 
+consist of all characters starting with charnum until the end of the 
+list of characters.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The text advance distance.
+
+</div>
+</dd>
+<dt class="exceptions-header">Exceptions</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception first-child"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code INDEX_SIZE_ERR
+</dt>
+<dd class="exception"> Raised if <var>charnum</var> or 
+<var>nchars</var> is negative or if <var>charnum</var> is greater than 
+or equal to the number of characters at this node.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGTextContentElement__getStartPositionOfChar" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a> <b>getStartPositionOfChar</b>(in unsigned long <var>charnum</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns the current text position before rendering the character in the
+user coordinate system for rendering the glyph(s) that correspond to
+the specified character. The current text position has already taken
+into account the effects of any inter-character adjustments due to
+properties <a>'letter-spacing'</a> and
+<a>'word-spacing'</a> and adjustments due to attributes
+<span class="attr-name">'x'</span>, <span class="attr-name">'y'</span>,
+<span class="attr-name">'dx'</span> and
+<span class="attr-name">'dy'</span>. If multiple consecutive characters
+are rendered inseparably (e.g., as a single glyph or a sequence of
+glyphs), then each of the inseparable characters will return the start
+position for the first glyph. 
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>unsigned long <var>charnum</var></div> 
+<div> The index of the character, where the first character has
+an index of 0.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The character's start position.
+
+</div>
+</dd>
+<dt class="exceptions-header">Exceptions</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception first-child"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code INDEX_SIZE_ERR
+</dt>
+<dd class="exception"> Raised if the <var>charnum</var> is
+negative or if <var>charnum</var> is greater than or equal to the
+number of characters at this node.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGTextContentElement__getEndPositionOfChar" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a> <b>getEndPositionOfChar</b>(in unsigned long <var>charnum</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns the current text position after rendering the character in the
+user coordinate system for rendering the glyph(s) that correspond to
+the specified character. This current text position does <em>not</em> take into
+account the effects of any inter-character adjustments to prepare for
+the next character, such as properties
+<a>'letter-spacing'</a> and <a>'word-spacing'</a> and adjustments due to
+attributes <span class="attr-name">'x'</span>,
+<span class="attr-name">'y'</span>, <span class="attr-name">'dx'</span>
+and <span class="attr-name">'dy'</span>. If multiple consecutive
+characters are rendered inseparably (e.g., as a single glyph or a
+sequence of glyphs), then each of the inseparable characters will
+return the end position for the last glyph. 
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>unsigned long <var>charnum</var></div> 
+<div> The index of the character, where the first character has
+an index of 0.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The character's end position.
+
+</div>
+</dd>
+<dt class="exceptions-header">Exceptions</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception first-child"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code INDEX_SIZE_ERR
+</dt>
+<dd class="exception"> Raised if the <var>charnum</var> is
+negative or if <var>charnum</var> is greater than or equal to the
+number of characters at this node.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGTextContentElement__getExtentOfChar" class="operation"><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <b>getExtentOfChar</b>(in unsigned long <var>charnum</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns a tightest rectangle which defines the minimum and maximum X and
+Y values in the user coordinate system for rendering the glyph(s) that
+correspond to the specified character. The calculations assume that all
+glyphs occupy the full standard glyph cell for the font. If multiple
+consecutive characters are rendered inseparably (e.g., as a single glyph
+or a sequence of glyphs), then each of the inseparable characters will
+return the same extent.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>unsigned long <var>charnum</var></div> 
+<div> The index of the character, where the first character has
+an index of 0.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The rectangle which encloses all of the rendered glyph(s).
+
+</div>
+</dd>
+<dt class="exceptions-header">Exceptions</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception first-child"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code INDEX_SIZE_ERR
+</dt>
+<dd class="exception"> Raised if the <var>charnum</var> is
+negative or if <var>charnum</var> is greater than or equal to the
+number of characters at this node.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGTextContentElement__getRotationOfChar" class="operation">float <b>getRotationOfChar</b>(in unsigned long <var>charnum</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns the rotation value relative to the current user coordinate
+system used to render the glyph(s) corresponding to the specified
+character. If multiple glyph(s) are used to render the given character
+and the glyphs each have different rotations (e.g., due to
+text-on-a-path), the user agent shall return an average value (e.g., the
+rotation angle at the midpoint along the path for all glyphs used to
+render this character). The rotation value represents the rotation that
+is supplemental to any rotation due to properties
+<a>'glyph-orientation-horizontal'</a> and
+<a>'glyph-orientation-vertical'</a>; thus, any glyph rotations due to
+these properties are not included into the returned rotation value. If
+multiple consecutive characters are rendered inseparably (e.g., as a
+single glyph or a sequence of glyphs), then each of the inseparable
+characters will return the same rotation value. 
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>unsigned long <var>charnum</var></div> 
+<div> The index of the character, where the first character has
+an index of 0.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The rotation angle.
+
+</div>
+</dd>
+<dt class="exceptions-header">Exceptions</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception first-child"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code INDEX_SIZE_ERR
+</dt>
+<dd class="exception"> Raised if the <var>charnum</var> is
+negative or if <var>charnum</var> is greater than or equal to the
+number of characters at this node.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGTextContentElement__getCharNumAtPosition" class="operation">long <b>getCharNumAtPosition</b>(in <a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a> <var>point</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns the index of the character whose corresponding glyph cell
+bounding box contains the specified point. The calculations assume that
+all glyphs occupy the full standard glyph cell for the font. If no such
+character exists, a value of -1 is returned. If multiple such
+characters exist, the character within the element whose glyphs were
+rendered last (i.e., take into account any reordering such as for
+bidirectional text) is used. If multiple consecutive characters are
+rendered inseparably (e.g., as a single glyph or a sequence of glyphs),
+then the user agent shall allocate an equal percentage of the text
+advance amount to each of the contributing characters in determining
+which of the characters is chosen. 
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div><a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a> <var>point</var></div> 
+<div> A point in user space.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The index of the character which is at the given point, where
+the first character has an index of 0.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGTextContentElement__selectSubString" class="operation">void <b>selectSubString</b>(in unsigned long <var>charnum</var>, in unsigned long <var>nchars</var>)
+</dt>
+<dd class="operation">
+<div>
+Causes the specified substring to be selected just as if the user 
+selected the substring interactively. 
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>unsigned long <var>charnum</var></div> 
+<div> The index of the start character which is at the given 
+point, where the first character has an index of 0.
+
+</div>
+</li>
+<li class="parameter">
+<div>unsigned long <var>nchars</var></div> 
+<div> The number of characters in the substring. If nchars 
+specifies more characters than are available, then the substring 
+will consist of all characters starting with charnum until the end 
+of the list of characters.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="exceptions-header">Exceptions</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception first-child"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code INDEX_SIZE_ERR
+</dt>
+<dd class="exception"> Raised if <var>charnum</var> or 
+<var>nchars</var> is negative or if <var>charnum</var> is greater 
+than or equal to the number of characters at this node. 
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
 
 <h3 id="InterfaceSVGTextPositioningElement">Interface SVGTextPositioningElement</h3>
 
-<edit:interface name='::svg::SVGTextPositioningElement'/>
+
+The <a>SVGTextPositioningElement</a> interface is inherited by text-related
+interfaces: <a>SVGTextElement</a>, <a>SVGTSpanElement</a>,
+<a>SVGTRefElement</a> and <a>SVGAltGlyphElement</a>.
+<pre class="idl">interface <b>SVGTextPositioningElement</b> : <a class="idlinterface" href="text.html#InterfaceSVGTextContentElement">SVGTextContentElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLengthList">SVGAnimatedLengthList</a> <a href="text.html#__svg__SVGTextPositioningElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLengthList">SVGAnimatedLengthList</a> <a href="text.html#__svg__SVGTextPositioningElement__y">y</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLengthList">SVGAnimatedLengthList</a> <a href="text.html#__svg__SVGTextPositioningElement__dx">dx</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLengthList">SVGAnimatedLengthList</a> <a href="text.html#__svg__SVGTextPositioningElement__dy">dy</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedNumberList">SVGAnimatedNumberList</a> <a href="text.html#__svg__SVGTextPositioningElement__rotate">rotate</a>;
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGTextPositioningElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLengthList">SVGAnimatedLengthList</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <span class="attr-name">'x'</span> on the
+given element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGTextPositioningElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLengthList">SVGAnimatedLengthList</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <span class="attr-name">'y'</span> on the
+given element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGTextPositioningElement__dx" class="attribute"><b>dx</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLengthList">SVGAnimatedLengthList</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <span class="attr-name">'dx'</span> on the
+given element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGTextPositioningElement__dy" class="attribute"><b>dy</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLengthList">SVGAnimatedLengthList</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <span class="attr-name">'dy'</span> on the
+given element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGTextPositioningElement__rotate" class="attribute"><b>rotate</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedNumberList">SVGAnimatedNumberList</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <span class="attr-name">'rotate'</span> on the
+given element.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
 
 <h3 id="InterfaceSVGTextElement">Interface SVGTextElement</h3>
 
+
 <edit:with element='text'>
-<edit:interface name='::svg::SVGTextElement'/>
+
+The <a>SVGTextElement</a> interface corresponds to the <a>'text'</a>
+element.
+<pre class="idl">interface <b>SVGTextElement</b> : <a class="idlinterface" href="text.html#InterfaceSVGTextPositioningElement">SVGTextPositioningElement</a>,
+                           <a class="idlinterface" href="types.html#InterfaceSVGTransformable">SVGTransformable</a> {
+};</pre>
+
 </edit:with>
 
 <h3 id="InterfaceSVGTSpanElement">Interface SVGTSpanElement</h3>
 
+
 <edit:with element='tspan'>
-<edit:interface name='::svg::SVGTSpanElement'/>
+
+The <a>SVGTSpanElement</a> interface corresponds to the <a>'tspan'</a>
+element.
+<pre class="idl">interface <b>SVGTSpanElement</b> : <a class="idlinterface" href="text.html#InterfaceSVGTextPositioningElement">SVGTextPositioningElement</a> {
+};</pre>
+
 </edit:with>
 
 <h3 id="InterfaceSVGTRefElement">Interface SVGTRefElement</h3>
 
+
 <edit:with element='tref'>
-<edit:interface name='::svg::SVGTRefElement'/>
+
+The <a>SVGTRefElement</a> interface corresponds to the <a>'tref'</a>
+element.
+<pre class="idl">interface <b>SVGTRefElement</b> : <a class="idlinterface" href="text.html#InterfaceSVGTextPositioningElement">SVGTextPositioningElement</a>,
+                           <a class="idlinterface" href="types.html#InterfaceSVGURIReference">SVGURIReference</a> {
+};</pre>
+
 </edit:with>
 
 <h3 id="InterfaceSVGTextPathElement">Interface SVGTextPathElement</h3>
 
+
 <edit:with element='textPath'>
-<edit:interface name='::svg::SVGTextPathElement'/>
+
+The <a>SVGTextPathElement</a> interface corresponds to the <a>'textPath'</a>
+element.
+<pre class="idl">interface <b>SVGTextPathElement</b> : <a class="idlinterface" href="text.html#InterfaceSVGTextContentElement">SVGTextContentElement</a>,
+                               <a class="idlinterface" href="types.html#InterfaceSVGURIReference">SVGURIReference</a> {
+
+  // textPath Method Types
+  const unsigned short <a href="text.html#__svg__SVGTextPathElement__TEXTPATH_METHODTYPE_UNKNOWN">TEXTPATH_METHODTYPE_UNKNOWN</a> = 0;
+  const unsigned short <a href="text.html#__svg__SVGTextPathElement__TEXTPATH_METHODTYPE_ALIGN">TEXTPATH_METHODTYPE_ALIGN</a> = 1;
+  const unsigned short <a href="text.html#__svg__SVGTextPathElement__TEXTPATH_METHODTYPE_STRETCH">TEXTPATH_METHODTYPE_STRETCH</a> = 2;
+
+  // textPath Spacing Types
+  const unsigned short <a href="text.html#__svg__SVGTextPathElement__TEXTPATH_SPACINGTYPE_UNKNOWN">TEXTPATH_SPACINGTYPE_UNKNOWN</a> = 0;
+  const unsigned short <a href="text.html#__svg__SVGTextPathElement__TEXTPATH_SPACINGTYPE_AUTO">TEXTPATH_SPACINGTYPE_AUTO</a> = 1;
+  const unsigned short <a href="text.html#__svg__SVGTextPathElement__TEXTPATH_SPACINGTYPE_EXACT">TEXTPATH_SPACINGTYPE_EXACT</a> = 2;
+
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="text.html#__svg__SVGTextPathElement__startOffset">startOffset</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="text.html#__svg__SVGTextPathElement__method">method</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="text.html#__svg__SVGTextPathElement__spacing">spacing</a>;
+};</pre><dl class="interface">
+<dt class="constants-header">Constants in group “textPath Method Types”:</dt>
+<dd>
+<dl class="constants">
+
+<dt id="__svg__SVGTextPathElement__TEXTPATH_METHODTYPE_UNKNOWN"
+    class="constant first-child"><b>TEXTPATH_METHODTYPE_UNKNOWN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+The enumeration was set to a value that is not one of predefined types.
+It is invalid to attempt to define a new value of this type or to
+attempt to switch an existing value to this type.
+
+
+</div>
+</dd>
+
+<dt id="__svg__SVGTextPathElement__TEXTPATH_METHODTYPE_ALIGN" class="constant"><b>TEXTPATH_METHODTYPE_ALIGN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+Corresponds to value <span class="attr-value">'align'</span>.
+
+
+</div>
+</dd>
+
+<dt id="__svg__SVGTextPathElement__TEXTPATH_METHODTYPE_STRETCH" class="constant"><b>TEXTPATH_METHODTYPE_STRETCH</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+Corresponds to value <span class="attr-value">'stretch'</span>.
+
+
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="constants-header">Constants in group “textPath Spacing Types”:</dt>
+<dd>
+<dl class="constants">
+
+<dt id="__svg__SVGTextPathElement__TEXTPATH_SPACINGTYPE_UNKNOWN"
+    class="constant first-child"><b>TEXTPATH_SPACINGTYPE_UNKNOWN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+The enumeration was set to a value that is not one of predefined types.
+It is invalid to attempt to define a new value of this type or to
+attempt to switch an existing value to this type.
+
+
+</div>
+</dd>
+
+<dt id="__svg__SVGTextPathElement__TEXTPATH_SPACINGTYPE_AUTO" class="constant"><b>TEXTPATH_SPACINGTYPE_AUTO</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+Corresponds to value <span class="attr-value">'auto'</span>.
+
+
+</div>
+</dd>
+
+<dt id="__svg__SVGTextPathElement__TEXTPATH_SPACINGTYPE_EXACT" class="constant"><b>TEXTPATH_SPACINGTYPE_EXACT</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+Corresponds to value <span class="attr-value">'exact'</span>.
+
+
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGTextPathElement__startOffset" class="attribute first-child"><b>startOffset</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'startOffset'</a> on the given
+<a>'textPath'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGTextPathElement__method" class="attribute"><b>method</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'method'</a> on the given
+<a>'textPath'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGTextPathElement__spacing" class="attribute"><b>spacing</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'spacing'</a> on the given
+<a>'textPath'</a> element.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
 </edit:with>
+
 
 <h3 id="InterfaceSVGAltGlyphElement">Interface SVGAltGlyphElement</h3>
 
+
 <edit:with element='altGlyph'>
-<edit:interface name='::svg::SVGAltGlyphElement'/>
+
+The <a>SVGAltGlyphElement</a> interface corresponds to the
+<a>'altGlyph'</a> element.
+<pre class="idl">interface <b>SVGAltGlyphElement</b> : <a class="idlinterface" href="text.html#InterfaceSVGTextPositioningElement">SVGTextPositioningElement</a>,
+                               <a class="idlinterface" href="types.html#InterfaceSVGURIReference">SVGURIReference</a> {
+  attribute DOMString <a href="text.html#__svg__SVGAltGlyphElement__glyphRef">glyphRef</a> setraises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+  attribute DOMString <a href="text.html#__svg__SVGAltGlyphElement__format">format</a> setraises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGAltGlyphElement__glyphRef" class="attribute first-child"><b>glyphRef</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'glyphRef attribute'</a> on the given
+element.
+
+
+</div>
+<dl class="attribute">
+<dt class="exceptions-header">Exceptions on setting</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
+</dt>
+<dd class="exception"> Raised on an attempt
+to change the value of a <a href="svgdom.html#ReadOnlyNodes">read only attribute</a>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGAltGlyphElement__format" class="attribute"><b>format</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'format'</a> on the given element.
+
+
+</div>
+<dl class="attribute">
+<dt class="exceptions-header">Exceptions on setting</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
+</dt>
+<dd class="exception"> Raised on an attempt
+to change the value of a <a href="svgdom.html#ReadOnlyNodes">read only attribute</a>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
 </edit:with>
+
 
 <h3 id="InterfaceSVGAltGlyphDefElement">Interface SVGAltGlyphDefElement</h3>
 
+
 <edit:with element='altGlyphDef'>
-<edit:interface name='::svg::SVGAltGlyphDefElement'/>
+
+The <a>SVGAltGlyphDefElement</a> interface corresponds to the
+<a>'altGlyphDef'</a> element.
+<pre class="idl">interface <b>SVGAltGlyphDefElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+};</pre>
+
 </edit:with>
 
 <h3 id="InterfaceSVGAltGlyphItemElement">Interface SVGAltGlyphItemElement</h3>
 
+
 <edit:with element='altGlyphItem'>
-<edit:interface name='::svg::SVGAltGlyphItemElement'/>
+
+The <a>SVGAltGlyphItemElement</a> interface corresponds to the
+<a>'altGlyphItem'</a> element.
+<pre class="idl">interface <b>SVGAltGlyphItemElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+};</pre>
+
 </edit:with>
 
 <h3 id="InterfaceSVGGlyphRefElement">Interface SVGGlyphRefElement</h3>
 
+
 <edit:with element='glyphRef'>
-<edit:interface name='::svg::SVGGlyphRefElement'/>
+
+The <a>SVGGlyphRefElement</a> interface corresponds to the
+<a>'glyphRef element'</a> element.
+<pre class="idl">interface <b>SVGGlyphRefElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>,
+                               <a class="idlinterface" href="types.html#InterfaceSVGURIReference">SVGURIReference</a>,
+                               <a class="idlinterface" href="types.html#InterfaceSVGStylable">SVGStylable</a> {
+  attribute DOMString <a href="text.html#__svg__SVGGlyphRefElement__glyphRef">glyphRef</a> setraises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+  attribute DOMString <a href="text.html#__svg__SVGGlyphRefElement__format">format</a> setraises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+  attribute float <a href="text.html#__svg__SVGGlyphRefElement__x">x</a> setraises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+  attribute float <a href="text.html#__svg__SVGGlyphRefElement__y">y</a> setraises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+  attribute float <a href="text.html#__svg__SVGGlyphRefElement__dx">dx</a> setraises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+  attribute float <a href="text.html#__svg__SVGGlyphRefElement__dy">dy</a> setraises(<a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>);
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGGlyphRefElement__glyphRef" class="attribute first-child"><b>glyphRef</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'glyphRef attribute'</a> on the given
+element.
+
+
+</div>
+<dl class="attribute">
+<dt class="exceptions-header">Exceptions on setting</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
+</dt>
+<dd class="exception"> Raised on an attempt
+to change the value of a <a href="svgdom.html#ReadOnlyNodes">read only attribute</a>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGGlyphRefElement__format" class="attribute"><b>format</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'format'</a> on the given element.
+
+
+</div>
+<dl class="attribute">
+<dt class="exceptions-header">Exceptions on setting</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
+</dt>
+<dd class="exception"> Raised on an attempt
+to change the value of a <a href="svgdom.html#ReadOnlyNodes">read only attribute</a>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGGlyphRefElement__x" class="attribute"><b>x</b><span class="idl-type-parenthetical"> (float)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given element.
+
+
+</div>
+<dl class="attribute">
+<dt class="exceptions-header">Exceptions on setting</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
+</dt>
+<dd class="exception"> Raised on an attempt
+to change the value of a <a href="svgdom.html#ReadOnlyNodes">read only attribute</a>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGGlyphRefElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (float)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given element.
+
+
+</div>
+<dl class="attribute">
+<dt class="exceptions-header">Exceptions on setting</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
+</dt>
+<dd class="exception"> Raised on an attempt
+to change the value of a <a href="svgdom.html#ReadOnlyNodes">read only attribute</a>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGGlyphRefElement__dx" class="attribute"><b>dx</b><span class="idl-type-parenthetical"> (float)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'dx'</a> on the given element.
+
+
+</div>
+<dl class="attribute">
+<dt class="exceptions-header">Exceptions on setting</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
+</dt>
+<dd class="exception"> Raised on an attempt
+to change the value of a <a href="svgdom.html#ReadOnlyNodes">read only attribute</a>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGGlyphRefElement__dy" class="attribute"><b>dy</b><span class="idl-type-parenthetical"> (float)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'dy'</a> on the given element.
+
+
+</div>
+<dl class="attribute">
+<dt class="exceptions-header">Exceptions on setting</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
+</dt>
+<dd class="exception"> Raised on an attempt
+to change the value of a <a href="svgdom.html#ReadOnlyNodes">read only attribute</a>.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
 </edit:with>
 
 </body>
