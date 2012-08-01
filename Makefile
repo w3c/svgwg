@@ -7,11 +7,11 @@ tools-check :
 
 all :
 	[ -f /usr/bin/cygpath.exe ] || $(MAKE) -C master/images/implnote/arcs/
-	@../svg2-tools/build.py
-
-new :
-	[ -f /usr/bin/cygpath.exe ] || $(MAKE) -C master/images/implnote/arcs/
 	@../svg2-tools/build.py -n
+
+old :
+	[ -f /usr/bin/cygpath.exe ] || $(MAKE) -C master/images/implnote/arcs/
+	@../svg2-tools/build.py
 
 pdf : all
 	prince --no-author-style -s build/publish/style/svg-style.css -s http://www.w3.org/StyleSheets/TR/W3C-REC -s build/publish/style/svg-style-print.css build/publish/single-page.html -o build/publish/single-page.pdf
