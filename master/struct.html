@@ -1651,9 +1651,7 @@ Object Model (HTML) Level 1</a> chapter of the
 [<a href="refs.html#ref-DOM1">DOM1</a>] specification.
 </p>
 <pre class="idl">interface <b>SVGDocument</b> : <a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#i-Document">Document</a>,
-                        <a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-DocumentEvent">DocumentEvent</a> {
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#i-Document">Document</a> {
   readonly attribute DOMString <a href="struct.html#__svg__SVGDocument__title">title</a>;
   readonly attribute DOMString <a href="struct.html#__svg__SVGDocument__referrer">referrer</a>;
   readonly attribute DOMString <a href="struct.html#__svg__SVGDocument__domain">domain</a>;
@@ -1725,15 +1723,15 @@ interface contains various miscellaneous commonly-used utility
 methods, such as matrix operations and the ability to control the
 time of redraw on visual rendering devices.</p>
 
-<p><a>SVGSVGElement</a> extends <a>ViewCSS</a> and <a>DocumentCSS</a> to
+<p><a>SVGSVGElement</a> implements <a>ViewCSS</a> and <a>DocumentCSS</a> to
 provide access to the computed values of properties and the override style
 sheet as described in <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/"><cite>DOM Level 2 Style</cite></a>
 [<a href="refs.html#ref-DOM2STYLE">DOM2STYLE</a>].</p>
 
-<pre class="idl">interface <b>SVGSVGElement</b> : <a>SVGGraphicsElement</a>,
-                          <a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-DocumentEvent">DocumentEvent</a>,
-                          <a class="idlinterface" href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/css.html#CSS-ViewCSS">ViewCSS</a>,
-                          <a class="idlinterface" href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/css.html#CSS-DocumentCSS">DocumentCSS</a> {
+<p class="issue">Does it make sense for <a>SVGSVGElement</a> to implement <a>ViewCSS</a> and <a>DocumentCSS</a>?
+Shouldn't the former be on Window and the latter on <a>Document</a> or <a>SVGDocument</a>?</p>
+
+<pre class="idl">interface <b>SVGSVGElement</b> : <a>SVGGraphicsElement</a> {
 
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__x">x</a>;
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__y">y</a>;
@@ -1749,21 +1747,21 @@ sheet as described in <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-2
            attribute float <a href="struct.html#__svg__SVGSVGElement__currentScale">currentScale</a>;
   readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGPoint">SVGPoint</a> <a href="struct.html#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>;
 
-  unsigned long <a href="struct.html#__svg__SVGSVGElement__suspendRedraw">suspendRedraw</a>(in unsigned long maxWaitMilliseconds);
-  void <a href="struct.html#__svg__SVGSVGElement__unsuspendRedraw">unsuspendRedraw</a>(in unsigned long suspendHandleID);
+  unsigned long <a href="struct.html#__svg__SVGSVGElement__suspendRedraw">suspendRedraw</a>(unsigned long maxWaitMilliseconds);
+  void <a href="struct.html#__svg__SVGSVGElement__unsuspendRedraw">unsuspendRedraw</a>(unsigned long suspendHandleID);
   void <a href="struct.html#__svg__SVGSVGElement__unsuspendRedrawAll">unsuspendRedrawAll</a>();
   void <a href="struct.html#__svg__SVGSVGElement__forceRedraw">forceRedraw</a>();
   void <a href="struct.html#__svg__SVGSVGElement__pauseAnimations">pauseAnimations</a>();
   void <a href="struct.html#__svg__SVGSVGElement__unpauseAnimations">unpauseAnimations</a>();
   boolean <a href="struct.html#__svg__SVGSVGElement__animationsPaused">animationsPaused</a>();
   float <a href="struct.html#__svg__SVGSVGElement__getCurrentTime">getCurrentTime</a>();
-  void <a href="struct.html#__svg__SVGSVGElement__setCurrentTime">setCurrentTime</a>(in float seconds);
+  void <a href="struct.html#__svg__SVGSVGElement__setCurrentTime">setCurrentTime</a>(float seconds);
   <a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <a href="struct.html#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a>(in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect, in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> referenceElement);
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <a href="struct.html#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a>(<a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect, <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> referenceElement);
   <a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <a href="struct.html#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a>(in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect, in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> referenceElement);
-  boolean <a href="struct.html#__svg__SVGSVGElement__checkIntersection">checkIntersection</a>(in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> element, in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect);
-  boolean <a href="struct.html#__svg__SVGSVGElement__checkEnclosure">checkEnclosure</a>(in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> element, in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect);
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <a href="struct.html#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a>(<a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect, <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> referenceElement);
+  boolean <a href="struct.html#__svg__SVGSVGElement__checkIntersection">checkIntersection</a>(<a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> element, <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect);
+  boolean <a href="struct.html#__svg__SVGSVGElement__checkEnclosure">checkEnclosure</a>(<a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> element, <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect);
   void <a href="struct.html#__svg__SVGSVGElement__deselectAll">deselectAll</a>();
   <a class="idlinterface" href="types.html#InterfaceSVGNumber">SVGNumber</a> <a href="struct.html#__svg__SVGSVGElement__createSVGNumber">createSVGNumber</a>();
   <a class="idlinterface" href="types.html#InterfaceSVGLength">SVGLength</a> <a href="struct.html#__svg__SVGSVGElement__createSVGLength">createSVGLength</a>();
@@ -1772,11 +1770,13 @@ sheet as described in <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-2
   <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <a href="struct.html#__svg__SVGSVGElement__createSVGMatrix">createSVGMatrix</a>();
   <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="struct.html#__svg__SVGSVGElement__createSVGRect">createSVGRect</a>();
   <a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransform">createSVGTransform</a>();
-  <a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>(in <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> matrix);
+  <a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>(<a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> matrix);
   <a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-745549614">Element</a> <a href="struct.html#__svg__SVGSVGElement__getElementById">getElementById</a>(in DOMString elementId);
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-745549614">Element</a> <a href="struct.html#__svg__SVGSVGElement__getElementById">getElementById</a>(DOMString elementId);
 };
 
+<a>SVGSVGElement</a> implements <a>ViewCSS</a>;
+<a>SVGSVGElement</a> implements <a>DocumentCSS</a>;
 <a>SVGSVGElement</a> implements <a>SVGFitToViewBox</a>;
 <a>SVGSVGElement</a> implements <a>SVGZoomAndPan</a>;</pre>
 
@@ -2059,7 +2059,7 @@ this attribute has.
 <dd>
 <dl class="attributes">
 
-<dt id="__svg__SVGSVGElement__suspendRedraw" class="operation first-child">unsigned long <b>suspendRedraw</b>(in unsigned long <var>maxWaitMilliseconds</var>)
+<dt id="__svg__SVGSVGElement__suspendRedraw" class="operation first-child">unsigned long <b>suspendRedraw</b>(unsigned long <var>maxWaitMilliseconds</var>)
 </dt>
 <dd class="operation">
 <div>
@@ -2090,7 +2090,7 @@ effect on redrawing.
 </dl>
 </dd>
 
-<dt id="__svg__SVGSVGElement__unsuspendRedraw" class="operation">void <b>unsuspendRedraw</b>(in unsigned long <var>suspendHandleID</var>)
+<dt id="__svg__SVGSVGElement__unsuspendRedraw" class="operation">void <b>unsuspendRedraw</b>(unsigned long <var>suspendHandleID</var>)
 </dt>
 <dd class="operation">
 <div>
@@ -2203,7 +2203,7 @@ then 0 is returned.
 </dl>
 </dd>
 
-<dt id="__svg__SVGSVGElement__setCurrentTime" class="operation">void <b>setCurrentTime</b>(in float <var>seconds</var>)
+<dt id="__svg__SVGSVGElement__setCurrentTime" class="operation">void <b>setCurrentTime</b>(float <var>seconds</var>)
 </dt>
 <dd class="operation">
 <div>
@@ -2237,7 +2237,7 @@ time for the current SVG document fragment.
 </dd>
 
 <dt id="__svg__SVGSVGElement__getIntersectionList" class="operation"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <b>getIntersectionList</b>(in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>, in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>referenceElement</var>)
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <b>getIntersectionList</b>(<a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>, <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>referenceElement</var>)
 </dt>
 <dd class="operation">
 <div>
@@ -2286,7 +2286,7 @@ exception that the interface is not
 </dd>
 
 <dt id="__svg__SVGSVGElement__getEnclosureList" class="operation"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <b>getEnclosureList</b>(in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>, in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>referenceElement</var>)
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <b>getEnclosureList</b>(<a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>, <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>referenceElement</var>)
 </dt>
 <dd class="operation">
 <div>
@@ -2334,7 +2334,7 @@ exception that the interface is not
 </dl>
 </dd>
 
-<dt id="__svg__SVGSVGElement__checkIntersection" class="operation">boolean <b>checkIntersection</b>(in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var>, in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>)
+<dt id="__svg__SVGSVGElement__checkIntersection" class="operation">boolean <b>checkIntersection</b>(<a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var>, <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>)
 </dt>
 <dd class="operation">
 <div>
@@ -2375,7 +2375,7 @@ the supplied rectangle.
 </dl>
 </dd>
 
-<dt id="__svg__SVGSVGElement__checkEnclosure" class="operation">boolean <b>checkEnclosure</b>(in <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var>, in <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>)
+<dt id="__svg__SVGSVGElement__checkEnclosure" class="operation">boolean <b>checkEnclosure</b>(<a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var>, <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>)
 </dt>
 <dd class="operation">
 <div>
@@ -2560,7 +2560,7 @@ object is initialized to an identity matrix transform
 </dl>
 </dd>
 
-<dt id="__svg__SVGSVGElement__createSVGTransformFromMatrix" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <b>createSVGTransformFromMatrix</b>(in <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <var>matrix</var>)
+<dt id="__svg__SVGSVGElement__createSVGTransformFromMatrix" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <b>createSVGTransformFromMatrix</b>(<a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <var>matrix</var>)
 </dt>
 <dd class="operation">
 <div>
@@ -2598,7 +2598,7 @@ are copied, the <var>matrix</var> parameter is not adopted as
 </dd>
 
 <dt id="__svg__SVGSVGElement__getElementById" class="operation"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-745549614">Element</a> <b>getElementById</b>(in DOMString <var>elementId</var>)
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-745549614">Element</a> <b>getElementById</b>(DOMString <var>elementId</var>)
 </dt>
 <dd class="operation">
 <div>
@@ -2828,8 +2828,7 @@ original (outermost) <a>'use'</a> will consist of a hierarchy of
   SVGElementInstance #2 (parentNode=#1, firstChild=#3, correspondingElement is the other 'use')
     SVGElementInstance #3 (parentNode=#2, firstChild=null, correspondingElement is the 'rect')
 </pre>
-<pre class="idl">interface <b>SVGElementInstance</b> : <a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-EventTarget">EventTarget</a> {
+<pre class="idl">interface <b>SVGElementInstance</b> : <a>EventTarget</a> {
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <a href="struct.html#__svg__SVGElementInstance__correspondingElement">correspondingElement</a>;
   readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGUseElement">SVGUseElement</a> <a href="struct.html#__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</a>;
   readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstance__parentNode">parentNode</a>;
@@ -2945,7 +2944,7 @@ or constraining how this collection is implemented.
 
   readonly attribute unsigned long <a href="struct.html#__svg__SVGElementInstanceList__length">length</a>;
 
-  <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstanceList__item">item</a>(in unsigned long index);
+  <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstanceList__item">item</a>(unsigned long index);
 };</pre><dl class="interface">
 <dt class="attributes-header">Attributes:</dt>
 <dd>
@@ -2965,7 +2964,7 @@ of valid child indices is 0 to <a>length</a>-1 inclusive.
 <dd>
 <dl class="attributes">
 
-<dt id="__svg__SVGElementInstanceList__item" class="operation first-child"><a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <b>item</b>(in unsigned long <var>index</var>)
+<dt id="__svg__SVGElementInstanceList__item" class="operation first-child"><a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <b>item</b>(unsigned long <var>index</var>)
 </dt>
 <dd class="operation">
 <div>
