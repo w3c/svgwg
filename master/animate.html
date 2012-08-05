@@ -2554,11 +2554,12 @@ method of the <a>DOMImplementation</a> interface to determine whether the
 <a>ElementTimeControl</a> interface is supported or not.  The feature string
 for this interface is "TimeControl".
 </p>
-<pre class="idl">interface <b>ElementTimeControl</b> {
+<pre class="idl">[NoInterfaceObject]
+interface <b>ElementTimeControl</b> {
   void <a href="animate.html#__smil__ElementTimeControl__beginElement">beginElement</a>();
-  void <a href="animate.html#__smil__ElementTimeControl__beginElementAt">beginElementAt</a>(in float offset);
+  void <a href="animate.html#__smil__ElementTimeControl__beginElementAt">beginElementAt</a>(float offset);
   void <a href="animate.html#__smil__ElementTimeControl__endElement">endElement</a>();
-  void <a href="animate.html#__smil__ElementTimeControl__endElementAt">endElementAt</a>(in float offset);
+  void <a href="animate.html#__smil__ElementTimeControl__endElementAt">endElementAt</a>(float offset);
 };</pre><dl class="interface">
 <dt class="operations-header">Operations:</dt>
 <dd>
@@ -2576,7 +2577,7 @@ The behavior of this method is equivalent to <code>beginElementAt(0)</code>.
 </div>
 </dd>
 
-<dt id="__smil__ElementTimeControl__beginElementAt" class="operation">void <b>beginElementAt</b>(in float <var>offset</var>)
+<dt id="__smil__ElementTimeControl__beginElementAt" class="operation">void <b>beginElementAt</b>(float <var>offset</var>)
 </dt>
 <dd class="operation">
 <div>
@@ -2615,7 +2616,7 @@ The behavior of this method is equivalent to <code>endElementAt(0)</code>.
 </div>
 </dd>
 
-<dt id="__smil__ElementTimeControl__endElementAt" class="operation">void <b>endElementAt</b>(in float <var>offset</var>)
+<dt id="__smil__ElementTimeControl__endElementAt" class="operation">void <b>endElementAt</b>(float <var>offset</var>)
 </dt>
 <dd class="operation">
 <div>
@@ -2745,8 +2746,8 @@ so the observed values of the detail attribute will be
    href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> <a href="animate.html#__smil__TimeEvent__view">view</a>;
   readonly attribute long <a href="animate.html#__smil__TimeEvent__detail">detail</a>;
 
-  void <a href="animate.html#__smil__TimeEvent__initTimeEvent">initTimeEvent</a>(in DOMString typeArg, in <a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> viewArg, in long detailArg);
+  void <a href="animate.html#__smil__TimeEvent__initTimeEvent">initTimeEvent</a>(DOMString typeArg, <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> viewArg, long detailArg);
 };</pre><dl class="interface">
 <dt class="attributes-header">Attributes:</dt>
 <dd>
@@ -2778,13 +2779,13 @@ animation.
 <dd>
 <dl class="attributes">
 
-<dt id="__smil__TimeEvent__initTimeEvent" class="operation first-child">void <b>initTimeEvent</b>(in DOMString <var>typeArg</var>, in <a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> <var>viewArg</var>, in long <var>detailArg</var>)
+<dt id="__smil__TimeEvent__initTimeEvent" class="operation first-child">void <b>initTimeEvent</b>(DOMString <var>typeArg</var>, <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> <var>viewArg</var>, long <var>detailArg</var>)
 </dt>
 <dd class="operation">
 <div>
 The <a>TimeEvent::initTimeEvent</a> method is used to initialize the value of a
-<a>TimeEvent</a> created through the <a>DocumentEvent</a> interface. This
+<a>TimeEvent</a> created with <code>document.createEvent()</code>. This
 method may only be called before the <a>TimeEvent</a> has been dispatched
 via the dispatchEvent method, though it may be called multiple times
 during that phase if necessary. If called multiple times, the final
@@ -2851,8 +2852,7 @@ animation elements is to use the standard <code>getAttribute</code>,
 <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/">DOM Level 2 Core</a>
 [<a href="refs.html#ref-DOM2">DOM2</a>].
 </p>
-<pre class="idl">interface <b>SVGAnimationElement</b> : <a>SVGElement</a>,
-                                <a class="idlinterface" href="animate.html#InterfaceElementTimeControl">ElementTimeControl</a> {
+<pre class="idl">interface <b>SVGAnimationElement</b> : <a>SVGElement</a> {
 
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <a href="animate.html#__svg__SVGAnimationElement__targetElement">targetElement</a>;
 
@@ -2861,7 +2861,10 @@ animation elements is to use the standard <code>getAttribute</code>,
   float <a href="animate.html#__svg__SVGAnimationElement__getSimpleDuration">getSimpleDuration</a>();
 };
 
-<a>SVGAnimationElement</a> implements <a>SVGTests</a>;</pre><dl class="interface">
+<a>SVGAnimationElement</a> implements <a>ElementTimeControl</a>;
+<a>SVGAnimationElement</a> implements <a>SVGTests</a>;</pre>
+
+<dl class="interface">
 <dt class="attributes-header">Attributes:</dt>
 <dd>
 <dl class="attributes">
