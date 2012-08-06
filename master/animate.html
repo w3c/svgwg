@@ -780,7 +780,7 @@ S ::= (#x20 | #x9 | #xD | #xA)*
           </dl>
           <p>A value of <span class="attr-value">'indefinite'</span>
           specifies that the end of the animation will be
-          determined by an <a>ElementTimeControl::endElement</a> method call (the animation
+          determined by an <a>SVGAnimationElement::endElement</a> method call (the animation
           DOM methods are described in <a href="#DOMInterfaces">DOM
           interfaces</a>).</p>
           <p>Except for any SVG-specific rules explicitly mentioned
@@ -2494,154 +2494,9 @@ avoided.</p>
 <h2 id="DOMInterfaces">DOM interfaces</h2>
 
 <p>Below are the DOM interfaces for the elements defined in this chapter.
-In addition, <a>ElementTimeControl</a> and <a>TimeEvent</a>, which are
+In addition, <a>TimeEvent</a>, which is
 from <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/">SMIL Animation</a>,
-are included here for easy reference.</p>
-
-<h3 id="InterfaceElementTimeControl">Interface ElementTimeControl</h3>
-
-<p>SMIL Animation supports several methods for controlling the behavior of
-animation: <code>beginElement()</code>, <code>beginElementAt()</code>,
-<code>endElement()</code> and <code>endElementAt()</code>. These methods
-are used to begin and end the active duration of an element. Authors can
-(but are not required to) declare the timing to respond to the DOM using
-the following syntax:
-</p>
-
-<pre>&lt;animate begin="indefinite" end="indefinite" .../&gt;</pre>
-
-<p>If a DOM method call is made to begin or end the element (using
-<code>beginElement()</code>, <code>beginElementAt()</code>,
-<code>endElement()</code> or <code>endElementAt()</code>), each method call
-creates a single instance time (in the appropriate instance times list).
-These times are then interpreted as part of the semantics of lists of
-times, as described in
-<a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-EvaluationOfBeginEndTimeLists">Evaluation of begin and end time lists</a>.
-</p>
-
-
-<ul>
-
-<li>The instance time associated with a <code>beginElement()</code> or
-<code>endElement()</code> call is the current presentation time at the
-time of the DOM method call.
-</li>
-
-
-<li>The instance time associated with a <code>beginElementAt()</code> or
-<code>endElementAt()</code> call is the current presentation time at the
-time of the DOM method call, plus or minus the specified offset.
-</li>
-
-
-<li>Note that <code>beginElement()</code> is subject to the <a>'animate/restart'</a>
-attribute in the same manner that event-based begin timing is.  Refer
-also to <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Restart">SMIL Animation: Restarting animation</a>
-([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.3.7).
-</li>
-
-</ul>
-
-
-<p>The expectation of the following interface is that an instance of the
-<a>ElementTimeControl</a> interface can be obtained by using binding-specific
-casting methods on an instance of an animation element.  A DOM application
-can use the <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/core.html#ID-5CED94D7">hasFeature</a>
-method of the <a>DOMImplementation</a> interface to determine whether the
-<a>ElementTimeControl</a> interface is supported or not.  The feature string
-for this interface is "TimeControl".
-</p>
-<pre class="idl">[NoInterfaceObject]
-interface <b>ElementTimeControl</b> {
-  void <a href="animate.html#__smil__ElementTimeControl__beginElement">beginElement</a>();
-  void <a href="animate.html#__smil__ElementTimeControl__beginElementAt">beginElementAt</a>(float offset);
-  void <a href="animate.html#__smil__ElementTimeControl__endElement">endElement</a>();
-  void <a href="animate.html#__smil__ElementTimeControl__endElementAt">endElementAt</a>(float offset);
-};</pre><dl class="interface">
-<dt class="operations-header">Operations:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__smil__ElementTimeControl__beginElement" class="operation first-child">void <b>beginElement</b>()
-</dt>
-<dd class="operation">
-<div>
-Creates a begin instance time for the current time. The new instance
-time is added to the <a
-   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>begin instance times list</em></a>.
-The behavior of this method is equivalent to <code>beginElementAt(0)</code>.
-
-</div>
-</dd>
-
-<dt id="__smil__ElementTimeControl__beginElementAt" class="operation">void <b>beginElementAt</b>(float <var>offset</var>)
-</dt>
-<dd class="operation">
-<div>
-Creates a begin instance time for the current time plus the specified
-offset. The new instance time is added to the
-<a
-   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>begin instance times list</em></a>.
-
-
-</div>
-<dl class="operation">
-<dt class="parameters-header">Parameters</dt>
-<dd>
-<ol class="parameters">
-<li class="parameter first-child">
-<div>float <var>offset</var></div> 
-<div> The offset from the current document time, in seconds, at
-which to begin the element.
-
-</div>
-</li>
-</ol>
-</dd>
-</dl>
-</dd>
-
-<dt id="__smil__ElementTimeControl__endElement" class="operation">void <b>endElement</b>()
-</dt>
-<dd class="operation">
-<div>
-Creates an end instance time for the current time. The new instance time is added to the
-<a
-   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>end instance times list</em></a>.
-The behavior of this method is equivalent to <code>endElementAt(0)</code>.
-
-</div>
-</dd>
-
-<dt id="__smil__ElementTimeControl__endElementAt" class="operation">void <b>endElementAt</b>(float <var>offset</var>)
-</dt>
-<dd class="operation">
-<div>
-Creates a end instance time for the current time plus the specified
-offset. The new instance time is added to the
-<a
-   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>end instance times list</em></a>.
-
-
-</div>
-<dl class="operation">
-<dt class="parameters-header">Parameters</dt>
-<dd>
-<ol class="parameters">
-<li class="parameter first-child">
-<div>float <var>offset</var></div> 
-<div> offset from the current document time, in seconds, at
-which to end the element.
-
-</div>
-</li>
-</ol>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
+is included here for easy reference.</p>
 
 <h3 id="InterfaceTimeEvent">Interface TimeEvent</h3>
 
@@ -2664,8 +2519,8 @@ active duration (i.e. when it restarts, but not when it
 repeats). It may be raised both in the course of normal
 (i.e. scheduled or interactive) timeline play, as well as
 in the case that the element was begun with the
-<a>ElementTimeControl::beginElement</a> or
-<a>ElementTimeControl::beginElementAt</a> methods. Note that if an
+<a>SVGAnimationElement::beginElement</a> or
+<a>SVGAnimationElement::beginElementAt</a> methods. Note that if an
 element is restarted while it is currently playing, the
 element will raise an end event and another begin event, as
 the element restarts. 
@@ -2690,7 +2545,7 @@ that this event is not raised at the simple end of each
 repeat. This event may be raised both in the course of
 normal (i.e. scheduled or interactive) timeline play, as
 well as in the case that the element was ended with the
-<a>ElementTimeControl::endElement</a> or <a>ElementTimeControl::endElementAt</a>
+<a>SVGAnimationElement::endElement</a> or <a>SVGAnimationElement::endElementAt</a>
 methods. Note that if an element is restarted while it is
 currently playing, the element will raise an end event and
 another begin event, as the element restarts. 
@@ -2820,13 +2675,10 @@ invocation takes precedence.
 
 <h3 id="InterfaceSVGAnimationElement">Interface SVGAnimationElement</h3>
 
-
-
 <p>The <a>SVGAnimationElement</a> interface is the base interface for all
 of the animation element interfaces: <a>SVGAnimateElement</a>,
 <a>SVGSetElement</a>, <a>SVGAnimateColorElement</a>,
-<a>SVGAnimateMotionElement</a> and <a>SVGAnimateTransformElement</a>.
-</p>
+<a>SVGAnimateMotionElement</a> and <a>SVGAnimateTransformElement</a>.</p>
 
 
 <p>Unlike other SVG DOM interfaces, the SVG DOM does not specify
@@ -2839,8 +2691,41 @@ animation elements is to use the standard <code>getAttribute</code>,
 <code>setAttribute</code>, <code>getAttributeNS</code> and
 <code>setAttributeNS</code> defined in
 <a href="http://www.w3.org/TR/dom/">DOM4</a>
-[<a href="refs.html#ref-DOM4">DOM4</a>].
-</p>
+[<a href="refs.html#ref-DOM4">DOM4</a>].</p>
+
+<p>SMIL Animation supports several methods for controlling the behavior of
+animation: <code>beginElement()</code>, <code>beginElementAt()</code>,
+<code>endElement()</code> and <code>endElementAt()</code>. These methods
+are used to begin and end the active duration of an element. Authors can
+(but are not required to) declare the timing to respond to the DOM using
+the following syntax:</p>
+
+<pre>&lt;animate begin="indefinite" end="indefinite" .../&gt;</pre>
+
+<p>If a DOM method call is made to begin or end the element (using
+<code>beginElement()</code>, <code>beginElementAt()</code>,
+<code>endElement()</code> or <code>endElementAt()</code>), each method call
+creates a single instance time (in the appropriate instance times list).
+These times are then interpreted as part of the semantics of lists of
+times, as described in
+<a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-EvaluationOfBeginEndTimeLists">Evaluation of begin and end time lists</a>.</p>
+
+
+<ul>
+  <li>The instance time associated with a <code>beginElement()</code> or
+  <code>endElement()</code> call is the current presentation time at the
+  time of the DOM method call.</li>
+
+  <li>The instance time associated with a <code>beginElementAt()</code> or
+  <code>endElementAt()</code> call is the current presentation time at the
+  time of the DOM method call, plus or minus the specified offset.</li>
+
+  <li>Note that <code>beginElement()</code> is subject to the <a>'animate/restart'</a>
+  attribute in the same manner that event-based begin timing is.  Refer
+  also to <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Restart">SMIL Animation: Restarting animation</a>
+  ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.3.7).</li>
+</ul>
+
 <pre class="idl">interface <b>SVGAnimationElement</b> : <a>SVGElement</a> {
 
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <a href="animate.html#__svg__SVGAnimationElement__targetElement">targetElement</a>;
@@ -2848,9 +2733,13 @@ animation elements is to use the standard <code>getAttribute</code>,
   float <a href="animate.html#__svg__SVGAnimationElement__getStartTime">getStartTime</a>();
   float <a href="animate.html#__svg__SVGAnimationElement__getCurrentTime">getCurrentTime</a>();
   float <a href="animate.html#__svg__SVGAnimationElement__getSimpleDuration">getSimpleDuration</a>();
+
+  void <a href="animate.html#__smil__SVGAnimationElement__beginElement">beginElement</a>();
+  void <a href="animate.html#__smil__SVGAnimationElement__beginElementAt">beginElementAt</a>(float offset);
+  void <a href="animate.html#__smil__SVGAnimationElement__endElement">endElement</a>();
+  void <a href="animate.html#__smil__SVGAnimationElement__endElementAt">endElementAt</a>(float offset);
 };
 
-<a>SVGAnimationElement</a> implements <a>ElementTimeControl</a>;
 <a>SVGAnimationElement</a> implements <a>SVGTests</a>;</pre>
 
 <dl class="interface">
@@ -2953,6 +2842,84 @@ determined on the given element.
 
 </dd>
 </dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__smil__SVGAnimationElement__beginElement" class="operation first-child">void <b>beginElement</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates a begin instance time for the current time. The new instance
+time is added to the <a
+   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>begin instance times list</em></a>.
+The behavior of this method is equivalent to <code>beginElementAt(0)</code>.
+
+</div>
+</dd>
+
+<dt id="__smil__SVGAnimationElement__beginElementAt" class="operation">void <b>beginElementAt</b>(float <var>offset</var>)
+</dt>
+<dd class="operation">
+<div>
+Creates a begin instance time for the current time plus the specified
+offset. The new instance time is added to the
+<a
+   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>begin instance times list</em></a>.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>float <var>offset</var></div> 
+<div> The offset from the current document time, in seconds, at
+which to begin the element.
+
+</div>
+</li>
+</ol>
+</dd>
+</dl>
+</dd>
+
+<dt id="__smil__SVGAnimationElement__endElement" class="operation">void <b>endElement</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an end instance time for the current time. The new instance time is added to the
+<a
+   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>end instance times list</em></a>.
+The behavior of this method is equivalent to <code>endElementAt(0)</code>.
+
+</div>
+</dd>
+
+<dt id="__smil__SVGAnimationElement__endElementAt" class="operation">void <b>endElementAt</b>(float <var>offset</var>)
+</dt>
+<dd class="operation">
+<div>
+Creates a end instance time for the current time plus the specified
+offset. The new instance time is added to the
+<a
+   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>end instance times list</em></a>.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>float <var>offset</var></div> 
+<div>The offset from the current document time, in seconds, at
+which to end the element.
+
+</div>
+</li>
+</ol>
 </dd>
 </dl>
 </dd>
