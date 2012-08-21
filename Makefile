@@ -7,10 +7,6 @@ tools-check :
 
 all :
 	[ -f /usr/bin/cygpath.exe ] || $(MAKE) -C master/images/implnote/arcs/
-	@../svg2-tools/build.py -n
-
-old :
-	[ -f /usr/bin/cygpath.exe ] || $(MAKE) -C master/images/implnote/arcs/
 	@../svg2-tools/build.py
 
 pdf : all
