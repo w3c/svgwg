@@ -40,10 +40,6 @@
   <p>
     Owner: Nikos (Action 3332).
   </p>
-  <p class="issue">
-    There is an unresolved incompatibility with filter-effects.
-    http://lists.w3.org/Archives/Public/public-svg-wg/2012JulSep/0050.html
-  </p>
 </div>
 
 <h1>Rendering Model</h1>
@@ -70,14 +66,18 @@ match the conformance requirements).</p>
 
 <h2 id="PaintersModel">The painters model</h2>
 
-<p>SVG uses a "painters model" of rendering.  <a>Paint</a>
+<div class="ready-for-wg-review">
+
+<p>SVG uses a "painters model" of rendering. <a>Paint</a>
 is applied in successive operations to the output device such
 that each operation paints over some area of the output device.
-When the area overlaps a previously painted area the new paint
-partially or completely obscures the old. When the paint is not
-completely opaque the result on the output device is defined by
-the (mathematical) rules for compositing described under
-<a href="masking.html#SimpleAlphaBlending">Alpha Blending</a>.</p>
+
+The first layer is always the background canvas. The background color of this canvas is defined by the viewport-fill property.
+
+Successive layers of paint are composited and blended with the background. As each layer is painted, it becomes part of the background for the next painting operation.
+This rules for painting with compositing and blending are described in the <a href="">Compositing and Blending Specification</a>.
+</p>
+</div>
 
 <h2 id="RenderingOrder">Rendering order</h2>
 
@@ -87,25 +87,20 @@ fragment getting "painted" first. Subsequent elements are
 painted on top of previously painted elements.</p>
 
 <h2 id="Grouping">How groups are rendered</h2>
-
-<p>Grouping elements such as the <a>'g'</a> element (see
-<a>container elements</a>)
-have the effect of producing a temporary separate canvas
-initialized to transparent black onto which child elements are
-painted. Upon the completion of the group, any
-<a href="render.html#FilteringPaintRegions">filter effects</a>
-specified for the group are applied to create a modified
-temporary canvas. The modified temporary canvas is composited
-into the background, taking into account any group-level
-<a href="masking.html#Masking">masking</a> and
-<a href="masking.html#OpacityProperty">opacity</a> settings on the
-group.</p>
+<div class="ready-for-wg-review">
+<p>
+Grouping elements, such as the <a>'g'</a> element (see <a>container elements</a>) create a <a>compositing group</a>.
+The compositing group will composite and blend with the <a>group backdrop</a> with behaviour depending on the values
+of the compositing and blending properties, such as <a>knock-out</a>, and </a>isolation</a>. See <a href="">Compositing and Blending Specification</a>.
+</p>
+</div>
 
 <h2 id="Elements">How elements are rendered</h2>
-
-<p>Individual <a>graphics elements</a> are rendered as if each graphics element
-represented its own group; thus, the effect is as if a
-temporary separate canvas is created for each graphics element.
+<div class="ready-for-wg-review">
+<p>
+Individual <a>graphics elements</a> are rendered as if each graphics element
+represented its own <a>compositing group</a>; thus, the effect is as if 
+a temporary separate canvas is created for each graphics element.
 The element is first painted onto the temporary canvas (see
 <a href="render.html#PaintingShapesAndText">Painting shapes and text</a> and
 <a href="render.html#PaintingRasterImages">Painting raster images</a> below).
@@ -115,7 +110,9 @@ modified temporary canvas. The modified temporary canvas is
 then composited into the background, taking into account any
 <a href="render.html#ClippingMaskingObjectOpacity">clipping,
 masking and object opacity</a> settings on the graphics
-element.</p>
+element.
+</p>
+</div>
 
 <h2 id="TypesOfGraphicsElements">Types of graphics elements</h2>
 
@@ -185,6 +182,12 @@ requirements are discussed under
 
 <h2 id="FilteringPaintRegions">Filtering painted regions</h2>
 
+<div class="issue">
+    This section needs more detail on the interaction between compositing and blending and filter effects - particularly when isolation=false
+    In this case, Filter Effects should not include the group backdrop in the effect so background removal must be performed before applying
+    the filter effect. 
+</div>
+
 <p>SVG allows any painting operation to be filtered. (See
 <a href="filters.html">Filter Effects</a>.)</p>
 
@@ -201,6 +204,7 @@ filtered by the processes defined in
 subregion of the output device by clipping and masking. This is
 described in <a href="masking.html">Clipping, Masking and
 Compositing</a>.</p>
+<div class="issue">Need to remove reference to compositing in the Clipping, Masking and Compositing chapter.</div>
 
 <p>Clipping uses a path to define a region of the output device
 to which paint can be applied. Any painting operation executed
@@ -217,34 +221,21 @@ typically anti-aliased on low-resolution devices (see
 described in
 <a href="masking.html#ClippingPaths">Clipping paths</a>.</p>
 
+<div class="ready-for-wg-review">
 <p>Masking uses the luminance of the color channels and alpha
 channel in a referenced SVG element to define a supplemental
 set of alpha values which are multiplied to the alpha values
 already present in the graphics to which the mask is applied.
-Masking is described in <a href="masking.html#Masking">Masking</a>.</p>
+The resulting alpha value is used as input to the Compositing 
+and Blending operations described in the <a href="">Compositing and Blending Specification</a>. 
+Masking is described in detail in <a href="masking.html#Masking">Masking</a>.</p>
 
 <p>A supplemental masking operation may also be specified by
 applying a "global" opacity to a set of rendering operations.
 In this case the mask is infinite, with a color of white and an
 alpha channel of the given opacity value. (See the <a>'opacity'</a>
 property.)</p>
-
-<p>In all cases the SVG implementation must behave as though
-all painting and filtering is first performed to an
-intermediate canvas which has been initialized to transparent
-black. Then, alpha values on the intermediate canvas are
-multiplied by the implicit alpha values from the clipping path,
-the alpha values from the mask, and the alpha values from the
-<a>'opacity'</a> property. The resulting
-canvas is composited into the background using
-<a href="masking.html#SimpleAlphaBlending">simple alpha blending</a>.
-Thus if an area of the output device is painted
-with a group opacity of 50% using opaque red paint followed by
-opaque green paint the result is as though it had been painted
-with just 50% opaque green paint. This is because the opaque
-green paint completely obscures the red paint on the
-intermediate canvas before the intermediate as a whole is
-rendered onto the output device.</p>
+</div>
 
 <h2 id="ParentCompositing">Parent Compositing</h2>
 
