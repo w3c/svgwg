@@ -48,6 +48,9 @@ the SVG user agent is provided the following information:</p>
   ([<a href="refs.html#ref-CSS21">CSS21</a>], section 4.3.2)</li>
 </ul>
 
+<p class="issue">Why are real world units relevant?  Shouldn't we
+just be relying on CSS' fixed ratio of mm to px units?</p>
+
 <p id="SVGInitialUserCoordinateSystem">Using the above information, the SVG user agent determines
 the <a>viewport</a>, an initial <a>viewport coordinate system</a> and an
 initial <a>user coordinate system</a>
@@ -96,6 +99,9 @@ viewport.)</p>
 
 <h2 id="ViewportSpace">The initial viewport</h2>
 
+<p class="issue">Do we need to port over some more up-to-date
+definitions of sizing from SVG Tiny 1.2?</p>
+
 <p id="SVGViewport">The SVG user agent negotiates with its parent user agent to
 determine the viewport into which the SVG user agent can render
 the document. In some circumstances, SVG content will be
@@ -110,6 +116,11 @@ and <a>'svg/height'</a> XML attributes on the <a>outermost svg element</a>.
 The negotiation process uses any information provided by the
 containing document and the SVG content itself to choose the
 viewport location and size.</p>
+
+<p class="issue">Talking about a "parent user agent" really makes
+this sound like we have a separate plugin SVG implementation
+communicating with a browser hosting the plugin.  These days,
+it's going to be the same user agent.</p>
 
 <p>The <a>'svg/width'</a> attribute on the
 <a>outermost svg element</a>
@@ -235,7 +246,7 @@ unit equal to the parent (implicit or explicit) user agent's
 
 <p>A new user space (i.e., a new current coordinate system) can
 be established by specifying <a>transformations</a> in the form of a <a>'transform'</a>
-attribute on a container element or graphics element or a
+property on a container element or graphics element or a
 <a>'viewBox'</a> attribute on an
 <a>'svg'</a>,
 <a>'symbol'</a>,
@@ -352,6 +363,14 @@ alt="Matrix concatenation" width="512" height="296" /></p>
     <td>yes</td>
   </tr>
 </table>
+
+<p class="issue">Do we need this blue box, and if so, should we expand it to
+include all of the property definition information?  Some sections (such as
+for <span class="property">'color'</span>) do not have the blue box.
+Others, like the one for <a>'white-space'</a>, have all the information from
+the CSS specification it comes from.  Regardless, I think we don't need
+to mention whether the property is animatable since all properties are
+animatable.</p>
 
 <p id="TransformList">The term <var>&lt;transform-list&gt;</var> used by this specification is equivalent to a list of <var>&lt;transform-functions&gt;</var>, the value of the <a>'transform'</a>
 property.</p>
@@ -928,6 +947,18 @@ where the content contains no transformations and it is
 desirable to specify values relative to the device pixel grid
 or to a particular real world unit size.</p>
 
+<p class="issue">That's wrong.  1px always corresponds to
+one user unit, and the "absolute" units must be interpreted
+as CSS says to, i.e. as fixed multiples of the CSS px, and
+not anything to do with the display's resolution.  The
+recommendation to use the absolute units (apart from px)
+only for <a>'svg/width'</a> and <a>'svg/height'</a> on
+root <a>'svg'</a> is a good one, however.  Defining
+the size of a document in mm and then using mm units
+for shapes within it is going to give counterintuitive
+results, since they'll be converted to user units to resolve
+against the view box.</p>
+
 <p>For percentage values that are defined to be relative to the
 size of viewport:</p>
 
@@ -968,6 +999,9 @@ the top and middle rectangles will likely be rendered at
 different sizes.) The bottom rectangle of the group illustrates
 what happens when values specified in inches are scaled.</p>
 
+<p class="issue">The example needs to be changed in light of
+the issue above about absolute units.</p>
+
 <p>The three rectangles in the middle demonstrate the use of
 one of the relative unit identifiers, the "em" unit. Because
 the <a>'font-size'</a> property has been set
@@ -1002,6 +1036,8 @@ coordinate values and lengths as fractions (and, in some cases,
 percentages) of the <a>bounding box</a>,
 by setting a specified attribute to <span class="attr-value">'objectBoundingBox'</span>
 on the given element:</p>
+
+<p class="issue">Need a line for <a>'meshGradient'</a>.</p>
 
 <table class='vert'>
   <tr>
@@ -1313,6 +1349,9 @@ between geographic coordinate systems and the SVG coordinate system is
 clear.</p>
   
 <h2 id="SVGGlobalTransformAttribute">The <span class="attr-name">'svg:transform'</span> attribute</h2>
+
+<p class="issue">Do we need this section?  Should we instead have a guide on
+how other specifications should re-use specific attributes or elements?</p>
 
 <div class="adef-list">
   <p><em>Attribute definition:</em></p>
@@ -2684,6 +2723,9 @@ Sets the transform type to SVG_TRANSFORM_SKEWY, with parameter
 
 <h3 id="InterfaceSVGTransformList">Interface SVGTransformList</h3>
 
+<p class="issue">This section needs to be updated to describe
+how it reflects the value of the <a>'transform'</a> property,
+or just defer to css3-tranforms if everything is defined there.</p>
 
 
 <p>This interface defines a list of SVGTransform objects.</p>

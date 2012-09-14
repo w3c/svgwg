@@ -100,6 +100,10 @@ in the <a href="#EmbeddedSVGExample">above example</a>). For more
 information, refer to the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a> Recommendation
 [<a href="refs.html#ref-XML-NS">XML-NS</a>].</p>
 
+<p class="issue">This section should talk about how a document's behavior
+is defined in terms of the DOM, and also explain how the HTML parser can
+create SVG fragments.</p>
+
 <h3 id="SVGElement">The <span class='element-name'>'svg'</span> element</h3>
 
 <!--
@@ -218,7 +222,7 @@ information, refer to the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060
     </tr>
     <tr>
       <th>Resolution:</th>
-      <td><a href="http://www.w3.org/2011/10/28-svg-irc#T00-23-44">We will allow <span class='attr-name'>'transform'</span> on <span class='attr-name'>'svg'</span> in SVG 2.</a></td>
+      <td><a href="http://www.w3.org/2011/10/28-svg-irc#T00-23-44">We will allow <span class='attr-name'>'transform'</span> on <span class='element-name'>'svg'</span> in SVG 2.</a></td>
     </tr>
     <tr>
       <th>Purpose:</th>
@@ -246,7 +250,10 @@ information, refer to the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060
     <span class='attr-value'>'1.1'</span>.<br />
      <span class="anim-target"><a
     href="animate.html#Animatable">Animatable</a>:
-    no.</span></dd>
+    no.</span>
+    <p class="issue">What are we doing with the <a>'version'</a>
+    attribute?  It's not clear whether it is useful to keep.</p>
+    </dd>
     <dt id="SVGElementBaseProfileAttribute"><span
     class="adef">baseProfile</span> = profile-name</dt>
     <dd>Describes the minimum SVG language profile that the
@@ -262,7 +269,10 @@ information, refer to the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060
     value of <span class='attr-value'>'none'</span> were specified.<br />
      <span class="anim-target"><a
     href="animate.html#Animatable">Animatable</a>:
-    no.</span></dd>
+    no.</span>
+    <p class="issue">It's unlikely SVG 2 will have profiles as
+    1.0 and 1.1 did.  Do we keep the attribute in case others
+    wish to profile SVG?  (Or should we be discouraging that?)</p></dd>
     <dt id="SVGElementXAttribute"><span
     class="adef">x</span> = "<span class="attr-value"><a
     href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
@@ -458,6 +468,10 @@ information, refer to the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060
           <em>start-tag</em>
           <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#sec-starttags">as defined in XML 1.0</a>
           ([<a href="refs.html#ref-XML10">XML10</a>], section 3.1) is fully parsed and processed.
+	  <p class="issue">What about when the SVG document fragment is within
+	  an XHTML document?  Is there a single timeline for the whole document, and if so,
+	  does it start at the parse time for the first <code>&lt;svg&gt;</code> start tag?
+	  What about when using the HTML parser?</p>
         </dd>
       </dl>
       <p>
@@ -474,6 +488,9 @@ of another document, the author will often want to include a
 referenced document. This attribute provides a convenient way to design
 SVG documents to scale-to-fit into an arbitrary viewport.</p>
 
+<p class="issue">This paragraph feels out of place just after the list
+of attributes specific to <a>'svg'</a>.</p>
+
 </edit:with>
 
 <h2 id="Groups">Grouping: the <span class='element-name'>'g'</span> element</h2>
@@ -488,6 +505,15 @@ and <a>'title'</a> elements, provide information about document
 structure and semantics. Documents that are rich in structure may be
 rendered graphically, as speech, or as braille, and thus promote
 <a href="access.html">accessibility</a>.</p>
+
+<p class="issue">That generously structured content with <a>'title'</a> and
+<a>'desc'</a> is more accessible isn't necessarily true.  It also seems
+like a stretch to claim that documents "rich in structure" can be
+rendered as speech or braille, without specific references to how
+that can be achieved.  More fundamental uses of grouping that should
+be mentioned are (a) for specifying common styling of inherited
+properties, and (b) for selecting elements to apply a group effect
+like filters and group opacity.</p>
 
 <p>A group of elements, as well as individual objects, can be given
 a name using the <a>'id'</a> attribute. Named groups are needed for
@@ -514,6 +540,8 @@ within it, to an arbitrary depth. Thus, the following is possible:</p>
 </svg>
 ]]></pre>
 
+<p class="issue">This is not a particularly useful example.</p>
+
 <div class="annotation svg2-requirement">
   <table>
     <tr>
@@ -538,6 +566,11 @@ within it, to an arbitrary depth. Thus, the following is possible:</p>
 
 <p>Any element that is not contained within a <a>'g'</a> is treated (at
 least conceptually) as if it were in its own group.</p>
+
+<p class="issue">It is unclear what this sentence actually means.
+Does it mean that all operations that apply to groups (such as group
+opacity, filter effects, etc.) can apply to single elements too?
+If so, then it should say that.</p>
 
 <h3 id="GElement">The <span class='element-name'>'g'</span> element</h3>
 
@@ -575,6 +608,11 @@ referenced: <a>'altGlyphDef'</a>, <a>'clipPath'</a>, <a>'cursor element'</a>,
 promotes understandability of the SVG content and thus promotes
 accessibility.</p>
 
+<p class="issue">Again this claim about accessibility is dubious.</p>
+
+<p class="issue">We should have a term for definition elements (since we
+now have a corresponding IDL interface) and reference it here.</p>
+
 <h3 id="DefsElement">The <span class='element-name'>'defs'</span> element</h3>
 
 <edit:elementsummary name='defs'/>
@@ -606,6 +644,11 @@ which are targets of local IRI references within a <a>'defs'</a>
 element which is a direct child of one of the ancestors of the
 referencing element. For example:</p>
 
+<p class="issue">Is this really about efficiency of implementations?
+If anything, it looks like it is ensuring progressively rendered
+documents don't make forward references that would otherwise
+cause an incorrect rendering before the referenced element is loaded.</p>
+
 <edit:example href='images/struct/defs01.svg' link='yes'/>
 
 <p>In the document above, the linear gradient is defined within
@@ -615,6 +658,10 @@ references the linear gradient. Thus, the above document conforms to the
 guideline.</p>
 
 <h2 id="DiscardElement">The <span class='element-name'>'discard'</span> element</h2>
+
+<p class="issue">Would this element be better as part of the Animation chapter?
+It also needs to be a member of the element categories that other animation elements
+are, and an IDL interface needs to be written for it.</p>
 
 <edit:with element='discard'>
 
@@ -730,7 +777,7 @@ guideline.</p>
   the <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
   element is no longer useful. It must also be discarded following the
   target element removal. If the
-  <a href="struct.html#DiscardElementHrefAttribute"><span class="attr-name">'xlink:href'</span></a>
+  <a href="struct.html#DiscardElementHrefAttribute"><span class="attr-name">'href'</span></a>
   attribute has an <a>invalid</a> IRI reference
   (the target element did not exist, for example),
   the <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
@@ -812,6 +859,9 @@ and <span class='element-name'>'title'</span> elements</h2>
 <edit:elementsummary name='title'/>
 </div>
 
+<p class="issue">Is there any updated wording from SVG Tiny 1.2 that we
+should be using wrt tooltips?</p>
+
 <p>Each <a>container element</a> or <a>graphics element</a> in an SVG drawing
 can supply a <a>'desc'</a> and/or a <a>'title'</a> description string where
 the description is text-only. When the current SVG document fragment is
@@ -826,10 +876,17 @@ hierarchies, and for following <a>'use'</a> element references, it is
 sometimes desirable to allow the user to control how deep they drill down into
 descriptive text.</p>
 
+<p class="issue">I don't think it is easy to use a style sheet to cause
+an element's <a>'title'</a> to be rendered in place of its graphics.</p>
+
 <p>In conforming SVG document fragments, any <a>'title'</a> element should be
 the first child element of its parent.  Note that those implementations that do
 use <a>'title'</a> to display a tooltip often will only do so if the
 <a>'title'</a> is indeed the first child element of its parent.</p>
+
+<p class="issue">Is it a SHOULD or a MUST that the <a>'title'</a> is the first
+element child?  We should check if the statement about implementations looking
+at the first child for a tooltip is still accurate.</p>
 
 <p>The following is an example. In typical operation, the SVG user agent would
 not render the <a>'desc'</a> and <a>'title'</a> elements but would render the
@@ -868,6 +925,11 @@ from other namespaces. Here is an example:</p>
 </svg>
 ]]></pre>
 
+<p class="issue">We should say what purpose including other-namespaced
+markup in <a>'title'</a> and <a>'desc'</a> has.  If it is just that
+these are basically metadata extension points for other profiles or
+uses of SVG, then we should say that.</p>
+
 <p>Authors should always provide a <a>'title'</a> child element to the
 <a>outermost svg element</a> within a stand-alone SVG document. The
 <a>'title'</a> child element to an <a>'svg'</a> element serves the
@@ -901,6 +963,23 @@ choose among multiple <a>'desc'</a> or <a>'title'</a> elements for processing
 (e.g., to decide which string to use for a tooltip), the user
 agent shall choose the first one.</p>
 
+<p class="issue">We are no longer using DTDs.  Are we happy to have
+a prose restriction for conforming SVG documents to have at most one
+<a>'title'</a> and <a>'desc'</a> child, and their positions?</p>
+
+<p class="issue">We have this sentence here about tooltips using the
+first element, which is stronger than the earlier note that some
+implementations do this.  We should look at how HTML describes
+the <span class="attr-name">'title'</span> attribute and whether
+a tooltip is required, suggested, etc., and follow that.</p>
+
+<p class="issue">Once we have said how ARIA attributes can be used
+in SVG, we might want to define <a>'title'</a> and <a>'desc'</a>
+in a manner consistent with them, so that it is clear what it means
+for example for an element to have both a <a>'desc'</a> element
+child and an <span class="attr-name">'aria-describedby'</span>
+attribute.</p>
+
 <h2 id="SymbolElement">The <span class='element-name'>'symbol'</span> element</h2>
 
 <edit:elementsummary name='symbol'/>
@@ -912,6 +991,12 @@ which can be instantiated by a <a>'use'</a> element.</p>
 times in the same document adds structure and semantics. Documents that are rich
 in structure may be rendered graphically, as speech, or as
 braille, and thus promote <a href="access.html">accessibility</a>.</p>
+
+<p class="issue">Again this mention of accessibility through the use of
+structure (this time with <a>'symbol'</a> elements).  We should include
+an example here or in the Accessibility appendix that shows how this
+is the case and what the actual effects of structuring content with
+<a>'symbol'</a> are.</p>
 
 <p>The key distinctions between a <a>'symbol'</a> and a <a>'g'</a> are:</p>
 
@@ -954,6 +1039,10 @@ references another element and indicates that the graphical
 contents of that element is included/drawn at that given point
 in the document.</p>
 
+<p class="issue"><a>'use'</a> is described as referencing template
+objects, but the parameters of the template are limited – just
+different inherited property values.</p>
+
 <p>Unlike <a>'image'</a>, the <a>'use'</a> element cannot reference
 entire files.</p>
 
@@ -973,6 +1062,9 @@ cloned DOM tree is non-exposed, the SVG Document Object Model
 element and its attributes. The SVG DOM does not show the
 referenced element's contents as children of <a>'use'</a> element.</p>
 
+<p class="issue">We should define the behavior of <a>'use'</a>
+in terms of Web Components.</p>
+
 <p>For user agents that support <a
 href="styling.html#StylingWithCSS">Styling with CSS</a>, the
 conceptual deep cloning of the referenced element into a
@@ -984,6 +1076,11 @@ be applied to the original (i.e., referenced) elements because
 they are part of the formal document structure. CSS2 selectors
 cannot be applied to the (conceptually) cloned DOM tree because
 its contents are not part of the formal document structure.</p>
+
+<p class="issue">We should be requiring CSS styling in SVG 2.
+Also, hopefully, how styles can apply or not to elements in the
+shadow tree (and how event handling works, below) should be specified by how
+we define <a>'use'</a> to work in terms of Web Components.</p>
 
 <p>Property inheritance, however, works as if the referenced
 element had been textually included as a deeply cloned child of
@@ -997,6 +1094,9 @@ then the actual target for the event will be the
 <a>SVGElementInstance</a> object
 within the "instance tree" corresponding to the given
 referenced element.</p>
+
+<p class="issue">Once we define <a>'use'</a> in terms of 
+Web Components, will we drop instance trees?</p>
 
 <p>The event handling for the non-exposed tree works as if the
 referenced element had been textually included as a deeply
@@ -1034,12 +1134,18 @@ class="prop-value">'visibility:visible'</span>, then that
 element will be visible even if the <a>'use'</a> element specifies <span
 class="prop-value">'visibility:hidden'</span>.</p>
 
+<p class="issue">Why is <a>'visibility'</a> called out speciically?  It might
+be better just to include an example that shows this.</p>
+
 <p>Animations on a referenced element will cause the instances
 to also be animated.</p>
 
 <p>A <a>'use'</a> element has the
 same visual effect as if the <a>'use'</a> element were replaced by the
 following generated content:</p>
+
+<p class="issue">Except that the replaced content shouldn't affect
+how styles are matched.</p>
 
 <ul>
   <li>
@@ -1280,6 +1386,9 @@ element defines how the SVG image content is fitted into the
 viewport and the <a>'clip'</a> and <a>'overflow'</a> properties on the <a>'image'</a> element define how the SVG
 image content is clipped (or not) relative to the viewport.</p>
 
+<p class="issue">Why does it make sense to override <a>'clip'</a>
+but not <a>'clip-path'</a>?</p>
+
 <p>The value of the <a>'viewBox'</a> attribute to use when
 evaluating the <a>'preserveAspectRatio'</a> attribute is
 defined by the referenced content. For content that clearly
@@ -1293,6 +1402,9 @@ raster-image-height'</span>). Where no value is readily available
 <a>outermost svg element</a>) the <a>'preserveAspectRatio'</a> attribute is
 ignored, and only the translation due to the <a>'x'</a> &amp; <a>'y'</a> attributes of the viewport is
 used to display the content.</p>
+
+<p class="issue">We should say how the use of an <code>#xywh</code>
+media fragment interacts with the the above.</p>
 
 <p>For example, if the image element referenced a PNG or JPEG
 and <span class="attr-value">preserveAspectRatio="xMinYMin
@@ -1479,6 +1591,8 @@ return either true or false results. The <a>'switch'</a> renders the first of
 its children for which all of these attributes test true. If
 the given attribute is not specified, then a true value is
 assumed.</p>
+
+<p class="issue">It sounds strange to talk about attributes "returning" a value.</p>
 
 <p>Similar to the <a>'display'</a> property, conditional processing
 attributes only affect the direct rendering of elements and do
@@ -1689,6 +1803,9 @@ element whether to render the element or not.</p>
 attributes to the elements that do not directly produce
 rendering.</p>
 
+<p class="issue">This was already mentioned in the "Conditional processing overview"
+section.  We should just describe this once.</p>
+
 <ul>
   <li>the test attributes do not effect the
   <a>'mask element'</a>, <a>'clipPath'</a>, <a>'linearGradient'</a>,
@@ -1733,6 +1850,11 @@ rendering.</p>
       </dl>
     </div>
 
+<p class="issue">Are we happy to keep promoting the use of <span class="attr-name">'xml:base'</span>?
+Is it a use case worth trying to include a more HTML-like syntax for – the <span class="element-name">'base'</span>
+element?  We anyway need to define somewhere what effect the HTML <span class="element-name">'base'</span>
+element has on any SVG document fragments.</p>
+
 <h3 id="LangSpaceAttrs">The <span class='attr-name'>'xml:lang'</span> and
 <span class='attr-name'>'xml:space'</span> attributes</h3>
 
@@ -1760,6 +1882,9 @@ attributes <a>'xml:lang'</a> and <a>'xml:space'</a>.</p>
     </tr>
   </table>
 </div>
+
+<p class="issue">Should we be moving <span class="attr-name">'lang'</span> instead
+of <span class="attr-name">'xlink:lang'</span>?</p>
 
     <div class="adef-list">
       <p><em>Attribute definitions:</em></p>
@@ -2043,6 +2168,9 @@ actually match the characteristics of the target medium. On
 systems where it is impossible to know the size of a pixel, a
 suitable default pixel size is provided.
 
+<p class="issue">Should this and the next three IDL attributes be removed?
+Are they implemented?</p>
+
 </div>
 </dd>
 
@@ -2319,6 +2447,10 @@ effect on redrawing.
 <div>
 In rendering environments supporting interactivity, forces the user agent
 to immediately redraw all regions of the viewport that require updating. 
+
+<p class="issue">Should this method be neutered as suspendRedraw and friends
+have been?  Do implementations actually support painting in the middle of
+a running script by calling this method?</p>
 
 </div>
 </dd>
@@ -2610,6 +2742,8 @@ by the supplied rectangle.
 Unselects any selected objects, including any selections of text strings
 and type-in bars.
 
+<p class="issue">What is a type-in bar?  Do we need <code>deselectAll</code> given
+we have DOM Selection?</p>
 </div>
 </dd>
 
@@ -2795,6 +2929,9 @@ subset of the document tree) for an Element whose id is given by
 no such element exists, returns null. Behavior is not defined if more
 than one element has this id.
 
+<p class="issue">Do we need this?  If so, can we define it in terms of
+calling Document.getElementById and checking whether the returned
+element is within the subtree?</p>
 
 </div>
 <dl class="operation">
