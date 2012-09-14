@@ -1,0 +1,740 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Linking</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <!--
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  -->
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>Linking</h1>
+
+<h2 id="IRIReference">References</h2>
+<h3 id="HeadOverview">Overview</h3>
+
+<p>On the Internet, resources are identified using <a>IRIs</a>
+(Internationalized Resource Identifiers). For
+example, an SVG file called someDrawing.svg located at
+http://example.com might have the following <a>IRI</a>:</p>
+
+<pre>
+http://example.com/someDrawing.svg
+</pre>
+
+<p>An <a>IRI</a> can also address a particular element within an XML
+document by including an <a>IRI</a> fragment
+identifier as part of the <a>IRI</a>. An <a>IRI</a> which includes an
+<a>IRI</a> fragment identifier consists of an optional base <a>IRI</a>, followed by a "#" character,
+followed by the <a>IRI</a> fragment identifier. For example, the
+following <a>IRI</a> can be used to specify the element whose ID is
+"Lamppost" within file someDrawing.svg:</p>
+
+<pre>
+http://example.com/someDrawing.svg#Lamppost
+</pre>
+
+<!-- from 1.2T - add this too?
+
+<h4 id="AlteringXlinkHref">Altering the <span class="attr-name">'xlink:href'</span> attribute</h4>
+
+<p>If the <a href="animate.html#HrefAttribute"><span class="attr-name">'xlink:href'</span></a>
+attribute of an element in the tree is altered by any means (e.g. script, declarative 
+animation) such that a new resource is referenced, the new resource must replace 
+the existing resource, and must be rendered as appropriate.  For specific effects
+on the scripting context when a <a>'script'</a> element's 
+<a>'script/xlink:href'</a> attribute is altered, see
+<a href="script.html#ScriptContentProcessing">Script processing</a>.</p>
+    
+-->
+
+<h3 id="IRIandURI">IRIs and URIs</h3>
+<p>Internationalized Resource Identifiers (<a>IRIs</a>) are a more generalized
+complement to Uniform Resource Identifiers (URIs). An <a>IRI</a> is a sequence
+of characters from the Universal Character Set [<a href="refs.html#ref-UNICODE">UNICODE</a>].
+A URI is constructed from a much more restricted set of characters. All URIs are
+already conformant <a>IRIs</a>. A mapping from <a>IRIs</a> to URIs is defined by
+the <a>IRI</a> specification, which means that IRIs can be used instead of URIs
+in XML documents, to identify resources. <a>IRIs</a> can be converted to URIs
+for resolution on a network, if the protocol does not support <a>IRIs</a>
+directly.</p>
+
+<p>Previous versions of SVG, following XLink, defined an IRI reference type
+as a URI <em>or as a sequence of characters which must result in an IRI after a
+particular escaping procedure was applied</em>. The escaping procedure was repeated in the
+XLink 1.0 specification [<a href="refs.html#ref-XLINK">XLINK</a>], and in the
+W3C XML Schema Part 2: Datatypes specification [<a href="refs.html#ref-SCHEMA2">SCHEMA2</a>].
+This copying introduced the possibility of error and divergence, but was done
+because the <a>IRI</a> specification was not yet standardized.</p>
+
+<p>In this specification, the correct term <a>IRI</a> is used for this "URI or sequence of characters
+plus an algorithm" and the escaping method, which turns IRIs into URIs, is defined by reference to the
+<a href="http://www.ietf.org/rfc/rfc3987.txt">IRI specification</a> [<a href="refs.html#ref-RFC3987">RFC3987</a>],
+which has since become an IETF Proposed Standard. Other W3C specifications are
+expected to be revised over time to remove these duplicate descriptions of the
+escaping procedure and to refer to <a>IRI</a> directly.</p>
+
+<h3 id="IRIforms">Syntactic forms: IRI and FuncIRI</h3>
+    
+<p>IRIs are used in the <a>'animate/xlink:href'</a> attribute. Some attributes
+allow both IRIs and text strings as content. To disambiguate a text string from
+a relative IRI, the functional notation
+<a href="types.html#DataTypeFuncIRI">&lt;FuncIRI&gt;</a> is used. This is simply
+an IRI delimited with a functional notation. <strong>Note:</strong> For
+historical reasons, the delimiters are "url(" and ")", for compatibility with
+the CSS specifications. The FuncIRI form is used in <a href="styling.html#StylingUsingPresentationAttributes">presentation attributes</a><!--
+not in 1.1
+and <a href="interact.html#navigation">navigation attributes</a> -->.</p>
+
+<p>SVG makes extensive use of <a>IRI</a> references, both absolute and relative,
+to other objects. For example, to <a>fill</a> a rectangle with a linear
+gradient, you first define a <a>'linearGradient'</a> element and give
+it an ID, as in:</p>
+
+<edit:example href="images/linking/05_07.xml" image="no" link="no"/>
+
+<p>You then reference the linear gradient as the value of the
+<a>'fill'</a> property for the rectangle, as in the following example:</p>
+    
+<edit:example href="images/linking/05_08.xml" image="no" link="no"/>
+
+
+<!-- old stuff from 1.1 for checking
+
+<p id="IRIReference">IRI references are defined in either of the
+following forms:</p>
+
+<pre class='grammar'><![CDATA[
+<IRI-reference> = [ <absoluteIRI> | <relativeIRI> ] [ "#" <elementID> ]    -or-
+<IRI-reference> = [ <absoluteIRI> | <relativeIRI> ] [ "#xpointer(id(" <elementID> "))" ]
+]]></pre>
+
+<p>where <span class="grammar">&lt;elementID&gt;</span>
+is the ID of the referenced element.</p>
+
+<p>(Note that the two forms above (i.e.,
+<span class="code-fragment">#&lt;elementID&gt;</span> and
+<span class="code-fragment">#xpointer(id(&lt;elementID&gt;))</span>)
+are formulated in syntaxes compatible with "XML Pointer Language (XPointer)"
+[<a href="http://www.w3.org/TR/xptr">XPTR</a>]. These two formulations of IRI
+references are the only XPointer formulations that are required in SVG 1.1 user
+agents.)</p>
+
+-->
+
+<p>SVG supports two types of IRI references:</p>
+
+<ul>
+  <li><a>local IRI references</a>, where the IRI reference does not contain an
+  <span class="grammar">&lt;absoluteIRI&gt;</span> or
+  <span class="grammar">&lt;relativeIRI&gt;</span> and thus only contains
+  a fragment identifier (i.e.,
+  <span class="code-fragment">#&lt;elementID&gt;</span> or
+  <span class="code-fragment">#xpointer(id&lt;elementID&gt;</span>))</li>
+
+  <li><a>non-local IRI references</a>, where the IRI reference does contain an
+  <span class="grammar">&lt;absoluteIRI&gt;</span> or
+  <span class="grammar">&lt;relativeIRI&gt;</span></li>
+</ul>
+
+<h3 id="processingIRI">Processing of IRI references</h3>
+
+<p>The following rules apply to the processing of IRI references:</p>
+
+<ul>
+  <li>IRI references to nodes that do not exist shall be treated as
+  invalid references.</li>
+
+  <li>IRI references to elements which are inappropriate
+  targets for the given reference shall be treated as invalid
+  references (see list below for appropriate targets). For
+  example, the <a>'clip-path'</a> property can only refer to
+  <a>'clipPath'</a> elements. The property setting
+  <span class="attr-value">clip-path:url(#MyElement)</span> is an
+  invalid reference if the referenced element is not a <a>'clipPath'</a>.</li>
+
+  <li>IRI references that directly or indirectly reference
+  themselves are treated as invalid circular references.</li>
+</ul>
+
+<p>The following list describes the elements and properties that allow IRI
+references and the valid target types for those references:</p>
+
+<ul>
+  <li>the <a>'a'</a> element can reference any local or non-local resource</li>
+  <li>the <a>'altGlyph'</a> element must reference either an <a>'altGlyphDef'</a> element or a <a>'glyph'</a> element</li>
+  <li>the <a>'animate'</a> element (see <a href="animate.html#TargetElement">Identifying the target element for an animation</a> for reference rules)</li>
+  <li>the <a>'animateColor'</a> element (see <a href="animate.html#TargetElement">Identifying the target element for an animation</a> for reference rules)</li>
+  <li>the <a>'animateMotion'</a> element (see <a href="animate.html#TargetElement">Identifying the target element for an animation</a> for reference rules)</li>
+  <li>the <a>'animateTransform'</a> element (see <a href="animate.html#TargetElement">Identifying the target element for an animation</a> for reference rules)</li>
+  <li>the <a>'clip-path'</a> property must reference a <a>'clipPath'</a> element</li>
+  <li>the <a>'color-profile element'</a> element must reference an ICC profile resource</li>
+  <li>the <a href="color.html#ColorProfileSrcProperty">'src'</a> descriptor on an @color-profile definition must reference an ICC profile resource or a <a>'color-profile element'</a> element</li>
+  <li>the <a>'cursor element'</a> element must reference a resource that can provide an image for the cursor graphic</li>
+  <li>the <a>'cursor property'</a> property must reference a resource that can provide an image for the cursor graphic</li>
+  <li>the <a>'feImage'</a> element must reference any local or non-local resource</li>
+  <li>the <a>'fill'</a> property (see <a href="painting.html#SpecifyingPaint">Specifying paint</a> for reference rules)</li>
+  <li>the <a>'filter element'</a> element must reference a <a>'filter element'</a> element</li>
+  <li>the <a>'filter property'</a> property must reference a <a>'filter element'</a> element</li>
+  <li>the <a>'image'</a> element must reference any local or non-local resource</li>
+  <li>the <a>'linearGradient'</a> element must reference a <a>'linearGradient'</a> or <a>'radialGradient'</a> element</li>
+  <li>the <a>'marker property'</a>, <a>'marker-start'</a>, <a>'marker-mid'</a> and <a>'marker-end'</a> properties must reference a <a>'marker element'</a> element.</li>
+  <li>the <a>'mask property'</a> property must reference a <a>'mask element'</a> element</li>
+  <li>the <a>'pattern'</a> element must reference a <a>'pattern'</a> element</li>
+  <li>the <a>'radialGradient'</a> element must reference a <a>'linearGradient'</a> or <a>'radialGradient'</a> element</li>
+  <li>the <a>'script'</a> element must reference an external resource that provides the script content</li>
+  <li>the <a>'stroke'</a> property (see <a href="painting.html#SpecifyingPaint">Specifying paint</a> for reference rules)</li>
+  <li>the <a>'textPath'</a> element must reference a <a>'path'</a> element</li>
+  <li>the <a>'tref'</a> element can reference any SVG element</li>
+  <li>the <a>'set'</a> element (see <a href="animate.html#TargetElement">Identifying the target element for an animation</a> for reference rules)</li>
+  <li>the <a>'use'</a> element can reference any local or non-local resource</li>
+</ul>
+
+<p>The following rules apply to the processing of invalid IRI references:</p>
+
+<ul>
+  <li>An invalid local IRI reference (i.e., an invalid references to a node
+  within the current document) represents an error (see
+  <a href="implnote.html#ErrorProcessing">Error processing</a>), apart from the
+  <a>'a/xlink:href'</a> attribute on the <a>'a'</a> element and the properties
+  that allow for backup values in the case where the IRI reference is invalid
+  (see <a>'fill'</a> and <a>'stroke'</a>).</li>
+
+  <li>An invalid circular IRI reference represents an error (see
+  <a href="implnote.html#ErrorProcessing">Error processing</a>).</li>
+</ul>
+
+
+
+<h3 id="xlinkRefAttrs">IRI reference attributes</h3>
+
+<p id="xlinkRefAttrsEmbed"><a>IRI references</a> are normally specified with an
+<span class="attr-name">'href'</span> attribute in the XLink
+[<a href="http://www.w3.org/TR/xlink/">XLink</a>] namespace. For example, if the
+prefix of 'xlink' is used for attributes in the XLink namespace, then the
+attribute is <!-- not "shall be"; could also have duplicate prefixes defined.-->
+specified as <span class="attr-name">'xlink:href'</span>. The value of this
+attribute forms a reference for the desired resource (or secondary resource, if
+there is a fragment identifier).</p>
+
+<p>The value of the <span class="attr-name">'href'</span>
+attribute must be an
+<a href="types.html#DataTypeIRI"><span class="svg-term">Internationalized Resource Identifier</span></a>.</p>
+
+<p>If the protocol, such as HTTP, does not support <a>IRIs</a> directly,
+the <a>IRI</a> is converted to a URI by the SVG implementation, as described
+in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">IRI specification</a> [<a href="refs.html#ref-RFC3987">RFC3987</a>].</p>
+
+<p>Because it is impractical for any application to check that
+a value is an <a>IRI reference</a>, this specification follows the lead
+of the <a href="http://www.ietf.org/rfc/rfc3986.txt">IRI Specification</a>
+in this matter and imposes no such conformance testing
+requirement on SVG applications.</p>
+
+<p>If the <a>IRI reference</a> is relative, its absolute version must be computed by the method described in
+<a href="http://www.w3.org/TR/xmlbase/">XML Base</a> before use [<a href="refs.html#ref-XML-BASE">XML-BASE</a>].</p>
+
+    <div class="adef-list">
+      <dl>
+        <dt><a id="XLinkTypeAttribute" ></a> <span
+            class="adef">xlink:type</span> = "<span
+              class="attr-value">simple</span>"</dt>
+        <dd><p>Identifies the type of XLink being used.  In SVG 1.1, only
+          simple links are available. 
+          Links are simple links by default, 
+          so the attribute <span
+            class="attr-value">xlink:type="simple"</span>
+           is optional and may be omitted on simple links.
+           Refer to the <a href="http://www.w3.org/TR/xlink/">XML Linking Language (XLink)</a> [<a href="refs.html#ref-XLINK">XLINK</a>].</p>
+          <p class="anim-target"><a
+            href="animate.html#Animatable">Animatable</a>:
+            no.</p></dd>
+        <dt><a id="XLinkRoleAttribute" ></a> <span
+            class="adef">xlink:role</span> = "<span
+              class="attr-value"><a
+                href="types.html#DataTypeIRI">&lt;IRI&gt;</a></span>"</dt>
+        <dd><p>An optional <a>IRI reference</a> that identifies some resource that describes
+          the intended property. The value must be an <a>IRI reference</a> as
+          defined in [<a
+            href="http://www.ietf.org/rfc/rfc3987.txt">RFC3987</a>],
+          except that if the <a>IRI</a> scheme used is allowed to have
+          absolute and relative forms, the <a>IRI</a> portion must be
+          absolute. When no value is supplied, no particular role
+          value shall be inferred.
+          Refer to the <a href="http://www.w3.org/TR/xlink/">XML Linking Language (XLink)</a> [<a href="refs.html#ref-XLINK">XLINK</a>].</p>
+          <p class="anim-target"><a
+            href="animate.html#Animatable">Animatable</a>:
+            no.</p></dd>
+        <dt><a id="XLinkArcRoleAttribute" ></a> <span
+            class="adef">xlink:arcrole</span> = "<span
+              class="attr-value"><a
+                href="types.html#DataTypeIRI">&lt;IRI&gt;</a></span>"</dt>
+        <dd><p>An optional <a>IRI reference</a> that identifies some resource that describes
+          the intended property. The value must be an <a>IRI reference</a> as
+          defined in [<a
+            href="http://www.ietf.org/rfc/rfc3987.txt">RFC3987</a>],
+          except that if the <a>IRI</a> scheme used is allowed to have
+          absolute and relative forms, the <a>IRI</a> portion must be
+          absolute. When no value is supplied, no particular role
+          value shall be inferred.  The arcrole
+          attribute corresponds to the [<a
+            href="refs.html#ref-RDF-PRIMER">RDF-PRIMER</a>] notion
+          of a property, where the role can be interpreted as stating
+          that "starting-resource HAS arc-role ending-resource." This
+          contextual role can differ from the meaning of an ending
+          resource when taken outside the context of this particular
+          arc. For example, a resource might generically represent a
+          "person," but in the context of a particular arc it might
+          have the role of "mother" and in the context of a different
+          arc it might have the role of "daughter."
+          Refer to the <a href="http://www.w3.org/TR/xlink/">XML Linking Language (XLink)</a> [<a href="refs.html#ref-XLINK">XLINK</a>].</p>
+          <p class="anim-target"><a
+            href="animate.html#Animatable">Animatable</a>:
+            no.</p></dd>
+        <dt><a id="XLinkTitleAttribute" ></a> <span
+            class="adef">xlink:title</span> = "<span
+                class="attr-value"><a href="types.html#DataTypeAnything">&lt;anything&gt;</a></span>"</dt>
+        <dd><p>The title attribute shall be used to describe the meaning of
+          a link or resource in a human-readable fashion, along the
+          same lines as the role or arcrole attribute. A value is
+          optional; if a value is supplied, it shall contain a
+          string that describes the resource. In general it is preferable
+          to  use a <a href="struct.html#TitleElement"><span class="element-name">'title'</span></a> child element
+          rather than a <span class="attr-name">'title'</span> attribute. The use of this
+          information is highly dependent on the type of processing
+          being done. It may be used, for example, to make titles
+          available to applications used by visually impaired users,
+          or to create a table of links, or to present help text that
+          appears when a user lets a mouse pointer hover over a
+          starting resource.
+          Refer to the <a href="http://www.w3.org/TR/xlink/">XML Linking Language (XLink)</a> [<a href="refs.html#ref-XLINK">XLINK</a>].</p>
+          <p class="anim-target"><a
+            href="animate.html#Animatable">Animatable</a>:
+            no.</p></dd>
+        <dt><a id="XLinkShowAttribute" ></a> <span
+            class="adef">xlink:show</span> = "<span
+              class="attr-value">new</span>' |
+          '<span
+            class="attr-value">replace</span>' |
+          '<span
+            class="attr-value">embed</span>' |
+          '<span
+            class="attr-value">other</span>' |
+          '<span
+            class="attr-value">none</span>'</dt>
+        <dd><p>This attribute is provided for backwards compatibility with SVG
+     1.1. It provides documentation to XLink-aware processors. In
+          case of a conflict, the target attribute has priority, since it can
+          express a wider range of values.
+          Refer to the <a href="http://www.w3.org/TR/xlink/">XML Linking Language (XLink)</a> [<a href="refs.html#ref-XLINK">XLINK</a>].</p>
+          <p class="anim-target"><a
+            href="animate.html#Animatable">Animatable</a>:
+            no.</p></dd>
+        <dt><a id="XLinkActuateAttribute" ></a> <span
+            class="adef">xlink:actuate</span> = "<span
+              class="attr-value">onLoad</span>'</dt>
+        <dd><p>This attribute is provided for backwards compatibility with SVG
+          1.1. It provides documentation to XLink-aware processors.
+          Refer to the <a href="http://www.w3.org/TR/xlink/">XML Linking Language (XLink)</a> [<a href="refs.html#ref-XLINK">XLINK</a>].</p>
+          <p class="anim-target"><a
+            href="animate.html#Animatable">Animatable</a>:
+            no.</p></dd>
+      </dl>
+    </div>
+
+<p>In all cases, for compliance with either the "Namespaces in XML 1.0" or the "Namespaces in XML 1.1"
+Recommendation [<a href="http://www.w3.org/TR/REC-xml-names/">XML-NS10</a>][<a href="http://www.w3.org/TR/xml-names11/">XML-NS</a>],
+an explicit XLink namespace declaration must be provided whenever
+one of the above XLink attributes is used within SVG content.
+One simple way to provide such an XLink namespace declaration
+is to include an <span class="attr-name">'xmlns'</span> attribute
+for the XLink namespace on the <a>'svg'</a> element for content that uses
+XLink attributes. For example:</p>
+
+<pre class='xml'><![CDATA[
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" ...>
+  <image xlink:href="foo.png" .../>
+</svg>
+]]></pre>
+
+<h2 id="Links">Links out of SVG content: the <span class="element-name">'a'</span> element</h2>
+
+<edit:with element='a'>
+
+<p>SVG provides an <a>'a'</a> element, to indicate links (also known
+as <em>hyperlinks</em> or <em>Web links</em>). The <a>'a'</a> element may
+contain any element that its parent may contain, except itself.</p>
+
+<p>SVG uses XLink ([<a href="http://www.w3.org/TR/2001/REC-xlink-20010627/">XLink</a>])
+for all link definitions. SVG 1.1 only requires
+that user agents support XLink's notion of
+<a href="http://www.w3.org/TR/2001/REC-xlink-20010627/#simple-links">simple links</a>.
+Each simple link associates exactly two resources, one
+local and one remote, with an arc going from the former to the latter.</p>
+
+<p>A simple link is defined for each separate rendered element contained
+within the <a>'a'</a> element; thus, if the <a>'a'</a> element contains
+three <a>'circle'</a> elements, a link is created for each circle. For
+each rendered element within an <a>'a'</a> element, the given rendered
+element is the local resource (the source anchor for the link).</p>
+
+<p>The remote resource (the destination for the link) is defined by
+an <a>IRI</a> specified by the <a>'xlink:href'</a> attribute on the <a>'a'</a>
+element. The remote resource may be any Web resource (e.g., an image, a video
+clip, a sound bite, a program, another SVG document, an HTML document, an
+element within the current document, an element within a different document, etc.).
+By activating these links (by clicking with the mouse, through keyboard
+input, voice commands, etc.), users may visit these resources.</p>
+
+<p id="ExampleLink01"><span class="example-ref">Example link01</span> assigns
+a link to an ellipse.</p>
+
+<edit:example href='images/linking/link01.svg' name='link01' description='a link on an ellipse' image='yes' link='yes'/>
+
+<p>If the above SVG file is viewed by a user agent that supports both
+SVG and HTML, then clicking on the ellipse will cause the current window
+or frame to be replaced by the W3C home page.</p>
+
+<div id="AElement">
+<edit:elementsummary name='a'/>
+</div>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+         <dt><a id="XLinkShowAttribute2" ></a> <span
+            class="adef">xlink:show</span> = "<span
+              class="attr-value">new</span>" |
+          "<span
+            class="attr-value">replace</span>" </dt>
+        <dd><p>This attribute provides documentation to XLink-aware processors. If
+          <span class="attr-value">target="_blank"</span> then use
+          <span class="attr-value">xlink:show="new"</span> else use
+          <span class="attr-value">'replace'</span>. In
+          case of a conflict, the target attribute has priority, since it can
+          express a wider range of values.
+          Refer to the <a href="http://www.w3.org/TR/xlink/">XML Linking Language (XLink)</a> [<a href="refs.html#ref-XLINK">XLINK</a>].</p>
+          <p class="anim-target"><a
+            href="animate.html#Animatable">Animatable</a>:
+            no.</p></dd>
+        <dt id="AElementXLinkActuateAttribute"><span
+        class="adef">xlink:actuate</span> = <span class='attr-value'>"onRequest"</span></dt>
+        <dd><p>This attribute provides documentation to XLink-aware processors that
+          an application should traverse from the starting
+        resource to the ending resource only on a post-loading
+        event triggered for the purpose of traversal.
+        Refer to the <a href="http://www.w3.org/TR/xlink/">XML Linking Language (XLink)</a> [<a href="refs.html#ref-XLINK">XLINK</a>].</p>
+         <p class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</p></dd>
+        <dt id="AElementXLinkHrefAttribute"><span
+          class="adef">xlink:href</span> = "<span class="attr-value"><a href="types.html#DataTypeIRI">&lt;IRI&gt;</a></span>"</dt>
+        <dd><p>The location of the referenced object, expressed as an <a>IRI reference</a>.</p>
+         <p class="anim-target"><a href="animate.html#Animatable">Animatable</a>: yes.</p>
+        </dd>
+        <dt id="AElementTargetAttribute"><span
+          class="adef">target</span> = "<span
+            class="attr-value">_replace</span>" |
+          "<span
+            class="attr-value">_self</span>" |
+          "<span
+            class="attr-value">_parent</span>" |
+          "<span
+            class="attr-value">_top</span>" |
+          "<span
+            class="attr-value">_blank</span>" |
+          "<span class="attr-value"><a href="types.html#DataTypeXML-Name">&lt;XML-Name&gt;</a></span>"
+        </dt>
+        <dd><p>This attribute should be used when there are multiple possible targets for
+          the ending resource, such as when the parent document is a
+          multi-frame HTML or XHTML document. This attribute specifies the
+          name or portion of the target window, frame, pane, tab, or other
+          relevant presentation context (e.g., an HTML or XHTML frame, iframe, or object element) into
+          which a document is to be opened when the link is activated:</p>
+          <dl class="definitions"><dt><span class="attr-value">_replace</span></dt>
+            <dd>The current SVG image is replaced by the linked content in the
+              same rectangular area in the same frame as the current SVG image.</dd>
+            <dt><span class="attr-value">_self</span></dt>
+            <dd>The current SVG image is replaced by the linked content in the
+            same frame as the current SVG image. If the attribute is not specified,
+	    <span class='attr-value'>'_self'</span> is assumed.</dd>
+            <dt><span class="attr-value">_parent</span></dt>
+            <dd>The immediate frameset parent of the SVG image is replaced by the
+              linked content.</dd>
+            <dt><span class="attr-value">_top</span></dt>
+            <dd>The content of the full window or tab, including any frames, is
+              replaced by the linked content</dd>
+            <dt><span class="attr-value">_blank</span></dt>
+              <dd>A new un-named window or tab is requested for the display of the
+                linked content. If this fails, the result is the same as <span class="attr-value">_top</span></dd>
+            <dt><span class="attr-value"><a href="types.html#DataTypeXML-Name">&lt;XML-Name&gt;</a></span></dt>
+              <dd>Specifies the name of the frame, pane, or other relevant
+                presentation context for display of the linked content. If this
+                already exists, it is re-used, replacing the existing content.  If
+                it does not exist, it is created (the same as <span class="attr-value">'_blank'</span>, except that
+                it now has a name). 
+                <!-- Note that frame-target must be an <a href="types.html#DataTypeXML-Name">XML Name</a> [XML11]. --></dd>
+          </dl>
+          <p>Note: The value <span class="attr-value">'_new'</span> is <em>not</em> a legal value for target (use <span class="attr-value">'_blank'</span>).</p>
+         <p class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</p></dd>
+      </dl>
+    </div>
+
+</edit:with>
+
+<h2 id="LinksIntoSVG">Linking into SVG content: IRI fragments and SVG views</h2>
+
+<p>Because SVG content often represents a picture or drawing
+of something, a common need is to link into a particular
+<em>view</em> of the document, where a view indicates
+the initial transformations so as to present a closeup of a particular
+section of the document.</p>
+
+<h3 id="SVGFragmentIdentifiers">SVG fragment identifiers</h3>
+
+<p>To link into a particular view of an SVG document, the IRI fragment
+identifier needs to be a correctly formed <dfn id='svg-fragment-identifier'>SVG
+fragment identifier</dfn>. An SVG fragment identifier defines the
+meaning of the "selector" or "fragment identifier" portion of IRIs that
+locate resources of MIME media type "image/svg+xml".</p>
+
+<p>An SVG fragment identifier can come in two forms:</p>
+
+<ul>
+  <li>Shorthand <em>bare name</em> form of addressing (e.g.,
+  <span class="attr-value">MyDrawing.svg#MyView</span>).  This form of
+  addressing, which allows addressing an SVG element by its ID, is compatible
+  with the fragment addressing mechanism for older versions of HTML.</li>
+
+  <li id="SVGViewSpecification">An <dfn>SVG view specification</dfn>
+  (e.g., <span class="attr-value">MyDrawing.svg#svgView(viewBox(0,200,1000,1000))</span>).
+  This form of addressing specifies the desired view of the
+  document (e.g., the region of the document to view, the
+  initial zoom level) completely within the SVG fragment
+  specification. The contents of the SVG view specification are
+  the five parameter specifications, <span class='attr-value'>viewBox(...)</span>,
+  <span class='attr-value'>preserveAspectRatio(...)</span>,
+  <span class='attr-value'>transform(...)</span>,
+  <span class='attr-value'>zoomAndPan(...)</span> and
+  <span class='attr-value'>viewTarget(...)</span>, whose parameters have the
+  same meaning as the corresponding attributes on a <a>'view'</a> element, or,
+  in the case of <span class='attr-value'>transform(...)</span>, the same
+  meaning as the corresponding attribute has on a
+  <a>'g'</a> element).</li>
+</ul>
+
+<p>An SVG fragment identifier is defined as follows:</p>
+
+<pre class='grammar'>
+SVGFragmentIdentifier ::= BareName |
+                          SVGViewSpec
+                
+BareName ::= XML_Name
+SVGViewSpec ::= 'svgView(' SVGViewAttributes ')'
+SVGViewAttributes ::= SVGViewAttribute |
+                      SVGViewAttribute ';' SVGViewAttributes
+                      
+SVGViewAttribute ::= viewBoxSpec |
+                     preserveAspectRatioSpec |
+                     transformSpec |
+                     zoomAndPanSpec |
+                     viewTargetSpec
+viewBoxSpec ::= 'viewBox(' ViewBoxParams ')'
+preserveAspectRatioSpec = 'preserveAspectRatio(' AspectParams ')'
+transformSpec ::= 'transform(' TransformParams ')'
+zoomAndPanSpec ::= 'zoomAndPan(' ZoomAndPanParams ')'
+viewTargetSpec ::= 'viewTarget(' ViewTargetParams ')'
+</pre>
+
+<p>where:</p>
+
+<ul>
+
+  <li><span class="code-fragment">ViewBoxParams</span> corresponds to the
+  parameter values for the <a>'viewBox'</a> attribute on the <a>'view'</a>
+  element. For example, <span class="attr-value">viewBox(0,0,200,200)</span>.</li>
+
+  <li><span class="code-fragment">AspectParams</span> corresponds to the
+  parameter values for the <a>'preserveAspectRatio'</a> attribute on the
+  <a>'view'</a> element. For example,
+  <span class="attr-value">preserveAspectRatio(xMidYMid)</span>.</li>
+
+  <li><span class="code-fragment">TransformParams</span> corresponds to the
+  parameter values for the <a>'transform'</a> property that is available on
+  many elements. For example, <span class="attr-value">transform(scale(5))</span>.</li>
+
+  <li><span class="code-fragment">ZoomAndPanParams</span> corresponds to the
+  parameter values for the <a>'zoomAndPan'</a> attribute on the <a>'view'</a>
+  element. For example, <span class="attr-value">zoomAndPan(magnify)</span>.</li>
+
+  <li><span class="code-fragment">ViewTargetParams</span> corresponds to the
+  parameter values for the <a>'view/viewTarget'</a> attribute on the <a>'view'</a>
+  element. For example, <span class="attr-value">viewTarget(MyElementID)</span>.</li>
+</ul>
+
+<p>Spaces are not allowed in fragment specifications; thus, commas
+are used to separate numeric values within an SVG view specification
+(e.g., <span class="attr-value">#svgView(viewBox(0,0,200,200))</span>)
+and semicolons are used to separate attributes (e.g.,
+<span class="attr-value">#svgView(viewBox(0,0,200,200);preserveAspectRatio(none))</span>).</p>
+
+<p>Semicolons used to separate 'SVGViewAttribute' in SVG fragments may be url-escaped (as %3B); 
+this is useful when animating a (semi-colon separated) list of IRIs because
+otherwise the semicolon would be interpreted as a list separator.</p>
+
+<p>The five types of <span class="code-fragment">SVGViewAttribute</span> may occur
+in any order, but each type may only occur at most one time in a correctly
+formed <span class="code-fragment">SVGViewSpec</span>.</p>
+
+<p>When a source document performs a link into an SVG document, for example
+via an <a href="http://www.w3.org/TR/1999/REC-html401-19991224/struct/links.html#h-12.2">HTML anchor element</a>
+([<a href="refs.html#ref-HTML4">HTML4</a>], section 12.2; i.e.,
+<span class="attr-value">&lt;a href=...&gt;</span> element in HTML) or an
+XLink specification [<a href="refs.html#ref-XLINK">XLINK</a>], then
+the SVG fragment identifier specifies the initial view into the SVG document,
+as follows:</p>
+
+<ul>
+  <li>If no SVG fragment identifier is provided (e.g, the specified IRI did
+  not contain a "#" character, such as <span class="attr-value">MyDrawing.svg</span>),
+  then the initial view into the SVG document is established using the view
+  specification attributes (i.e., <a>'viewBox'</a>, etc.) on the
+  <a>outermost svg element</a>.</li>
+
+  <li>If the SVG fragment identifier addresses a <a>'view'</a> element within
+  an SVG document (e.g., <span class="attr-value">MyDrawing.svg#MyView</span>
+  or <span class="attr-value">MyDrawing.svg#xpointer(id('MyView'))</span>)
+  then the closest ancestor <a>'svg'</a> element is displayed in the viewport.
+  Any view specification attributes included on the given <a>'view'</a>
+  element override the corresponding view specification attributes on the
+  closest ancestor <a>'svg'</a> element.</li>
+
+  <li>If the SVG fragment identifier addresses specific SVG view (e.g.,
+  <span class="attr-value">MyDrawing.svg#svgView(viewBox(0,200,1000,1000))</span>),
+  then the document fragment defined by the closest ancestor <a>'svg'</a>
+  element is displayed in the viewport using the SVG view specification
+  provided by the SVG fragment identifier.</li>
+
+  <li>If the SVG fragment identifier addresses any element other than a
+  <a>'view'</a> element, then the document defined by the closest ancestor
+  <a>'svg'</a> element is displayed in the viewport using the view
+  specification attributes on that <a>'svg'</a> element.</li>
+</ul>
+
+<h3 id="ViewElement">Predefined views: the <span class="element-name">'view'</span> element</h3>
+
+<edit:with element='view'>
+
+<p>The <span class="element-name">'view'</span> element is defined as follows:</p>
+
+<edit:elementsummary name='view'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="ViewElementViewTargetAttribute"><span
+        class="adef">viewTarget</span> = "<em>XML_Name
+        [XML_NAME]*</em>"</dt>
+        <dd>Indicates the target object associated with the view.
+        <br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+      </dl>
+    </div>
+
+</edit:with>
+
+<h3 id="ViewHighlight">Highlighting views</h3>
+
+<p>It is helpful to users if the target element(s) are highlighted. The visual
+styling of this highlight should be decided by the document author, because the
+<a>SVG user agent</a> has no way to determine what changes would make the
+elements more visible.</p>
+
+<p>The CSS :target selector ([<a href="refs.html#ref-SELECTORS">SELECTORS</a>],
+section 6.2.2) may be used in a stylesheet to provide alternate styling for
+elements which are the target of links. For example:</p>
+
+<edit:example href="images/linking/target.xml" image="no" link="no"/>
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<h3 id="InterfaceSVGAElement">Interface SVGAElement</h3>
+
+
+<edit:with element='a'>
+
+<p>The <a>SVGAElement</a> interface corresponds to the <a>'a'</a> element.</p>
+
+<pre class="idl">interface <b>SVGAElement</b> : <a>SVGGraphicsElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedString">SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__target">target</a>;
+};
+
+<a>SVGAElement</a> implements <a>SVGURIReference</a>;</pre>
+
+<dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGAElement__target" class="attribute first-child"><b>target</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedString">SVGAnimatedString</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'target'</a> on the given <a>'a'</a> element.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGViewElement">Interface SVGViewElement</h3>
+
+
+<edit:with element='view'>
+
+<p>The <a>SVGViewElement</a> interface corresponds to the <a>'view'</a> element.</p>
+
+<pre class="idl">interface <b>SVGViewElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGStringList">SVGStringList</a> <a href="linking.html#__svg__SVGViewElement__viewTarget">viewTarget</a>;
+};
+
+<a>SVGViewElement</a> implements <a>SVGFitToViewBox</a>;
+<a>SVGViewElement</a> implements <a>SVGZoomAndPan</a>;</pre>
+
+<dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGViewElement__viewTarget" class="attribute first-child"><b>viewTarget</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGStringList">SVGStringList</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'viewTarget'</a> on the given <a>'view'</a>
+element. A list of DOMString values which contain the names listed in
+the <a>'viewTarget'</a> attribute. Each of the DOMString values can be
+associated with the corresponding element using the getElementById()
+method call.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+</body>
+</html>

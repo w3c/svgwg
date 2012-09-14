@@ -1,0 +1,1279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Clipping, Masking and Compositing</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <!--
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  -->
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+
+<h1>Clipping, Masking and Compositing</h1>
+
+<h2 id="Introduction">Introduction</h2>
+
+<p>SVG supports the following clipping/masking features:</p>
+
+<ul>
+  <li><a href="#ClippingPaths">clipping paths</a>, which uses
+  any combination of <a>'path'</a>, <a>'text'</a> and
+  <a>basic shapes</a> to serve as
+  the outline of a (in the absence of anti-aliasing) 1-bit
+  mask, where everything on the "inside" of the outline is
+  allowed to show through but everything on the outside is
+  masked out</li>
+
+  <li><a href="#Masking">masks</a>, which are
+  <a>container elements</a>
+  which can contain <a>graphics elements</a>
+  or other container elements which define a set of graphics
+  that is to be used as a semi-transparent mask for compositing
+  foreground objects into the current background.</li>
+</ul>
+
+<p>One key distinction between a <a href="#ClippingPaths">clipping path</a>
+and a <a href="#Masking">mask</a> is that clipping paths are hard masks
+(i.e., the silhouette consists of either fully opaque pixels or
+fully transparent pixels, with the possible exception of
+anti-aliasing along the edge of the silhouette) whereas masks
+consist of an image where each pixel value indicates the degree
+of transparency vs. opacity. In a mask, each pixel value can
+range from fully transparent to fully opaque.</p>
+
+<p>SVG supports only simple alpha blending compositing (see
+<a href="#SimpleAlphaBlending">Simple Alpha Compositing</a>).</p>
+
+<h2 id="SimpleAlphaBlending">Simple alpha compositing</h2>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support new compositing and blending modes from the <a href="https://dvcs.w3.org/hg/FXTF/rawfile/tip/compositing/index.html">Compositing and Blending specification</a>.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2012/07/24-svg-minutes.html#item09">SVG WG agrees with publishing the Compositing spec.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow common graphical effects supported by Illustrator, etc.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Nikos (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3332">ACTION-3332</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<p>Graphics elements are blended into the elements already
+rendered on the canvas using simple alpha compositing, in which
+the resulting color and opacity at any given pixel on the
+canvas is the result of the following formulas (all color
+values use premultiplied alpha):</p>
+
+<pre>
+Er, Eg, Eb    - Element color value
+Ea            - Element alpha value
+Cr, Cg, Cb    - Canvas color value (before blending)
+Ca            - Canvas alpha value (before blending)
+Cr', Cg', Cb' - Canvas color value (after blending)
+Ca'           - Canvas alpha value (after blending)
+Ca' = 1 - (1 - Ea) * (1 - Ca)
+Cr' = (1 - Ea) * Cr + Er
+Cg' = (1 - Ea) * Cg + Eg
+Cb' = (1 - Ea) * Cb + Eb
+</pre>
+
+<p>The following rendering properties, which provide
+information about the color space in which to perform the
+compositing operations, apply to compositing operations:</p>
+
+<ul>
+  <li><a>'color-interpolation'</a></li>
+  <li><a>'color-rendering'</a></li>
+</ul>
+
+<h2 id="ClippingPaths">Clipping paths</h2>
+
+<p class="note">
+Note that this section may be moved to a separate CSS Masking specification in
+a future draft.
+</p>
+
+<p>The clipping path restricts the region to which paint can be
+applied. Conceptually, any parts of the drawing that lie
+outside of the region bounded by the currently active clipping
+path are not drawn. A clipping path can be thought of as a mask
+wherein those pixels outside the clipping path are black with
+an alpha value of zero and those pixels inside the clipping
+path are white with an alpha value of one (with the possible
+exception of anti-aliasing along the edge of the
+silhouette).</p>
+
+<h3 id="InitialClippingPath">The initial clipping path</h3>
+
+<p>When an <a>'svg'</a> element is either the root element in the
+document or is embedded within a document whose layout is determined
+according to the layout rules of CSS or XSL, then the user agent must
+establish an initial clipping path for the SVG document fragment. The
+<a>'overflow'</a> and <a>'clip'</a> properties along with additional SVG
+user agent processing rules determine the initial clipping path which
+the user agent establishes for the SVG document fragment:</p>
+
+<h3 id="OverflowAndClipProperties">The <span class="property">'overflow'</span>
+and <span class="property">'clip'</span> properties</h3>
+
+<p class="issue">This property definition table need to be replaced
+with a link to css3-box.</p>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="OverflowProperty">overflow</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>visible | hidden | scroll | auto</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>visible</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="coords.html#ElementsThatEstablishViewports">elements
+    which establish a new viewport</a>, <a>'pattern'</a> elements
+    and <a>'marker element'</a> elements</td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a>Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
+<p>The <a>'overflow'</a> property has the same parameter values and has the
+same meaning <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visufx.html#propdef-overflow">as defined in CSS 2.1</a>
+([<a href="refs.html#ref-CSS21">CSS21</a>], section 11.1.1);
+however, the following additional points apply:</p>
+
+<ul>
+  <li>The <a>'overflow'</a> property applies to
+  <a href="coords.html#ElementsThatEstablishViewports">elements that establish new viewports</a>
+  (e.g., <a>'svg'</a> elements), <a>'pattern'</a> elements and <a>'marker element'</a>
+  elements. For all other elements, the property has no effect (i.e., a clipping
+  rectangle is not created).</li>
+
+  <li>For those elements to which the <a>'overflow'</a> property can apply, if
+  the <a>'overflow'</a> property has the value <span class='prop-value'>hidden</span> or <span class='prop-value'>scroll</span>,
+  the effect is that a new clipping path in the shape of a rectangle is created.
+  The result is equivalent to defining a <a>'clipPath'</a> element whose
+  content is a <a>'rect'</a> element which defines the equivalent rectangle,
+  and then specifying the &lt;uri&gt; of this <a>'clipPath'</a> element on the
+  <a>'clip-path'</a> property for the given element.</li>
+
+  <li>If the <a>'overflow'</a> property has a value other than
+  <span class='prop-value'>hidden</span> or <span class='prop-value'>scroll</span>,
+  the property has no effect (i.e., a clipping rectangle is not created).</li>
+
+  <li>Within SVG content, the value <span class='prop-value'>auto</span> is
+  equivalent to the value <span class='prop-value'>visible</span>.</li>
+
+  <li>When an <a>outermost svg element</a> is embedded inline within a
+  parent XML grammar which uses <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html">CSS layout</a>
+  ([<a href="refs.html#ref-CSS21">CSS21</a>], chapter 9)
+  or <a href="http://www.w3.org/TR/2006/REC-xsl11-20061205/">XSL formatting</a>
+  [<a href="refs.html#ref-XSL">XSL</a>], if the
+  <a>'overflow'</a> property has the value <span class='prop-value'>hidden</span>
+  or <span class='prop-value'>scroll</span>, then the user agent will
+  establish an initial clipping path equal to the bounds of the initial
+  <a href="coords.html#SVGViewport">viewport</a>; otherwise, the initial
+  clipping path is set according to the <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visufx.html#overflow">clipping rules as defined in CSS 2.1</a>
+  ([<a href="refs.html#ref-CSS21">CSS21</a>], section 11.1.1).</li>
+
+  <li>When an <a>outermost svg element</a> is stand-alone or embedded
+  inline within a parent XML grammar which does not use CSS layout
+  or XSL formatting, the
+  <a>'overflow'</a> property on the <a>outermost svg element</a> is ignored
+  for the purposes of visual rendering and the initial clipping path is set to
+  the bounds of the initial <a href="coords.html#SVGViewport">viewport</a>.</li>
+
+  <li>The initial value for <a>'overflow'</a> as defined
+  in [<a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visufx.html#overflow">CSS21-overflow</a>]
+  is 'visible', and this applies also to the <a>rootmost 'svg' element</a>; however,
+  for child elements of an SVG document, SVG's <a href="styling.html#UAStyleSheet">user agent style sheet</a>
+  overrides this initial value and sets the <a>'overflow'</a> property on
+  <a href="coords.html#ElementsThatEstablishViewports">elements that establish new viewports</a>
+  (e.g., <a>'svg'</a> elements), <a>'pattern'</a> elements and
+  <a>'marker element'</a> elements to the value 'hidden'.</li>
+</ul>
+
+<p>As a result of the above, the default behavior of SVG user agents is to
+establish a clipping path to the bounds of the initial
+<a href="coords.html#SVGViewport">viewport</a> and to establish a new clipping
+path for each <a href="coords.html#ElementsThatEstablishViewports">element which
+establishes a new viewport</a> and each <a>'pattern'</a> and
+<a>'marker element'</a> element.</p>
+
+<p>For related information, see <a href="masking.html#AutoClipAtViewportNotViewBox">Clip
+to viewport vs. clip to <span class="attr-name">'viewBox'</span></a>.</p>
+
+<p class="issue">This property definition table need to be replaced
+with a link to CSS 2.1</p>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="ClipProperty">clip</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>&lt;shape&gt; | auto</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>auto</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="coords.html#ElementsThatEstablishViewports">elements
+    which establish a new viewport</a>, <a>'pattern'</a> elements
+    and <a>'marker element'</a> elements</td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a>Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
+<p>The <a>'clip'</a> property has the same parameter values
+<a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visufx.html#clipping">as defined in CSS 2.1</a>
+([<a href="refs.html#ref-CSS21">CSS21</a>], section 11.1.2).
+Unitless values, which indicate current user coordinates, are
+permitted on the coordinate values on the &lt;shape&gt;. The
+value of <span class='prop-value'>auto</span> defines a clipping path along
+the bounds of the viewport created by the given element.</p>
+
+<h3 id="AutoClipAtViewportNotViewBox">Clip to viewport vs. clip to
+<span class="attr-name">'viewBox'</span></h3>
+
+<p>It is important to note that initial values for the <a>'overflow'</a> and
+<a>'clip'</a> properties and the <a href="styling.html#UAStyleSheet">user agent
+style sheet</a> will result in an initial clipping path that is set to the
+bounds of the initial viewport. When attributes <a>'viewBox'</a> and
+<a>'preserveAspectRatio'</a> attributes are specified, it is sometime
+desirable that the clipping path be set to the bounds of the <a>'viewBox'</a>
+instead of the viewport (or reference rectangle, in the case of
+<a>'marker element'</a> and <a>'pattern'</a> elements), particularly when
+<a>'preserveAspectRatio'</a> specifies uniform scaling and the aspect ratio of
+the <a>'viewBox'</a> does not match the aspect ratio of the viewport.</p>
+
+<p>To set the initial clipping path to the bounds of the <a>'viewBox'</a>, set
+the bounds of <a>'clip'</a> property to the same rectangle as specified on the
+<a>'viewBox'</a> attribute. (Note that the parameters do not match.
+<a>'clip'</a> takes values &lt;top&gt;, &lt;right&gt;,&lt;bottom&gt; and
+&lt;left&gt;, whereas <a>'viewBox'</a> takes values &lt;min-x&gt;,
+&lt;min-y&gt;, &lt;width&gt; and &lt;height&gt;.)</p>
+
+<h3 id="EstablishingANewClippingPath">Establishing a new clipping path: the <span class="element-name">'clipPath'</span> element</h3>
+
+<edit:with element='clipPath'>
+
+<p id="ClipPathElement">A clipping path is defined with a <a>'clipPath'</a>
+element. A clipping path is used/referenced using the <a>'clip-path'</a>
+property.</p>
+
+<p>A <a>'clipPath'</a> element can contain <a>'path'</a> elements,
+<a>'text'</a> elements, <a href="shapes.html">basic shapes</a> (such as
+<a>'circle'</a>) or a <a>'use'</a> element. If a <a>'use'</a> element is a
+child of a <a>'clipPath'</a> element, it must directly reference
+<a>'path'</a>, <a>'text'</a> or <a href="shapes.html">basic shape</a> elements.
+Indirect references are an error (see
+<a href="implnote.html#ErrorProcessing">Error processing</a>).</p>
+
+<p>The raw geometry of each child element exclusive of rendering properties
+such as <a>'fill'</a>, <a>'stroke'</a>, <a>'stroke-width'</a> within a
+<a>'clipPath'</a> conceptually defines a 1-bit mask (with the possible
+exception of anti-aliasing along the edge of the geometry) which represents
+the silhouette of the graphics associated with that element. Anything outside
+the outline of the object is masked out. If a child element is 
+made invisible by <a>'display'</a> or <a>'visibility'</a> it does not contribute
+to the clipping path. When the <a>'clipPath'</a> element
+contains multiple child elements, the silhouettes of the child elements are
+logically OR'd together to create a single silhouette which is then used to
+restrict the region onto which paint can be applied. Thus, a point is inside
+the clipping path if it is inside any of the children of the
+<a>'clipPath'</a>.</p>
+
+<p>For a given graphics element, the actual clipping path used
+will be the intersection of the clipping path specified by its
+<a>'clip-path'</a> property (if any) with any clipping paths on its
+ancestors, as specified by the <a>'clip-path'</a> property on the
+ancestor elements, or by the <a>'overflow'</a> property on ancestor
+<a href="coords.html#ElementsThatEstablishViewports">elements
+which establish a new viewport</a>. Also, see the discussion of
+<a href="masking.html#InitialClippingPath">the initial clipping path</a>.)</p>
+
+<p>A couple of notes:</p>
+
+<ul>
+  <li>The <a>'clipPath'</a> element itself and its child elements do
+  <em>not</em> inherit clipping paths from the ancestors of the
+  <a>'clipPath'</a> element.</li>
+
+  <li>The <a>'clipPath'</a> element or any of its children can specify
+  property <a>'clip-path'</a>.<br /> If a valid <a>'clip-path'</a> reference
+  is placed on a <a>'clipPath'</a> element, the resulting clipping path is the
+  intersection of the contents of the <a>'clipPath'</a> element with the
+  referenced clipping path.<br />
+  If a valid <a>'clip-path'</a> reference is placed on one of the children of
+  a <a>'clipPath'</a> element, then the given child element is clipped by the
+  referenced clipping path before OR'ing the silhouette of the child element
+  with the silhouettes of the other child elements.</li>
+
+  <li>An empty clipping path will completely clip away the element that had the
+  <a>'clip-path'</a> property applied.</li>
+</ul>
+
+<edit:elementsummary name='clipPath'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="ClipPathElementClipPathUnitsAttribute"><span
+        class="adef">clipPathUnits</span> =
+        "<em>userSpaceOnUse</em> | <em>objectBoundingBox</em>"</dt>
+        <dd>Defines the coordinate system for the contents of the
+        <a>'clipPath'</a>.<br />
+         If <span class="attr-value">clipPathUnits="userSpaceOnUse"</span>,
+        the contents of the <a>'clipPath'</a> represent values in
+        the current user coordinate system in place at the time
+        when the <a>'clipPath'</a>
+        element is referenced (i.e., the user coordinate system for
+        the element referencing the <a>'clipPath'</a> element via the
+        <a>'clip-path'</a> property).<br />
+         If <span class="attr-value">clipPathUnits="objectBoundingBox"</span>,
+        then the user coordinate system for the contents of the
+        <a>'clipPath'</a> element is established using the bounding box of
+        the element to which the clipping path is applied (see <a
+        href="coords.html#ObjectBoundingBox">Object bounding box
+        units</a>).<br />
+         If attribute <a>'clipPathUnits'</a>
+        is not specified, then the effect is as if a value of <span
+        class="attr-value">'userSpaceOnUse'</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+
+<p><a href="styling.html#SVGStylingProperties">Properties</a> inherit into the
+<a>'clipPath'</a> element from its ancestors; properties do <em>not</em>
+inherit from the element referencing the <a>'clipPath'</a> element.</p>
+
+<p><a>'clipPath'</a> elements are never rendered directly; their only usage is
+as something that can be referenced using the <a>'clip-path'</a> property. The
+<a>'display'</a> property does not apply to the <a>'clipPath'</a> element;
+thus, <a>'clipPath'</a> elements are not directly rendered even if the
+<a>'display'</a> property is set to a value other than
+<span class="prop-value">none</span>, and <a>'clipPath'</a> elements are
+available for referencing even when the <a>'display'</a> property on the
+<a>'clipPath'</a> element or any of its ancestors is set to
+<span class="prop-value">none</span>.</p>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="ClipPathProperty">clip-path</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a>&lt;funciri&gt;</a> | none</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>container elements</a>, <a>graphics elements</a>
+    and <a>'clipPath'</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified, but with <a>&lt;funciri&gt;</a> values made absolute</td>
+  </tr>
+  <tr>
+    <th><a>Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
+<dl>
+  <dt><span class="prop-value"><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a></span></dt>
+  <dd>An <a>IRI reference</a> to another graphical object within the same SVG
+  document fragment which will be used as the clipping path. If the
+  <a>IRI reference</a> is not valid (e.g it points to an object that doesn't
+  exist or the object is not a <a>'clipPath'</a> element) the <a>'clip-path'</a>
+  property must be treated as if it hadn't been specified.</dd>
+</dl>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="ClipRuleProperty">clip-rule</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>nonzero | evenodd</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>nonzero</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td>graphics elements within a <a>'clipPath'</a> element</td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a>Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
+<dl>
+  <dt><span class="prop-value">nonzero</span></dt>
+  <dd>See description of <a>'fill-rule'</a> property.</dd>
+
+  <dt><span class="prop-value">evenodd</span></dt>
+  <dd>See description of <a>'fill-rule'</a> property.</dd>
+</dl>
+
+<p>The <a>'clip-rule'</a> property only applies to graphics elements that are
+contained within a <a>'clipPath'</a> element. The following fragment of code
+will cause an evenodd clipping rule to be applied to the clipping path because
+<a>'clip-rule'</a> is specified on the <a>'path'</a> element that defines the
+clipping shape:</p>
+
+<pre><![CDATA[
+<g clip-rule="nonzero">
+  <clipPath id="MyClip">
+    <path d="..." clip-rule="evenodd" />
+  </clipPath>
+  <rect clip-path="url(#MyClip)" ... />
+</g>
+]]></pre>
+
+<p>whereas the following fragment of code will <em>not</em> cause an
+evenodd clipping rule to be applied because the <a>'clip-rule'</a> is
+specified on the referencing element, not on the object defining the
+clipping shape:</p>
+
+<pre><![CDATA[
+<g clip-rule="nonzero">
+  <clipPath id="MyClip">
+    <path d="..." />
+  </clipPath>
+  <rect clip-path="url(#MyClip)" clip-rule="evenodd" ... />
+</g>
+]]></pre>
+
+<h3 id="clipPath-geometry">Clipping paths, geometry, and pointer events</h3>
+
+<p>A clipping path is conceptually equivalent to a custom viewport for
+the referencing element.  Thus, it affects the rendering of an element,
+but not the element's inherent geometry. The bounding box of a clipped
+element (that is, an element which references a <a>'clipPath'</a>
+element via a <a>'clip-path'</a> property, or a child of the 
+referencing element) must remain the same as if it were not clipped.</p>
+
+<p>By default, <a href="interact.html#PointerEventsProperty">pointer events</a>
+must not be dispatched on the clipped (non-visible) regions of a shape.  For
+example, a circle with a radius of 10 which is clipped to a circle with a radius
+of 5 will not receive <span class="event-name">'click'</span> events outside the
+smaller radius.  Later versions of SVG may define new properties to enable
+fine-grained control over the interactions between hit testing and clipping.</p>
+
+</edit:with>
+
+<div class="ready-for-wider-review">
+
+<h2 id="Masking">Masking</h2>
+
+<p class="note">
+Note that this section may be moved to a separate CSS Masking specification in
+a future draft.
+</p>
+
+<p>In SVG, it is possible to specify another graphics element or file
+to be used as an alpha mask for compositing the current object into the
+background.</p>
+
+<p>
+A mask is applied using the <a>'mask property'</a> property.
+The mask source may be defined using a <a>'mask element'</a> element.
+Alternatively, the <a>'mask property'</a> property may refer to a CSS image or
+SVG <a href="pservers.html">paint server</a>.
+</p>
+
+<p>
+The effect of applying a mask is as if the mask source elements are
+rendered into an offscreen image which has been initialized to transparent
+black.
+The graphical object to which the mask is applied
+will be painted onto the background through the
+mask, thus completely or partially masking out parts of the graphical
+object.</p>
+
+<p id="ExampleMask01"><span class="example-ref">Example mask01</span> uses
+an image to mask a rectangle.</p>
+
+<edit:example href='images/masking/mask01.svg' name='mask01' description='blue text masked with gradient against red background' image='yes' link='yes'/>
+
+<h3 id="mask-property">The <span class="property">'mask'</span> property</h3>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="MaskProperty">mask</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>[ <a>&lt;mask-source&gt;</a> [ luminance | alpha | auto ]? ]
+        | none </td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>container elements</a> and <a>graphics elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>A <a>&lt;mask-source&gt;</a> followed by a mask type
+      (one of <span class="prop-value">luminance</span>,
+              <span class="prop-value">alpha</span>, or
+              <span class="prop-value">auto</span>),
+        or otherwise the keyword <span class="prop-value">none</span>.</td>
+  </tr>
+  <tr>
+    <th><a>Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+<p>Where:</p>
+<dl>
+  <dt id="DataTypeMaskSource"><span class="prop-value">&lt;mask-source&gt;</span> =</dt>
+  <dd>
+    <a>&lt;funciri&gt;</a> | <a>&lt;image&gt;</a> | child |
+    <a>&lt;child-selector&gt;</a>
+  </dd>
+</dl>
+
+<p class="note">
+The ability for the <a>'mask property'</a> property to reference a child element
+without an ID reference, or a CSS <a>&lt;image&gt;</a> is new in SVG 2.
+</p>
+
+<p>
+The meaning of the different <a>&lt;mask-source&gt;</a> values is as follows:
+</p>
+
+<dl>
+  <dt><span class="prop-value"><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a></span></dt>
+  <dd>An <a>IRI reference</a> to a <a>'mask element'</a> element or <a
+  href="pservers.html">paint server</a> element.</dd>
+  <dt><span class="prop-value"><a href="types.html#DataTypeImage">&lt;image&gt;</a></span></dt>
+  <dd>A CSS image value used to defined the contents of the offscreen buffer
+  used for masking.
+  As per the definition of <a>&lt;image&gt;</a> this value may reference bitmap
+  images, SVG images, gradients and other graphical elements.
+  <p class="issue">
+    <a>&lt;image&gt;</a> overlaps with <a>&lt;funciri&gt;</a> and hence the
+    parsing for <span class="prop-value">url(...)</span> needs to be defined
+    (e.g. references to elements may only refer to <a>'mask element'</a>
+    elements or <a href="pservers.html">paint server</a> elements, whilst <span
+    class="prop-value">url(...)</span> values without a fragment identifier are
+    processed in usual fashion for CSS Images).
+  </p>
+  </dd>
+  <dt><span class="prop-value">child</span></dt>
+  <dd>A keyword to indicate that the last child <a>'mask element'</a>
+  element should be used as the mask source. It is equivalent to
+  <span class="prop-value">select(mask:last-of-type)</span>.</dd>
+  <dt><span class="prop-value"><a href="types.html#DataTypeChildSelector">&lt;child-selector&gt;</a></span></dt>
+  <dd>A comma-separated list of <a>compound selectors</a> scoped at the element
+      to which the <a>'mask property'</a> property applied.
+      The first matching element in <a>tree order</a> (as defined in [<a
+      href="refs.html#ref-DOM4">DOM4</a>]) as a result of evaluating the list of
+      selectors is taken as the mask source.
+      If there are no matching elements the mask source is invalid.</dd>
+</dl>
+
+<p>
+If a <a>&lt;mask-source&gt;</a> is provided, a mask type may also be specified.
+The mask type determines which of the methods described in <a
+href="#MaskValues">Calculating mask values</a> should be used for calculating
+mask values from the mask source.
+</p>
+
+<p>
+If a <a>&lt;mask-source&gt;</a> is provided without a mask type, the value <span class="prop-value">auto</span> is used.
+</p>
+
+<p>
+If a mask type other than <span class="prop-value">auto</span> is specified
+and the <a>&lt;mask-source&gt;</a> refers to a <a>'mask element'</a> element
+with a <a>'mask/maskType'</a> attribute, the mask type specified on the <a>'mask
+property'</a> property takes precedence.
+</p>
+
+<p>The possible values for the mask type are as follows:</p>
+
+<dl>
+  <dt><span class="prop-value">luminance</span></dt>
+  <dd>
+  Indicates that the luminance values of the mask source should be used as the
+  mask values.
+  </dd>
+  <dt><span class="prop-value">alpha</span></dt>
+  <dd>
+  Indicates that the alpha values of the mask source should be used as the mask
+  values.
+  </dd>
+  <dt><span class="prop-value">auto</span></dt>
+  <dd>
+  If the mask source is a <a>'mask element'</a> element, the method used for
+  calculating the mask values is determined by the <a>'mask/maskType'</a>
+  attribute on the <a>'mask element'</a> element.
+  Otherwise, the alpha values of the mask source should be used as the 
+  mask values.
+  <p class="issue">
+    Should the default be <span class="prop-value">luminance</span> instead?
+  </p>
+  </dd>
+</dl>
+
+<p>
+  The <a>lacuna value</a> for the <span class="property">'mask'</span> property
+  is <span class="prop-value">'none'</span>.
+</p>
+
+<h3 id="MaskSources">Mask source content</h3>
+
+<p>
+The content and behavior of a mask can be defined using a <a>'mask element'</a>
+element, a <a href="pservers.html">paint server</a> element, or a CSS
+<a>&lt;image&gt;</a> value.
+</p>
+
+<h4 id="MaskValues">Calculating mask values</h4>
+
+<p class="note">
+The ability to use the alpha of a mask source as the mask values is new
+in SVG 2.
+In SVG 1.1 masks always use the luminance of the mask source as the mask
+values.
+</p>
+
+<p>
+A mask source may be interpreted using one of two different methods with regards
+to calculating the mask values that will be multiplied with the target alpha
+values.
+</p>
+
+<p>
+The first and simplest method of calculating the mask values is to use the alpha
+channel of the mask source.
+In this case the mask value at a given point is simply the value of the alpha channel at that point.
+The color channels do not contribute to the mask value.
+</p>
+
+<p>
+The second method of calculating the mask values is to use the luminance of the mask source.
+In this case the mask value at a given point is computed from the color channel values and alpha channel value using the following procedure.
+</p>
+
+<ol>
+<li>Compute a luminance value from the color channel values.
+  <ul>
+    <li>
+    If the computed value of <a>'color-interpolation'</a> on the <a>'mask
+  element'</a> element is <span class="attr-value">linearRGB</span>, convert the
+  original image color values (potentially in the sRGB color space) to the linear
+  RGB color space (see <a
+    href="painting.html#RenderingHints">Rendering properties</a>).
+    </li>
+    <li>Then, using non-premultiplied RGB color values, apply the
+    luminance-to-alpha coefficients (as defined in the <a>'feColorMatrix'</a>
+    filter primitive) to convert the RGB color values to luminance
+    values.
+    </li>
+  </ul>
+</li>
+<li>Multiply the computed luminance value by the corresponding alpha
+value to produce the mask value.</li>
+</ol>
+
+<p>Regardless of the method used, the procedure for calculating
+mask values assumes the content of the mask is a four-channel RGBA graphics
+object.
+For other types of graphics objects, special handling is required as
+follows.</p>
+
+<p>For a three-channel RGB graphics object that is used in a mask (e.g.,
+when referencing a three-channel image file), the effect is as if the object
+were converted into a four-channel RGBA image with the alpha channel
+uniformly set to 1.</p>
+
+<p>For a single-channel image that is used in a mask (e.g., when
+referencing a single-channel grayscale image file), the effect is as if the
+object were converted into a four-channel RGBA image, where the single
+channel from the referenced object is used to compute the three color
+channels and the alpha channel is uniformly set to 1. Note that when
+referencing a grayscale image file, the transfer curve relating the
+encoded grayscale values to linear light values must be taken into
+account when computing the color channels.</p>
+
+<p>Note that SVG <a>'path'</a>s, shapes (e.g., <a>'circle'</a>) and
+<a>'text'</a> are all treated as four-channel RGBA images for the purposes
+of masking operations.</p>
+
+<p>The effect of a mask is identical to what would have happened if
+there were no mask but instead the alpha channel of the given object
+were multiplied with the mask's resulting mask values.</p>
+
+<h4 id="MaskElement">Defining a mask source: the <span class="element-name">'mask'</span> element</h4>
+
+<edit:with element='mask'>
+
+<edit:elementsummary name='mask'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="MaskElementMaskUnitsAttribute"><span
+        class="adef">maskUnits</span> = "<em>userSpaceOnUse</em> |
+        <em>objectBoundingBox</em>"</dt>
+        <dd>Defines the coordinate system for attributes
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>.<br />
+         If <span
+        class="attr-value">maskUnits="userSpaceOnUse"</span>,
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
+        represent values in the current user coordinate system in place at
+        the time when the <a>'mask element'</a>
+        element is referenced (i.e., the user coordinate system for
+        the element referencing the <a>'mask element'</a> element via the
+        <a>'mask property'</a> property).<br />
+         If <span
+        class="attr-value">maskUnits="objectBoundingBox"</span>,
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
+        represent fractions or percentages of the bounding box of
+        the element to which the mask is applied. (See <a
+        href="coords.html#ObjectBoundingBox">Object bounding box
+        units</a>.)<br />
+         If attribute <a>'maskUnits'</a> is
+        not specified, then the effect is as if a value of <span
+        class="attr-value">'objectBoundingBox'</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="MaskElementMaskContentUnitsAttribute"><span
+        class="adef">maskContentUnits</span> =
+        "<em>userSpaceOnUse</em> | <em>objectBoundingBox</em>"</dt>
+        <dd>Defines the coordinate system for the contents of the
+        <a>'mask element'</a>.<br />
+         If <span
+        class="attr-value">maskContentUnits="userSpaceOnUse"</span>,
+        the user coordinate system for the contents of the
+        <a>'mask element'</a> element is the current
+        user coordinate system in place at the time when the
+        <a>'mask element'</a> element is referenced
+        (i.e., the user coordinate system for the element
+        referencing the <a>'mask element'</a>
+        element via the <a>'mask property'</a>
+        property).<br />
+         If <span
+        class="attr-value">maskContentUnits="objectBoundingBox"</span>,
+        the user coordinate system for the contents of the <a>'mask element'</a> is established using the
+        bounding box of the element to which the mask is applied.
+        (See <a href="coords.html#ObjectBoundingBox">Object
+        bounding box units</a>.)<br />
+         If attribute <a>'maskContentUnits'</a> is not specified,
+        then the effect is as if a value of <span
+        class="attr-value">'userSpaceOnUse'</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="MaskElementMaskTypeAttribute"><span
+        class="adef">maskType</span> =
+        "<em>luminance</em> | <em>alpha</em>"</dt>
+        <dd>
+         Defines the procedure used for calculating mask values from the
+        contents of the mask as described in <a href="#MaskValues">Calculating
+        mask values</a>.
+        <br />
+        If attribute <a>'maskType'</a> is not specified,
+        then the effect is as if a value of <span
+        class="attr-value">'luminance'</span> were
+        specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span>
+        <div class="annotation">
+          Although authors may find <span class="attr-value">'alpha'</span> more
+          intuitive, the default value is <span
+          class="attr-value">'luminance'</span> to provide backwards
+          compatibility with SVG 1.1.
+        </div>
+        </dd>
+        <dt id="MaskElementXAttribute"><span
+        class="adef">x</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>The x-axis coordinate of one corner of the rectangle
+        for the largest possible offscreen buffer. Note that the
+        clipping path used to render any graphics within the mask
+        will consist of the intersection of the current clipping
+        path associated with the given object and the rectangle
+        defined by 
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'-10%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="MaskElementYAttribute"><span
+        class="adef">y</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeCoordinate">&lt;coordinate&gt;</a></span>"</dt>
+        <dd>The y-axis coordinate of one corner of the rectangle
+        for the largest possible offscreen buffer.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'-10%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="MaskElementWidthAttribute"><span
+        class="adef">width</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+        <dd>The width of the largest possible offscreen buffer.
+        Note that the clipping path used to render any graphics
+        within the mask will consist of the intersection of the
+        current clipping path associated with the given object and
+        the rectangle defined by
+        <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables rendering of the element.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'120%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="MaskElementHeightAttribute"><span
+        class="adef">height</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
+        <dd>The height of the largest possible offscreen
+        buffer.<br />
+         A negative value is an error (see <a
+        href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables rendering of the element.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'120%'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+      </dl>
+    </div>
+
+<p><a href="styling.html#SVGStylingProperties">Properties</a> inherit into the
+<a>'mask element'</a> element from its ancestors; properties do <em>not</em>
+inherit from the element referencing the <a>'mask element'</a> element.</p>
+
+<p><a>'mask element'</a> elements are never rendered directly; their only
+usage is as something that can be referenced using the <a>'mask property'</a>
+property. The <a>'opacity'</a>, <a>'filter property'</a> and <a>'display'</a> properties do not apply to the
+<a>'mask element'</a> element; thus, <a>'mask element'</a> elements are not
+directly rendered even if the <a>'display'</a> property is set to a value
+other than <span class="prop-value">none</span>, and <a>'mask element'</a>
+elements are available for referencing even when the <a>'display'</a> property
+on the <a>'mask element'</a> element or any of its ancestors is set to
+<span class="prop-value">none</span>.</p>
+
+<h4 id="SVGPaintServer">Using an SVG paint server as a mask source</h4>
+
+<p class="note">
+The ability to reference paint servers with the <a>'mask property'</a> property
+is new in SVG 2.
+</p>
+
+<p>
+Besides an SVG <a>'mask element'</a> element, the 'mask' property may
+also refer to an SVG <a href="pservers.html">paint server</a> element such as
+a <a>'linearGradient'</a> element or <a>'pattern'</a> element.
+When the mask source is an SVG paint server, the effect is as if the following
+steps were performed:
+</p>
+
+<ol>
+  <li>Create a new <a>'mask element'</a> element as a sibling of the
+      paint server element.</li>
+  <li>Let the <a>'mask/maskUnits'</a> attribute be <span
+      class="attr-value">'userSpaceOnUse'</span>.</li>
+  <li>Let the dimensions of the mask 
+      (<a>'mask/x'</a>, <a>'mask/y'</a>, <a>'mask/width'</a>,
+      and <a>'mask/height'</a>) match the dimensions of the <a>decorated
+      bounding box</a> of the mask target.</li>
+  <li>Let the <a>'mask/maskContentUnits'</a> attribute be <span
+      class="attr-value">'objectBoundingBox'</span>.</li>
+  <li>Create a new <a>'rect'</a> element as a child of the newly
+      created <a>'mask element'</a> element.</li>
+  <li>Let both the width and the height of the <a>'rect'</a> element be
+      <span class="attr-value">'100%'</span>.</li>
+  <li>Let the <a>'fill'</a> property of the <a>'rect'</a> element
+      refer to the paint server element.</li>
+  <li>Use the newly created <a>'mask element'</a> as the mask source.</li>
+</ol>
+
+</edit:with>
+
+</div>
+
+<div class="ready-for-wider-review">
+<h2 id="ObjectAndGroupOpacityProperties">Object and group opacity: the
+effect of the <span class="property">'opacity'</span> property</h2>
+
+<p class="note">See the CSS Color Module Level 3 for the definition
+of <a>'opacity'</a>. [<a href="refs.html#ref-CSS3COLOR">CSS3COLOR</a>]</p>
+
+<p>The <a>'opacity'</a> property specifies how opaque a given
+graphical element or container element will be when it is
+painted to the canvas.  When applied to a container element,
+this is known as <em>group opacity</em>, and when applied to
+an individual rendering element, it is known as <em>object
+opacity</em>.  The principle for these two operations however
+is the same.</p>
+
+<p>There are several other opacity-related properties in SVG:</p>
+
+<ul>
+  <li><a>'fill-opacity'</a>, which specifies the opacity of a fill
+  operation;</li>
+
+  <li><a>'stroke-opacity'</a>, which specifies the opacity of a stroking
+  operation;</li>
+
+  <li><a>'solid-opacity'</a>, which specifies the opacity of a solid color
+  paint server; and</li>
+
+  <li><a>'stop-opacity'</a>, which specifies the opacity of a gradient stop.</li>
+</ul>
+
+<p>These four opacity properties are involved in intermediate rendering operations.
+Object and group opacity however can be thought of as a post-processing
+operation.  Conceptually, the object or group to which <a>'opacity'</a> applies
+is rendered into an RGBA offscreen image.  The offscreen image as whole is then blended
+into the canvas with the specified <a>'opacity'</a> value used uniformly
+across the offscreen image.</p>
+
+<p>An <a>'opacity'</a> value of 0 means fully transparent and 1 means fully
+opaque. Opacity values are clamped to the range [0, 1];
+see <a href="implnote.html#RangeClamping">Clamping values which are restricted
+to a particular range</a> for details.</p>
+
+<p>The <a>'opacity'</a> property applies to the following SVG elements:
+<a>'svg'</a>, <a>'g'</a>, <a>'symbol'</a>, <a>'marker element'</a>,
+<a>'a'</a>, <a>'switch'</a>, <a>graphics elements</a> and
+<a>text content child elements</a>.</p>
+
+<div class="example">
+  <p>The following example illustrates various usage of the <a>'opacity'</a>
+  property on objects and groups.</p>
+
+  <edit:includefile href='images/masking/opacity01.svg'/>
+
+  <div class='figure'>
+    <img class='bordered' src='images/masking/opacity01.svg' alt='Image showing different groups of circles blended into the background.'/>
+    <p class='caption'>Each group of red and green circles is first rendered
+    to an offscreen image before being blended with the background
+    blue rectangle as a whole, with the given <a>'opacity'</a> values.</p>
+  </div>
+
+  <p>In the example, the top row of circles have differing opacities,
+  ranging from 1.0 to 0.2. The bottom row illustrates five <a>'g'</a> elements,
+  each of which contains overlapping red and green circles, as follows:</p>
+
+  <ul>
+    <li>The first group shows the opaque case for reference. The group has
+    opacity of 1, as do the circles.</li>
+
+    <li>The second group shows group opacity when the elements in the group are
+    opaque.</li>
+
+    <li>The third and fourth group show that opacity is not commutative. In the
+    third group (which has opacity of 1), a semi-transparent green circle is
+    drawn on top of a semi-transparent red circle, whereas in the fourth group a
+    semi-transparent red circle is drawn on top of a semi-transparent green
+    circle. Note that area where the two circles intersect display different
+    colors. The third group shows more green color in the intersection area,
+    whereas the fourth group shows more red color.</li>
+
+    <li>The fifth group shows the multiplicative effect of opacity settings.
+    Both the circles and the group itself have opacity settings of .5. The
+    result is that the portion of the red circle which does not overlap with the
+    green circle (i.e., the top/right of the red circle) will blend into the
+    blue rectangle with accumulative opacity of .25 (i.e., .5*.5), which, after
+    blending into the blue rectangle, results in a blended color which is 25%
+    red and 75% blue.</li>
+  </ul>
+</div>
+</div>
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<h3 id="InterfaceSVGClipPathElement">Interface SVGClipPathElement</h3>
+
+<edit:with element='clipPath'>
+
+<p>The <a>SVGClipPathElement</a> interface corresponds to the <a>'clipPath'</a> element.</p>
+
+<pre class="idl">interface <b>SVGClipPathElement</b> : <a>SVGDefinitionElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="masking.html#__svg__SVGClipPathElement__clipPathUnits">clipPathUnits</a>;
+};
+
+<a>SVGClipPathElement</a> implements <a>SVGUnitTypes</a>;</pre>
+
+<dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGClipPathElement__clipPathUnits" class="attribute first-child"><b>clipPathUnits</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'clipPathUnits'</a> on the given
+<a>'clipPath'</a> element.  Takes one of the constants defined in
+<a>SVGUnitTypes</a>.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGMaskElement">Interface SVGMaskElement</h3>
+
+<edit:with element='mask'>
+
+<p>The <a>SVGMaskElement</a> interface corresponds to the <a>'mask element'</a> element.</p>
+
+<pre class="idl">interface <b>SVGMaskElement</b> : <a>SVGDefinitionElement</a> {
+
+  // Mask Types
+  const unsigned short <a href="masking.html#__svg__SVGMaskElement__SVG_MASKTYPE_LUMINANCE">SVG_MASKTYPE_LUMINANCE</a> = 0;
+  const unsigned short <a href="masking.html#__svg__SVGMaskElement__SVG_MASKTYPE_ALPHA">SVG_MASKTYPE_ALPHA</a> = 1;
+
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="masking.html#__svg__SVGMaskElement__maskUnits">maskUnits</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="masking.html#__svg__SVGMaskElement__maskContentUnits">maskContentUnits</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="masking.html#__svg__SVGMaskElement__maskType">maskType</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="masking.html#__svg__SVGMaskElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="masking.html#__svg__SVGMaskElement__y">y</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="masking.html#__svg__SVGMaskElement__width">width</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="masking.html#__svg__SVGMaskElement__height">height</a>;
+};
+
+<a>SVGMaskElement</a> implements <a>SVGUnitTypes</a>;</pre>
+
+<dl class="interface">
+<dt class="constants-header">Constants in group “Mask Types”:</dt>
+<dd>
+<dl class="constants">
+
+<dt id="__svg__SVGMaskElement__SVG_MASKTYPE_LUMINANCE" class="constant first-child"><b>SVG_MASKTYPE_LUMINANCE</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+Corresponds to value <span class="attr-value">'luminance'</span>.
+
+
+</div>
+</dd>
+
+<dt id="__svg__SVGMaskElement__SVG_MASKTYPE_ALPHA" class="constant"><b>SVG_MASKTYPE_ALPHA</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+Corresponds to value <span class="attr-value">'alpha'</span>.
+
+
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGMaskElement__maskUnits" class="attribute first-child"><b>maskUnits</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'maskUnits'</a> on the given
+<a>'mask element'</a> element.  Takes one of the constants defined in
+<a>SVGUnitTypes</a>.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGMaskElement__maskContentUnits" class="attribute"><b>maskContentUnits</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'maskContentUnits'</a> on the given
+<a>'mask element'</a> element.  Takes one of the constants defined in
+<a>SVGUnitTypes</a>.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGMaskElement__maskType" class="attribute"><b>maskType</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'maskType'</a> on the given
+<a>'mask element'</a> element.  Takes one of the Mask Types constants
+defined in this interface.
+
+
+<div class="note">This will highly likely become a WebIDL Enum in future
+(as soon as our toolchain supports it) so implementors are discouraged
+from implementing this attribute for the time being.
+</div>
+
+</div>
+</dd>
+
+<dt id="__svg__SVGMaskElement__x" class="attribute"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given <a>'mask element'</a>
+element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGMaskElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given <a>'mask element'</a>
+element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGMaskElement__width" class="attribute"><b>width</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'width'</a> on the given
+<a>'mask element'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGMaskElement__height" class="attribute"><b>height</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'height'</a> on the given
+<a>'mask element'</a> element.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+</body>
+</html>
