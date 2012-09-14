@@ -3390,6 +3390,161 @@ interface SVGPaint : SVGColor {
 <p class="issue">There are some missing definitions of 
 SVGPaint members here.  The interface might be going away, however.</p>
 
+
+<div class="ready-for-wg-review">
+<h3 id="InterfaceSVGMarkerInstance">Interface SVGMarkerInstance</h3>
+
+<p>The <a>SVGMarkerInstance</a> interface is used to represent an instance
+of a marker that is on a <a>markable element</a>.  An <a>SVGMarkerInstance</a>
+can represent any kind of marker, including <a>positioned markers</a>.</p>
+
+<p class="issue">What should we do about liveness?  If it is live, we
+could have it know what index it is for, and always return information
+about the marker at that index (and return null for the element if
+that index is no longer valid).</p>
+
+<pre class='idl'>interface <b>SVGMarkerInstance</b> {
+  readonly attribute <a>SVGMarkerElement</a> element;
+  readonly attribute float position;
+  readonly attribute <a>SVGPoint</a> point;
+  readonly attribute float angle;
+};</pre>
+
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGMarkerInstance__element" class="attribute first-child"><b>element</b><span class="idl-type-parenthetical"> (readonly <a>SVGMarkerElement</a>)</span></dt>
+      <dd class="attribute">The <a>'marker element'</a> element that defines
+      the marker.  If the marker is a <a>vertex marker</a>, <a>segment marker</a>
+      or <a>repeating marker</a>, then this will be the <a>'marker element'</a>
+      element that the relevant marker property referenced.  If the marker is
+      a <a>positioned marker</a>, then this will be the child <a>'marker element'</a>
+      element of the <a>markable element</a>.</dd>
+
+      <dt id="__svg__SVGMarkerInstance__position" class="attribute"><b>position</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
+      <dd class="attribute">The distance along the <a>equivalent path</a> of the
+      <a>markable element</a> that the marker is positioned at.</dd>
+
+      <dt id="__svg__SVGMarkerInstance__point" class="attribute"><b>point</b><span class="idl-type-parenthetical"> (readonly <a>SVGPoint</a>)</span></dt>
+      <dd class="attribute">The point, in the user space of the
+      <a>markable element</a>, that the marker is positioned at.
+      The <a>SVGPoint</a> object is read only.</dd>
+
+      <dt id="__svg__SVGMarkerInstance__angle" class="attribute"><b>angle</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
+      <dd class="attribute">The orientation of the marker relative to a
+      vector pointing in the direction of the positive y-axis of the
+      <a>markable element</a>'s user space.</dd>
+    </dl>
+  </dd>
+</dl>
+
+
+<h3 id="InterfaceSVGMarkerList">Interface SVGMarkerList</h3>
+
+<p>The <a>SVGMarkerList</a> interface is used to expose the list of markers that
+are painted on a given <a>markable element</a>.  This list includes all
+<a>vertex markers</a>, <a>segment markers</a>, <a>repeating markers</a> and
+<a>positioned markers</a>.  The list of <a>SVGMarkerInstance</a> objects
+is maintained in the order that the markers are painted (see
+<a href='painting.html#Markers'>Markers</a>).</p>
+
+<pre class='idl'>interface <b>SVGMarkerList</b> {
+  readonly attribute unsigned long <a href='#__svg__SVGMarkerList__length'>length</a>;
+  getter <a>SVGMarkerInstance</a>? <a href='#__svg__SVGMarkerList__item'>item</a>(unsigned long index);
+};</pre>
+
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGMarkerList__length" class="attribute first-child"><b>length</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
+      <dd class="attribute">The number of markers on this element.</dd>
+    </dl>
+  </dd>
+  <dt class="operations-header">Operations:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGMarkerList__item" class="operation first-child"><a>SVGMarkerInstance</a>? <b>item</b>(unsigned long <var>index</var>)</dt>
+      <dd class="operation">
+        Gets the <a>SVGMarkerInstance</a> at the given position in the
+        list of markers on this element.
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>unsigned long <var>index</var></div>
+                <div>The index of the <a>SVGMarkerInstance</a> to return.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>Returns the <a>SVGMarkerInstance</a> at position <var>index</var>
+          in the list of markers on this element, or null if <var>index</var>
+          is out of range.</dd>
+        </dl>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+
+
+<h3 id="InterfaceSVGMarkableElement">Interface SVGMarkableElement</h3>
+
+<p>The <a>SVGMarkableElement</a> interface is implemented on all
+<a>markable elements</a>, and provides access to the markers that are placed on
+the element's path.</p>
+
+<pre class='idl'>[NoInterfaceObject]
+interface <b>SVGMarkableElement</b> {
+  readonly attribute <a>SVGMarkerList</a> <a href='#__svg__SVGMarkableElement__markers'>markers</a>;
+
+  long <a href='#__svg__SVGMarkableElement__getMarkerIndexFromPoint'>getMarkerIndexFromPoint</a>(<a>SVGPoint</a> point);
+};</pre>
+
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGMarkableElement__markers" class="attribute first-child"><b>markers</b><span class="idl-type-parenthetical"> (readonly <a>SVGMarkerList</a>)</span></dt>
+      <dd class="attribute">The list of markers on this element.</dd>
+    </dl>
+  </dd>
+  <dt class="operations-header">Operations:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGMarkableElement__getMarkerIndexFromPoint" class="operation first-child">long <b>getMarkerIndexFromPoint</b>(<a>SVGPoint</a> point)</dt>
+      <dd class="operation">
+        Returns the index into the <a>SVGMarkerList</a> of the marker that is at
+        the specified point.  Normal hit testing rules apply; the value of the
+        <a>'pointer-events'</a> property on the elements that comprise the markers,
+        as well as its value on this element, is honored, and the top-most marker
+        is selected when there are multiple markers whose content is at the given
+        point.
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div><a>SVGPoint</a> <var>point</var></div>
+                <div>The point to check for intersection with the markers
+                on this element.  The <a>SVGPoint</a> is interpreted as a
+                point in the user space of this element.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>The index into this element's <a>SVGMarkerList</a> of the marker
+          at the given point, or -1 if there is no such marker.</dd>
+        </dl>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+</div>
+
+
 <h3 id="InterfaceSVGMarkerElement">Interface SVGMarkerElement</h3>
 
 
