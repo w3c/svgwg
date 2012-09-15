@@ -491,6 +491,8 @@ attributes, including presentation attributes, but not in style sheets.</p>
 
     <p>In the SVG DOM, &lt;length&gt; values are represented using
     <a>SVGLength</a> or <a>SVGAnimatedLength</a> objects.</p>
+
+    <p class='issue'>We should disentangle lengths and percentages.</p>
   </dd>
   
   <dt id="DataTypeListOfFamilyNames">&lt;list-of-family-names&gt;</dt>
@@ -2129,28 +2131,34 @@ same value as <a>baseVal</a>.
 
 <h3 id="InterfaceSVGNumber">Interface SVGNumber</h3>
 
+<p>Used for attributes of basic type
+<a href="types.html#DataTypeNumber">&lt;number&gt;</a>.</p>
 
-Used for attributes of basic type
-<a href="types.html#DataTypeNumber">&lt;number&gt;</a>.
-<pre class="idl">interface <b>SVGNumber</b> {
+<pre class="idl">[<a href="#__svg__SVGNumber__constructor">Constructor</a>,
+ <a href="#__svg__SVGNumber__constructor1">Constructor</a>(float value)]
+interface <b>SVGNumber</b> {
   attribute float <a href="types.html#__svg__SVGNumber__value">value</a>;
 };</pre>
 
 <dl class="interface">
-<dt class="attributes-header">Attributes:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__svg__SVGNumber__value" class="attribute first-child"><b>value</b><span class="idl-type-parenthetical"> (float)</span></dt>
-<dd class="attribute">
-<div>
-The value of the given attribute.
-
-
-</div>
-</dd>
-</dl>
-</dd>
+  <dt class="operations-header">Constructors:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGNumber__constructor" class="operation first-child"><b>SVGNumber</b>()</dt>
+      <dd>Creates a new <a>SVGNumber</a> object with its value attribute set to 0.</dd>
+      <dt id="__svg__SVGNumber__constructor1" class="operation first-child"><b>SVGNumber</b>(float <var>value</var>)</dt>
+      <dd>Creates a new <a>SVGNumber</a> object with its value attribute set to <var>value</var>.</dd>
+    </dl>
+  </dd>
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGNumber__value" class="attribute first-child"><b>value</b><span class="idl-type-parenthetical"> (float)</span></dt>
+      <dd class="attribute">
+        <div>The value of the given attribute.</div>
+      </dd>
+    </dl>
+  </dd>
 </dl>
 
 
@@ -2607,18 +2615,32 @@ the attribute is not animated.
 
 <h3 id="InterfaceSVGLength">Interface SVGLength</h3>
 
-
-
 <p>The <a>SVGLength</a> interface corresponds to the
-<a href="types.html#DataTypeLength">&lt;length&gt;</a> basic data type.
-</p>
-
+<a href="types.html#DataTypeLength">&lt;length&gt;</a> and
+<a href="types.html#DataTypePercentage">&lt;percentage&gt;</a> basic data types,
+and represents a length or percentage that consists of a numerical factor and a unit,
+where the unit is one of the set of units described in
+<a href="coords.html#Units">Units</a> (em, ex, px, pt, pc, cm, mm and in),
+a percentage, a unitless number (user units), or "unknown".</p>
 
 <p id="ReadOnlyLength">An <a>SVGLength</a> object can be designated as <em>read only</em>,
 which means that attempts to modify the object will result in an exception
-being thrown, as described below.
-</p>
-<pre class="idl">interface <b>SVGLength</b> {
+being thrown, as described below.</p>
+
+<p id="AssociatedElement">An <a>SVGLength</a> object can be <em>associated</em>
+with a particular element, as well as being designated with a <em>directionality</em>:
+horizontal, vertical or unspecified.  The associated element and the directionality of the
+length are used to resolve percentage values to user units.  Unless otherwise
+described, an <a>SVGLength</a> object is not associated with any element and
+has unspecified directionality.</p>
+
+<p class='issue'>We need to define the behavior of converting values from/to percentages
+when the viewport width/height/size is zero.</p>
+
+<pre class="idl">[<a href="#__svg__SVGLength__constructor">Constructor</a>,
+ <a href="#__svg__SVGLength__constructor1">Constructor</a>(float value, optional unsigned short unitType),
+ <a href="#__svg__SVGLength__constructor2">Constructor</a>(DOMString value)]
+interface <b>SVGLength</b> {
 
   // Length Unit Types
   const unsigned short <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a> = 0;
@@ -2640,318 +2662,224 @@ being thrown, as described below.
 
   void <a href="types.html#__svg__SVGLength__newValueSpecifiedUnits">newValueSpecifiedUnits</a>(unsigned short unitType, float valueInSpecifiedUnits);
   void <a href="types.html#__svg__SVGLength__convertToSpecifiedUnits">convertToSpecifiedUnits</a>(unsigned short unitType);
-};</pre><dl class="interface">
-<dt class="constants-header">Constants in group “Length Unit Types”:</dt>
-<dd>
-<dl class="constants">
+};</pre>
 
-<dt id="__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN" class="constant first-child"><b>SVG_LENGTHTYPE_UNKNOWN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-<dd class="constant">
-<div>
-The unit type is not one of predefined unit types. It is invalid to
-attempt to define a new value of this type or to attempt to switch an
-existing value to this type.
-
-
-</div>
-</dd>
-
-<dt id="__svg__SVGLength__SVG_LENGTHTYPE_NUMBER" class="constant"><b>SVG_LENGTHTYPE_NUMBER</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-<dd class="constant">
-<div>
-No unit type was provided (i.e., a unitless value was specified), which
-indicates a value in user units.
-
-
-</div>
-</dd>
-
-<dt id="__svg__SVGLength__SVG_LENGTHTYPE_PERCENTAGE" class="constant"><b>SVG_LENGTHTYPE_PERCENTAGE</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-<dd class="constant">
-<div>
-A percentage value was specified.
-
-
-</div>
-</dd>
-
-<dt id="__svg__SVGLength__SVG_LENGTHTYPE_EMS" class="constant"><b>SVG_LENGTHTYPE_EMS</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-<dd class="constant">
-<div>
-A value was specified using the em units defined in CSS 2.1.
-
-
-</div>
-</dd>
-
-<dt id="__svg__SVGLength__SVG_LENGTHTYPE_EXS" class="constant"><b>SVG_LENGTHTYPE_EXS</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-<dd class="constant">
-<div>
-A value was specified using the ex units defined in CSS 2.1.
-
-
-</div>
-</dd>
-
-<dt id="__svg__SVGLength__SVG_LENGTHTYPE_PX" class="constant"><b>SVG_LENGTHTYPE_PX</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-<dd class="constant">
-<div>
-A value was specified using the px units defined in CSS 2.1.
-
-
-</div>
-</dd>
-
-<dt id="__svg__SVGLength__SVG_LENGTHTYPE_CM" class="constant"><b>SVG_LENGTHTYPE_CM</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-<dd class="constant">
-<div>
-A value was specified using the cm units defined in CSS 2.1.
-
-
-</div>
-</dd>
-
-<dt id="__svg__SVGLength__SVG_LENGTHTYPE_MM" class="constant"><b>SVG_LENGTHTYPE_MM</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-<dd class="constant">
-<div>
-A value was specified using the mm units defined in CSS 2.1.
-
-
-</div>
-</dd>
-
-<dt id="__svg__SVGLength__SVG_LENGTHTYPE_IN" class="constant"><b>SVG_LENGTHTYPE_IN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-<dd class="constant">
-<div>
-A value was specified using the in units defined in CSS 2.1.
-
-
-</div>
-</dd>
-
-<dt id="__svg__SVGLength__SVG_LENGTHTYPE_PT" class="constant"><b>SVG_LENGTHTYPE_PT</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-<dd class="constant">
-<div>
-A value was specified using the pt units defined in CSS 2.1.
-
-
-</div>
-</dd>
-
-<dt id="__svg__SVGLength__SVG_LENGTHTYPE_PC" class="constant"><b>SVG_LENGTHTYPE_PC</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-<dd class="constant">
-<div>
-A value was specified using the pc units defined in CSS 2.1.
-
-
-</div>
-</dd>
-</dl>
-</dd>
-<dt class="attributes-header">Attributes:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__svg__SVGLength__unitType" class="attribute first-child"><b>unitType</b><span class="idl-type-parenthetical"> (readonly unsigned short)</span></dt>
-<dd class="attribute">
-<div>
-The type of the value as specified by one of the SVG_LENGTHTYPE_*
-constants defined on this interface.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGLength__value" class="attribute"><b>value</b><span class="idl-type-parenthetical"> (float)</span></dt>
-<dd class="attribute">
-<div>
-The value as a floating point value, in user units. Setting this
-attribute will cause <a>valueInSpecifiedUnits</a> and
-<a>valueAsString</a> to be updated automatically to reflect this setting.
-
-
-</div>
-<dl class="attribute">
-<dt class="exceptions-header">Exceptions on setting</dt>
-<dd>
-<dl class="exceptions">
-<dt class="exception"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
-</dt>
-<dd class="exception"> Raised when the length is
-<a href="#ReadOnlyLength">read only</a>.
-
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGLength__valueInSpecifiedUnits" class="attribute"><b>valueInSpecifiedUnits</b><span class="idl-type-parenthetical"> (float)</span></dt>
-<dd class="attribute">
-<div>
-The value as a floating point value, in the units expressed by
-<a>unitType</a>. Setting this attribute will cause <a>value</a> and
-<a>valueAsString</a> to be updated automatically to reflect this setting. 
-
-
-</div>
-<dl class="attribute">
-<dt class="exceptions-header">Exceptions on setting</dt>
-<dd>
-<dl class="exceptions">
-<dt class="exception"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
-</dt>
-<dd class="exception"> Raised when the length is
-<a href="#ReadOnlyLength">read only</a>.
-
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGLength__valueAsString" class="attribute"><b>valueAsString</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
-<dd class="attribute">
-<div>
-The value as a string value, in the units expressed by <a>unitType</a>.
-Setting this attribute will cause <a>value</a>, 
-<a>valueInSpecifiedUnits</a> and <a>unitType</a> 
-to be updated automatically to reflect this
-setting. 
-
-
-</div>
-<dl class="attribute">
-<dt class="exceptions-header">Exceptions on setting</dt>
-<dd>
-<dl class="exceptions">
-<dt class="exception"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code SYNTAX_ERR
-</dt>
-<dd class="exception"> Raised if the assigned string cannot 
-be parsed as a valid <a>&lt;length&gt;</a>.
-
-</dd>
-<dt class="exception"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
-</dt>
-<dd class="exception"> Raised when the length is
-<a href="#ReadOnlyLength">read only</a>.
-
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-<dt class="operations-header">Operations:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__svg__SVGLength__newValueSpecifiedUnits" class="operation first-child">void <b>newValueSpecifiedUnits</b>(unsigned short <var>unitType</var>, float <var>valueInSpecifiedUnits</var>)
-</dt>
-<dd class="operation">
-<div>
-Reset the value as a number with an associated <a>unitType</a>, thereby
-replacing the values for all of the attributes on the object.
-
-
-</div>
-<dl class="operation">
-<dt class="parameters-header">Parameters</dt>
-<dd>
-<ol class="parameters">
-<li class="parameter first-child">
-<div>unsigned short <var>unitType</var></div> 
-<div> The unit type for the value (e.g., <a>SVG_LENGTHTYPE_MM</a>).
-
-</div>
-</li>
-<li class="parameter">
-<div>float <var>valueInSpecifiedUnits</var></div> 
-<div> The new value.
-
-</div>
-</li>
-</ol>
-</dd>
-<dt class="exceptions-header">Exceptions</dt>
-<dd>
-<dl class="exceptions">
-<dt class="exception first-child"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NOT_SUPPORTED_ERR
-</dt>
-<dd class="exception"> Raised if unitType is SVG_LENGTHTYPE_UNKNOWN 
-or not a valid unit type constant (one of the other SVG_LENGTHTYPE_* constants 
-defined on this interface).
-
-</dd>
-<dt class="exception"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
-</dt>
-<dd class="exception"> Raised when the length is
-<a href="#ReadOnlyLength">read only</a>.
-
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGLength__convertToSpecifiedUnits" class="operation">void <b>convertToSpecifiedUnits</b>(unsigned short <var>unitType</var>)
-</dt>
-<dd class="operation">
-<div>
-Preserve the same underlying stored value, but reset the stored unit
-identifier to the given <var>unitType</var>. Object attributes
-<a>unitType</a>, <a>valueInSpecifiedUnits</a> and <a>valueAsString</a>
-might be modified as a result of this method. For example, if the
-original value were "0.5cm" and the method was invoked to convert to
-millimeters, then the <a>unitType</a> would be changed to
-<a>SVG_LENGTHTYPE_MM</a>, <a>valueInSpecifiedUnits</a> would be changed
-to the numeric value 5 and <a>valueAsString</a> would be changed to
-"5mm".
-
-
-</div>
-<dl class="operation">
-<dt class="parameters-header">Parameters</dt>
-<dd>
-<ol class="parameters">
-<li class="parameter first-child">
-<div>unsigned short <var>unitType</var></div> 
-<div> The unit type to switch to (e.g., <a>SVG_LENGTHTYPE_MM</a>).
-
-</div>
-</li>
-</ol>
-</dd>
-<dt class="exceptions-header">Exceptions</dt>
-<dd>
-<dl class="exceptions">
-<dt class="exception first-child"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NOT_SUPPORTED_ERR
-</dt>
-<dd class="exception"> Raised if unitType is SVG_LENGTHTYPE_UNKNOWN 
-or not a valid unit type constant (one of the other SVG_LENGTHTYPE_* constants 
-defined on this interface).
-
-</dd>
-<dt class="exception"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
-</dt>
-<dd class="exception"> Raised when the length is
-<a href="#ReadOnlyLength">read only</a>.
-
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
+<dl class="interface">
+  <dt class="operations-header">Constructors:</dt>
+  <dd>
+    <dl class="operations">
+      <dt id="__svg__SVGLength__constructor" class="operation first-child"><b>SVGLength</b>()</dt>
+      <dd>Creates a new <a>SVGLength</a> object whose value is zero user units.</dd>
+      <dt id="__svg__SVGLength__constructor1" class="operation first-child"><b>SVGLength</b>(float <var>value</var>, optional unsigned short <var>unitType</var>)</dt>
+      <dd>Creates a new <a>SVGLength</a> object whose value is <var>value</var> in the
+      units specified by <var>unitType</var>.</dd>
+      <dt id="__svg__SVGLength__constructor2" class="operation first-child"><b>SVGLength</b>(DOMString <var>value</var>)</dt>
+      <dd>Creates a new <a>SVGLength</a> object whose value is determined by
+      parsing <var>value</var> as a <a>&lt;length&gt;</a> or <a>&lt;percentage&gt;</a>.
+      If <var>value</var> cannot be parsed as a <a>&lt;length&gt;</a> or
+      <a>&lt;percentage&gt;</a>, then a
+      <a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#syntaxerror">SyntaxError</a>
+      is thrown.</dd>
+    </dl>
+  </dd>
+  <dt class="constants-header">Constants in group “Length Unit Types”:</dt>
+  <dd>
+    <dl class="constants">
+      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN" class="constant first-child"><b>SVG_LENGTHTYPE_UNKNOWN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>The unit type is not one of predefined unit types. It is invalid to
+        attempt to define a new value of this type or to attempt to switch an
+        existing value to this type.</div>
+      </dd>
+      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_NUMBER" class="constant"><b>SVG_LENGTHTYPE_NUMBER</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>No unit type was provided (i.e., a unitless value was specified), which
+        indicates a value in user units.</div>
+      </dd>
+      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_PERCENTAGE" class="constant"><b>SVG_LENGTHTYPE_PERCENTAGE</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>A percentage value was specified.</div>
+      </dd>
+      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_EMS" class="constant"><b>SVG_LENGTHTYPE_EMS</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>A value was specified using the em units defined in CSS 2.1.</div>
+      </dd>
+      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_EXS" class="constant"><b>SVG_LENGTHTYPE_EXS</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>A value was specified using the ex units defined in CSS 2.1.</div>
+      </dd>
+      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_PX" class="constant"><b>SVG_LENGTHTYPE_PX</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>A value was specified using the px units defined in CSS 2.1.</div>
+      </dd>
+      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_CM" class="constant"><b>SVG_LENGTHTYPE_CM</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>A value was specified using the cm units defined in CSS 2.1.</div>
+      </dd>
+      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_MM" class="constant"><b>SVG_LENGTHTYPE_MM</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>A value was specified using the mm units defined in CSS 2.1.</div>
+      </dd>
+      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_IN" class="constant"><b>SVG_LENGTHTYPE_IN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>A value was specified using the in units defined in CSS 2.1.</div>
+      </dd>
+      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_PT" class="constant"><b>SVG_LENGTHTYPE_PT</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>A value was specified using the pt units defined in CSS 2.1.</div>
+      </dd>
+      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_PC" class="constant"><b>SVG_LENGTHTYPE_PC</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>A value was specified using the pc units defined in CSS 2.1.</div>
+      </dd>
+    </dl>
+  </dd>
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGLength__unitType" class="attribute first-child"><b>unitType</b><span class="idl-type-parenthetical"> (readonly unsigned short)</span></dt>
+      <dd class="attribute">
+        <div>The type of the value as specified by one of the SVG_LENGTHTYPE_*
+        constants defined on this interface.</div>
+      </dd>
+      <dt id="__svg__SVGLength__value" class="attribute"><b>value</b><span class="idl-type-parenthetical"> (float)</span></dt>
+      <dd class="attribute">
+        <div>The value of the length in user units.
+        On getting, returns the value converted to user units.  If
+        the type of the <a>SVGLength</a> is unknown, or it is a percentage
+        but the object has no associated element, the numerical factor
+        of the length is returned.  On setting, sets the numerical
+        factor to the assigned value and the unit type to user units.</div>
+        <dl class="attribute">
+          <dt class="exceptions-header">Exceptions on setting</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the length is <a href="#ReadOnlyLength">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGLength__valueInSpecifiedUnits" class="attribute"><b>valueInSpecifiedUnits</b><span class="idl-type-parenthetical"> (float)</span></dt>
+      <dd class="attribute">
+        <div>The numerical factor of the length value.</div>
+        <dl class="attribute">
+          <dt class="exceptions-header">Exceptions on setting</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the length is <a href="#ReadOnlyLength">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGLength__valueAsString" class="attribute"><b>valueAsString</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
+      <dd class="attribute">
+        <div>
+          <p>The length value as a string.  On getting, returns a
+          string as follows:</p>
+          <ul>
+            <li>If the unit type of the length is unknown or user units,
+            the string is simply the numeric factor converted to a string.</li>
+            <li>If the unit type of the length is a percentage, the string
+            is the result of concatenating the numeric factor converted to a string 
+            with the string "%".</li>
+            <li>Otherwise, the string is the result of concatenating the numeric
+            factor converted to a string with the CSS length unit in lowercase.</li>
+          </ul>
+          <p>On setting, updates the numeric factor and units type of the
+          <a>SVGLength</a> object according to the result of parsing the
+          assigned string as a <a>&lt;length&gt;</a> or <a>&lt;percentage&gt;</a>.</p>
+        </div>
+        <dl class="attribute">
+          <dt class="exceptions-header">Exceptions on setting</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code SYNTAX_ERR</dt>
+              <dd class="exception">Raised if the assigned string cannot be parsed as a valid <a>&lt;length&gt;</a> or <a>&lt;percentage&gt;</a>.</dd>
+              <dt class="exception"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the length is <a href="#ReadOnlyLength">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+    </dl>
+  </dd>
+  <dt class="operations-header">Operations:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGLength__newValueSpecifiedUnits" class="operation first-child">void <b>newValueSpecifiedUnits</b>(unsigned short <var>unitType</var>, float <var>valueInSpecifiedUnits</var>)</dt>
+      <dd class="operation">
+        <div>Sets the numeric factor of the length value to <var>valueInSpecifiedUnits</var>
+        and the unit type to <var>unitType</var>.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>unsigned short <var>unitType</var></div> 
+                <div>The unit type for the value (e.g., <a>SVG_LENGTHTYPE_MM</a>).</div>
+              </li>
+              <li class="parameter">
+                <div>float <var>valueInSpecifiedUnits</var></div> 
+                <div>The new value.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NOT_SUPPORTED_ERR</dt>
+              <dd class="exception">Raised if unitType is SVG_LENGTHTYPE_UNKNOWN 
+              or not a valid unit type constant (one of the other SVG_LENGTHTYPE_* constants 
+              defined on this interface).</dd>
+              <dt class="exception"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the length is <a href="#ReadOnlyLength">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGLength__convertToSpecifiedUnits" class="operation">void <b>convertToSpecifiedUnits</b>(unsigned short <var>unitType</var>)</dt>
+      <dd class="operation">
+        <div>
+          <p>Sets the unit type of the length value to the type specified by
+          <var>unitType</var> and sets the numeric factor value such that it
+          represents the same absolute length.
+          For example, if the original value were "0.5cm" and the method was
+          invoked to convert to millimeters, then <a>unitType</a> would return
+          <a>SVG_LENGTHTYPE_MM</a> and <a>valueInSpecifiedUnits</a> would return the
+          numeric value 5.</p>
+          <p>If the old or new unit type
+          is percentage and the <a>SVGLength</a> object has no associated
+          element, then the percentages are considered to resolve against
+          a length of 100 user units.  For example, converting an <a>SVGLength</a>
+          whose value is 20px to a percentage will result in the value being 20%.</p>
+        </div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>unsigned short <var>unitType</var></div> 
+                <div>The unit type to switch to (e.g., <a>SVG_LENGTHTYPE_MM</a>).</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NOT_SUPPORTED_ERR</dt>
+              <dd class="exception">Raised if unitType is SVG_LENGTHTYPE_UNKNOWN 
+              or not a valid unit type constant (one of the other SVG_LENGTHTYPE_* constants 
+              defined on this interface).</dd>
+              <dt class="exception"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the length is <a href="#ReadOnlyLength">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+    </dl>
+  </dd>
 </dl>
 
 
@@ -3407,18 +3335,19 @@ the attribute is not animated.
 
 <h3 id="InterfaceSVGAngle">Interface SVGAngle</h3>
 
-
-
 <p>The <a>SVGAngle</a> interface corresponds to the
-<a href="types.html#DataTypeAngle">&lt;angle&gt;</a> basic data type.
-</p>
-
+<a href="types.html#DataTypeAngle">&lt;angle&gt;</a> basic data type,
+and represents an angle that consists of a numerical factor and a unit,
+where the unit is degrees, radians, grads, unitless numbers or "unknown".</p>
 
 <p id="ReadOnlyAngle">An <a>SVGAngle</a> object can be designated as <em>read only</em>,
 which means that attempts to modify the object will result in an exception
-being thrown, as described below.
-</p>
-<pre class="idl">interface <b>SVGAngle</b> {
+being thrown, as described below.</p>
+
+<pre class="idl">[<a href="#__svg__SVGAngle__constructor">Constructor</a>,
+ <a href="#__svg__SVGAngle__constructor1">Constructor</a>(float value, optional unsigned short unitType),
+ <a href="#__svg__SVGAngle__constructor2">Constructor</a>(DOMString value)]
+interface <b>SVGAngle</b> {
 
   // Angle Unit Types
   const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</a> = 0;
@@ -3434,7 +3363,25 @@ being thrown, as described below.
 
   void <a href="types.html#__svg__SVGAngle__newValueSpecifiedUnits">newValueSpecifiedUnits</a>(unsigned short unitType, float valueInSpecifiedUnits);
   void <a href="types.html#__svg__SVGAngle__convertToSpecifiedUnits">convertToSpecifiedUnits</a>(unsigned short unitType);
-};</pre><dl class="interface">
+};</pre>
+
+<dl class="interface">
+  <dt class="operations-header">Constructors:</dt>
+  <dd>
+    <dl class="operations">
+      <dt id="__svg__SVGAngle__constructor" class="operation first-child"><b>SVGAngle</b>()</dt>
+      <dd>Creates a new <a>SVGAngle</a> object whose value is zero user units.</dd>
+      <dt id="__svg__SVGAngle__constructor1" class="operation first-child"><b>SVGAngle</b>(float <var>value</var>, optional unsigned short <var>unitType</var>)</dt>
+      <dd>Creates a new <a>SVGAngle</a> object whose value is <var>value</var> in the
+      units specified by <var>unitType</var>.</dd>
+      <dt id="__svg__SVGAngle__constructor2" class="operation first-child"><b>SVGAngle</b>(DOMString <var>value</var>)</dt>
+      <dd>Creates a new <a>SVGAngle</a> object whose value is determined by
+      parsing <var>value</var> as an <a>&lt;angle&gt;</a>.
+      If <var>value</var> cannot be parsed, then a
+      <a href="http://dvcs.w3.org/hg/domcore/raw-file/tip/Overview.html#syntaxerror">SyntaxError</a>
+      is thrown.</dd>
+    </dl>
+  </dd>
 <dt class="constants-header">Constants in group “Angle Unit Types”:</dt>
 <dd>
 <dl class="constants">
@@ -3502,193 +3449,144 @@ constants defined on this interface.
 </div>
 </dd>
 
-<dt id="__svg__SVGAngle__value" class="attribute"><b>value</b><span class="idl-type-parenthetical"> (float)</span></dt>
-<dd class="attribute">
-<div>
-The angle value as a floating point value, in degrees. Setting this
-attribute will cause <a>valueInSpecifiedUnits</a> and
-<a>valueAsString</a> to be updated automatically to reflect this setting. 
+      <dt id="__svg__SVGAngle__value" class="attribute"><b>value</b><span class="idl-type-parenthetical"> (float)</span></dt>
+      <dd class="attribute">
+        <div>The value of the angle in degrees.
+        On getting, returns the value converted to degrees.  If
+        the type of the <a>SVGAngle</a> is unknown, the numerical factor
+        of the angle is returned.  On setting, sets the numerical
+        factor to the assigned value and the unit type to unitless numbers.</div>
+        <dl class="attribute">
+          <dt class="exceptions-header">Exceptions on setting</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the angle is <a href="#ReadOnlyAngle">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+
+      <dt id="__svg__SVGAngle__valueInSpecifiedUnits" class="attribute"><b>valueInSpecifiedUnits</b><span class="idl-type-parenthetical"> (float)</span></dt>
+      <dd class="attribute">
+        <div>The numerical factor of the angle value.</div>
+        <dl class="attribute">
+          <dt class="exceptions-header">Exceptions on setting</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the angle is <a href="#ReadOnlyAngle">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+
+      <dt id="__svg__SVGAngle__valueAsString" class="attribute"><b>valueAsString</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
+      <dd class="attribute">
+        <div>
+          <p>The angle value as a string.  On getting, returns a
+          string as follows:</p>
+          <ul>
+            <li>If the unit type of the angle is unknown or unitless numbers,
+            the string is simply the numeric factor converted to a string.</li>
+            <li>Otherwise, the string is the result of concatenating the numeric
+            factor converted to a string with the CSS angle unit in lowercase.</li>
+          </ul>
+          <p>On setting, updates the numeric factor and units type of the
+          <a>SVGAngle</a> object according to the result of parsing the
+          assigned string as an <a>&lt;angle&gt;</a>.</p>
+        </div>
+        <dl class="attribute">
+          <dt class="exceptions-header">Exceptions on setting</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code SYNTAX_ERR</dt>
+              <dd class="exception">Raised if the assigned string cannot be parsed as a valid <a>&lt;angle&gt;</a>.</dd>
+              <dt class="exception"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the angle is <a href="#ReadOnlyLength">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
 
 
-</div>
-<dl class="attribute">
-<dt class="exceptions-header">Exceptions on setting</dt>
-<dd>
-<dl class="exceptions">
-<dt class="exception"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
-</dt>
-<dd class="exception"> Raised when the angle is
-<a href="#ReadOnlyAngle">read only</a>.
-
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGAngle__valueInSpecifiedUnits" class="attribute"><b>valueInSpecifiedUnits</b><span class="idl-type-parenthetical"> (float)</span></dt>
-<dd class="attribute">
-<div>
-The angle value as a floating point value, in the units expressed by
-<a>unitType</a>. Setting this attribute will cause <a>value</a> and
-<a>valueAsString</a> to be updated automatically to reflect this setting. 
-
-
-</div>
-<dl class="attribute">
-<dt class="exceptions-header">Exceptions on setting</dt>
-<dd>
-<dl class="exceptions">
-<dt class="exception"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
-</dt>
-<dd class="exception"> Raised when the angle is
-<a href="#ReadOnlyAngle">read only</a>.
-
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGAngle__valueAsString" class="attribute"><b>valueAsString</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
-<dd class="attribute">
-<div>
-The angle value as a string value, in the units expressed by
-<a>unitType</a>. Setting this attribute will cause <a>value</a>,
-<a>valueInSpecifiedUnits</a> and <a>unitType</a>
-to be updated automatically to reflect
-this setting. 
-
-
-</div>
-<dl class="attribute">
-<dt class="exceptions-header">Exceptions on setting</dt>
-<dd>
-<dl class="exceptions">
-<dt class="exception"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code SYNTAX_ERR
-</dt>
-<dd class="exception"> Raised if the assigned string cannot 
-be parsed as a valid <a>&lt;angle&gt;</a>.
-
-</dd>
-<dt class="exception"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
-</dt>
-<dd class="exception"> Raised when the angle is
-<a href="#ReadOnlyAngle">read only</a>.
-
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
 </dl>
 </dd>
 <dt class="operations-header">Operations:</dt>
 <dd>
 <dl class="attributes">
 
-<dt id="__svg__SVGAngle__newValueSpecifiedUnits" class="operation first-child">void <b>newValueSpecifiedUnits</b>(unsigned short <var>unitType</var>, float <var>valueInSpecifiedUnits</var>)
-</dt>
-<dd class="operation">
-<div>
-Reset the value as a number with an associated <a>unitType</a>, thereby
-replacing the values for all of the attributes on the object.
+      <dt id="__svg__SVGAngle__newValueSpecifiedUnits" class="operation first-child">void <b>newValueSpecifiedUnits</b>(unsigned short <var>unitType</var>, float <var>valueInSpecifiedUnits</var>)</dt>
+      <dd class="operation">
+        <div>Sets the numeric factor of the angle value to <var>valueInSpecifiedUnits</var>
+        and the unit type to <var>unitType</var>.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>unsigned short <var>unitType</var></div> 
+                <div>The unit type for the value (e.g., <a>SVG_ANGLETYPE_DEG</a>).</div>
+              </li>
+              <li class="parameter">
+                <div>float <var>valueInSpecifiedUnits</var></div> 
+                <div>The new value.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NOT_SUPPORTED_ERR</dt>
+              <dd class="exception">Raised if unitType is SVG_ANGLETYPE_UNKNOWN 
+              or not a valid unit type constant (one of the other SVG_ANGLETYPE_* constants 
+              defined on this interface).</dd>
+              <dt class="exception"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the angle is <a href="#ReadOnlyAngle">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
 
-
-</div>
-<dl class="operation">
-<dt class="parameters-header">Parameters</dt>
-<dd>
-<ol class="parameters">
-<li class="parameter first-child">
-<div>unsigned short <var>unitType</var></div> 
-<div> The unit type for the value (e.g., <a>SVG_ANGLETYPE_DEG</a>).
-
-</div>
-</li>
-<li class="parameter">
-<div>float <var>valueInSpecifiedUnits</var></div> 
-<div> The angle value.
-
-</div>
-</li>
-</ol>
-</dd>
-<dt class="exceptions-header">Exceptions</dt>
-<dd>
-<dl class="exceptions">
-<dt class="exception first-child"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NOT_SUPPORTED_ERR
-</dt>
-<dd class="exception"> Raised if unitType is SVG_ANGLETYPE_UNKNOWN 
-or not a valid unit type constant (one of the other SVG_ANGLETYPE_* constants 
-defined on this interface).
-
-</dd>
-<dt class="exception"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
-</dt>
-<dd class="exception"> Raised when the angle is
-<a href="#ReadOnlyAngle">read only</a>.
-
-</dd>
+      <dt id="__svg__SVGAngle__convertToSpecifiedUnits" class="operation">void <b>convertToSpecifiedUnits</b>(unsigned short <var>unitType</var>)</dt>
+      <dd class="operation">
+        <div>
+          <p>Sets the unit type of the angle value to the type specified by
+          <var>unitType</var> and sets the numeric factor value such that it
+          represents the same absolute angle.
+          For example, if the original value were "180deg" and the method was
+          invoked to convert to radians, then <a>unitType</a> would return
+          <a>SVG_ANGLETYPE_RAD</a> and <a>valueInSpecifiedUnits</a> would return the
+          numeric value π.</p>
+        </div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>unsigned short <var>unitType</var></div> 
+                <div>The unit type to switch to (e.g., <a>SVG_ANGLETYPE_DEG</a>).</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NOT_SUPPORTED_ERR</dt>
+              <dd class="exception">Raised if unitType is SVG_ANGLETYPE_UNKNOWN 
+              or not a valid unit type constant (one of the other SVG_ANGLETYPE_* constants 
+              defined on this interface).</dd>
+              <dt class="exception"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the angle is <a href="#ReadOnlyAngle">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+    </dl>
+  </dd>
 </dl>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGAngle__convertToSpecifiedUnits" class="operation">void <b>convertToSpecifiedUnits</b>(unsigned short <var>unitType</var>)
-</dt>
-<dd class="operation">
-<div>
-Preserve the same underlying stored value, but reset the stored unit
-identifier to the given <var>unitType</var>. Object attributes
-<a>unitType</a>, <a>valueInSpecifiedUnits</a> and <a>valueAsString</a>
-might be modified as a result of this method. 
 
 
-</div>
-<dl class="operation">
-<dt class="parameters-header">Parameters</dt>
-<dd>
-<ol class="parameters">
-<li class="parameter first-child">
-<div>unsigned short <var>unitType</var></div> 
-<div> The unit type to switch to (e.g., <a>SVG_ANGLETYPE_DEG</a>).
-
-</div>
-</li>
-</ol>
-</dd>
-<dt class="exceptions-header">Exceptions</dt>
-<dd>
-<dl class="exceptions">
-<dt class="exception first-child"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NOT_SUPPORTED_ERR
-</dt>
-<dd class="exception"> Raised if unitType is SVG_ANGLETYPE_UNKNOWN 
-or not a valid unit type constant (one of the other SVG_ANGLETYPE_* constants 
-defined on this interface).
-
-</dd>
-<dt class="exception"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR
-</dt>
-<dd class="exception"> Raised when the angle is
-<a href="#ReadOnlyAngle">read only</a>.
-
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
 
 
 <h3 id="InterfaceSVGAnimatedAngle">Interface SVGAnimatedAngle</h3>
@@ -4034,25 +3932,38 @@ is an arbitrary floating point number.
 
 <h3 id="InterfaceSVGRect">Interface SVGRect</h3>
 
-
-
 <p>Represents rectangular geometry.  Rectangles are defined as consisting
 of a (x,y) coordinate pair identifying a minimum X value, a minimum Y
 value, and a width and height, which are usually constrained to be
-non-negative.
-</p>
-
+non-negative.</p>
 
 <p id="ReadOnlyRect">An <a>SVGRect</a> object can be designated as <em>read only</em>,
 which means that attempts to modify the object will result in an exception
-being thrown, as described below.
-</p>
-<pre class="idl">interface <b>SVGRect</b> {
+being thrown, as described below.</p>
+
+<pre class="idl">[<a href="#__svg__SVGRect__constructor">Constructor</a>,
+ <a href="#__svg__SVGRect__constructor1">Constructor</a>(float x, float y, float width, float height)]
+interface <b>SVGRect</b> {
   attribute float <a href="types.html#__svg__SVGRect__x">x</a>;
   attribute float <a href="types.html#__svg__SVGRect__y">y</a>;
   attribute float <a href="types.html#__svg__SVGRect__width">width</a>;
   attribute float <a href="types.html#__svg__SVGRect__height">height</a>;
-};</pre><dl class="interface">
+};</pre>
+
+<dl class="interface">
+  <dt class="operations-header">Constructors:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGRect__constructor" class="operation first-child"><b>SVGRect</b>()</dt>
+      <dd class="operation">
+        <div>Creates a new <a>SVGRect</a> object with its x, y, width and height attributes set to 0.</div>
+      </dd>
+      <dt id="__svg__SVGRect__constructor" class="operation first-child"><b>SVGRect</b>(float x, float y, float width, float height)</dt>
+      <dd class="operation">
+        <div>Creates a new <a>SVGRect</a> object with its x, y, width and height attributes set to <var>x</var>, <var>y</var>, <var>width</var> and <var>height</var>, respectively.</div>
+      </dd>
+    </dl>
+  </dd>
 <dt class="attributes-header">Attributes:</dt>
 <dd>
 <dl class="attributes">
