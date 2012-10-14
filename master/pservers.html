@@ -603,6 +603,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
 
 </edit:with>
 
+<div class="ready-for-wider-review">
 <h3 id="RadialGradients">Radial gradients</h3>
 
 <edit:with element='radialGradient'>
@@ -729,11 +730,10 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
     <dd>
 
       <p>
-	<a>'cx'</a>, <a>'cy'</a> and <a>'r'</a> define the largest
-        (i.e., outermost) circle for the radial gradient. The
+	<a>'cx'</a>, <a>'cy'</a> and <a>'r'</a> define the end circle for the radial gradient. The
         gradient will be drawn such that the
         100% <a href="#GradientStops">gradient stop</a> is mapped
-        to the perimeter of this largest circle.
+        to the perimeter of this end circle.
       </p>
 
       <dl class="attrdef-svg2">
@@ -775,9 +775,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
       <p>
         A negative value is an error
         (see <a href="implnote.html#ErrorProcessing">Error
-        processing</a>).  A value of zero will cause the area to be
-        painted as a single color using the color and opacity of the
-        last <a href="pservers.html#GradientStops">gradient stop</a>.
+        processing</a>).
       </p>
 
       <dl class="attrdef-svg2">
@@ -795,11 +793,10 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
     <dd>
 
       <p>
-	<a>'fx'</a>, <a>'fy'</a>, and <a>'fr'</a> define the smallest
-        (i.e., innermost) circle for the radial gradient. The gradient
-        will be drawn such that the 0%
-        <a href="#GradientStops">gradient stop</a> is mapped to the
-        perimeter of this smallest circle.
+  <a>'fx'</a>, <a>'fy'</a>, and <a>'fr'</a> define the start circle for the radial gradient. The
+        gradient will be drawn such that the
+        0% <a href="#GradientStops">gradient stop</a> is mapped
+        to the perimeter of this start circle.
       </p>
 
       <dl class="attrdef-svg2">
@@ -869,6 +866,12 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
 
       <p>
 	<a>'fr'</a> is the radius of the focal circle. See <a>'fx'</a>.
+      </p>
+
+      <p>
+                A negative value is an error
+        (see <a href="implnote.html#ErrorProcessing">Error
+        processing</a>).
       </p>
 
       <dl class="attrdef-svg2">
@@ -990,14 +993,13 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
 
 <h4 id="RadialGradientNotes">Notes on radial gradients</h4>
 
-<p>If the point defined by <a>'fx'</a> and <a>'fy'</a> lies outside the
-circle defined by <a>'cx'</a>, <a>'cy'</a>, and <a>'r'</a>, then the user
-agent shall set the focal point to the intersection of the line from
-(<a>'cx'</a>, <a>'cy'</a>) to (<a>'fx'</a>, <a>'fy'</a>) with the circle
-defined by <a>'cx'</a>, <a>'cy'</a>, and <a>'r'</a>.</p>
+<p>If the start circle defined by <a>'fx'</a>, <a>'fy'</a> and <a>'fr'</a> lies
+outside the end circle defined by <a>'cx'</a>, <a>'cy'</a>, and <a>'r'</a>, effectively
+a cone is created, touched by the two circles. Areas outside the cone stay untouched by
+the gradient (transparent black).</p>
 
-<p class="issue">What happens if the circle defined by 'fx', 'fy', and 'fr'
-crosses outside of the circle defined by 'cx', 'cy', and 'cr'?</p>
+<p>If the start circle fully overlaps with the end circle, no
+gradient is drawn. The area stays untouched (transparent black).</p>
 
 <p class="issue">What color space is the weighted average performed
 (linearRGB/sRGB)?</p>
@@ -1042,6 +1044,7 @@ server.</p>
   image='yes' link='yes'/>
 
 </edit:with>
+</div>
 
 <h3 id="MeshGradients">Mesh gradients</h3>
 
