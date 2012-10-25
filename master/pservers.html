@@ -617,7 +617,10 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
 
   <dl class="attrdef-list-svg2">
 
-    <dt id="RadialGradientElementGradientUnitsAttribute"></dt>
+    <dt id="RadialGradientElementGradientUnitsAttribute">
+      <span class="adef">gradientUnits</span> =
+      "<span class="attr-value">userSpaceOnUse | objectBoundingBox</span>"
+    </dt>
     <dd>
 
       <p>
@@ -627,7 +630,9 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
 
       <dl class="attrdef-svg2">
 
+	<!--
 	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
+	-->
 	<dt><a>Lacuna value</a></dt>  <dd>objectBoundingBox</dd>
 	<dt><a>Animatable</a></dt>    <dd>yes</dd>
 
@@ -793,7 +798,8 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
     <dd>
 
       <p>
-  <a>'fx'</a>, <a>'fy'</a>, and <a>'fr'</a> define the start circle for the radial gradient. The
+	<a>'fx'</a>, <a>'fy'</a>, and <a>'fr'</a> define the start
+	circle for the radial gradient. The
         gradient will be drawn such that the
         0% <a href="#GradientStops">gradient stop</a> is mapped
         to the perimeter of this start circle.
@@ -825,6 +831,9 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
 	  of the innermost circle (<a>'fx'</a>,<a>'fy'</a>). The
 	  dashed lines show two gradient vectors. Vectors connect
 	  corresponding points on the inner and outer most circles.
+	  The region outside the outer circle is painted with the the
+	  last <a>'stop-color'</a> while the region inside the inner
+	  circle is painted with the first <a>'stop-color'</a>.
 	</p>
       </div>
 
@@ -869,7 +878,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
       </p>
 
       <p>
-                A negative value is an error
+        A negative value is an error
         (see <a href="implnote.html#ErrorProcessing">Error
         processing</a>).
       </p>
@@ -993,6 +1002,15 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
 
 <h4 id="RadialGradientNotes">Notes on radial gradients</h4>
 
+<p class="note">Changed in SVG 2. SVG 1.1 required that the focal
+point, if outside the end circle, be moved to be on the end
+circle. The change was made to align with Canvas.</p>
+
+<p class="annotation">Allowing the focal point to lie outside the end
+circle was resolved at the
+<a href="http://www.w3.org/2012/09/19-svg-minutes.html#item01">Rigi
+Kaltbad working group meeting</a>.</p>
+
 <p>If the start circle defined by <a>'fx'</a>, <a>'fy'</a> and <a>'fr'</a> lies
 outside the end circle defined by <a>'cx'</a>, <a>'cy'</a>, and <a>'r'</a>, effectively
 a cone is created, touched by the two circles. Areas outside the cone stay untouched by
@@ -1001,8 +1019,18 @@ the gradient (transparent black).</p>
 <p>If the start circle fully overlaps with the end circle, no
 gradient is drawn. The area stays untouched (transparent black).</p>
 
-<p class="issue">What color space is the weighted average performed
-(linearRGB/sRGB)?</p>
+<div class="figure">
+  <img
+     alt="Image of a radial gradient with the focal (start circle) outside
+	  the start circle."
+     src="images/pservers/radial_gradient_focus_reflect.png"/>
+
+  <p class="caption">A radial gradient with the focal (start) circle
+    outside the start circle. The focal circle is the
+    larger circle on the left. The gradient has
+    <span class="attr-value">spreadMethod="reflect"</span>.
+  </p>
+</div>
 
 <div class="figure">
   <img
@@ -1012,12 +1040,22 @@ gradient is drawn. The area stays untouched (transparent black).</p>
 
   <p class="caption">Two radial gradients with
   <span class="attr-value">spreadMethod="repeat"</span>. On the
-  left, the focus is just inside the right side of the circle
+  left, the focal point is just inside the right side of the circle
   defined by by <a>'cx'</a>, <a>'cy'</a>, and <a>'r'</a>. On the
-  right, the focus is on the circle. In this case, the area
+  right, the focal point is on the circle. In this case, the area
   painted to the right of the circumference has a fill equal to
   the weighted average of the colors in the gradient vector.</p>
 </div>
+
+<p class="note">The treatment of the area to the right of the gradient
+in the right-hand side of the above figure is different from that of
+Canvas where the area would be transparent black. The difference is to
+maintain compatibility with SVG 1.1.</p>
+
+<p class="annotation">The color space for the weighted average is the
+same as in which the gradient is interpolated. See
+<a href="http://www.w3.org/2012/09/19-svg-minutes.html#item01">Rigi
+Kaltbad working group meeting</a>.</p>
 
 <p><a href="styling.html#SVGStylingProperties">Properties</a>
 inherit into the <a>'radialGradient'</a> element from its ancestors;
