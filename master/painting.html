@@ -727,7 +727,7 @@ and <span class="property">'stroke-miterlimit'</span> properties</h3>
   </tr>
   <tr>
     <th>Value:</th>
-    <td>miter | round | bevel</td>
+    <td>miter | round | bevel | arcs </td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -776,12 +776,33 @@ the <a href="implnote.html#PathElementImplementationNotes">path implementation n
   <dt><span class='prop-value'>bevel</span></dt>
   <dd>This value indicates that a bevelled corner is to be used to join path segments.
   The bevel shape is a triangle that fills the area between the two stroked segments.</dd>
+
+  <dt><span class='prop-value'>arcs</span></dt>
+  <dd>This value indicates that an arcs corner is to be used to join
+    path segments. The arcs shape is formed by extending the outer
+    edges of the stroke at the join point with arcs that have the same
+    curvature as the outer edges at the join point.</dd>
 </dl>
 
+<p class="issue">Is there a better name than <i>arcs</i> for this property value?
+I (Tav) prefer <i>talon</i> (as in bird claw). The term <i>arc</i> has other uses
+in SVG and in graphics in general. The term <i>talon</i> would be unique as well
+as fit in with the existing property value names for line-join.</p>
+
+<p class="issue">How does the miter limit apply? (It's hard to get really
+long joins.) Do you fall back to miter or bevel? (Probably miter as it is
+more in the style.)</p>
+
+<p class="note">The <span class='prop-value'>arcs</span> value is new in SVG 2.
+It was added to provide a better looking join when the path segments at the
+join are curved.</p>
+
+<p class="annotation">Adding new line join was approved at <a href="http://www.w3.org/2012/09/19-svg-minutes.html#item08">Rigi Kaltbad group meeting</a>.</p>
+
 <div class="figure">
-  <img class="bordered" src="images/painting/linejoin.svg"
-       alt="Image showing three paths, each with a different line join."/>
-  <p class="caption">The three types of line joins.</p>
+  <img class="bordered" src="images/painting/linejoin-four.svg"
+       alt="Image showing four paths, each with a different line join."/>
+  <p class="caption">The four types of line joins.</p>
 </div>
 
 <table class="propdef">
@@ -830,6 +851,8 @@ far beyond the thickness of the line stroking the path. The
 <a>'stroke-miterlimit'</a> imposes a limit on the ratio of the miter
 length to the <a>'stroke-width'</a>. When the limit is exceeded, the
 join is converted from a miter to a bevel.</p>
+
+<p class="issue">How should this apply to arcs line-joins?</p>
 
 <dl>
   <dt><span class='prop-value'>&lt;number&gt;</span></dt>
@@ -1275,6 +1298,23 @@ a subpath is determined as follows:</p>
   <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> as the two endpoints of
   the arc.</li> 
 
+  <li>If <a>'stroke-linejoin'</a> is <span class="prop-value">arcs</span>,
+    then find the circles that are tangent to the stroke edges at
+    <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> with the
+    same curvature as the edges at those points (see below). If both
+    curvatures are zero fall through to <span class="prop-value">miter</span>.
+    Extend the stroke edges using these circles (or a line, in the case
+    of zero curvature). If the two circles (or circle and line)
+    intersect, return the area inside the region defined by the lines
+    that connect <var>P</var> with <var>P</var><sub>1</sub>
+    and <var>P</var><sub>2</sub> and the arcs defined by the circles
+    (or arc and line) between the closest intersection point
+    to <var>P</var>, and <var>P</var><sub>1</sub> and
+    <var>P</var><sub>2</sub>. If the two circles (or circle and line)
+    do not intersect, fall through to <span class="prop-value">miter</span>.
+    Note that the curvatures are calculated in user-space before any
+    transforms are applied.</li>
+
   <li>Let <var>θ</var> be the angle between <var>A</var> and <var>B</var>.</li>
 
   <li>If <a>'stroke-linejoin'</a> is <span class="prop-value">miter</span> and
@@ -1292,6 +1332,321 @@ a subpath is determined as follows:</p>
   The white line is the original path, which has two segments that come to a
   point, and the gray region is the stroke.</p>
 </div>
+
+<div class="figure">
+  <img class="bordered" src="images/painting/linejoin-construction-arcs.svg"
+       alt="Image showing the lines and points computed to construct an arcs line join."/>
+  <p class="caption">Construction of an arcs line join shape, shown in
+    pink. The white line is the original path, which has two segments
+    that come to a point, and the gray region is the stroke. The
+    dashed lines show circles that are tangent to and have the
+    curvature of the segments at the join.  The olive-green circles
+    (concentric with the dashed circles) define the join shape.</p>
+</div>
+
+<h3 id="CurvatureCalculation">Computing the circles for the <span class="prop-value">arcs</span>
+'stroke-linejoin'</h3>
+
+<p>The <span class="prop-value">arcs</span> <a>'stroke-linejoin'</a>
+  requires finding circles that are both tangent to and have the same
+  curvatures as the outer stroke edges at the ends of path
+  segments. To find one of these circles, first calculate the
+  curvature <var>&#x03BA;</var> of the path segment at its end (see
+  below). Next, find the radius of a circle corresponding to this
+  curvature: <var>r</var> = 1/<var>&#x03BA;</var>. Increase or
+  decrease the radius by one half of the stroke width to account for
+  the stroke: <var>r<sub>c</sub></var> = <var>r</var> &#x00b1; &#xbd;
+  stroke-width. The center of the circle will be on a line normal to
+  the path end a distance of <var>r<sub>c</sub></var> away from the
+  outer stroke edge at the end.</p>
+
+<p>For a line: the curvature is infinite. Extend the outer stroke edge by a line.</p>
+
+<p>For an elliptical arc:</p>
+<p class="issue">Need to do. This isn't as trivial as it first looks since we have to deal
+  with rx != ry and an arbitrary rotation.</p>
+
+<p>For a quadratic Bézier:
+
+  <div role="math" aria-describedby="math-quadratic-start">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+      <mi>&#x03BA;<!-- κ --></mi>
+      <mo stretchy="false">(</mo>
+      <mn>0</mn>
+      <mo stretchy="false">)</mo>
+      <mo>=</mo>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mn>1</mn>
+	  <mn>2</mn>
+	</mfrac>
+      </mrow>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mrow>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&#x2212;<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>0</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+            <mo>&#x00D7;<!-- × --></mo>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <mo>&#x2212;<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+	  </mrow>
+	  <mrow>
+            <mrow class="MJX-TeXAtom-ORD">
+              <mo stretchy="false">|</mo>
+            </mrow>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&#x2212;<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>0</mn>
+            </msub>
+            <msup>
+              <mrow class="MJX-TeXAtom-ORD">
+		<mo stretchy="false">|</mo>
+              </mrow>
+              <mn>3</mn>
+            </msup>
+	  </mrow>
+	</mfrac>
+      </mrow>
+    </math>
+    <pre id="math-quadratic-start">$$\kappa(0) = {2\over3}{(P_1-P_0)\times((P_0-P_1)+(P_2-P_1))\over|P_1-P_0|^3}$$</pre>
+  </div>
+
+  <div role="math" aria-describedby="math-quadratic-end">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+      <mi>&#x03BA;<!-- κ --></mi>
+      <mo stretchy="false">(</mo>
+      <mn>1</mn>
+      <mo stretchy="false">)</mo>
+      <mo>=</mo>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mn>1</mn>
+	  <mn>2</mn>
+	</mfrac>
+      </mrow>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mrow>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <mo>&#x2212;<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+            <mo>&#x00D7;<!-- × --></mo>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>0</mn>
+            </msub>
+            <mo>&#x2212;<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+	  </mrow>
+	  <mrow>
+            <mrow class="MJX-TeXAtom-ORD">
+              <mo stretchy="false">|</mo>
+            </mrow>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <mo>&#x2212;<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <msup>
+              <mrow class="MJX-TeXAtom-ORD">
+		<mo stretchy="false">|</mo>
+              </mrow>
+              <mn>3</mn>
+            </msup>
+	  </mrow>
+	</mfrac>
+      </mrow>
+    </math>
+    <pre id="math-quadratic-start">$$\kappa(0) = {2\over3}{(P_1-P_0)\times((P_0-P_1)+(P_2-P_1))\over|P_1-P_0|^3}$$</pre>
+  </div>
+
+  Where <var>&#x03BA;(0)</var> and <var>&#x03BA;(1)</var> are the
+  signed curvatures at the start and end of the path segment
+  respectively, and the <var>P</var>'s are the three points that
+  define the quadratic Bézier.</p>
+
+<p>For a cubic Bézier:
+
+  <div role="math" aria-describedby="math-cubic-start">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+      <mi>&#x03BA;<!-- κ --></mi>
+      <mo stretchy="false">(</mo>
+      <mn>0</mn>
+      <mo stretchy="false">)</mo>
+      <mo>=</mo>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mn>2</mn>
+	  <mn>3</mn>
+	</mfrac>
+      </mrow>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mrow>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&#x2212;<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>0</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+            <mo>&#x00D7;<!-- × --></mo>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <mo>&#x2212;<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+	  </mrow>
+	  <mrow>
+            <mrow class="MJX-TeXAtom-ORD">
+              <mo stretchy="false">|</mo>
+            </mrow>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&#x2212;<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>0</mn>
+            </msub>
+            <msup>
+              <mrow class="MJX-TeXAtom-ORD">
+		<mo stretchy="false">|</mo>
+              </mrow>
+              <mn>3</mn>
+            </msup>
+	  </mrow>
+	</mfrac>
+      </mrow>
+    </math>
+    <pre id="math-cubic-start">$$\kappa(0) = {2\over3}{(P_1-P_0)\times((P_0-P_1)+(P_2-P_1))\over|P_1-P_0|^3}$$</pre>
+  </div>
+
+  <div role="math" aria-describedby="math-cubic-end">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+      <mi>&#x03BA;<!-- κ --></mi>
+      <mo stretchy="false">(</mo>
+      <mn>1</mn>
+      <mo stretchy="false">)</mo>
+      <mo>=</mo>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mn>2</mn>
+	  <mn>3</mn>
+	</mfrac>
+      </mrow>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mrow>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>3</mn>
+            </msub>
+            <mo>&#x2212;<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+            <mo>&#x00D7;<!-- × --></mo>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>&#x2212;<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+	  </mrow>
+	  <mrow>
+            <mrow class="MJX-TeXAtom-ORD">
+              <mo stretchy="false">|</mo>
+            </mrow>
+            <msub>
+              <mi>P</mi>
+              <mn>3</mn>
+            </msub>
+            <mo>&#x2212;<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <msup>
+              <mrow class="MJX-TeXAtom-ORD">
+		<mo stretchy="false">|</mo>
+              </mrow>
+              <mn>3</mn>
+            </msup>
+	  </mrow>
+	</mfrac>
+      </mrow>
+    </math>
+    <pre id="math-cubic-end">$$\kappa(1) = {2\over3}{(P_3-P_2)\times((P_1-P_2)+(P_3-P_2))\over|P_3-P_2|^3}$$</pre>
+  </div>
+
+  Where <var>&#x03BA;(0)</var> and <var>&#x03BA;(1)</var> are the
+  signed curvatures at the start and end of the path segment
+  respectively, and the <var>P</var>'s are the four points that define
+  the cubic Bézier. Note, if
+  <var>P<sub>0</sub></var> and <var>P<sub>1</sub></var>, or
+  <var>P<sub>2</sub></var> and <var>P<sub>3</sub></var> are degenerate, the
+  curvature will be infinite and a line should be used in constructing the join.</p>
+
 
 <h2 id="VisibilityControl">Controlling visibility: the effect of the <span
 class="property">'display'</span> and <span class="property">'visibility'</span>
