@@ -17,33 +17,45 @@
 
 <h1>Painting: Filling, Stroking and Marker Symbols</h1>
 
+<div class="ready-for-wg-review">
 <h2 id="Introduction">Introduction</h2>
 
-<p><a>'path'</a> elements, <a>'text'</a> elements and <a href="shapes.html">basic shapes</a> can be
-<strong>filled</strong> (which means painting the interior of
-the object) and <strong>stroked</strong> (which means painting
-along the outline of the object). Filling and stroking both can
-be thought of in more general terms as
-<strong>painting</strong> operations.</p>
-
-<p>Certain elements (i.e., <a>'path'</a>, <a>'polyline'</a>, <a>'polygon'</a>
-and <a>'line'</a> elements) can also have
-<a href="painting.html#Markers">marker symbols</a> drawn at their vertices.</p>
-
-<p>With SVG, you can paint (i.e., fill or stroke) with:</p>
+<p>Graphical elements that define a shape – <a>'path'</a> elements, <a>basic shapes</a>
+and <a>text content elements</a> – are rendered by being <strong>filled</strong>,
+which is painting the interior of the object, and <strong>stroked</strong>, which is
+painting along the outline of the object.  Filling and stroking are both
+<strong>painting</strong> operations.  SVG 2 supports a number of
+different paints that the fill and stroke of a graphical element can be painted with:</p>
 
 <ul>
   <li>a single color</li>
-  <li>a gradient (linear or radial)</li>
-  <li>a pattern (vector or image, possibly tiled)</li>
-  <li>custom paints available via <a href="extend.html">extensibility</a></li>
+  <li>a gradient (linear, radial or mesh)</li>
+  <li>a pattern (vector or raster, possibly tiled)</li>
+  <li>other images as specified using CSS Image Value syntax [<a href="refs.html#ref-CSS3IMAGES">CSS3IMAGES</a>]</li>
 </ul>
 
+<p>The paint to use for filling and stroking an element is specified using the
+<a>'fill'</a> and <a>'stroke'</a> properties.  The following section describes
+the different values that can be used for these properties.</p>
+
+<p>Other properties, such as <a>'fill-opacity'</a> and <a>'stroke-width'</a>,
+also have an effect on the way fill and stroke paint is applied to the
+canvas.  The <a href='#FillProperties'>Fill properties</a> and <a href='#StrokeProperties'>Stroke properties</a>
+sections below describe these properties.</p>
+
+<p>Certain elements – <a>'path'</a>, <a>'polyline'</a>, <a>'polygon'</a>
+and <a>'line'</a> elements – can also have <strong>marker symbols</strong>
+drawn at their vertices or at other positions along the path that
+they describe.  The <a href='#Markers'>Markers</a> section below describes
+how markers can be defined and used.</p>
+
+<!--
 <p>SVG uses the general notion of a <strong>paint server</strong>. Paint
 servers are specified using a <a href="linking.html#IRIReference">IRI reference</a>
 on a <a>'fill'</a> or <a>'stroke'</a> property.
 <a href="pservers.html">Gradients and patterns</a> are just specific types of
 paint servers.</p>
+-->
 
 <h2 id="SpecifyingPaint">Specifying paint</h2>
 
@@ -68,102 +80,79 @@ paint servers.</p>
   </table>
 </div>
 
-<p class="issue">Gecko supports values with slightly different names – -moz-objectFill, -moz-objectFillOpacity,
--moz-objectValue (for stroke width), etc. – so we might want to use those names instead.</p>
+<p>Properties <a>'fill'</a> and <a>'stroke'</a> take on a value of type <a>&lt;paint&gt;</a>:</p>
 
-<p>Properties <a>'fill'</a> and <a>'stroke'</a> take on a value of type
-<span class="prop-value">&lt;paint&gt;</span>, which is specified as follows:</p>
+<div class="definition">
+  <dfn id="DataTypePaint">&lt;paint&gt;</dfn> =<br/>
+  <div style="margin-left: 2em">
+    none |<br/>
+    <a>&lt;color&gt;</a> |<br/>
+    [ <a>&lt;color&gt;</a>? <a>&lt;icccolor&gt;</a> ] |<br/>
+    <a>&lt;gradient&gt;</a> |<br/>
+    [ <a>&lt;funciri&gt;</a> [ none | <a>&lt;color&gt;</a> | [ <a>&lt;color&gt;</a>? <a>&lt;icccolor&gt;</a> ] ]? ] |<br/>
+    context-fill |<br/>
+    context-stroke
+  </div>
+</div>
 
-    <table>
-      <tr>
-        <td><span
-        class="property">&lt;paint&gt;</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-        <td><span class="prop-value">none |<br />
-         currentColor |<br />
-         <a href="types.html#DataTypeGradient">&lt;gradient&gt;</a> |<br />
-         <a href="types.html#DataTypeColor">&lt;color&gt;</a>
-         [<a href="types.html#DataTypeICCColor">&lt;icccolor&gt;</a>] |<br />
-          <a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a> [ none | currentColor | <a href="types.html#DataTypeColor">&lt;color&gt;</a>
-         [<a href="types.html#DataTypeICCColor">&lt;icccolor&gt;</a>] ] |<br />
-         <a class="noxref"
-        href="http://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html#value-def-inherit">
-        <span
-        class="value-inst-inherit noxref">inherit</span></a></span></td>
-      </tr>
-    </table>
+<p>Values have the following meaning:</p>
 
 <dl>
   <dt>none</dt>
   <dd>Indicates that no paint is applied.</dd>
 
-  <dt>currentColor</dt>
-  <dd>Indicates that painting is done using the current animated value of the color specified
-  by the <a>'color'</a> property. This
-  mechanism is provided to facilitate sharing of color
-  attributes between parent grammars such as other (non-SVG)
-  XML. This mechanism allows you to define a style in your HTML
-  which sets the <span class='property'>'color'</span> property and then pass that style to
-  the SVG user agent so that your SVG text will draw in the
-  same color.</dd>
+  <dt>&lt;color&gt;</dt>
+  <dd>A solid color as <a href="http://www.w3.org/TR/css3-color/#colorunits">defined in <cite>CSS Color Module Level 3</cite></a>.
+  [<a href="refs.html#ref-CSS3COLOR">CSS3COLOR</a>]  All forms of &lt;color&gt;
+  defined by that specification are valid for use as a <a>&lt;paint&gt;</a>
+  value.  This includes the basic color keywords,
+  RGB &amp; RGBA color values, the <span class="prop-value">transparent</span>
+  value, HSL &amp; HSLA color values, the extended color keywords,
+  the <span class="prop-value">currentColor</span> value,
+  and the CSS2 UI colors.  Note that when <span class='prop-value'>currentColor</span>
+  is used, it refers to the current animated value of the <a>'color'</a> property.</dd>
 
-  <dt><strong><a href="types.html#DataTypeGradient">&lt;gradient&gt;</a></strong></dt>
-  <dd><a href="types.html#DataTypeGradient">&lt;gradient&gt;</a> is a CSS gradient that can be
-  set as a paint server. Percentage values
-  get resolved against the bounding box of the element to which the gradient is applied.</dd>
+  <dt><a href="types.html#DataTypeGradient">&lt;gradient&gt;</a></dt>
+  <dd>A CSS gradient value as <a href="http://www.w3.org/TR/css3-images/#gradients">defined in
+  <cite>CSS Image Values and Replaced Content Module Level 3</cite></a>. Percentage values
+  are resolved against the bounding box of the element to which the gradient is applied.</dd>
 
-  <dt><strong>&lt;color&gt; [&lt;icccolor&gt;]</strong></dt>
-  <dd><a href="types.html#DataTypeColor">&lt;color&gt;</a> is
-  the explicit color (in the sRGB color space [<a href='refs.html#ref-SRGB'>SRGB</a>])
-  to be used to paint the current object. SVG supports all of
-  the syntax alternatives for &lt;color&gt;
-  <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/syndata.html#value-def-color">defined in CSS 2.1</a>
-  ([<a href="refs.html#ref-CSS21">CSS21</a>], section 4.3.6), with the
-  exception that SVG contains an expanded list of <a
-  href="types.html#ColorKeywords">recognized color keywords
-  names</a>. If an optional ICC color specification [<a href='refs.html#ref-ICC42'>ICC42</a>] is
-  provided, then the user agent searches the color profile
-  description database for a <a
-  href="color.html#ColorProfileDescriptions">color profile
-  description</a> entry whose name descriptor matches
-  the &lt;author-ident&gt; part of the <a href="types.html#DataTypeICCColor">&lt;icccolor&gt;</a>
-  and uses the last matching entry that is found.
-  (If no match is found, then the ICC color specification is
-  ignored.) The comma and/or whitespace separated list
-  of <a href="types.html#DataTypeNumber">&lt;number&gt;</a>s
-  is a set of ICC-profile-specific color values.
-  (In most cases, the <a href="types.html#DataTypeNumber">&lt;number&gt;</a>s will
-  be in the range 0 to 1.) On platforms which support ICC-based
-  color management, the <a href="types.html#DataTypeICCColor">&lt;icccolor&gt;</a> gets
-  precedence over the <a href="types.html#DataTypeColor">&lt;color&gt;</a> (which is in the sRGB color
-  space). Note that color interpolation occurs in an RGB color
-  space even if an ICC-based color specification is provided
-  (see <a>'color-interpolation'</a>).
+  <dt>&lt;color&gt;? &lt;icccolor&gt;</dt>
+  <dd>An ICC color [<a href='refs.html#ref-ICC42'>ICC42</a>] with an optional sRGB fallback color if the ICC color cannot
+  be used.  The user agent searches the color profile description
+  database for a <a href="color.html#ColorProfileDescriptions">color profile description</a>
+  entry whose name descriptor matches the &lt;author-ident&gt; part of the
+  <a>&lt;icccolor&gt;</a> and uses the last matching entry that is found.
+  If no match is found, then the sRGB fallback color is used instead,
+  if provided; otherwise the document is in error
+  (see <a href="implnote.html#ErrorProcessing">Error processing</a>).
+  The comma and/or whitespace separated list of <a>&lt;number&gt;</a>s
+  within the <a>&lt;icccolor&gt;</a> is a set of ICC-profile-specific color values.
+  (In most cases, the <a>&lt;number&gt;</a>s will be in the range 0 to 1.)
+  Note that color interpolation occurs in an RGB color space even if an
+  ICC-based color specification is provided (see <a>'color-interpolation'</a>).
   For more on ICC-based colors, refer to <a
   href="color.html#ColorProfileDescriptions">Color profile
   descriptions</a>.</dd>
 
-  <dt><strong><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a><br />
-   &nbsp;&nbsp;&nbsp;[ none |<br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;currentColor |<br />
-   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;color&gt;
-  [&lt;icccolor&gt;] ]</strong></dt>
-  <dd><a href="types.html#DataTypeFuncIRI">&lt;funciri&gt;</a> is used to identify a <a
-  href="pservers.html">paint server</a> such as a gradient, a
-  pattern or a custom paint defined by an extension (see <a
-  href="extend.html">Extensibility</a>). The &lt;funciri&gt;
-  points to the paint server (e.g., a <a
-  href="pservers.html#Gradients">gradient</a> or <a
-  href="pservers.html#Patterns">pattern</a>) to be
-  used to paint the current object. If the <a
-  href="linking.html#IRIReference">IRI reference</a>
-  is not valid (e.g., it points to an object that doesn't exist
-  or the object is not a valid paint server), then the paint
-  method following the &lt;funciri&gt; (i.e., <span class='prop-value'>none |
-  currentColor | &lt;color&gt; [&lt;icccolor&gt;]</span>
-  is used if provided; otherwise, the document is in error (see
-  <a href="implnote.html#ErrorProcessing">Error
-  processing</a>).</dd>
+  <dt><a>&lt;funciri&gt;</a> [ none | <a>&lt;color&gt;</a> | [ <a>&lt;color&gt;</a>? <a>&lt;icccolor&gt;</a> ] ]?</dt>
+  <dd>A reference to a <a href="pservers.html">paint server</a> element with an optional
+  fallback color or <span class="prop-value">none</span>.
+  The <a>&lt;funciri&gt;</a> is used to identify a <a>'solidColor'</a> element,
+  <a>gradient element</a> or <a>'pattern'</a> element,
+  which defines the paint to use.  If the <a>IRI reference</a>
+  is not valid (e.g., it points to an element that does not exist
+  or the element is not a valid paint server), then the fallback
+  value is used, if provided; otherwise, the document is in error
+  (see <a href="implnote.html#ErrorProcessing">Error processing</a>).</dd>
+
+  <dt>context-fill</dt>
+  <dt>context-stroke</dt>
+  <dd>The computed value of the <a>'fill'</a> or <a>'stroke'</a>
+  property, respectively, of the <a>context element</a>.  If there
+  is no context element, then no paint is applied.</dd>
 </dl>
+</div>
 
 <div class="ready-for-wider-review">
 <h2 id="FillProperties">Fill properties</h2>
@@ -2082,10 +2071,11 @@ goes outside of the marker's viewport will be clipped.</p>
 
 <p><a href="styling.html#SVGStylingProperties">Properties</a> inherit into the
 <a>'marker element'</a> element from its ancestors; properties do <em>not</em>
-inherit from the element referencing the <a>'marker element'</a> element.</p>
-
-<p class="issue">Mention the new paint keywords that allow referencing
-object fill/stroke, etc.</p>
+inherit from the element referencing the <a>'marker element'</a> element.
+<span class="ready-for-wg-review">Note however that by using the <span class="prop-value">context-stroke</span>
+value for the <a>'fill'</a> or <a>'stroke'</a> on elements in its definition,
+a single marker can be designed to match the style of the element referencing
+the marker.</span></p>
 
 <p><a>'marker element'</a> elements are only rendered directly
 when they are used as children of a <a>markable element</a>
@@ -2233,18 +2223,22 @@ will be rendered on that final vertex.</p>
 <p class="note">Note that <a>'marker-start'</a> and <a>'marker-end'</a>
 refer to the first and last vertex of the entire path, not each subpath.</p>
 
+<div class="ready-for-wg-review">
 <div class="example">
   <p>The following example shows a triangular marker symbol used as a
-  <a>vertex marker</a> to form an arrowhead at the end of a path.</p>
+  <a>vertex marker</a> to form an arrowhead at the end of two paths.</p>
 
   <edit:includefile href='images/painting/marker.svg'/>
 
   <div class="figure">
-    <img class="bordered" src="images/painting/marker.svg"
+    <img class="bordered" src="images/painting/marker-rendering.svg"
          alt="Image showing the use of an automatically oriented marker."/>
     <p class="caption">The triangle is placed at the end of the path and
-    oriented automatically so that it points in the right direction.</p>
+    oriented automatically so that it points in the right direction.
+    The use of <span class="prop-value">context-stroke</span> ensures
+    the fill of the triangle matches the stroke of each <a>'path'</a>.</p>
   </div>
+</div>
 </div>
 
 <h3 id="SegmentMarkers">Segment markers: the <span class="property">'marker-segment'</span>
