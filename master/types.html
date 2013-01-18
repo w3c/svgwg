@@ -4128,8 +4128,7 @@ Corresponds to value <span class="attr-value">'objectBoundingBox'</span>.
 </dd>
 </dl>
 
-
-<h3 id="InterfaceSVGLocatableElement">Interface SVGLocatableElement</h3>
+<h3 id="InterfaceSVGGraphicsElement">Interface SVGGraphicsElement</h3>
 
 <div class="annotation svg2-requirement">
   <table>
@@ -4152,232 +4151,179 @@ Corresponds to value <span class="attr-value">'objectBoundingBox'</span>.
   </table>
 </div>
 
-<p class="issue">Now that there are no elements that implement <a>SVGLocatableElement</a>
-but not <a>SVGTransformableElement</a>, can we just merge these interfaces?  <a>SVGSVGElement</a>,
-which was the one element like this, now inherits from <a>SVGGraphicsElement</a>.</p>
-
-<p>Interface <a>SVGLocatableElement</a> is for all elements to which the
-<a>'transform'</a> property applies or which can have a bounding box in current user space.</p>
-
-<pre class="idl">interface <b>SVGLocatableElement</b> : <a>SVGElement</a> {
-
-  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>? <a href="types.html#__svg__SVGLocatableElement__nearestViewportElement">nearestViewportElement</a>;
-  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>? <a href="types.html#__svg__SVGLocatableElement__farthestViewportElement">farthestViewportElement</a>;
-
-  <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="types.html#__svg__SVGLocatableElement__getBBox">getBBox</a>();
-  <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="types.html#__svg__SVGLocatableElement__getStrokeBBox">getStrokeBBox</a>();
-  <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a>? <a href="types.html#__svg__SVGLocatableElement__getCTM">getCTM</a>();
-  <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a>? <a href="types.html#__svg__SVGLocatableElement__getScreenCTM">getScreenCTM</a>();
-  <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <a href="types.html#__svg__SVGLocatableElement__getTransformToElement">getTransformToElement</a>(<a class="idlinterface" href="types.html#InterfaceSVGLocatableElement">SVGLocatableElement</a> element);
-};</pre><dl class="interface">
-<dt class="attributes-header">Attributes:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__svg__SVGLocatableElement__nearestViewportElement" class="attribute first-child"><b>nearestViewportElement</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>?)</span></dt>
-<dd class="attribute">
-<div>
-The element which established the current viewport. Often, the nearest
-ancestor <a>'svg'</a> element. Null if the current element is the
-<a>outermost svg element</a>.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGLocatableElement__farthestViewportElement" class="attribute"><b>farthestViewportElement</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>?)</span></dt>
-<dd class="attribute">
-<div>
-The farthest ancestor <a>'svg'</a> element. Null if the current element
-is the <a>outermost svg element</a>.
-
-</div>
-</dd>
-</dl>
-</dd>
-<dt class="operations-header">Operations:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__svg__SVGLocatableElement__getBBox" class="operation first-child"><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <b>getBBox</b>()
-</dt>
-<dd class="operation">
-<div>
-Returns the tight bounding box in current user space (i.e., after
-application of the <a>'transform'</a> property) on the
-geometry of all contained graphics elements, exclusive of stroking, clipping, masking and
-filter effects. Note that getBBox must return the actual bounding box
-at the time the method was called, even in case the element has not
-yet been rendered. 
-
-
-</div>
-<dl class="operation">
-<dt class="returns-header">Returns</dt>
-<dd>
-<div> An <a>SVGRect</a> object that defines the bounding box.
-
-</div>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGLocatableElement__getStrokeBBox" class="operation"><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <b>getStrokeBBox</b>()
-</dt>
-<dd class="operation">
-<div>
-Returns the union of the tight bounding box (see <a>getBBox</a>), the stroke
-bounding box and the stroke bounding box of applied markers in current user space
-(i.e., after application of the <a>'transform'</a> property) on the
-geometry of all contained graphics elements, exclusive of clipping, masking and
-filter effects. The stroke bounding box takes the stroke style
-properties <a>'stroke-width'</a>, <a>'stroke-linecap'</a>, <a>'stroke-linejoin'</a>,
-<a>'stroke-miterlimit'</a>, <a>'stroke-dasharray'</a> and <a>'stroke-dashoffset'</a>
-into account. Note that getStrokeBBox must
-return the actual union of the bounding box at the time the method was called,
-even in case the element has not yet been rendered.
-</div>
-<dl class="operation">
-<dt class="returns-header">Returns</dt>
-<dd>
-<div> An <a>SVGRect</a> object that defines the stroke bounding box.
-
-</div>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGLocatableElement__getCTM" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a>? <b>getCTM</b>()
-</dt>
-<dd class="operation">
-<div>
-Returns the transformation matrix from current user units (i.e., after
-application of the <a>'transform'</a> property) to the viewport
-coordinate system for the <a>nearestViewportElement</a>. Note that null 
-is returned if this element is not hooked into the document tree.
-
-
-</div>
-<dl class="operation">
-<dt class="returns-header">Returns</dt>
-<dd>
-<div> An <a>SVGMatrix</a> object that defines the CTM.
-
-</div>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGLocatableElement__getScreenCTM" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a>? <b>getScreenCTM</b>()
-</dt>
-<dd class="operation">
-<div>
-Returns the transformation matrix from current user units (i.e., after
-application of the <a>'transform'</a> property) to the parent
-user agent's notice of a "pixel". For display devices, ideally this
-represents a physical screen pixel. For other devices or environments
-where physical pixel sizes are not known, then an algorithm similar to
-the CSS 2.1 definition of a "pixel" can be used instead.  Note that null 
-is returned if this element is not hooked into the document tree. This 
-method would have been more aptly named as <code>getClientCTM</code>, 
-but the name <code>getScreenCTM</code> is kept for historical reasons.
-
-
-</div>
-<dl class="operation">
-<dt class="returns-header">Returns</dt>
-<dd>
-<div> An <a>SVGMatrix</a> object that defines the given
-transformation matrix.
-
-</div>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGLocatableElement__getTransformToElement" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <b>getTransformToElement</b>(<a class="idlinterface" href="types.html#InterfaceSVGLocatableElement">SVGLocatableElement</a> <var>element</var>)
-</dt>
-<dd class="operation">
-<div>
-Returns the transformation matrix from the user coordinate system on the
-current element (after application of the <a>'transform'</a> property)
-to the user coordinate system on parameter <var>element</var>
-(after application of its <a>'transform'</a> property). 
-
-
-</div>
-<dl class="operation">
-<dt class="parameters-header">Parameters</dt>
-<dd>
-<ol class="parameters">
-<li class="parameter first-child">
-<div><a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var></div> 
-<div> The target element.
-
-</div>
-</li>
-</ol>
-</dd>
-<dt class="returns-header">Returns</dt>
-<dd>
-<div> An <a>SVGMatrix</a> object that defines the transformation.
-
-</div>
-</dd>
-<dt class="exceptions-header">Exceptions</dt>
-<dd>
-<dl class="exceptions">
-<dt class="exception first-child"><a>InvalidStateError</a>
-</dt>
-<dd class="exception"> Raised if the currently
-defined transformation matrices make it impossible to compute the
-given matrix (e.g., because one of the transformations is singular). 
-
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-<h3 id="InterfaceSVGTransformableElement">Interface SVGTransformableElement</h3>
-
-<p>Interface <a>SVGTransformableElement</a> contains properties and methods that
-apply to all elements to which the <a>'transform'</a> property applies.</p>
-
-<pre class="idl">interface <b>SVGTransformableElement</b> : <a>SVGLocatableElement</a> {
-  readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedTransformList">SVGAnimatedTransformList</a> <a href="types.html#__svg__SVGTransformableElement__transform">transform</a>;
-};</pre><dl class="interface">
-<dt class="attributes-header">Attributes:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__svg__SVGTransformableElement__transform" class="attribute first-child"><b>transform</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedTransformList">SVGAnimatedTransformList</a>)</span></dt>
-<dd class="attribute">
-<div>
-Corresponds to attribute <a>'transform'</a> on the given element.
-
-</div>
-</dd>
-</dl>
-</dd>
-</dl>
-
-<p class="issue">This needs to be updated to reflect the value of the <a>'transform'</a>
-property.</p>
-
-<h3 id="InterfaceSVGGraphicsElement">Interface SVGGraphicsElement</h3>
-
 <p>Interface <a>SVGGraphicsElement</a> represents SVG elements whose primary purpose
-is to directly render graphics into a group.</p>
+is to directly render graphics into a group. The
+<a>'transform'</a> property applies to all <a>SVGGraphicsElement</a>. All <a>SVGGraphicsElement</a>
+have a bounding box in current user space.</p>
 
-<pre class="idl">interface <b>SVGGraphicsElement</b> : <a>SVGTransformableElement</a> {
+<pre class="idl">interface <b>SVGGraphicsElement</b> : <a>SVGElement</a> {
+  readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedTransformList">SVGAnimatedTransformList</a> <a href="types.html#__svg__SVGGraphicsElement__transform">transform</a>;
+
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>? <a href="types.html#__svg__SVGGraphicsElement__nearestViewportElement">nearestViewportElement</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>? <a href="types.html#__svg__SVGGraphicsElement__farthestViewportElement">farthestViewportElement</a>;
+
+  <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="types.html#__svg__SVGGraphicsElement__getBBox">getBBox</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="types.html#__svg__SVGGraphicsElement__getStrokeBBox">getStrokeBBox</a>();
+  <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a>? <a href="types.html#__svg__SVGGraphicsElement__getCTM">getCTM</a>();
+  <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a>? <a href="types.html#__svg__SVGGraphicsElement__getScreenCTM">getScreenCTM</a>();
+  <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <a href="types.html#__svg__SVGGraphicsElement__getTransformToElement">getTransformToElement</a>(<a class="idlinterface" href="types.html#InterfaceSVGGraphicsElement">SVGGraphicsElement</a> element);
 };
 
 <a>SVGGraphicsElement</a> implements <a>SVGTests</a>;</pre>
 
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGGraphicsElement__transform" class="attribute first-child"><b>transform</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedTransformList">SVGAnimatedTransformList</a>)</span></dt>
+      <dd class="attribute">
+        <div>
+          Corresponds to attribute <a>'transform'</a> on the given element.
+        </div>
+      </dd>
+      <dt id="__svg__SVGGraphicsElement__nearestViewportElement" class="attribute first-child"><b>nearestViewportElement</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>?)</span></dt>
+      <dd class="attribute">
+        <div>
+          The element which established the current viewport. Often, the nearest
+          ancestor <a>'svg'</a> element. Null if the current element is the
+          <a>outermost svg element</a>.
+        </div>
+      </dd>
+      <dt id="__svg__SVGGraphicsElement__farthestViewportElement" class="attribute"><b>farthestViewportElement</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>?)</span></dt>
+      <dd class="attribute">
+        <div>
+          The farthest ancestor <a>'svg'</a> element. Null if the current element
+          is the <a>outermost svg element</a>.
+        </div>
+      </dd>
+    </dl>
+  </dd>
+  <dd>
+  <dt class="operations-header">Operations:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGGraphicsElement__getBBox" class="operation first-child"><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <b>getBBox</b>()</dt>
+      <dd class="operation">
+        <div>
+          Returns the tight bounding box in current user space (i.e., after
+          application of the <a>'transform'</a> property) on the
+          geometry of all contained graphics elements, exclusive of stroking, clipping, masking and
+          filter effects. Note that getBBox must return the actual bounding box
+          at the time the method was called, even in case the element has not
+          yet been rendered.
+        </div>
+        <dl class="operation">
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>
+              An <a>SVGRect</a> object that defines the bounding box.
+            </div>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGGraphicsElement__getStrokeBBox" class="operation"><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <b>getStrokeBBox</b>()</dt>
+      <dd class="operation">
+        <div>
+          Returns the union of the tight bounding box (see <a>getBBox</a>), the stroke
+          bounding box and the stroke bounding box of applied markers in current user space
+          (i.e., after application of the <a>'transform'</a> property) on the
+          geometry of all contained graphics elements, exclusive of clipping, masking and
+          filter effects. The stroke bounding box takes the stroke style
+          properties <a>'stroke-width'</a>, <a>'stroke-linecap'</a>, <a>'stroke-linejoin'</a>,
+          <a>'stroke-miterlimit'</a>, <a>'stroke-dasharray'</a> and <a>'stroke-dashoffset'</a>
+          into account. Note that getStrokeBBox must
+          return the actual union of the bounding box at the time the method was called,
+          even in case the element has not yet been rendered.
+        </div>
+        <dl class="operation">
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>
+              An <a>SVGRect</a> object that defines the stroke bounding box.
+            </div>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGGraphicsElement__getCTM" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a>? <b>getCTM</b>()</dt>
+      <dd class="operation">
+        <div>
+          Returns the transformation matrix from current user units (i.e., after
+          application of the <a>'transform'</a> property) to the viewport
+          coordinate system for the <a>nearestViewportElement</a>. Note that null 
+          is returned if this element is not hooked into the document tree.
+        </div>
+        <dl class="operation">
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>
+              An <a>SVGMatrix</a> object that defines the CTM.
+            </div>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGGraphicsElement__getScreenCTM" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a>? <b>getScreenCTM</b>()</dt>
+      <dd class="operation">
+        <div>
+          Returns the transformation matrix from current user units (i.e., after
+          application of the <a>'transform'</a> property) to the parent
+          user agent's notice of a "pixel". For display devices, ideally this
+          represents a physical screen pixel. For other devices or environments
+          where physical pixel sizes are not known, then an algorithm similar to
+          the CSS 2.1 definition of a "pixel" can be used instead.  Note that null 
+          is returned if this element is not hooked into the document tree. This 
+          method would have been more aptly named as <code>getClientCTM</code>, 
+          but the name <code>getScreenCTM</code> is kept for historical reasons.
+        </div>
+        <dl class="operation">
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>
+              An <a>SVGMatrix</a> object that defines the given
+              transformation matrix.
+            </div>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGGraphicsElement__getTransformToElement" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <b>getTransformToElement</b>(<a class="idlinterface" href="types.html#InterfaceSVGGraphicsElement">SVGGraphicsElement</a> <var>element</var>)</dt>
+      <dd class="operation">
+        <div>
+          Returns the transformation matrix from the user coordinate system on the
+          current element (after application of the <a>'transform'</a> property)
+          to the user coordinate system on parameter <var>element</var>
+          (after application of its <a>'transform'</a> property). 
+        </div>
+        <dl class="operation">
+        <dt class="parameters-header">Parameters</dt>
+        <dd>
+          <ol class="parameters">
+            <li class="parameter first-child">
+              <div><a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var></div> 
+              <div>
+                The target element.
+              </div>
+            </li>
+          </ol>
+        </dd>
+        <dt class="returns-header">Returns</dt>
+        <dd>
+          <div>
+            An <a>SVGMatrix</a> object that defines the transformation.
+          </div>
+        </dd>
+        <dt class="exceptions-header">Exceptions</dt>
+        <dd>
+          <dl class="exceptions">
+          <dt class="exception first-child"><a>InvalidStateError</a></dt>
+          <dd class="exception">
+            Raised if the currently
+            defined transformation matrices make it impossible to compute the
+            given matrix (e.g., because one of the transformations is singular). 
+          </dd>
+        </dl>
+      </dd>
+    </dl>
+  </dd>
+</dl>
 
 <div class="ready-for-wg-review">
 <h3 id="InterfaceSVGGeometryElement">Interface SVGGeometryElement</h3>
@@ -4444,7 +4390,9 @@ paths, text and the basic shapes.</p>
     </dl>
   </dd>
 </dl>
-</div>
+
+<p class="issue">This needs to be updated to reflect the value of the <a>'transform'</a>
+property.</p>
 
 <h3 id="InterfaceSVGTests">Interface SVGTests</h3>
 
