@@ -1709,6 +1709,97 @@ Note that since <a>'visibility'</a> is an inherited property,
 although it has no effect on a <a>container element</a> itself,
 its inherited value can affect descendant elements.</p>
 
+<h2 id="NonScalingStroke">Non-scaling stroke</h2>
+      <p>Sometimes it is of interest to let the outline of an object keep its original width no
+         matter which transforms are applied to it. For example, in a map with a 2px wide line representing
+         roads it is of interest to keep the roads 2px wide even when the user zooms into the
+         map. To achieve this, SVG Tiny 1.2 introduces the <a href="#VectorEffectProperty"><span class="prop-name">'vector-effect'</span></a>
+         property. Future versions of the SVG language will allow for more powerful vector
+         effects through this property but this version restricts it to being able to
+         specify the non-scaling stroke behavior. </p>
+
+      <div id="VectorEffectProperty" class="propdef">
+         <dl>
+            <dt id="propdef-vector-effect">
+               <span class="index-def propdef-title prop-name" title="'vector-effect'">'vector-effect'</span>
+            </dt>
+            <dd>
+               <table summary="vector-effect property" class="propinfo" cellspacing="0" cellpadding="0">
+                  <tr valign="baseline">
+                     <td>
+                        <em>Value:</em>   </td>
+                     <td> non-scaling-stroke | none | <a class="noxref" href="http://www.w3.org/TR/CSS2/cascade.html#value-def-inherit"><span class="value-inst-inherit noxref">inherit</span></a>
+                     </td>
+                  </tr>
+                  <tr valign="baseline">
+                     <td>
+                        <em>Initial:</em>   </td>
+                     <td> none </td>
+                  </tr>
+                  <tr valign="baseline">
+                     <td>
+                        <em>Applies to:</em>   </td>
+                     <td>
+                        <a href="intro.html#TermGraphicsElement"><span class="svg-term">graphics elements</span></a>
+                     </td>
+                  </tr>
+                  <tr valign="baseline">
+                     <td>
+                        <em>Inherited:</em>   </td>
+                     <td> no </td>
+                  </tr>
+                  <tr valign="baseline">
+                     <td>
+                        <em>Percentages:</em>   </td>
+                     <td> N/A </td>
+                  </tr>
+                  <tr valign="baseline">
+                     <td>
+                        <em>Media:</em>   </td>
+                     <td> visual </td>
+                  </tr>
+                  <tr valign="baseline">
+                     <td>
+                        <em><a href="animate.html#Animatable">Animatable</a>:</em>   </td>
+                     <td> yes </td>
+                  </tr>
+                  <tr valign="baseline">
+                     <td>
+                        <em>Computed value:</em>   </td>
+                     <td> Specified value, except inherit </td>
+                  </tr>
+               </table>
+            </dd>
+         </dl>
+      </div>
+
+
+      <dl>
+         <dt class="prop-value"> none </dt>
+         <dd> Specifies that no vector effect shall be applied, i.e. the default rendering behaviour
+            from SVG 1.1 is used which is to first fill the geometry of a shape with a specified
+            paint, then stroke the outline with a specified paint. </dd>
+         <dt class="prop-value"> non-scaling-stroke </dt>
+         <dd> Modifies the way an object is stroked. Normally stroking involves calculating stroke
+            outline of the shape's path in current <a href="intro.html#TermUserSpace"><span class="svg-term">user space</span></a> and filling that outline with the
+            stroke paint (color or gradient). With the non-scaling-stroke vector effect, stroke outline
+            shall be calculated in the "host" coordinate space instead of user coordinate space.
+            More precisely: a user agent establishes a host coordinate space which in SVG Tiny 1.2 is
+            always the same as "screen coordinate space". The stroke outline is calculated in the
+            following manner: first, the shape's path is transformed into the host coordinate space.
+            Stroke outline is calculated in the host coordinate space. The resulting outline is
+            transformed back to the <a href="intro.html#TermUserCoordinateSystem"><span class="svg-term">user coordinate system</span></a>.
+            (Stroke outline is always filled with stroke paint in the current user space). The resulting visual effect of this
+            modification is that stroke width is not dependant on the transformations of the element
+            (including non-uniform scaling and shear transformations) and zoom level. </dd>
+      </dl>
+
+      <p>Note: Future versions of SVG may allow ways to control the host coordinate system.</p>
+
+      <p>Below is an example of the non-scaling-stroke <a href="#VectorEffectProperty"><span class="prop-name">'vector-effect'</span></a>.</p>
+
+      <edit:includefile href='images/painting/non-scaling-stroke.svg' link="yes" image="yes"/>
+
 
 <h2 id="Markers">Markers</h2>
 
