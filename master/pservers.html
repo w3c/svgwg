@@ -1,0 +1,2243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Paint Servers: Solid Colors, Gradients, and Patterns</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <!--
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  -->
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>Paint Servers: Solid Colors, Gradients, and Patterns</h1>
+
+<h2 id="Introduction">Introduction</h2>
+
+<p>
+  This section covers <strong>Paint Servers</strong>, a method which
+  allows the <a>'fill'</a> or <a>'stroke'</a> of an object to be defined
+  by a resource found elsewhere. It allows resources to be reused
+  throughout a document. See the section
+  <a href="painting.html">Painting: Filling and Stroking</a> for a
+  general discussion of filling and stroking objects.
+</p>
+
+<!-- Fill and stroke are already defined in painting.html. No need to
+redefine them here. -->
+
+<p>
+  SVG defines three types of paint servers:
+</p>
+
+<ul>
+  <li><a href="#SolidColors">Solid colors</a>,</li>
+  <li><a href="#Gradients">Gradients</a>,</li>
+  <li><a href="#Patterns">Patterns</a>.</li>
+</ul>
+
+<p class="issue">
+  SVG1.1 refers to
+  "<a href="http://www.w3.org/TR/SVG/pservers.html#Introduction">built-in</a>"
+  paint servers. Is there any other kind?
+</p>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support hatching.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/28-svg-irc#T18-28-09">SVG 2 should support hatching without the artifacts that patterns currently impose.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow the kinds of patterns required for mapping, engraving, etc. where continuous lines are required.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Tav (no action)</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Arbitrary fills for shapes.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/28-svg-irc#T18-32-32">SVG 2 shall support filling and stroking from arbitrary elements.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow for example videos or images to be used as a fill source.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Alex? (no action)</td>
+    </tr>
+  </table>
+</div>
+
+<p class="issue">
+  It seems that all paint servers (except perhaps, mesh gradients,
+  when rendered directly) inherit from their ancestors and do not
+  inherit from the element referencing the paint server.  Rather than
+  repeating this for each type of paint server, can the text be moved
+  into the introduction section for paint servers?
+</p>
+
+<div class="figure">
+  <img
+     alt="Image of three types of paint servers."
+     src="images/pservers/pservers_example.png"/>
+  <p class="caption">Three types of paint servers. From left to right:
+    A solid color ("MyLightPurple").
+    A linear gradient.
+    A pattern.
+  </p>
+</div>
+
+<p>
+  Paint servers are used by including an <a>IRI reference</a> in
+  a <a>'fill'</a> or <a>'stroke'</a> property (i.e. fill="#MyLightPurple").
+</p>
+
+
+<h2 id="SolidColors">Solid colors</h2>
+
+<p class="note">Solid Colors are new in SVG 2 (ported from SVG 1.2 Tiny).</p>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support named colors.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2012/01/26-svg-minutes.html">Will add <span class="element-name">'solidColor'</span> element to SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To provide an easy mechanism for creating named colors and palettes. Also useful for animation.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Tav (no action)</td>
+    </tr>
+  </table>
+</div>
+
+<p>The 'solidColor' element is a paint server that provides a single
+color with opacity. It can be referenced any place a single color
+can be used. The 'solidColor' element allows a palette to be defined
+and used consistently throughout a document. It is also useful as
+away of animating a palette colors.  (See the chapter
+<a href="color.html">Color</a> for a more general discussion of color
+in SVG.)</p>
+
+<p><a href="styling.html#SVGStylingProperties">Properties</a> inherit
+into the <a>'solidColor'</a> element from its ancestors;
+properties do <em>not</em> inherit from the element referencing
+the <a>'solidColor'</a> element.</p>
+
+<p><a>'solidColor'</a> elements are never rendered directly;
+their only usage is as something that can be referenced using the
+<a>'fill'</a> and <a>'stroke'</a> properties. The <a>'display'</a>
+property does not apply to the <a>'solidColor'</a> element; thus,
+<a>'solidColor'</a> elements are not directly rendered even if
+the <a>'display'</a> property is set to a value other than
+<span class="prop-value">none</span>, and <a>'solidColor'</a>
+elements are available for referencing even when the <a>'display'</a>
+property on the <a>'solidColor'</a> element or any of its ancestors
+is set to <span class="prop-value">none</span>.</p>
+
+<edit:with element='solidColor'>
+
+<p id="SolidColorElement">Solid colors are defined by a <a>'solidColor'</a>
+element.</p>
+
+<edit:elementsummary name='solidColor'/>
+
+<h3 id="SolidColorProperties">Properties</h3>
+
+  <dl class="propdef-list-svg2">
+
+    <dt id="SolidColorProperty"><span class="propdef-title property">'solid-color'</span></dt>
+    <dd>
+
+      <p>
+	The <a>'solid-color'</a> property specifies the color of
+	the <a>'solidColor'</a>. The keyword
+	<span class="attr-value">currentColor</span> and ICC colors
+	can be specified in the same manner as within a
+	<a href="painting.html#SpecifyingPaint">&lt;paint&gt;</a>
+	specification for the <a>'fill'</a> and <a>'stroke'</a>
+	properties.
+      </p>
+
+      <dl class="propdef-svg2">
+	<dt>Value</dt>
+        <dd>
+	  currentColor |
+	  <a>&lt;color&gt;</a> <a>&lt;icccolor&gt;</a>
+	</dd>
+        <dt>Initial</dt>            <dd>black</dd>
+        <dt>Applies to</dt>         <dd><a>'solid-color'</a> elements</dd>
+        <dt>Inherited</dt>          <dd>no</dd>
+        <dt>Percentages</dt>        <dd>N/A</dd>
+        <dt>Media</dt>              <dd>visual</dd>
+        <dt><a>Animatable</a></dt>  <dd>yes</dd>
+      </dl>
+    </dd>
+
+    <dt id="SolidOpacityProperty"><span class="propdef-title property">'solid-opacity'</span></dt>
+    <dd>
+
+      <p>
+	The <a>'solid-opacity'</a> property defines the opacity of
+	the <a>'solidColor'</a>.
+      </p>
+
+      <dl class="propdef-svg2">
+        <dt>Value</dt>              <dd>&lt;opacity-value&gt;</dd>
+        <dt>Initial</dt>            <dd>1</dd>
+        <dt>Applies to</dt>         <dd><a>'solid-color'</a> elements</dd>
+        <dt>Inherited</dt>          <dd>no</dd>
+        <dt>Percentages</dt>        <dd>N/A</dd>
+        <dt>Media</dt>              <dd>visual</dd>
+        <dt><a>Animatable</a></dt>  <dd>yes</dd>
+      </dl>
+
+      <dl class="propdef-values">
+	<dt>&lt;opacity-value&gt;</dt>
+	<dd>
+	  The opacity of the 'solidColor'. Any values outside the
+	  range 0.0 (fully transparent) to 1.0 (fully opaque) must be
+	  clamped to this range. The value of 'solid-opacity' is
+	  independent of the opacity used to render the paint via
+	  <a>'fill'</a> or <a>'stroke'</a>.
+	</dd>
+      </dl>
+
+    </dd>
+
+  </dl><!-- propdef-list -->
+
+<edit:example href='images/pservers/solidcolor.svg' name='solidcolor.svg'
+  description='fill objects using a solidColor paint server' 
+  image='yes' link='yes'/>
+
+</edit:with>
+
+<h2 id="Gradients">Gradients</h2>
+
+<p>Gradients consist of smooth color transitions between points on a
+drawing surface. SVG provides for three types of gradients:</p>
+
+<ul>
+  <li><a href="#LinearGradients">linear gradients</a>,</li>
+  <li><a href="#RadialGradients">radial gradients</a>,</li>
+  <li><a href="#MeshGradients">mesh gradients</a>.</li>
+</ul>
+
+<p>Once a gradient is defined, a <a>graphics element</a> can be
+filled or stroked with the gradient by setting the <a>'fill'</a>
+or <a>'stroke'</a> properties to reference the gradient.</p>
+
+<p>Color transitions for linear and radial gradients are defined by a
+series of color <a href="#GradientStops">stops</a> along a gradient
+vector. A gradient normal defines how the colors in a vector are
+painted to the surface. For a linear gradient, the normal
+corresponds to lines with the same color. It is perpendicular to the
+vector in an untransformed gradient.
+
+When a <a>graphics element</a> references a gradient, conceptually the
+<a>graphics element</a> should take a copy of the gradient vector and
+gradient normal and treat it as part of its own geometry. Any transformations
+applied to the <a>graphics element</a> geometry also apply to the copied
+gradient vector and gradient normal. Any gradient transforms that are
+specified on the reference gradient are applied before any <a>graphics element</a>
+transformations are applied to the gradient.</p>
+
+<div class="figure">
+  <img
+     alt="Image of linear and radial gradients with vectors and normals indicated."
+     src="images/pservers/gradient_vector_and_normal.png"/>
+
+  <p class="caption">Linear and radial gradients with the gradient vector and gradient
+  normal indicated. The vector consists of three stops shown by small circles.</p>
+</div>
+
+<div class="issue">
+  <p>Would it be better to just refer to the normal as the line where color is
+  constant.  In this case, it would be a circle for an untransformed radial
+  gradient.</p>
+
+  <p>Alternative figure:</p>
+
+  <div class="figure">
+    <img
+       alt="Image of linear and radial gradients with vectors and normals indicated."
+       src="images/pservers/gradient_vector_and_normal_alt.png"/>
+
+    <p class="caption">Linear and radial gradients with the gradient vector
+    indicated. The vector consists of three stops shown by small
+    circles. One gradient normal is shown for each gradient.</p>
+  </div>
+</div>
+
+<p>Color transitions for mesh gradients are defined by an array of
+color <a href="#GradientStops">stops</a>. The mapping of colors to
+the drawing surface in this case is done by geometric data located
+in the stops. This is discussed in detail in the
+<a href="#MeshGradients">mesh gradients</a> section.</p>
+
+<h3 id="LinearGradients">Linear gradients</h3>
+
+<edit:with element='linearGradient'>
+
+<p id="LinearGradientElement">Linear gradients are defined by a
+<a>'linearGradient'</a> element.</p>
+
+<edit:elementsummary name='linearGradient'/>
+
+<h4 id="LinearGradientAttributes">Attributes</h4>
+
+  <dl class="attrdef-list-svg2">
+
+    <dt id="LinearGradientElementGradientUnitsAttribute"><span class="adef">gradientUnits</span></dt>
+    <dd>
+
+      <p>
+	Defines the coordinate system for attributes <a>'x1'</a>,
+        <a>'y1'</a>, <a>'x2'</a> and <a>'y2'</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+
+	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
+	<dt><a>Lacuna value</a></dt>  <dd>objectBoundingBox</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+
+      </dl>
+
+      <dl class="attrdef-values">
+
+	<dt>userSpaceOnUse</dt>
+        <dd>
+	  <p>
+            If <span class="attr-value">gradientUnits="userSpaceOnUse"</span>,
+
+            <a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a>, and <a>'y2'</a>
+
+            represent values in the coordinate system that results
+            from taking the current user coordinate system in place at
+            the time when the gradient element is referenced (i.e.,
+            the user coordinate system for the element referencing the
+            gradient element via a <a>'fill'</a> or <a>'stroke'</a>
+            property) and then applying the transform specified by
+            attribute <a>'gradientTransform'</a>. Percentages
+            represent values relative to the current viewport.
+	  </p>
+	</dd>
+
+	<dt>objectBoundingBox</dt>
+	<dd>
+	  <p>
+            If <span class="attr-value">gradientUnits="objectBoundingBox"</span>,
+            the user coordinate system for attributes
+
+            <a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a> and <a>'y2'</a>
+
+	    is established using the bounding box of the element to
+            which the gradient is applied
+            (see <a href="coords.html#ObjectBoundingBox">Object
+            bounding box units</a>) and then applying the transform
+            specified by attribute <a>'gradientTransform'</a>.
+            Percentages represent values relative to the bounding box
+            for the object.
+	  </p>
+	  <p>
+            When <span class="attr-value">gradientUnits="objectBoundingBox"</span>
+            and <a>'gradientTransform'</a> is the identity matrix, the
+            normal of the linear gradient is perpendicular to the
+            gradient vector in object bounding box space (i.e., the
+            abstract coordinate system where (0,0) is at the top/left
+            of the object bounding box and (1,1) is at the
+            bottom/right of the object bounding box). When the
+            object's bounding box is not square, the gradient normal
+            which is initially perpendicular to the gradient vector
+            within object bounding box space may render
+            non-perpendicular relative to the gradient vector in user
+            space. If the gradient vector is parallel to one of the
+            axes of the bounding box, the gradient normal will remain
+            perpendicular. This transformation is due to application
+            of the non-uniform scaling transformation from bounding
+            box space to user space.
+	  </p>
+	</dd>
+
+      </dl><!-- Attribute values -->
+
+    </dd>
+
+    <dt id="LinearGradientElementGradientTransformAttribute">
+      <span class="adef">gradientTransform</span>
+    </dt>
+    <dd>
+
+      <p>
+	Contains the definition of an optional additional
+        transformation from the gradient coordinate system onto the
+        target coordinate system
+
+        (i.e., <span class='attr-value'>'userSpaceOnUse'</span> or
+        <span class='attr-value'>'objectBoundingBox'</span>).
+
+	This allows for things such as skewing the gradient.
+
+	This additional transformation matrix is post-multiplied to
+        (i.e., inserted to the right of) any previously defined
+        transformations, including the implicit transformation
+        necessary to convert
+        from <a href="coords.html#ObjectBoundingBox">object bounding
+        box units</a> to user space.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a>&lt;transform-list&gt;</a></dd>
+	<dt><a>Lacuna value</a></dt>  <dd>identity transform</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="LinearGradientElementX1Attribute"><span class="adef">x1</span></dt>
+    <dd>
+
+      <p>
+	<a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a> and <a>'y2'</a> define
+        a <em>gradient vector</em> for the linear
+        gradient. This <em>gradient vector</em> provides starting and
+        ending points onto which the <a href="#GradientStops">gradient
+        stops</a> are mapped. The values
+        of <a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a> and <a>'y2'</a> can
+        be either numbers or percentages.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt><a>Lacuna value</a></dt>  <dd>0%</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="LinearGradientElementY1Attribute"><span class="adef">y1</span></dt>
+    <dd>
+
+      <p>
+	See <a>'x1'</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt><a>Lacuna value</a></dt>  <dd>0%</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="LinearGradientElementX2Attribute"><span class="adef">x2</span></dt>
+    <dd>
+
+      <p>
+	See <a>'x1'</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt><a>Lacuna value</a></dt>  <dd>100%</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+    </dd>
+
+    <dt id="LinearGradientElementY2Attribute"><span class="adef">y2</span></dt>
+    <dd>
+
+      <p>
+	See <a>'x1'</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt><a>Lacuna value</a></dt>  <dd>100%</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+      <p class="issue">SVG 1.1 2nd edition has lacuna value="0%".</p>
+    </dd>
+
+    <dt id="LinearGradientElementSpreadMethodAttribute">
+      <span class="adef">spreadMethod</span>
+    </dt>
+    <dd>
+      <p>
+	Indicates what happens if the gradient starts or ends
+        inside the bounds of the <em>target rectangle</em>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd>pad | reflect | repeat</dd>
+	<dt><a>Lacuna value</a></dt>  <dd>pad</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+      <dl class="attrdef-values">
+
+	<dt>pad</dt>
+        <dd>
+	  Use the terminal colors of the gradient to fill the
+          remainder of the target region.
+	</dd>
+
+	<dt>reflect</dt>
+	<dd>
+	  Reflect the gradient pattern start-to-end, end-to-start,
+          start-to-end, etc. continuously until the <em>target
+          rectangle</em> is filled.
+	</dd>
+
+	<dt>repeat</dt>
+	<dd>
+          Repeat the gradient pattern start-to-end, start-to-end,
+          start-to-end, etc. continuously until the target region is
+          filled.
+	</dd>
+
+      </dl>
+
+      <div class="figure">
+	<img
+	   alt="Image of the three possible values for 'spreadMethod'."
+	   src="images/pservers/spread_method.png"/>
+	<p class="caption">
+	  Illustration of the three possible values for
+	  <span class="adef">spreadMethod</span>, from left to
+	  right: pad, reflect, repeat. The gradient vector spans
+	  from 40% to 60% of the bounding box width.
+	</p>
+      </div>
+    </dd>
+
+    <dt id="LinearGradientElementHrefAttribute">
+      <span class="adef">xlink:href</span>
+    </dt>
+    <dd>
+      <p>
+        An <a>IRI reference</a> to a
+        different <a>'linearGradient'</a> or
+        <a>'radialGradient'</a> element within the current SVG
+        document fragment. Any <a>'linearGradient'</a> attributes
+        which are defined on the referenced element which are not
+        defined on this element are inherited by this element. If this
+        element has no defined gradient stops, and the referenced
+        element does (possibly due to its own <a>'xlink:href'</a>
+        attribute), then this element inherits the gradient stop from
+        the referenced element.  Inheritance can be indirect to an
+        arbitrary level; thus, if the referenced element inherits
+        attribute or gradient stops due to its own <a>'xlink:href'</a>
+        attribute, then the current element can inherit those
+        attributes or gradient stops.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a>&lt;iri&gt;</a></dd>
+	<dt><a>Lacuna value</a></dt>  <dd>empty</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+  </dl>
+
+<h4 id="LinearGradientNotes">Notes on linear gradients</h4>
+
+<p>If <a>'x1'</a> = <a>'x2'</a> and <a>'y1'</a> =
+<a>'y2'</a>, then the area to be painted will be painted as a
+single color using the color and opacity of the last
+<a href="pservers.html#GradientStops">gradient stop</a>.</p>
+
+<p><a href="styling.html#SVGStylingProperties">Properties</a> inherit
+into the <a>'linearGradient'</a> element from its ancestors;
+properties do <em>not</em> inherit from the element referencing
+the <a>'linearGradient'</a> element.</p>
+
+<p><a>'linearGradient'</a> elements are never rendered directly;
+their only usage is as something that can be referenced using the
+<a>'fill'</a> and <a>'stroke'</a> properties. The <a>'display'</a>
+property does not apply to the <a>'linearGradient'</a> element; thus,
+<a>'linearGradient'</a> elements are not directly rendered even if
+the <a>'display'</a> property is set to a value other than
+<span class="prop-value">none</span>, and <a>'linearGradient'</a>
+elements are available for referencing even when the <a>'display'</a>
+property on the <a>'linearGradient'</a> element or any of its ancestors
+is set to <span class="prop-value">none</span>.</p>
+
+<p id="ExampleLinGrad01"><span class="example-ref">Example lingrad01</span>
+shows how to fill a rectangle by referencing a linear gradient paint server.</p>
+
+<edit:example href='images/pservers/lingrad01.svg' name='lingrad01'
+  description='Fill a rectangle by referencing a linear gradient paint server'
+  image='yes' link='yes'/>
+
+</edit:with>
+
+<div class="ready-for-wider-review">
+<h3 id="RadialGradients">Radial gradients</h3>
+
+<edit:with element='radialGradient'>
+
+<p id="RadialGradientElement">Radial gradients are defined by a
+<a>'radialGradient'</a> element.</p>
+
+<edit:elementsummary name='radialGradient'/>
+
+<h4 id="RadialGradientAttributes">Attributes</h4>
+
+  <dl class="attrdef-list-svg2">
+
+    <dt id="RadialGradientElementGradientUnitsAttribute">
+      <span class="adef">gradientUnits</span> =
+      "<span class="attr-value">userSpaceOnUse | objectBoundingBox</span>"
+    </dt>
+    <dd>
+
+      <p>
+	Defines the coordinate system for attributes
+        <a>'cx'</a>, <a>'cy'</a>, <a>'r'</a>, <a>'fx'</a>, <a>'fy'</a>, and <a>'fr'</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+
+	<!--
+	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
+	-->
+	<dt><a>Lacuna value</a></dt>  <dd>objectBoundingBox</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+
+      </dl>
+
+      <dl class="attrdef-values">
+
+	<dt>userSpaceOnUse</dt>
+        <dd>
+	  <p>
+            If <span class="attr-value">gradientUnits="userSpaceOnUse"</span>,
+
+            <a>'cx'</a>, <a>'cy'</a>, <a>'r'</a>, <a>'fx'</a>, <a>'fy'</a>,
+            and <a>'fr'</a>
+
+	    represent values in the coordinate system that results
+            from taking the current user coordinate system in place at
+            the time when the gradient element is referenced (i.e.,
+            the user coordinate system for the element referencing the
+            gradient element via a <a>'fill'</a> or <a>'stroke'</a>
+            property) and then applying the transform specified by
+            attribute <a>'gradientTransform'</a>. Percentages
+            represent values relative to the current viewport.
+	  </p>
+	</dd>
+
+	<dt>objectBoundingBox</dt>
+	<dd>
+	  <p>
+            If <span class="attr-value">gradientUnits="objectBoundingBox"</span>,
+            the user coordinate system for attributes
+
+            <a>'cx'</a>, <a>'cy'</a>, <a>'r'</a>, <a>'fx'</a>, <a>'fr'</a>,
+            and <a>'fr'</a>
+
+	    is established using the bounding box of the element to
+            which the gradient is applied
+            (see <a href="coords.html#ObjectBoundingBox">Object
+            bounding box units</a>) and then applying the transform
+            specified by attribute <a>'gradientTransform'</a>.
+            Percentages represent values relative to the bounding box
+            for the object.
+	  </p>
+	  <p>
+            When <span class="attr-value">gradientUnits="objectBoundingBox"</span>
+            and <a>'gradientTransform'</a> is the identity matrix,
+            then the rings of the radial gradient are circular with
+            respect to the object bounding box space (i.e., the
+            abstract coordinate system where (0,0) is at the top/left
+            of the object bounding box and (1,1) is at the
+            bottom/right of the object bounding box). When the
+            object's bounding box is not square, the rings that are
+            conceptually circular within object bounding box space
+            will render as elliptical due to application of the
+            non-uniform scaling transformation from bounding box space
+            to user space.
+	  </p>
+	</dd>
+
+      </dl><!-- Attribute values -->
+
+    </dd>
+
+    <dt id="RadialGradientElementGradientTransformAttribute">
+      <span class="adef">gradientTransform</span> =
+      "<span class="attr-value"><a>&lt;transform-list&gt;</a></span>"
+    </dt>
+    <dd>
+
+      <p>
+	Contains the definition of an optional additional
+        transformation from the gradient coordinate system onto the
+        target coordinate system
+
+        (i.e., <span class='attr-value'>'userSpaceOnUse'</span> or
+        <span class='attr-value'>'objectBoundingBox'</span>).
+
+	This allows for things such as skewing the gradient.
+
+	This additional transformation matrix is post-multiplied to
+        (i.e., inserted to the right of) any previously defined
+        transformations, including the implicit transformation
+        necessary to convert
+        from <a href="coords.html#ObjectBoundingBox">object bounding
+        box units</a> to user space.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;transform-list&gt;</a></dd> -->
+	<dt><a>Lacuna value</a></dt>  <dd>identity transform</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="RadialGradientElementCXAttribute">
+      <span class="adef">cx</span> =
+      "<span class="attr-value"><a>&lt;length&gt;</a></span>"
+    </dt>
+    <dd>
+
+      <p>
+	<a>'cx'</a>, <a>'cy'</a> and <a>'r'</a> define the end circle for the radial gradient. The
+        gradient will be drawn such that the
+        100% <a href="#GradientStops">gradient stop</a> is mapped
+        to the perimeter of this end circle.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+	<dt><a>Lacuna value</a></dt>  <dd>50%</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="RadialGradientElementCYAttribute">
+      <span class="adef">cy</span> =
+      "<span class="attr-value"><a>&lt;length&gt;</a></span>"
+    </dt>
+    <dd>
+
+      <p>
+	See <a>'cx'</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+	<dt><a>Lacuna value</a></dt>  <dd>50%</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="RadialGradientElementRAttribute">
+      <span class="adef">r</span> =
+      "<span class="attr-value"><a>&lt;length&gt;</a></span>"
+    </dt>
+    <dd>
+
+      <p>
+	See <a>'cx'</a>.
+      </p>
+
+      <p>
+        A negative value is an error
+        (see <a href="implnote.html#ErrorProcessing">Error
+        processing</a>).
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+	<dt><a>Lacuna value</a></dt>  <dd>50%</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="RadialGradientElementFXAttribute">
+      <span class="adef">fx</span> =
+      "<span class="attr-value"><a>&lt;length&gt;</a></span>"
+    </dt>
+    <dd>
+
+      <p>
+	<a>'fx'</a>, <a>'fy'</a>, and <a>'fr'</a> define the start
+	circle for the radial gradient. The
+        gradient will be drawn such that the
+        0% <a href="#GradientStops">gradient stop</a> is mapped
+        to the perimeter of this start circle.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+	<dt><a>Lacuna value</a></dt>  <dd>see below</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+      <p>
+        If attribute <a>'fx'</a> is not specified, <a>'fx'</a> will coincide
+        with the presentational value of <a>'cx'</a> for the element whether the
+        value for 'cx' was inherited or not. If the element references an
+        element that specifies a value for 'fx', then the value of 'fx' is
+        inherited from the referenced element.
+      </p>
+
+      <div class="figure">
+	<img
+	   alt="Diagram of various radial gradient attributes."
+	   src="images/pservers/radial_gradient_dimensions.png"/>
+	<p class="caption">
+	  This diagram shows how the geometric attributes are defined
+	  for the case where <a>'fr'</a> is 50% of <a>'r'</a>. The
+	  small circle marks the center of the outermost circle
+	  (<a>'cx'</a>,<a>'cy'</a>), while the cross marks the center
+	  of the innermost circle (<a>'fx'</a>,<a>'fy'</a>). The
+	  dashed lines show two gradient vectors. Vectors connect
+	  corresponding points on the inner and outer most circles.
+	  The region outside the outer circle is painted with the the
+	  last <a>'stop-color'</a> while the region inside the inner
+	  circle is painted with the first <a>'stop-color'</a>.
+	</p>
+      </div>
+
+    </dd>
+
+    <dt id="RadialGradientElementFYAttribute">
+      <span class="adef">fy</span> =
+      "<span class="attr-value"><a>&lt;length&gt;</a></span>"
+    </dt>
+    <dd>
+
+      <p>
+	See <a>'fx'</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+	<dt><a>Lacuna value</a></dt>  <dd>see below</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+      <p>
+        If attribute <a>'fy'</a> is not specified, <a>'fy'</a>
+        will coincide with the presentational value of <a>'cy'</a>
+        for the element whether the value for 'cy' was inherited
+        or not. If the element references an element that
+        specifies a value for 'fy', then the value of 'fy' is
+        inherited from the referenced element.
+      </p>
+    </dd>
+
+    <dt id="RadialGradientElementFRAttribute">
+      <span class="adef">fr</span> =
+      "<span class="attr-value"><a>&lt;length&gt;</a></span>"
+    </dt>
+    <dd>
+
+      <p class="note">New in SVG 2. Added to align with Canvas.</p>
+
+      <p>
+	<a>'fr'</a> is the radius of the focal circle. See <a>'fx'</a>.
+      </p>
+
+      <p>
+        A negative value is an error
+        (see <a href="implnote.html#ErrorProcessing">Error
+        processing</a>).
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+	<dt><a>Lacuna value</a></dt>  <dd>0%, see below</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+      <p>
+        If the attribute is not specified, the effect is as if a
+	value of <span class='attr-value'>'0%'</span> were
+	specified.  If the element references an element that
+	specifies a value for 'fr', then the value of 'fr' is
+	inherited from the referenced element.
+      </p>
+
+      <div class="annotation svg2-requirement">
+        <table>
+          <tr>
+            <th>SVG 2 Requirement:</th>
+            <td>Allow specifying focal circle radius in radial gradients.</td>
+          </tr>
+          <tr>
+            <th>Resolution:</th>
+            <td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item06">Add an <span class="attr-name">'fr'</span> attribute to <span class="element-name">'radialGradient'</span>> for SVG 2.</a></td>
+          </tr>
+          <tr>
+            <th>Purpose:</th>
+            <td>To align with Canvas.  The zero-offset stop would be along the circle
+            defined by the <span class="attr-name">'fx'</span>, <span class="attr-name">'fy'</span>
+            and <span class="attr-name">'fr'</span> attributes.</td>
+          </tr>
+          <tr>
+            <th>Owner:</th>
+            <td>Erik (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3098">ACTION-3098</a>)</td>
+          </tr>
+        </table>
+      </div>
+    </dd>
+
+    <dt id="RadialGradientElementSpreadMethodAttribute">
+      <span class="adef">spreadMethod</span> = "pad | reflect | repeat"
+    </dt>
+    <dd>
+
+      <p>
+	Indicates what happens if the gradient starts or ends inside
+        the bounds of the object(s) being painted by the gradient. Has
+        the same values and meanings as the <a>'linearGradient/spreadMethod'</a>
+        attribute on <a>'linearGradient'</a> element.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd>pad | reflect | repeat</dd> -->
+	<dt><a>Lacuna value</a></dt>  <dd>pad</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+    </dd>
+
+    <dt id="RadialGradientElementHrefAttribute">
+      <span class="adef">xlink:href</span> =
+      "<span class="attr-value"><a>&lt;iri&gt;</a></span>"
+    </dt>
+    <dd>
+      <p>
+        An <a>IRI reference</a>
+        to a different <a>'linearGradient'</a> or
+        <a>'radialGradient'</a> element within the current SVG
+        document fragment. Any <a>'radialGradient'</a> attributes
+        which are defined on the referenced element which are not
+        defined on this element are inherited by this element. If this
+        element has no defined gradient stops, and the referenced
+        element does (possibly due to its own <a>'xlink:href'</a>
+        attribute), then this element inherits the gradient stop from
+        the referenced element.  Inheritance can be indirect to an
+        arbitrary level; thus, if the referenced element inherits
+        attribute or gradient stops due to its own <a>'xlink:href'</a>
+        attribute, then the current element can inherit those
+        attributes or gradient stops.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;iri&gt;</a></dd> -->
+	<dt><a>Lacuna value</a></dt>  <dd>empty</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+  </dl>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Clarify radial gradients with focal point on the circle.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item05">When the focal point is on the circle edge, with repeat, then the distance between the first and last stop for the repeating colors is 0 and the paint should generate a color that is the average of all the gradient stops.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To improve interoperability of radial gradients.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Erik (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3097">ACTION-3097</a>)</td>
+    </tr>
+    <tr>
+      <th>Note:</th>
+      <td>SVG 1.1 does not define what to do when the focal point
+      is on the circle edge, with 'repeat'. The distance between the
+      first and last stop for the repeating colors is 0. It was
+      resolved that the paint should generate a color that is the
+      weighted average (by offset) of all the gradient stops.</td>
+    </tr>
+  </table>
+</div>
+
+<h4 id="RadialGradientNotes">Notes on radial gradients</h4>
+
+<p class="note">Changed in SVG 2. SVG 1.1 required that the focal
+point, if outside the end circle, be moved to be on the end
+circle. The change was made to align with Canvas.</p>
+
+<p class="annotation">Allowing the focal point to lie outside the end
+circle was resolved at the
+<a href="http://www.w3.org/2012/09/19-svg-minutes.html#item01">Rigi
+Kaltbad working group meeting</a>.</p>
+
+<p>If the start circle defined by <a>'fx'</a>, <a>'fy'</a> and <a>'fr'</a> lies
+outside the end circle defined by <a>'cx'</a>, <a>'cy'</a>, and <a>'r'</a>, effectively
+a cone is created, touched by the two circles. Areas outside the cone stay untouched by
+the gradient (transparent black).</p>
+
+<p>If the start circle fully overlaps with the end circle, no
+gradient is drawn. The area stays untouched (transparent black).</p>
+
+<div class="figure">
+  <img
+     alt="Image of a radial gradient with the focal (start circle) outside
+	  the start circle."
+     src="images/pservers/radial_gradient_focus_reflect.png"/>
+
+  <p class="caption">A radial gradient with the focal (start) circle
+    outside the start circle. The focal circle is the
+    larger circle on the left. The gradient has
+    <span class="attr-value">spreadMethod="reflect"</span>.
+  </p>
+</div>
+
+<div class="figure">
+  <img
+     alt="Image of two radial gradients, one with the focus just inside the circumference
+    and one with the focus on the circumference."
+     src="images/pservers/radial_gradient_focus.png"/>
+
+  <p class="caption">Two radial gradients with
+  <span class="attr-value">spreadMethod="repeat"</span>. On the
+  left, the focal point is just inside the right side of the circle
+  defined by by <a>'cx'</a>, <a>'cy'</a>, and <a>'r'</a>. On the
+  right, the focal point is on the circle. In this case, the area
+  painted to the right of the circumference has a fill equal to
+  the weighted average of the colors in the gradient vector.</p>
+</div>
+
+<p class="note">The treatment of the area to the right of the gradient
+in the right-hand side of the above figure is different from that of
+Canvas where the area would be transparent black. The difference is to
+maintain compatibility with SVG 1.1.</p>
+
+<p class="annotation">The color space for the weighted average is the
+same as in which the gradient is interpolated. See
+<a href="http://www.w3.org/2012/09/19-svg-minutes.html#item01">Rigi
+Kaltbad working group meeting</a>.</p>
+
+<p><a href="styling.html#SVGStylingProperties">Properties</a>
+inherit into the <a>'radialGradient'</a> element from its ancestors;
+properties do <em>not</em> inherit from the element referencing the
+<a>'radialGradient'</a> element.</p>
+
+<p><a>'radialGradient'</a> elements are never rendered directly;
+their only usage is as something that can be referenced using the
+<a>'fill'</a> and <a>'stroke'</a> properties. The <a>'display'</a>
+property does not apply to the <a>'radialGradient'</a> element; thus,
+<a>'radialGradient'</a> elements are not directly rendered even if
+the <a>'display'</a> property is set to a value other than
+<span class="prop-value">none</span>, and <a>'radialGradient'</a> elements
+are available for referencing even when the <a>'display'</a> property on
+the <a>'radialGradient'</a> element or any of its ancestors is set to
+<span class="prop-value">none</span>.</p>
+
+<p id="ExampleRadGrad01"><span class="example-ref">Example radgrad01</span>
+shows how to fill a rectangle by referencing a radial gradient paint
+server.</p>
+
+<edit:example href='images/pservers/radgrad01.svg' name='radgrad01'
+  description='Fill a rectangle by referencing a radial gradient paint server'
+  image='yes' link='yes'/>
+
+</edit:with>
+</div>
+
+<h3 id="MeshGradients">Mesh gradients</h3>
+
+<edit:with element='meshGradient'>
+
+<p class="note">New in SVG 2. Added to allow shadings along curved lines. This
+is needed, for example, in creating life-like drawings.</p>
+
+<p>The mesh gradients in SVG are based on an array of Coons Patches.
+A Coons Patch is a shading defined by colors place at the corners
+of an area enclosed by four Bézier curves.</p>
+
+<div class="figure">
+  <img
+     alt="Image of single mesh patch."
+     src="images/pservers/mesh_gradient_patch.png"/>
+
+  <p class="caption">A single Coons-Mesh patch.</p>
+</div>
+
+<p class="annotation">A Coons Patch is equivalent to a bi-cubic Ferguson patch
+where the distance between a cubic Bézier end point and its nearest control
+point is one-third the length of the corresponding Ferguson tangent line.</p>
+    
+<p>The corner colors are mapped to the patch area with a two step
+process.  First the colors are placed at the corners of a unit
+square the area inside the square is colored using a bilinear
+interpolation. Second, the points inside the square are mapped to
+points inside the patch using the following formula (u, and v are
+the coordinates inside the unit square):</p>
+
+<div class="note">
+<pre>
+S = S<sub>C</sub> + S<sub>D</sub> &#x2212; S<sub>B</sub>, where
+S<sub>C</sub>(u,v) = (1&#x2212;v)×C<sub>1</sub>(u) + v×C<sub>2</sub>(u),
+S<sub>D</sub>(u,v) = (1&#x2212;u)×D<sub>1</sub>(v) + u×D<sub>2</sub>(v), and
+S<sub>B</sub>(u,v) = (1&#x2212;v)×[(1-u)×C<sub>1</sub>(0) + u×C<sub>1</sub>(1)]
+             +  v×[(1&#x2212;u)×C<sub>2</sub>(0) + u×C<sub>2</sub>(1)].
+</pre>
+</div>
+
+<p class="issue">MathML gets stripped out by build script.</p>
+
+<pre><![CDATA[
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+    <msup><mi>S</mi></msup><mo>=</mo><mi>S</mi><msub>C</msub><mo>+</mo><mi>S</mi><msub>D</msub>
+  </mrow>
+</math>]]></pre>
+
+<p class="issue">Come up with better explanation of the mapping with diagram.
+The subtraction term in the above formula ensures that the boundary conditions
+are met.</p>
+
+<div class="note">
+  <p>One method of rendering a patch is to "divide and conquer."  Check
+  if the four corner colors of the patch are the same within a
+  specified tolerance. If so, paint the patch with the average color
+  using the normal path filling routine. If not, divide the patch
+  into four smaller patches and repeat the color tolerance
+  check. Repeat the process as many times as necessary.</p>
+
+  <p>Another way to render a patch is to first divide the patch
+  vertically or horizontally into a series of smaller patches that
+  are each less than one pixel high or wide. Then each resulting
+  patch can be rendered as a path.</p>
+</div>
+
+<p>For a mesh, the individual patches are placed in an array. There
+are two reasons for using an array. The first is that an array of
+meshes is a natural result for most content creation processes
+(start with a path and then subdivide its area into rows and
+columns of patches).  The second is that the data can be compacted
+by sharing sides and corners. The array structure is conceptual
+only. The actual mesh can be distorted in any way possible. The
+mesh gradient syntax is designed so that it is easy to simulate
+other types of gradients such as conical gradients or triangle
+meshes as shown in the examples below.</p>
+
+<p>The structure of a mesh gradient is as follows:</p>
+
+<div class="example">
+<pre>
+&lt;meshGradient x="100" y="100"&gt;
+  &lt;meshRow&gt;
+    &lt;meshPatch&gt;
+      &lt;stop .../&gt;
+        Up to four stops in first patch. See details below.
+    &lt;/meshPatch&gt;
+    &lt;meshPatch&gt;
+      Any number of meshPatches in row.
+    &lt;/meshPatch&gt;
+  &lt;/meshRow&gt;
+  &lt;meshRow&gt;
+    Any number of meshRows, each with the same number of meshPatches as in the first row.
+  &lt;/meshRow&gt;
+&lt;/meshGradient&gt;
+</pre>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support photorealistic gradients.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item04">Mesh gradients are accepted by the WG for SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow more complex gradients such as those found in nature.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Tav (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3121">ACTION-3121</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation">
+  <p>Resolution: Rename stop-path to 'd' or 'path' (Coons patch syntax).</p>
+  <p><a href="http://www.w3.org/Graphics/SVG/WG/wiki/SVG2_Resolutions#Rename_stop-path_to_.27d.27_or_.27path.27_.28Coons_patch_syntax.29">Seattle 2011 F2F day 3</a></p>
+</div>
+
+<div class="annotation">
+  <p>Resolution: We will allow just C/c/L/l in mesh path data. We will leave out tensor control points.
+  We will not allow multiple colors at mesh intersections, just use zero size patches instead.</p>
+  <p><a href="http://lists.w3.org/Archives/Public/www-svg/2011Oct/0046.html">Boston 2011 F2F</a></p>
+</div>
+
+
+<p id="MeshGradientElement">Mesh gradients are defined by a <a>'meshGradient'</a>
+element.</p>
+
+<edit:elementsummary name='meshGradient'/>
+
+<p class="issue">TODO: Define <span id="MeshGradientElementXAttribute" class="attr-name">'x'</span>,
+<span id="MeshGradientElementYAttribute" class="attr-name">'y'</span>,
+<span id="MeshGradientElementGradientUnitsAttribute" class="attr-name">'gradientUnits'</span>
+<span id="MeshGradientElementGradientTransformAttribute" class="attr-name">'gradientTransform'</span> and
+<span id="MeshGradientElementHrefAttribute" class="attr-name">'href'</span>
+attributes.</p>
+
+</edit:with>
+
+<edit:with element='meshRow'>
+
+<p id="MeshRowElement">Mesh rows are defined by a <a>'meshRow'</a> element.</p>
+
+<edit:elementsummary name='meshRow'/>
+
+</edit:with>
+
+<edit:with element='meshPatch'>
+
+<p id="MeshPatchElement">Mesh patches are defined by a <a>'meshPatch'</a>
+element.</p>
+
+<edit:elementsummary name='meshPatch'/>
+
+</edit:with>
+
+<h3 id="GradientStops">Gradient stops</h3>
+
+<edit:with element='stop'>
+
+<p id="StopElement">The vector (linear and radial gradients)
+or array (mesh gradients) of colors to use in a gradient is
+defined by the <a>'stop'</a> elements that are child elements to a
+<a>'linearGradient'</a>, <a>'radialGradient'</a>, or <a>'meshPatch'</a>
+element.</p>
+
+<p class="annotation">In SVG 1.1, the above read: "The ramp of
+colors..." but "ramp" is used nowhere else in this section.</p>
+
+<edit:elementsummary name='stop'/>
+
+<h4 id="GradientStopAttributes">Attributes</h4>
+
+  <dl class="attrdef-list-svg2">
+
+    <dt id="StopElementOffsetAttribute">
+      <span class="adef">offset</span>
+    </dt>
+    <dd>
+
+      <p>
+	Indicates were the gradient stop is placed.  For linear
+	gradients, the <a>'offset'</a> attribute represents a location
+	along the <em>gradient vector</em>. For radial gradients, it
+	represents a fractional distance from the edge of the
+	innermost/smallest circle to the edge of the outermost/largest
+	circle. This attribute does not apply to mesh gradients.
+      </p>
+
+      <dl class="attrdef-svg2">
+
+	<dt>Value</dt>                <dd><a>&lt;number&gt;</a> | <a>&lt;percentage&gt;</a></dd>
+	<dt><a>Lacuna value</a></dt>  <dd>see notes below</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+
+      </dl>
+
+      <dl class="attrdef-values">
+
+	<dt><a>&lt;number&gt;</a></dt>
+        <dd>A number usually ranging from 0 to 1.</dd>
+
+	<dt><a>&lt;percentage&gt;</a></dt>
+        <dd>A percentage usually ranging from 0% to 100%.</dd>
+
+      </dl>
+
+    </dd>
+
+    <dt id="StopElementPathAttribute">
+      <span class="adef">path</span>
+    </dt>
+    <dd>
+
+      <p>
+	Gives the path for one side of a mesh gradient patch.
+
+	This attribute applies only to mesh gradients.
+      </p>
+
+      <dl class="attrdef-svg2">
+
+	<dt>Value</dt>                <dd>mesh path data</dd>
+	<dt><a>Lacuna value</a></dt>  <dd>see notes below</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+
+      </dl>
+
+      <p>
+	A description of mesh path data.
+      </p>
+
+    </dd>
+
+  </dl>
+
+<h4 id="StopColorProperties">Properties</h4>
+
+  <dl class="propdef-list-svg2">
+
+    <dt id="StopColorProperty"><span class="propdef-title property">'stop-color'</span></dt>
+    <dd>
+
+      <p>
+	The <a>'stop-color'</a> property indicates what color to use
+	at that gradient stop. The keyword
+	<span class="attr-value">currentColor</span> and ICC colors
+	can be specified in the same manner as within a
+	<a href="painting.html#SpecifyingPaint">&lt;paint&gt;</a>
+	specification for the <a>'fill'</a> and <a>'stroke'</a>
+	properties.
+      </p>
+
+      <dl class="propdef-svg2">
+	<dt>Value</dt>
+        <dd>
+	  currentColor |
+          <a>&lt;color&gt;</a> <a>&lt;icccolor&gt;</a>
+	</dd>
+        <dt>Initial</dt>            <dd>black</dd>
+        <dt>Applies to</dt>         <dd><a>'stop'</a> elements</dd>
+        <dt>Inherited</dt>          <dd>no</dd>
+        <dt>Percentages</dt>        <dd>N/A</dd>
+        <dt>Media</dt>              <dd>visual</dd>
+        <dt><a>Animatable</a></dt>  <dd>yes</dd>
+      </dl>
+    </dd>
+
+    <dt id="StopOpacityProperty"><span class="propdef-title property">'stop-opacity'</span></dt>
+    <dd>
+
+      <p>
+	The <a>'stop-opacity'</a> property defines the opacity of
+	a given gradient stop.
+      </p>
+
+      <dl class="propdef-svg2">
+        <dt>Value</dt>              <dd>&lt;opacity-value&gt;</dd>
+        <dt>Initial</dt>            <dd>1</dd>
+        <dt>Applies to</dt>         <dd><a>'stop'</a> elements</dd>
+        <dt>Inherited</dt>          <dd>no</dd>
+        <dt>Percentages</dt>        <dd>N/A</dd>
+        <dt>Media</dt>              <dd>visual</dd>
+        <dt><a>Animatable</a></dt>  <dd>yes</dd>
+      </dl>
+
+      <dl class="propdef-values">
+	<dt>&lt;opacity-value&gt;</dt>
+	<dd>
+	  The opacity of the 'stopColor'. Any values outside the
+	  range 0.0 (fully transparent) to 1.0 (fully opaque) must be
+	  clamped to this range. The value of 'stop-opacity' is
+	  independent of the opacity used to render the paint via
+	  <a>'fill'</a> or <a>'stroke'</a>.
+	</dd>
+      </dl>
+
+    </dd>
+
+  </dl><!-- propdef-list -->
+
+<h4 id="StopNotes">Notes on gradient stops</h4>
+
+<ul>
+  <li>Gradient offset values less than 0 (or less than 0%) are
+  rounded up to 0%. Gradient offset values greater than 1 (or
+  greater than 100%) are rounded down to 100%.</li>
+
+  <li>It is necessary that at least two stops defined to have a
+  gradient effect. If no stops are defined, then painting shall
+  occur as if 'none' were specified as the paint style. If one
+  stop is defined, then paint with the solid color fill using
+  the color defined for that gradient stop.</li>
+
+  <li>Each gradient offset value is required to be equal to or
+  greater than the previous gradient stop's offset value. If a
+  given gradient stop's offset value is not equal to or greater
+  than all previous offset values, then the offset value is
+  adjusted to be equal to the largest of all previous offset
+  values.</li>
+
+  <li>
+    <p>If two gradient stops have the same offset value, then the
+    latter gradient stop controls the color value at the
+    overlap point. In particular:</p>
+
+    <pre><![CDATA[
+<stop offset="0" stop-color="white"/>
+<stop offset=".2" stop-color="red"/>
+<stop offset=".2" stop-color="blue"/>
+<stop offset="1" stop-color="black"/>
+]]></pre>
+
+    <p>will have approximately the same effect as:</p>
+
+    <pre><![CDATA[
+<stop offset="0" stop-color="white"/>
+<stop offset=".1999999999" stop-color="red"/>
+<stop offset=".2" stop-color="blue"/>
+<stop offset="1" stop-color="black"/>
+]]></pre>
+
+    <p>which is a gradient that goes smoothly from white to red,
+    then abruptly shifts from red to blue, and then goes
+    smoothly from blue to black.</p>
+  </li>
+</ul>
+
+</edit:with>
+
+<h2 id="Patterns">Patterns</h2>
+
+<edit:with element='pattern'>
+
+<p id="PatternElement">A pattern is used to <a>'fill'</a> or <a>'stroke'</a>
+an object using a pre-defined graphic object which can be replicated
+("tiled") at fixed intervals in <em>x</em> and <em>y</em> to cover the
+areas to be painted. Patterns are defined using a <a>'pattern'</a>
+element and then referenced by properties <a>'fill'</a> and
+<a>'stroke'</a> on a given <a>graphics element</a> to indicate that the
+given element shall be filled or stroked with the pattern.</p>
+
+<p>Attributes <a>'x'</a>, <a>'y'</a>, <a>'width'</a>, <a>'height'</a>
+and <a>'patternUnits'</a> define a reference rectangle somewhere
+on the infinite canvas. The reference rectangle has its top/left
+at (<var>x</var>,&nbsp;<var>y</var>) and its bottom/right at
+(<var>x</var>&nbsp;+&nbsp;<var>width</var>,&nbsp;<var>y</var>&nbsp;+&nbsp;<var>height</var>).
+The tiling theoretically extends a series of such rectangles to infinity in X
+and Y (positive and negative), with rectangles starting at
+(<var>x</var>&nbsp;+&nbsp;m*<var>width</var>,&nbsp;<var>y</var>&nbsp;+&nbsp;n*
+<var>height</var>) for each possible integer value for <em>m</em>
+and <em>n</em>.</p>
+
+<edit:elementsummary name='pattern'/>
+
+<h3 id="PatternElementAttributes">Attributes</h3>
+
+  <dl class="attrdef-list-svg2">
+
+    <dt id="PatternElementPatternUnitsAttribute"><span class="adef">patternUnits</span></dt>
+    <dd>
+
+      <p>
+	Defines the coordinate system for attributes
+	<a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+
+	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
+	<dt><a>Lacuna value</a></dt>  <dd>objectBoundingBox</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+
+      </dl>
+
+      <dl class="attrdef-values">
+
+	<dt>userSpaceOnUse</dt>
+        <dd>
+	  <p>
+            If <span class="attr-value">patternUnits="userSpaceOnUse"</span>,
+
+            <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
+
+            represent values in the coordinate system that results
+            from taking the current user coordinate system in place at
+            the time when the <a>'pattern'</a> element is referenced
+            (i.e., the user coordinate system for the element
+            referencing the <a>'pattern'</a> element via a
+            <a>'fill'</a> or <a>'stroke'</a> property) and then
+            applying the transform specified by attribute
+            <a>'patternTransform'</a>. Percentages
+            represent values relative to the current viewport.
+	  </p>
+	</dd>
+
+	<dt>objectBoundingBox</dt>
+	<dd>
+	  <p>
+            If <span class="attr-value">patternUnits="objectBoundingBox"</span>,
+            the user coordinate system for attributes
+
+            <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
+
+            is established using the bounding box of the element to
+            which the pattern is applied
+            (see <a href="coords.html#ObjectBoundingBox">Object
+            bounding box units</a>) and then applying the transform
+            specified by attribute <a>'patternTransform'</a>.
+            Percentages represent values relative to the bounding box
+            for the object.
+	  </p>
+	</dd>
+
+      </dl><!-- Attribute values -->
+
+    </dd>
+
+    <dt id="PatternElementPatternContentUnitsAttribute">
+      <span class="adef">patternContentUnits</span>
+    </dt>
+    <dd>
+
+      <p>
+	Defines the coordinate system for the contents of the
+	<a>'pattern'</a>. Note that this attribute has no effect if
+	attribute <a>'viewBox'</a> is specified.
+      </p>
+
+      <dl class="attrdef-svg2">
+
+	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
+	<dt><a>Lacuna value</a></dt>  <dd>userSpaceOnUse</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+
+      </dl>
+
+      <dl class="attrdef-values">
+
+	<dt>userSpaceOnUse</dt>
+        <dd>
+	  <p>
+	    If <span class="attr-value">patternContentUnits="userSpaceOnUse"</span>,
+	    the user coordinate system for the contents of the <a>'pattern'</a>
+	    element is the coordinate system that results from taking
+	    the current user coordinate system in place at the time
+	    when the <a>'pattern'</a> element is referenced (i.e., the
+	    user coordinate system for the element referencing the
+	    <a>'pattern'</a> element via a <a>'fill'</a> or <a>'stroke'</a>
+	    property) and then applying the transform specified by attribute
+	    <a>'patternTransform'</a>.
+	  </p>
+	</dd>
+
+	<dt>objectBoundingBox</dt>
+	<dd>
+	  <p>
+            If <span class="attr-value">patternContentUnits="objectBoundingBox"</span>,
+            the user coordinate system for the contents of
+            the <a>'pattern'</a> element is established using the
+            bounding box of the element to which the pattern is
+            applied
+            (see <a href="coords.html#ObjectBoundingBox">Object
+            bounding box units</a>) and then applying the transform
+            specified by attribute <a>'patternTransform'</a>.
+	  </p>
+	</dd>
+
+      </dl><!-- Attribute values -->
+
+    </dd>
+
+    <dt id="PatternElementPatternTransformAttribute">
+      <span class="adef">patternTransform</span>
+    </dt>
+    <dd>
+
+      <p>
+	Contains the definition of an optional additional
+        transformation from the pattern coordinate system onto the
+        target coordinate system
+
+        (i.e., <span class='attr-value'>'userSpaceOnUse'</span> or
+        <span class='attr-value'>'objectBoundingBox'</span>).
+
+	This allows for things such as skewing the pattern tiles.
+
+	This additional transformation matrix is post-multiplied to
+        (i.e., inserted to the right of) any previously defined
+        transformations, including the implicit transformation
+        necessary to convert
+        from <a href="coords.html#ObjectBoundingBox">object bounding
+        box units</a> to user space.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a>&lt;transform-list&gt;</a></dd>
+	<dt><a>Lacuna value</a></dt>  <dd>identity transform</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="PatternElementXAttribute"><span class="adef">x</span></dt>
+    <dd>
+      <p>
+	<a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
+        indicate how the pattern tiles are placed and spaced. These
+        attributes represent coordinates and values in the coordinate
+        space specified by the combination of
+        attributes <a>'patternUnits'</a>
+        and <a>'patternTransform'</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt><a>Lacuna value</a></dt>  <dd>0</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="PatternElementYAttribute"><span class="adef">y</span></dt>
+    <dd>
+
+      <p>
+	See <a>'x'</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt><a>Lacuna value</a></dt>  <dd>0</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="PatternElementWidthAttribute"><span class="adef">width</span></dt>
+    <dd>
+
+      <p>
+	See <a>'x'</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt><a>Lacuna value</a></dt>  <dd>0</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+      <p>
+        A negative value is an error
+        (see <a href="implnote.html#ErrorProcessing">Error
+        processing</a>).  A value of zero disables rendering of the
+        element (i.e., no paint is applied).
+      </p>
+
+    </dd>
+
+    <dt id="PatternElementHeightAttribute"><span class="adef">height</span></dt>
+    <dd>
+
+      <p>
+	See <a>'x'</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt><a>Lacuna value</a></dt>  <dd>0</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+      <p>
+        A negative value is an error (see <a href="implnote.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables rendering of the element (i.e., no
+        paint is applied).
+      </p>
+
+    </dd>
+ 
+    <dt id="PatternElementHrefAttribute"><span class="adef">xlink:href</span></dt>
+    <dd>
+      <p>
+	An <a href="linking.html#IRIReference">IRI reference</a> to a
+        different <a>'pattern'</a> element within the current SVG
+        document fragment. Any attributes which are defined on the
+        referenced element which are not defined on this element are
+        inherited by this element. If this element has no children,
+        and the referenced element does (possibly due to its
+        own <a>'xlink:href'</a> attribute), then this element inherits
+        the children from the referenced element. Inheritance can be
+        indirect to an arbitrary level; thus, if the referenced
+        element inherits attributes or children due to its
+        own <a>'xlink:href'</a> attribute, then the current element
+        can inherit those attributes or children.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a>&lt;iri&gt;</a></dd> 
+	<dt><a>Lacuna value</a></dt>  <dd>empty</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="PatternElementPreserveAspectRatioAttribute"><span class="adef">preserveAspectRatio</span></dt>
+    <dd>
+
+      <p>
+        See <a>'preserveAspectRatio'</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>
+	<dd>
+	  <a href="coords.html#PreserveAspectRatioAttribute">[defer] &lt;align&gt;
+	    [&lt;meetOrSlice&gt;]</a>
+	</dd>
+	<dt><a>Lacuna value</a></dt>  <dd>xMidYMid meet</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+  </dl>
+
+<h3 id="PatternNotes">Notes on patterns</h3>
+
+<p>SVG's <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
+the <a>'overflow'</a> property for <a>'pattern'</a> elements to
+<span class="prop-value">hidden</span>, which causes a rectangular clipping
+path to be created at the bounds of the pattern tile.  Unless the
+<a>'overflow'</a> property is overridden, any graphics within the pattern
+which goes outside of the pattern rectangle will be clipped.  Note that if
+the <a>'overflow'</a> property is set to <span class="prop-value">visible</span>
+the rendering behavior for the pattern is undefined. 
+<a href="pservers.html#ExamplePattern01">Example pattern01</a> below shows the
+effect of clipping to the pattern tile.</p>
+
+<p>The contents of the <a>'pattern'</a> are relative to a new coordinate
+system. If there is a <a>'viewBox'</a> attribute, then the new coordinate
+system is fitted into the region defined by the <a>'x'</a>, <a>'y'</a>,
+<a>'width'</a>, <a>'height'</a> and <a>'patternUnits'</a> attributes on the
+<a>'pattern'</a> element using the standard rules for <a>'viewBox'</a> and
+<a>'preserveAspectRatio'</a>. If there is no <a>'viewBox'</a> attribute, then
+the new coordinate system has its origin at (<var>x</var>,&nbsp;<var>y</var>),
+where <var>x</var> is established by the <a>'x'</a> attribute on the
+<a>'pattern'</a> element, and <var>y</var> is established by the <a>'y'</a>
+attribute on the <a>'pattern'</a> element. Thus, in the following example:</p>
+
+<div class="example">
+<pre><![CDATA[
+<pattern x="10" y="10" width="20" height="20">
+  <rect x="5" y="5" width="10" height="10"/>
+</pattern>
+]]></pre>
+</div>
+
+<p>the rectangle has its top/left located 5 units to the right and 5
+units down from the origin of the pattern tile.</p>
+
+<p>The <a>'viewBox'</a> attribute introduces a supplemental transformation
+which is applied on top of any transformations necessary to create a new
+pattern coordinate system due to attributes <a>'x'</a>, <a>'y'</a>,
+<a>'width'</a>, <a>'height'</a> and <a>'patternUnits'</a>.</p>
+
+<p><a href="styling.html#SVGStylingProperties">Properties</a> inherit into the
+<a>'pattern'</a> element from its ancestors; properties do <em>not</em>
+inherit from the element referencing the <a>'pattern'</a> element.</p>
+
+<p><a>'pattern'</a> elements are never rendered directly; their only
+usage is as something that can be referenced using the <a>'fill'</a>
+and <a>'stroke'</a> properties. The <a>'display'</a> property does not
+apply to the <a>'pattern'</a> element; thus, <a>'pattern'</a> elements
+are not directly rendered even if the <a>'display'</a> property is set
+to a value other than
+<span class="prop-value">none</span>, and <a>'pattern'</a> elements are
+available for referencing even when the <a>'display'</a> property on the
+<a>'pattern'</a> element or any of its ancestors is set to
+<span class="prop-value">none</span>.</p>
+
+<p><a href="script.html#EventAttributes">Event attributes</a> and
+<a href="svgdom.html#EventListeners">event listeners</a> attached
+to the contents of a <a>'pattern'</a> element are not processed;
+only the rendering aspects of <a>'pattern'</a> elements are
+processed.</p>
+
+<p id="ExamplePattern01"><span class="example-ref">Example pattern01</span>
+shows how to fill a rectangle by referencing a pattern paint
+server. Note how the blue stroke of each triangle has been
+slightly clipped at the top and the left. This is due to SVG's
+<a href="styling.html#UAStyleSheet">user agent style sheet</a> setting
+the <a>'overflow'</a> property for <a>'pattern'</a> elements to
+<span class="prop-value">hidden</span>, which causes the pattern to be clipped
+to the bounds of the pattern tile.</p>
+
+<edit:example href='images/pservers/pattern01.svg' name='pattern01'
+  description='fill a rectangle by referencing a pattern paint server' image='yes' link='yes'/>
+
+</edit:with>
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<h3 id="InterfaceSVGSolidColorElement">Interface SVGSolidColorElement</h3>
+
+<edit:with element='solidColor'>
+
+<pre class="idl"></pre>
+
+<p class="issue">IDL needs to be added for SVGSolidColorElement.</p>
+
+</edit:with>
+
+<h3 id="InterfaceSVGGradientElement">Interface SVGGradientElement</h3>
+
+
+The <a>SVGGradientElement</a> interface is a base interface used by
+<a>SVGLinearGradientElement</a> and <a>SVGRadialGradientElement</a>.
+<pre class="idl">interface <b>SVGGradientElement</b> : <a>SVGElement</a> {
+
+  // Spread Method Types
+  const unsigned short <a href="pservers.html#__svg__SVGGradientElement__SVG_SPREADMETHOD_UNKNOWN">SVG_SPREADMETHOD_UNKNOWN</a> = 0;
+  const unsigned short <a href="pservers.html#__svg__SVGGradientElement__SVG_SPREADMETHOD_PAD">SVG_SPREADMETHOD_PAD</a> = 1;
+  const unsigned short <a href="pservers.html#__svg__SVGGradientElement__SVG_SPREADMETHOD_REFLECT">SVG_SPREADMETHOD_REFLECT</a> = 2;
+  const unsigned short <a href="pservers.html#__svg__SVGGradientElement__SVG_SPREADMETHOD_REPEAT">SVG_SPREADMETHOD_REPEAT</a> = 3;
+
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="pservers.html#__svg__SVGGradientElement__gradientUnits">gradientUnits</a>;
+  readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedTransformList">SVGAnimatedTransformList</a> <a href="pservers.html#__svg__SVGGradientElement__gradientTransform">gradientTransform</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="pservers.html#__svg__SVGGradientElement__spreadMethod">spreadMethod</a>;
+};
+
+<a>SVGGradientElement</a> implements <a>SVGURIReference</a>;
+<a>SVGGradientElement</a> implements <a>SVGUnitTypes</a>;</pre>
+
+<dl class="interface">
+<dt class="constants-header">Constants in group “Spread Method Types”:</dt>
+<dd>
+<dl class="constants">
+
+<dt id="__svg__SVGGradientElement__SVG_SPREADMETHOD_UNKNOWN"
+    class="constant first-child"><b>SVG_SPREADMETHOD_UNKNOWN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+The type is not one of predefined types. It is invalid to attempt to
+define a new value of this type or to attempt to switch an existing
+value to this type.
+
+
+</div>
+</dd>
+
+<dt id="__svg__SVGGradientElement__SVG_SPREADMETHOD_PAD" class="constant"><b>SVG_SPREADMETHOD_PAD</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+Corresponds to value <span class="attr-value">'pad'</span>.
+
+
+</div>
+</dd>
+
+<dt id="__svg__SVGGradientElement__SVG_SPREADMETHOD_REFLECT" class="constant"><b>SVG_SPREADMETHOD_REFLECT</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+Corresponds to value <span class="attr-value">'reflect'</span>.
+
+
+</div>
+</dd>
+
+<dt id="__svg__SVGGradientElement__SVG_SPREADMETHOD_REPEAT" class="constant"><b>SVG_SPREADMETHOD_REPEAT</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+<dd class="constant">
+<div>
+Corresponds to value <span class="attr-value">'repeat'</span>.
+
+
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGGradientElement__gradientUnits" class="attribute first-child"><b>gradientUnits</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <span class="attr-name">'gradientUnits'</span>
+on the given element.  Takes one of the constants defined in
+<a>SVGUnitTypes</a>.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGGradientElement__gradientTransform" class="attribute"><b>gradientTransform</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedTransformList">SVGAnimatedTransformList</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <span class="attr-name">'gradientTransform'</span>
+on the given element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGGradientElement__spreadMethod" class="attribute"><b>spreadMethod</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <span class="attr-name">'spreadMethod'</span>
+on the given element.  One of the Spread Method Types defined on
+this interface.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+<h3 id="InterfaceSVGLinearGradientElement">Interface SVGLinearGradientElement</h3>
+
+
+<edit:with element='linearGradient'>
+
+The <a>SVGLinearGradientElement</a> interface corresponds to the
+<a>'linearGradient'</a> element.
+<pre class="idl">interface <b>SVGLinearGradientElement</b> : <a>SVGGradientElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGLinearGradientElement__x1">x1</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGLinearGradientElement__y1">y1</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGLinearGradientElement__x2">x2</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGLinearGradientElement__y2">y2</a>;
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGLinearGradientElement__x1" class="attribute first-child"><b>x1</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x1'</a> on the given
+<a>'linearGradient'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGLinearGradientElement__y1" class="attribute"><b>y1</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y1'</a> on the given
+<a>'linearGradient'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGLinearGradientElement__x2" class="attribute"><b>x2</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x2'</a> on the given
+<a>'linearGradient'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGLinearGradientElement__y2" class="attribute"><b>y2</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y2'</a> on the given
+<a>'linearGradient'</a> element.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGRadialGradientElement">Interface SVGRadialGradientElement</h3>
+
+
+<edit:with element='radialGradient'>
+
+The <a>SVGRadialGradientElement</a> interface corresponds to the
+<a>'radialGradient'</a> element.
+<pre class="idl">interface <b>SVGRadialGradientElement</b> : <a>SVGGradientElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__cx">cx</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__cy">cy</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__r">r</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__fx">fx</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__fy">fy</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__fr">fr</a>;
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGRadialGradientElement__cx" class="attribute first-child"><b>cx</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'cx'</a> on the given
+<a>'radialGradient'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGRadialGradientElement__cy" class="attribute"><b>cy</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'cy'</a> on the given
+<a>'radialGradient'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGRadialGradientElement__r" class="attribute"><b>r</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'r'</a> on the given
+<a>'radialGradient'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGRadialGradientElement__fx" class="attribute"><b>fx</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'fx'</a> on the given
+<a>'radialGradient'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGRadialGradientElement__fy" class="attribute"><b>fy</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'fy'</a> on the given
+<a>'radialGradient'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGRadialGradientElement__fr" class="attribute"><b>fr</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'fr'</a> on the given
+<a>'radialGradient'</a> element.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGMeshGradientElement">Interface SVGMeshGradientElement</h3>
+
+
+<edit:with element='meshGradient'>
+
+The <a>SVGMeshGradientElement</a> interface corresponds to the
+<a>'meshGradient'</a> element.
+<pre class="idl">interface <b>SVGMeshGradientElement</b> : <a>SVGGradientElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGMeshGradientElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGMeshGradientElement__y">y</a>;
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGMeshGradientElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given
+<a>'meshGradient'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGMeshGradientElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given
+<a>'meshGradient'</a> element.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGMeshRowElement">Interface SVGMeshRowElement</h3>
+
+<pre class="idl">interface <b>SVGMeshRowElement</b> : <a>SVGElement</a> {
+};</pre>
+
+
+<h3 id="InterfaceSVGMeshPatchElement">Interface SVGMeshPatchElement</h3>
+
+<pre class="idl">interface <b>SVGMeshPatchElement</b> : <a>SVGElement</a> {
+};</pre>
+
+
+<h3 id="InterfaceSVGStopElement">Interface SVGStopElement</h3>
+
+
+<edit:with element='stop'>
+
+The <a>SVGStopElement</a> interface corresponds to the <a>'stop'</a>
+element.
+<pre class="idl">interface <b>SVGStopElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedNumber">SVGAnimatedNumber</a> <a href="pservers.html#__svg__SVGStopElement__offset">offset</a>;
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGStopElement__offset" class="attribute first-child"><b>offset</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedNumber">SVGAnimatedNumber</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'offset'</a> on the given <a>'stop'</a>
+element.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGPatternElement">Interface SVGPatternElement</h3>
+
+
+<edit:with element='pattern'>
+
+The <a>SVGPatternElement</a> interface corresponds to the <a>'pattern'</a>
+element.
+<pre class="idl">interface <b>SVGPatternElement</b> : <a>SVGElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="pservers.html#__svg__SVGPatternElement__patternUnits">patternUnits</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="pservers.html#__svg__SVGPatternElement__patternContentUnits">patternContentUnits</a>;
+  readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedTransformList">SVGAnimatedTransformList</a> <a href="pservers.html#__svg__SVGPatternElement__patternTransform">patternTransform</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGPatternElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGPatternElement__y">y</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGPatternElement__width">width</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGPatternElement__height">height</a>;
+};
+
+<a>SVGPatternElement</a> implements <a>SVGFitToViewBox</a>;
+<a>SVGPatternElement</a> implements <a>SVGURIReference</a>;
+<a>SVGPatternElement</a> implements <a>SVGUnitTypes</a>;</pre>
+
+<dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGPatternElement__patternUnits" class="attribute first-child"><b>patternUnits</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'patternUnits'</a> on the given
+<a>'pattern'</a> element. Takes one of the constants defined in
+<a>SVGUnitTypes</a>.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGPatternElement__patternContentUnits" class="attribute"><b>patternContentUnits</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'patternContentUnits'</a> on the given
+<a>'pattern'</a> element. Takes one of the constants defined in
+<a>SVGUnitTypes</a>.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGPatternElement__patternTransform" class="attribute"><b>patternTransform</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedTransformList">SVGAnimatedTransformList</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'patternTransform'</a> on the given
+<a>'pattern'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGPatternElement__x" class="attribute"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given <a>'pattern'</a>
+element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGPatternElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given <a>'pattern'</a>
+element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGPatternElement__width" class="attribute"><b>width</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'width'</a> on the given <a>'pattern'</a>
+element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGPatternElement__height" class="attribute"><b>height</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'height'</a> on the given <a>'pattern'</a>
+element.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+</body>
+</html>
