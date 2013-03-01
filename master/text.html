@@ -3621,11 +3621,12 @@ the word "different" (i.e., yellow fill, darkgreen stroke):</p>
 <edit:with element='textPath'>
 
 <p>In addition to text drawn in a straight line, SVG also includes the ability
-to place text along the shape of a <a>'path'</a> element. To specify that a
-block of text is to be rendered along the shape of a <a>'path'</a>, include
-the given text within a <a>'textPath'</a> element which includes an
-<a>'xlink:href'</a> attribute with an <a>IRI reference</a>
-to a <a>'path'</a> element.</p>
+to place text along the shape of a <a>'path'</a> element.
+To specify that a block of text is to be rendered along the shape of
+a <a>'path'</a>, include the given text within a <a>'textPath'</a> element which
+includes an <a>'xlink:href'</a> attribute with an <a>IRI reference</a> to
+a <a>'path'</a> element, or a <a>'d'</a> attribute that specifies the path data
+directly.</p>
 
 <h3 id="TextPathElement">The <span class="element-name">'textPath'</span> element</h3>
 
@@ -3659,7 +3660,7 @@ to a <a>'path'</a> element.</p>
         class="adef">startOffset</span> = "<span
         class="attr-value"><a
         href="types.html#DataTypeLength">&lt;length&gt;</a></span>"</dt>
-        <dd>An offset from the start of the <a>'path'</a> for the initial
+        <dd>An offset from the start of the path for the initial
         current text position, calculated using the user agent's <a
         href="paths.html#DistanceAlongAPath">distance along the
         path</a> algorithm.<br />
@@ -3671,9 +3672,9 @@ to a <a>'path'</a> element.</p>
          If a percentage is given, then the <a>'startOffset'</a> represents a
         percentage distance along the entire path. Thus, <span
         class="attr-value">startOffset="0%"</span> indicates the
-        start point of the <a>'path'</a> and <span
+        start point of the path and <span
         class="attr-value">startOffset="100%"</span> indicates the
-        end point of the <a>'path'</a>.<br />
+        end point of the path.<br />
         <br />
          If the attribute is not specified, the effect is as if a
         value of "0" were specified.<br />
@@ -3727,6 +3728,30 @@ to a <a>'path'</a> element.</p>
         value of <span class="attr-value">exact</span> were
         specified.<br />
          <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        yes.</span></dd>
+        <dt id="TextPathElementDAttribute"><span
+        class="adef">d</span> =
+        "<a href="paths.html#PathData"><em>path data</em></a>"</dt>
+        <dd>The definition of the path onto which the glyphs will be rendered.
+        The handling of erroneous path data follows the behavior specified in
+        the <a href="implnote.html#PathElementImplementationNotes"><span
+        class="element-name">'path'</span> element implementation
+        notes</a>.<br/>
+        If both the <a>'d'</a> attribute and <a>'xlink:href'</a>
+        attributes are specified, it is as if the <a>'xlink:href'</a> attribute
+        were not specified for the purposes of rendering.
+        In the <a>SVGTextPathElement</a> interface both values will still be
+        reflected.
+        Furthermore, if a value for <a>'xlink:href'</a> is specified in markup
+        and path data is subsequently specified via the
+        <a>SVGAnimatedPathData::pathSegList</a> member of the
+        <a>SVGTextPathElement</a>, then this is equivalent to specifying the
+        <a>'d'</a> attribute&#x2014;the <a>'xlink:href'</a> will be disregarded
+        for rendering and the path specified in the
+        <a>SVGAnimatedPathData::pathSegList</a> will be used instead.
+        <br/>
+        <span class="anim-target"><a
         href="animate.html#Animatable">Animatable</a>:
         yes.</span></dd>
         <dt><a id="TextPathElementHrefAttribute"></a> <span
@@ -5329,7 +5354,8 @@ element.
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="text.html#__svg__SVGTextPathElement__spacing">spacing</a>;
 };
 
-<a>SVGTextPathElement</a> implements <a>SVGURIReference</a>;</pre>
+<a>SVGTextPathElement</a> implements <a>SVGURIReference</a>;
+<a>SVGTextPathElement</a> implements <a>SVGAnimatedPathData</a>;</pre>
 
 <dl class="interface">
 <dt class="constants-header">Constants in group “textPath Method Types”:</dt>
