@@ -1,0 +1,780 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>SVG Document Object Model (DOM)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <!--
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  -->
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>SVG Document Object Model (DOM)</h1>
+
+<p class="normativity"><strong>This appendix is normative.</strong></p>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Improve the DOM.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-35-49">We will generally improve the SVG DOM for SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>Help authors use the SVG DOM by making it less Java-oriented.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3273">ACTION-3273</a>)</td>
+    </tr>
+    <tr>
+      <th>Note:</th>
+      <td>See <a href="http://www.w3.org/Graphics/SVG/WG/wiki/SVG_2_DOM">SVG 2 DOM</a> Wiki page.</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Improve the SVG path DOM APIs.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-23-23">We will improve the SVG path DOM APIs in SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>Clean up SVGPathSegList interface, and possibly share an API with Canvas.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (no action)</td>
+    </tr>
+  </table>
+</div>
+
+<h2 id="SVGDOMOverview">SVG DOM overview</h2>
+
+<p class="ready-for-wg-review">The SVG DOM is defined in terms of <a href="http://www.w3.org/TR/WebIDL/">Web IDL</a>
+interfaces. All IDL fragments in this specification must be interpreted as
+required for <a href="http://www.w3.org/TR/WebIDL/#dfn-conforming-idl-fragment">conforming IDL fragments</a>,
+as described in the Web IDL specification. [<a href="refs.html#ref-WEBIDL">WEBIDL</a>]</p>
+
+<p>The SVG DOM builds upon a number of DOM specifications.  In particular:</p>
+
+<ul>
+  <li>The SVG DOM requires complete support for <a href="http://www.w3.org/TR/dom/">DOM4</a>
+  [<a href="refs.html#ref-DOM4">DOM4</a>]</li>
+
+  <li>The SVG DOM requires complete support for 
+  <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Views-20001113/">DOM Level 2 Views</a>
+  [<a href="refs.html#ref-DOM2VIEWS">DOM2VIEWS</a>].</li>
+
+  <li>The SVG DOM requires support for relevant aspects of
+  <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Events-20001113/">DOM Level 2 Events</a>
+  [<a href="refs.html#ref-DOM2EVENTS">DOM2EVENTS</a>].
+  (For the specific features from DOM 2 Events that are required, see
+  see <a href="svgdom.html#RelationshipWithDOM2Events">Relationship with DOM Level 2 Events</a>.)</li>
+
+  <li>For implementations that support CSS, the SVG DOM requires complete
+  support for
+  <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/stylesheets.html">DOM Level 2 Style Sheets</a>
+  ([<a href="refs.html#ref-DOM2STYLE">DOM2STYLE</a>], chapter 1)
+  and relevant aspects of
+  <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/css.html">DOM Level 2 CSS</a>
+  ([<a href="refs.html#ref-DOM2STYLE">DOM2STYLE</a>], chapter 2).
+  (For the specific features from DOM 2 CSS that are required, see
+  <a href="svgdom.html#RelationshipWithCSSOM">Relationship with DOM Level 2 CSS</a>.)</li>
+</ul>
+
+<p>A DOM application can use the <strong>hasFeature</strong> method of
+the <a>DOMImplementation</a> interface to
+verify that the interfaces listed in this section are
+supported. The list of available interfaces is provided in
+section <a href="svgdom.html#FeatureStrings">Feature strings
+for the <strong>hasFeature</strong> method call</a>.</p>
+
+<p>All SVG DOM objects that directly correspond to an attribute, e.g.
+the <a>SVGAnimatedLength</a> <a>SVGRectElement::ry</a> in an
+<a>SVGRectElement</a>, are live.
+This means that any changes made to the attribute are immediately
+reflected in the corresponding SVG DOM object.</p>    
+
+<h3 id="SVGObjectInitialization">SVG DOM object initialization</h3>
+
+<p>The SVG DOM allows attributes to be accessed even though they haven't been
+specified explicitly in the document markup. When this happens an appropriate object 
+is created, initialized and returned. This newly constructed object does not affect rendering until
+it is modified for the first time. After the first modification the object
+becomes live, such that any modifications made to the corresponding
+attribute are immediately reflected in the object.</p>
+
+<p>For example, if <code>rectElement.x.baseVal</code> is accessed
+and the <a>'rect/x'</a> attribute was not specified in the document, the
+returned SVG DOM object would represent the value <span class="attr-value">0 user units</span>.</p>
+
+<p>For cases where an attribute has a default value the returned SVG DOM object that must reflect that value, 
+and for all other cases the object is initialized as described below.
+If a particular SVG DOM interface is not listed below that means
+that the object initialization shall be done using the values for the 
+objects that the interface contains, e.g <span class="DOMInterfaceName">DOMString</span> in the
+case of <a>SVGAnimatedString</a>, or four <span class="DOMInterfaceName">floats</span> in the case of <a>SVGRect</a>.</p>
+
+<dl id="SVGObjectInitValues">
+  <dt class="DOMInterfaceName"><a href="text.html#__svg__SVGTextContentElement__textLength">SVGTextContentElement.textLength</a></dt>
+  <dd>Initialized with the return-value of <a>SVGTextContentElement::getComputedTextLength</a>
+  on the same element.</dd>
+
+  <dt class="DOMInterfaceName">DOMString</dt>
+  <dd>Initialized as the empty string (<span class="attr-value">""</span>).</dd>
+
+  <dt class="DOMInterfaceName">float</dt>
+  <dt class="DOMInterfaceName">long</dt>
+  <dt class="DOMInterfaceName">short</dt>
+  <dd>Initialized as <span class="attr-value">0</span>.</dd>
+
+  <dt class="DOMInterfaceName">boolean</dt>
+  <dd>Initialized as <span class="attr-value">false</span>.</dd>
+
+  <dt class="DOMInterfaceName"><a>SVGLength</a></dt>
+  <dd>Initialized as <span class="attr-value">0 user units</span>
+  (<a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</a>).</dd>
+
+  <dt class="DOMInterfaceName"><a>SVGLengthList</a></dt>
+  <dt class="DOMInterfaceName"><a>SVGNumberList</a></dt>
+  <dt class="DOMInterfaceName"><a>SVGPointList</a></dt>
+  <dt class="DOMInterfaceName"><a>SVGStringList</a></dt>
+  <dt class="DOMInterfaceName"><a>SVGTransformList</a></dt>
+  <dd>Initialized as the empty list.</dd>
+
+  <dt class="DOMInterfaceName"><a>SVGAngle</a></dt>
+  <dd>Initialized as <span class="attr-value">0 in unspecified units</span>
+  (<a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNSPECIFIED">SVG_ANGLETYPE_UNSPECIFIED</a>).</dd>
+
+  <dt class="DOMInterfaceName"><a>SVGZoomAndPan</a></dt>
+  <dd>Initialized as <span class="attr-value">0</span>
+  (<a href="types.html#__svg__SVGZoomAndPan__SVG_ZOOMANDPAN_UNKNOWN">SVG_ZOOMANDPAN_UNKNOWN</a>).</dd>
+
+  <dt class="DOMInterfaceName"><a>SVGPreserveAspectRatio</a></dt>
+  <dd>Initialized as <span class="attr-value">'xMidYMid meet'</span>.</dd>        
+</dl>
+
+<h2 id="ElementsInTheSVGDOM">Elements in the SVG DOM</h2>
+
+<p>Every <a>Element</a> object that corresponds to an SVG element (that is,
+an element with namespace URI "http://www.w3.org/2000/svg" and a
+local name that is one of the elements defined in this specification)
+must also implement the DOM interface identified in element definition.
+For example, in <a href="shapes.html#RectElement">The <span class="element-name">'rect'</span> element</a>,
+the <a>SVGRectElement</a> interface is identified.  This means that every
+<a>Element</a> object whose namespace URI is "http://www.w3.org/2000/svg"
+and whose local name is "rect" must also implement <a>SVGRectElement</a>.</p>
+
+<h2 id="SVGDOMNamingConventions">Naming conventions</h2>
+
+<p>The SVG DOM follows similar naming conventions to the
+<a href="http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-html.html">Document Object Model HTML</a>
+([<a href="refs.html#ref-DOM1">DOM1</a>], chapter 2).</p>
+
+<p>All names are defined as one or more English words
+concatenated together to form a single string. Property or
+method names start with the initial keyword in lowercase, and
+each subsequent word starts with a capital letter. For example,
+a property that returns document meta information such as the
+date the file was created might be named "fileDateCreated". In
+the ECMAScript binding, properties are exposed as properties of
+a given object.</p>
+
+<p>For attributes with the CDATA data type, the case of the
+return value is that given in the source document.</p>
+
+
+<h2 id="FeatureStrings">Feature strings for the <strong>hasFeature</strong> method call</h2>
+
+<p>The feature strings that are available for the
+<strong>hasFeature</strong> method call that is part of the SVG
+DOM's support for the <a>DOMImplementation</a> interface
+defined in
+<a href="http://www.w3.org/TR/dom/">DOM4</a>
+[<a href="refs.html#ref-DOM4">DOM4</a>]
+are the same features strings available for the <a>'requiredFeatures'</a> attribute that is
+available for many SVG elements.</p>
+
+<p>For all features that correspond to the SVG language and are
+documented in this specification (see appendix <a
+href="feature.html">Feature Strings</a> for a list of features
+in the SVG language), the <strong>version</strong> number for
+the <strong>hasFeature</strong> method call is "1.1". For
+features that correspond to other languages, refer to the
+relevant other specifications to determine the appropriate
+version number for the given feature.</p>
+
+<h2 id="RelationshipWithDOM2Events">Relationship with DOM Level 2 Events</h2>
+
+<p>The SVG DOM supports all of the interfaces defined in, and
+the following event types from,
+<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Events-20001113/">DOM Level 2 Events</a>
+[<a href="refs.html#ref-DOM2EVENTS">DOM2EVENTS</a>]:</p>
+
+<ul>
+  <li>
+    These <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Events-20001113/events.html#Events-eventgroupings-uievents">User Interface events</a>
+    ([<a href="refs.html#ref-DOM2EVENTS">DOM2EVENTS</a>], section 1.6.1):
+    <ul>
+      <li><a href="interact.html#FocusInEvent">DOMFocusIn</a></li>
+      <li><a href="interact.html#FocusOutEvent">DOMFocusOut</a></li>
+      <li><a href="interact.html#ActivateEvent">DOMActivate</a></li>
+    </ul>
+  </li>
+
+  <li>
+    These <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Events-20001113/events.html#Events-eventgroupings-mouseevents">mouse events</a>
+    ([<a href="refs.html#ref-DOM2EVENTS">DOM2EVENTS</a>], section 1.6.2):
+    <ul>
+      <li><a href="interact.html#ClickEvent">click</a></li>
+      <li><a href="interact.html#MouseDownEvent">mousedown</a></li>
+      <li><a href="interact.html#MouseUpEvent">mouseup</a></li>
+      <li><a href="interact.html#MouseOverEvent">mouseover</a></li>
+      <li><a href="interact.html#MouseMoveEvent">mousemove</a></li>
+      <li><a href="interact.html#MouseOutEvent">mouseout</a></li>
+    </ul>
+    <em>clientX</em> and <em>clientY</em> parameters for mouse
+    events represent the mouse coordinates at which the event
+    occurred relative to the DOM Implementation's client area.
+    <em>relatedTarget</em> is used to identify a secondary
+    EventTarget related to a UI event. Currently this attribute
+    is used with the mouseover event to indicate the
+    EventTarget which the pointing device exited and with the
+    mouseout event to indicate the EventTarget which the
+    pointing device entered.
+  </li>
+
+  <li>
+    These <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Events-20001113/events.html#Events-eventgroupings-mutationevents">mutation events</a>
+    ([<a href="refs.html#ref-DOM2EVENTS">DOM2EVENTS</a>], section 1.6.4):
+    <ul>
+      <li><a href="interact.html#DOMSubtreeModifiedEvent">DOMSubtreeModified</a></li>
+      <li><a href="interact.html#DOMNodeInsertedEvent">DOMNodeInserted</a></li>
+      <li><a href="interact.html#DOMNodeRemovedEvent">DOMNodeRemoved</a></li>
+      <li><a href="interact.html#DOMNodeRemovedFromDocumentEvent">DOMNodeRemovedFromDocument</a></li>
+      <li><a href="interact.html#DOMNodeInsertedIntoDocumentEvent">DOMNodeInsertedIntoDocument</a></li>
+      <li><a href="interact.html#DOMAttrModifiedEvent">DOMAttrModified</a></li>
+      <li><a href="interact.html#DOMCharacterDataModifiedEvent">DOMCharacterDataModified</a></li>
+    </ul>
+  </li>
+
+  <li>
+    The SVG DOM defines the following SVG-specific custom event
+    interfaces. These event interfaces are mandatory for SVG
+    user agents: 
+    <ul>
+      <li><a href="interact.html#LoadEvent">SVGLoad</a></li>
+      <li><a href="interact.html#UnloadEvent">SVGUnload</a></li>
+      <li><a href="interact.html#AbortEvent">SVGAbort</a></li>
+      <li><a href="interact.html#ErrorEvent">SVGError</a></li>
+      <li><a href="interact.html#ResizeEvent">SVGResize</a></li>
+      <li><a href="interact.html#ScrollEvent">SVGScroll</a>
+      (triggered by either scroll or pan user actions)</li>
+    </ul>
+  </li>
+
+  <li>
+    The SVG DOM defines an additional custom event interface: 
+    <ul>
+      <li><a href="interact.html#ZoomEvent">SVGZoom</a>
+      (definition can be found in the description of the <a>SVGZoomEvent</a> interface)</li>
+    </ul>
+  </li>
+
+  <li>
+    The following event types are triggered due to state
+    changes in animations. (The definitions for these events
+    can be found in the description of the <a>TimeEvent</a> interface.)
+    <ul>
+      <li><a href="interact.html#BeginEvent">beginEvent</a></li>
+      <li><a href="interact.html#EndEvent">endEvent</a></li>
+      <li><a href="interact.html#RepeatEvent">repeatEvent</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p id="EventListeners">While event listeners can be registered using an
+<code>addEventListener</code> call on any element in the DOM,
+the use of <a href="script.html#EventAttributes">event attributes</a>
+on elements where those attributes are disallowed will not result in their
+being invoked if the relevant event is dispatched to the element.
+For example, if the <a>'onclick'</a> attribute were specified on
+a <a>'title'</a> element, its contents would never be run in
+response to a <span class='attr-value'>click</span> event:</p>
+
+<pre class='example'><![CDATA[
+<svg xmlns="http://www.w3.org/2000/svg">
+  <title onclick="alert('Hello')">Invalid event attribute</title>
+  <script>
+    // Find the 'title' element.
+    var title = document.getElementsByTagNameNS("http://www.w3.org/2000/svg", "title")[0];
+
+    // Create and initialize a 'click' event.
+    var event = document.createEvent("MouseEvent");
+    event.initMouseEvent("click", true, false, this, 1, 0, 0, 0, 0, false,
+                         false, false, false, 0, null);
+
+    // Dispatch the event to the 'title' element.  Since onclick="" is not
+    // allowed on 'title', the alert will not show.
+    title.dispatchEvent(event);
+  </script>
+</svg>
+]]></pre>
+
+<p>See the <a href='attindex.html'>Attribute Index</a> for details on
+which elements a given event attribute is allowed to be specified on.</p>
+
+<p>Implementors may view the setting of event attributes as the
+creation and registration of an <a>EventListener</a> on the
+<a>EventTarget</a>.  Such event listeners are invoked only for
+the "bubbling" and "at target" phases, as if false were specified
+for the <code>useCapture</code> argument to <code>addEventListener</code>.
+This <a>EventListener</a> behaves in the same manner as any other
+which may be registered on the <a>EventTarget</a>.</p>
+
+<p>If the attribute representing the event listener is changed,
+this may be viewed as the removal of the previously registered
+<a>EventListener</a> and the registration of a new one. Futhermore, no
+specification is made as to the order in which event attributes
+will receive the event with regards to the other EventListeners
+on the <a>EventTarget</a>.</p>
+
+<p>In ECMAScript, one way to establish an event listener is to
+define a function and pass that function to the <code>addEventListener</code> method:</p>
+
+<pre>
+function myAction1(evt) {
+  // process the event
+}
+// ... later ...
+myElement.addEventListener("DOMActivate", myAction1, false)
+</pre>
+
+<p>In ECMAScript, the character data content of an
+<a href="script.html#EventAttributes">event attribute</a> becomes
+the definition of the ECMAScript function which gets invoked in
+response to the event. As with all registered ECMAScript event
+listener functions, this function receives an <a>Event</a> object as a
+parameter, and the name of the Event object is
+<strong>evt</strong>. For example, it is possible to write:</p>
+
+<pre><![CDATA[
+<rect onactivate="MyActivateHandler(evt)" .../>
+]]></pre>
+
+<p>which will pass the <a>Event</a> object <strong>evt</strong> into
+function <code>MyActivateHandler</code>.</p>
+
+<h2 id="RelationshipWithCSSOM">Relationship with DOM Level 2 CSS</h2>
+
+<p>The section describes the facilities from 
+<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/css.html">DOM Level 2 CSS</a>
+([<a href="refs.html#ref-DOM2STYLE">DOM2STYLE</a>], chapter 2)
+that are part of the SVG DOM.</p>
+
+<h3 id="CSSDOMFeaturesNoCSSSupport">User agents that do not support styling with CSS</h3>
+
+<p>User agents that do not support <a href="styling.html#StylingWithCSS">styling with CSS</a>
+are only required to support the following interfaces from
+<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/css.html">DOM Level 2 CSS</a>
+([<a href="refs.html#ref-DOM2STYLE">DOM2STYLE</a>], chapter 2), along with
+any interfaces necessary to implement the interfaces, such as
+<a>CSSPrimitiveValue</a> and <a>CSSValueList</a>. These interfaces are used in
+conjunction with the <a>SVGElement::getPresentationAttribute</a> method call
+on interface <a>SVGElement</a>, which must be supported on all implementations
+of the SVG DOM.</p>
+
+<ul>
+  <li>Interface <a>RGBColor</a></li>
+  <li>Interface <a>CSSValue</a></li>
+</ul>
+
+<h3 id="CSSDOMFeaturesWithCSSSupport">User agents that support styling with CSS</h3>
+
+<p>User agents that support <a href="styling.html#StylingWithCSS">Styling with CSS</a>,
+the SVG DOM, and <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/aural.html">aural styling</a>
+([<a href="refs.html#ref-CSS21">CSS21</a>], appendix A)
+must support all of the interfaces defined in
+<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/css.html">DOM Level 2 CSS</a>
+([<a href="refs.html#ref-DOM2STYLE">DOM2STYLE</a>], chapter 2)
+which apply to aural properties.</p>
+
+<p>For <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/media.html#visual-media-group">visual media</a>
+([<a href="refs.html#ref-CSS21">CSS21</a>], section 7.3.1),
+user agents must support all of the required interfaces defined in
+DOM Level 2 CSS.  All of the interfaces that are optional for DOM Level 2 CSS
+are also optional for user agents implementing the SVG DOM.</p>
+    
+<h3 id="ExtendedInterfaces">Extended interfaces</h3>
+
+<p>Note: the <a>SVGElement::getPresentationAttribute</a> method and the interfaces that extend <a>CSSValue</a> are deprecated, and may be dropped from future versions of the SVG specification.</p>
+
+<p>Whether or not a user agent supports <a href="styling.html#StylingWithCSS">styling with CSS</a>,
+a user agent still must support interface <a>CSSValue</a>, as this is the type
+that is returned from the <a>SVGElement::getPresentationAttribute</a>
+method call on interface <a>SVGElement</a>.</p>
+
+<p>DOM Level 2 CSS defines a set of
+<a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/css.html#CSS-extended">extended interfaces</a>
+([<a href="refs.html#ref-DOM2STYLE">DOM2STYLE</a>], section 2.3) for use in
+conjunction with interface <a>CSSValue</a>. The table below specifies the type
+of <a>CSSValue</a> used to represent each SVG property that applies to
+<a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/media.html#visual-media-group">visual media</a> 
+([<a href="refs.html#ref-CSS21">CSS21</a>], section 7.3.1).
+The expectation is that the <a>CSSValue</a> returned from the
+<span class="dom-method-name">getPropertyCSSValue</span> method on the
+<a>CSSStyleDeclaration</a> interface or the <a>SVGElement::getPresentationAttribute</a>
+method on the <a>SVGElement</a> interface can be cast down, using
+binding-specific casting methods, to the specific derived interface.</p>
+
+<p>For properties that are represented by a custom interface
+(the <span class='dom-attr-name'>cssValueType</span> of the <a>CSSValue</a> is CSS_CUSTOM),
+the name of the derived interface is specified in the table. For these
+properties, the table below indicates which extended interfaces
+are mandatory and which are not.</p>
+
+<p>For properties that consist of lists of values (the
+<span class='dom-attr-name'>cssValueType</span> of the <a>CSSValue</a> is
+CSS_VALUE_LIST), the derived interface is <a>CSSValueList</a>. For all other
+properties (the <span class='dom-attr-name'>cssValueType</span> of the <a>CSSValue</a>
+is CSS_PRIMITIVE_VALUE), the derived interface is <a>CSSPrimitiveValue</a>.</p>
+
+<p>For shorthand properties, a <a>CSSValue</a> always will have a value
+of null. Shorthand property values can only be accessed and modified as
+strings.</p>
+
+<p>The SVG DOM defines the following SVG-specific custom property
+interfaces, all of which are mandatory for SVG user agents:</p>
+
+<ul>
+  <li><a>SVGColor</a></li>
+  <li><a>SVGICCColor</a></li>
+  <li><a>SVGPaint</a></li>
+</ul>
+
+<table class='vert property-table'>
+  <tr>
+    <th>Property Name</th>
+    <th>Representation</th>
+    <th>Mandatory?<br/>(Extended interfaces only)</th>
+  </tr>
+  <tr>
+    <td><a>'alignment-baseline'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'baseline-shift'</a></td>
+    <td>ident, length, percentage</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'clip'</a></td>
+    <td>rect, ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'clip-path'</a></td>
+    <td>uri, ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'clip-rule'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'color'</a></td>
+    <td>rgbcolor, ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'color-interpolation'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'color-rendering'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'cursor property'</a></td>
+    <td>uri, ident</td>
+    <td>no</td>
+  </tr>
+  <tr>
+    <td><a>'direction'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'display'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'dominant-baseline'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'enable-background'</a></td>
+    <td>list of idents and numbers</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'fill'</a></td>
+    <td><a>SVGPaint</a></td>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <td><a>'fill-opacity'</a></td>
+    <td>number</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'fill-rule'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'filter property'</a></td>
+    <td>uri, ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'flood-color'</a></td>
+    <td><a>SVGColor</a></td>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <td><a>'flood-opacity'</a></td>
+    <td>number</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'font property'</a></td>
+    <td>null</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'font-family'</a></td>
+    <td>list of strings and idents</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'font-size'</a></td>
+    <td>ident, length, percentage</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'font-size-adjust'</a></td>
+    <td>number, ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'font-stretch'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'font-style'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'font-variant'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'font-weight'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'glyph-orientation-horizontal'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'glyph-orientation-vertical'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'image-rendering'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'letter-spacing'</a></td>
+    <td>ident, length</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'lighting-color'</a></td>
+    <td><a>SVGColor</a></td>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <td><a>'marker property'</a></td>
+    <td>null</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'marker-end'</a></td>
+    <td>uri, ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'marker-mid'</a></td>
+    <td>uri, ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'marker-start'</a></td>
+    <td>uri, ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'mask property'</a></td>
+    <td>uri, ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'opacity'</a></td>
+    <td>number</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'overflow'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'pointer-events'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'shape-rendering'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'stop-color'</a></td>
+    <td><a>SVGColor</a></td>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <td><a>'stop-opacity'</a></td>
+    <td>number</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'stroke'</a></td>
+    <td><a>SVGPaint</a></td>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <td><a>'stroke-dasharray'</a></td>
+    <td>ident or list of lengths</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'stroke-dashoffset'</a></td>
+    <td>length</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'stroke-linecap'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'stroke-linejoin'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'stroke-miterlimit'</a></td>
+    <td>length</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'stroke-opacity'</a></td>
+    <td>number</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'stroke-width'</a></td>
+    <td>length</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'text-anchor'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'text-decoration'</a></td>
+    <td>list of ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'text-rendering'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'unicode-bidi'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'visibility'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'word-spacing'</a></td>
+    <td>length, ident</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><a>'writing-mode'</a></td>
+    <td>ident</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+
+<h2 id="InvalidValues">Invalid values</h2>
+
+<p>If a script sets a DOM attribute to an invalid value (e.g.,
+a negative number for an attribute that requires a non-negative
+number or an out-of-range value for an enumeration), unless
+this specification indicates otherwise, no exception shall be
+raised on setting, but the given document fragment shall become
+technically <em>in error</em> as described in
+<a href="implnote.html#ErrorProcessing">Error processing</a>.</p>
+
+</body>
+</html>
