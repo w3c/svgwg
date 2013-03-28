@@ -1,0 +1,3035 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Animation</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>Animation</h1>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirements:</th>
+      <td>
+        <ul>
+          <li>Support for non-negative speed on time containers</li>
+          <li>Support path-based animations of pairs of attributes</li>
+          <li>Define all explicitly undefined parts of the SVG 1.1 spec (wrt to to-animations)</li>
+          <li>Support motion animation of a specified speed</li>
+          <li>Apply the changes from SVG Tiny 1.2 Animations chapter</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>Resolutions:</th>
+      <td>
+        <ul>
+          <li><a href="http://www.w3.org/2012/01/10-svg-irc#T05-49-00">We will solve animation reversing in SVG 2.</a></li>
+          <li><a href="http://www.w3.org/2012/01/10-svg-irc#T05-49-00">We will have support for non-negative speed="" on time containers (if we decide to include time containers) in SVG 2.</a></li>
+          <li><a href="http://www.w3.org/2011/12/08-svg-irc#T20-53-32">We will support path-based animation of pairs of attributes.</a></li>
+          <li><a href="http://www.w3.org/2012/01/10-svg-irc#T05-09-32">We will allow <code>&lt;animateTransform type="matrix"&gt;</code> in SVG 2.</a></li>
+          <li><a href="http://www.w3.org/2012/01/13-svg-irc#T23-16-28">We will support motion animation of a specified speed in SVG 2.</a></li>
+          <li><a href="http://www.w3.org/2012/03/08-svg-irc#T21-18-10">SVG 2 will apply the changes from SVG 1.2 Tiny to the SVG animation section.</a></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>General improvements to the animation features of SVG 2.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Brian (no action)</td>
+    </tr>
+    <tr>
+      <th>Note:</th>
+      <td>These will be addressed in the separate <a href="https://dvcs.w3.org/hg/FXTF/raw-file/tip/web-anim/index.html">Web Animations specification</a>,
+      which SVG 2 will eventually reference.</td>
+    </tr>
+  </table>
+</div>
+
+<div class="ready-for-wider-review">
+<h2 id="Introduction">Introduction</h2>
+
+<p>Because the Web is a dynamic medium, SVG supports the
+ability to change vector graphics over time. SVG content can be
+animated in the following ways:</p>
+
+<ul>
+  <li>Using <a href="http://www.w3.org/TR/2012/WD-css3-animations-20120403/"><cite>CSS Animations</cite></a>
+  [<a href="refs.html#ref-CSS3ANIMATIONS">CSSANIMATIONS</a>]. A CSS
+  module that describes a way for authors to animate the values of
+  CSS properties over time, using keyframes. The behavior of these
+  keyframe animations can be controlled by specifying their duration,
+  number of repeats, and repeating behavior.</li>
+  <li>Using <a href="http://www.w3.org/TR/2012/WD-css3-transitions-20120403/"><cite>CSS Transitions</cite></a>
+  [<a href="refs.html#ref-CSS3TRANSITIONS">CSS3TRANSITIONS</a>]. A CSS
+  module that allows changes to values of CSS properties to occur
+  smoothly over a specified duration.</li>
+  <li>Using SVG's <a href="#AnimationElements">animation elements</a>.
+  SVG document fragments can describe time-based modifications
+  to the document's elements. Using the various animation
+  elements, you can define motion paths, fade-in or fade-out
+  effects, and objects that grow, shrink, spin or change color.</li>
+
+  <li>Using the <a href="svgdom.html">SVG DOM</a>. The SVG DOM
+  is defined based on the DOM4 specification [<a href="refs.html#ref-DOM4">DOM4</a>].
+  Every attribute and style sheet setting is
+  accessible to scripting, and SVG offers a set of additional
+  DOM interfaces to support efficient animation via scripting.
+  As a result, virtually any kind of animation can be achieved.
+  The timer facilities in scripting languages such as
+  ECMAScript can be used to start up and control the
+  animations [<a href="refs.html#ref-ECMA-262">ECMA-262</a>].
+  (See <a href="#DOMAnimationExample">example</a> below.)</li>
+
+  <li>SVG has been designed to allow
+  <a href="http://www.w3.org/TR/2008/REC-SMIL3-20081201/">SMIL</a> [<a href="refs.html#ref-SMIL">SMIL</a>] to use
+  animated or static SVG content as media components.</li>
+</ul>
+</div>
+
+<h2 id="AnimationElements">Animation elements</h2>
+
+<h3 id="AnimationElementsIntro">Overview</h3>
+
+<p>SVG's animation elements were developed in collaboration
+with the W3C Synchronized Multimedia (SYMM) Working Group,
+developers of the <a href="http://www.w3.org/TR/2008/REC-SMIL3-20081201/"><cite>Synchronized Multimedia Integration Language
+(SMIL) 3.0 Specification</cite></a> [<a href="refs.html#ref-SMIL">SMIL</a>].</p>
+
+<p>The SYMM Working Group, in collaboration with the SVG
+Working Group, has authored the <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation specification</cite></a>
+[<a href="refs.html#ref-SMILANIM">SMILANIM</a>],
+which represents a general-purpose XML animation feature set.
+SVG incorporates the animation features defined in the SMIL
+Animation specification and provides some SVG-specific
+extensions.</p>
+
+<p>For an introduction to the approach and features available
+in any language that supports SMIL Animation, see
+<a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#AnimationFramework">SMIL Animation overview</a>
+and <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#AnimationModel">SMIL Animation animation model</a>
+([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], sections 2 and 3). For the list of animation
+features which go beyond SMIL Animation, see
+<a href="animate.html#SVGExtensionsToSMILAnimation">SVG extensions to SMIL Animation</a>.</p>
+
+<h3 id="RelationshipToSMILAnimation">Relationship to SMIL Animation</h3>
+
+<p>SVG is a host language in terms of SMIL Animation and
+therefore introduces additional constraints and features as
+permitted by that specification. Except for any SVG-specific
+rules explicitly mentioned in this specification, the normative
+definition for SVG's animation elements and attributes is the
+<a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a>
+specification [<a href="refs.html#ref-SMILANIM">SMILANIM</a>].</p>
+
+<p>SVG supports the following four animation elements which are
+defined in the SMIL Animation specification:</p>
+
+    <table class='vert offset'>
+      <tr>
+        <td><a>'animate'</a></td>
+        <td>allows scalar attributes and properties to be assigned
+        different values over time</td>
+      </tr>
+      <tr>
+        <td><a>'set'</a></td>
+        <td>a convenient shorthand for <a>'animate'</a>, which is useful for
+        assigning animation values to non-numeric attributes and
+        properties, such as the <a>'visibility'</a> property</td>
+      </tr>
+      <tr>
+        <td><a>'animateMotion'</a></td>
+        <td>moves an element along a motion path</td>
+      </tr>
+      <tr>
+        <td><a>'animateColor'</a></td>
+        <td>modifies the color value of particular attributes or
+        properties over time</td>
+      </tr>
+    </table>
+
+<p>Although SVG defines <a>'animateColor'</a>, its use is deprecated in
+favor of simply using the <a>'animate'</a> element to target properties
+that can take color values.</p>
+
+<p id="SVGExtensionsToSMILAnimation">Additionally, SVG includes the following compatible
+extensions to SMIL Animation:</p>
+
+<table class='vert offset'>
+  <tr>
+    <td><a>'animateTransform'</a></td>
+    <td>modifies one of SVG's transformation attributes over
+    time, such as the <a>'transform'</a> attribute</td>
+  </tr>
+  <tr>
+    <td><a>'animateMotion/path'</a> attribute</td>
+    <td>SVG allows any feature from SVG's <a
+    href="paths.html#PathData">path data</a> syntax to be
+    specified in a <a>'animateMotion/path'</a> attribute to the <a>'animateMotion'</a> element
+    (SMIL Animation only allows a subset of SVG's path data
+    syntax within a <a>'animateMotion/path'</a> attribute)</td>
+  </tr>
+  <tr>
+    <td><a>'mpath'</a> element</td>
+    <td>SVG allows an <a>'animateMotion'</a> element to
+    contain a child <a>'mpath'</a> element which
+    references an SVG <a>'path'</a> element as the
+    definition of the motion path</td>
+  </tr>
+  <tr>
+    <td><a>'animateMotion/keyPoints'</a> attribute</td>
+    <td>SVG adds a <a>'animateMotion/keyPoints'</a> attribute to the <a>'animateMotion'</a> to provide
+    precise control of the velocity of motion path
+    animations</td>
+  </tr>
+  <tr>
+    <td><a>'animateMotion/rotate'</a> attribute</td>
+    <td>SVG adds a <a>'animateMotion/rotate'</a> attribute to the <a>'animateMotion'</a> to control
+    whether an object is automatically rotated so that its
+    x-axis points in the same direction (or opposite direction)
+    as the directional tangent vector of the motion path</td>
+  </tr>
+</table>
+
+<p class="issue">The description of <a>'animateTransform'</a> above should
+reference the <a>'transform'</a> property.</p>
+
+<p>For compatibility with other aspects of the language, SVG
+uses <a>IRI references</a> via an <a>'set/xlink:href'</a> attribute to
+identify the elements which are to be targets of the animations,
+as allowed in SMIL 3.0.</p>
+
+<p>SMIL Animation requires that the host language define the
+meaning for <em id='DocumentBegin'>document begin</em> and the
+<em id='DocumentEnd'>document end</em>. Since an
+<a>'svg'</a> is sometimes the root of
+the XML document tree and other times can be a component of a
+parent XML grammar, the document begin for a given SVG
+document fragment is defined to be the exact time at which the
+<a>'svg'</a> element's <a href="interact.html#LoadEvent">SVGLoad event</a> is
+triggered. The document end of an SVG document
+fragment is the point at which the document fragment has been
+released and is no longer being processed by the user agent.
+However, nested <a>'svg'</a> elements within an SVG
+document do not constitute document fragments in this sense,
+and do not define a separate document begin; all times within
+the nested SVG fragment are relative to the document time
+defined for the root <a>'svg'</a> element.</p>
+
+<p>For SVG, the term <dfn id="PresentationTime">presentation time</dfn>
+indicates the position in the timeline relative
+to the document begin of a given document
+fragment.</p>
+
+<p>SVG defines more constrained error processing than is
+defined in the <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a>
+specification [<a href="refs.html#ref-SMILANIM">SMILANIM</a>].
+SMIL Animation defines error processing behavior
+where the document continues to run in certain error
+situations, whereas all animations within an SVG document
+fragment will stop in the event of any error within the
+document (see <a href="implnote.html#ErrorProcessing">Error
+processing</a>).</p>
+
+<h3 id="AnimationElementsExample">Animation elements example</h3>
+
+<div class="example">
+<p id="ExampleAnim01"><span class="example-ref">Example anim01</span> below
+demonstrates each of SVG's five animation elements.</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<svg width="8cm" height="3cm"  viewBox="0 0 800 300"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <desc>Example anim01 - demonstrate animation elements</desc>
+  <rect x="1" y="1" width="798" height="298" 
+        fill="none" stroke="blue" stroke-width="2" />
+  <!-- The following illustrates the use of the 'animate' element
+        to animate a rectangles x, y, and width attributes so that
+        the rectangle grows to ultimately fill the viewport. -->
+  <rect id="RectElement" x="300" y="100" width="300" height="100"
+        fill="rgb(255,255,0)"  >
+    <animate attributeName="x" attributeType="XML"
+             begin="0s" dur="9s" fill="freeze" from="300" to="0" />
+    <animate attributeName="y" attributeType="XML"
+             begin="0s" dur="9s" fill="freeze" from="100" to="0" />
+    <animate attributeName="width" attributeType="XML"
+             begin="0s" dur="9s" fill="freeze" from="300" to="800" />
+    <animate attributeName="height" attributeType="XML"
+             begin="0s" dur="9s" fill="freeze" from="100" to="300" />
+  </rect>
+  <!-- Set up a new user coordinate system so that
+        the text string's origin is at (0,0), allowing
+        rotation and scale relative to the new origin -->
+  <g transform="translate(100,100)" >
+    <!-- The following illustrates the use of the 'set', 'animateMotion',
+         'animate' and 'animateTransform' elements. The 'text' element 
+         below starts off hidden (i.e., invisible). At 3 seconds, it:
+           * becomes visible
+           * continuously moves diagonally across the viewport
+           * changes color from blue to dark red
+           * rotates from -30 to zero degrees
+           * scales by a factor of three. -->
+    <text id="TextElement" x="0" y="0"
+          font-family="Verdana" font-size="35.27" visibility="hidden"  > 
+      It's alive!
+      <set attributeName="visibility" attributeType="CSS" to="visible"
+           begin="3s" dur="6s" fill="freeze" />
+      <animateMotion path="M 0 0 L 100 100" 
+           begin="3s" dur="6s" fill="freeze" />
+      <animate attributeName="fill" attributeType="CSS"
+           from="rgb(0,0,255)" to="rgb(128,0,0)"
+           begin="3s" dur="6s" fill="freeze" />
+      <animateTransform attributeName="transform" attributeType="XML"
+           type="rotate" from="-30" to="0"
+           begin="3s" dur="6s" fill="freeze" />
+      <animateTransform attributeName="transform" attributeType="XML"
+           type="scale" from="1" to="3" additive="sum"
+           begin="3s" dur="6s" fill="freeze" />
+    </text>
+  </g>
+</svg>
+]]></pre>
+
+<!--
+  Would be good to replace this with an <edit:example>, if that
+  supported multiple images.
+  -->
+<div class="figure">
+<table >
+  <caption>
+    Example anim01
+  </caption>
+  <tr>
+    <td><img width="256" height="91"
+    alt="Example anim01 - at zero seconds"
+    src="images/animate/anim01a.png" /> <span
+    class="table-heading-1">At zero seconds</span></td>
+    <td>&nbsp;</td>
+    <td><img width="256" height="91"
+    alt="Example anim01 - at three seconds"
+    src="images/animate/anim01b.png" /> <span
+    class="table-heading-1">At three seconds</span></td>
+  </tr>
+  <tr>
+    <td><img width="256" height="91"
+    alt="Example anim01 - at six seconds"
+    src="images/animate/anim01c.png" /> <span
+    class="table-heading-1">At six seconds</span></td>
+    <td>&nbsp;</td>
+    <td><img width="256" height="91"
+    alt="Example anim01 - at nine seconds"
+    src="images/animate/anim01d.png" /> <span
+    class="table-heading-1">At nine seconds</span></td>
+  </tr>
+</table>
+</div>
+<p class="view-as-svg"><a href="images/animate/anim01.svg">View
+this example as SVG (SVG-enabled browsers only)</a></p>
+</div>
+
+<p>The sections below describe the various animation attributes
+and elements.</p>
+
+<edit:with element='animate'>
+
+<h3 id="TargetElement">Attributes to identify the target element for an animation</h3>
+
+<p>The following attribute is common to all animation
+elements and identifies the target element for the animation.</p>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="HrefAttribute"><span class="adef">xlink:href</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeIRI">&lt;iri&gt;</a></span>"</dt>
+        <dd><p>An <a>IRI
+        reference</a> to the element which is the target of this
+        animation and which therefore will be modified over
+        time.</p>
+        <p>The target element must be part of the <a>current
+        SVG document fragment</a>.</p>
+        <p>&lt;iri&gt; must point to exactly one target element which
+        is capable of being the target of the given animation. If
+        &lt;iri&gt; points to multiple target elements, if the
+        given target element is not capable of being a target of
+        the given animation, or if the given target element is not
+        part of the current SVG document fragment, then the
+        document is in error (see <a
+        href="implnote.html#ErrorProcessing">Error
+        processing</a>).</p>
+        <p>If the <a>'xlink:href'</a> attribute
+        is not provided, then the target element will be the
+        immediate parent element of the current animation
+        element.</p>
+        <p>Refer to the descriptions of the individual animation
+        elements for any restrictions on what types of elements can
+        be targets of particular types of animations.</p>
+        <p>Except for any SVG-specific rules explicitly mentioned in
+        this specification, the normative definition for this
+        attribute is the <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a>
+        specification.
+        In particular, see <a
+        href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#SpecifyingAnimationTarget">
+        SMIL Animation: Specifying the animation target</a>
+        ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.1).</p></dd>
+      </dl>
+    </div>
+
+<h3 id="TargetAttributes">Attributes to identify the target attribute or property for an animation</h3>
+
+<p>The following attributes are the <dfn id='animation-attribute-target-attributes'>animation attribute target attributes</dfn>,
+which identify the target attribute or property for the given 
+<a href="animate.html#TargetElement">target element</a> whose value changes
+over time.</p>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="AttributeNameAttribute"><span class='adef'>attributeName</span>
+        = "<span class='attr-value'>&lt;attributeName&gt;</span>"</dt>
+        <dd><p>Specifies the name of the target attribute. An XMLNS
+        prefix may be used to indicate the XML namespace for the
+        attribute. The prefix will be interpreted in the scope of
+        the current (i.e., the referencing) animation
+        element.</p>
+        <p>Except for any SVG-specific rules explicitly mentioned in
+        this specification, the normative definition for this
+        attribute is the <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a>
+        specification.
+        In particular, see <a
+        href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#SpecifyingAnimationTarget">
+        SMIL Animation: Specifying the animation target</a>
+        ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.1).</p></dd>
+        <dt id="AttributeTypeAttribute"><span class='adef'>attributeType</span>
+        = "<span class='attr-value'>CSS | XML | auto</span>"</dt>
+        <dd>
+          <p>Specifies the namespace in which the target attribute and
+          its associated values are defined. The attribute value is
+          one of the following (values are case-sensitive):</p>
+          <dl>
+            <dt><span class='attr-value'>CSS</span></dt>
+            <dd>This specifies that the value of <a>'attributeName'</a> is
+            the name of a CSS property defined as animatable in
+            this specification.</dd>
+            <dt><span class='attr-value'>XML</span></dt>
+            <dd>This specifies that the value of <a>'attributeName'</a> is
+            the name of an XML attribute defined in the default XML
+            namespace for the target element. If the value for
+            <a>'attributeName'</a> has an XMLNS prefix, the
+            implementation must use the associated namespace as
+            defined in the scope of the target element. The
+            attribute must be defined as animatable in this
+            specification.</dd>
+            <dt><span class='attr-value'>auto</span></dt>
+            <dd>The implementation should match the
+            <a>'attributeName'</a> to an attribute for the
+            target element. The implementation must first search
+            through the list of CSS properties for a matching
+            property name, and if none is found, search the default
+            XML namespace for the element.</dd>
+          </dl>
+          <p>The default value is <span class='attr-value'>'auto'</span>.</p>
+          <p>Except for any SVG-specific rules explicitly mentioned
+          in this specification, the normative definition for this
+          attribute is the <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a>
+          specification.
+          In particular, see <a
+          href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#SpecifyingAnimationTarget">
+          SMIL Animation: Specifying the animation target</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.1).</p>
+        </dd>
+      </dl>
+    </div>
+    
+
+<h3 id="Animation.nsexample">Animation with namespaces</h3>
+
+
+<p id="ExampleNS01"><span class="example-ref">Example 
+animns01</span> below shows a namespace prefix being resolved 
+to a namespace name in the scope of the referencing element, and
+that namespace name being used (regardless of the prefix which 
+happens to be used in the target scope) to identify the 
+attribute being animated.</p>
+
+<edit:example href="images/animate/animns01.svg" link="yes" image="no"/>
+
+
+<h3 id="complexDistances">Paced animation and complex types</h3>
+
+<p>Paced animations assume a notion of distance between the various
+animation values defined by the
+<a>'to'</a>, <a>'from'</a>, <a>'by'</a> and <a>'values'</a>
+attributes.  Distance is defined only for scalar types (such as
+<a href="types.html#DataTypeLength">&lt;length&gt;</a>), colors
+and the subset of transformation types that are supported by
+<a>'animateTransform'</a>.
+In the list of distance functions below, V<sub>a</sub> and V<sub>b</sub>
+represent the two values the distance between which is being calculated.</p>
+
+<p>Since paced animation is intended to produce an animation with an even
+pace of change, it does not make sense to define distance functions
+for all data types.  Distance can be usefully defined for types whose
+values are <var>n</var>-dimensional vectors (including scalars, which are
+1-dimensional vectors).  For example, a
+<a href="types.html#DataTypeLength">&lt;length&gt;</a> value is a scalar
+value, and a <a href="types.html#DataTypeColor">&lt;color&gt;</a> value
+is a 3-dimensional vector. Thus attributes of these types can have paced
+animation applied to them.  On the other hand, a
+<a href="types.html#DataTypeLengths">&lt;list-of-length&gt;</a>
+(as used by <a href="painting.html#StrokeDasharrayProperty"><span class="property">'stroke-dasharray'</span></a>)
+is a list of scalars (1-dimensional vectors), and
+<a href="shapes.html#PointsBNF">&lt;list-of-points&gt;</a> (as used by
+the <a href="shapes.html#PolygonElementPointsAttribute"><span class="attr-name">'points'</span></a>
+attribute on a <a href="shapes.html#PolygonElement"><span class="element-name">'polygon'</span></a>)
+is a list of 2-dimensional vectors.  Therefore, these types do not have a
+distance function defined and cannot have paced animation applied to them.</p>
+
+<p>The distance functions for types that support paced animation are as follows:</p>
+
+<dl class='indented'>
+  <dt><a href="types.html#DataTypeInteger">&lt;integer&gt;</a>,
+  <a href="types.html#DataTypeLength">&lt;length&gt;</a> and
+  <a href="types.html#DataTypeNumber">&lt;number&gt;</a></dt>
+  <dd>
+    <p>distance(V<sub>a</sub>, V<sub>b</sub>) = |V<sub>a</sub> − V<sub>b</sub>|</p>
+    <p>
+      Examples: animating the
+      <a>'rect/x'</a> attribute on a
+      <a>'rect'</a>, or the
+      <a>'stroke-width'</a>
+      property on a <a>'circle'</a>.
+    </p>
+  </dd>
+
+  <dt><a href="types.html#DataTypeColor">&lt;color&gt;</a></dt>
+  <dd>
+    <p>distance(V<sub>a</sub>, V<sub>b</sub>) = sqrt((V<sub>a</sub>.red − V<sub>b</sub>.red)<sup>2</sup> + (V<sub>a</sub>.green − V<sub>b</sub>.green)<sup>2</sup> + (V<sub>a</sub>.blue − V<sub>b</sub>.blue)<sup>2</sup>), where:</p>
+    <div class='vardefs'>
+      <div>V<sub><var>i</var></sub>.red is the red component of the V<sub><var>i</var></sub> color value,</div>
+      <div>V<sub><var>i</var></sub>.green is the green component of the V<sub><var>i</var></sub> color value, and</div>
+      <div>V<sub><var>i</var></sub>.blue is the blue component of the V<sub><var>i</var></sub> color value.</div>
+    </div>
+    <p>
+      Each of the color component values is usually in the range [0, 1],
+      where 0 represents none of that color component, and 1 represents
+      the maximum amount of that color component, in the sRGB gamut
+      [<a href='refs.html#ref-SRGB'>SRGB</a>].  Since
+      <a href="types.html#DataTypeColor">&lt;color&gt;</a> values
+      may specify colors outside of the sRGB gamut, these component
+      values may lie outside the range [0, 1].
+    </p>
+    <p>
+      Example: animating the <a>'fill property'</a>
+      property on an <a>'ellipse'</a>.
+    </p>
+  </dd>
+
+  <dt>Transform definitions of type <span class='attr-value'>'translate'</span></dt>
+  <dd>
+    <p>distance(V<sub>a</sub>, V<sub>b</sub>) = sqrt((V<sub>a</sub>.tx − V<sub>b</sub>.tx)<sup>2</sup> + (V<sub>a</sub>.ty − V<sub>b</sub>.ty)<sup>2</sup>), where:</p>
+    <div class='vardefs'>
+      <div>V<sub><var>i</var></sub>.tx is the <var>x</var> component of the V<sub><var>i</var></sub> translation transform value, and</div>
+      <div>V<sub><var>i</var></sub>.ty is the <var>y</var> component of the V<sub><var>i</var></sub> translation transform value.</div>
+    </div>
+    <p>
+      Example (for all transform definition types): animating the <a>'transform'</a>
+      attribute on a <a>'g'</a> using <a>'animateTransform'</a>.
+    </p>
+  </dd>
+
+  <dt>Transform definitions of type <span class='attr-value'>'scale'</span></dt>
+  <dd>
+    <p>distance(V<sub>a</sub>, V<sub>b</sub>) = sqrt((V<sub>a</sub>.sx − V<sub>b</sub>.sx)<sup>2</sup> + (V<sub>a</sub>.sy − V<sub>b</sub>.sy)<sup>2</sup>), where:</p>
+    <div class='vardefs'>
+      <div>V<sub><var>i</var></sub>.sx is the <var>x</var> component of the V<sub><var>i</var></sub> scale transform value, and</div>
+      <div>V<sub><var>i</var></sub>.sy is the <var>y</var> component of the V<sub><var>i</var></sub> scale transform value.</div>
+    </div>
+    <p>
+      Note that, as when specifying scale transformations in a
+      <a href="types.html#DataTypeTransformList">&lt;transform-list&gt;</a>, if the
+      <var>y</var> component of the scale is omitted it is implicitly equal
+      to the <var>x</var> component.
+    </p>
+  </dd>
+
+  <dt>Transform definitions of type <span class='attr-value'>'rotate'</span>,
+  <span class='attr-value'>'skewX'</span> and <span class='attr-value'>'skewY'</span></dt>
+  <dd>
+    <p>distance(V<sub>a</sub>, V<sub>b</sub>) = sqrt((V<sub>a</sub>.angle − V<sub>b</sub>.angle)<sup>2</sup>), where:</p>
+    <div class='vardefs'>
+      <div>
+        V<sub><var>i</var></sub>.angle is the angle component of the
+        V<sub><var>i</var></sub> rotation or skew transform value.
+      </div>
+    </div>
+    <p>
+      Since the distance function for rotations is not in terms of the
+      rotation center point components, a paced animation that changes
+      the rotation center point may not appear to have a paced
+      movement when the animation is applied.
+    </p>
+  </dd>
+</dl>
+
+<p>Distance functions for all other data types are not defined.
+If <span class='attr-value'>calcMode="paced"</span> is used on an
+animation of an attribute or property whose type is not one of
+those listed above, the animation effect is undefined.
+<a>SVG user agents</a> may choose to
+perform the animation as if <span class='attr-value'>calcMode="linear"</span>,
+but this is not required.  Authors are recommended not to specify
+paced animation on types not listed above.</p>
+
+
+<h3 id="TimingAttributes">Attributes to control the timing of the animation</h3>
+
+<p>The following attributes are the <dfn id='animation-timing-attributes'>animation timing attributes</dfn>.
+They are common to all animation elements and control the timing of the animation,
+including what causes the animation to start and end, whether the
+animation runs repeatedly, and whether to retain the end state
+the animation once the animation ends.</p>
+
+<p id="optWSP">In the syntax specifications that follow, optional white
+space is indicated as "S", defined as follows:</p>
+
+<pre>
+S ::= (#x20 | #x9 | #xD | #xA)*
+</pre>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="BeginAttribute"><span class='adef'>begin</span> =
+        "<span class='attr-value'><a href="#BeginValueListSyntax">begin-value-list</a></span>"</dt>
+        <dd>
+          <p>Defines when the element should begin (i.e. become
+          active).</p>
+          <p>The attribute value is a semicolon separated list of
+          values.</p>
+           
+          <dl>
+            <dt id="BeginValueListSyntax">begin-value-list ::= <a
+            href="#BeginValueSyntax">begin-value</a> (S? ";" S?
+            begin-value-list )?</dt>
+            <dd>A semicolon separated list of begin values. The
+            interpretation of a list of begin times is detailed in
+            SMIL Animation's section on <a
+            href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-EvaluationOfBeginEndTimeLists">
+            "Evaluation of begin and end time lists"</a>.</dd>
+            <dt id="BeginValueSyntax">begin-value ::= ( <a
+            href="#OffsetValueSyntax">offset-value</a> | <a
+            href="#SyncbaseValueSyntax">syncbase-value</a> | <a
+            href="#EventValueSyntax">event-value</a> | <a
+            href="#RepeatValueSyntax">repeat-value</a> | <a
+            href="#AccessKeyValueSyntax">accessKey-value</a> | <a
+            href="#WallclockSyncValueSyntax">wallclock-sync-value</a>
+            | <a href="#IndefiniteValue">"indefinite"</a> )</dt>
+            <dd>Describes the element begin.</dd>
+            <dt id="OffsetValueSyntax">offset-value ::= ( S? "+" |
+            "-" S? )? ( <a
+            href="animate.html#ClockValueSyntax">Clock-value</a>
+            )</dt>
+            <dd>For SMIL Animation, this describes the element
+            begin as an offset from an implicit syncbase. For SVG,
+            the implicit syncbase begin is defined to be relative
+            to the document begin. Negative begin times are
+            entirely valid and easy to compute, as long as there is
+            a resolved document begin time.</dd>
+            <dt id="SyncbaseValueSyntax">syncbase-value ::= (
+            Id-value "." ( "begin" | "end" ) ) ( S? ("+"|"-") S? <a
+            href="animate.html#ClockValueSyntax">Clock-value</a>
+            )?</dt>
+            <dd>Describes a <dfn>syncbase</dfn>
+            and an optional offset from that syncbase. The element
+            begin is defined relative to the begin or active end of
+            another animation. A syncbase consists of an ID
+            reference to another animation element followed by
+            either <code>begin</code> or <code>end</code> to
+            identify whether to synchronize with the beginning or
+            active end of the referenced animation element.</dd>
+            <dt id="EventValueSyntax">event-value ::= ( Id-value
+            "." )? ( event-ref ) ( S? ("+"|"-") S? <a
+            href="animate.html#ClockValueSyntax">Clock-value</a>
+            )?</dt>
+            <dd>Describes an event and an optional offset that
+            determine the element begin. The animation begin is
+            defined relative to the time that the event is raised.
+            The list of event-symbols available for a given
+            event-base element is the list of event attributes
+            available for the given element as defined in the <a
+            href="interact.html">Interactivity</a> chapter, with the one difference
+            that the leading 'on' is removed from the event name
+            (i.e., the animation event name is 'click', not
+            'onclick'). A list of all events supported by SVG can
+            be found in <a href="interact.html#SVGEvents">Complete
+            list of supported events</a>. Details of event-based
+            timing are described in <a
+            href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Unifying">
+            SMIL Animation: Unifying Event-based and Scheduled
+            Timing</a>.</dd>
+            <dt id="RepeatValueSyntax">repeat-value ::= ( Id-value
+            "." )? "repeat(" integer ")" ( S? ("+"|"-") S? <a
+            href="animate.html#ClockValueSyntax">Clock-value</a>
+            )?</dt>
+            <dd>Describes a qualified repeat event. The element
+            begin is defined relative to the time that the repeat
+            event is raised with the specified iteration
+            value.</dd>
+            <dt id="AccessKeyValueSyntax">accessKey-value ::=
+            "accessKey(" character ")" ( S? ("+"|"-") S? <a
+            href="animate.html#ClockValueSyntax">Clock-value</a>
+            )?</dt>
+            <dd>Describes an accessKey that determines the element
+            begin. The element begin is defined relative to the
+            time that the accessKey character is input by the
+            user.</dd>
+            <dt id="WallclockSyncValueSyntax">wallclock-sync-value ::= "wallclock(" wallclock-value
+            ")"</dt>
+            <dd>Describes the element begin as a real-world clock
+            time. The wallclock time syntax is based upon syntax
+            defined in <cite>Representation of dates and times</cite>
+            [<a href="refs.html#ref-ISO8601">ISO8601</a>].</dd>
+            <dt id="IndefiniteValue">"indefinite"</dt>
+            <dd><p>The begin of the animation will be determined by a
+            "beginElement()" method call or a hyperlink targeted to
+            the element.</p>
+            <p>The animation DOM methods are described in <a
+            href="#DOMInterfaces">DOM interfaces</a>.</p>
+            <p>Hyperlink-based timing is described in <a
+            href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#HyperlinkSemantics">
+            SMIL Animation: Hyperlinks and timing</a>.</p></dd>
+          </dl>
+          <p>Except for any SVG-specific rules explicitly mentioned in
+          this specification, the normative definition for this
+          attribute is the <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a>
+          specification.
+          In particular, see <a
+          href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#SpecifyingAnimationTarget">
+          SMIL Animation: 'begin' attribute</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.2.1).</p>
+        </dd>
+
+        <dt id="DurAttribute"><span class='adef'>dur</span> =
+        <span class='attr-value'><a href="#ClockValueSyntax">Clock-value</a> | "media" | "indefinite"</span></dt>
+        <dd>
+          <p>Specifies the simple duration.</p>
+          <p>The attribute value can be one of the following:</p>
+          <dl>
+            <dt><a href="#ClockValueSyntax">Clock-value</a></dt>
+            <dd>Specifies the length of the simple duration in <a
+            href="#PresentationTime">presentation time</a>. Value
+            must be greater than 0.</dd>
+            <dt>"media"</dt>
+            <dd>Specifies the simple duration as the intrinsic
+            media duration. This is only valid for elements that
+            define media.<br />
+             (For SVG's <a href="#AnimationElements">animation elements</a>, if <span
+            class="attr-value">'media'</span> is specified, the
+            attribute will be ignored.)</dd>
+            <dt>"indefinite"</dt>
+            <dd>Specifies the simple duration as indefinite.</dd>
+          </dl>
+          <p>If the animation does not have a <a>'dur'</a> attribute, the simple
+          duration is indefinite. Note that interpolation will not
+          work if the simple duration is indefinite (although this
+          may still be useful for <a>'set'</a> elements). Except
+          for any SVG-specific rules explicitly mentioned in this
+          specification, the normative definition for this
+          attribute is the <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a>
+          specification.
+          In particular, see <a
+          href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#DurAttribute">
+          SMIL Animation: 'dur' attribute</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.2.1).</p>
+        </dd>
+
+        <dt id="EndAttribute"><span class='adef'>end</span> = "<span class='attr-value'><a
+        href="#EndValueListSyntax">end-value-list</a></span>"</dt>
+        <dd>
+          <p>Defines an end value for the animation that can constrain
+          the active duration. The attribute value is a semicolon
+          separated list of values.</p>
+           
+          <dl>
+            <dt id="EndValueListSyntax">end-value-list ::= <a
+            href="#EndValueSyntax">end-value</a> (S? ";" S?
+            end-value-list )?</dt>
+            <dd>A semicolon separated list of end values. The
+            interpretation of a list of end times is detailed
+            below.</dd>
+          </dl>
+           
+          <dl>
+            <dt id="EndValueSyntax">end-value ::= ( <a
+            href="#OffsetValueSyntax">offset-value</a> | <a
+            href="#SyncbaseValueSyntax">syncbase-value</a> | <a
+            href="#EventValueSyntax">event-value</a> | <a
+            href="#RepeatValueSyntax">repeat-value</a> | <a
+            href="#AccessKeyValueSyntax">accessKey-value</a> | <a
+            href="#WallclockSyncValueSyntax">wallclock-sync-value</a>
+            | "indefinite" )</dt>
+            <dd>Describes the active end of the animation.</dd>
+          </dl>
+          <p>A value of <span class="attr-value">'indefinite'</span>
+          specifies that the end of the animation will be
+          determined by an <a>SVGAnimationElement::endElement</a> method call (the animation
+          DOM methods are described in <a href="#DOMInterfaces">DOM
+          interfaces</a>).</p>
+          <p>Except for any SVG-specific rules explicitly mentioned
+          in this specification, the normative definition for this
+          attribute is the <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a>
+          specification.
+          In particular, see <a
+          href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#EndActiveAttribute">
+          SMIL Animation: 'end' attribute</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.3.2).</p>
+        </dd>
+        <dt id="MinAttribute"><span class='adef'>min</span> = <span class='attr-value'><a
+        href="#ClockValueSyntax">Clock-value</a> | "media"</span></dt>
+        <dd>
+          <p>Specifies the minimum value of the active duration.</p>
+          <p>The attribute value can be either of the following:</p>
+          <dl>
+            <dt><a href="#ClockValueSyntax">Clock-value</a></dt>
+            <dd><p>Specifies the length of the minimum value of the
+            active duration, measured in local time.</p>
+            <p>Value must be greater than 0.</p></dd>
+            <dt>"media"</dt>
+            <dd>Specifies the minimum value of the active duration
+            as the intrinsic media duration. This is only valid for
+            elements that define media. (For SVG's <a href="#AnimationElements">animation elements</a>,
+            if <span class="attr-value">'media'</span> is specified, the
+            attribute will be ignored.)</dd>
+          </dl>
+          <p>The default value for <a>'min'</a>
+          is <span class='attr-value'>'0'</span>. This does not constrain the active duration at
+          all.</p>
+          <p>Except for any SVG-specific rules explicitly mentioned
+          in this specification, the normative definition for this
+          attribute is the
+          <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+          In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#MinMax">SMIL Animation: 'min' attribute</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.3.3).</p>
+        </dd>
+        <dt id="MaxAttribute"><span class='adef'>max</span> = <span class='attr-value'><a
+        href="#ClockValueSyntax">Clock-value</a> | "media"</span></dt>
+        <dd>
+          <p>Specifies the maximum value of the active duration.</p>
+          <p>The attribute value can be either of the following:</p>
+          <dl>
+            <dt><a href="#ClockValueSyntax">Clock-value</a></dt>
+            <dd><p>Specifies the length of the maximum value of the
+            active duration, measured in local time.</p>
+            <p>Value must be greater than 0.</p></dd>
+            <dt>"media"</dt>
+            <dd>Specifies the maximum value of the active duration
+            as the intrinsic media duration. This is only valid for
+            elements that define media. (For SVG's
+            <a href="#AnimationElements">animation elements</a>, if <span
+            class="attr-value">'media'</span> is specified, the
+            attribute will be ignored.)</dd>
+          </dl>
+          <p>There is no default value for <a>'max'</a>. This does not constrain the
+          active duration at all.</p>
+          <p>Except for any SVG-specific rules explicitly mentioned
+          in this specification, the normative definition for this
+          attribute is the
+          <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+          In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#MinMax">SMIL Animation: 'max' attribute</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.3.3).</p>
+        </dd>
+        <dt id="RestartAttribute"><span class='adef'>restart</span> =
+        <span class='attr-value'>"always" | "whenNotActive" | "never"</span></dt>
+        <dd>
+          <dl>
+            <dt><span class='attr-value'>always</span></dt>
+            <dd>The animation can be restarted at any
+            time.&nbsp;<br />
+             This is the default value.</dd>
+            <dt><span class='attr-value'>whenNotActive</span></dt>
+            <dd>The animation can only be restarted when it is not
+            active (i.e. after the active end). Attempts to restart
+            the animation during its active duration are
+            ignored.</dd>
+            <dt><span class='attr-value'>never</span></dt>
+            <dd>The element cannot be restarted for the remainder
+            of the current simple duration of the parent time
+            container. (In the case of SVG, since the parent time
+            container is the SVG document fragment, then the
+            animation cannot be restarted for the remainder of the
+            document duration.)</dd>
+          </dl>
+          <p>Except for any SVG-specific rules explicitly mentioned in
+          this specification, the normative definition for this
+          attribute is the
+          <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+          In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#RestartAttribute">SMIL Animation: 'restart' attribute</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.3.7).</p>
+        </dd>
+        <dt id="RepeatCountAttribute"><span class='adef'>repeatCount</span> =
+        <span class='attr-value'>numeric value | "indefinite"</span></dt>
+        <dd>
+          <p>Specifies the number of iterations of the animation
+          function. It can have the following attribute values:</p>
+          <dl>
+            <dt>numeric value</dt>
+            <dd>This is a (base 10) "floating point" numeric value
+            that specifies the number of iterations. It can include
+            partial iterations expressed as fraction values. A
+            fractional value describes a portion of the <a
+            href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#SpecifyingAnimationFunction">
+            simple duration</a>. Values must be greater than
+            0.</dd>
+            <dt>"indefinite"</dt>
+            <dd>The animation is defined to repeat indefinitely
+            (i.e. until the document ends).</dd>
+          </dl>
+          <p>Except for any SVG-specific rules explicitly mentioned in
+          this specification, the normative definition for this
+          attribute is the
+          <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+          In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#RepeatCountAttribute">SMIL Animation: 'repeatCount' attribute</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.3.1).</p>
+        </dd>
+        <dt id="RepeatDurAttribute"><span class='adef'>repeatDur</span> =
+        <span class='attr-value'><a href="#ClockValueSyntax">Clock-value</a> |
+        "indefinite"</span></dt>
+        <dd>
+          <p>Specifies the total duration for repeat. It can have the
+          following attribute values:</p>
+          <dl>
+            <dt><a href="#ClockValueSyntax">Clock-value</a></dt>
+            <dd>Specifies the duration in <a
+            href="#PresentationTime">presentation time</a> to
+            repeat the animation function
+            <code><strong>f(t)</strong></code>.</dd>
+            <dt>"indefinite"</dt>
+            <dd>The animation is defined to repeat indefinitely
+            (i.e. until the document ends).</dd>
+          </dl>
+          <p>Except for any SVG-specific rules explicitly mentioned in
+          this specification, the normative definition for this
+          attribute is the
+          <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+          In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#RepeatDurAttribute">SMIL Animation: 'repeatDur' attribute</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.3.1).</p>
+        </dd>
+        <dt id="FillAttribute"><span class='adef'>fill</span> =
+        <span class='attr-value'>"freeze" | "remove"</span></dt>
+        <dd>
+          <p>This attribute can have the following values:</p>
+          <dl>
+            <dt><span class='attr-value'>freeze</span></dt>
+            <dd>The animation effect <a
+            href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#AnimationModel">
+            F(t)</a> is defined to freeze the effect value at the
+            last value of the active duration. The animation effect
+            is "frozen" for the remainder of the document duration
+            (or until the animation is restarted - see <a
+            href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Restart">
+            SMIL Animation: Restarting animation</a>).</dd>
+            <dt><span class='attr-value'>remove</span></dt>
+            <dd><p>The animation effect is removed (no longer applied)
+            when the active duration of the animation is over.
+            After the active end of the animation, the animation no
+            longer affects the target (unless the animation is
+            restarted - see <a
+            href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Restart">
+            SMIL Animation: Restarting animation</a>).</p>
+            <p>This is the default value.</p></dd>
+          </dl>
+          <p>Except for any SVG-specific rules explicitly mentioned in
+          this specification, the normative definition for this
+          attribute is the
+          <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+          In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#FillAttribute">SMIL Animation: 'fill' attribute</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.3.5).</p>
+        </dd>
+      </dl>
+
+    </div>
+
+<p>The <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a>
+specification [<a href="refs.html#ref-SMILANIM">SMILANIM</a>] defines the detailed processing
+rules associated with the above attributes. Except for any SVG-specific
+rules explicitly mentioned in this specification, the SMIL Animation
+specification is the normative definition of the processing rules for
+the above attributes.</p>
+
+<h4 id="ClockValueSyntax">Clock values</h4>
+
+<p>Clock values have the same syntax as in
+<a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a>
+specification [<a href="refs.html#ref-SMILANIM">SMILANIM</a>]. The grammar for
+clock values is repeated here:</p>
+
+<pre>
+Clock-val         ::= Full-clock-val | Partial-clock-val 
+                      | Timecount-val
+Full-clock-val    ::= Hours ":" Minutes ":" Seconds ("." Fraction)?
+Partial-clock-val ::= Minutes ":" Seconds ("." Fraction)?
+Timecount-val     ::= Timecount ("." Fraction)? (Metric)?
+Metric            ::= "h" | "min" | "s" | "ms"
+Hours             ::= DIGIT+; any positive number
+Minutes           ::= 2DIGIT; range from 00 to 59
+Seconds           ::= 2DIGIT; range from 00 to 59
+Fraction          ::= DIGIT+
+Timecount         ::= DIGIT+
+2DIGIT            ::= DIGIT DIGIT
+DIGIT             ::= [0-9]
+</pre>
+
+<p>For Timecount values, the default metric suffix is "s" (for
+seconds). No embedded white space is allowed in clock values,
+although leading and trailing white space characters will be
+ignored.</p>
+
+<p>Clock values describe <a href="#PresentationTime">presentation time</a>.</p>
+
+<div class="example">
+<p>The following are examples of legal clock values:</p>
+
+<ul>
+  <li>Full clock values:&nbsp;<code><br />
+   &nbsp; 02:30:03&nbsp;&nbsp;&nbsp;</code> = 2 hours, 30 minutes and 3 seconds<br />
+   <code>&nbsp; 50:00:10.25</code> = 50 hours, 10 seconds and 250 milliseconds</li>
+
+  <li>Partial clock value:&nbsp;<code><br />
+   &nbsp; 02:33&nbsp;&nbsp;</code> = 2 minutes and 33 seconds<br />
+   <code>&nbsp; 00:10.5</code> = 10.5 seconds = 10 seconds and 500 milliseconds</li>
+
+  <li>Timecount values:<br />
+   <code>&nbsp; 3.2h&nbsp;&nbsp;&nbsp;</code> = 3.2 hours = 3 hours and 12 minutes<br />
+   <code>&nbsp; 45min&nbsp;&nbsp;</code> = 45 minutes<br />
+   <code>&nbsp; 30s&nbsp;&nbsp;&nbsp;&nbsp;</code> = 30 seconds<br />
+   <code>&nbsp; 5ms&nbsp;&nbsp;&nbsp;&nbsp;</code> = 5 milliseconds<br />
+   <code>&nbsp; 12.467&nbsp;</code> = 12 seconds and 467 milliseconds</li>
+</ul>
+
+<p>Fractional values are just (base 10) floating point definitions of seconds.
+Thus:</p>
+
+<p><code>&nbsp; 00.5s&nbsp;&nbsp;&nbsp;&nbsp;</code> = 500 milliseconds<br />
+<code>&nbsp; 00:00.005</code> = 5 milliseconds</p>
+</div>
+
+<h3 id="ValueAttributes">Attributes that define animation values over time</h3>
+
+<p>The following attributes are the <dfn id='animation-value-attributes'>animation value attributes</dfn>.
+They are common to elements <edit:elementswithattributecategory name='animation value'/>. These
+attributes define the values that are assigned to the target
+attribute or property over time. The attributes below provide
+control over the relative timing of keyframes and the
+interpolation method between discrete values.</p>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="CalcModeAttribute"><span class='adef'>calcMode</span> =
+        <span class="attr-value">"discrete | linear | paced | spline"</span></dt>
+        <dd>
+          <p>Specifies the interpolation mode for the animation. This
+          can take any of the following values. The default mode is
+          <span class='attr-value'>'linear'</span>, however if the attribute does not support
+          linear interpolation (e.g. for strings), the
+          <a>'calcMode'</a> attribute is ignored and discrete
+          interpolation is used.</p>
+          <dl>
+            <dt><span class='attr-value'>discrete</span></dt>
+            <dd>This specifies that the animation function will
+            jump from one value to the next without any
+            interpolation.</dd>
+            <dt><span class='attr-value'>linear</span></dt>
+            <dd>Simple linear interpolation between values is used
+            to calculate the animation function. Except for <a>'animateMotion'</a>, this
+            is the default <a>'calcMode'</a>.</dd>
+            <dt><span class='attr-value'>paced</span></dt>
+            <dd>
+            Defines interpolation to produce an even pace of
+            change across the animation. This is only supported for the
+            data types for which there is an appropriate distance function
+            defined, which includes only scalar numeric types plus the
+            types listed in <a href="#complexDistances">Paced animation and complex types</a>.
+            If <span class='attr-value'>'paced'</span> is specified, any
+            <a>'keyTimes'</a> or <a>'keySplines'</a> will
+            be ignored. For <a>'animateMotion'</a>, this
+            is the default <a>'calcMode'</a>.
+            Authors are discouraged from using paced animation on types
+            that do not have a distance function defined, due to its
+            unpredictable behavior in some user agents.</dd>
+            <dt><span class='attr-value'>spline</span></dt>
+            <dd>Interpolates from one value in the
+            <a>'values'</a> list to the next according to a
+            time function defined by a cubic Bézier spline.
+            The points of the spline are defined in the
+            <a>'keyTimes'</a> attribute, and the control points
+            for each interval are defined in the
+            <a>'keySplines'</a> attribute.</dd>
+          </dl>
+          <p>Except for any SVG-specific rules explicitly mentioned in
+          this specification, the normative definition for this
+          attribute is the
+          <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+          In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#CalcModeAttribute">SMIL Animation: 'calcMode' attribute</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.2.3).</p>
+        </dd>
+        <dt id="ValuesAttribute"><span class='adef'>values</span> =
+        <span class='attr-value'>"&lt;list&gt;"</span></dt>
+        <dd>A semicolon-separated list of one or more values.
+        Vector-valued attributes are supported using the vector
+        syntax of the <a>'attributeType'</a> domain. Per the SMIL
+        specification, leading and trailing white space,
+        and white space before and after semicolon separators,
+        is allowed and will be ignored.  Except for
+        any SVG-specific rules explicitly mentioned in this
+        specification, the normative definition for this attribute
+        is the
+        <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+        In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#ValuesAttribute">SMIL Animation: 'values' attribute</a>
+        ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.2.2).</dd>
+        <dt id="KeyTimesAttribute"><span class='adef'>keyTimes</span> =
+        <span class='attr-value'>"&lt;list&gt;"</span></dt>
+        <dd>
+          <p>A semicolon-separated list of time values used to control
+          the pacing of the animation. Each time in the list
+          corresponds to a value in the <a>'values'</a>
+          attribute list, and defines when the value is used in the
+          animation function. Each time value in the
+          <a>'keyTimes'</a> list is specified as a floating
+          point value between 0 and 1 (inclusive), representing a
+          proportional offset into the simple duration of the
+          animation element.</p>
+
+          <p>For animations specified with a <a>'values'</a> list, the
+          <a>'keyTimes'</a> attribute if specified must have exactly as many
+          values as there are in the <a>'values'</a> attribute. For from/to/by
+          animations, the <a>'keyTimes'</a> attribute if specified must have
+          two values.</p>
+
+          <p>Each successive time value must be greater than or equal
+          to the preceding time value.</p>
+           
+          <p>The <a>'keyTimes'</a> list semantics depends upon
+          the interpolation mode:</p>
+          <ul>
+            <li>For linear and spline animation,&nbsp;the first
+            time value in the list must be 0, and the last time
+            value in the list must be 1. The key time
+            associated with each value defines when the value is
+            set; values are interpolated between the key times.</li>
+            <li>For discrete animation, the first time value in the
+            list must be 0. The time associated with each value
+            defines when the value is set; the animation function
+            uses that value until the next time defined in
+            <a>'keyTimes'</a>.</li>
+          </ul>
+          <p>If the interpolation mode is <span class='attr-value'>'paced'</span>, the
+          <a>'keyTimes'</a> attribute is ignored.</p>
+
+          <p>If there are any errors in the <a>'keyTimes'</a>
+          specification (bad values, too many or too few values),
+          the document fragment is in error (see <a
+          href="implnote.html#ErrorProcessing">error
+          processing</a>).</p>
+
+          <p>If the simple duration is indefinite, any
+          <a>'keyTimes'</a> specification will be
+          ignored.</p>
+          
+          <p>
+            Because paced animation interpolation is unspecified for some
+            value types, authors are encouraged to use
+            <span class="attr-value">'linear'</span> animation interpolation with
+            calculated <a>'keyTimes'</a>
+            to achieve particular interpolation behavior for these types.
+          </p>
+
+          <p>Except for any SVG-specific rules explicitly mentioned
+          in this specification, the normative definition for this
+          attribute is the
+          <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+          In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#KeyTimesAttribute">SMIL Animation: 'keyTimes' attribute</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.2.3).</p>
+        </dd>
+        <dt id="KeySplinesAttribute"><span class='adef'>keySplines</span> =
+        <span class='attr-value'>"&lt;list&gt;"</span></dt>
+        <dd><p>A set of Bézier control points associated with
+        the <a>'keyTimes'</a> list, defining a cubic
+        Bézier function that controls interval pacing. The
+        attribute value is a semicolon-separated list of control
+        point descriptions. Each control point description is a set
+        of four values: <code>x1 y1 x2 y2</code>, describing the
+        Bézier control points for one time segment. Note:
+        <a href="http://www.w3.org/TR/2008/REC-SMIL3-20081201/smil-animation.html#adef-keySplines">SMIL</a>
+        allows these values to be separated either by commas with 
+        optional whitespace, or by whitespace alone.  The
+        <a>'keyTimes'</a> values that define the associated
+        segment are the Bézier "anchor points", and the
+        <a>'keySplines'</a> values are the control points.
+        Thus, there must be one fewer sets of control points than
+        there are <a>'keyTimes'</a>.</p>
+
+        <p>The values must all be in the range 0 to 1.</p>
+
+        <p>This attribute is ignored unless the <a>'calcMode'</a>
+        is set to <span class='attr-value'>'spline'</span>.</p>
+
+        <p>If there are any errors in the <a>'keySplines'</a>
+        specification (bad values, too many or too few values), the
+        document fragment is in error (see <a
+        href="implnote.html#ErrorProcessing">error
+        processing</a>).</p>
+
+        <p>Except for any SVG-specific rules explicitly mentioned in
+        this specification, the normative definition for this
+        attribute is the
+        <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+        In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#KeySplinesAttribute">SMIL Animation: 'keySplines' attribute</a>
+        ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.2.3).</p></dd>
+
+        <dt id="FromAttribute"><span class='adef'>from</span> =
+        <span class='attr-value'>"&lt;value&gt;"</span></dt>
+        <dd>Specifies the starting value of the animation.<br />
+         Except for any SVG-specific rules explicitly mentioned in
+        this specification, the normative definition for this
+        attribute is the
+        <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+        In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#FromAttribute">SMIL Animation: 'from' attribute</a>
+        ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.2.2).</dd>
+
+        <dt id="ToAttribute"><span class='adef'>to</span> =
+        <span class='attr-value'>"&lt;value&gt;"</span></dt>
+        <dd>Specifies the ending value of the animation.<br />
+         Except for any SVG-specific rules explicitly mentioned in
+        this specification, the normative definition for this
+        attribute is the
+        <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+        In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#ToAttribute">SMIL Animation: 'to' attribute</a>
+        ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.2.2).</dd>
+
+        <dt id="ByAttribute"><span class='adef'>by</span> =
+        <span class='attr-value'>"&lt;value&gt;"</span></dt>
+        <dd>Specifies a relative offset value for the
+        animation.<br />
+         Except for any SVG-specific rules explicitly mentioned in
+        this specification, the normative definition for this
+        attribute is the
+        <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+        In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#ByAttribute">SMIL Animation: 'by' attribute</a>
+        ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.2.2).</dd>
+      </dl>
+
+      <p>The <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification [<a href="refs.html#ref-SMILANIM">SMILANIM</a>]
+      defines the detailed processing
+      rules associated with the above attributes. Except for any
+      SVG-specific rules explicitly mentioned in this
+      specification, the SMIL Animation specification is the normative definition of
+      the processing rules for the above attributes.</p>
+      <p>The animation values specified in the animation element
+      must be legal values for the specified attribute. Leading and
+      trailing white space, and white space before and after
+      semicolon separators, will be ignored.</p>
+      <p>All values specified must be legal values for the
+      specified attribute (as defined in the associated namespace).
+      If any values are not legal, the document fragment is in
+      error (see <a href="implnote.html#ErrorProcessing">error
+      processing</a>).</p>
+      <p>If a list of values is used, the animation will apply the
+      values in order over the course of the animation. If a list
+      of <a>'values'</a> is specified, any <a>'from'</a>,
+      <a>'to'</a> and <a>'by'</a> attribute values are ignored.</p>
+      <p>The processing rules for the variants of
+      <em>from/by/to</em> animations are described in <a
+      href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#AnimFuncValues">
+      Animation function values</a> with the following exception.</p>
+      <p>In order to provide behavior that is intuitive and consistent
+      between discrete animations with an explicitly specified
+      <a>'from'</a> attribute (e.g. "from-to animation") and those
+      where the underlying value is used (e.g. "to animation"), the
+      behavior of discrete to-animation in SVG deviates from the
+      definition in SMIL Animation.
+      As with a discrete from-to animation, a discrete to animation
+      will set the underlying value for the first half of the simple
+      duration (or, if a <a>'keyTimes'</a> list is provided, until the
+      simple duration specified by the second value in the <a>'keyTimes'</a>
+      list) and the <a>'to'</a> value for the remainder of the simple
+      duration.</p>
+      <p>The following figure illustrates the interpretation of the
+      <a>'keySplines'</a> attribute. Each diagram illustrates
+      the effect of <a>'keySplines'</a> settings for a single
+      interval (i.e. between the associated pairs of values in the
+      <a>'keyTimes'</a> and <a>'values'</a> lists.). The
+      horizontal axis can be thought of as the input value for the
+      <em>unit progress</em> of interpolation within the interval -
+      i.e. the pace with which interpolation proceeds along the
+      given interval. The vertical axis is the resulting value for
+      the <em>unit progress</em>, yielded by the function that
+      the <a>'keySplines'</a> attribute defines.
+       Another way of describing
+      this is that the horizontal axis is the input <em>unit
+      time</em> for the interval, and the vertical axis is the
+      output <em>unit time</em>. See also the section <a
+      href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#TimingAndRealWorldClockTime">
+      Timing and real-world clock times</a>.</p>
+      <div class="example">
+      <table  style="border-collapse:separate; border-spacing: 20px;">
+        <caption>
+          Examples of <span class="attr-name">keySplines</span>
+        </caption>
+        <tr>
+          <td><img class="bordered" width="250" height="250"
+          alt="Example keySplines01 - keySplines of 0 0 1 1 (the default)"
+           src="images/animate/keySplines01.svg" /> <span
+          class="table-heading-1">keySplines="0&nbsp;0&nbsp;1&nbsp;1"
+          (the default)</span></td>
+          <td><img class="bordered" width="250" height="250"
+          alt="Example keySplines01 - keySplines of .5 0 .5 1"
+          src="images/animate/keySplines02.svg" /> <span
+          class="table-heading-1">keySplines=".5&nbsp;0&nbsp;.5&nbsp;1"</span></td>
+        </tr>
+        <tr>
+          <td><img class="bordered" width="250" height="250"
+          alt="Example keySplines01 - keySplines of 0 .75 .25 1"
+          src="images/animate/keySplines03.svg" /> <span
+          class="table-heading-1">keySplines="0&nbsp;.75&nbsp;.25&nbsp;1"</span></td>
+          <td><img class="bordered" width="250" height="250"
+          alt="Example keySplines01 - keySplines of 1 0 .25 .25"
+          src="images/animate/keySplines04.svg" /><span
+          class="table-heading-1">keySplines="1&nbsp;0&nbsp;.25&nbsp;.25"</span></td>
+        </tr>
+      </table>
+      
+      <p>To illustrate the calculations, consider the simple
+      example:</p>
+<pre>
+&lt;animate dur="4s" values="10; 20" keyTimes="0; 1"
+     calcMode="spline" <strong>keySplines</strong>=<em>{as in table}</em> /&gt;
+</pre>
+      <p>Using the <a>'keySplines'</a> values for each of the four cases
+      above, the approximate interpolated values as the animation
+      proceeds are:</p>
+      <table class="data">
+        <caption>keySplines values</caption>
+        <thead>
+          <tr>
+            <th>Value of <span class='attr-name'>'keySplines'</span></th>
+            <th>Initial value</th>
+            <th>After 1s</th>
+            <th>After 2s</th>
+            <th>After 3s</th>
+            <th>Final value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>0 0 1 1</th>
+            <td>10.0</td>
+            <td>12.5</td>
+            <td>15.0</td>
+            <td>17.5</td>
+            <td>20.0</td>
+          </tr>
+          <tr>
+            <th>.5 0 .5 1</th>
+            <td>10.0</td>
+            <td>11.0</td>
+            <td>15.0</td>
+            <td>19.0</td>
+            <td>20.0</td>
+          </tr>
+          <tr>
+            <th>0 .75 .25 1</th>
+            <td>10.0</td>
+            <td>18.0</td>
+            <td>19.3</td>
+            <td>19.8</td>
+            <td>20.0</td>
+          </tr>
+          <tr>
+            <th>1 0 .25 .25</th>
+            <td>10.0</td>
+            <td>10.1</td>
+            <td>10.6</td>
+            <td>16.9</td>
+            <td>20.0</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p>For a formal definition of Bézier spline
+      calculation, see [<a
+      href="refs.html#ref-FOLEY-VANDAM">FOLEY-VANDAM</a>], pp. 488-491.</p>
+    </div>
+
+<h3 id="AdditionAttributes">Attributes that control whether animations are additive</h3>
+
+<p>It is frequently useful to define animation as an offset or
+delta to an attribute's value, rather than as absolute values.</p>
+
+<div class="example">
+<p>A simple "grow" animation can increase the width of an object
+by 10 pixels:</p>
+
+<pre><![CDATA[
+<rect width="20px" ...>
+  <animate attributeName="width" from="0px" to="10px" dur="10s"
+           additive="sum"/>
+</rect>
+]]></pre>
+</div>
+
+<p>It is frequently useful for repeated animations to build
+upon the previous results, accumulating with each iteration.</p>
+
+<div class="example">
+<p>
+The following example causes the rectangle to continue to grow
+with each repeat of the animation:</p>
+
+<pre><![CDATA[
+<rect width="20px" ...>
+  <animate attributeName="width" from="0px" to="10px" dur="10s"
+           additive="sum" accumulate="sum" repeatCount="5"/>
+</rect>
+]]></pre>
+
+<p>At the end of the first repetition, the rectangle has a
+width of 30 pixels. At the end of the second repetition, the
+rectangle has a width of 40 pixels. At the end of the fifth
+repetition, the rectangle has a width of 70 pixels.</p>
+</div>
+
+<p>For more information about additive animations, see <a
+href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#AdditiveAnim">
+SMIL Animation: Additive animation</a>. For more information on
+cumulative animations, see <a
+href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Accumulate">
+SMIL Animation: Controlling behavior of repeating animation -
+Cumulative animation</a>.</p>
+
+<p>The following attributes are the <dfn id='animation-addition-attributes'>animation addition attributes</dfn>,
+which are common to elements <edit:elementswithattributecategory name='animation addition'/>.</p>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="AdditiveAttribute"><span class='adef'>additive</span> =
+        <span class='attr-value'>"replace | sum"</span></dt>
+        <dd>
+          <p>Controls whether or not the animation is
+          additive.</p>
+           
+          <dl>
+            <dt><span class='attr-value'>sum</span></dt>
+            <dd>Specifies that the animation will add to the
+            underlying value of the attribute and other lower
+            priority animations.</dd>
+            <dt><span class='attr-value'>replace</span></dt>
+            <dd>Specifies that the animation will override the
+            underlying value of the attribute and other lower
+            priority animations. This is the default, however the
+            behavior is also affected by the animation value
+            attributes <a>'by'</a> and <a>'to'</a>, as described in <a
+            href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#FromToByAndAdditive">
+            SMIL Animation: How from, to and by attributes affect
+            additive behavior</a>.</dd>
+          </dl>
+          <p>Except for any SVG-specific rules explicitly mentioned
+          in this specification, the normative definition for this
+          attribute is the
+          <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+          In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#AdditiveAttribute">SMIL Animation: 'additive' attribute</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.3.6).</p>
+        </dd>
+        <dt id="AccumulateAttribute"><span class='adef'>accumulate</span> =
+        <span class='attr-value'>"none | sum"</span></dt>
+        <dd>
+          <p>Controls whether or not the animation is
+          cumulative.</p>
+           
+          <dl>
+            <dt><span class='attr-value'>sum</span></dt>
+            <dd>Specifies that each repeat iteration after the
+            first builds upon the last value of the previous
+            iteration.</dd>
+            <dt><span class='attr-value'>none</span></dt>
+            <dd>Specifies that repeat iterations are not
+            cumulative. This is the default.</dd>
+          </dl>
+
+          <p>This attribute is ignored if the target attribute value
+          does not support addition, or if the animation element
+          does not repeat.</p>
+
+          <p>Cumulative animation is not defined for "<em>to
+          animation</em>".</p>
+
+          <p>This attribute will be ignored if the animation function
+          is specified with only the <a>'to'</a>
+          attribute.</p>
+
+          <p>Except for any SVG-specific rules explicitly mentioned
+          in this specification, the normative definition for this
+          attribute is the
+          <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+          In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#AccumulateAttribute">SMIL Animation: 'accumulate' attribute</a>
+          ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.3.1).</p>
+        </dd>
+      </dl>
+    </div>
+
+</edit:with>
+
+<h3 id="Inheritance">Inheritance</h3>
+
+<p>SVG allows both attributes and properties to be animated. If
+a given attribute or property is inheritable by descendants,
+then animations on a parent element such as a <a>'g'</a> element has the effect of
+propagating the attribute or property animation values to
+descendant elements as the animation proceeds; thus, descendant
+elements can inherit animated attributes and properties from
+their ancestors.</p>
+
+<h3 id="AnimateElement">The <span class="element-name">'animate'</span> element</h3>
+
+<edit:with element='animate'>
+
+<p>The <a>'animate'</a> element is
+used to animate a single attribute or property over time.</p>
+<div class="example">
+<p>This example makes a rectangle repeatedly fade away over 5 seconds:</p>
+
+<pre><![CDATA[
+<rect>
+  <animate attributeType="CSS" attributeName="opacity" 
+         from="1" to="0" dur="5s" repeatCount="indefinite" />
+</rect>
+]]></pre>
+</div>
+
+<p>Except for any SVG-specific rules explicitly mentioned in this
+specification, the normative definition for this element is the
+<a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#animateElement">SMIL Animation: 'animate' element</a>
+([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 4.1).</p>
+
+<edit:elementsummary name='animate'/>
+
+<p>The <a>'color-interpolation'</a> property applies to color interpolations
+that result from animations using the <a>'animate'</a> element.</p>
+
+<p>For a list of attributes and properties that can be animated
+using the <a>'animate'</a> element, see
+<a href="animate.html#AnimationAttributesAndProperties">Elements,
+attributes and properties that can be animated</a>.</p>
+
+</edit:with>
+
+<h3 id="SetElement">The <span class="element-name">'set'</span> element</h3>
+
+<edit:with element='set'>
+
+<p>The <a>'set'</a> element provides
+a simple means of just setting the value of an attribute for a
+specified duration. It supports all attribute types, including
+those that cannot reasonably be interpolated, such as string
+and boolean values. The <a>'set'</a>
+element is non-additive. The additive and accumulate attributes
+are not allowed, and will be ignored if specified.</p>
+
+<p>Except for any SVG-specific rules explicitly mentioned in this
+specification, the normative definition for this element is the
+<a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#setElement">SMIL Animation: 'set' element</a>
+([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 4.2).</p>
+
+<edit:elementsummary name='set'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="SetElementToAttribute"><span
+        class="adef">to</span> = "<span
+        class="attr-value">&lt;value&gt;</span>"</dt>
+        <dd>Specifies the value for the attribute during the
+        duration of the <a>'set'</a>
+        element. The argument value must match the attribute
+        type.</dd>
+      </dl>
+    </div>
+    <p>For a list of attributes and properties that can be animated
+    using the <a>'set'</a> element, see
+    <a
+    href="animate.html#AnimationAttributesAndProperties">Elements,
+    attributes and properties that can be animated</a>.</p>
+
+</edit:with>
+
+<h3 id="AnimateMotionElement">The <span class="element-name">'animateMotion'</span> element</h3>
+
+<edit:with element='animateMotion'>
+
+<p>The <a>'animateMotion'</a> element causes a referenced element to
+move along a motion path.</p>
+
+<p>Except for any SVG-specific rules explicitly mentioned in this
+specification, the normative definition for this element is the
+<a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#animateMotionElement">SMIL Animation: 'animateMotion' element</a>
+([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 4.3).</p>
+
+<edit:elementsummary name='animateMotion'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="AnimateMotionElementCalcModeAttribute"><span class='adef'>calcMode</span> =
+        <span class='attr-value'>"discrete | linear | paced | spline"</span></dt>
+        <dd>Specifies the interpolation mode for the animation.
+        Refer to general description of the <a>'animate/calcMode'</a> attribute above. The
+        only difference is that the default value for the <a>'calcMode'</a>
+        for <a>'animateMotion'</a> is <span class="attr-value">'paced'</span>. See <a
+        href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#MotionCalcModeAttribute">
+        SMIL Animation: 'calcMode' attribute for
+        'animateMotion'</a>.</dd>
+        <dt id="PathAttribute"><span class="adef">path</span> = "<span
+        class="attr-value">&lt;path-data&gt;</span>"</dt>
+        <dd>The motion path, expressed in the same format and
+        interpreted the same way as the <a>'path/d'</a> attribute on the
+        <a>'path element'</a> element. The effect
+        of a motion path animation is to add a supplemental
+        transformation matrix onto the CTM for the referenced
+        object which causes a translation along the x- and y-axes
+        of the current user coordinate system by the computed X and
+        Y values computed over time.</dd>
+        <dt id="KeyPointsAttribute"><span class="adef">keyPoints</span> = "<span
+        class="attr-value">&lt;list-of-numbers&gt;</span>"</dt>
+        <dd><p><a>'keyPoints'</a> takes a
+        semicolon-separated list of floating point values between 0
+        and 1 and indicates how far along the motion path the
+        object shall move at the moment in time specified by
+        corresponding <a>'keyTimes'</a>
+        value. Distance calculations use the user agent's <a
+        href="paths.html#DistanceAlongAPath">distance along the
+        path</a> algorithm. Each progress value in the list
+        corresponds to a value in the <a>'keyTimes'</a>
+        attribute list.</p>
+        <p>If a list of <a>'keyPoints'</a> is specified, there
+        must be exactly as many values in the
+        <a>'keyPoints'</a> list as in the <a>'keyTimes'</a>
+        list.</p>
+        <p>If there are any errors in the <a>'keyPoints'</a>
+        specification (bad values, too many or too few values),
+        then the document is in error (see <a
+        href="implnote.html#ErrorProcessing">Error
+        processing</a>).</p></dd>
+        <dt id="RotateAttribute"><span class="adef">rotate</span> = "<span
+        class="attr-value"><a>&lt;number&gt;</a> | auto |
+        auto-reverse</span>"</dt>
+        <dd>
+           <p>The <a>'rotate'</a> attribute post-multiplies a supplemental
+           transformation matrix onto the CTM of the target element to apply a
+           rotation transformation about the origin of the current user
+           coordinate system. The rotation transformation is applied after the
+           supplemental translation transformation that is computed due to the
+           <a>'path attribute'</a> attribute.</p>
+
+           <dl>
+             <dt><span class="attr-value">auto</span></dt>
+             <dd>Indicates that the object is rotated over time by the angle of
+             the direction (i.e., directional tangent vector) of the motion path.</dd>
+             
+             <dt><span class="attr-value">auto-reverse</span></dt>
+             <dd>Indicates that the object is rotated over time by the angle of the
+             direction (i.e., directional tangent vector) of the motion path plus
+             180 degrees.</dd>
+             
+             <dt><span class='attr-value'><a>&lt;number&gt;</a></span></dt>
+             <dd>Indicates that the target element has a constant rotation
+             transformation applied to it, where the rotation angle is the
+             specified number of degrees.</dd>
+          </dl>
+
+          <p>The default value is <span class='attr-value'>'0'</span>.</p>
+        </dd>
+        <dt id="OriginAttribute"><span class="adef">origin</span> = "<span
+        class="attr-value">default</span>"</dt>
+        <dd>The <a>'origin'</a> attribute is <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#MotionOriginAttribute">defined in the SMIL Animation
+        specification</a> ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 4.3).
+        It has no effect in SVG.</dd>
+      </dl>
+    </div>
+
+<div id='MPathElement'>
+<edit:elementsummary name='mpath'/>
+</div>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="MPathElementHrefAttribute"><span
+        class="adef">xlink:href</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeIRI">&lt;iri&gt;</a></span>"</dt>
+        <dd>An <a>IRI
+        reference</a> to the <a>'path element'</a> element which
+        defines the motion path.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+      </dl>
+    </div>
+
+    <p>For <a>'animateMotion'</a>, the specified values for <a>'from'</a>,
+    <a>'by'</a>, <a>'to'</a> and <a>'values'</a> consists of x, y coordinate
+    pairs, with a single comma and/or white space separating the x coordinate
+    from the y coordinate. For example, <span class="attr-value">from="33,15"</span>
+    specifies an x coordinate value of <span class="attr-value">33</span> and
+    a y coordinate value of <span class="attr-value">15</span>.</p>
+
+    <p>If provided, the <a>'values'</a> attribute must consists of a list of
+    x, y coordinate pairs. Coordinate values are separated by at least one
+    white space character or a comma.  Additional white space around the
+    separator is allowed. For example, <span class="attr-value">values="10,20;30,20;30,40"</span>
+    or <span class="attr-value">values="10mm,20mm;30mm,20mm;30mm,40mm"</span>.
+    Each coordinate represents a <a href="types.html#DataTypeLength">length</a>.
+    Attributes <a>'from'</a>, <a>'by'</a>, <a>'to'</a> and <a>'values'</a>
+    specify a shape on the current canvas which represents the motion path.</p>
+
+    <p>Two options are available which allow definition of a motion
+    path using any of SVG's <a href="paths.html#PathData">path
+    data</a> commands:</p>
+    <ul>
+      <li>the <a>'path attribute'</a> attribute defines a motion path directly on
+      <a>'animateMotion'</a> element using any of SVG's
+      <a href="paths.html#PathData">path data</a> commands.</li>
+
+      <li>the <a>'mpath'</a> sub-element provides the ability to reference an
+      external <a>'path element'</a> element as the definition of the motion path.</li>
+    </ul>
+    <p>Note that SVG's <a href="paths.html#PathData">path data</a>
+    commands can only contain values in user space, whereas <a>'from'</a>,
+    <a>'by'</a>, <a>'to'</a> and <a>'values'</a> can specify coordinates in
+    user space or using unit identifiers. See <a href="coords.html#Units">Units</a>.</p>
+
+    <p>The various (x,y) points of the shape provide a supplemental
+    transformation matrix onto the CTM for the referenced object
+    which causes a translation along the x- and y-axes of the current
+    user coordinate system by the (x,y) values of the shape computed
+    over time. Thus, the referenced object is translated over time
+    by the offset of the motion path relative to the origin of the
+    current user coordinate system. The supplemental transformation is
+    applied on top of any transformations due to the target element's
+    <a>'transform'</a> property or any animations on that attribute due
+    to <a>'animateTransform'</a> elements on the target element.</p>
+
+    <p>The <a>'additive'</a> and <a>'accumulate'</a> attributes apply
+    to <a>'animateMotion'</a> elements. Multiple <a>'animateMotion'</a>
+    elements all simultaneously referencing the same target element can
+    be additive with respect to each other; however, the transformations
+    which result from the <a>'animateMotion'</a> elements are always
+    supplemental to any transformations due to the target element's
+    <a>'transform'</a> property or any <a>'animateTransform'</a>
+    elements.</p>
+
+    <p>The default calculation mode (<a>'calcMode'</a>) for
+    <a>'animateMotion'</a> is "paced". This will produce constant
+    velocity motion along the specified path. Note that while
+    animateMotion elements can be additive, it is important to observe
+    that the addition of two or more "paced" (constant velocity)
+    animations might not result in a combined motion animation with
+    constant velocity.</p>
+
+    <p>When a path is combined with "discrete", "linear"
+    or "spline" <a>'calcMode'</a> settings, and if attribute
+    <a>'keyPoints'</a> is not provided, the number of values is
+    defined to be the number of points defined by the path, unless
+    there are "move to" commands within the path. A "move to" command
+    within the path (i.e. other than at the beginning of
+    the path description) A "move to" command does not
+    count as an additional point when dividing up the duration, or
+    when associating <a>'keyTimes'</a>, <a>'keySplines'</a>
+    and <a>'keyPoints'</a> values. When a path is
+    combined with a "paced" <a>'calcMode'</a> setting, all "move to"
+    commands are considered to have 0 length (i.e. they always happen
+    instantaneously), and is not considered in computing the pacing.</p>
+
+    <p>For more flexibility in controlling the velocity along the
+    motion path, the <a>'keyPoints'</a> attribute provides the
+    ability to specify the progress along the motion path for
+    each of the <a>'keyTimes'</a> specified values. If specified,
+    <a>'keyPoints'</a> causes <a>'keyTimes'</a> to apply to the values
+    in <a>'keyPoints'</a> rather than the points specified in the
+    <a>'values'</a> attribute array or the points on the <a>'path attribute'</a>
+    attribute.</p>
+
+    <p>The override rules for <a>'animateMotion'</a> are as follows. 
+    Regarding the definition of the motion path, the <a>'mpath'</a> element
+    overrides the the <a>'path attribute'</a> attribute, which overrides <a>'values'</a>,
+    which overrides <a>'from'</a>, <a>'by'</a> and <a>'to'</a>. Regarding
+    determining the points which correspond to the <a>'keyTimes'</a>
+    attributes, the <a>'keyPoints'</a> attribute overrides <a>'path attribute'</a>,
+    which overrides <a>'values'</a>, which overrides <a>'from'</a>, <a>'by'</a>
+    and <a>'to'</a>.</p>
+
+    <p>At any time <em>t</em> within a motion path animation of
+    duration <em>dur</em>, the computed coordinate (x,y) along the
+    motion path is determined by finding the point (x,y) which is
+    <em>t/dur</em> distance along the motion path using the user
+    agent's <a href="paths.html#DistanceAlongAPath">distance along
+    the path</a> algorithm.</p>
+
+    <div class="example">
+    <p>The following example demonstrates the supplemental
+    transformation matrices that are computed during a motion path
+    animation.</p>
+
+    <p id="ExampleAnimMotion01"><span class="example-ref">Example animMotion01</span> shows
+    a triangle moving along a motion path.</p>
+<pre><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<svg width="5cm" height="3cm"  viewBox="0 0 500 300"
+     xmlns="http://www.w3.org/2000/svg" version="1.1"
+     xmlns:xlink="http://www.w3.org/1999/xlink" >
+  <desc>Example animMotion01 - demonstrate motion animation computations</desc>
+  <rect x="1" y="1" width="498" height="298"
+        fill="none" stroke="blue" stroke-width="2" />
+  <!-- Draw the outline of the motion path in blue, along
+          with three small circles at the start, middle and end. -->
+  <path id="path1" d="M100,250 C 100,50 400,50 400,250"
+        fill="none" stroke="blue" stroke-width="7.06"  />
+  <circle cx="100" cy="250" r="17.64" fill="blue"  />
+  <circle cx="250" cy="100" r="17.64" fill="blue"  />
+  <circle cx="400" cy="250" r="17.64" fill="blue"  />
+  <!-- Here is a triangle which will be moved about the motion path.
+       It is defined with an upright orientation with the base of
+       the triangle centered horizontally just above the origin. -->
+  <path d="M-25,-12.5 L25,-12.5 L 0,-87.5 z"
+        fill="yellow" stroke="red" stroke-width="7.06"  >
+    <!-- Define the motion path animation -->
+    <animateMotion dur="6s" repeatCount="indefinite" rotate="auto" >
+       <mpath xlink:href="#path1"/>
+    </animateMotion>
+  </path>
+</svg>
+]]></pre>
+    <table >
+      <caption>
+        Example animMotion01
+      </caption>
+      <tr>
+        <td><img width="144" height="91"
+        alt="Example animMotion01 - at zero seconds"
+        src="images/animate/animMotion01a.png" /><br/><span
+        class="table-heading-1">At zero seconds</span></td>
+        <td><img width="144" height="91"
+        alt="Example animMotion01 - at three seconds"
+        src="images/animate/animMotion01b.png" /> <br/><span
+        class="table-heading-1">At three seconds</span></td>
+        <td><img width="144" height="91"
+        alt="Example animMotion01 - at six seconds"
+        src="images/animate/animMotion01c.png" /> <br/><span
+        class="table-heading-1">At six seconds</span></td>
+      </tr>
+    </table>
+    <p class="view-as-svg"><a
+    href="images/animate/animMotion01.svg">View this example as SVG
+    (SVG-enabled browsers only)</a></p>
+    <p>The following table shows the supplemental transformation
+    matrices that are applied to achieve the effect of the motion
+    path animation.</p>
+    <table class="data">
+      <caption>Example animMotion01 time slices</caption>
+      <thead>
+        <tr>
+          <th></th>
+          <th>After 0s</th>
+          <th>After 3s</th>
+          <th>After 6s</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Supplemental transform
+           due to movement
+           along motion path</td>
+          <td>translate(100,250)</td>
+          <td>translate(250,100)</td>
+          <td>translate(400,250)</td>
+        </tr>
+        <tr>
+          <td>Supplemental transform
+           due to
+           <span class="attr-value">rotate="auto"</span></td>
+          <td>rotate(-90)</td>
+          <td>rotate(0)</td>
+          <td>rotate(90)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<p>For a list of elements that can be animated using the <a>'animateMotion'</a>
+element, see <a href="animate.html#AnimationAttributesAndProperties">Elements,
+attributes and properties that can be animated</a>.</p>
+
+</edit:with>
+
+<h3 id="AnimateColorElement">The <span class="element-name">'animateColor'</span> element</h3>
+
+<edit:with element='animateColor'>
+
+<p>The <a>'animateColor'</a> element specifies a color transformation
+over time.</p>
+
+<p>Except for any SVG-specific rules explicitly mentioned in this
+specification, the normative definition for this element is the
+<a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a> specification.
+In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#animateColorElement">SMIL Animation: 'animateColor' element</a>
+([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 4.4).</p>
+
+<edit:elementsummary name='animateColor'/>
+
+<p>The <a>'from'</a>, <a>'by'</a> and <a>'to'</a> attributes take color
+values, where each color value is expressed using the following syntax (the
+same syntax as used in SVG's properties that can take color values):</p>
+
+<pre><a href="types.html#DataTypeColor">&lt;color&gt;</a> <a href="types.html#DataTypeICCColor">&lt;icccolor&gt;</a>?</pre>
+
+<p>The <a>'values'</a> attribute for the <a>'animateColor'</a> element
+consists of a semicolon-separated list of color values, with each color
+value expressed in the above syntax.</p>
+
+<p>Out of range color values can be provided, but user agent processing
+will be implementation dependent. User agents should clamp color
+values to allow color range values as late as possible, but note that
+system differences might preclude consistent behavior across different
+systems.</p>
+
+<p>The <a>'color-interpolation'</a> property applies to color interpolations
+that result from <a>'animateColor'</a> animations.</p>
+
+<p>The use of <a>'animateColor'</a> is deprecated, since all of its functionality
+can be achieved simply by using <a>'animate'</a> to target properties that
+can take color values.  The <a>'animateColor'</a> element may be dropped from
+a future version of the SVG specification.</p>
+
+<p>For a list of attributes and properties that can be animated using the
+<a>'animateColor'</a> element, see
+<a href="animate.html#AnimationAttributesAndProperties">Elements, attributes and properties that can be animated</a>.</p>
+
+</edit:with>
+
+<h3 id="AnimateTransformElement">The <span class="element-name">'animateTransform'</span> element</h3>
+
+<edit:with element='animateTransform'>
+
+<p>The <a>'animateTransform'</a> element animates a transformation attribute
+on a target element, thereby allowing animations to control translation,
+scaling, rotation and/or skewing.</p>
+
+<p class="issue">This section should talk about the <a>'transform'</a> property.</p>
+
+<edit:elementsummary name='animateTransform'/>
+
+<div class="adef-list">
+  <p><em>Attribute definitions:</em></p>
+  <dl>
+    <dt id="AnimateTransformElementTypeAttribute"><span class="adef">type</span> =
+    "<span class="attr-value">translate | scale | rotate | skewX | skewY</span>"</dt>
+    <dd>Indicates the type of transformation which is to have its values
+    change over time.
+    If the attribute is not specified, then the effect is as if a value of <span class="attr-value">'translate'</span> were specified.
+    </dd>
+  </dl>
+</div>
+
+<p>The <a>'from'</a>, <a>'by'</a> and <a>'to'</a> attributes take a value
+expressed using the same syntax that is available for the given transformation
+type:</p>
+
+<ul>
+  <li>For a <span class="attr-value">type="translate"</span>, each individual
+  value is expressed as <span class="attr-value">&lt;tx&gt; [,&lt;ty&gt;]</span>.</li>
+
+  <li>For a <span class="attr-value">type="scale"</span>, each individual
+  value is expressed as <span class="attr-value">&lt;sx&gt; [,&lt;sy&gt;]</span>.</li>
+
+  <li>For a <span class="attr-value">type="rotate"</span>, each individual
+  value is expressed as <span class="attr-value">&lt;rotate-angle&gt; [&lt;cx&gt; &lt;cy&gt;]</span>.</li>
+
+  <li>For a <span class="attr-value">type="skewX"</span> and
+  <span class="attr-value">type="skewY"</span>, each individual value is
+  expressed as <span class="attr-value">&lt;skew-angle&gt;</span>.</li>
+</ul>
+
+<p>(See <a href="coords.html#TransformProperty">The <span class="property">'transform'</span> property</a>.)</p>
+
+<p>The <a>'values'</a> attribute for the <a>'animateTransform'</a> element
+consists of a semicolon-separated list of values, where each individual value
+is expressed as described above for <a>'from'</a>, <a>'by'</a> and <a>'to'</a>.</p>
+
+<p>The animation effect for <a>'animateTransform'</a> is post-multiplied to the
+underlying value for additive <a>'animateTransform'</a> animations (see below)
+instead of added to the underlying value, due to the specific behavior of
+<a>'animateTransform'</a>.</p>
+
+<p><em>From-to</em>, <em>from-by</em> and <em>by animations</em> are defined
+in SMIL to be equivalent to a corresponding <em>values animation</em>.  See
+the <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#AnimFuncValues">Animation function values</a>
+section of SMIL Animation ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.2.2).
+However, <em>to animations</em> are a mixture of additive and non-additive
+behavior, as described in the <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#FromToByAndAdditive">How
+from, to and by attributes affect additive behavior</a> section of SMIL
+Animation ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.3.6).
+<em>To animations</em> provide specific functionality to get a smooth
+change from the underlying value to the <a>'to'</a> attribute value, which
+conflicts mathematically with the requirement for additive transform
+animations to be post-multiplied.  As a consequence, in SVG 1.1 the behavior of
+<em>to animations</em> for <a>'animateTransform'</a> is undefined.  Authors
+are suggested to use <em>from-to</em>, <em>from-by</em>, <em>by</em> or
+<em>values animations</em> to achieve any desired transform animation.</p>
+
+<p>If <a href="#CalcModeAttribute"><span class="attr-name">'calcMode'</span></a>
+has the value <span class="attr-value">'paced'</span>, then the "distance" for the transformation is
+calculated as further described in
+<a href="#complexDistances">Paced animations and complex types</a>.</p>    
+
+<p>When an animation is active, the effect of non-additive
+<a>'animateTransform'</a> (i.e., <span class="attr-value">additive="replace"</span>)
+is to replace the given attribute's value with the transformation defined by
+the <a>'animateTransform'</a>. The effect of additive (i.e.,
+<span class="attr-value">additive="sum"</span>) is to post-multiply the
+transformation matrix corresponding to the transformation defined by this
+<a>'animateTransform'</a>.</p>
+
+<div class="example">
+<p>To illustrate:</p>
+
+<pre><![CDATA[
+<rect transform="skewX(30)"...>
+  <animateTransform attributeName="transform" attributeType="XML"
+                    type="rotate" from="0" to="90" dur="5s"
+                    additive="replace" fill="freeze"/>
+  <animateTransform attributeName="transform" attributeType="XML"
+                    type="scale" from="1" to="2" dur="5s"
+                    additive="replace" fill="freeze"/>
+</rect>
+]]></pre>
+
+<p>In the code snippet above, because the both animations have
+<span class="attr-value">additive="replace"</span>, the first
+animation overrides the transformation on the rectangle itself
+and the second animation overrides the transformation from the
+first animation; therefore, at time 5 seconds, the visual
+result of the above two animations would be equivalent to the
+following static rectangle:</p>
+
+<pre><![CDATA[
+<rect transform="scale(2)" ... />
+]]></pre>
+</div>
+
+<!--<p>whereas in the following example:</p>-->
+
+<div class="example">
+<pre><![CDATA[
+<rect transform="skewX(30)"...>
+  <animateTransform attributeName="transform" attributeType="XML"
+                    type="rotate" from="0" to="90" dur="5s" 
+                    additive="sum" fill="freeze"/>
+  <animateTransform attributeName="transform" attributeType="XML"
+                    type="scale" from="1" to="2" dur="5s"
+                    additive="sum" fill="freeze"/>
+</rect>
+]]></pre>
+
+<p>In this code snippet, because the both animations have
+<span class="attr-value">additive="sum"</span>, the first animation
+post-multiplies its transformation to any transformations on
+the rectangle itself and the second animation post-multiplies
+its transformation to any transformation from the first
+animation; therefore, at time 5 seconds, the visual result of
+the above two animations would be equivalent to the following
+static rectangle:</p>
+
+<pre><![CDATA[
+<rect transform="skewX(30) rotate(90) scale(2)" ... />
+]]></pre>
+</div>
+
+<div class="note">
+<p>The zero value used when performing a <em>by animation</em>
+with <span class='attr-value'>type="scale"</span> is indeed 0.
+Thus, performing the following animation causes the rectangle to be
+invisible at time 0s (since the animated transform list value is
+<span class='attr-value'>'scale(0)'</span>), and be scaled back
+to its original size at time 5s (since the animated transform list value is
+<span class='attr-value'>'scale(1)'</span>):</p>
+
+<pre><![CDATA[
+<rect width="100" height="100">
+  <animateTransform attributeName="transform" attributeType="XML"
+                    type="scale" by="1" dur="5s" fill="freeze"/>
+</rect>
+]]></pre>
+</div>
+
+<p>When a transform animation has <span class='attr-value'>accumulate='sum'</span>,
+the accumulation that occurs for each completed repetition of the animation
+is computed on the values specified in the <a>'animateTransform'</a> element's
+<a href="animate.html#ValueAttributes">animation value attributes</a> (i.e.,
+<a>'values'</a>, <a>'from'</a>, <a>'to'</a> and <a>'by'</a>) and not on the
+transformation matrix that these values represent.</p>
+
+<div class="example">
+<p>For example, in the following
+code snippet, 3 is added to the scale value at the start of each repetition:</p>
+
+<pre><![CDATA[
+<rect width="100" height="100">
+  <animateTransform attributeName="transform" attributeType="XML"
+                    type="scale" from="2" to="3" repeatCount="3" dur="4s"
+                    fill="freeze"/>
+</rect>
+]]></pre>
+
+<p>The following graph and table shows the animated <a>'transform'</a> value on
+the <a>'rect'</a> over the course of the animation:</p>
+
+<table class="graph indented">
+  <tr>
+    <td><img src="images/cumulative-transform-graph-1.png" width="430" height="320" alt="The scale value animates from 2 to 12 with discontinuities at 4s and 8s."/></td>
+    <td>
+      <table class="data compact">
+        <thead>
+          <tr><th>Time</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0s</td><td  >scale(2)</td></tr>
+          <tr><td>1s</td><td>scale(2.25)</td></tr>
+          <tr><td>2s</td><td>scale(2.5)</td></tr>
+          <tr><td>3s</td><td>scale(2.75)</td></tr>
+          <tr><td>4s</td><td>scale(5)</td></tr>
+          <tr><td>5s</td><td>scale(5.25)</td></tr>
+          <tr><td>6s</td><td>scale(5.5)</td></tr>
+          <tr><td>7s</td><td>scale(5.75)</td></tr>
+          <tr><td>8s</td><td>scale(8)</td></tr>
+          <tr><td>9s</td><td>scale(8.25)</td></tr>
+          <tr><td>10s</td><td>scale(8.5)</td></tr>
+          <tr><td>11s</td><td>scale(8.75)</td></tr>
+          <tr><td>12s</td><td>scale(9)</td></tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</table>
+</div>
+
+<p>Transform item types that can have multiple values – <span class='attr-value'>'translate'</span>,
+<span class='attr-value'>'scale'</span> and <span class='attr-value'>'rotate'</span> – are
+treated as vectors and accumulation is performed with vector addition.  Optional values that
+are omitted are taken to have their usual implied value: <span class='attr-value'>1</span> for
+the <span class='attr-value'>&lt;sy&gt;</span> component of a <span class='attr-value'>'scale'</span>
+and <span class='attr-value'>0</span> for the <span class='attr-value'>&lt;tx&gt;</span> component
+of a <span class='attr-value'>'translate'</span> and the <span class='attr-value'>&lt;cx cy&gt;</span>
+components of a <span class='attr-value'>'rotate'</span>.</p>
+
+<div class="example">
+<p>For example, consider the following code snippet, which has a cumulative transform
+animation of type <span class='attr-value'>'rotate'</span>:</p>
+
+<pre><![CDATA[
+<rect width="100" height="100">
+  <animateTransform attributeName="transform" attributeType="XML"
+                    type="rotate" from="0 30 40" to="10 30 40"
+                    repeatCount="2" dur="1s" fill="freeze"/>
+</rect>
+]]></pre>
+
+<p>At time 1 second, the animated value of <a>'transform'</a> on the <a>'rect'</a>
+will jump from <span class='attr-value'>'rotate(10 30 40)'</span> to <span class='attr-value'>'rotate(10 60 80)'</span>,
+because the effect of the accumulation is to take the value at the end of the first repetition,
+<span class='attr-value'>'10 30 40'</span>, and add to it the value at simple duration <var>t</var> = 0s, which
+is <span class='attr-value'>'0 30 40'</span>.</p>
+</div>
+
+<p>For a list of attributes and properties that can be animated using the
+<a>'animateTransform'</a> element, see
+<a href="animate.html#AnimationAttributesAndProperties">Elements, attributes and properties that can be animated</a>.</p>
+
+</edit:with>
+
+<h3 id="AnimationAttributesAndProperties">Elements, attributes and properties that can be animated</h3>
+
+<p>The following lists all of the elements which can be animated by an
+<a>'animateMotion'</a> element:</p>
+
+<ul>
+  <li><a>'svg'</a></li>
+  <li><a>'g'</a></li>
+  <li><a>'defs'</a></li>
+  <li><a>'use'</a></li>
+  <li><a>'image'</a></li>
+  <li><a>'switch'</a></li>
+  <li><a>'path'</a></li>
+  <li><a>'rect'</a></li>
+  <li><a>'circle'</a></li>
+  <li><a>'ellipse'</a></li>
+  <li><a>'line'</a></li>
+  <li><a>'polyline'</a></li>
+  <li><a>'polygon'</a></li>
+  <li><a>'text'</a></li>
+  <li><a>'clipPath'</a></li>
+  <li><a>'mask element'</a></li>
+  <li><a>'a'</a></li>
+  <li><a>'foreignObject'</a></li>
+</ul>
+
+<p id="Animatable">Each attribute or property within this specification
+indicates whether or not it can be animated by SVG's animation
+elements. Animatable attributes and properties are designated
+as follows:</p>
+
+<p class='indented'><span class="anim-target">Animatable: yes.</span></p>
+
+<p>whereas attributes and properties that cannot be animated are designated:</p>
+
+<p class='indented'><span class="anim-target">Animatable: no.</span></p>
+
+<p>Some properties are defined as being animatable but only for non-additive animations:</p>
+
+<p class='indented'><span class="anim-target">Animatable: yes (non-additive).</span></p>
+
+<p>SVG has a defined set of <a href="types.html#BasicDataTypes">basic data types</a>
+for its various supported attributes and properties. For those
+attributes and properties that can be animated, the following
+table indicates which animation elements can be used to animate
+each of the basic data types. If a given attribute or property
+can take values of keywords (which are not additive) or numeric
+values (which are additive), then additive animations are
+possible if the subsequent animation uses a numeric value even
+if the base animation uses a keyword value; however, if the
+subsequent animation uses a keyword value, additive animation
+is not possible.</p>
+
+<table class="data">
+  <caption>Animatable data types</caption>
+  <thead>
+    <tr>
+      <th>Data type</th>
+      <th>Additive?</th>
+      <th><a>'animate'</a></th>
+      <th><a>'set'</a></th>
+      <th><a>'animateColor'</a></th>
+      <th><a>'animateTransform'</a></th>
+      <!--
+      <th><a href="animate.html#AnimateColorElement"><span class="element-name">‘animate<br /> Color’</span></a></th>
+      <th><a href="animate.html#AnimateTransformElement"><span class="element-name">‘animate<br /> Transform’</span></a></th>
+      -->
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th><a>&lt;angle&gt;</a></th>
+      <td>yes</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td>no</td>
+      <td>no</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th><a
+      href="types.html#DataTypeColor">&lt;color&gt;</a></th>
+      <td>yes</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td>no</td>
+      <td>Only additive if each value can be converted to an RGB color.</td>
+    </tr>
+    <tr>
+      <th><a
+      href="types.html#DataTypeFrequency">&lt;frequency&gt;</a></th>
+      <td>no</td>
+      <td>no</td>
+      <td>no</td>
+      <td>no</td>
+      <td>no</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th><a
+      href="types.html#DataTypeInteger">&lt;integer&gt;</a></th>
+      <td>yes</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td>no</td>
+      <td>no</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th><a>&lt;length&gt;</a></th>
+      <td>yes</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td>no</td>
+      <td>no</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th><a href="types.html#DataTypeList">&lt;list-of-<var>T</var>s&gt;</a></th>
+      <td>no</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td>no</td>
+      <td>no</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th><a>&lt;number&gt;</a></th>
+      <td>yes</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td>no</td>
+      <td>no</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th><a
+      href="types.html#DataTypePaint">&lt;paint&gt;</a></th>
+      <td>yes</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td>no</td>
+      <td>Only additive if each value can be converted to an RGB color.</td>
+    </tr>
+    <tr>
+      <th><a>&lt;percentage&gt;</a></th>
+      <td>yes</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td>no</td>
+      <td>no</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th><a href="types.html#DataTypeTime">&lt;time&gt;</a></th>
+      <td>no</td>
+      <td>no</td>
+      <td>no</td>
+      <td>no</td>
+      <td>no</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th><a href="types.html#DataTypeIRI">&lt;iri&gt;</a></th>
+      <td>no</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td>no</td>
+      <td>no</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <th>All other data types used in animatable attributes and
+      properties</th>
+      <td>no</td>
+      <td>yes</td>
+      <td>yes</td>
+      <td>no</td>
+      <td>no</td>
+      <td>&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Any deviation from the above table or other special note
+about the animation capabilities of a particular attribute or
+property is included in the section of the specification where
+the given attribute or property is defined.</p>
+
+<h2 id="DOMAnimationExample">Animation using the SVG DOM</h2>
+
+<div class="example">
+<p><span class="example-ref">Example dom01</span> shows a simple animation
+using the DOM.</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<svg width="4cm" height="2cm" viewBox="0 0 400 200"
+     xmlns="http://www.w3.org/2000/svg"
+     onload="StartAnimation(evt)" version="1.1">
+  <script type="application/ecmascript">]]>&lt;![CDATA[<![CDATA[
+    var timevalue = 0;
+    var timer_increment = 50;
+    var max_time = 5000;
+    var text_element;
+    function StartAnimation(evt) {
+      text_element = evt.target.ownerDocument.getElementById("TextElement");
+      ShowAndGrowElement();
+    }
+    function ShowAndGrowElement() {
+      timevalue = timevalue + timer_increment;
+      if (timevalue > max_time)
+        return;
+      // Scale the text string gradually until it is 20 times larger
+      scalefactor = (timevalue * 20.) / max_time;
+      text_element.setAttribute("transform", "scale(" + scalefactor + ")");
+      // Make the string more opaque
+      opacityfactor = timevalue / max_time;
+      text_element.setAttribute("opacity", opacityfactor);
+      // Call ShowAndGrowElement again <timer_increment> milliseconds later.
+      setTimeout("ShowAndGrowElement()", timer_increment)
+    }
+    window.ShowAndGrowElement = ShowAndGrowElement
+  ]]>]]&gt;<![CDATA[</script>
+  <rect x="1" y="1" width="398" height="198"
+        fill="none" stroke="blue" stroke-width="2"/>
+  <g transform="translate(50,150)" fill="red" font-size="7">
+    <text id="TextElement">SVG</text>
+  </g>
+</svg>
+]]></pre>
+
+<div class="figure">
+<table >
+  <caption>
+    Example dom01
+  </caption>
+  <tr>
+    <td><img width="151" height="76"
+    alt="Example dom01 - at zero seconds"
+    src="images/animate/dom01a.png" /> <br/>
+    At zero seconds</td>
+    <td><img width="151" height="76"
+    alt="Example dom01 - at three seconds"
+    src="images/animate/dom01b.png" /> <br/>
+    At 2.5 seconds</td>
+    <td><img width="151" height="76"
+    alt="Example dom01 - at six seconds"
+    src="images/animate/dom01c.png" /> <br/>
+    At five seconds</td>
+  </tr>
+</table>
+</div>
+
+<p class="view-as-svg"><a href="images/animate/dom01.svg">View
+this example as SVG (SVG-enabled browsers only)</a></p>
+
+<p>The above SVG file contains a single graphics element, a
+text string that says "SVG". The animation loops for 5 seconds.
+The text string starts out small and transparent and grows to
+be large and opaque. Here is an explanation of how this example
+works:</p>
+
+<ul>
+  <li>The <span class='attr-value'>onload="StartAnimation(evt)"</span> attribute
+  indicates that, once the document has been fully loaded and
+  processed, invoke ECMAScript function
+  <code>StartAnimation</code>.</li>
+
+  <li>The <a>'script'</a> element defines the ECMAScript which makes
+  the animation happen. The <code>StartAnimation()</code>
+  function is only called once to give a value to global
+  variable <code>text_element</code> and to make the initial
+  call to <code>ShowAndGrowElement()</code>.
+  <code>ShowAndGrowElement()</code> is called every 50
+  milliseconds and resets the <a>'transform'</a> and
+  <a>'style attribute'</a> attributes on the text element to new
+  values each time it is called. At the end of
+  <code>ShowAndGrowElement</code>, the function tells the
+  ECMAScript engine to call itself again after 50 more
+  milliseconds.</li>
+
+  <li>The <a>'g'</a> element shifts the coordinate system so that the
+  origin is shifted toward the lower-left of the viewing area.
+  It also defines the fill color and font-size to use when
+  drawing the text string.</li>
+
+  <li>The <a>'text'</a> element contains the text string and is the
+  element whose attributes get changed during the
+  animation.</li>
+</ul>
+</div>
+
+<p>If scripts are modifying the same attributes or properties
+that are being animated by SVG's
+<a href="#AnimationElements">animation elements</a>,
+the scripts modify the base value for the animation. If a base
+value is modified while an animation element is animating the
+corresponding attribute or property, the animations are
+required to adjust dynamically to the new base value.</p>
+
+<p>If a script is modifying a property on the override style
+sheet at the same time that an <a>animation element</a> is
+animating that property, the result is
+implementation-dependent; thus, it is recommended that this be
+avoided.</p>
+
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<p>Below are the DOM interfaces for the elements defined in this chapter.
+In addition, <a>TimeEvent</a>, which is
+from <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/">SMIL Animation</a>,
+is included here for easy reference.</p>
+
+<h3 id="InterfaceTimeEvent">Interface TimeEvent</h3>
+
+<p>The <a>TimeEvent</a>
+interface, defined in <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#DOMSupport">
+SMIL Animation: Supported interfaces</a>, provides specific
+contextual information associated with Time events.
+</p>
+
+<p>The different types of events that can occur are:</p>
+
+<dl>
+
+<dt><strong>beginEvent</strong></dt>
+
+<dd>
+This event is raised when the element local timeline begins
+to play. It will be raised each time the element begins the
+active duration (i.e. when it restarts, but not when it
+repeats). It may be raised both in the course of normal
+(i.e. scheduled or interactive) timeline play, as well as
+in the case that the element was begun with the
+<a>SVGAnimationElement::beginElement</a> or
+<a>SVGAnimationElement::beginElementAt</a> methods. Note that if an
+element is restarted while it is currently playing, the
+element will raise an end event and another begin event, as
+the element restarts. 
+
+<ul>
+
+<li>Bubbles: No</li>
+
+<li>Cancelable: No</li>
+
+<li>Context Info: None</li>
+
+</ul>
+
+</dd>
+
+<dt><strong>endEvent</strong></dt>
+
+<dd>
+This event is raised at the active end of the element. Note
+that this event is not raised at the simple end of each
+repeat. This event may be raised both in the course of
+normal (i.e. scheduled or interactive) timeline play, as
+well as in the case that the element was ended with the
+<a>SVGAnimationElement::endElement</a> or <a>SVGAnimationElement::endElementAt</a>
+methods. Note that if an element is restarted while it is
+currently playing, the element will raise an end event and
+another begin event, as the element restarts. 
+
+<ul>
+
+<li>Bubbles: No</li>
+
+<li>Cancelable: No</li>
+
+<li>Context Info: None</li>
+
+</ul>
+
+</dd>
+
+<dt><strong>repeatEvent</strong></dt>
+
+<dd>
+This event is raised when an element local timeline
+repeats. It will be raised each time the element repeats,
+after the first iteration.<br />
+The event provides a numerical indication of which repeat
+iteration is beginning. The value is a 0-based integer, but
+the repeat event is not raised for the first iteration and
+so the observed values of the detail attribute will be
+&gt;= 1. 
+
+<ul>
+
+<li>Bubbles: No</li>
+
+<li>Cancelable: No</li>
+
+<li>Context Info: detail (current iteration)</li>
+
+</ul>
+
+</dd>
+
+</dl>
+<pre class="idl">interface <b>TimeEvent</b> : <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-Event">Event</a> {
+
+  readonly attribute <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> <a href="animate.html#__svg__TimeEvent__view">view</a>;
+  readonly attribute long <a href="animate.html#__svg__TimeEvent__detail">detail</a>;
+
+  void <a href="animate.html#__svg__TimeEvent__initTimeEvent">initTimeEvent</a>(DOMString typeArg, <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> viewArg, long detailArg);
+};</pre><dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__TimeEvent__view" class="attribute first-child"><b>view</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a>)</span></dt>
+<dd class="attribute">
+<div>
+The <a>TimeEvent::view</a> attribute identifies the <a>AbstractView</a>
+[<a href="refs.html#ref-DOM2VIEWS">DOM2VIEWS</a>] from which the event
+was generated.
+
+</div>
+</dd>
+
+<dt id="__svg__TimeEvent__detail" class="attribute"><b>detail</b><span class="idl-type-parenthetical"> (readonly long)</span></dt>
+<dd class="attribute">
+<div>
+Specifies some detail information about the Event, depending on the type
+of the event. For this event type, indicates the repeat number for the
+animation.
+
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="operations-header">Operations:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__TimeEvent__initTimeEvent" class="operation first-child">void <b>initTimeEvent</b>(DOMString <var>typeArg</var>, <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> <var>viewArg</var>, long <var>detailArg</var>)
+</dt>
+<dd class="operation">
+<div>
+The <a>TimeEvent::initTimeEvent</a> method is used to initialize the value of a
+<a>TimeEvent</a> created with <code>document.createEvent()</code>. This
+method may only be called before the <a>TimeEvent</a> has been dispatched
+via the dispatchEvent method, though it may be called multiple times
+during that phase if necessary. If called multiple times, the final
+invocation takes precedence. 
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>DOMString <var>typeArg</var></div> 
+<div> Specifies the event type.
+
+</div>
+</li>
+<li class="parameter">
+<div><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> <var>viewArg</var></div> 
+<div> Specifies the Event's <a>AbstractView</a>.
+
+</div>
+</li>
+<li class="parameter">
+<div>long <var>detailArg</var></div> 
+<div> Specifies the Event's detail.
+
+</div>
+</li>
+</ol>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+<h3 id="InterfaceSVGAnimationElement">Interface SVGAnimationElement</h3>
+
+<p>The <a>SVGAnimationElement</a> interface is the base interface for all
+of the animation element interfaces: <a>SVGAnimateElement</a>,
+<a>SVGSetElement</a>, <a>SVGAnimateColorElement</a>,
+<a>SVGAnimateMotionElement</a> and <a>SVGAnimateTransformElement</a>.</p>
+
+
+<p>Unlike other SVG DOM interfaces, the SVG DOM does not specify
+convenience DOM properties corresponding to the various language
+attributes on SVG's animation elements. Specification of these
+convenience properties in a way that will be compatible with future
+versions of SMIL Animation is expected in a future version of SVG. The
+current method for accessing and modifying the attributes on the
+animation elements is to use the standard <code>getAttribute</code>,
+<code>setAttribute</code>, <code>getAttributeNS</code> and
+<code>setAttributeNS</code> defined in
+<a href="http://www.w3.org/TR/dom/">DOM4</a>
+[<a href="refs.html#ref-DOM4">DOM4</a>].</p>
+
+<p>SMIL Animation supports several methods for controlling the behavior of
+animation: <code>beginElement()</code>, <code>beginElementAt()</code>,
+<code>endElement()</code> and <code>endElementAt()</code>. These methods
+are used to begin and end the active duration of an element. Authors can
+(but are not required to) declare the timing to respond to the DOM using
+the following syntax:</p>
+
+<pre>&lt;animate begin="indefinite" end="indefinite" .../&gt;</pre>
+
+<p>If a DOM method call is made to begin or end the element (using
+<code>beginElement()</code>, <code>beginElementAt()</code>,
+<code>endElement()</code> or <code>endElementAt()</code>), each method call
+creates a single instance time (in the appropriate instance times list).
+These times are then interpreted as part of the semantics of lists of
+times, as described in
+<a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-EvaluationOfBeginEndTimeLists">Evaluation of begin and end time lists</a>.</p>
+
+
+<ul>
+  <li>The instance time associated with a <code>beginElement()</code> or
+  <code>endElement()</code> call is the current presentation time at the
+  time of the DOM method call.</li>
+
+  <li>The instance time associated with a <code>beginElementAt()</code> or
+  <code>endElementAt()</code> call is the current presentation time at the
+  time of the DOM method call, plus or minus the specified offset.</li>
+
+  <li>Note that <code>beginElement()</code> is subject to the <a>'animate/restart'</a>
+  attribute in the same manner that event-based begin timing is.  Refer
+  also to <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Restart">SMIL Animation: Restarting animation</a>
+  ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.3.7).</li>
+</ul>
+
+<pre class="idl">interface <b>SVGAnimationElement</b> : <a>SVGElement</a> {
+
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <a href="animate.html#__svg__SVGAnimationElement__targetElement">targetElement</a>;
+
+  float <a href="animate.html#__svg__SVGAnimationElement__getStartTime">getStartTime</a>();
+  float <a href="animate.html#__svg__SVGAnimationElement__getCurrentTime">getCurrentTime</a>();
+  float <a href="animate.html#__svg__SVGAnimationElement__getSimpleDuration">getSimpleDuration</a>();
+
+  void <a href="animate.html#__svg__SVGAnimationElement__beginElement">beginElement</a>();
+  void <a href="animate.html#__svg__SVGAnimationElement__beginElementAt">beginElementAt</a>(float offset);
+  void <a href="animate.html#__svg__SVGAnimationElement__endElement">endElement</a>();
+  void <a href="animate.html#__svg__SVGAnimationElement__endElementAt">endElementAt</a>(float offset);
+};
+
+<a>SVGAnimationElement</a> implements <a>SVGTests</a>;</pre>
+
+<dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGAnimationElement__targetElement" class="attribute first-child"><b>targetElement</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>)</span></dt>
+<dd class="attribute">
+<div>
+The element which is being animated.
+
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="operations-header">Operations:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGAnimationElement__getStartTime" class="operation first-child">float <b>getStartTime</b>()
+</dt>
+<dd class="operation">
+<div>
+Returns the begin time, in seconds, for this animation element's current
+interval, if it exists, regardless of whether the interval has begun yet.
+If there is no current interval, then a DOMException with code
+INVALID_STATE_ERR is thrown.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The start time, in seconds, of this animation element's current
+interval.
+
+</div>
+</dd>
+<dt class="exceptions-header">Exceptions</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception first-child"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code INVALID_STATE_ERR
+</dt>
+<dd class="exception"> The animation element does not
+have a current interval.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGAnimationElement__getCurrentTime" class="operation">float <b>getCurrentTime</b>()
+</dt>
+<dd class="operation">
+<div>
+Returns the current time in seconds relative to time zero for the given
+time container.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The current time in seconds relative to time zero for the given
+time container.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGAnimationElement__getSimpleDuration" class="operation">float <b>getSimpleDuration</b>()
+</dt>
+<dd class="operation">
+<div>
+Returns the number of seconds for the simple duration for this animation.
+If the simple duration is undefined (e.g., the end time is indefinite),
+then an exception is raised.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> number of seconds for the simple duration for this animation.
+
+</div>
+</dd>
+<dt class="exceptions-header">Exceptions</dt>
+<dd>
+<dl class="exceptions">
+<dt class="exception first-child"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NOT_SUPPORTED_ERR
+</dt>
+<dd class="exception"> The simple duration is not
+determined on the given element.
+
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGAnimationElement__beginElement" class="operation first-child">void <b>beginElement</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates a begin instance time for the current time. The new instance
+time is added to the <a
+   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>begin instance times list</em></a>.
+The behavior of this method is equivalent to <code>beginElementAt(0)</code>.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGAnimationElement__beginElementAt" class="operation">void <b>beginElementAt</b>(float <var>offset</var>)
+</dt>
+<dd class="operation">
+<div>
+Creates a begin instance time for the current time plus the specified
+offset. The new instance time is added to the
+<a
+   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>begin instance times list</em></a>.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>float <var>offset</var></div> 
+<div> The offset from the current document time, in seconds, at
+which to begin the element.
+
+</div>
+</li>
+</ol>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGAnimationElement__endElement" class="operation">void <b>endElement</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an end instance time for the current time. The new instance time is added to the
+<a
+   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>end instance times list</em></a>.
+The behavior of this method is equivalent to <code>endElementAt(0)</code>.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGAnimationElement__endElementAt" class="operation">void <b>endElementAt</b>(float <var>offset</var>)
+</dt>
+<dd class="operation">
+<div>
+Creates a end instance time for the current time plus the specified
+offset. The new instance time is added to the
+<a
+   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>end instance times list</em></a>.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>float <var>offset</var></div> 
+<div>The offset from the current document time, in seconds, at
+which to end the element.
+
+</div>
+</li>
+</ol>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+<h3 id="InterfaceSVGAnimateElement">Interface SVGAnimateElement</h3>
+
+
+
+<edit:with element='animate'>
+
+<p>The <a>SVGAnimateElement</a> interface corresponds to the <a>'animate'</a>
+element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'animate'</a> element
+via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGAnimateElement</b> : <a class="idlinterface" href="animate.html#InterfaceSVGAnimationElement">SVGAnimationElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGSetElement">Interface SVGSetElement</h3>
+
+
+
+<edit:with element='set'>
+
+<p>The <a>SVGSetElement</a> interface corresponds to the <a>'set'</a>
+element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'set'</a> element
+via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGSetElement</b> : <a class="idlinterface" href="animate.html#InterfaceSVGAnimationElement">SVGAnimationElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGAnimateMotionElement">Interface SVGAnimateMotionElement</h3>
+
+
+
+<edit:with element='animateMotion'>
+
+<p>The <a>SVGAnimateMotionElement</a> interface corresponds to the
+<a>'animateMotion'</a> element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'animateMotion'</a>
+element via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGAnimateMotionElement</b> : <a class="idlinterface" href="animate.html#InterfaceSVGAnimationElement">SVGAnimationElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGMPathElement">Interface SVGMPathElement</h3>
+
+
+
+<edit:with element='mpath'>
+
+<p>The <a>SVGMPathElement</a> interface corresponds to the <a>'mpath'</a>
+element.
+</p>
+<pre class="idl">interface <b>SVGMPathElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+};
+
+<a>SVGMPathElement</a> implements <a>SVGURIReference</a>;</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGAnimateColorElement">Interface SVGAnimateColorElement</h3>
+
+
+
+<edit:with element='animateColor'>
+
+<p>The <a>SVGAnimateColorElement</a> interface corresponds to the
+<a>'animateColor'</a> element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'animateColor'</a>
+element via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGAnimateColorElement</b> : <a class="idlinterface" href="animate.html#InterfaceSVGAnimationElement">SVGAnimationElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGAnimateTransformElement">Interface SVGAnimateTransformElement</h3>
+
+
+
+<edit:with element='animateTransform'>
+
+<p>The <a>SVGAnimateTransformElement</a> interface corresponds to the
+<a>'animateTransform'</a> element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the
+<a>'animateTransform'</a> element via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGAnimateTransformElement</b> : <a class="idlinterface" href="animate.html#InterfaceSVGAnimationElement">SVGAnimationElement</a> {
+};</pre>
+
+</edit:with>
+
+</body>
+</html>
