@@ -1,0 +1,910 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>SVG Integration 1.0</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" title="Default" type="text/css" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" href="style/default_no_issues.css"/>
+  <style>
+    .feature {
+        text-align: right;
+    }
+    .embedcontext, table.ref_modes td {
+        width: 150px;
+        height: 150px;
+    }
+    table.ref_modes td {
+        border: gainsboro 1px solid;
+    }
+    th, td {
+        text-align: center;
+    }
+    .bg {
+        background-image: url(./smiley.svg);
+        width: 150px;
+        height: 150px;
+    }
+    table.features {
+        border: gray 1px solid;
+        margin-top: 1em;
+    }
+    table.features th, table.features td {
+        text-align: left;
+        background-color: gainsboro !important;
+        color: black !important;
+        padding: 0.5em !important;
+    }
+    table.features thead th {
+        text-align: center;
+        background-color: gray !important;
+        color: white !important;
+        font-weight: normal;
+    }
+  </style>
+</head>
+<body>
+
+<div class="head">
+  <p><a href="http://www.w3.org/"><img height="48" width="72" alt="W3C" src="http://www.w3.org/Icons/w3c_home"/></a></p>
+  <h1 id="pagetitle">SVG Integration 1.0</h1>
+  <h2 id="pagesubtitle">W3C <edit:maturity/> <em><edit:date/></em></h2>
+  <dl>
+    <dt>This version:</dt>
+    <dd><edit:thisversion/></dd>
+    <dt>Latest version:</dt>
+    <dd><edit:latestversion/></dd>
+    <edit:includelatesteditorsdraft/>
+    <!--
+    <dt>Previous version:</dt>
+    <dd><edit:previousversion/></dd>
+    -->
+    <dt>Public comments:</dt>
+    <dd><a href="mailto:www-svg@w3.org" class='url'>www-svg@w3.org</a> (<a href="http://lists.w3.org/Archives/Public/www-svg/">archive</a>)</dd>
+    <dt class="top-editors">Editors:</dt>
+    <dd>Doug Schepers, W3C &lt;<a href="mailto:schepers@w3.org" class='url'>schepers@w3.org</a>&gt;</dd>
+  </dl>
+  <edit:copyright/>
+</div>
+
+<hr/>
+
+<h2 id="abstract">Abstract</h2>
+
+<p>The SVG Integration Module is intended as a guide to other markup
+and programming on how to best integrate SVG, within the context of
+that language's constraints. SVG may be integrated in whole or in part,
+and may be included in another language by reference or by inclusion
+(that is, through linking or inline). This specification contains
+normatively referenceable material, and discusses default behaviors
+and best practices, but is not intended to override the design of the
+referencing language.</p>
+
+<p>This specification contains references to other SVG specifications.</p>
+
+<h2 id="status">Status of This Document</h2>
+
+<p><em>This section describes the status of this document at the time of its
+publication. Other documents may supersede this document. A list of current W3C
+publications and the latest revision of this technical report can be found in
+the <a href="http://www.w3.org/TR/">W3C technical reports index</a> at http://www.w3.org/TR/</em>.</p>
+
+<p>This document is the <edit:date/> <strong><edit:maturity/></strong> of Short Title.
+<span class="issue">Custom SotD information goes here.</span></p>
+
+<p>Comments on this <edit:maturity/> are welcome.
+Comments can be sent to <a href="mailto:www-svg@w3.org" class='url'>www-svg@w3.org</a>,
+the public email list for issues related to vector graphics on the Web. This list is
+<a href="http://lists.w3.org/Archives/Public/www-svg/">archived</a> and
+senders must agree to have their message publicly archived from their
+first posting. To subscribe send an email to
+<a href="mailto:www-svg-request@w3.org" class='url'>www-svg-request@w3.org</a> with
+the word <code>subscribe</code> in the subject line.</p>
+
+<p>This document has been produced by the
+<a href="http://www.w3.org/Graphics/SVG/WG">W3C SVG Working Group</a> as part of
+the <a href="http://www.w3.org/Graphics/Activity">Graphics Activity</a> within
+the <a href="http://www.w3.org/Interaction/">W3C Interaction Domain</a>. The
+goals of the W3C SVG Working Group are discussed in the
+<a href="http://www.w3.org/2007/11/SVG_rechartering/SVG-WG-charter.html">W3C SVG Charter</a>. 
+The W3C SVG Working Group maintains a public Web page,
+<a href="http://www.w3.org/Graphics/SVG/" class='url'>http://www.w3.org/Graphics/SVG/</a>,
+that contains further background information. The authors of
+this document are the SVG Working Group participants.</p>
+
+<p>This document was produced by a group operating under the
+<a href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 W3C Patent Policy</a>. 
+W3C maintains a <a rel="disclosure" href="http://www.w3.org/2004/01/pp-impl/19480/status">public list of any patent disclosures</a>
+made in connection with the deliverables of the group; that page also includes
+instructions for disclosing a patent. An individual who has actual knowledge of
+a patent which the individual believes contains
+<a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#def-essential">Essential Claim(s)</a>
+must disclose the information in accordance with
+<a href="http://www.w3.org/Consortium/Patent-Policy-20040205/#sec-Disclosure">section 6 of the W3C Patent Policy</a>.</p>
+
+<p>Publication as a Working Draft does not imply endorsement by the W3C Membership.
+This is a draft document and may be updated, replaced or obsoleted by other documents
+at any time. It is inappropriate to cite this document as other than work in progress.</p>
+
+<p>A list of current W3C Recommendations and other technical documents can be found at
+<a href="http://www.w3.org/TR/" class='url'>http://www.w3.org/TR/</a>. W3C publications
+may be updated, replaced, or obsoleted by other documents at any time.</p>
+
+<h2 id="feedback" edit:toc="no">How to read this document and give feedback</h2>
+
+<p>This draft of SVG Integration introduces new normative prose for
+integrating the SVG language into other markup languages. One of
+the goals is that this specification can be re-used more easily by
+other specifications that want to have well-defined interaction and
+interoperability with SVG. Future drafts of this specification may
+introduce syntax and markup for the SVG language that may not be
+backwards compatible with older SVG User Agents, and the use of this
+syntax should be accompanied by a fallback using the <a>'switch'</a>
+element.</p>
+
+<h2 id="toc">Table of Contents</h2>
+
+<edit:fulltoc/>
+
+<h2 id="intro">Introduction</h2>
+
+<p><em>Describe the technology and specification here.</em></p>
+
+<p>Note that even though this specification references parts of
+<a href="#ref-svg11">SVG 1.1</a> and <a href="#ref-svgt12">SVG Tiny 1.2</a>
+it does not require a complete implementation of those specifications.</p>
+
+<p>This document is normative.</p>
+
+<p>This document contains explicit conformance criteria that overlap
+with some RNG definitions in requirements. If there is any conflict
+between the two, the explicit conformance criteria are the definitive
+reference.</p>
+
+<h3 id="use-cases">Use Cases and Requirements</h3>
+
+<p><em>This section is informative.</em></p>
+
+<p>Here are some of the use cases and requirements for this specification.</p>
+
+<ul>
+  <li>must have clear tables that integrate all known SVG elements, attributes, attribute values, and methods</li>
+  <li>should link back to normative definitions for all the above</li>
+  <li>should be automated (derive lists from SVG 1.1, SVG Tiny 1.2, Vector Effects, Filters, Compositing, Transforms, etc. via script)</li>
+  <li>must be normatively referenceable, e.g. by HTML5, CSS, ODF, IPTV, and other languages where we expect SVG might be reused as a whole, or even referenced in part, as in the Widgets specs</li>
+  <li>should have revision history [1]</li>
+  <li>may have case-insensitive string equivalents [2]</li>
+  <li>must cover different embedding and referencing scenarios (may work with HTML &amp; CSS WGs here), with different expected capabilities</li>
+  <li>must explain how to extend SVG properly (copying the chapter from SVG Tiny 1.2) [4]</li>
+  <li>must address potential security issues (external references, circular references, that weird thing ROC brought up with pixel-sniffing)</li>
+  <li>must address passed in parameters, fragment identifiers, etc.</li>
+  <li>should cover other specific odds and ends with various elements</li>
+  <li>must address focus navigation across embedding boundaries</li>
+  <li>must address fragment identifiers behavior for compound documents</li>
+  <li>must address link traversal in compound documents</li>
+  <li>must discuss transparency and compositing</li>
+  <li>should discuss embedding size and dimensions (including script access to rendered dimensions)</li>
+  <li>may introduce new integration features</li>
+  <li>may define parameter defaulting syntax</li>
+  <li>may define or reference a data binding mechanism</li>
+</ul>
+
+<h2 id="referencing-modes">Referencing Modes for SVG</h2>
+
+<p>There are many different ways in which an external SVG file may be referenced
+in a host language.  These different scenarios are known as
+<dfn id="TermReferencingMode">referencing modes</dfn>,
+and each <a>referencing mode</a> is suited to a different set of
+constraints, in terms of security, performance optimization, intended usage,
+and legacy considerations.  Each <a>referencing mode</a> defines whether
+such features as script execution, external references, declarative animation,
+interactivity, and linking must or must not be supported.  Different
+<a>referencing modes</a> may be specified for different aspects of the same
+language, or a language may use a single <a>referencing mode</a>, depending on
+the complexity of the language.  A conforming User Agent must support the full
+feature set defined for each <a>referencing mode</a> for all languages that
+that User Agent supports, and must not permit behavior disallowed by the
+relevant <a>referencing mode</a>.  Where multiple <a>referencing modes</a> are
+permitted, authors should choose the most restricted <a>referencing modes</a>
+that meets their needs.</p>
+
+<p>A DOM must be produced and maintained for SVG images using all
+<a>referencing modes</a> except <a href="#immediate_mode">Immediate Mode</a>,
+and the DOM must be exposed to Accessibility Technology User Agents.</p>
+
+<p class="issue">Should we have an Immediate Mode?</p>
+
+<p class="issue">Should we talk about CORS here?</p>
+
+
+<h3 id="definitions">Feature Definitions</h3>
+
+<dl>
+  <dt><dfn id="def-declarative_animation">declarative animation</dfn></dt>
+  <dd>Declarative animation is a change or set of changes
+  to the presentation of the SVG image through the use of
+  predefined elements or properties, as with the SMIL elements
+  <a>'animate'</a>, <a>'set'</a>, etc., as
+  opposed to procedural script. Declarative animation may be triggered
+  by either a event timeline or by user-generated events (see
+  <a href="#def-interaction"><span class="svg-term">interaction</span></a>).
+  Because it has a bounded set of functionality, declarative animation may
+  pose less of a security risk than
+  <a href="#def-script_execution"><span class="svg-term">script execution</span></a>.
+  Complex animations may be computationally intensive, and thus may not be
+  suitable for all devices or <a>referencing modes</a>.</dd>
+
+  <dt><dfn id="def-external_reference">external reference</dfn></dt>
+  <dd>
+    <p>An external reference is any link from the current file to
+    another file for inclusion, rendering, or processing in the context
+    of the current file. In some situations, external references may
+    constitute a security concern; because it is difficult to detect
+    when the use of an external resource is safe and when it is not,
+    under secure circumstances, all external references should be
+    disabled, unless there is an appropriate security mechanism in place
+    (<span class="issue">CORS?</span>). External references include, but
+    are not limited to:</p>
+
+    <ul>
+      <li><span class="attr-name">&#x2018;xlink:href&#x2019;</span> attribute
+      targets for elements, such as <a>'image'</a>, <a>'use'</a>,
+      <a>'feImage'</a>, <a>'tref'</a>, <a>'video'</a>
+      <a href="http://www.w3.org/TR/2008/REC-SVGTiny12-20081222/multimedia.html#AudioElement"><span class="element-name">&#x2018;audio&#x2019;</span></a>,
+      <a href="http://www.w3.org/TR/2008/REC-SVGTiny12-20081222/multimedia.html#AnimationElement"><span class="element-name">&#x2018;animation&#x2019;</span></a>,
+      <a>'font-face-uri'</a>, <a>'textPath'</a>, <a>'mpath'</a>,
+      <a>'script'</a>, <a>'cursor element'</a>, <a>'altGlyph'</a>, <a>'glyphRef'</a>,
+      <a>'color-profile element'</a>, <a>'foreignObject'</a>,
+      <a href="http://www.w3.org/TR/2008/REC-SVGTiny12-20081222/struct.html#PrefetchElement"><span class="element-name">&#x2018;prefetch&#x2019;</span></a></li>
+
+      <li>external stylesheets (XSL or CSS)</li>
+
+      <li>external references for CSS properties: <a>'fill'</a>,
+      <a>'stroke'</a>, <a>'mask property'</a>, <a>'marker property'</a>, <a>'marker-mid'</a>,
+      <a>'marker-start'</a>, <a>'marker-end'</a>, <a>'clip-path'</a>,
+      <a>'filter property'</a></li>
+
+      <li>CSS @import rule</li>
+
+      <li>@font-face with external src</li>
+
+      <li><a>'foreignObject'</a> may contain external resources (depends on
+      the content inside, for html e.g. iframe, object etc)</li>
+
+      <li>elements in other namespaces that load external resources (e.g.
+      <span class="element-name">&#x2018;xhtml:link&#x2019;</span>,
+      <span class="element-name">&#x2018;xhtml:script&#x2019;</span>, etc)</li>
+    </ul>
+  </dd>
+
+  <dt><dfn id="def-link_traversal">link traversal</dfn></dt>
+  <dd>Link traversal refers to changing of the user agent's
+  current active document view by user activation of a hyperlink.
+  In the context of <a>referencing modes</a>, link traversal
+  only pertains to hyperlinks defined within the referenced SVG
+  file. A host language may allow all or part of an SVG image to
+  serve as a link in the host language's context and using that
+  language's conventions and mechanisms, such as using HTML's
+  <span class="element-name">&#x2018;a&#x2019;</span> or
+  <span class="element-name">&#x2018;map&#x2019;</span> elements.</dd>
+
+  <dt><dfn id="def-script_execution">script execution</dfn></dt>
+  <dd>Script execution is the processing and application of
+  procedural (as opposed to declarative) code and events. Where a
+  <a>referencing mode</a> does not allow script execution, this
+  prohibition must apply to scripted events or changes to the SVG
+  DOM whether the script is contained inside the referenced SVG file
+  or in the host language file. In the context of
+  <a>referencing modes</a>, script execution only pertains to the DOM of
+  the SVG image, not to events or changes to the host language's DOM.
+  For example, an SVG image would act the same as a PNG image in
+  an HTML <span class="element-name">&#x2018;a&#x2019;</span>
+  element, such that a mouse event on that
+  <span class="element-name">&#x2018;a&#x2019;</span> element would fire and
+  bubble up the HTML DOM, but would not be available to a script in the
+  SVG DOM.</dd>
+
+  <dt><dfn id="def-interaction">interaction</dfn></dt>
+  <dd>Interaction means receiving and processing user-generated events,
+  such as mouse or keyboard activity. Where a <a>referencing mode</a>
+  does not allow interactivity, such as for performance or security
+  reasons, the interactivity is prohibited in the SVG DOM only, and may
+  trigger events normally in the the host language's context.</dd>
+</dl>
+
+<h3 id="dynamic_interactive_mode">Dynamic Interactive Mode</h3>
+
+<p>This <a>referencing mode</a> imposes no restrictions on any
+feature of the SVG language. This is the <a>referencing mode</a>
+that must be used for standalone SVG files in normal circumstances.
+This specification recommends that this <a>referencing mode</a>
+apply to those elements that are referred to in HTML5 as a
+<a href="http://www.w3.org/TR/html5/browsers.html#browsing-context">browsin g context</a>,
+such as the <span class="element-name">&#x2018;object&#x2019;</span>,
+<span class="element-name">&#x2018;iframe&#x2019;</span>, and
+<span class="element-name">&#x2018;embed&#x2019;</span> elements.</p>
+
+<table class="features" border="0" cellpadding="2" cellspacing="2">
+  <thead>
+    <tr>
+      <th colspan="2">Dynamic Interactive Features</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>script execution</th>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>external references</th>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>declarative animation</th>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>interactivity</th>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>link traversal</th>
+      <td>yes</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="animated_mode">Animated Mode</h3>
+
+<p>This <a>referencing mode</a> is intended for circumstances where
+performance may be an issue, where there are limited security
+concerns, or where image support has traditionally been limited
+to raster images (such as JPEG or PNG), but where animation is
+desired. Animated mode allows declarative animation, but permits
+no script execution, interactivity, or link traversal. This is
+the <a>referencing mode</a> that must be supported for the SVG
+<a>'image'</a> element and is recommended to apply to the HTML
+<span class="element-name">&#x2018;img&#x2019;</span> element and for
+use as a Widget icon.</p>
+
+<table class="features" border="0" cellpadding="2" cellspacing="2">
+  <thead>
+    <tr>
+      <th colspan="2">Animated Features</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>script execution</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>external references</th>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>declarative animation</th>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>interactivity</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>link traversal</th>
+      <td>no</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="secure_animated_mode">Secure Animated Mode</h3>
+
+<p>This <a>referencing mode</a> is intended for circumstances where
+performance may be an issue, where there are strict security concerns,
+or where image support has traditionally been limited to raster images
+(such as JPEG or PNG), but where animation is desired. Secure animated
+mode allows declarative animation, but permits no script execution,
+external references, interactivity, or link traversal.</p>
+
+<table class="features" border="0" cellpadding="2" cellspacing="2">
+  <thead>
+    <tr>
+      <th colspan="2">Secure Animated Features</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>script execution</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>external references</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>declarative animation</th>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>interactivity</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>link traversal</th>
+      <td>no</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="static_mode">Static Mode</h3>
+
+<p>This <a>referencing mode</a> is intended for circumstances where
+performance may be an issue, or where there are limited security
+concerns. Static mode permits no script execution, declarative
+animation, interactivity, or link traversal. This is the
+<a>referencing mode</a> that is recommended to apply to CSS background images.</p>
+
+<table class="features" border="0" cellpadding="2" cellspacing="2">
+  <thead>
+    <tr>
+      <th colspan="2">Static Features</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>script execution</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>external references</th>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>declarative animation</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>interactivity</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>link traversal</th>
+      <td>no</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="secure_static_mode">Secure Static Mode</h3>
+
+<p>This <a>referencing mode</a> is intended for circumstances where
+performance may be an issue, or where there are strict security
+concerns. Secure static mode permits no script execution, external
+references, declarative animation, interactivity, or link traversal.</p>
+
+<table class="features" border="0" cellpadding="2" cellspacing="2">
+  <thead>
+    <tr>
+      <th colspan="2">Secure Static Features</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>script execution</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>external references</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>declarative animation</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>interactivity</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>link traversal</th>
+      <td>no</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="immediate_mode">Immediate Mode</h3>
+
+<p>This <a>referencing mode</a> is intended for circumstances where
+performance is a major concern. Immediate mode permits no script
+execution, external references, declarative animation, interactivity,
+or link traversal. In addition, a User Agent may to discard the DOM
+representation from memory after rendering. This is only to be used
+in extreme circumstances, as it severely limits the usability and
+accessibility of SVG. <span class="issue">Should we have an Immediate
+Mode?</span></p>
+
+<table class="features" border="0" cellpadding="2" cellspacing="2">
+  <thead>
+    <tr>
+      <th colspan="2">Immediate Features</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>script execution</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>external references</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>declarative animation</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>interactivity</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>link traversal</th>
+      <td>no</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="examples">Examples</h3>
+
+<p>Below are various methods of embedding SVG in an HTML page by
+reference. Each <a>referencing mode</a> element should display a yellow
+smiley face. In each example below, clicking on the eyes tests link
+traversal, and clicking on the face tests declarative interactivity
+and script execution. The link should replace the image with a blue
+square (clicking on that will return you to the original image). The
+declarative (SMIL) interactivity should change the image from shades
+of yellow to shades of green. The script should fill in the smile.
+Time-based (as opposed to interactivity-based) declarative animation is
+supported if the left eye is winking.</p>
+
+<table class="ref_modes" border="0" cellpadding="2" cellspacing="2">
+  <thead>
+    <tr>
+      <th colspan="5">Example 1: Different <a>referencing modes</a> in HTML</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>object</th>
+      <th>iframe</th>
+      <th>embed</th>
+      <th>img</th>
+      <th>CSS background</th>
+    </tr>
+    <tr>
+      <td>
+        <object class="embedcontext" type="image/svg+xml" data="smiley.svg">Please use FF1.5+, Opera 9+, WebKit/Safari3.0, or IE with an SVG plugin!</object>
+      </td>
+      <td>
+        <iframe class="embedcontext" src="smiley.svg" frameborder="0">Please use FF1.5+, Opera 9+, WebKit/Safari3.0, or IE with an SVG plugin!</iframe>
+      </td>
+      <td>
+        <embed class="embedcontext" src="smiley.svg" type="image/svg+xml"></embed>
+      </td>
+      <td>
+        <img class="embedcontext" alt="smiley face" src="smiley.svg" />
+      </td>
+      <td class="bg">&#xA0;</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="foreign-content">Foreign Content in SVG</h2>
+
+<p>SVG is designed to be used as a standalone format, or in combination with
+other formats such as X/HTML.  These different formats can be used in SVG, by
+reference or by inclusion (inline), as with the
+<a>'foreignObject'</a> element described in
+<a href="http://www.w3.org/TR/SVGTiny12/extend.html#ForeignObjectElement">embedding foreign object types</a>.</p>
+
+<h3 id="foreignobject">The <span class="element-name">'foreignObject'</span> Element</h3>
+
+<p>When <a>'foreignObject'</a> is used to contain content which is styled by
+CSS, the viewport establishes the initial containing block (as defined in CSS
+2.1).  The dimensions of the CSS viewport in pixels are the width and height
+attribute values of the <a>'foreignObject'</a> element in user units.</p>
+
+<div class="example">
+  <p>For example, if HTML content is included inline in SVG inside a
+  <a>'foreignObject'</a> element with a <a>'foreignObject/width'</a> of
+  <span class="attr-value">'400'</span> and a
+  <a>'foreignObject/height'</a> of <span class="attr-value">'600'</span>,
+  the HTML content will wrap to that area, as if it were an HTML
+  <span class="element-name">'div'</span> element with those dimensions.</p>
+</div>
+
+<p class="issue">@@ What should we say about when to rasterize the
+foreign content? In existing implementations, HTML form controls in
+'foreignObject' often look pixelated</p>
+
+<p class="issue">@@ Add examples of HTML in foreignObject, by reference
+and inline.</p>
+
+<p class="issue">@@ Link to CDR\WICD specs.</p>
+
+<h2 id="inline-svg">SVG in Foreign Content</h2>
+
+<p>SVG is designed to be used as a standalone format, or in combination
+with other formats such as X/HTML. SVG can be used in these different
+formats, by reference or by inclusion (inline).</p>
+
+<p>When used as a reference, SVG content falls into one of the
+categories detailed in <a href="referencing_modes">Referencing Modes
+for SVG</a>. When used as inline, SVG must be used with the constraints
+established by that host language (such as HTML5).</p>
+
+<p class="issue">@@ Add examples of referenced and inline SVG.</p>
+
+<p class="issue">@@ Give details about
+<a href="http://www.w3.org/TR/SVGTiny12/linking.html#AElementTargetAttribute" title="Linking &#x2013; SVG Tiny 1.2">link target keywords</a>
+in inline and referenced modes.</p>
+
+<p class="issue">@@ Link to CDR\WICD specs.</p>
+
+<h2 id="extend">Extending SVG</h2>
+
+<h3 id="ConformingSVGExtensions">Extension conformance requirements</h3>
+
+<p>Specifications and implementations are allowed to extend the SVG
+specification but in order to claim conformance the following criteria
+need to be met:</p>
+
+<ul>
+  <li>An extension must support the normative chapters of the SVG
+  specifications that define conformance to SVG.</li>
+
+  <li>An extension must support the normative chapters of the SVG
+  specifications that detail extensibility.</li>
+
+  <li>An extension must support the normative chapters of the SVG
+  specifications that define conditional processing.</li>
+
+  <li>If using features defined in SVG, an extension must not
+  redefine the syntax of those features.</li>
+
+  <li>An extension must not redefine the semantics of any existing SVG
+  element or attribute.</li>
+
+  <li>SVG attribute and element names must not be reused in extensions,
+  even in a separate namespace, in order to avoid author confusion.</li>
+</ul>
+
+<h3 id="ForeignNamespacesPrivateData">Foreign namespaces and private data</h3>
+
+<p>SVG allows inclusion of elements from foreign namespaces
+anywhere with the SVG content. In general, the SVG user agent
+must include any unknown elements in the DOM, but must otherwise
+ignore unknown elements. (The notable exception is described under
+<a href="http://www.w3.org/TR/SVGTiny12/extend.html#ForeignObjectElement">Embedding foreign object types</a>.)</p>
+
+<p>Extension elements in the SVG namespace must not be used.</p>
+
+<p>Additionally, SVG allows inclusion of attributes from
+foreign namespaces on any 
+<a href="http://www.w3.org/TR/SVGTiny12/intro.html#TermSVGElement"><span class="svg-term">SVG element</span></a>.
+Extensions of SVG-namespaced elements in the form of attributes must be bound to 
+a namespace by a prefix.  Any unbound attributes not defined by an SVG
+specification must be treated as unknown attributes.  The SVG user 
+agent must include unknown attributes in the DOM, but may
+otherwise ignore unknown attributes.  Attributes bound to a foreign
+namespace may extend the semantics or behavior of SVG elements
+in user agents that support that foreign namespace.</p>
+
+<p>SVG's ability to include foreign namespaces can be used for
+the following purposes:</p>
+
+<ul>
+  <li>Application-specific information to allow authoring
+  applications to include model-level data in the SVG content
+  to serve their "roundtripping" purposes (i.e., the ability to
+  write, then read a file without loss of higher-level
+  information).</li>
+
+  <li>Supplemental data for extensibility. For example, suppose
+  you have an extrusion extension which takes any 2D graphics
+  and extrudes it in three dimensions. When applying the
+  extrusion extension, you probably will need to set some
+  parameters. The parameters can be included in the SVG content
+  by inserting elements from an extrusion extension
+  namespace.</li>
+
+  <li>Metadata to add supplementary semantics to the SVG file, or
+  to specific elements or attributes within the file.</li>
+</ul>
+
+<p>To illustrate, a business graphics authoring application
+might want to include some private data within an SVG document
+so that it could properly reassemble the chart (a pie chart in
+this case) upon reading it back in:</p>
+
+<div class="example">
+  <div class="exampleheader"><strong>Example:</strong> 23_01.svg</div>
+  <div class="examplesource">
+    <pre>&lt;?xml version="1.0"?&gt;
+&lt;svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny"
+     width="4in" height="3in"&gt;
+
+  &lt;defs&gt;
+
+    &lt;myapp:piechart xmlns:myapp="http://example.org/myapp"
+                    title="Sales by Region"&gt;
+      &lt;myapp:pieslice label="Northern Region" value="1.23"/&gt;
+      &lt;myapp:pieslice label="Eastern Region" value="2.53"/&gt;
+      &lt;myapp:pieslice label="Southern Region" value="3.89"/&gt;
+      &lt;myapp:pieslice label="Western Region" value="2.04"/&gt;
+      &lt;!-- Other private data goes here --&gt;
+
+    &lt;/myapp:piechart&gt;
+  &lt;/defs&gt;
+
+  &lt;desc&gt;This chart includes private data in another namespace&lt;/desc&gt;
+
+  &lt;!-- In here would be the actual SVG graphics elements which
+       draw the pie chart --&gt;
+&lt;/svg&gt;</pre>
+  </div>
+</div>
+
+
+<h2 id="SVGEncoding">SVG Encoding</h2>
+
+<h3 id="XMLEncoding">XML encoding conformance requirements</h3>
+
+<p>An <a>SVG Document Fragment</a>, <a>SVG Stand-Alone Document</a>, 
+or <a>SVG Included Document Fragment</a> encoded using XML conforms to the SVG 
+specifications if it is valid, well-formed, and uses namespaces according
+to the Namespaces in XML specification.  Non-conforming documents
+may be rendered according to the behavior specified for error-correction
+in the SVG or XML specifications.</p>
+
+<p class="issue">Which SVG spec should define better error handling?</p>
+
+<h3 id="NonXMLEncoding">Non-XML encoding conformance requirements</h3>
+
+<p>An <a>SVG Document Fragment</a>, <a>SVG Stand-Alone Document</a>, or
+<a>SVG Included Document Fragment</a> encoded using a non-XML encoding (e.g.
+efficient XML compression, or HTML5 parser)
+conforms to the SVG specifications if and only if the non-XML encoding in question 
+guarantees roundtripping from XML to the encoding and back in such a way that the
+resulting document when processed by an <a>SVG user agent</a>
+must always render, animate, and interact in the exact same way as the
+original. Note that this requires a high-level of fidelity from the encoding
+including, but not limited to, the ability to encode non-conforming content
+and content from foreign namespaces without loss, maintaining ID typing, 
+and not removing non-rendered elements such as
+<a>'title'</a>, <a>'desc'</a>, <a>'metadata'</a>,
+or elements not included in the <a>rendering tree</a> through use of 
+<a>conditional processing attributes</a>.</p>
+
+<h2 id="svg-tokens">SVG Elements, Attributes, and Properties</h2>
+
+<p>This is a comprehensive list of all SVG elements from the SVG 1.1 [SVG11]
+and SVG Tiny 1.2 [SVGT12] specifications.  This document will be updated as
+new elements are minted.</p>
+
+<h3 id="case-matching">Case Matching</h3>
+
+<p>For purposes of string matching and conversion, such as post-parsing
+case-fixing, the <a href="#elements-element-name">Element Name</a> must
+represent the canonical string.  If an implementation finds a case-insensitive
+string match for any of these element name which contains characters in the
+range <abbr title="A-Z">U+0041..U+005A</abbr> (Unicode class
+<abbr title="Letter, Uppercase">Lu</abbr>), the equivalent characters in the
+range <abbr title="a-z">U+0061..U+007A</abbr> (Unicode class
+<abbr title="Letter, Lowercase">Ll</abbr>) must be converted to the equivalent
+class <abbr title="Letter, Uppercase">Lu</abbr> character.  In other words,
+for mixed-case element names, the lowercase-only strings must be changed to
+the mixed-case string.</p>
+
+<h3 id="svg-elements">SVG Elements</h3>
+
+<p class="issue">TODO: auto-generate a table of elements.</p>
+
+<h3 id="svg-attributes">SVG Attributes</h3>
+
+<p class="issue">TODO: auto-generate a table of attributes.</p>
+
+<h3 id="svg-properties">SVG Properties</h3>
+
+<p class="issue">TODO: auto-generate a table of properties.</p>
+
+<h2 id="svg-sizing">Dynamic Sizing of SVG Content</h2>
+
+<p class="issue">TODO</p>
+
+<h2 id="RelaxNG">9 RelaxNG Schema for SVG Integration 1.0</h2>
+
+<p>The schema for SVG Integration 1.0 is written in
+<a href="http://www.y12.doe.gov/sgml/sc34/document/0362_files/relaxng-is.pdf">RelaxNG</a>
+[<a href="#ref-RNG">RelaxNG</a>], a namespace-aware schema language that uses
+the datatypes from <a href="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/">XML Schema Part 2</a>
+[<a href="#ref-Schema2">Schema2</a>]. This allows namespaces and modularity to
+be much more naturally expressed than using DTD syntax. The RelaxNG schema for
+SVG Filter 1.2 may be imported by other RelaxNG schemas, or combined with
+other schemas in other languages into a multi-namespace, multi-grammar schema
+using <a href="http://www.asahi-net.or.jp/~eb2m-mrt/dsdl/">Namespace-based Validation Dispatching Language</a>
+[<a href="#ref-NVDL">NVDL</a>].</p>
+
+<p>Unlike a DTD, the schema used for validation is not hardcoded into the
+document instance. There is no equivalent to the DOCTYPE declaration. Simply
+point your editor or other validation tool to the IRI of the schema (or your
+local cached copy, as you prefer).</p>
+
+<p>The RNG is under construction, and only the individual RNG snippets are
+available at this time. They have not yet been integrated into a functional
+schema. The individual RNG files are available <a href="rng">here</a>.</p>
+
+<h2 id="refs">References</h2>
+
+<h3 id="normrefs">Normative References</h3>
+
+<dl>
+  <dt id="ref-RFC2119"><strong class="normref">[RFC2119]</strong></dt>
+  <dd><cite><a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a></cite>,
+  S. Bradner, March 1997.
+  <br />Available at http://tools.ietf.org/html/rfc2119.</dd>
+
+  <dt id="ref-SVG11"><strong class="normref">[SVG11]</strong></dt>
+  <dd><cite class="w3crec"><a href="http://www.w3.org/TR/2003/REC-SVG11-20030114/">Scalable Vector Graphics (SVG) 1.1</a></cite>,
+  J. Ferraiolo, <span class="ruby"><span class="rb">&#x85E4;&#x6CA2; &#x6DF3;</span><span class="rp">(</span><span class="rt"><span class="familyname">Fujisawa</span> Jun</span><span class="rp">)</span></span>, D. Jackson, eds.
+  World Wide Web Consortium, 14 January 2003.
+  <br />This edition of SVG 1.1 is http://www.w3.org/TR/2003/REC-SVG11-20030114/.
+  <br />The <a href="http://www.w3.org/TR/SVG11/">latest edition of SVG 1.1</a> is available at http://www.w3.org/TR/SVG11/.</dd>
+
+  <dt id="ref-SVGT12"><strong class="normref">[SVGT12]</strong></dt>
+  <dd><cite class="w3crec"><a href="http://www.w3.org/TR/2008/REC-SVGTiny12-20081222/">Scalable Vector Graphics (SVG) Tiny 1.2</a></cite>,
+  O. Andersson, R. Berjon, E. Dahlstr&#xF6;m, A. Emmons, J. Ferraiolo, A. Grasso, V. Hardy, S. Hayman, D. Jackson, C. Lilley, C. McCormack, A. Neumann, C. Northway, A. Quint, N. Ramani, D. Schepers, A. Shellshear, eds.
+  World Wide Web Consortium, 22 December 2008.
+  <br />This edition of SVG Tiny 1.2 is http://www.w3.org/TR/2008/REC-SVGTiny12-20081222/.
+  <br />The <a href="http://www.w3.org/TR/SVGTiny12/">latest edition of SVG Tiny 1.2</a> is available at http://www.w3.org/TR/SVGTiny12/.</dd>
+</dl>
+
+<h3 id="informrefs">Informative References</h3>
+
+<dl>
+  <dt class="w3ccr"><strong class="normref">[CSS2]</strong></dt>
+  <dd><cite><a href="http://www.w3.org/TR/2010/CR-CSS2-20090908/">Cascading Style Sheets Level 2 Revision 1 (CSS 2.1) Specification</a></cite>,
+  B. Bos, T. &#xC7;elik, I. Hickson, H.W. Lie, Editors. World Wide Web Consortium, 23 April 2009, <strong>Work in Progress</strong>.
+  <br/>This version of the CSS 2.1 Specification is http://www.w3.org/TR/2009/CR-CSS2-20090908/.
+  <br/>The <a class="normative" href="http://www.w3.org/TR/CSS2/">latest version of CSS 2.1</a> is available at http://www.w3.org/TR/CSS2/.</dd>
+
+  <dt id="references-HTML5"><strong class="informref">[HTML5]</strong></dt>
+  <dd><cite class="w3cwd"><a href="http://www.w3.org/TR/2009/WD-html5-20090825/">HTML 5</a></cite>,
+  I. Hickson, D. Hyatt, eds.
+  World Wide Web Consortium, <span class="wip">work in progress</span>, 25 August 2009.
+  <br />This edition of HTML 5 is http://www.w3.org/TR/2009/WD-html5-20090825/.
+  <br />The <a href="http://www.w3.org/TR/html5/">latest edition of HTML 5</a> is available at
+  http://www.w3.org/TR/html5/.</dd>
+
+  <dt id="ref-NVDL"><strong class="informref">[NVDL]</strong></dt>
+  <dd><cite><a href="http://www.jtc1sc34.org/repository/0694.pdf">Information Technology &#x2014; Document Schema Definition Languages (DSDL) &#x2014; Part 4: Namespace-based Validation Dispatching Language</a></cite>: ISO/IEC FDIS 19757-4:2005(E),
+  International Organization for Standardization, December 2005.
+  <br />Available at http://www.jtc1sc34.org/repository/0694.pdf.</dd>
+
+  <dt id="ref-SCHEMA2"><strong class="informref">[SCHEMA2]</strong></dt>
+  <dd><cite class="w3crec"><a href="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/">XML Schema Part 2: Datatypes Second Edition</a></cite>.
+  P. Biron, A. Malhotra, eds.
+  World Wide Web Consortium, 28 October 2004.
+  (See also <a href="http://www.w3.org/TR/2005/NOTE-xml11schema10-20050511/"><cite>Processing XML 1.1 documents with XML Schema 1.0 processors</cite></a>
+  [<a href="#ref-XML11-SCHEMA">XML11-SCHEMA</a>].)
+  <br />This edition of XML Schema Part 2 is http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/.
+  <br />The <a href="http://www.w3.org/TR/xmlschema-2/">latest edition of XML Schema Part 2</a> is available at
+  http://www.w3.org/TR/xmlschema-2/.</dd>
+</dl>
+
+<h3 id="Acknowledgments">Acknowledgments</h3>
+
+<p>The editors would like to acknowledge and thank the following
+people for substantive aid with this specification:
+Erik Dahlstr&#xF6;m.</p>
+
+</body>
+</html>
