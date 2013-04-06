@@ -2,6 +2,9 @@
 
 all-with-tools-check : tools-check all
 
+all-specs : all
+	@for spec in specs/*; do [ -f $$spec/Makefile ] && make -C $$spec/ all; done
+
 tools-check :
 	@bash -c "REMOTE_REV=$$(hg id -i http://svgwg.org/hg/svg2-tools); [ \$$? = 0 -o \"\$$REMOTE_REV\" != \"\" ] || exit 0; LOCAL_REV=$$(hg id -i ../svg2-tools); [ \"\$$LOCAL_REV\" = \"\$$REMOTE_REV\" -o \"\$$LOCAL_REV\" = \"\$$REMOTE_REV\"+ ] || (echo \"You must update your svg2-tools repository! (Remote repository has revision \$$REMOTE_REV, but you are at \$$LOCAL_REV.)\"; exit 1)"
 
