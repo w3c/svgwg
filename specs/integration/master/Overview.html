@@ -41,6 +41,44 @@
         color: white !important;
         font-weight: normal;
     }
+
+.element-buttons {
+  padding-left: 0.5em;
+}
+a.button, .button {
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  border-right: 1px solid rgba(0, 0, 0, 0.25);
+  background-color: wheat;
+}
+a.button:link, a.button:visited {
+  text-decoration: none;
+  color: black;
+}
+.button.disabled {
+  background: none;
+  color: #aaa;
+  cursor: default;
+}
+#element-index > * > tr > :first-child {
+  width: 1px;
+}
+#element-index > tbody > tr > :first-child {
+  white-space: nowrap;
+}
+#element-index > thead th {
+  vertical-align: bottom;
+}
+#element-index > tbody > tr > * {
+  vertical-align: baseline;
+}
+#element-index > tbody > tr > td > div + div {
+  margin-top: 0.5em;
+}
   </style>
 </head>
 <body>
@@ -807,6 +845,50 @@ the mixed-case string.</p>
 <h3 id="svg-elements">SVG Elements</h3>
 
 <p class="issue">TODO: auto-generate a table of elements.</p>
+
+<edit:script><![CDATA[
+function doElementTable(conf, page, n) {
+  var table = utils.parse('<table class="proptable attrtable" id="element-index"><thead><tr><th>Element</th><th>Attributes and content model</th></tr></thead><tbody></tbody></table>');
+  var tbody = table.lastChild;
+  Object.keys(conf.definitions.elements).sort().forEach(function(elementName) {
+    function makeElementButton(className, label, href) {
+      var enabled = !!href;
+      return utils.parse(enabled ? ' <a class="button {{className}}" href="{{href}}">{{label}}</a>'
+                                 : ' <span class="button disabled {{className}}">{{label}}</span>',
+                         { className: className,
+                           href: href,
+                           label: label });
+    }
+    var href11, href12T, href2;
+    for (var specid in conf.definitionsBySpec) {
+      var element = conf.definitionsBySpec[specid].elements[elementName];
+      if (element) {
+        if (specid == 'SVG11' || conf.definitionMainSpecs[specid] == 'SVG11') {
+          href11 = element.href;
+        } else if (specid == 'SVG12T' || conf.definitionMainSpecs[specid] == 'SVG12T') {
+          href12T = element.href;
+        } else if (specid == 'SVG2' || conf.definitionMainSpecs[specid] == 'SVG2') {
+          href2 = element.href;
+        }
+      }
+    }
+    var buttons = [
+      makeElementButton('SVG11', '1.1', href11),
+      makeElementButton('SVG12T', '1.2T', href12T),
+      makeElementButton('SVG2', '2', href2)
+    ];
+    var tr = utils.parse('<tr><th><span class="element-name">{{elementName}}</span> <span class="element-buttons" onmouseover="overButton(event)" onmouseout="outButton(event)">{{buttons}}</span></th><td>...</td></tr>',
+                         { elementName: elementName,
+                           buttons: buttons });
+    tbody.appendChild(tr);
+  });
+  utils.replace(n, table);
+}
+
+processing.defineReplacement("elementtable", doElementTable);
+]]></edit:script>
+
+<edit:elementtable/>
 
 <h3 id="svg-attributes">SVG Attributes</h3>
 
