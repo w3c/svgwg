@@ -79,7 +79,39 @@ a.button:link, a.button:visited {
 #element-index > tbody > tr > td > div + div {
   margin-top: 0.5em;
 }
+#element-index dl, #element-index dt, #element-index dd { margin-top: 0; margin-bottom: 0; }
+#element-index ul, #element-index li { display: inline; margin: 0; padding: 0; }
+#element-index li::before { content: "\25cf  "; }
   </style>
+<script>
+function overButton(event) {
+  var version = event.target.textContent;
+  if (version == "1.1" || version == "1.2T" || version == "2") {
+    var n = event.target;
+    while (n.localName != "th") {
+      n = n.parentNode;
+    }
+    n = n.firstElementChild;
+    var elementName = n.textContent;
+    document.body.classList.add("limit-attr-" + elementName);
+    document.body.classList.add("show-attr-" + elementName + "-SVG" + version.replace(/\./g, ""));
+  }
+}
+
+function outButton(event) {
+  var version = event.target.textContent;
+  if (version == "1.1" || version == "1.2T" || version == "2") {
+    var n = event.target;
+    while (n.localName != "th") {
+      n = n.parentNode;
+    }
+    n = n.firstElementChild;
+    var elementName = n.textContent;
+    document.body.classList.remove("limit-attr-" + elementName);
+    document.body.classList.remove("show-attr-" + elementName + "-SVG" + version.replace(/\./g, ""));
+  }
+}
+</script>
 </head>
 <body>
 
@@ -99,7 +131,7 @@ a.button:link, a.button:visited {
     -->
     <dt>Public comments:</dt>
     <dd><a href="mailto:www-svg@w3.org" class='url'>www-svg@w3.org</a> (<a href="http://lists.w3.org/Archives/Public/www-svg/">archive</a>)</dd>
-    <dt class="top-editors">Editors:</dt>
+    <dt class="top-editors">Editor:</dt>
     <dd>Doug Schepers, W3C &lt;<a href="mailto:schepers@w3.org" class='url'>schepers@w3.org</a>&gt;</dd>
   </dl>
   <edit:copyright/>
@@ -844,13 +876,12 @@ the mixed-case string.</p>
 
 <h3 id="svg-elements">SVG Elements</h3>
 
-<p class="issue">TODO: auto-generate a table of elements.</p>
-
 <edit:script><![CDATA[
 function doElementTable(conf, page, n) {
   var table = utils.parse('<table class="proptable attrtable" id="element-index"><thead><tr><th>Element</th><th>Attributes and content model</th></tr></thead><tbody></tbody></table>');
   var tbody = table.lastChild;
-  Object.keys(conf.definitions.elements).sort().forEach(function(elementName) {
+  var elementNames = Object.keys(conf.definitions.elements).sort()
+  elementNames.forEach(function(elementName) {
     function makeElementButton(className, label, href) {
       var enabled = !!href;
       return utils.parse(enabled ? ' <a class="button {{className}}" href="{{href}}">{{label}}</a>'
@@ -877,12 +908,148 @@ function doElementTable(conf, page, n) {
       makeElementButton('SVG12T', '1.2T', href12T),
       makeElementButton('SVG2', '2', href2)
     ];
-    var tr = utils.parse('<tr><th><span class="element-name">{{elementName}}</span> <span class="element-buttons" onmouseover="overButton(event)" onmouseout="outButton(event)">{{buttons}}</span></th><td>...</td></tr>',
+    var ariaAttributes = utils.set(conf.definitions.attributeCategories.aria.attributes.map(function(a) { return a.name }));
+    var attributes =
+      utils.list([].concat((conf.definitions.elements[elementName].attributeCategories.indexOf('aria') != -1 ? [utils.parse('<a class="{{classes}}" href="#aria-attributes">aria attributes</a>',
+                                                                                                                            { classes: [conf.lookupElementAttributeCategoryBySpec('SVG11' , elementName, 'aria') ? 'attr-' + elementName + '-SVG11'  : '',
+                                                                                                                                        conf.lookupElementAttributeCategoryBySpec('SVG12T', elementName, 'aria') ? 'attr-' + elementName + '-SVG12T' : '',
+                                                                                                                                        conf.lookupElementAttributeCategoryBySpec('SVG2',   elementName, 'aria') ? 'attr-' + elementName + '-SVG2'   : ''].join(' ') })] : []),
+                           (conf.definitions.elements[elementName].attributeCategories.indexOf('presentation') != -1 ? [utils.parse('<a class="{{classes}}" href="#presentation-attributes">presentation attributes</a>',
+                                                                                                                                    { classes: [conf.lookupElementAttributeCategoryBySpec('SVG11' , elementName, 'presentation') ? 'attr-' + elementName + '-SVG11'  : '',
+                                                                                                                                                conf.lookupElementAttributeCategoryBySpec('SVG12T', elementName, 'presentation') ? 'attr-' + elementName + '-SVG12T' : '',
+                                                                                                                                                conf.lookupElementAttributeCategoryBySpec('SVG2',   elementName, 'presentation') ? 'attr-' + elementName + '-SVG2'   : ''].join(' ') })] : []),
+                           Object.keys(conf.definitions.elements[elementName].attributes)
+                             .filter(function(a) { return !ariaAttributes[a] })
+                             .sort()
+                             .map(function(attributeName) { return conf.definitions.elements[elementName].attributes[attributeName] })
+                             .map(function(a) { return utils.parse('<span class="{{classes}}"><a href="{{href}}"><span>{{attribute}}</span></a></span>',
+                                                                   { attribute: a.name,
+                                                                     classes: ['attr-name',
+                                                                               conf.lookupElementAttributeBySpec('SVG11', elementName, a.name)  ? 'attr-' + elementName + '-SVG11'  : '',
+                                                                               conf.lookupElementAttributeBySpec('SVG12T', elementName, a.name) ? 'attr-' + elementName + '-SVG12T' : '',
+                                                                               conf.lookupElementAttributeBySpec('SVG2', elementName, a.name)   ? 'attr-' + elementName + '-SVG2'   : ''].join(' '),
+                                                                     href: (function() {
+                                                                             var an = a.name.replace(':', '-');
+                                                                             if (a.specific) {
+                                                                               return '#attr-' + elementName + '-' + an;
+                                                                             } else if (a.common) {
+                                                                               return '#attr-' + an;
+                                                                             } else if (a.category) {
+                                                                               return '#attr-' + a.category.name.replace(/ /g, '-') + '-' + an;
+                                                                             } else {
+                                                                               throw "unexpected";
+                                                                             }
+                                                                           })() }) })));
+
+    var element11 = conf.lookupElementBySpec('SVG11', elementName),
+        element12T = conf.lookupElementBySpec('SVG12T', elementName),
+        element2 = conf.lookupElementBySpec('SVG2', elementName);
+    var elements = [], childElements = [], contentModels = [];
+
+    var commonContentModel;
+
+    function gatherChildElements(element, specid) {
+      if (!element) {
+        return null;
+      }
+      var childElementsForSpec = { };
+      for (var i = 0; i < element.elements.length; i++) {
+        var name = element.elements[i];
+        childElementsForSpec[name] = conf.lookupElementBySpec(specid, name);
+      }
+      for (var i = 0; i < element.elementCategories.length; i++) {
+        var catName = element.elementCategories[i];
+        var cat = conf.definitionsBySpec[specid].elementCategories[catName];
+        if (cat) {
+          for (var j = 0; j < cat.elements.length; j++) {
+            var name = cat.elements[j];
+            childElementsForSpec[name] = conf.lookupElementBySpec(specid, name);
+          }
+        }
+      }
+      childElements.push(childElementsForSpec);
+      contentModels.push(element.contentModelDescription || element.contentModel);
+      elements.push(element);
+      return childElementsForSpec;
+    }
+
+    var childElements11 = gatherChildElements(element11, 'SVG11'),
+        childElements12T = gatherChildElements(element12T, 'SVG12T'),
+        childElements2 = gatherChildElements(element2, 'SVG2');
+
+    var contentModel11 = element11 && (element11.contentModelDescription || element11.contentModel);
+    var contentModel12T = element12T && (element12T.contentModelDescription || element12T.contentModel);
+    var contentModel2 = element2 && (element2.contentModelDescription || element2.contentModel);
+
+    function formatContentModel(contentModel, childElements, specid) {
+      var classes = [childElements11  ? 'attr-' + elementName + '-SVG11'  : '',
+                     childElements12T ? 'attr-' + elementName + '-SVG12T' : '',
+                     childElements2   ? 'attr-' + elementName + '-SVG2'   : ''].join(' ');
+      if (typeof contentModel == 'string') {
+        var intro;
+        switch (contentModel) {
+          case 'any':
+            return utils.parse('<span class="{{classes}}">any elements or character data</span>', { classes: classes });
+          case 'text':
+            return utils.parse('<span class="{{classes}}">character data</span>', { classes: classes });
+          default:
+            return utils.parse('<span class="{{classes}}">empty</span>', { classes: classes });
+          case 'textoranyof':
+            intro = utils.parse('<span class="{{classes}}">character data</span>, ', { classes: classes });
+            break;
+          case 'anyof':
+            intro = '';
+            break;
+          case 'oneormoreof':
+            intro = utils.parse('<span class="{{classes}}">at least one of </span> ', { classes: classes });
+            break;
+        }
+        return utils.parse('{{intro}} {{links}}',
+                           { intro: intro,
+                             links: utils.list(Object.keys(childElements)
+                                      .sort()
+                                      .map(function(name) { return utils.parse('<span class="{{classes}}"><a href="#element-{{name}}"><span>{{name}}</span></a></span>',
+                                                                               { name: name,
+                                                                                 classes: ['element-name',
+                                                                                           childElements11  && childElements11[name]  ? 'attr-' + elementName + '-SVG11'  : '',
+                                                                                           childElements12T && childElements12T[name] ? 'attr-' + elementName + '-SVG12T' : '',
+                                                                                           childElements2   && childElements2[name]   ? 'attr-' + elementName + '-SVG2'   : ''].join(' ') }) })) });
+      } else {
+        var n = utils.parse('<div>{{description}}</div>', { description: contentModel.cloneNode(true) });
+        n.setAttributeNS(namespaces.edit, 'edit:speclinks', specid);
+        return n;
+      }
+    }
+
+    var contentModel = '';
+    if (utils.allEqual(contentModels)) {
+      contentModel = formatContentModel(contentModels[0], childElements[0], '');
+    } else {
+      var entries = [];
+      if (element11)  entries.push(utils.parse('<dt class="attr-{{name}}-SVG11">For SVG 1.1</dt><dd class="attr-{{name}}-SVG11">{{contentModel}}</dd>', { name: elementName, contentModel: formatContentModel(contentModel11, childElements11, 'SVG11') }));
+      if (element12T) entries.push(utils.parse('<dt class="attr-{{name}}-SVG12T">For SVG 1.2 Tiny</dt><dd class="attr-{{name}}-SVG12T">{{contentModel}}</dd>', { name: elementName, contentModel: formatContentModel(contentModel12T, childElements12T, 'SVG12T') }));
+      if (element2)   entries.push(utils.parse('<dt class="attr-{{name}}-SVG2">For SVG 2</dt><dd class="attr-{{name}}-SVG2">{{contentModel}}</dd>', { name: elementName, contentModel: formatContentModel(contentModel2, childElements2, 'SVG2') }));
+      contentModel = utils.parse('<dl>{{entries}}</dl>', { entries: entries });
+    }
+
+    var tr = utils.parse('<tr id="element-{{elementName}}"><th><span class="element-name">{{elementName}}</span> <span class="element-buttons" onmouseover="overButton(event)" onmouseout="outButton(event)">{{buttons}}</span></th><td><div>{{attributes}}</div><div>{{contentModel}}</div></td></tr>',
                          { elementName: elementName,
-                           buttons: buttons });
+                           buttons: buttons,
+                           attributes: attributes,
+                           contentModel: contentModel });
     tbody.appendChild(tr);
   });
-  utils.replace(n, table);
+  var style = utils.parse('<style></style>');
+  style.textContent =
+    elementNames.map(function(attributeName) { return ['.limit-attr-' + attributeName + ' #element-index .attr-' + attributeName + '-SVG11',
+                                                       '.limit-attr-' + attributeName + ' #element-index .attr-' + attributeName + '-SVG12T',
+                                                       '.limit-attr-' + attributeName + ' #element-index .attr-' + attributeName + '-SVG2'].join(', ') }).join(', ') +
+    ' { opacity: 0.25; } ' +
+    elementNames.map(function(attributeName) { return ['.show-attr-' + attributeName + '-SVG11 #element-index .attr-' + attributeName + '-SVG11',
+                                                       '.show-attr-' + attributeName + '-SVG12T #element-index .attr-' + attributeName + '-SVG12T',
+                                                       '.show-attr-' + attributeName + '-SVG2 #element-index .attr-' + attributeName + '-SVG2'].join(', ') }).join(', ') +
+    ' { opacity: 1; }';
+  utils.replace(n, utils.fragment([style, table]));
 }
 
 processing.defineReplacement("elementtable", doElementTable);
