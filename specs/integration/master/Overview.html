@@ -881,6 +881,7 @@ function doElementTable(conf, page, n) {
   var table = utils.parse('<table class="proptable attrtable" id="element-index"><thead><tr><th>Element</th><th>Attributes and content model</th></tr></thead><tbody></tbody></table>');
   var tbody = table.lastChild;
   var elementNames = Object.keys(conf.definitions.elements).sort()
+  var ariaAttributes = utils.set(conf.definitions.attributeCategories.aria.attributes.map(function(a) { return a.name }));
   elementNames.forEach(function(elementName) {
     function makeElementButton(className, label, href) {
       var enabled = !!href;
@@ -908,7 +909,15 @@ function doElementTable(conf, page, n) {
       makeElementButton('SVG12T', '1.2T', href12T),
       makeElementButton('SVG2', '2', href2)
     ];
-    var ariaAttributes = utils.set(conf.definitions.attributeCategories.aria.attributes.map(function(a) { return a.name }));
+
+    var element11 = conf.lookupElementBySpec('SVG11', elementName),
+        element12T = conf.lookupElementBySpec('SVG12T', elementName),
+        element2 = conf.lookupElementBySpec('SVG2', elementName);
+
+    var attributeNames = Object.keys(utils.set([].concat(element11  ? Object.keys(element11.attributes)  : [],
+                                                         element12T ? Object.keys(element12T.attributes) : [],
+							 element2   ? Object.keys(element2.attributes)   : []))).sort();
+
     var attributes =
       utils.list([].concat((conf.definitions.elements[elementName].attributeCategories.indexOf('aria') != -1 ? [utils.parse('<a class="{{classes}}" href="#aria-attributes">aria attributes</a>',
                                                                                                                             { classes: [conf.lookupElementAttributeCategoryBySpec('SVG11' , elementName, 'aria') ? 'attr-' + elementName + '-SVG11'  : '',
@@ -918,10 +927,12 @@ function doElementTable(conf, page, n) {
                                                                                                                                     { classes: [conf.lookupElementAttributeCategoryBySpec('SVG11' , elementName, 'presentation') ? 'attr-' + elementName + '-SVG11'  : '',
                                                                                                                                                 conf.lookupElementAttributeCategoryBySpec('SVG12T', elementName, 'presentation') ? 'attr-' + elementName + '-SVG12T' : '',
                                                                                                                                                 conf.lookupElementAttributeCategoryBySpec('SVG2',   elementName, 'presentation') ? 'attr-' + elementName + '-SVG2'   : ''].join(' ') })] : []),
-                           Object.keys(conf.definitions.elements[elementName].attributes)
+                           attributeNames
                              .filter(function(a) { return !ariaAttributes[a] })
                              .sort()
-                             .map(function(attributeName) { return conf.definitions.elements[elementName].attributes[attributeName] })
+                             .map(function(attributeName) { return element2   && element2.attributes[attributeName]   ||
+			                                           element12T && element12T.attributes[attributeName] ||
+								   element11  && element11.attributes[attributeName] })
                              .map(function(a) { return utils.parse('<span class="{{classes}}"><a href="{{href}}"><span>{{attribute}}</span></a></span>',
                                                                    { attribute: a.name,
                                                                      classes: ['attr-name',
@@ -941,9 +952,6 @@ function doElementTable(conf, page, n) {
                                                                              }
                                                                            })() }) })));
 
-    var element11 = conf.lookupElementBySpec('SVG11', elementName),
-        element12T = conf.lookupElementBySpec('SVG12T', elementName),
-        element2 = conf.lookupElementBySpec('SVG2', elementName);
     var elements = [], childElements = [], contentModels = [];
 
     var commonContentModel;
