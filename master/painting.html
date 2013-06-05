@@ -2088,7 +2088,7 @@ coordinate system of the marker contents, after application of the
   </tr>
   <tr>
     <td><dfn id="OrientAttribute">orient</dfn></td>
-    <td>auto | <a>&lt;angle&gt;</a> | <a>&lt;number&gt;</a></td>
+    <td>auto | auto-start-reverse | <a>&lt;angle&gt;</a> | <a>&lt;number&gt;</a></td>
     <td>0</td>
     <td>yes&#160;(non-additive)</td>
   </tr>
@@ -2108,7 +2108,7 @@ Values have the following meaning:</p>
     indicates that the marker is oriented such that its positive
     x-axis is pointing in the direction of the path at the point
     it is placed.</p>
-    
+
     <p>If the marker is a <a>segment marker</a>, then
     the direction the marker is oriented is, if considering the
     incoming and outgoing directions as unit vectors, in the
@@ -2129,7 +2129,23 @@ Values have the following meaning:</p>
       or if there is no following subpath.</li>
     </ul>
   </dd>
+</dl>
 
+<dl class="ready-for-wg-review">
+  <dt><span class="attr-value">'auto-start-reverse'</span></dt>
+  <dd>
+    <p>A value of <span class="attr-value">'auto-start-reverse'</span>
+    means the same as <span class="attr-value">'auto'</span> except that
+    for a marker placed by <a>'marker-start'</a>, the orientation is 180°
+    different from the orientation as determined by <span class="attr-value">'auto'</span>.</p>
+
+    <p class="note">This allows a single arrowhead marker to be defined
+    that can be used for both the start and end of a path, point in the right
+    directions.</p>
+  </dd>
+</dl>
+
+<dl>
   <dt><span class="attr-value"><a>&lt;angle&gt;</a></span></dt>
   <dt><span class="attr-value"><a>&lt;number&gt;</a></span></dt>
   <dd>
@@ -4125,6 +4141,7 @@ The <a>SVGMarkerElement</a> interface corresponds to the
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="painting.html#__svg__SVGMarkerElement__markerHeight">markerHeight</a>;
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="painting.html#__svg__SVGMarkerElement__orientType">orientType</a>;
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedAngle">SVGAnimatedAngle</a> <a href="painting.html#__svg__SVGMarkerElement__orientAngle">orientAngle</a>;
+           attribute DOMString <a href="painting.html#__svg__SVGMarkerElement__orient">orient</a>;
 
   void <a href="painting.html#__svg__SVGMarkerElement__setOrientToAuto">setOrientToAuto</a>();
   void <a href="painting.html#__svg__SVGMarkerElement__setOrientToAngle">setOrientToAngle</a>(<a class="idlinterface" href="types.html#InterfaceSVGAngle">SVGAngle</a> angle);
@@ -4139,7 +4156,7 @@ The <a>SVGMarkerElement</a> interface corresponds to the
     class="constant first-child"><b>SVG_MARKERUNITS_UNKNOWN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
 <dd class="constant">
 <div>
-The marker unit type is not one of predefined types. It is invalid to
+The marker unit type is not one of othe other predefined types. It is invalid to
 attempt to define a new value of this type or to attempt to switch an
 existing value to this type.
 
@@ -4176,7 +4193,8 @@ The value of attribute <a>'markerUnits'</a> is
     class="constant first-child"><b>SVG_MARKER_ORIENT_UNKNOWN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
 <dd class="constant">
 <div>
-The marker orientation is not one of predefined types. It is invalid to
+The marker orientation is <span class="attr-value">'auto-start-rotate'</span> or
+is not one of the predefined types. It is invalid to
 attempt to define a new value of this type or to attempt to switch an
 existing value to this type.
 
@@ -4259,7 +4277,9 @@ Corresponds to attribute <a>'markerHeight'</a> on the given
 <div>
 Corresponds to attribute <a>'orient'</a> on the given
 <a>'marker element'</a> element.  One of the Marker Orientation
-Types defined on this interface.
+Types defined on this interface.  If the <a>'orient'</a>
+attribute is set to <span class="attr-value">'auto-start-rotate'</span>,
+then the value of orientType is SVG_MARKER_ORIENT_UNKNOWN.
 
 </div>
 </dd>
@@ -4275,6 +4295,17 @@ otherwise, it will be set to zero.
 </div>
 </dd>
 </dl>
+
+<dl class="attributes">
+<dt id="__svg__SVGMarkerElement__orient" class="attribute"><b>orient</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
+<dd class="attribute">
+  <div>Corresponds to attribute <a>'orient'</a> on the
+  given <a>'marker element'</a> element.  This attribute
+  simply reflects the value of the <a>'orient'</a>
+  content attribute.</div>
+</dd>
+</dl>
+
 </dd>
 <dt class="operations-header">Operations:</dt>
 <dd>
