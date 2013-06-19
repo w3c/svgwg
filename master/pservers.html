@@ -1785,15 +1785,15 @@ element and then referenced by properties <a>'fill'</a> and
 given element shall be filled or stroked with the hatch.
 Paths are defined by <a>'hatchPath'</a> elements.</p>
 
-<p>Attributes <a>'x'</a>, <a>'y'</a>, <a>'pitch'</a>, <a>'angle'</a>,
+<p>Attributes <a>'x'</a>, <a>'y'</a>, <a>'pitch'</a>, <a>'rotate'</a>,
 and <a>'hatchUnits'</a> define an infinitely long reference strip
 on the infinite canvas. The strip has one edge at
 (<var>x</var>,&nbsp;<var>y</var>) and its other edge at a distance
-of <var>pitch</var> in the direction defined by <var>angle</var>.
+of <var>pitch</var> in the direction defined by <var>rotate</var>.
 This one-dimension tiling theoretically extends a series of such
-strips in the direction of 'angle' to infinity (positive and
+strips in the direction of 'rotate' to infinity (positive and
 negative), with strips starting at
-(<var>x</var>&nbsp;+&nbsp;m*<var>pitch</var>*cos(<var>angle</var>),&nbsp;<var>y</var>&nbsp;+&nbsp;m*<var>pitch</var>*sin(<var>angle</var>)
+(<var>x</var>&nbsp;+&nbsp;m*<var>pitch</var>*cos(<var>rotate</var>),&nbsp;<var>y</var>&nbsp;+&nbsp;m*<var>pitch</var>*sin(<var>rotate</var>)
 for each possible integer value of <em>m</em>.</p>
 
 <div class="figure">
@@ -1802,13 +1802,10 @@ for each possible integer value of <em>m</em>.</p>
      src="images/pservers/hatch_attributes.svg"/>
   <p class="caption">Three adjacent strips separated by dashed lines
     showing their relationship to each other for a
-    given <var>pitch</var> and <var>angle</var>. The reference line
+    given <var>pitch</var> and <var>rotate</var>. The reference line
     determines the origin of <a>'hatchPath'</a>s.
   </p>
 </div>
-
-<p class="issue">Check that angle defined in same sense as other
-  angles is SVG (clockwise/counter-clockwise, etc.).</p>
 
 <edit:elementsummary name='hatch'/>
 
@@ -1823,7 +1820,7 @@ for each possible integer value of <em>m</em>.</p>
 
       <p>
 	Defines the coordinate system for attributes
-	<a>'x'</a>, <a>'y'</a>, <a>'pitch'</a> and <a>'angle'</a>.
+	<a>'x'</a>, <a>'y'</a>, <a>'pitch'</a> and <a>'rotate'</a>.
       </p>
 
       <dl class="attrdef-svg2">
@@ -1841,7 +1838,7 @@ for each possible integer value of <em>m</em>.</p>
 	  <p>
             If <span class="attr-value">hatchUnits="userSpaceOnUse"</span>,
 
-            <a>'x'</a>, <a>'y'</a>, <a>'pitch'</a>, and <a>'angle'</a>
+            <a>'x'</a>, <a>'y'</a>, <a>'pitch'</a>, and <a>'rotate'</a>
 
             represent values in the coordinate system that results
             from taking the current user coordinate system in place at
@@ -1861,7 +1858,7 @@ for each possible integer value of <em>m</em>.</p>
             If <span class="attr-value">hatchUnits="objectBoundingBox"</span>,
             the user coordinate system for attributes
 
-            <a>'x'</a>, <a>'y'</a>, <a>'pitch'</a>, and <a>'angle'</a>
+            <a>'x'</a>, <a>'y'</a>, <a>'pitch'</a>, and <a>'rotate'</a>
 
             is established using the bounding box of the element to
             which the hatch is applied
@@ -1964,7 +1961,7 @@ for each possible integer value of <em>m</em>.</p>
     <dt id="HatchElementXAttribute"><span class="adef">x</span></dt>
     <dd>
       <p>
-	<a>'x'</a>, <a>'y'</a>, <a>'pitch'</a> and <a>'angle'</a>
+	<a>'x'</a>, <a>'y'</a>, <a>'pitch'</a> and <a>'rotate'</a>
         indicate how the hatch strips are placed and spaced. These
         attributes represent coordinates and values in the coordinate
         space specified by the combination of
@@ -2017,7 +2014,7 @@ for each possible integer value of <em>m</em>.</p>
 
     </dd>
 
-    <dt id="HatchElementAngleAttribute"><span class="adef">angle</span></dt>
+    <dt id="HatchElementRotateAttribute"><span class="adef">rotate</span></dt>
     <dd>
 
       <p>
@@ -2029,6 +2026,10 @@ for each possible integer value of <em>m</em>.</p>
 	<dt><a>Lacuna value</a></dt>  <dd>0</dd>
 	<dt><a>Animatable</a></dt>    <dd>yes</dd>
       </dl>
+
+      <p class="annotation">
+	Changed name from 'angle' to 'rotate' at Tokyo F2F.
+      </p>
 
     </dd>
  
@@ -2074,7 +2075,6 @@ element). Strips with higher <var>x</var> (larger <var>m</var>) values
 must be rendered after strips with lower <var>x</var>
 (lower <var>m</var>) values.</p>
 
-<p class="issue">The default should probably be visible.</p>
 
 <p>The contents of the <a>'hatch'</a> are relative to a new coordinate
 system.  The new coordinate system has its origin at
@@ -2082,10 +2082,10 @@ system.  The new coordinate system has its origin at
 by the <a>'x'</a> attribute on the <a>'hatch'</a> element,
 and <var>y</var> is established by the <a>'y'</a> attribute on
 the <a>'hatch'</a> element. The coordinate system is rotated around
-the origin by the angle given by the <a>'angle'</a> attribute.
+the origin by the angle given by the <a>'rotate'</a> attribute.
 </p>
 
-<p class="issue">The viewBox and preserveAspectRatio attributes are
+<p class="annotation">The viewBox and preserveAspectRatio attributes are
 not useful and have been removed (as compared to the pattern element).</p>
 
 <p><a href="script.html#EventAttributes">Event attributes</a> and
@@ -2103,7 +2103,7 @@ processed.</p>
 -->
 <div class="example">
 <pre><![CDATA[
-<hatch pitch="5" angle="135">
+<hatch pitch="5" rotate="135">
   <hatchPath stroke="#a080ff" stroke-width="2"/>
 </hatch>
 ]]></pre>
@@ -2206,6 +2206,11 @@ point of each repeating section is joined to the first point of the
 next repeating section with the current value
 of <a>'stroke-linejoin'</a>.
 </p>
+
+<p>A hatch path can have any of the stroke style properties applied to it, however only
+solid color paint servers are allowed for the <a>'stroke'</a> property.</p>
+
+<p class="annotation">Limiting 'stroke' to solid paint servers was resolved at the Tokyo F2F.</p>
 
 <!--
 <edit:example href='images/pservers/pattern01.svg' name='hatch01'
