@@ -102,35 +102,22 @@ paint servers.</p>
   </table>
 </div>
 
-<p>Properties <a>'fill'</a> and <a>'stroke'</a> take on a comma separated list of values of type <a>&lt;paint&gt;</a> with
-the last value optionally taking a space separated solid color fallback.</p>
+<p>Properties <a>'fill'</a> and <a>'stroke'</a> take on a comma separated list of values of type <a>&lt;paint&gt;</a>. Each paint is applied to an element in reverse order. Note, only a <a href="pservers.html">paint server</a> in the last position may take an optional fallback color.</p>
 
+<p class="note">The ability to apply more than one paint to an element is new in SVG 2.</p>
 <p class="annotation">The paint order follows that of CSS backgrounds.</p>
 
 <div class="example">
-<pre><![CDATA[
+  <pre><![CDATA[
 <rect width="100" height="100" fill="url(#MyHatch1, #MyHatch2, powderblue)">
-]]></pre>
-<div class="figure">
-  <img
-     alt="An example of applying three paints to a rectangle."
-     src="images/painting/multiple_paints.svg"/>
-  <p class="caption">The rightmost rectangle is filled by stacking the paints shown in the other rectangles.</p>
+  ]]></pre>
+  <div class="figure">
+    <img
+       alt="An example of applying three paints to a rectangle."
+       src="images/painting/multiple_paints.svg"/>
+    <p class="caption">The rightmost rectangle is filled by stacking the paints shown in the other rectangles.</p>
+  </div>
 </div>
-</div>
-
-<div class="example">
-<pre><![CDATA[
-<rect width="100" height="100" fill="url(#MyHatch1, #MyHatch2 powderblue)">
-]]></pre>
-<div class="figure">
-  <img
-     alt="An example with a fallback solid paint fill."
-     src="images/painting/multiple_paints2.svg"/>
-  <p class="caption">The left rectangle shows the expected fill if both MyHatch1  and MyHatch2 are defined. The right rectangle shows the expected fill if MyHatch1 is defined but MyHatch2 is missing.</p>
-</div>
-</div>
-
 
 
 <p>The type <a>&lt;paint&gt;</a> is defined as:</p>
@@ -189,11 +176,12 @@ the last value optionally taking a space separated solid color fallback.</p>
   descriptions</a>.</dd>
 
   <dt>[ <a>&lt;funciri&gt;</a> | child | <a>&lt;child-selector&gt;</a> ] [ none | <a>&lt;color&gt;</a> | [ <a>&lt;color&gt;</a>? <a>&lt;icccolor&gt;</a> ] ]?</dt>
-  <dd>A reference to a <a href="pservers.html">paint server</a> element with an
+  <dd>A reference to a <a href="pservers.html">paint server</a> element with, if
+  the paint server is the last paint specified, an
   optional fallback color or <span class="prop-value">none</span>.
   The <a>&lt;funciri&gt;</a>, <span class="prop-value">child</span> keyword,
   or <a>&lt;child-selector&gt;</a> is used to identify a <a>'solidColor'</a>
-  element, <a>gradient element</a> or <a>'pattern'</a> element,
+  element, <a>gradient element</a>, <a>'pattern'</a> element, or <a>'hatch'</a> element,
   which defines the paint to use.
   The <span class="prop-value">child</span> keyword in this instance matches the
   last child <a>paint server element</a> of the element where the paint value
@@ -203,6 +191,21 @@ the last value optionally taking a space separated solid color fallback.</p>
   server), then the fallback value is used, if provided; otherwise, the document
   is in error (see <a href="implnote.html#ErrorProcessing">Error
   processing</a>).</dd>
+
+  <div class="example">
+    <pre><![CDATA[
+<rect width="100" height="100" fill="url(#MyHatch1, #MyHatch2 powderblue)">
+    ]]></pre>
+    <div class="figure">
+      <img
+         alt="An example with a fallback solid paint fill."
+         src="images/painting/multiple_paints2.svg"/>
+      <p class="caption">The left rectangle shows the expected fill if both MyHatch1  and MyHatch2 are defined. The right rectangle shows the expected fill if MyHatch1 is defined but MyHatch2 is missing.</p>
+    </div>
+  </div>
+
+  <p class="issue">Should the document be in error if a non-final paint-server reference is invalid? (Only the last paint-server has a fallback.)</p>
+  <p class="issue">How should 'child' behave with allowing multiple paints?</p>
 
   <dt>context-fill</dt>
   <dt>context-stroke</dt>
