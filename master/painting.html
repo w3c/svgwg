@@ -28,10 +28,11 @@ painting along the outline of the object.  Filling and stroking are both
 different paints that the fill and stroke of a graphical element can be painted with:</p>
 
 <ul>
-  <li>a single color</li>
-  <li>a gradient (linear, radial or mesh)</li>
-  <li>a pattern (vector or raster, possibly tiled)</li>
-  <li>other images as specified using CSS Image Value syntax [<a href="refs.html#ref-CSS3IMAGES">CSS3IMAGES</a>]</li>
+  <li>a single color,</li>
+  <li>a gradient (linear, radial, or mesh),</li>
+  <li>a pattern (vector or raster, possibly tiled),</li>
+  <li>a hatch,</li>
+  <li>other images as specified using CSS Image Value syntax [<a href="refs.html#ref-CSS3IMAGES">CSS3IMAGES</a>].</li>
 </ul>
 
 <p>The paint to use for filling and stroking an element is specified using the
@@ -80,7 +81,59 @@ paint servers.</p>
   </table>
 </div>
 
-<p>Properties <a>'fill'</a> and <a>'stroke'</a> take on a value of type <a>&lt;paint&gt;</a>:</p>
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Addition:</th>
+      <td>Allow multiple paints in fill and stroke.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2013/06/03-svg-minutes.html#item10">We will allow multiple paints in the fill and stroke properties in SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>Useful for creating cross hatchings, putting a partially transparent pattern on top of a solid fill, etc.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Tav (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3500">ACTION-3500</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<p>Properties <a>'fill'</a> and <a>'stroke'</a> take on a comma separated list of values of type <a>&lt;paint&gt;</a> with
+the last value optionally taking a space separated solid color fallback.</p>
+
+<p class="annotation">The paint order follows that of CSS backgrounds.</p>
+
+<div class="example">
+<pre><![CDATA[
+<rect width="100" height="100" fill="url(#MyHatch1, #MyHatch2, powderblue)">
+]]></pre>
+<div class="figure">
+  <img
+     alt="An example of applying three paints to a rectangle."
+     src="images/painting/multiple_paints.svg"/>
+  <p class="caption">The rightmost rectangle is filled by stacking the paints shown in the other rectangles.</p>
+</div>
+</div>
+
+<div class="example">
+<pre><![CDATA[
+<rect width="100" height="100" fill="url(#MyHatch1, #MyHatch2 powderblue)">
+]]></pre>
+<div class="figure">
+  <img
+     alt="An example with a fallback solid paint fill."
+     src="images/painting/multiple_paints2.svg"/>
+  <p class="caption">The left rectangle shows the expected fill if both MyHatch1  and MyHatch2 are defined. The right rectangle shows the expected fill if MyHatch1 is defined but MyHatch2 is missing.</p>
+</div>
+</div>
+
+
+
+<p>The type <a>&lt;paint&gt;</a> is defined as:</p>
 
 <div class="definition">
   <dfn id="DataTypePaint">&lt;paint&gt;</dfn> =<br/>
