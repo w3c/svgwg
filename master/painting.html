@@ -20,7 +20,7 @@
 <div class="ready-for-wider-review">
 <h2 id="Introduction">Introduction</h2>
 
-<p>Graphical elements that define a shape – <a>'path'</a> elements, <a>basic shapes</a>
+<p>Graphical elements that define a shape – <a>'path'</a> elements, <a>basic shapes</a>,
 and <a>text content elements</a> – are rendered by being <strong>filled</strong>,
 which is painting the interior of the object, and <strong>stroked</strong>, which is
 painting along the outline of the object.  Filling and stroking are both
@@ -44,11 +44,14 @@ also have an effect on the way fill and stroke paint is applied to the
 canvas.  The <a href='#FillProperties'>Fill properties</a> and <a href='#StrokeProperties'>Stroke properties</a>
 sections below describe these properties.</p>
 
-<p>Certain elements – <a>'path'</a>, <a>'polyline'</a>, <a>'polygon'</a>
-and <a>'line'</a> elements – can also have <strong>marker symbols</strong>
+<p>Some graphics elements – <a>'path'</a> elements and <a>basic
+shapes</a> – can also have <strong>marker symbols</strong>
 drawn at their vertices or at other positions along the path that
 they describe.  The <a href='#Markers'>Markers</a> section below describes
 how markers can be defined and used.</p>
+
+<p class="annotation">SVG 2 adds markers on shapes. Resolved at
+<a href="http://www.w3.org/2013/06/03-svg-minutes.html#item03">Tokyo F2F</a>.</p>
 
 <!--
 <p>SVG uses the general notion of a <strong>paint server</strong>. Paint
@@ -109,7 +112,7 @@ paint servers.</p>
 
 <div class="example">
   <pre><![CDATA[
-<rect width="100" height="100" fill="url(#MyHatch1, #MyHatch2, powderblue)">
+<rect width="100" height="100" fill="url(#MyHatch1), url(#MyHatch2), powderblue">
   ]]></pre>
   <div class="figure">
     <img
@@ -188,13 +191,16 @@ paint servers.</p>
   is specified.
   If the reference is not valid (e.g., it points to an element that
   does not exist, no element was matched, or the element is not a valid paint
-  server), then the fallback value is used, if provided; otherwise, the document
-  is in error (see <a href="implnote.html#ErrorProcessing">Error
-  processing</a>).</dd>
+  server), then the fallback value is used (if the paint server reference is the last
+  paint specified and if the fallback color is provided); otherwise,
+  it must be treated as if <span class='prop-value'>none</span> was specified.
+  <p class="annotation">Changed from SVG 1.1 behavior where document is in error
+    if paint server missing or invalid.</p>
+  </dd>
 
   <div class="example">
     <pre><![CDATA[
-<rect width="100" height="100" fill="url(#MyHatch1, #MyHatch2 powderblue)">
+<rect width="100" height="100" fill="url(#MyHatch1), url(#MyHatch2) powderblue">
     ]]></pre>
     <div class="figure">
       <img
@@ -204,8 +210,8 @@ paint servers.</p>
     </div>
   </div>
 
-  <p class="issue">Should the document be in error if a non-final paint-server reference is invalid? (Only the last paint-server has a fallback.)</p>
   <p class="issue">How should 'child' behave with allowing multiple paints?</p>
+  <p class="issue">This section needs additional examples, especially one with 'child'.</p>
 
   <dt>context-fill</dt>
   <dt>context-stroke</dt>
