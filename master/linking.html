@@ -500,7 +500,29 @@ of something, a common need is to link into a particular
 the initial transformations so as to present a closeup of a particular
 section of the document.</p>
 
+<dl class="ready-for-wider-review">
 <h3 id="SVGFragmentIdentifiers">SVG fragment identifiers</h3>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Merge the SVG 1.1 SE text and the SVG Tiny 1.2 text on fragment identifiers link traversal and add media fragments.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2012/03/08-svg-irc#T21-05-52">SVG 2 will media fragment identifiers.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To align with Media Fragments URI.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cyril (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3442">ACTION-3442</a>)</td>
+    </tr>
+  </table>
+</div>
 
 <p>To link into a particular view of an SVG document, the IRI fragment
 identifier needs to be a correctly formed <dfn id='svg-fragment-identifier'>SVG
@@ -508,7 +530,7 @@ fragment identifier</dfn>. An SVG fragment identifier defines the
 meaning of the "selector" or "fragment identifier" portion of IRIs that
 locate resources of MIME media type "image/svg+xml".</p>
 
-<p>An SVG fragment identifier can come in two forms:</p>
+<p>An SVG fragment identifier can come in the following forms:</p>
 
 <ul>
   <li>Shorthand <em>bare name</em> form of addressing (e.g.,
@@ -531,13 +553,21 @@ locate resources of MIME media type "image/svg+xml".</p>
   in the case of <span class='attr-value'>transform(...)</span>, the same
   meaning as the corresponding attribute has on a
   <a>'g'</a> element).</li>
+  
+  <li><em>Basic media fragments identifiers</em> of type spatial or temporal
+  (e.g., <span class="attr-value">MyDrawing.svg#xywh=0,200,1000,1000 or MyAnimation.svg#t=10)</span>)
+  as defined in [<a href="refs.html#ref-MEDIAFRAGMENTSURI">Media Fragments URI 1.0 (basic)</a>] and possibly combined using the &amp; sign (e.g. <span class="attr-value">MyDrawing.svg#xywh=0,200,1000,1000&t=10</span>).
+  <p class="issue">This implies that it is not possible anymore in SVG 2.0 to define id for elements starting with 'xywh=' or 't='.</p>
+  </li>
 </ul>
 
 <p>An SVG fragment identifier is defined as follows:</p>
 
 <pre class='grammar'>
-SVGFragmentIdentifier ::= BareName |
-                          SVGViewSpec
+SVGFragmentIdentifier ::= BareName *( "&" <a href="http://www.w3.org/TR/media-frags/#timesegment">timesegment</a> ) |
+                          SVGViewSpec *( "&" <a href="http://www.w3.org/TR/media-frags/#timesegment">timesegment</a> ) | 
+                          <a href="http://www.w3.org/TR/media-frags/#spacesegment">spacesegment</a> *( "&" timesegment ) |
+                          <a href="http://www.w3.org/TR/media-frags/#timesegment">timesegment</a> *( "&" spacesegment )  
                 
 BareName ::= XML_Name
 SVGViewSpec ::= 'svgView(' SVGViewAttributes ')'
@@ -611,6 +641,26 @@ as follows:</p>
   specification attributes (i.e., <a>'viewBox'</a>, etc.) on the
   <a>outermost svg element</a>.</li>
 
+  <li>If the SVG fragment identifier addresses a <a href="http://www.w3.org/TR/media-frags/#spacesegment">space segment</a> 
+  (e.g., <span class="attr-value">MyDrawing.svg#xywh=0,0,100,100</span>),then the initial
+  view into the SVG document is established using the view specification attributes 
+  on the <a>outermost svg element</a> where the 'viewBox' is overriden by the 
+  x, y, width and height values provided by the fragment identifier.
+  <p class="issue">Do we allow the "pixel:" or "percent:" part of the spatial 
+  identifier? If yes, how do they map onto SVG user units?</p>
+  </li>
+
+  <li>If the SVG fragment identifier addresses a <a href="http://www.w3.org/TR/media-frags/#timesegment">time segment</a> 
+  (e.g., <span class="attr-value">MyDrawing.svg#t=10</span>),then the initial
+  view into the SVG document is established as if no fragment identifier was 
+  provided. The rendering of the SVG Document shall be as if the setCurrentTime 
+  method on the SVG Document element had been called with the begin time value 
+  from the fragment identifier. Additionally, if an end time value is provided 
+  in the fragment identifier, the effect is equivalent to calling the pauseAnimations
+  method on the SVG Document when the document time reaches the end time of the 
+  fragment identifier.
+  </li>
+
   <li>If the SVG fragment identifier addresses a <a>'view'</a> element within
   an SVG document (e.g., <span class="attr-value">MyDrawing.svg#MyView</span>
   or <span class="attr-value">MyDrawing.svg#xpointer(id('MyView'))</span>)
@@ -629,7 +679,14 @@ as follows:</p>
   <a>'view'</a> element, then the document defined by the closest ancestor
   <a>'svg'</a> element is displayed in the viewport using the view
   specification attributes on that <a>'svg'</a> element.</li>
+  
+   <li>If the SVG fragment identifier addresses a combination of the above 
+   non-time related identifiers with a time-related identifier (ie. a timesegment),
+  the behavior of each identifier is applied.
+  </li>
+ 
 </ul>
+</dl>
 
 <h3 id="ViewElement">Predefined views: the <span class="element-name">'view'</span> element</h3>
 
