@@ -1,0 +1,1659 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Fonts</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <!--
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  -->
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>Fonts</h1>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Include explicit support for Web Open Font Format (WOFF).</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/03/01-svg-minutes.html#item03">We will mandate WOFF support in SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow access to full OpenType features for internationalisation and advanced typography.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Chris (no action)</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Mandate support for SVG Tiny fonts.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/03/01-svg-minutes.html#item04">SVG 2 will mandate support for SVG Tiny fonts support, and SVG Full fonts will be specified in a separate module.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>Backwards compatibility for deployed content.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Erik (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3126">ACTION-3126</a>),
+          Chris (✓ <a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3127">ACTION-3127</a>)</td>
+    </tr>
+    <tr>
+      <th>Note:</th>
+      <td>The "separate module" is now being worked on in the SVG Glyphs for OpenType community group.</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Reference CSS3 Fonts.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item08">SVG 2 will depend on CSS3 Fonts.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>Alignment with CSS 2.1 and CSS3 for Web font functionality, and to provide
+      access to advanced typographic features of fonts.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Chris (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3123">ACTION-3123</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<h2 id="Introduction">Introduction</h2>
+
+<p>Reliable delivery of fonts is a requirement for SVG.
+Designers need to create SVG content with arbitrary fonts and
+know that the same graphical result will appear when the
+content is viewed by all end users, even when end users do not
+have the necessary fonts installed on their computers. This
+parallels the print world, where the designer uses a given font
+when authoring a drawing for print, and the graphical content
+appears exactly the same in the printed version as it appeared
+on the designer's authoring system.</p>
+
+<p>SVG utilizes the
+<a href="http://dev.w3.org/csswg/css3-fonts/">WebFonts</a>
+facility defined in
+([<a href="refs.html#ref-CSS3FONTS">CSS3 Fonts</a>]) as a key
+mechanism for reliable delivery of font data to end users. In a
+common scenario, SVG authoring applications generate
+compressed, subsetted WebFonts
+for all text elements used by a given SVG document fragment.</p>
+
+<p>One disadvantage to the WebFont
+facility in the past was that specifications did not require
+support of particular font formats. The result was that
+different implementations supported different Web font formats,
+thereby making it difficult for Web site creators to post a
+single Web site using WebFonts that worked across all user
+agents.</p>
+
+<p>SVG 2 mandates support for Web Open Font Format [<a href="refs.html#ref-WOFF">WOFF</a>], which 
+ is now supported in <a href="http://w3c-test.org/framework/review/woff-at/">most user agents</a>. Besides enabling compressed, subsetted WebFonts
+with accompanying metadata for clear licensing, WOFF also benefits from OpenType multilingual features 
+and support for advanced typography. Thus, content authors can author CSS to request discretionary ligatures, 
+swash forms, old-style figures etc. while also ensuring that a font is provided which supports those features.</p>
+
+<p>In SVG 1.1, to provide a common font format for SVG that is guaranteed
+to be supported by all <a
+href="conform.html#ConformingSVGViewers">conforming SVG
+viewers</a>, SVG provideed a facility to define fonts in SVG.
+This facility was called <em>SVG fonts</em>. For backwards compatibility, SVG 2 requires support for a subset
+of SVG Fonts, SVG Tiny Fonts, which has been widely deployed especially for mobile content.</p>
+
+
+<h2 id="FontDescriptions">Describing a font</h2>
+
+<h3 id="FontDescriptionsOverview">Overview of font descriptions</h3>
+
+<p>A font description provides the bridge between an author's
+font specification and the font data, which is the data needed
+to format text and to render the abstract glyphs to which the
+characters map — the actual scalable outlines or bitmaps. Fonts
+are referenced by properties, such as the <a>'font-family'</a> property.</p>
+
+<p>Each specified font description is added to the font
+database and so that it can be used to select the relevant font
+data. The font description contains descriptors such as the
+location of the font data on the Web, and characterizations of
+that font data. The font descriptors are also needed to match
+the font properties to particular font data. The level of
+detail of a font description can vary from just the name of the
+font up to a list of glyph widths.</p>
+
+<p>For more about font descriptions, refer to
+<a href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/">CSS Fonts Module Level 3</a>.
+[<a href="refs.html#ref-CSS3FONTS">CSS3FONTS</a>]</p>
+
+<h3 id="FontDescriptionsAlternatives">Alternative ways for providing a font description</h3>
+
+<p>Font descriptions can be specified in either of the
+following ways:</p>
+
+<ul>
+  <li>a <a>'font-face'</a> element</li>
+
+  <li id="AtFontFace">an <a href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">@font-face rule</a>
+  ([<a href="refs.html#ref-CSS3FONTS">CSS3FONTS</a>], section 4.1) within a CSS
+  style sheet (only applicable for user agents which support using CSS to
+  style the SVG content)</li>
+</ul>
+
+<h3 id="FontFaceElement">The <span class="element-name">'font-face'</span> element</h3>
+
+<edit:with element='font-face'>
+
+<p>The <a>'font-face'</a> element
+corresponds directly to the <a href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">@font-face facility</a>
+in CSS3 Fonts ([<a href="refs.html#ref-CSS3FONTS">CSS3FONTS</a>], section 4.1). It can be used to describe the
+characteristics of any font, SVG font or otherwise.</p>
+
+<p>When used to describe the characteristics of an SVG font
+contained within the same document, it is recommended that the
+<a>'font-face'</a> element be a
+child of the <a>'font element'</a> element it is describing
+so that the <a>'font element'</a> element can be
+self-contained and fully-described. In this case, any
+<a>'font-face-src'</a> elements within
+the <a>'font-face'</a> element are
+ignored as it is assumed that the <a>'font-face'</a> element is describing
+the characteristics of its parent <a>'font element'</a> element.</p>
+
+<edit:elementsummary name='font-face'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="FontFaceElementFontFamilyAttribute"><span
+        class="adef">font-family</span> = "<span
+        class="attr-value">&lt;string&gt;</span>"</dt>
+        <dd>Same syntax and semantics as the <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-family-desc">
+        <span class="property">'font-family'</span></a> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">@font-face rule</a>.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementFontStyleAttribute"><span
+        class="adef">font-style</span> = "<span
+        class="attr-value">all | [ normal | italic | oblique] [,
+        [normal | italic | oblique]]*</span>"</dt>
+        <dd>Same syntax and semantics as the <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-prop-desc"><span class="property">'font-style'</span></a> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>. The style of a font. Takes on the same
+        values as the <a>'font-style property'</a>
+        property, except that a comma-separated list is
+        permitted.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'all'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementFontVariantAttribute"><span
+        class="adef">font-variant</span> = "<span
+        class="attr-value">[normal | small-caps] [,[normal |
+        small-caps]]*</span>"</dt>
+        <dd>Same syntax and semantics as the <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-rend-desc">
+        <span class="property">'font-variant'</span></a>
+        descriptor within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>. Indication of whether this face is the
+        small-caps variant of a font. Takes on the same values as
+        the <a>'font-variant property'</a>
+        property, except that a comma-separated list is
+        permitted.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'normal'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementFontWeightAttribute"><span
+        class="adef">font-weight</span> = "<span
+        class="attr-value">all | [normal | bold | 100 | 200 | 300 |
+        400 | 500 | 600 | 700 | 800 | 900] [, [normal | bold | 100 |
+        200 | 300 | 400 | 500 | 600 | 700 | 800 |
+        900]]*</span>"</dt>
+        <dd>
+          Same syntax and semantics as the <a
+          href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-prop-desc">
+          <span class="property">'font-weight'</span></a>
+          descriptor within an <a
+          href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+          @font-face rule</a>.<br />
+           The weight of a face relative to others in the same font
+          family. Takes on the same values as the <a>'font-weight property'</a>
+          property with three exceptions: 
+          <ul>
+            <li>relative keywords (<span class='prop-value'>bolder</span>, <span class='prop-value'>lighter</span>) are not
+            permitted</li>
+            <li>a comma-separated list of values is permitted, for
+            fonts that contain multiple weights</li>
+            <li>an additional keyword, <span class='attr-value'>'all'</span>, is permitted, which
+            means that the font will match for all possible
+            weights; either because it contains multiple weights,
+            or because that face only has a single weight.</li>
+          </ul>
+          If the attribute is not specified, the effect is as if a
+          value of <span class='attr-value'>'all'</span> were specified.<br />
+           <span class="anim-target"><a
+          href="animate.html#Animatable">Animatable</a>: no.</span>
+        </dd>
+        <dt id="FontFaceElementFontStretchAttribute"><span
+        class="adef">font-stretch</span> = "<span
+        class="attr-value">all | [ normal | ultra-condensed |
+        extra-condensed | condensed | semi-condensed |
+        semi-expanded | expanded | extra-expanded | ultra-expanded]
+        [, [ normal | ultra-condensed | extra-condensed | condensed
+        | semi-condensed | semi-expanded | expanded |
+        extra-expanded | ultra-expanded] ]*</span>"</dt>
+        <dd>
+          Same syntax and semantics as the <a
+          href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-prop-desc">
+          <span class="property">'font-stretch'</span></a>
+          descriptor within an <a
+          href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+          @font-face rule</a>. Indication of the condensed or
+          expanded nature of the face relative to others in the
+          same font family. Takes on the same values as the <a>'font-stretch property'</a>
+          property except that: 
+          <ul>
+            <li>relative keywords (<span class='prop-value'>wider</span>, <span class='prop-value'>narrower</span>) are not
+            permitted</li>
+            <li>a comma-separated list is permitted</li>
+            <li>the keyword <span class='attr-value'>'all'</span> is permitted</li>
+          </ul>
+          If the attribute is not specified, the effect is as if a
+          value of <span class='attr-value'>'normal'</span> were specified.<br />
+           <span class="anim-target"><a
+          href="animate.html#Animatable">Animatable</a>: no.</span>
+        </dd>
+        <dt id="FontFaceElementFontSizeAttribute"><span
+        class="adef">font-size</span> = "<span
+        class="attr-value">&lt;string&gt;</span>"</dt>
+        <dd>Same syntax and semantics as the 
+        <span class="property">'font-size'</span> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have a font-size descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementUnicodeRangeAttribute"><span
+        class="adef">unicode-range</span> = "<span
+        class="attr-value">&lt;urange&gt; [,
+        &lt;urange&gt;]*</span>"</dt>
+        <dd>Same syntax and semantics as the <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#descdef-unicode-range">
+        <span class="property">'unicode-range'</span></a>
+        descriptor within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>. The range of ISO 10646 characters [<a href="refs.html#ref-UNICODE">UNICODE</a>]
+        possibly covered by the glyphs in the font. Except for any
+        additional information provided in this specification, the
+        <a href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#descdef-unicode-range">normative definition of the attribute</a>
+        is in CSS 2.1 ([<a href="refs.html#ref-CSS21">CSS21</a>], section 4.5).<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'U+0-10FFFF'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementUnitsPerEmAttribute"><span
+        class="adef">units-per-em</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>Same syntax and semantics as the
+        <span class="property">'units-per-em'</span>
+        descriptor within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>. The number of coordinate units on the
+        em square, the size of the design grid on which glyphs are
+        laid out.<br />
+         This value is almost always necessary as nearly every
+        other attribute requires the definition of a design
+        grid.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'1000'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have a units-per-em descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementPanose1Attribute"><span
+        class="adef">panose-1</span> = "<span
+        class="attr-value">[&lt;integer&gt;]{10}</span>"</dt>
+        <dd>Same syntax and semantics as the
+        <span class="property">'panose-1'</span> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>. The Panose-1 number, consisting of ten
+        decimal integers, separated by whitespace. Except for any
+        additional information provided in this specification, the
+        normative definition of the attribute
+        is in CSS2.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'0 0 0 0 0 0 0 0 0 0'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have a panose-1 descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementStemvAttribute"><span
+        class="adef">stemv</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>Same syntax and semantics as the
+        <span class="property">'stemv'</span> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have a stemv descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementStemhAttribute"><span
+        class="adef">stemh</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>Same syntax and semantics as the
+        <span class="property">'stemh'</span> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have a stemh descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementSlopeAttribute"><span
+        class="adef">slope</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>Same syntax and semantics as the
+        <span class="property">'slope'</span> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#font-descriptions">
+        @font-face rule</a>. The vertical stroke angle of the font.
+        Except for any additional information provided in this
+        specification, the normative definition of the attribute
+        is in CSS2.<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'0'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have a slope descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementCapHeightAttribute"><span
+        class="adef">cap-height</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>Same syntax and semantics as the
+        <span class="property">'cap-height'</span> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>. The height of uppercase glyphs in the
+        font within the font coordinate system.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have a cap-height descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementXHeightAttribute"><span
+        class="adef">x-height</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>Same syntax and semantics as the
+        <span class="property">'x-height'</span> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>. The height of lowercase glyphs in the
+        font within the font coordinate system.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have an x-height descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementAccentHeightAttribute"><span
+        class="adef">accent-height</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>The distance from the origin to the top of accent
+        characters, measured by a distance within the font
+        coordinate system.<br />
+         If the attribute is not specified, the effect is as if the
+        attribute were set to the value of the <a>'ascent'</a> attribute.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementAscentAttribute"><span
+        class="adef">ascent</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>Same syntax and semantics as the
+        <span class="property">'ascent'</span> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>. The maximum unaccented height of the
+        font within the font coordinate system.<br />
+         If the attribute is not specified, the effect is as if the
+        attribute were set to the difference between the <a>'units-per-em'</a>
+        value and the <a>'font/vert-origin-y'</a> value for the
+        corresponding font.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have an ascent descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementDescentAttribute"><span
+        class="adef">descent</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>Same syntax and semantics as the
+        <span class="property">'descent'</span> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>. The maximum unaccented depth of the
+        font within the font coordinate system.<br />
+         If the attribute is not specified, the effect is as if the
+        attribute were set to the <a>'font/vert-origin-y'</a> value for the
+        corresponding font.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have a descent descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementWidthsAttribute"><span
+        class="adef">widths</span> = "<span
+        class="attr-value">&lt;string&gt;</span>"</dt>
+        <dd>Same syntax and semantics as the
+        <span class="property">'widths'</span> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have a widths descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementBboxAttribute"><span
+        class="adef">bbox</span> = "<span
+        class="attr-value">&lt;string&gt;</span>"</dt>
+        <dd>Same syntax and semantics as the
+        <span class="property">'bbox'</span> descriptor within
+        an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have a bbox descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementIdeographicAttribute"><span
+        class="adef">ideographic</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>For horizontally oriented glyph layouts, indicates the
+        alignment coordinate for glyphs to achieve ideographic
+        baseline alignment. The value is an offset in the font
+        coordinate system.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementAlphabeticAttribute"><span
+        class="adef">alphabetic</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>Same syntax and semantics as the
+        <span class="property">'baseline'</span> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>. For horizontally oriented glyph
+        layouts, indicates the alignment coordinate for glyphs to
+        achieve alphabetic baseline alignment. The value is an
+        offset in the font coordinate system.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have a baseline descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementMathematicalAttribute"><span
+        class="adef">mathematical</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>Same syntax and semantics as the
+        <span class="property">'mathline'</span> descriptor
+        within an <a
+        href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">
+        @font-face rule</a>. For horizontally oriented glyph
+        layouts, indicates the alignment coordinate for glyphs to
+        achieve mathematical baseline alignment. The value is an
+        offset in the font coordinate system.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span>
+	<p class="issue">CSS3 Fonts does not have a mathline descriptor.</p>
+	</dd>
+        <dt id="FontFaceElementHangingAttribute"><span
+        class="adef">hanging</span> = "<span class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>For horizontally oriented glyph layouts, indicates the
+        alignment coordinate for glyphs to achieve hanging baseline
+        alignment. The value is an offset in the font coordinate
+        system.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementVertIdeographicAttribute"><span
+        class="adef">v-ideographic</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>For vertically oriented glyph layouts, indicates the
+        alignment coordinate for glyphs to achieve ideographic
+        baseline alignment. The value is an offset in the font
+        coordinate system relative to the glyph-specific <a>'glyph/vert-origin-x'</a> attribute.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementVertAlphabeticAttribute"><span
+        class="adef">v-alphabetic</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>For vertically oriented glyph layouts, indicates the
+        alignment coordinate for glyphs to achieve alphabetic
+        baseline alignment. The value is an offset in the font
+        coordinate system relative to the glyph-specific <a>'glyph/vert-origin-x'</a> attribute.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementVertMathematicalAttribute"><span
+        class="adef">v-mathematical</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>For vertically oriented glyph layouts, indicates the
+        alignment coordinate for glyphs to achieve mathematical
+        baseline alignment. The value is an offset in the font
+        coordinate system relative to the glyph-specific <a>'glyph/vert-origin-x'</a> attribute.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementVertHangingAttribute"><span
+        class="adef">v-hanging</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>For vertically oriented glyph layouts, indicates the
+        alignment coordinate for glyphs to achieve hanging baseline
+        alignment. The value is an offset in the font coordinate
+        system relative to the glyph-specific <a>'glyph/vert-origin-x'</a> attribute.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementUnderlinePositionAttribute"><span
+        class="adef">underline-position</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>The ideal position of an underline within the font
+        coordinate system.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementUnderlineThicknessAttribute"><span class="adef">underline-thickness</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>The ideal thickness of an underline, expressed as a
+        length within the font coordinate system.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementStrikeThroughPositionAttribute"><span class="adef">strikethrough-position</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>The ideal position of a strike-through within the font
+        coordinate system.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementStrikeThroughThicknessAttribute"><span class="adef">strikethrough-thickness</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>The ideal thickness of a strike-through, expressed as a
+        length within the font coordinate system.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementOverlinePositionAttribute"><span
+        class="adef">overline-position</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>The ideal position of an overline within the font
+        coordinate system.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontFaceElementOverlineThicknessAttribute"><span
+        class="adef">overline-thickness</span> = "<span
+        class="attr-value"><a
+        href="types.html#DataTypeNumber">&lt;number&gt;</a></span>"</dt>
+        <dd>The ideal thickness of an overline, expressed as a
+        length within the font coordinate system.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+      </dl>
+    </div>
+
+</edit:with>
+
+<p>The following elements and attributes correspond to the
+<span class="property">'src'</span> descriptor within an
+@font-face rule. Refer to the descriptions of the
+<a href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">@font-face rule</a> and
+<a href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#src-desc">'src' descriptor</a>
+in the CSS 2.1 specification ([<a href="refs.html#ref-CSS21">CSS21</a>],
+sections 4.1 and 4.3.)</p>
+
+<h3 id="FontFaceSrcElement">The <span class="element-name">'font-face-src'</span> element</h3>
+
+<edit:with element='font-face-src'>
+
+<p>The <a>'font-face-src'</a> element, together with the
+<a>'font-face-uri'</a> and <a>'font-face-format'</a> elements described in the
+following sections, correspond to the <span class='property'>'src'</span>
+descriptor within an @font-face rule.  (Refer to the descriptions of the
+<a href='http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#src-desc'>@font-face rule</a>
+and <a href='http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#src-desc'>'src' descriptor</a>
+in the CSS3 Fonts specification ([<a href='refs.html#ref-CSS3FONTS'>CSS3FONTS</a>], sections
+4.1 and 4.3.)</p>
+
+<p>A <a>'font-face-src'</a> element contains <a>'font-face-uri'</a> and
+<a>'font-face-name'</a> elements, which are used for referencing external
+and local fonts, respectively.</p>
+
+<edit:elementsummary name='font-face-src'/>
+
+</edit:with>
+
+<h3 id="FontFaceURIElement">The <span class='element-name'>'font-face-uri'</span> and <span class='element-name'>'font-face-format'</span> elements</h3>
+
+<edit:with element='font-face-uri'>
+
+<p>The <a>'font-face-uri'</a> element is used within a <a>'font-face-src'</a>
+element to reference a font defined inside or outside of the current SVG
+document.</p>
+
+<p>When a <a>'font-face-uri'</a> is referencing an <a href='#SVGFontsOverview'>SVG font</a>,
+then that reference must be to an SVG <a>'font element'</a> element, therefore
+requiring the use of a fragment identifier [<a href='refs.html#ref-RFC3986'>RFC3986</a>].
+The referenced <a>'font element'</a> element can be local (i.e., within the same
+document as the <a>'font-face-uri'</a> element) or remote (i.e., within a
+different document).</p>
+
+<edit:elementsummary name='font-face-uri'/>
+
+<div class="adef-list">
+  <p><em>Attribute definitions:</em></p>
+  <dl>
+    <dt id="FontFaceUriElementHrefAttribute"><span class='adef'>xlink:href</span> =
+    "<span class='attr-value'><a href='types.html#DataTypeIRI'>&lt;IRI&gt;</a></span>"</dt>
+    <dd>
+      The <a>'xlink:href'</a> attribute specifies the location of the referenced
+      font.<br/>
+      <span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: no.</span>
+    </dd>
+  </dl>
+</div>
+
+</edit:with>
+
+<edit:with element='font-face-format'>
+
+<p>Child <a>'font-face-format'</a> elements of a <a>'font-face-uri'</a>
+element are used to specify the supported formats of the font referenced by that
+<a>'font-face-uri'</a> element.  They correspond to entries in a
+<span class='prop-value'>format(…)</span> clause of the
+<span class='property'>'src'</span> descriptor in an @font-face rule.</p>
+
+<div id="FontFaceFormatElement">
+<edit:elementsummary name='font-face-format'/>
+</div>
+
+<div class="adef-list">
+  <p><em>Attribute definitions:</em></p>
+  <dl>
+    <dt id="FontFaceFormatElementStringAttribute"><span class='adef'>string</span> =
+    "<span class='attr-value'><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dd>
+      The <a>'string'</a> attribute is a hint to the user agent, and specifies
+      a list of formats that the font referenced by the parent <a>'font-face-uri'</a>
+      element supports.  The syntax of the attribute value is a format string
+      as defined in CSS2,
+      such as <span class='attr-value'>'truetype'</span>.  Refer to the description of the
+      'src' descriptor
+      in CSS2 for details on how the format hint is interpreted.<br/>
+      <span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: no.</span>
+      <p class="issue">CSS3 Fonts does not have format strings.</p>
+    </dd>
+  </dl>
+</div>
+
+</edit:with>
+
+<h3 id="FontFaceNameElement">The <span class='element-name'>'font-face-name'</span> element</h3>
+
+<edit:with element='font-face-name'>
+
+<p>The <a>'font-face-name'</a> element is used within a <a>'font-face-src'</a>
+element to reference a local font by name.  It corresponds to a <span class='prop-value'>local(…)</span>
+clause in an @font-face rule <span class='property'>'src'</span> descriptor.</p>
+
+<edit:elementsummary name='font-face-name'/>
+
+<div class="adef-list">
+  <p><em>Attribute definitions:</em></p>
+  <dl>
+    <dt id="FontFaceNameElementNameAttribute"><span class='adef'>name</span> =
+    "<span class='attr-value'><a href='types.html#DataTypeAnything'>&lt;anything&gt;</a></span>"</dt>
+    <dd>
+      The <a>'name'</a> attribute specifies the name of a local font.  Unlike
+      the syntax allowed between the parentheses of the <span class='prop-value'>local(…)</span>
+      clause in an @font-face rule <span class='property'>'src'</span> descriptor,
+      the font name specified in this attribute is not surrounded in single or
+      double quotes.  Refer to the description of the <a href='http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#src-desc'>'src' descriptor</a>
+      in CSS3 Fonts for details on how the font name is interpreted
+      ([<a href='refs.html#ref-CSS3FONTS'>CSS3FONTS</a>], section 4.3).<br/>
+      <span class="anim-target"><a href="animate.html#Animatable">Animatable</a>: no.</span>
+    </dd>
+  </dl>
+</div>
+
+</edit:with>
+
+
+<h2 id="SVGFontsOverview">Overview of SVG fonts</h2>
+
+<p>An SVG font is a font defined
+using SVG's <a>'font element'</a> element.</p>
+
+<p>The purpose of SVG fonts is to allow for delivery of glyph
+outlines in display-only environments. SVG fonts that accompany
+Web pages must be supported only in browsing and viewing
+situations. Graphics editing applications or file translation
+tools must not attempt to convert SVG fonts into system fonts.
+The intent is that SVG files be interchangeable between two
+content creators, but not the SVG fonts that might accompany
+these SVG files. Instead, each content creator will need to
+license the given font before being able to successfully edit
+the SVG file. The <a>'font-face-name'</a> element
+indicates the name of licensed font to use for editing.</p>
+
+<p>SVG fonts contain unhinted font outlines. Because of this,
+on many implementations there will be limitations regarding the
+quality and legibility of text in small font sizes. For
+increased quality and legibility in small font sizes, content
+creators may want to use an alternate font technology, such as
+fonts that ship with operating systems or an alternate WebFont
+format.</p>
+
+<p>Because SVG fonts are expressed using SVG elements and
+attributes, in some cases the SVG font will take up more space
+than if the font were expressed in a different WebFont
+format which was especially designed for compact expression of
+font data. For the fastest delivery of Web pages, content
+creators may want to use an alternate font technology.</p>
+
+<p>A key value of SVG fonts is guaranteed availability in SVG
+user agents. In some situations, it might be appropriate for an
+SVG font to be the first choice for rendering some text. In
+other situations, the SVG font might be an alternate, back-up
+font in case the first choice font (perhaps a hinted system
+font) is not available to a given user.</p>
+
+<p>The characteristics and attributes of SVG fonts correspond
+closely to the font characteristics and parameters described in
+the <a href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/">CSS Fonts Modules Level 3 specification</a>
+[<a href="refs.html#ref-CSS3FONTS">CSS3FONTS</a>]. In this model,
+various font metrics, such as advance values and baseline
+locations, and the glyph outlines themselves, are expressed in
+units that are relative to an abstract square whose height is
+the intended distance between lines of type in the same type
+size. This square is called the <em>em square</em> and
+it is the design grid on which the glyph
+outlines are defined. The value of the <a>'font-face/units-per-em'</a>
+attribute on the <a>'font-face'</a> element specifies how
+many units the em square is divided into. Common values for
+other font types are, for example, 250 (Intellifont), 1000
+(Type 1) and 2048 (TrueType, TrueType GX and Open-Type). Unlike
+standard graphics in SVG, where the initial coordinate system
+has the y-axis pointing downward (see <a
+href="coords.html#InitialCoordinateSystem">The initial
+coordinate system</a>), the design grid for SVG fonts, along
+with the initial coordinate system for the glyphs, has the
+y-axis pointing upward for consistency with accepted industry
+practice for many popular font formats.</p>
+
+<p>SVG fonts and their associated glyphs do not specify
+bounding box information. Because the glyph outlines are
+expressed as SVG graphics elements, the implementation has the
+option to render the glyphs either using standard graphics
+calls or by using special-purpose font rendering technology, in
+which case any necessary maximum bounding box and overhang
+calculations can be performed from analysis of the graphics
+elements contained within the glyph outlines.</p>
+
+<p>An SVG font can be either embedded within the same document
+that uses the font or saved as part of an external
+resource.</p>
+
+<p>Here is an example of how you might embed an SVG font inside
+of an SVG document.</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg width="400px" height="300px" version="1.1"
+  xmlns = 'http://www.w3.org/2000/svg'>
+  <defs>
+    <font id="Font1" horiz-adv-x="1000">
+      <font-face font-family="Super Sans" font-weight="bold" font-style="normal"
+          units-per-em="1000" cap-height="600" x-height="400"
+          ascent="700" descent="300"
+          alphabetic="0" mathematical="350" ideographic="400" hanging="500">
+        <font-face-src>
+          <font-face-name name="Super Sans Bold"/>
+        </font-face-src>
+      </font-face>
+      <missing-glyph><path d="M0,0h200v200h-200z"/></missing-glyph>
+      <glyph unicode="!" horiz-adv-x="300"><!-- Outline of exclam. pt. glyph --></glyph>
+      <glyph unicode="@"><!-- Outline of @ glyph --></glyph>
+      <!-- more glyphs -->
+    </font>
+  </defs>
+  <text x="100" y="100" 
+           style="font-family: 'Super Sans', Helvetica, sans-serif;
+                  font-weight: bold; font-style: normal">Text 
+    using embedded font</text>
+</svg>
+]]></pre>
+
+<p>Here is an example of how you might use the
+<a href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">CSS @font-face facility</a>
+([<a href="refs.html#ref-CSS3FONTS">CSS3FONTS</a>], section 4.1) to reference an SVG font which is saved
+in an external file. First referenced SVG font file:</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg width="100%" height="100%" version="1.1"
+ xmlns = 'http://www.w3.org/2000/svg'>
+  <defs>
+    <font id="Font2" horiz-adv-x="1000">
+      <font-face font-family="Super Sans" font-weight="normal" font-style="italic"
+          units-per-em="1000" cap-height="600" x-height="400"
+          ascent="700" descent="300"
+          alphabetic="0" mathematical="350" ideographic="400" hanging="500">
+        <font-face-src>
+          <font-face-name name="Super Sans Italic"/>
+        </font-face-src>
+      </font-face>
+      <missing-glyph><path d="M0,0h200v200h-200z"/></missing-glyph>
+      <glyph unicode="!" horiz-adv-x="300"><!-- Outline of exclam. pt. glyph --></glyph>
+      <glyph unicode="@"><!-- Outline of @ glyph --></glyph>
+      <!-- more glyphs -->
+    </font>
+  </defs>
+</svg>
+]]></pre>
+
+<p>The SVG file which uses/references the above SVG font</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg width="400px" height="300px" version="1.1"
+ xmlns = 'http://www.w3.org/2000/svg'>  
+  <defs>
+    <style type="text/css">
+      @font-face {
+        font-family: 'Super Sans'; 
+        font-weight: normal;
+        font-style: italic;
+        src: url("myfont.svg#Font2") format("svg")
+      }
+   </style>
+  </defs>
+  <text x="100" y="100"
+           style="font-family: 'Super Sans'; font-weight:normal;
+                  font-style: italic">Text using referenced font</text>
+</svg>
+]]></pre>
+
+<h2 id="FontElement">The <span class="element-name">'font'</span> element</h2>
+
+<edit:with element='font'>
+
+<p>The <a>'font element'</a> element defines an SVG font.</p>
+
+<edit:elementsummary name='font'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="FontElementHorizOriginXAttribute"><span
+        class="adef">horiz-origin-x</span> = "<span
+        class="attr-value">&lt;number&gt;</span>"</dt>
+        <dd>The X-coordinate in the font coordinate system of the
+        origin of a glyph to be used when drawing horizontally
+        oriented text. (Note that the origin applies to all glyphs
+        in the font.)<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'0'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontElementHorizOriginYAttribute"><span
+        class="adef">horiz-origin-y</span> = "<span
+        class="attr-value">&lt;number&gt;</span>"</dt>
+        <dd>The Y-coordinate in the font coordinate system of the
+        origin of a glyph to be used when drawing horizontally
+        oriented text. (Note that the origin applies to all glyphs
+        in the font.)<br />
+         If the attribute is not specified, the effect is as if a
+        value of <span class='attr-value'>'0'</span> were specified.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontElementHorizAdvXAttribute"><span
+        class="adef">horiz-adv-x</span> = "<span
+        class="attr-value">&lt;number&gt;</span>"</dt>
+        <dd>The default horizontal advance after rendering a glyph
+        in horizontal orientation. Glyph widths are required to be
+        non-negative, even if the glyph is typically rendered
+        right-to-left, as in Hebrew and Arabic scripts.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontElementVertOriginXAttribute"><span
+        class="adef">vert-origin-x</span> = "<span
+        class="attr-value">&lt;number&gt;</span>"</dt>
+        <dd>The default X-coordinate in the font coordinate system
+        of the origin of a glyph to be used when drawing vertically
+        oriented text.<br />
+         If the attribute is not specified, the effect is as if the
+        attribute were set to half of the effective value of
+        attribute <a>'horiz-adv-x'</a>.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontElementVertOriginYAttribute"><span
+        class="adef">vert-origin-y</span> = "<span
+        class="attr-value">&lt;number&gt;</span>"</dt>
+        <dd>The default Y-coordinate in the font coordinate system
+        of the origin of a glyph to be used when drawing vertically
+        oriented text.<br />
+         If the attribute is not specified, the effect is as if the
+        attribute were set to the position specified by the font's
+        <a>'font-face/ascent'</a> attribute.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="FontElementVertAdvYAttribute"><span
+        class="adef">vert-adv-y</span> = "<span
+        class="attr-value">&lt;number&gt;</span>"</dt>
+        <dd>The default vertical advance after rendering a glyph in
+        vertical orientation.<br />
+         If the attribute is not specified, the effect is as if a
+        value equivalent of one <em>em</em> were specified (see
+        <a>'font-face/units-per-em'</a>).<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+      </dl>
+    </div>
+
+<p>Each <a>'font element'</a> element must have a <a>'font-face'</a>
+child element which describes various characteristics of the font.</p>
+
+</edit:with>
+
+<h2 id='GlyphElement'>The <span class="element-name">'glyph'</span> element</h2>
+
+<edit:with element='glyph'>
+
+<p>The <a>'glyph'</a> element
+defines the graphics for a given glyph. The coordinate system
+for the glyph is defined by the various attributes in the
+<a>'font element'</a> element.</p>
+
+<p>The graphics that make up the <a>'glyph'</a> can be a single
+<a href="paths.html#PathData">path data</a> specification within
+the <a>'d'</a> attribute,  arbitrary SVG as
+content within the <a>'glyph'</a>, or both.
+These two alternatives are processed differently (see
+below).</p>
+
+<edit:elementsummary name='glyph'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="GlyphElementUnicodeAttribute"><span
+        class="adef">unicode</span> = "<span
+        class="attr-value">&lt;string&gt;</span>"</dt>
+        <dd>One or more Unicode characters indicating the sequence
+        of Unicode characters which corresponds to this glyph. If a
+        character is provided, then this glyph corresponds to the
+        given Unicode character. If multiple characters are
+        provided, then this glyph corresponds to the given sequence
+        of Unicode characters. One use of a sequence of characters
+        is ligatures. For example, if <span
+        class="attr-value">unicode="ffl"</span>, then the given
+        glyph will be used to render the sequence of characters
+        "f", "f", and "l".<br />
+        <br />
+         It is often useful to refer to characters using XML
+        character references expressed in hexadecimal notation or
+        decimal notation. For example, <span
+        class="attr-value">unicode="ffl"</span> could be expressed
+        as XML character references in hexadecimal notation as
+        <span
+        class="attr-value">unicode="&amp;#x66;&amp;#x66;&amp;#x6c;"</span>
+        or in decimal notation as <span
+        class="attr-value">unicode="&amp;#102;&amp;#102;&amp;#108;"</span>.<br />
+        <br />
+         The <a>'unicode'</a> attribute
+        contributes to the process for deciding which glyph(s) are
+        used to represent which character(s). See <a
+        href="fonts.html#GlyphSelectionRules">glyph selection
+        rules</a>. If the <a>'unicode'</a> attribute is not
+        provided for a given <a>'glyph'</a>, then the only way
+        to use this glyph is via an <a>'altGlyph'</a> reference.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="GlyphElementGlyphNameAttribute"><span
+        class="adef">glyph-name</span> = "<span
+        class="attr-value">&lt;author-ident&gt; [, &lt;author-ident&gt; ]*</span>
+        "</dt>
+        <dd>A name for the glyph. It is recommended that glyph
+        names be unique within a font. The glyph names can be used
+        in situations where Unicode character numbers do not
+        provide sufficient information to access the correct glyph,
+        such as when there are multiple glyphs per Unicode
+        character. The glyph names can be referenced in <a
+        href="fonts.html#KernElements">kerning</a>
+        definitions.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="GlyphElementDAttribute"><span
+        class="adef">d</span> = "<span class="attr-value">path
+        data</span>"</dt>
+        <dd>The definition of the outline of a glyph, using the
+        same syntax as for the <a>'path/d'</a> attribute on a <a>'path'</a>
+        element. See <a href="paths.html#PathData">Path data</a>.<br />
+         See below for a discussion of this attribute.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="GlyphElementOrientationAttribute"><span
+        class="adef">orientation</span> = "<span
+        class="attr-value">h | v</span>"</dt>
+        <dd>Indicates that the given glyph is only to be used for a
+        particular inline-progression-direction (i.e., horizontal
+        or vertical). If the attribute is not specified, then the
+        glyph can be used in all cases (i.e., both horizontal and
+        vertical inline-progression-direction).<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="GlyphElementArabicFormAttribute"><span
+        class="adef">arabic-form</span> = "<span
+        class="attr-value">initial | medial | terminal |
+        isolated</span>"</dt>
+        <dd>For Arabic glyphs, indicates which of the four possible
+        forms this glyph represents.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="GlyphElementLangAttribute"><span
+        class="adef">lang</span> = "<span
+        class="attr-value">%LanguageCodes;</span>"</dt>
+        <dd>The attribute value is a comma-separated list of
+        language names as defined in
+        <a href="http://www.ietf.org/rfc/bcp/bcp47.txt">BCP 47</a>
+        [<a href="refs.html#ref-BCP47">BCP47</a>].
+        The glyph can be used if the <a>'xml:lang'</a> attribute exactly
+        matches one of the languages given in the value of this
+        parameter, or if the <a>'xml:lang'</a> attribute exactly
+        equals a prefix of one of the languages given in the value
+        of this parameter such that the first tag character
+        following the prefix is "-".<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="GlyphElementHorizAdvXAttribute"><span
+        class="adef">horiz-adv-x</span> = "<span
+        class="attr-value">&lt;number&gt;</span>"</dt>
+        <dd>The horizontal advance after rendering the glyph in
+        horizontal orientation. If the attribute is not specified,
+        the effect is as if the attribute were set to the value of
+        the font's <a>'font/horiz-adv-x'</a> attribute.<br />
+         Glyph widths are required to be non-negative, even if the
+        glyph is typically rendered right-to-left, as in Hebrew and
+        Arabic scripts.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="GlyphElementVertOriginXAttribute"><span
+        class="adef">vert-origin-x</span> = "<span
+        class="attr-value">&lt;number&gt;</span>"</dt>
+        <dd>The X-coordinate in the font coordinate system of the
+        origin of the glyph to be used when drawing vertically
+        oriented text.<br />
+         If the attribute is not specified, the effect is as if the
+        attribute were set to the value of the font's <a>'font/vert-origin-x'</a>
+        attribute.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="GlyphElementVertOriginYAttribute"><span
+        class="adef">vert-origin-y</span> = "<span
+        class="attr-value">&lt;number&gt;</span>"</dt>
+        <dd>The Y-coordinate in the font coordinate system of the
+        origin of a glyph to be used when drawing vertically
+        oriented text.<br />
+         If the attribute is not specified, the effect is as if the
+        attribute were set to the value of the font's <a>'font/vert-origin-y'</a>
+        attribute.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="GlyphElementVertAdvYAttribute"><span
+        class="adef">vert-adv-y</span> = "<span
+        class="attr-value">&lt;number&gt;</span>"</dt>
+        <dd>The vertical advance after rendering a glyph in
+        vertical orientation.<br />
+         If the attribute is not specified, the effect is as if the
+        attribute were set to the value of the font's <a>'font/vert-adv-y'</a> attribute.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+      </dl>
+    </div>
+
+<p>The graphics for the <a>'glyph'</a> can be specified using
+either the <a>'d'</a> attribute or arbitrary SVG as
+content within the <a>'glyph'</a>.</p>
+
+<p>If the <a>'d'</a> attribute is specified, then the
+path data within this attribute is processed as follows:</p>
+
+<ul>
+  <li>Any relative coordinates within the path data
+  specification are converted into equivalent absolute
+  coordinates</li>
+
+  <li>Each of these absolute coordinates is transformed from
+  the font coordinate system into the <a>'text'</a> element's current
+  coordinate system such that the origin of the font coordinate
+  system is properly positioned and rotated to align with the
+  <a href="text.html#CurrentTextPosition">current text
+  position</a> and orientation for the glyph, and scaled so
+  that the correct <a>'font-size'</a> is achieved.</li>
+
+  <li>The resulting, transformed path specification is rendered
+  as if it were a <a>'path'</a> element, using the
+  styling properties that apply to the characters which
+  correspond to the given glyph, and ignoring any styling
+  properties specified on the <a>'font element'</a> element or the
+  <a>'glyph'</a> element.</li>
+</ul>
+
+<p>If the <a>'glyph'</a> has child
+elements, then those child elements are rendered in a manner
+similar to how the <a>'use'</a> element renders a
+referenced symbol. The rendering effect is as if the contents
+of the referenced <a>'glyph'</a>
+element were deeply cloned into a separate non-exposed DOM
+tree. Because the cloned DOM tree is non-exposed, the SVG DOM
+does not show the cloned instance.</p>
+
+<p>For user agents that support <a
+href="styling.html#StylingWithCSS">Styling with CSS</a>, the
+conceptual deep cloning of the referenced <a>'glyph'</a> element into a non-exposed
+DOM tree also copies any property values resulting from
+<a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html">the CSS cascade</a>
+([<a href="refs.html#ref-CSS21">CSS21</a>], chapter 6)
+on the referenced <a>'glyph'</a> and
+its contents, and also applies any property values on the
+<a>'font element'</a> element. CSS 2.1 selectors
+can be applied to the original (i.e., referenced) elements
+because they are part of the formal document structure. CSS 2.1
+selectors cannot be applied to the (conceptually) cloned DOM
+tree because its contents are not part of the formal document
+structure.</p>
+
+<p>Property inheritance, however, works as if the referenced
+<a>'glyph'</a> had been textually
+included as a deeply cloned child within the document tree. The
+referenced <a>'glyph'</a> inherits
+properties from the element that contains the characters that
+correspond to the <a>'glyph'</a>.
+The <a>'glyph'</a> does not inherit
+properties from the <a>'font element'</a> element's original
+parents.</p>
+
+<p>In the generated content, for each instance of a given <a>'glyph'</a>, a
+<a>'g'</a> is created which carries
+with it all property values resulting from the CSS cascade
+on the <a>'font element'</a> element for the
+referenced <a>'glyph'</a>. Within
+this <a>'g'</a> is another <a>'g'</a> which carries with it all
+property values resulting from the CSS cascade
+on the <a>'glyph'</a> element. The
+original contents of the <a>'glyph'</a> element are deep-cloned
+within the inner <a>'g'</a> element.</p>
+
+<p>If the <a>'glyph'</a> has both a
+<a>'d'</a> attribute and child elements,
+the <a>'d'</a> attribute is rendered first, and
+then the child elements.</p>
+
+<p>In general, the <a>'d'</a> attribute renders in the same
+manner as system fonts. For example, a dashed pattern will
+usually look the same if applied to a system font or to an SVG
+font which defines its glyphs using the <a>'d'</a> attribute. Many implementations
+will be able to render glyphs defined with the <a>'d'</a> attribute quickly and will be
+able to use a font cache for further performance gains.</p>
+
+<p>Defining a glyph by including child elements within the
+<a>'glyph'</a> gives greater
+flexibility but more complexity. Different fill and stroke
+techniques can be used on different parts of the glyphs. For
+example, the base of an "i" could be red, and the dot could be
+blue. This approach has an inherent complexity with units. Any
+properties specified on a text elements which represents a
+length, such as the <a>'stroke-width'</a> property, might
+produce surprising results since the length value will be
+processed in the coordinate system of the glyph.</p>
+
+</edit:with>
+
+<h2 id="MissingGlyphElement">The <span class="element-name">'missing-glyph'</span> element</h2>
+
+<edit:with element='missing-glyph'>
+
+<p>The <a>'missing-glyph'</a> element defines the graphics to use if
+there is an attempt to draw a glyph from a given font and the given
+glyph has not been defined. The attributes on the <a>'missing-glyph'</a>
+element have the same meaning as the corresponding attributes on the
+<a>'glyph'</a> element.</p>
+
+<edit:elementsummary name='missing-glyph'/>
+
+</edit:with>
+
+<h2 id="GlyphSelectionRules">Glyph selection rules</h2>
+
+<p>When determining the glyph(s) to draw a given character sequence, the
+<a>'font element'</a> element is searched from its first <a>'glyph'</a>
+element to its last in logical order to see if the upcoming sequence
+of Unicode characters to be rendered matches the sequence of Unicode
+characters specified in the <a>'glyph/unicode'</a> attribute for the
+given <a>'glyph'</a> element. The first successful match is used. Thus,
+the "ffl" ligature needs to be defined in the font before the "f" glyph;
+otherwise, the "ffl" will never be selected.</p>
+
+<p>Note that any occurrences of <a>'altGlyph'</a> take precedence over
+the above glyph selection rules within an SVG font.</p>
+
+<h2 id="KernElements">The <span class="element-name">'hkern'</span> and <span class="element-name">'vkern'</span> elements</h2>
+
+<p>The <a>'hkern'</a> and <a>'vkern'</a> elements define kerning
+pairs for horizontally-oriented and vertically-oriented pairs
+of glyphs, respectively.</p>
+
+<p>Kern pairs identify pairs of glyphs within a single font
+whose inter-glyph spacing is adjusted when the pair of glyphs
+are rendered next to each other. In addition to the requirement
+that the pair of glyphs are from the same font, SVG font
+kerning happens only when the two glyphs correspond to
+characters which have the same values for properties <a>'font-family'</a>,
+<a>'font-size'</a>, <a>'font-style'</a>, <a>'font-weight'</a>,
+<a>'font-variant'</a>, <a>'font-stretch'</a>, <a>'font-size-adjust'</a>
+and <a>'font property'</a>.</p>
+
+<p>An example of a kerning pair are the letters "Va", where the
+typographic result might look better if the letters "V" and the
+"a" were rendered slightly closer together.</p>
+
+<p>Right-to-left and bidirectional text in SVG is laid out in a
+two-step process, which is described in <a
+href="text.html#RelationshipWithBiDirectionality">Relationship
+with bidirectionality</a>. If SVG fonts are used, before
+kerning is applied, characters are re-ordered into
+left-to-right (or top-to-bottom, for vertical text) visual
+rendering order. Kerning from SVG fonts is then applied on
+pairs of glyphs which are rendered contiguously. The first
+glyph in the kerning pair is the left (or top) glyph in visual
+rendering order. The second glyph in the kerning pair is the
+right (or bottom) glyph in the pair.</p>
+
+<p>For convenience to font designers and to minimize file
+sizes, a single <a>'hkern'</a> and
+<a>'vkern'</a> can define a single
+kerning adjustment value between one set of glyphs (e.g., a
+range of Unicode characters) and another set of glyphs (e.g.,
+another range of Unicode characters).</p>
+
+<p id="HKernElement">The <a>'hkern'</a> element
+defines kerning pairs and adjustment values in the horizontal
+advance value when drawing pairs of glyphs which the two glyphs
+are contiguous and are both rendered horizontally (i.e.,
+side-by-side). The spacing between characters is reduced by the
+kerning adjustment. (Negative kerning adjustments increase the
+spacing between characters.)</p>
+
+<p id="VKernElement">The <a>'vkern'</a> element
+defines kerning pairs and adjustment values in the vertical
+advance value when drawing pairs of glyphs together when
+stacked vertically. The spacing between characters is reduced
+by the kerning adjustment.</p>
+
+<edit:with element='hkern'>
+
+<edit:elementsummary name='hkern'/>
+
+<edit:elementsummary name='vkern'/>
+
+    <div class="adef-list">
+      <p><em>Attribute definitions:</em></p>
+      <dl>
+        <dt id="HKernElementU1Attribute"><span
+        class="adef">u1</span> = "<span
+        class="attr-value">[&lt;character&gt; | &lt;urange&gt; ] [,
+        [&lt;character&gt; | &lt;urange&gt;] ]*</span> "</dt>
+        <dd>A sequence (comma-separated) of Unicode characters
+        (refer to the description of the <a>'glyph/unicode'</a>
+        attribute to the <a>'glyph'</a> element for a
+        description of how to express individual Unicode
+        characters) and/or ranges of Unicode characters (see
+        <a href="http://www.w3.org/TR/2011/WD-css3-fonts-20111004/#unicode-range-desc">description of ranges of Unicode characters in CSS2</a>;
+        [<a href="refs.html#ref-CSS3FONTS">CSS3FONTS</a>], section 4.5) which
+        identify a set of possible first glyphs in the kerning
+        pair. If a given Unicode character within the set has
+        multiple corresponding <a>'glyph'</a> elements (i.e.,
+        there are multiple <a>'glyph'</a> elements with the
+        same <a>'glyph/unicode'</a> attribute value, but
+        different <a>'glyph/glyph-name'</a> values), then all
+        such glyphs are included in the set. Comma is the separator
+        character; thus, to kern a comma, specify the comma as part
+        of a range of Unicode characters or as a glyph name using
+        the <a>'g1'</a> attribute. The total set of
+        possible first glyphs in the kerning pair is the union of
+        glyphs specified by the <a>'u1'</a> and <a>'g1'</a> attributes.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="HKernElementG1Attribute"><span
+        class="adef">g1</span> = "<span
+        class="attr-value">&lt;author-ident&gt; [, &lt;author-ident&gt; ]*</span>
+        "</dt>
+        <dd>A sequence (comma-separated) of glyph names (i.e.,
+        values that match <a>'glyph/glyph-name'</a> attributes
+        on <a>'glyph'</a> elements) which
+        identify a set of possible first glyphs in the kerning
+        pair. All glyphs with the given glyph name are included in
+        the set. The total set of possible first glyphs in the
+        kerning pair is the union of glyphs specified by the
+        <a>'u1'</a> and <a>'g1'</a> attributes.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="HKernElementU2Attribute"><span
+        class="adef">u2</span> = "<span
+        class="attr-value">[&lt;character&gt; | &lt;urange&gt;] [,
+        [&lt;character&gt; | &lt;urange&gt;] ]*</span> "</dt>
+        <dd>Same as the <a>'u1'</a> attribute, except that <a>'u2'</a>
+        specifies possible second glyphs in the kerning pair.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="HKernElementG2Attribute"><span
+        class="adef">g2</span> = "<span
+        class="attr-value">&lt;author-ident&gt; [, &lt;author-ident&gt; ]*</span>
+        "</dt>
+        <dd>Same as the <a>'g1'</a> attribute, except that <a>'g2'</a>
+        specifies possible second
+        glyphs in the kerning pair.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+        <dt id="HKernElementKAttribute"><span
+        class="adef">k</span> = "<span
+        class="attr-value">&lt;number&gt;</span>"</dt>
+        <dd>The amount to decrease the spacing between the two
+        glyphs in the kerning pair. The value is in the font
+        coordinate system. This attribute is required.<br />
+         <span class="anim-target"><a
+        href="animate.html#Animatable">Animatable</a>:
+        no.</span></dd>
+      </dl>
+    </div>
+
+<p>At least one each of <a>'u1'</a> or <a>'g1'</a> and at least one
+of <a>'u2'</a> or <a>'g2'</a> must be provided.</p>
+
+</edit:with>
+
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<h3 id="InterfaceSVGFontElement">Interface SVGFontElement</h3>
+
+
+<edit:with element='font'>
+
+<p>The <a>SVGFontElement</a> interface corresponds to the
+<a>'font element'</a> element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'font element'</a> element
+via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGFontElement</b> : <a>SVGElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGGlyphElement">Interface SVGGlyphElement</h3>
+
+
+<edit:with element='glyph'>
+
+<p>The <a>SVGGlyphElement</a> interface corresponds to the
+<a>'glyph'</a> element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'glyph'</a> element
+via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGGlyphElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGMissingGlyphElement">Interface SVGMissingGlyphElement</h3>
+
+
+<edit:with element='missing-glyph'>
+
+<p>The <a>SVGMissingGlyphElement</a> interface corresponds to the
+<a>'missing-glyph'</a> element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'missing-glyph'</a> element
+via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGMissingGlyphElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGHKernElement">Interface SVGHKernElement</h3>
+
+
+<edit:with element='hkern'>
+
+<p>The <a>SVGHKernElement</a> interface corresponds to the
+<a>'hkern'</a> element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'hkern'</a> element
+via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGHKernElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+};</pre>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGVKernElement">Interface SVGVKernElement</h3>
+
+
+<edit:with element='vkern'>
+
+<p>The <a>SVGVKernElement</a> interface corresponds to the
+<a>'vkern'</a> element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'vkern'</a> element
+via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGVKernElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGFontFaceElement">Interface SVGFontFaceElement</h3>
+
+
+<edit:with element='font-face'>
+
+<p>The <a>SVGFontFaceElement</a> interface corresponds to the
+<a>'font-face'</a> element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'font-face'</a> element
+via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGFontFaceElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGFontFaceSrcElement">Interface SVGFontFaceSrcElement</h3>
+
+
+<edit:with element='font-face-src'>
+
+<p>The <a>SVGFontFaceSrcElement</a> interface corresponds to the
+<a>'font-face-src'</a> element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'font-face-src'</a> element
+via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGFontFaceSrcElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+};</pre>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGFontFaceUriElement">Interface SVGFontFaceUriElement</h3>
+
+
+<edit:with element='font-face-uri'>
+
+<p>The <a>SVGFontFaceUriElement</a> interface corresponds to the
+<a>'font-face-uri'</a> element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'font-face-uri'</a> element
+via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGFontFaceUriElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+};</pre>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGFontFaceFormatElement">Interface SVGFontFaceFormatElement</h3>
+
+
+<edit:with element='font-face-format'>
+
+<p>The <a>SVGFontFaceFormatElement</a> interface corresponds to the
+<a>'font-face-format'</a> element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'font-face-format'</a> element
+via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGFontFaceFormatElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGFontFaceNameElement">Interface SVGFontFaceNameElement</h3>
+
+
+<edit:with element='font-face-name'>
+
+<p>The <a>SVGFontFaceNameElement</a> interface corresponds to the
+<a>'font-face-name'</a> element.
+</p>
+
+
+<p>Object-oriented access to the attributes of the <a>'font-face-name'</a> element
+via the SVG DOM is not available.
+</p>
+<pre class="idl">interface <b>SVGFontFaceNameElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+};</pre>
+
+</edit:with>
+
+</body>
+</html>
