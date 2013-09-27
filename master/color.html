@@ -202,13 +202,6 @@ ICC-based color specification is provided, but this can be changed (see <a>'colo
 &lt;circle fill="#CD853F icc-color(acmecmyk, 0.11, 0.48, 0.83, 0.00)"/></pre>
     </div>
     
-    <p>Example:</p>
-    <div class="example">
-      <pre>
-&lt;color-profile name="acmecmyk" href="http://printers.example.com/acmecorp/model1234"/>
-&lt;circle fill="#CD853F icc-color(acmecmyk, 0.11, 0.48, 0.83, 0.00)"/></pre>
-      </div>
-    
     <p class="note">Same syntax as SVG 1.1, increased conformance requirement.</p>
     
     <p>SVG 2  uses the extended ICC color specification from SVG 1.1.  In SVG 1.1,  parsing the syntax was required but implementing the ICC colour itself  was optional,  as indicated by  phrases such as "If ICC-based colors are provided and the SVG user agent supports ICC color, then...". An SVG 1.1 user agent which also conforms to this specification "supports ICC color" for the purposes of conforming to SVG 1.1.</p>
@@ -292,7 +285,12 @@ ICC-based color specification is provided, but this can be changed (see <a>'colo
     <p>Example:</p>
     <div class="example">
     <pre >
-&lt;color-profile name="FooColors" href="http://swatches.example.com/Foo"/>
+&lt;style>
+@color-profile {
+  name: FooColors;
+  src: url(http://swatches.example.com/Foo);
+}
+&lt;/style>
 &lt;circle fill="#CD853F icc-color(FooColors, Sandy23C)"/></pre>
       </div>
     
@@ -436,191 +434,6 @@ svg { border: 1px solid #888; background-color: #eee }
     descriptors for the location of the color profile on the Web, a name to reference
     the profile and information about rendering intent.</p>
 
-<h3 id="ColorProfileAlternatives">Alternative ways of defining a color profile description</h3>
-
-<p>Color profile descriptions can be specified in either of the following ways:</p>
-
-<ul>
-  <li>a <a>'color-profile element'</a> element</li>
-
-  <li>an <em>@color-profile</em> rule within a CSS style sheet </li>
-</ul>
-
-
-<p>If a color profile with the same <em>name</em> value has
-been identified by both a <a>'color-profile element'</a> element and
-<em>@color-profile</em> rules within a CSS style sheet, then
-the user agent shall first attempt to locate the profile by
-using the specifications in the <em>@color-profile</em> rules
-first.</p>
-
-<h3 id="ColorProfileElement">The <span class="element-name">'color-profile'</span> element</h3>
-
-<p class="issue">The <a>'color-profile element'</a> element is going to be removed, as it is
-redundant with the <strong>@color-profile</strong> rule.</p>
-
-<edit:with element='color-profile'>
-
-<edit:elementsummary name='color-profile'/>
-
-    <div class="adef-list">
-      <p><em>Attribute definitions:</em></p>
-      <dl>
-        <dt id="ColorProfileElementHrefAttribute"><span class="adef">href</span> = "<span
-        class="attr-value"><a
-        href="types.html#DataTypeIRI">&lt;iri&gt;</a></span>"</dt>
-        <dd>The location of an ICC profile resource.<br />
-         <span class="anim-target"><a
-        href="animate.html#Animatable">Animatable</a>:
-        no.</span></dd>
-
-        <dt id="ColorProfileElementLocalAttribute"><span class="adef">local</span> =  sRGB | "<span
-        class="attr-value">&lt;string&gt;</span>"</dt>
-        <dd>The unique ID for a locally stored color profile.
-        &lt;string&gt; is the profile's unique ID as specified by
-        <a href="http://www.color.org/">International Color
-        Consortium</a>.
-          <div class="requirement" id="assert_sRGBCaseInsensitive">         
-            When used in a style sheet,
-            for consistency with <a href="http://www.w3.org/TR/CSS2/grammar.html">CSS lexical
-              scanning and parsing rules</a>, the keyword "sRGB" MUST be case-insensitive. However,
-            it is recommended that the mixed capitalization "sRGB" SHOULD be used for consistency
-            with common industry practice.</div>
-          <div class="requirement" id="assert_localColorProfilesFirst">
-            If both the <a href="#ColorProfileElementHrefAttribute"><span class="attr-name">href</span></a>
-            and the <span class="attr-name">local</span> attributes are specified, then the
-            user agent MUST search the local system for the locally stored color profile first,
-            and, if not available locally, then attempt to use the resource identified by the
-            <a href="#ColorProfileElementHrefAttribute"><span class="attr-name">href</span></a>
-            attribute.</div>
-          (Note: Profile description fields do <em>not</em> represent a profile's unique ID.
-          With current ICC proposals, the profile's unique ID is an MD5-encoded value within
-          the profile header.).<br />
-         <span class="anim-target"><a
-        href="animate.html#Animatable">Animatable</a>:
-        no.</span></dd>
-        <dt id="ColorProfileElementNameAttribute"><span class="adef">name</span> = "<span
-        class="attr-value">&lt;identifier&gt;</span>"</dt>
-        <dd>The name which is used as the first parameter for <span
-        class="prop-value">icc-color</span> specifications within
-        <a>'fill'</a>, <a>'stroke'</a>, <a>'stop-color'</a>,
-        <a>'flood-color'</a> and <a>'lighting-color'</a> property
-        values to identify the color profile to use for the ICC
-        color specification and the name which can be the value of
-        the <a>'color-profile element'</a> property. Note
-        that if 'name' is not provided, it will be impossible
-        to reference the given color profile description. 
-         <span class="anim-target"><a
-        href="animate.html#Animatable">Animatable</a>:
-        no.</span></dd>
-        <dt id="ColorProfileElementRenderingIntentAttribute"><span class="adef">rendering-intent</span> = "<span
-        class="attr-value">auto | perceptual |
-        relative-colorimetric | saturation |
-        absolute-colorimetric</span>"</dt>
-        <dd>
-          <p><a>'rendering-intent'</a>
-          permits the specification of a color profile rendering
-          intent other than the default. <a>'rendering-intent'</a> is applicable
-          primarily to color profiles corresponding to CMYK color
-          spaces. The different options cause different methods to
-          be used for translating colors to the color gamut of the
-          target rendering device:</p>
-          <dl>
-            <dt><span class='prop-value'>auto</span></dt>
-            <dd>This is the default behavior. The user agent
-            determines the best intent based on the content type.
-              <div class="requirement" id="assert_renderingIntentAuto">
-                For image content containing an embedded profile, the User Agent MUST use the intent
-                specified within the profile. Otherwise, the user agent MUST use the current profile
-                and force the intent, overriding any intent that might be stored in the profile
-                itself.
-              </div></dd>
-            <dt><span class='prop-value'>perceptual</span></dt>
-            <dd>            <p>This method is often the preferred choice for images, especially when
-              there are substantial differences between the source and destination
-              (such as a CRT display image reproduced on a reflection print). It takes
-              the colors of the source image and re-optimizes the appearance for the
-              destination medium using proprietary methods. This re-optimization may
-              result in colors within both the source and destination gamuts being
-              changed, although perceptual transforms are supposed to maintain the
-              basic artistic intent of the original in the reproduction. They will not
-              attempt to correct errors in the source image.
-            </p>
-              <p class="note">With v2 ICC profiles there is no specified perceptual reference
-                medium, which can cause interoperability problems. When v2 ICC profiles
-                are used it may be safer to use the media-relative colorimetric
-                rendering intent with black point compensation, instead of the perceptual
-                rendering intent, unless the specific source and destination profiles to
-                be used have been checked to ensure the combination produces the desired
-                result.
-              </p>
-              <div class="requirement" id="assert_renderingIntentPerceptual">
-                This method SHOULD maintain relative color values among the pixels as they are mapped
-                to the target device gamut. This method MAY change pixel values that were originally
-                within the target device gamut, in order to avoid hue shifts and discontinuities
-                and to preserve as much as possible the overall appearance of the scene.
-              </div>
-            </dd>
-            <dt><span class='prop-value'>saturation</span></dt>
-            <dd>            <p>This option was created to preserve the relative saturation (chroma) of
-              the original, and to keep solid colors pure. However, it experienced
-              interoperability problems like the perceptual intent, and as solid color
-              preservation is not amenable to a reference medium solution using v4
-              profiles does not solve the problem. Use of this rendering intent is <em>not
-                recommended</em> unless the specific source and destination profiles to be
-              used have been checked to ensure the combination produces the desired
-              result.
-            </p>
-              <div class="requirement" id="assert_renderingIntentSaturation">
-                This option SHOULD preserve the relative saturation (chroma) values of the original
-                pixels. Out of gamut colors SHOULD be converted to colors that have the same saturation
-                but fall just inside the gamut.
-              </div></dd>
-            <dt><span class='prop-value'>relative-colorimetric</span></dt>
-            <dd>            <p>Media-relative colorimetric 
-              is required to leave source colors that fall inside the destination
-              medium gamut unchanged relative to the respective media white points.
-              Source colors that are out of the destination medium gamut are mapped to
-              colors on the gamut boundary using a variety of different methods.</p>
-              
-              <p class="note">Note: the media-relative colorimetric rendering intent is often used with
-                black point compensation, where the source medium black point is mapped
-                to the destination medium black point as well.</p>
-              
-              <div class="requirement" id="assert_renderingIntentRelativeColorimetric">
-                This method MUST map the source white point to the desination white point.
-                If black point compensation is in use, the source black point MUST also be mapped to the destination black point.
-                Adaptation algorithms SHOULD be used to adjust for the change in white point. Relative relationships of colors inside
-                both source and destination gamuts SHOULD be preserved. 
-                Relative relationships of colors outside the destination gamut MAY be changed.
-              </div></dd>
-            <dt><span class='prop-value'>absolute-colorimetric</span></dt>
-            <dd><p>ICC-absolute colorimetric  is
-              required to leave source colors that fall inside the destination medium
-              gamut unchanged relative to the adopted white (a perfect reflecting
-              diffuser). Source colors that are out of the destination medium gamut
-              are mapped to colors on the gamut boundary using a variety of different
-              methods. This method produces the most accurate color matching of
-              in-gamut colors, but will result in highlight clipping if the
-              destination medium white point is lower than the source medium white
-              point. For this reason it is recommended for use <em>only</em> in applications
-              that need exact color matching and where highlight clipping is not a
-              concern.
-            </p>
-              <div class="requirement" id="assert_renderingIntentAbsoluteColorimetric">
-                This method MUST disable white point matching and black point matching when converting colors.
-              </div>
-              In general, this option is not recommended.</dd>
-          </dl>
-          <br />
-           <span class="anim-target"><a
-          href="animate.html#Animatable">Animatable</a>: no.</span>
-        </dd>
-      </dl>
-    </div>
-  <p class="issue">Fallback behaviour needs to be specified, for when the requested rendering intent does not have a corresponding table in the profile; or when all rendering-intents are provided using the same table.</p>
-</edit:with>
-
 <h3 id="ColorProfileAtRule">The CSS <strong>@color-profile</strong> rule</h3>
 
 <p>When the document is styled using CSS, the CSS
@@ -741,8 +554,12 @@ child elements.</p>
 
 <dl>
   <dt><span class='prop-value'><a>&lt;identifier&gt;</a></span></dt>
-  <dd>See the description for the <a>'color-profile/name'</a> attribute on the
-  <a>'color-profile element'</a> element. Note that if 'name' is not
+  <dd>The name which is used as the first parameter for <span
+  class="prop-value">icc-color</span> specifications within
+  <a>'fill'</a>, <a>'stroke'</a>, <a>'stop-color'</a>,
+  <a>'flood-color'</a> and <a>'lighting-color'</a> property
+  values to identify the color profile to use for the ICC
+  color specification.  Note that if 'name' is not
   provided, it will be impossible to reference the given @color-profile
   definition.</dd>
 </dl>
@@ -776,10 +593,107 @@ child elements.</p>
       </dl>
     </div>
 
-<p>See the description for the <a>'color-profile/rendering-intent'</a> attribute on the
-<a>'color-profile element'</a> element.</p>
-  
-  
+<p>The ‘rendering-intent’ descriptor
+permits the specification of a color profile rendering
+intent other than the default. ‘rendering-intent’ is applicable
+primarily to color profiles corresponding to CMYK color
+spaces. The different options cause different methods to
+be used for translating colors to the color gamut of the
+target rendering device:</p>
+<dl>
+  <dt><span class='prop-value'>auto</span></dt>
+  <dd>This is the default behavior. The user agent
+  determines the best intent based on the content type.
+    <div class="requirement" id="assert_renderingIntentAuto">
+      For image content containing an embedded profile, the User Agent MUST use the intent
+      specified within the profile. Otherwise, the user agent MUST use the current profile
+      and force the intent, overriding any intent that might be stored in the profile
+      itself.
+    </div></dd>
+  <dt><span class='prop-value'>perceptual</span></dt>
+  <dd>            <p>This method is often the preferred choice for images, especially when
+    there are substantial differences between the source and destination
+    (such as a CRT display image reproduced on a reflection print). It takes
+    the colors of the source image and re-optimizes the appearance for the
+    destination medium using proprietary methods. This re-optimization may
+    result in colors within both the source and destination gamuts being
+    changed, although perceptual transforms are supposed to maintain the
+    basic artistic intent of the original in the reproduction. They will not
+    attempt to correct errors in the source image.
+  </p>
+    <p class="note">With v2 ICC profiles there is no specified perceptual reference
+      medium, which can cause interoperability problems. When v2 ICC profiles
+      are used it may be safer to use the media-relative colorimetric
+      rendering intent with black point compensation, instead of the perceptual
+      rendering intent, unless the specific source and destination profiles to
+      be used have been checked to ensure the combination produces the desired
+      result.
+    </p>
+    <div class="requirement" id="assert_renderingIntentPerceptual">
+      This method SHOULD maintain relative color values among the pixels as they are mapped
+      to the target device gamut. This method MAY change pixel values that were originally
+      within the target device gamut, in order to avoid hue shifts and discontinuities
+      and to preserve as much as possible the overall appearance of the scene.
+    </div>
+  </dd>
+  <dt><span class='prop-value'>saturation</span></dt>
+  <dd>            <p>This option was created to preserve the relative saturation (chroma) of
+    the original, and to keep solid colors pure. However, it experienced
+    interoperability problems like the perceptual intent, and as solid color
+    preservation is not amenable to a reference medium solution using v4
+    profiles does not solve the problem. Use of this rendering intent is <em>not
+      recommended</em> unless the specific source and destination profiles to be
+    used have been checked to ensure the combination produces the desired
+    result.
+  </p>
+    <div class="requirement" id="assert_renderingIntentSaturation">
+      This option SHOULD preserve the relative saturation (chroma) values of the original
+      pixels. Out of gamut colors SHOULD be converted to colors that have the same saturation
+      but fall just inside the gamut.
+    </div></dd>
+  <dt><span class='prop-value'>relative-colorimetric</span></dt>
+  <dd>            <p>Media-relative colorimetric 
+    is required to leave source colors that fall inside the destination
+    medium gamut unchanged relative to the respective media white points.
+    Source colors that are out of the destination medium gamut are mapped to
+    colors on the gamut boundary using a variety of different methods.</p>
+    
+    <p class="note">Note: the media-relative colorimetric rendering intent is often used with
+      black point compensation, where the source medium black point is mapped
+      to the destination medium black point as well.</p>
+    
+    <div class="requirement" id="assert_renderingIntentRelativeColorimetric">
+      This method MUST map the source white point to the desination white point.
+      If black point compensation is in use, the source black point MUST also be mapped to the destination black point.
+      Adaptation algorithms SHOULD be used to adjust for the change in white point. Relative relationships of colors inside
+      both source and destination gamuts SHOULD be preserved. 
+      Relative relationships of colors outside the destination gamut MAY be changed.
+    </div></dd>
+  <dt><span class='prop-value'>absolute-colorimetric</span></dt>
+  <dd><p>ICC-absolute colorimetric  is
+    required to leave source colors that fall inside the destination medium
+    gamut unchanged relative to the adopted white (a perfect reflecting
+    diffuser). Source colors that are out of the destination medium gamut
+    are mapped to colors on the gamut boundary using a variety of different
+    methods. This method produces the most accurate color matching of
+    in-gamut colors, but will result in highlight clipping if the
+    destination medium white point is lower than the source medium white
+    point. For this reason it is recommended for use <em>only</em> in applications
+    that need exact color matching and where highlight clipping is not a
+    concern.
+  </p>
+    <div class="requirement" id="assert_renderingIntentAbsoluteColorimetric">
+      This method MUST disable white point matching and black point matching when converting colors.
+    </div>
+    In general, this option is not recommended.
+  </dd>
+</dl>
+
+<p class="issue">Fallback behaviour needs to be specified, for when the
+requested rendering intent does not have a corresponding table in the profile;
+or when all rendering-intents are provided using the same table.</p>
+
+
 <div class="ready-for-wider-review">
 <h2 id="syntax">Color syntax</h2>
 
@@ -939,72 +853,12 @@ child elements.</p>
 
 <h2 id="DOMInterfaces">DOM interfaces</h2>
 
-<h3 id="InterfaceSVGColorProfileElement">Interface SVGColorProfileElement</h3>
-
-
-<edit:with element='color-profile'>
-
-The <a>SVGColorProfileElement</a> interface corresponds to the
-<a>'color-profile element'</a> element.
-<pre class="idl">interface <b>SVGColorProfileElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
-  attribute DOMString <a href="color.html#__svg__SVGColorProfileElement__local">local</a>;
-  attribute DOMString <a href="color.html#__svg__SVGColorProfileElement__name">name</a>;
-  attribute unsigned short <a href="color.html#__svg__SVGColorProfileElement__renderingIntent">renderingIntent</a>;
-};
-
-<a>SVGColorProfileElement</a> implements <a>SVGRenderingIntent</a>;
-<a>SVGColorProfileElement</a> implements <a>SVGURIReference</a>;</pre>
-
-<dl class="interface">
-<dt class="attributes-header">Attributes:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__svg__SVGColorProfileElement__local" class="attribute first-child"><b>local</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
-<dd class="attribute">
-<div>
-Corresponds to attribute <a>'local'</a> on the given element.
-
-
-</div>
-</dd>
-
-<dt id="__svg__SVGColorProfileElement__name" class="attribute"><b>name</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
-<dd class="attribute">
-<div>
-Corresponds to attribute <a>'name'</a> on the given element.
-
-
-</div>
-</dd>
-
-<dt id="__svg__SVGColorProfileElement__renderingIntent" class="attribute"><b>renderingIntent</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-<dd class="attribute">
-<div>
-Corresponds to attribute <a>'rendering-intent'</a> on the given element.
-The value of this attribute is the value of the the RENDERING_INTENT_*
-constant defined on <a>SVGRenderingIntent</a> that corresponds to the
-value of the <a>'rendering-intent'</a> attribute.
-
-
-</div>
-</dd>
-</dl>
-</dd>
-</dl>
-
-</edit:with>
-
-
 <h3 id="InterfaceSVGColorProfileRule">Interface SVGColorProfileRule</h3>
-
-
 
 <p>The <a>SVGColorProfileRule</a> interface represents an @color-profile
 rule in a CSS style sheet. An @color-profile rule identifies a ICC
 profile which can be referenced within a given document.
 </p>
-
 
 <p>Support for the <a>SVGColorProfileRule</a> interface is only required
 in user agents that support <a href="styling.html#StylingWithCSS">styling with CSS</a>.
