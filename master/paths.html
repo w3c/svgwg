@@ -38,10 +38,11 @@ curves.</p>
 
 <p>Paths represent the geometry of the outline of an object,
 defined in terms of <em>moveto</em> (set a new current point),
-<em>lineto</em> (draw a straight line), <em>curveto</em> (draw
+<em>bearing</em> (set a new orientation), <em>lineto</em>
+(draw a straight line), <em>curveto</em> (draw
 a curve using a cubic Bézier), <em>arc</em> (elliptical
 or circular arc) and <em>closepath</em> (close the current
-shape by drawing a line to the last <em>moveto</em>) elements.
+shape by drawing a line to the last <em>moveto</em>) commands.
 Compound paths (i.e., a path with multiple subpaths) are
 possible to allow effects such as "donut holes" in objects.</p>
 
@@ -177,7 +178,7 @@ what their shape is as a path.  (The equivalent path of a
 <p>A path is defined by including a <a>'path'</a>
 element which contains a <span class='attr-value'>d="(path data)"</span>
 attribute, where the <a>'d'</a> attribute contains the
-<em>moveto</em>, <em>line</em>, <em>curve</em> (both cubic and
+<em>moveto</em>, <em>bearing</em>, <em>lineto</em>, <em>curveto</em> (both cubic and
 quadratic Béziers), <em>arc</em> and <em>closepath</em>
 instructions.</p>
 <p><span class="example-ref">Example triangle01</span>
@@ -236,9 +237,9 @@ attempts to minimize the size of path data are as follows:</p>
   -100 -200" and use "M 100 200 L 200 100 -100 -200"
   instead).</li>
 
-  <li>Relative versions of all commands are available
-  (uppercase means absolute coordinates, lowercase means
-  relative coordinates).</li>
+  <li>For most commands there are absolute and relative
+  versions available (uppercase means absolute coordinates,
+  lowercase means relative coordinates).</li>
 
   <li>Alternate forms of <em>lineto</em> are available to
   optimize the special cases of horizontal and vertical lines
@@ -264,12 +265,32 @@ Instead, say: "13000.56".)</p>
 values are relative to the current point at the start of the
 command.</p>
 
-<p>In the tables below, the following notation is used:</p>
+<div class="ready-for-wg-review">
+
+<p>Relative path commands are also influenced by the
+current bearing, which is an angle set by the <em>bearing</em>
+commands.  This allows for paths to be specified using a
+style of "turtle graphics", where straight line and curved
+path segments are placed with their starting point at a
+tangent (or at some other angle) to the current bearing.</p>
+
+</div>
+
+<p>In the tables below, the following notation is used to
+describe the syntax of a given path command:</p>
 
 <ul>
   <li>(): grouping of parameters</li>
   <li>+: 1 or more of the given parameter(s) is required</li>
 </ul>
+
+<div class="ready-for-wg-review">
+
+<p>In the description of the path commands, <var>cpx</var> and
+<var>cpy</var> represent the coordinates of the current point,
+and <var>cb</var> represents the current bearing.</p>
+
+</div>
 
 <p>The following sections list the commands.</p>
     
@@ -296,7 +317,7 @@ is not the first command) represent the start of a new
     <td>moveto</td>
     <td>(x y)+</td>
     <td>
-      Start a new sub-path at the given (x,y) coordinate.
+      Start a new sub-path at the given (x,y) coordinates.
       <strong>M</strong> (uppercase) indicates that absolute
       coordinates will follow; <strong>m</strong> (lowercase)
       indicates that relative coordinates will follow. If a moveto is
@@ -311,7 +332,16 @@ is not the first command) represent the start of a new
     </td>
   </tr>
 </table>
-    
+
+<div class="ready-for-wg-review">
+
+<p>When a relative <strong>m</strong> command is used, the
+position moved to is (<var>cpx</var> + <var>x</var> cos <var>cb</var>
++ <var>y</var> sin <var>cb</var>, <var>cpy</var> +
+<var>x</var> sin <var>cb</var> + <var>y</var> cos <var>cb</var>).</p>
+
+</div>
+
 <h3 id="PathDataClosePathCommand">The <strong>"closepath"</strong> command</h3>
 
 <p>The "closepath" (<strong>Z</strong> or <strong>z</strong>)
@@ -336,6 +366,12 @@ current value of <a>'stroke-linecap'</a>.
 At the end of the command, the new current point is set to the
 initial point of the current subpath.</p>
 
+<div class="ready-for-wg-review">
+
+<p>The current bearing does not affect a <strong>z</strong> command.</p>
+
+</div>
+
 <table  class="PathDataTable">
   <tr>
     <th>Command</th>
@@ -349,11 +385,12 @@ initial point of the current subpath.</p>
     <td>closepath</td>
     <td>(none)</td>
     <td>Close the current subpath by drawing a straight line from the
-    current point to current subpath's initial point. Since the Z and z
+    current point to current subpath's initial point. Since the
+    <strong>Z</strong> and <strong>z</strong>
     commands take no parameters, they have an identical effect.</td>
   </tr>
 </table>
-    
+   
 <h3 id="PathDataLinetoCommands">The <strong>"lineto"</strong> commands</h3>
 
 <p>The various "lineto" commands draw straight lines from the
@@ -385,30 +422,61 @@ current point to a new point:</p>
      <strong>h</strong> (relative)</td>
     <td>horizontal lineto</td>
     <td>x+</td>
-    <td>Draws a horizontal line from the current point (cpx,
-    cpy) to (x, cpy). <strong>H</strong> (uppercase) indicates
+    <td>Draws a horizontal line from the current point.
+    <strong>H</strong> (uppercase) indicates
     that absolute coordinates will follow; <strong>h</strong>
     (lowercase) indicates that relative coordinates will
     follow. Multiple x values can be provided (although usually
-    this doesn't make sense). At the end of the command, the
-    new current point becomes (x, cpy) for the final value of
-    x.</td>
+    this doesn't make sense). An <strong>H</strong> or <strong>h</strong>
+    command is equivalent to an <strong>L</strong> or <strong>l</strong>
+    command with 0 specified for the y coordinate.
+    At the end of the command, the new current point is
+    taken from the final coordinate value.</td>
   </tr>
   <tr>
     <td><strong>V</strong> (absolute)<br />
      <strong>v</strong> (relative)</td>
     <td>vertical lineto</td>
     <td>y+</td>
-    <td>Draws a vertical line from the current point (cpx, cpy)
-    to (cpx, y). <strong>V</strong> (uppercase) indicates that
+    <td>Draws a vertical line from the current point.
+    <strong>V</strong> (uppercase) indicates that
     absolute coordinates will follow; <strong>v</strong>
     (lowercase) indicates that relative coordinates will
     follow. Multiple y values can be provided (although usually
-    this doesn't make sense). At the end of the command, the
-    new current point becomes (cpx, y) for the final value of
-    y.</td>
+    this doesn't make sense).  A <strong>V</strong> or <strong>v</strong>
+    command is equivalent to an <strong>L</strong> or <strong>l</strong>
+    command with 0 specified for the x coordinate.
+    At the end of the command, the new current point is
+    taken from the final coordinate value.</td>
   </tr>
 </table>
+
+<div class="ready-for-wg-review">
+
+<p>When a relative <strong>l</strong> command is used, the
+end point of the line is (<var>cpx</var> + <var>x</var> cos <var>cb</var>
++ <var>y</var> sin <var>cb</var>, <var>cpy</var> +
+<var>x</var> sin <var>cb</var> + <var>y</var> cos <var>cb</var>).</p>
+
+<p>When a relative <strong>h</strong> command is used,
+the end point of the line is (<var>cpx</var> + <var>x</var> cos <var>cb</var>,
+<var>cpy</var> + <var>x</var> sin <var>cb</var>).  This means
+that an <strong>h</strong> command with a positive <var>x</var>
+value draws a line in the direction of the current bearing.  When
+the current bearing is 0, this is a horizontal line in the direction
+of the positive x-axis.</p>
+
+<div class="note">
+  <p>When there is a non-zero bearing, a mnemonic for the <strong>h</strong>
+  command could be "<u>h</u>ead this distance at the current bearing",
+  rather than "draw a <u>h</u>orizontal line".</p>
+</div>
+
+<p>When a relative <strong>v</strong> command is used,
+the end point of the line is (<var>cpx</var> + <var>y</var> sin <var>cb</var>,
+<var>cpy</var> + <var>y</var> cos <var>cb</var>).</p>
+
+</div>
 
 <h3 id="PathDataCurveCommands">The curve commands</h3>
 
@@ -485,6 +553,18 @@ current point to a new point:</p>
   </tr>
 </table>
 
+<div class="ready-for-wg-review">
+
+<p>When a relative <strong>c</strong> or <strong>s</strong>
+command is used, each of the relative coordinate pairs
+is computed as for those in an <strong>m</strong> command.
+For example, the final control point of the curve of
+both commands is (<var>cpx</var> + <var>x</var> cos <var>cb</var>
++ <var>y</var> sin <var>cb</var>, <var>cpy</var> +
+<var>x</var> sin <var>cb</var> + <var>y</var> cos <var>cb</var>).</p>
+
+</div>
+
 <p><span class="example-ref">Example cubic01</span> shows some
 simple uses of cubic Bézier commands within a path. The
 example uses an internal CSS style sheet to assign styling
@@ -553,6 +633,18 @@ this example as SVG (SVG-enabled browsers only)</a><br />
   </tr>
 </table>
 
+<div class="ready-for-wg-review">
+
+<p>When a relative <strong>q</strong> or <strong>t</strong>
+command is used, each of the relative coordinate pairs
+is computed as for those in an <strong>m</strong> command.
+For example, the final control point of the curve of
+both commands is (<var>cpx</var> + <var>x</var> cos <var>cb</var>
++ <var>y</var> sin <var>cb</var>, <var>cpy</var> +
+<var>x</var> sin <var>cb</var> + <var>y</var> cos <var>cb</var>).</p>
+
+</div>
+
 <p><span class="example-ref">Example quad01</span> shows some
 simple uses of quadratic Bézier commands within a path.
 Note that the control point for the "T" command is computed
@@ -614,6 +706,18 @@ command.</p>
     calculations and help determine how the arc is drawn.</td>
   </tr>
 </table>
+
+<div class="ready-for-wg-review">
+
+<p>When a relative <strong>a</strong> command is used, the end point
+of the arc is (<var>cpx</var> + <var>x</var> cos <var>cb</var>
++ <var>y</var> sin <var>cb</var>, <var>cpy</var> +
+<var>x</var> sin <var>cb</var> + <var>y</var> cos <var>cb</var>).
+The effective value of the x-axis-rotation parameter is
+also affected by the current bearing: it is computed as
+<var>x-axis-rotation</var> + <var>cb</var>.</p>
+
+</div>
 
 <p><span class="example-ref">Example arcs01</span> shows some
 simple uses of arc commands within a path.</p>
@@ -686,6 +790,81 @@ href="implnote.html#ArcImplementationNotes">Elliptical arc
 implementation notes</a> for detailed implementation notes for
 the path data elliptical arc commands.</p>
 
+<div class="ready-for-wg-review">
+
+<h3 id="PathDataBearingCommands">The bearing commands</h3>
+
+<p>The bearing commands (<strong>B</strong> or <strong>b</strong>)
+set the current bearing, which influences the orientation of
+subsequent relative path commands:</p>
+
+<table class="PathDataTable">
+  <tr>
+    <th>Command</th>
+    <th>Name</th>
+    <th>Parameters</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>B</strong> (absolute)<br/>
+      <strong>b</strong> (relative)</td>
+    <td>bearing</td>
+    <td>angle+</td>
+    <td>Sets the current bearing.  The parameter is an angle
+    in degrees, where 0 indicates the direction of the positive
+    x-axis.  <strong>B</strong> (uppercase) sets
+    the current bearing to the specified angle; <strong>b</strong>
+    (lowercase) sets the current bearing to be the angle of the
+    tangent at the end of the preceding path command plus the
+    specified angle.  The current point is unaffected.
+    Although multiple parameters may be specified, this usually
+    will not be useful, as they could be combined into a single
+    angle value.</td>
+  </tr>
+</table>
+
+<p>At the beginning of a path, the current bearing is 0, which
+points in the direction of the positive x-axis.  The current
+bearing remains unchanged until a <strong>B</strong> or
+<strong>b</strong> command is encountered.  Since the relative
+<strong>b</strong> command sets the current bearing relative
+to the tangent at the end of the preceding path command,
+it is possible to set the bearing to that tangent by using
+"b 0".</p>
+
+<div class="example">
+  <p>The example below shows how bearing commands can be used
+  to draw a regular pentagon.</p>
+
+  <pre class="xml"><![CDATA[<svg xmlns="http://www.w3.org/2000/svg"
+     width="300" height="100" viewBox="0 0 300 100">
+
+  <path fill="#eee"
+        stroke="deeppink" stroke-width="8px" stroke-linejoin="round"
+        d="M 150,10
+           B 36 h 47
+           b 72 h 47
+           b 72 h 47
+           b 72 h 47 z"/>
+
+</svg>]]></pre>
+
+  <div class="figure">
+    <img class="bordered" src="images/paths/bearing01.svg"
+         alt="Image showing the use of the bearing command."/>
+    <p class="caption">Bearing commands can be used to position
+    the end points of the sides of a regular polygon without
+    having to use trigonometry to calculate them based on the
+    polygon's interior angles.</p>
+  </div>
+</div>
+
+<div class="issue">
+  <p>What should we do about the SVGPathSeg objects for these new path commands?</p>
+</div>
+
+</div>
+
 <h3 id="PathDataBNF">The grammar for path data</h3>
 
 <p>The following notation is used in the Backus-Naur Form (BNF)
@@ -723,6 +902,7 @@ drawto-command:
     | quadratic-bezier-curveto
     | smooth-quadratic-bezier-curveto
     | elliptical-arc
+    | bearing
 moveto:
     ( "M" | "m" ) wsp* moveto-argument-sequence
 moveto-argument-sequence:
@@ -780,7 +960,12 @@ elliptical-arc-argument-sequence:
 elliptical-arc-argument:
     number comma-wsp? number comma-wsp? 
         number comma-wsp flag comma-wsp? flag comma-wsp? coordinate-pair
-coordinate-pair:
+bearing:
+    ( "B" | "b") wsp* bearing-argument-sequence
+<div class="ready-for-wg-review">bearing-argument-sequence:
+    number
+    | number comma-wsp? bearing-argument-sequence</div><!--
+-->coordinate-pair:
     coordinate comma-wsp? coordinate
 coordinate:
     number
@@ -858,7 +1043,7 @@ path so that the user agent can scale distance-along-a-path
 computations by the ratio of <a>'pathLength'</a> to the user agent's own
 computed value for total path length.</p>
 
-<p>A "moveto" operation within a <a>'path'</a> element is defined to have
+<p>A "moveto" or "bearing" operation within a <a>'path'</a> element is defined to have
 zero length. Only the various "lineto", "curveto" and "arcto"
 commands contribute to path length calculations.</p>
 
@@ -908,7 +1093,6 @@ single command within a path data specification.
 The unit type is not one of predefined types. It is invalid to attempt
 to define a new value of this type or to attempt to switch an existing
 value to this type.
-
 
 </div>
 </dd>
