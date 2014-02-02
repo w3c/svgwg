@@ -1916,72 +1916,52 @@ referencing document (e.g., an XHTML document). The second DOM hierarchy
 will be for the referenced SVG document.
 </p>
 
-<p class="issue">HTML defines title, referrer and domain.  We should remove
-them and file a bug on HTML to ensure that title does the right thing for
-SVG documents.</p>
-
 <p>For historical reasons, <a>Window</a> objects must also have a writable, configurable,
 non-enumerable property named SVGDocument whose value is the <a>Document</a> interface object.</p>
 
 <pre class="idl">partial interface <a>Document</a> {
-  readonly attribute DOMString <a href="struct.html#__svg__SVGDocument__title">title</a>;
-  readonly attribute DOMString <a href="struct.html#__svg__SVGDocument__referrer">referrer</a>;
-  readonly attribute DOMString <a href="struct.html#__svg__SVGDocument__domain">domain</a>;
   readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGSVGElement">SVGSVGElement</a> <a href="struct.html#__svg__SVGDocument__rootElement">rootElement</a>;
+};</pre>
+
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGDocument__rootElement" class="attribute first-child"><b>rootElement</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGSVGElement">SVGSVGElement</a>)</span></dt>
+      <dd class="attribute">
+        <div>
+          The root <a>'svg'</a> in the document hierarchy.
+
+          This attribute is deprecated, and may be removed in a future svg specification.
+          Authors are encouraged to use the <a href="http://www.w3.org/TR/dom/#dom-document-documentelement">documentElement</a> attribute in Document instead.
+        </div>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+
+<p>The following IDL fragment must be supported only if the SVG implementation is also a
+<a href="http://www.w3.org/TR/html/infrastructure.html#interactive">Web browser or other interactive user agent</a>,
+and therefore implements HTML.</p>
+
+<pre class="idl"><span class='comment'>// must only be implemented in certain implementations</span>
+partial interface <a>Document</a> {
+  readonly attribute DOMString title;
+  readonly attribute DOMString referrer;
+  readonly attribute DOMString domain;
   readonly attribute Element? <a href="struct.html#__svg__SVGDocument__activeElement">activeElement</a>;
-};</pre><dl class="interface">
-<dt class="attributes-header">Attributes:</dt>
-<dd>
-<dl class="attributes">
+};</pre>
 
-<dt id="__svg__SVGDocument__title" class="attribute first-child"><b>title</b><span class="idl-type-parenthetical"> (readonly DOMString)</span></dt>
-<dd class="attribute">
-<div>
-The title of a document as specified by the <a>'title'</a> sub-element of
-the <a>'svg'</a> root element (i.e.,
-<span class="code-fragment">&lt;svg&gt;&lt;title&gt;Here is the title&lt;/title&gt;...&lt;/svg&gt;</span>)
+<p class='note'>This is because the interface members below are already defined in HTML,
+and in implementations that support SVG and HTML we they cannot be duplicated.</p>
 
-</div>
-</dd>
+<p>The title, referrer, domain and activeElement IDL attributes must behave the same as
+<a href="http://www.w3.org/TR/html/dom.html#document">the corresponding IDL attributes defined in HTML</a>.</p>
 
-<dt id="__svg__SVGDocument__referrer" class="attribute"><b>referrer</b><span class="idl-type-parenthetical"> (readonly DOMString)</span></dt>
-<dd class="attribute">
-<div>
-Returns the URI of the page that linked to this page. The value is an
-empty string if the user navigated to the page directly (not through a
-link, but, for example, via a bookmark).
-
-</div>
-</dd>
-
-<dt id="__svg__SVGDocument__domain" class="attribute"><b>domain</b><span class="idl-type-parenthetical"> (readonly DOMString)</span></dt>
-<dd class="attribute">
-<div>
-The domain name of the server that served the document, or a null string
-if the server cannot be identified by a domain name.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGDocument__rootElement" class="attribute"><b>rootElement</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGSVGElement">SVGSVGElement</a>)</span></dt>
-<dd class="attribute">
-<div>
-The root <a>'svg'</a> in the document hierarchy.
-
-This attribute is deprecated, and may be removed in a future svg specification.
-Authors are encouraged to use the <a href="http://www.w3.org/TR/dom/#dom-document-documentelement">documentElement</a> attribute in Document instead.
-</div>
-</dd>
-<dt id="__svg__SVGDocument__activeElement" class="attribute"><b>activeElement</b><span class="idl-type-parenthetical"> (readonly Element)</span></dt>
-<dd class="attribute">
-<div>
-The activeElement attribute must return the element in the document that is focused. If no element in the Document is focused, this must return the <a href="http://www.w3.org/TR/dom/#dom-document-documentelement">documentElement</a>.
-</div>
-</dd>
-
-</dl>
-</dd>
-</dl>
+<p class='issue'>Issues have been filed on HTML so that title and activeElement work
+on SVG documents (by looking at <a>'title'</a> elements in the SVG namespace,
+and by defaulting to the root <a>'svg'</a> element rather than the <span class='element-name'>body</span>
+element, respectively).</p>
 
 <h3 id="InterfaceSVGSVGElement">Interface SVGSVGElement</h3>
 
