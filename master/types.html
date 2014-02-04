@@ -4017,14 +4017,20 @@ is to directly render graphics into a group. The
 <a>'transform'</a> property applies to all <a>SVGGraphicsElement</a>. All <a>SVGGraphicsElement</a>
 have a bounding box in current user space.</p>
 
-<pre class="idl">interface <b>SVGGraphicsElement</b> : <a>SVGElement</a> {
+<pre class="idl">dictionary <b id="SVGBoundingBoxOptions">SVGBoundingBoxOptions</b> {
+  bool fill = true;
+  bool stroke = false;
+  bool markers = false;
+  bool clipped = false;
+};
+
+interface <b>SVGGraphicsElement</b> : <a>SVGElement</a> {
   readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedTransformList">SVGAnimatedTransformList</a> <a href="types.html#__svg__SVGGraphicsElement__transform">transform</a>;
 
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>? <a href="types.html#__svg__SVGGraphicsElement__nearestViewportElement">nearestViewportElement</a>;
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>? <a href="types.html#__svg__SVGGraphicsElement__farthestViewportElement">farthestViewportElement</a>;
 
-  <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="types.html#__svg__SVGGraphicsElement__getBBox">getBBox</a>();
-  <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="types.html#__svg__SVGGraphicsElement__getStrokeBBox">getStrokeBBox</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="types.html#__svg__SVGGraphicsElement__getBBox">getBBox</a>(optional <a href="#SVGBoundingBoxOptions">SVGBoundingBoxOptions</a> options);
   <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a>? <a href="types.html#__svg__SVGGraphicsElement__getCTM">getCTM</a>();
   <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a>? <a href="types.html#__svg__SVGGraphicsElement__getScreenCTM">getScreenCTM</a>();
   <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <a href="types.html#__svg__SVGGraphicsElement__getTransformToElement">getTransformToElement</a>(<a class="idlinterface" href="types.html#InterfaceSVGGraphicsElement">SVGGraphicsElement</a> element);
@@ -4063,16 +4069,17 @@ have a bounding box in current user space.</p>
   </dd>
   <dt class="operations-header">Operations:</dt>
   <dd>
+    <div class="ready-for-wg-review">
     <dl class="attributes">
-      <dt id="__svg__SVGGraphicsElement__getBBox" class="operation first-child"><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <b>getBBox</b>()</dt>
+      <dt id="__svg__SVGGraphicsElement__getBBox" class="operation first-child"><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <b>getBBox</b>(optional <a href="#SVGBoundingBoxOptions">SVGBoundingBoxOptions</a> <var>options</var>)</dt>
       <dd class="operation">
         <div>
-          Returns the tight bounding box in current user space (i.e., after
-          application of the <a>'transform'</a> property) on the
-          geometry of all contained graphics elements, exclusive of stroking, clipping, masking and
-          filter effects. Note that getBBox must return the actual bounding box
-          at the time the method was called, even in case the element has not
-          yet been rendered.
+          <p>Returns the result of invoking the <a href="coords.html#BoundingBoxes">bounding box algorithm</a>
+          for the element, with <var>fill</var>, <var>stroke</var>, <var>markers</var>
+          and <var>clipped</var> members of the <var>options</var> dictionary argument
+          used to control which parts of the element are included in the bounding box,
+	  using the element's user space as the coordinate system to return the
+	  bounding box in.</p>
         </div>
         <dl class="operation">
           <dt class="returns-header">Returns</dt>
@@ -4083,29 +4090,9 @@ have a bounding box in current user space.</p>
           </dd>
         </dl>
       </dd>
-      <dt id="__svg__SVGGraphicsElement__getStrokeBBox" class="operation"><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <b>getStrokeBBox</b>()</dt>
-      <dd class="operation">
-        <div>
-          Returns the union of the tight bounding box (see <a>getBBox</a>), the stroke
-          bounding box and the stroke bounding box of applied markers in current user space
-          (i.e., after application of the <a>'transform'</a> property) on the
-          geometry of all contained graphics elements, exclusive of clipping, masking and
-          filter effects. The stroke bounding box takes the stroke style
-          properties <a>'stroke-width'</a>, <a>'stroke-linecap'</a>, <a>'stroke-linejoin'</a>,
-          <a>'stroke-miterlimit'</a>, <a>'stroke-dasharray'</a> and <a>'stroke-dashoffset'</a>
-          into account. Note that getStrokeBBox must
-          return the actual union of the bounding box at the time the method was called,
-          even in case the element has not yet been rendered.
-        </div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>
-              An <a>SVGRect</a> object that defines the stroke bounding box.
-            </div>
-          </dd>
-        </dl>
-      </dd>
+    </dl>
+    </div>
+    <dl class="attributes">
       <dt id="__svg__SVGGraphicsElement__getCTM" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a>? <b>getCTM</b>()</dt>
       <dd class="operation">
         <div>
