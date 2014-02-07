@@ -1175,19 +1175,20 @@ from the referenced element's original parents.</p>
 
 <p>If event attributes are assigned to referenced elements,
 then the actual target for the event will be the
-<a>SVGElementInstance</a> object
-within the "instance tree" corresponding to the given
+element within the "instance tree" corresponding to the given
 referenced element.</p>
 
-<p class="issue">Once we define <a>'use'</a> in terms of 
-Web Components, will we drop instance trees?</p>
+<p class="issue">Should reference <a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#events">Shadow DOM</a> 
+for the event handling. Note that events will be retargeted to maintain the encapsulation, 
+ie. not to leak the original target inside a shadow tree.</p>
 
 <p>The event handling for the non-exposed tree works as if the
 referenced element had been textually included as a deeply
 cloned child of the <a>'use'</a>
-element, except that events are dispatched to the <a>SVGElementInstance</a> objects. The
-event's target and currentTarget attributes are set to the
-<a>SVGElementInstance</a> that
+element, and events are dispatched according to the shadow tree 
+<a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#event-dispatch">event dispatching algorithm</a> [<a href="refs.html#ref-SHADOWDOM">SHADOWDOM</a>].
+The event's target and currentTarget attributes are set to the
+instance tree element that
 corresponds to the target and current target elements in the
 referenced subtree. An event propagates through the exposed and
 non-exposed portions of the tree in the same manner as it would
@@ -1197,12 +1198,10 @@ through non-exposed tree elements in the capture phase,
 followed by the target phase at the target of the event, then
 bubbling back through non-exposed tree to the use element and
 then back through regular tree to the root element in bubbling
-phase.</p>
-
-<p>An element and all its corresponding <a>SVGElementInstance</a> objects
-share an event listener list. The currentTarget attribute of
-the event can be used to determine through which object an
-event listener was invoked.</p>
+phase. In order to maintain encapsulation events must use the
+<a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#event-retargeting">event retargeting algorithm</a> [<a href="refs.html#ref-SHADOWDOM">SHADOWDOM</a>]
+when crossing from a non-exposed tree to the regular tree.
+</p>
 
 <p>The behavior of the <a>'visibility'</a> property conforms to
 this model of property inheritance. Thus, specifying <span
@@ -2977,8 +2976,6 @@ element.
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__y">y</a>;
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__width">width</a>;
   readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__height">height</a>;
-  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGUseElement__instanceRoot">instanceRoot</a>;
-  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGUseElement__animatedInstanceRoot">animatedInstanceRoot</a>;
 };
 
 <a>SVGUseElement</a> implements <a>SVGURIReference</a>;</pre>
@@ -3022,249 +3019,12 @@ element.
 </div>
 </dd>
 
-<dt id="__svg__SVGUseElement__instanceRoot" class="attribute"><b>instanceRoot</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
-<dd class="attribute">
-<div>
-The root of the "instance tree".  See description of
-<a>SVGElementInstance</a> for a discussion on the instance tree.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGUseElement__animatedInstanceRoot" class="attribute"><b>animatedInstanceRoot</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
-<dd class="attribute">
-<div>
-If the <a>'xlink:href'</a> attribute is being animated, contains the current
-animated root of the "instance tree".  If the <a>'xlink:href'</a> attribute
-is not currently being animated, contains the same value as
-<a>instanceRoot</a>.  See description of <a>SVGElementInstance</a>
-for a discussion on the instance tree.
-
-</div>
-</dd>
 </dl>
 </dd>
 </dl>
 
 </edit:with>
 
-
-<h3 id="InterfaceSVGElementInstance">Interface SVGElementInstance</h3>
-
-
-
-<p>For each <a>'use'</a> element, the SVG DOM maintains a shadow tree (the
-"instance tree") of objects of type <a>SVGElementInstance</a>. An
-<a>SVGElementInstance</a> represents a single node in the instance tree.
-The root object in the instance tree is pointed to by the
-<a>SVGUseElement::instanceRoot</a> attribute on the
-<a>SVGUseElement</a> object for the corresponding <a>'use'</a> element.
-</p>
-
-
-<p>If the <a>'use'</a> element references a simple graphics element such as
-a <a>'rect'</a>, then there is only a single <a>SVGElementInstance</a>
-object, and the <a>correspondingElement</a> attribute on this
-<a>SVGElementInstance</a> object is the <a>SVGRectElement</a> that
-corresponds to the referenced <a>'rect'</a> element.
-</p>
-
-
-<p>If the <a>'use'</a> element references a <a>'g'</a> which contains two
-<a>'rect'</a> elements, then the instance tree contains three
-<a>SVGElementInstance</a> objects, a root <a>SVGElementInstance</a> object
-whose <a>correspondingElement</a> is the <a>SVGGElement</a> object for the
-<a>'g'</a>, and then two child <a>SVGElementInstance</a> objects, each of
-which has its <a>correspondingElement</a> that is an <a>SVGRectElement</a>
-object.
-</p>
-
-
-<p>If the referenced object is itself a <a>'use'</a>, or if there are
-<a>'use'</a> subelements within the referenced object, the instance tree
-will contain recursive expansion of the indirect references to form a
-complete tree. For example, if a <a>'use'</a> element references a
-<a>'g'</a>, and the <a>'g'</a> itself contains a <a>'use'</a>, and that
-<a>'use'</a> references a <a>'rect'</a>, then the instance tree for the
-original (outermost) <a>'use'</a> will consist of a hierarchy of
-<a>SVGElementInstance</a> objects, as follows:
-</p>
-
-<pre>SVGElementInstance #1 (parentNode=null, firstChild=#2, correspondingElement is the 'g')
-  SVGElementInstance #2 (parentNode=#1, firstChild=#3, correspondingElement is the other 'use')
-    SVGElementInstance #3 (parentNode=#2, firstChild=null, correspondingElement is the 'rect')
-</pre>
-<pre class="idl">interface <b>SVGElementInstance</b> : <a>EventTarget</a> {
-  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <a href="struct.html#__svg__SVGElementInstance__correspondingElement">correspondingElement</a>;
-  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGUseElement">SVGUseElement</a> <a href="struct.html#__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</a>;
-  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstance__parentNode">parentNode</a>;
-  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstanceList">SVGElementInstanceList</a> <a href="struct.html#__svg__SVGElementInstance__childNodes">childNodes</a>;
-  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstance__firstChild">firstChild</a>;
-  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstance__lastChild">lastChild</a>;
-  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstance__previousSibling">previousSibling</a>;
-  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstance__nextSibling">nextSibling</a>;
-};</pre><dl class="interface">
-<dt class="attributes-header">Attributes:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__svg__SVGElementInstance__correspondingElement"
-    class="attribute first-child"><b>correspondingElement</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>)</span></dt>
-<dd class="attribute">
-<div>
-The corresponding element to which this object is an instance. For
-example, if a <a>'use'</a> element references a <a>'rect'</a> element,
-then an <a>SVGElementInstance</a> is created, with its
-<a>correspondingElement</a> being the <a>SVGRectElement</a> object
-for the <a>'rect'</a> element.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGElementInstance__correspondingUseElement" class="attribute"><b>correspondingUseElement</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGUseElement">SVGUseElement</a>)</span></dt>
-<dd class="attribute">
-<div>
-The corresponding <a>'use'</a> element to which this
-<a>SVGElementInstance</a> object belongs. When <a>'use'</a> elements are
-nested (e.g., a <a>'use'</a> references another <a>'use'</a> which
-references a graphics element such as a <a>'rect'</a>), then the
-<a>correspondingUseElement</a> is the outermost <a>'use'</a> (i.e., the
-one which indirectly references the <a>'rect'</a>, not the one with the
-direct reference).
-
-</div>
-</dd>
-
-<dt id="__svg__SVGElementInstance__parentNode" class="attribute"><b>parentNode</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
-<dd class="attribute">
-<div>
-The parent of this <a>SVGElementInstance</a> within the instance tree.
-All <a>SVGElementInstance</a> objects have a parent except the
-<a>SVGElementInstance</a> which corresponds to the element which was
-directly referenced by the <a>'use'</a> element, in which case
-<a>parentNode</a> is null.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGElementInstance__childNodes" class="attribute"><b>childNodes</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstanceList">SVGElementInstanceList</a>)</span></dt>
-<dd class="attribute">
-<div>
-An <a>SVGElementInstanceList</a> that contains all children of this
-<a>SVGElementInstance</a> within the instance tree. If there are no
-children, this is an <a>SVGElementInstanceList</a> containing no entries
-(i.e., an empty list).
-
-</div>
-</dd>
-
-<dt id="__svg__SVGElementInstance__firstChild" class="attribute"><b>firstChild</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
-<dd class="attribute">
-<div>
-The first child of this <a>SVGElementInstance</a> within the instance
-tree. If there is no such <a>SVGElementInstance</a>, this returns null.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGElementInstance__lastChild" class="attribute"><b>lastChild</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
-<dd class="attribute">
-<div>
-The last child of this <a>SVGElementInstance</a> within the instance
-tree. If there is no such <a>SVGElementInstance</a>, this returns null.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGElementInstance__previousSibling" class="attribute"><b>previousSibling</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
-<dd class="attribute">
-<div>
-The <a>SVGElementInstance</a> immediately preceding this
-<a>SVGElementInstance</a>. If there is no such <a>SVGElementInstance</a>,
-this returns null.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGElementInstance__nextSibling" class="attribute"><b>nextSibling</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a>)</span></dt>
-<dd class="attribute">
-<div>
-The <a>SVGElementInstance</a> immediately following this
-<a>SVGElementInstance</a>. If there is no such <a>SVGElementInstance</a>,
-this returns null.
-
-</div>
-</dd>
-</dl>
-</dd>
-</dl>
-
-
-<h3 id="InterfaceSVGElementInstanceList">Interface SVGElementInstanceList</h3>
-
-
-The <a>SVGElementInstanceList</a> interface provides the abstraction of an
-ordered collection of <a>SVGElementInstance</a> objects, without defining
-or constraining how this collection is implemented.
-<pre class="idl">interface <b>SVGElementInstanceList</b> {
-
-  readonly attribute unsigned long <a href="struct.html#__svg__SVGElementInstanceList__length">length</a>;
-
-  <a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <a href="struct.html#__svg__SVGElementInstanceList__item">item</a>(unsigned long index);
-};</pre><dl class="interface">
-<dt class="attributes-header">Attributes:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__svg__SVGElementInstanceList__length" class="attribute first-child"><b>length</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
-<dd class="attribute">
-<div>
-The number of <a>SVGElementInstance</a> objects in the list. The range
-of valid child indices is 0 to <a>length</a>-1 inclusive.
-
-</div>
-</dd>
-</dl>
-</dd>
-<dt class="operations-header">Operations:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__svg__SVGElementInstanceList__item" class="operation first-child"><a class="idlinterface" href="struct.html#InterfaceSVGElementInstance">SVGElementInstance</a> <b>item</b>(unsigned long <var>index</var>)
-</dt>
-<dd class="operation">
-<div>
-Returns the <var>index</var>th item in the collection. If
-<var>index</var> is greater than or equal to the number of nodes in the
-list, this returns null.
-
-
-</div>
-<dl class="operation">
-<dt class="parameters-header">Parameters</dt>
-<dd>
-<ol class="parameters">
-<li class="parameter first-child">
-<div>unsigned long <var>index</var></div> 
-<div> Index into the collection.
-
-</div>
-</li>
-</ol>
-</dd>
-<dt class="returns-header">Returns</dt>
-<dd>
-<div> The <a>SVGElementInstance</a> object at the <var>index</var>th
-position in the <a>SVGElementInstanceList</a>, or null if that is not
-a valid index.
-
-</div>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
 
 <h3 id="InterfaceSVGSwitchElement">Interface SVGSwitchElement</h3>
 
