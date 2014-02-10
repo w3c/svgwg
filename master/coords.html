@@ -1035,10 +1035,135 @@ values specified in percentage units are scaled.</p>
 
 <h2 id="BoundingBoxes">Bounding boxes</h2>
 
-<p>The bounding box of an element is an axis-aligned rectangle in a given
-coordinate system that tightly contains certain parts of the element.
-The following algorithm describes how to compute the bounding box for a
-given element.  The inputs to the algorithm are:</p>
+<p>The bounding box (or "bbox") of an element is the tightest fitting rectangle
+aligned with the axes of that element's user coordinate system that entirely
+encloses it and its descendants.</p>
+
+<p>Three kinds of bounding boxes can be computed for an element:</p>
+
+<ol>
+  <li>The <dfn id="TermObjectBoundingBox" data-dfn-type="dfn" data-export="">object bounding box</dfn> is the bounding box that contains only
+  an element's geometric shape.  For <a>basic shapes</a>, this is the area
+  that is filled.  Unless otherwise specified, this is what is meant by the
+  unqualified term "bounding box".</li>
+
+  <li>The <dfn id="TermStrokeBoundingBox" data-dfn-type="dfn" data-export="">stroke bounding box</dfn> is the bounding box that contains
+  an element's geometric shape and its <a>stroke shape</a>.</li>
+
+  <li>The <dfn id="TermDecoratedBoundingBox" data-dfn-type="dfn" data-export="">decorated bounding box</dfn> is the bounding box that contains 
+  an element's geometric shape, its <a>stroke shape</a> and its <a>markers</a>.</li>
+</ol>
+
+<p class='note'>Note that the values of the <a>'opacity'</a>, <a>'visibility'</a>, <a>'fill'</a>,
+<a>'fill-opacity'</a>, <a>'fill-rule'</a>, <a>'stroke-dasharray'</a>
+and <a>'stroke-dashoffset'</a> properties on an element have no effect on the
+bounding box of an element.</p>
+
+<p>For curved shapes, the bounding box must enclose all portions of the shape
+along the edge, not just end points. Note that control points for a curve which
+are not defined as lying along the line of the resulting curve (e.g., the second
+coordinate pair of a Cubic Bézier command) must not contribute to the dimensions
+of the bounding box (though those points may fall within the area of the
+bounding box, if they lie within the shape itself, or along or close to the
+curve). For example, control points of a curve that are at a further distance
+than the curve edge, from the non-enclosing side of the curve edge, must be
+excluded from the bounding box.</p>
+
+<div class="figure">
+  <img src="images/coords/bbox01.svg"
+       alt="Image showing the object bounding box of a quadratic Bézier curve." />
+  <p class="caption">The path <span class='attr-value'>'M20,50 L35,100 H120 V50 Q70,10 20,50'</span>
+  is shown in light blue.  On the left, a correct object bounding box of the path is
+  shown.  Note that it does not include the top-most control point of the curve, but
+  it does include all of the blue shape, even the parts that lie outside of the convex hull
+  of the control points.</p>
+</div>
+
+<p>Even if an element is not in the rendering tree – due to it being
+<span class='prop-value'>'display: none'</span>, within a <a>'defs'</a>
+element, not usually rendered like a <a>'symbol'</a> element or not
+currently present in the document tree – it still has a bounding box.
+A call to <a href="types.html#__svg__SVGGraphicsElement__getBBox">getBBox</a>
+on the element will return the same rectangle as if the element were
+rendered.  However, an element that is not in the rendering tree
+does not contribute to the bounding box of any ancestor element.</p>
+
+<div class='example'>
+  <p>The following example defines a number of elements.  The <a>object bounding box</a>
+  for each element with an ID is shown below.</p>
+
+  <edit:includefile href='images/coords/bbox-calc.svg'/>
+
+  <table class='vert' summary="Bounding box results for different elements, depending on context.">
+    <thead>
+      <tr>
+        <th>Element ID</th>
+        <th>Bounding Box Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>"<code>defs-1</code>"</td>
+        <td>{0, 0, 0, 0}</td>
+      </tr>
+      <tr>
+        <td>"<code>rect-1</code>"</td>
+        <td>{20, 20, 40, 40}</td>
+      </tr>
+      <tr>
+        <td>"<code>group-1</code>"</td>
+        <td>{30, 30, 40, 40}</td>
+      </tr>
+      <tr>
+        <td>"<code>use-1</code>"</td>
+        <td>{30, 30, 40, 40}</td>
+      </tr>
+      <tr>
+        <td>"<code>group-2</code>"</td>
+        <td>{10, 10, 100, 100}</td>
+      </tr>
+      <tr>
+        <td>"<code>rect-2</code>"</td>
+        <td>{10, 10, 100, 100}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>For <a>text content elements</a>, for the purposes of the bounding box
+calculation, each glyph must be treated as a separate graphics element.
+he calculations must assume that all glyphs occupy the full glyph cell.
+For example, for horizontal text, the calculations must assume that each glyph
+extends vertically to the full ascent and descent values for the font.
+An exception to this is when the <a>'text/width'</a> or <a>'text/height'</a>
+attribute has been specified on the <a>'text'</a> element, in which case the
+element's <a>content area</a> is its bounding box.</p>
+
+<p>Because declarative or scripted animation can change the shape, size, and
+position of an element, the bounding box is mutable. Thus, the bounding box
+for an element shall reflect the current values for the element at the snapshot
+in time at which the bounding box is requested, whether through a script call
+or as part of a declarative or linking syntax.</p>
+
+<p>Note that an element which has zero width, zero height, or both (such as a
+vertical or horizontal line, or a <a>'rect'</a> element with an unspecified
+<a>'rect/width'</a> or <a>'rect/height'</a>) still has a bounding box, with a
+positive value for the positive dimension, or with <span class='attr-value'>'0'</span>
+for both the width and height if no positive dimension is specified. Similarly,
+subpaths segments of a <a>'path'</a> element with zero width and height must be
+included in that element's geometry for the sake of the bounding box. Note also
+that elements whose DOM object does not derive from <a>SVGGraphicsElement</a>
+(such as gradient elements) do not have a bounding box, and thus have no
+interface to request a bounding box.</p>
+
+<p>Elements in the rendering tree which reference unresolved resources shall
+still have a bounding box, defined by the position and dimensions specified in
+their attributes, or by the <a>lacuna value</a> for those attributes if no
+values are supplied. For example, the element <code>&lt;use xlink:href="#bad" x="10" y="10"/&gt;</code>
+would have a bounding box with an x and y of 10 and a width and height of 0.</p>
+
+<p>The following algorithm defines how to compute a bounding box for a given
+element.  The inputs to the algorithm are:</p>
 
 <ul>
   <li><var>element</var>, the element we are computing a bounding box for;</li>
@@ -1062,15 +1187,19 @@ given element.  The inputs to the algorithm are:</p>
       <li>Let <var>box</var> be a rectangle initialized to (0, 0, 0, 0).</li>
       <li>Let <var>fill-shape</var> be the <a>equivalent path</a> of <var>element</var>
       if it is a <a>shape</a>, or a shape that includes each of the glyph cells corresponding
-      to the text within the elements otherwise.</li>
+      to the text within the elements otherwise.
+      <p class='issue'>Need to update this take into account <a>'text/width'</a> and <a>'text/height'</a>
+      on <a>'text'</a>.</p></li>
       <li>If <var>fill</var> is true, then set <var>box</var> to the tightest rectangle
       in the coordinate system <var>space</var> that contains <var>fill-shape</var>.
-      <p class='issue'>We should say something about allowed approximations such as using the bounding
-      box of a Bézier segment's control points.</p></li>
+      <p class='note'>The values of the <a>'fill'</a>, <a>'fill-opacity'</a> and <a>'fill-rule'</a>
+      properties do not affect <var>fill-shape</var>.</p></li>
       <li>If <var>stroke</var> is true and the element's <a>'stroke'</a> is anything other than
       <span class='prop-value'>none</span>, then set <var>box</var> to be the union of <var>box</var> and the
       tightest rectangle in coordinate system <var>space</var> that contains the <a href="painting.html#StrokeShape">stroke shape</a> of the
-      element, with the assumption that the element has no dash pattern.</li>
+      element, with the assumption that the element has no dash pattern.
+      <p class='note'>The values of the <a>'stroke-opacity'</a>, <a>'stroke-dasharray'</a>
+      and <a>'stroke-dashoffset'</a> do not affect the calculation of the stroke shape.</p></li>
       <li>If <var>markers</var> is true, then for each marker <var>marker</var> rendered on the element:
         <ol>
           <li>For each descendant <a>graphics element</a> <var>child</var> of the <a>'marker element'</a> element
@@ -1136,6 +1265,16 @@ given element.  The inputs to the algorithm are:</p>
     </ol>
   </dd>
 </dl>
+
+<p>The <a>object bounding box</a>, <a>stroke bounding box</a> or <a>decorated bounding box</a>
+of an element is the result of invoking the bounding box computation algorithm
+above with the following arguments:
+<var>element</var> is the element itself;
+<var>space</var> is the element's user coordinate system;
+<var>fill</var> is true;
+<var>stroke</var> is true if we are computing the <a>stroke bounding box</a> or <a>decorated bounding box</a>, and false othwerise;
+<var>markers</var> is true if we are computing the <a>decorated bounding box</a>, and false otherwise; and
+<var>clipped</var> is false.</p>
 
 </div>
 
