@@ -953,8 +953,9 @@ theta less than approximately 11.5 degrees.</p>
 <p>See the definition of the <a>line join shape</a> below for a more precise
 description of the shape a line join will have.</p>
 
-<h3 id="StrokeDashing">Dashing strokes: the <span class="property">'stroke-dasharray'</span>
-and <span class="property">'stroke-dashoffset'</span> properties</h3>
+<h3 id="StrokeDashing">Dashing strokes: the <span class="property">'stroke-dasharray'</span>,
+<span class="property">'stroke-dashoffset'</span>, <span class="property">'stroke-dashcorner'</span>
+and <span class="property">'stroke-dashadjust'</span> properties</h3>
 
 <table class="propdef">
   <tr>
@@ -1110,7 +1111,224 @@ value is negative, then the effect is the same as dash offset <var>d</var>:</p>
 
 <p>See the definition of <a>dash positions</a> below for a more precise
 description of positions along a path that dashes will be placed.</p>
+</div>
 
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="StrokeDashcornerProperty">stroke-dashcorner</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>none | <a>&lt;length&gt;</a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>shapes</a> and <a>text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>refer to the size of the current viewport (see <a href="coords.html#Units">Units</a>)</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a>Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
+<p class="note">New in SVG 2.  Added to allow better control of dashing
+at the vertices of a shape, such as at the four corners of a rectangle.</p>
+
+<p>The <a>'stroke-dashcorner'</a> property controls whether a dash
+is always painted at the vertices of a stroked shape.  The points at which
+a dash corner is painted include the start and end points of every
+segment within the shape's <a>equivalent path</a>.</p>
+
+<p class="issue">This will not help with placing a corner dash on a
+<a>'rect'</a> with rounded corners, as they will also be placed at
+the points between the arcs forming the rounded corners and the
+straight line segments.</p>
+
+<dl>
+  <dt><span class='prop-value'>none</span></dt>
+  <dd>Indicates that no dashes are required to be painted at the
+  vertices of the shape.</dd>
+
+  <dt><span class='prop-value'>&lt;length&gt;</span></dt>
+  <dd>Specifies that a dash of the given length is to be painted
+  at each vertex of the shape.  For an open shape, the first
+  corner dash is positioned so that it begins at the start of
+  the path, and the last corner dash so that it ends at the
+  end of the path.  The other corner dashes of an open shape,
+  and all corner dashes of a closed shape, are positioned so that
+  they are centered on their vertex.</dd>
+</dl>
+
+<p class="issue">Should the corner dash at the first and last vertex
+of an open shape be half the length of the others?  Should this be
+author controllable?</p>
+
+<p class="issue">Should there be a way to specify a padding, so that
+any dash pattern between the corner dashes does not not run up against them?</p>
+
+<p>The <a>'stroke-dashcorner'</a> property also controls how
+the dash pattern given by <a>'stroke-dasharray'</a> is repeated.
+When <span class='prop-value'>none</span> is used, the dash pattern
+is repeated over the entire length of the subpath.  When any
+other value is used, the dash pattern is repeated separately
+on each path segment in the space between the segement's
+two adjacent corner dashes.</p>
+
+<p class="issue">Need to define what happens when corner dashes would overlap.</p>
+
+<div class="figure">
+  <img class="bordered" src="images/painting/dashcorner.svg"
+       alt="Image showing a rectangle at each corner and short dashes in between."/>
+  <p class="caption">A rectangle painted with a dashed stroke and with
+  corner dashes.  The dashing pattern is <span class="prop-value">0,8</span>
+  and the corner dash length is <span class="prop-value">32</span>.</p>
+</div>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="StrokeDashadjustProperty">stroke-dashadjust</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>none | [stretch | compress] [dashes | gaps]?</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>shapes</a> and <a>text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a>Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
+<p class="note">New in SVG 2.  Added to allow for more visually
+pleasing stroke dash patterns.</p>
+
+<p>The <a>'stroke-dashadjust'</a> property specifies whether and
+how a stroke's dash pattern will be adjusted so that it is repeated
+a whole number of times along an element's subpaths.</p>
+
+<dl>
+  <dt><span class='prop-value'>none</span></dt>
+  <dd>Indicates that no adjustment of the dash pattern takes place.</dd>
+
+  <dt><span class='prop-value'>stretch</span></dt>
+  <dd>Indicates that when the dash pattern does not fit into a subpath
+  a whole number times, the dashes or gaps (or both) will be lengthened
+  so that it does.</dd>
+
+  <dt><span class='prop-value'>compress</span></dt>
+  <dd>Indicates that when the dash pattern does not fit into a subpath
+  a whole number times, the dashes or gaps (or both) will be shortened
+  so that it does.</dd>
+
+  <dt><span class='prop-value'>dashes</span></dt>
+  <dd>Indicates that when a dash pattern is to be stretched or compressed,
+  only the length of the dashes will be adjusted; the gaps will remain
+  as specified.</dd>
+
+  <dt><span class='prop-value'>gaps</span></dt>
+  <dd>Indicates that when a dash pattern is to be stretched or compressed,
+  only the length of the gaps will be adjusted; the dashes will remain
+  as specified.</dd>
+</dl>
+
+<p class="issue">Do we need to be able to choose to stretch or compress?</p>
+
+<p>If neither the <span class='prop-value'>dashes</span> or
+<span class='prop-value'>gaps</span> keyword is given, both the
+dashes and the gaps will be adjusted.</p>
+
+<p>The target length that a dash pattern will be adjusted to depends
+on the value of the <a>'stroke-dashcorner'</a> property:</p>
+
+<ol>
+  <li>If <a>'stroke-dashcorner'</a> is <span class='prop-value'>none</span>,
+  then the dash pattern will be adjusted to fit within the length of
+  the subpath a whole number of times.</li>
+
+  <li>If <a>'stroke-dashcorner'</a> has any other value, including a zero
+  length, then the dash pattern will be adjusted differently for each
+  segment of the subpath such that it fits between the two corner
+  dashes at the ends of the segment a whole number of times.</li>
+</ol>
+
+<p>The adjustment of dash and gap length in a dash pattern is done by
+scaling the lengths by a factor, which is the number closest to 1 that
+will result in the dash pattern fitting in the target length a whole
+number of times.  If <span class='prop-value'>stretch</span> is used,
+the factor is a number between 1 and 2, while if <span class='prop-value'>compress</span>
+is used, the factor is a number between 0 and 1.  If there
+is no appropriate factor that can be chosen – for example if
+<span class='prop-value'>stretch</span> is used but the
+dash pattern is longer than the target length, or if <span class='prop-value'>gaps</span>
+was specified but all of the gaps in the dash pattern are zero – then
+no adjustment is performed.</p>
+
+<p class="issue">Should there be an <span class='prop-value'>auto</span>
+value which means round to the closest number of whole repetitions?</p>
+
+<p class="issue">Does the compression or expansion of the dashes and gaps
+happen after an odd-lengthed dash array is doubled so that it has an even
+number of entries or before? Probably after.</p>
+
+<p class="issue">Do we want to allow control of whether the stroke ends with a
+dash or with a gap? For a closed path, you probably want a gap at the end,
+while for a non-closed path, a dash at the end is probably better. Omit control
+for this, but just do it automatically based on whether the path is closed?</p>
+
+<div class="figure">
+  <img class="bordered" src="images/painting/dashadjust.svg"
+       alt="Image showing three shapes stroked with the same dash pattern, all adjusted to their individual path lengths."/>
+  <p class="caption">The same dash stroke used on three
+  different paths, adjusted to fit a whole number of
+  times on each.</p>
+</div>
+
+<div class="ready-for-wider-review">
 <h3 id="StrokeShape">Computing the shape of the stroke</h3>
 
 <div class="annotation svg2-requirement">
@@ -1137,6 +1355,9 @@ description of positions along a path that dashes will be placed.</p>
 <p class="issue">Something in this section needs to reference
 <a>'path/pathLength'</a> so that dash lengths are in the author's
 path length space.</p>
+
+<p class="issue">This section doesn't handle <a>'stroke-dashcorner'</a>
+and <a>'stroke-dashadjust'</a> yet.</p>
 
 <p>The <dfn id="TermStrokeShape">stroke shape</dfn> of an element is the
 shape that is filled by the <a>'stroke'</a> property.  The following algorithm
