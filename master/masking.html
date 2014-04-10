@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Clipping, Masking and Compositing</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <!--
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  -->
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+
+<h1>Clipping, Masking and Compositing</h1>
+
+<div class="ready-for-wider-review">
+<h2 id="SimpleAlphaBlending">Simple alpha compositing</h2>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support new compositing and blending modes from the <a href="https://dvcs.w3.org/hg/FXTF/rawfile/tip/compositing/index.html">Compositing and Blending specification</a>.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2012/07/24-svg-minutes.html#item09">SVG WG agrees with publishing the Compositing spec.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow common graphical effects supported by Illustrator, etc.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Nikos (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3332">ACTION-3332</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<p>Graphics elements are blended into the elements already
+rendered on the canvas using simple alpha compositing, in which
+the resulting color and opacity at any given pixel on the
+canvas is the result of the following formulas (all color
+values use premultiplied alpha):</p>
+
+<pre>
+Er, Eg, Eb    - Element color value
+Ea            - Element alpha value
+Cr, Cg, Cb    - Canvas color value (before blending)
+Ca            - Canvas alpha value (before blending)
+Cr', Cg', Cb' - Canvas color value (after blending)
+Ca'           - Canvas alpha value (after blending)
+Ca' = 1 - (1 - Ea) * (1 - Ca)
+Cr' = (1 - Ea) * Cr + Er
+Cg' = (1 - Ea) * Cg + Eg
+Cb' = (1 - Ea) * Cb + Eb
+</pre>
+
+<p>The following rendering properties, which provide
+information about the color space in which to perform the
+compositing operations, apply to compositing operations:</p>
+
+<ul>
+  <li><a>'color-interpolation'</a></li>
+  <li><a>'color-rendering'</a></li>
+</ul>
+
+<p class="note">Support for simple alpha compositing is mandatory.
+A future module <a href="https://dvcs.w3.org/hg/FXTF/rawfile/tip/compositing/index.html">Compositing and Blending</a>
+will specify additional compositing and blending operations.</p>
+</div>
+
+<h2 id="OverflowAndClipProperties">The <span class="property">'overflow'</span>
+property</h2>
+
+<p class="issue">This property definition table need to be replaced
+with a link to <a href="http://www.w3.org/TR/css3-box/">CSS3-box</a>.
+<br/>Dirk: Probably not. It is a WD, not updated for 5 years.</p>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="OverflowProperty">overflow</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>visible | hidden | scroll | auto</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>visible</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="coords.html#ElementsThatEstablishViewports">elements
+    which establish a new viewport</a>, <a>'pattern'</a> elements
+    and <a>'marker element'</a> elements</td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a>Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
+<p>The <a>'overflow'</a> property has the same parameter values and has the
+same meaning <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visufx.html#propdef-overflow">as defined in CSS 2.1</a>
+([<a href="refs.html#ref-CSS21">CSS21</a>], section 11.1.1);
+however, the following additional points apply:</p>
+
+<p class="issue">We need to define how 'overflow-x' and 'overflow-y' are
+going to work in the furture. Sadly, these properties belong to CSS3-box.</p>
+
+<ul>
+  <li>The <a>'overflow'</a> property applies to
+  <a href="coords.html#ElementsThatEstablishViewports">elements that establish new viewports</a>
+  (e.g., <a>'svg'</a> elements), <a>'pattern'</a> elements and <a>'marker element'</a>
+  elements. For all other elements, the property has no effect (i.e., a clipping
+  rectangle is not created).</li>
+
+  <li>For those elements to which the <a>'overflow'</a> property can apply, if
+  the <a>'overflow'</a> property has the value <span class='prop-value'>hidden</span> or <span class='prop-value'>scroll</span>,
+  the effect is that a new clipping path in the shape of a rectangle is created.
+  The result is equivalent to defining a <a>'clipPath'</a> element whose
+  content is a <a>'rect'</a> element which defines the equivalent rectangle,
+  and then specifying the &lt;uri&gt; of this <a>'clipPath'</a> element on the
+  <a>'clip-path'</a> property for the given element.</li>
+
+  <li>If the <a>'overflow'</a> property has a value other than
+  <span class='prop-value'>hidden</span> or <span class='prop-value'>scroll</span>,
+  the property has no effect (i.e., a clipping rectangle is not created).</li>
+
+  <li>Within SVG content, the value <span class='prop-value'>auto</span> is
+  equivalent to the value <span class='prop-value'>visible</span>.</li>
+
+  <li>When an <a>outermost svg element</a> is embedded inline within a
+  parent XML grammar which uses <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html">CSS layout</a>
+  ([<a href="refs.html#ref-CSS21">CSS21</a>], chapter 9)
+  or <a href="http://www.w3.org/TR/2006/REC-xsl11-20061205/">XSL formatting</a>
+  [<a href="refs.html#ref-XSL">XSL</a>], if the
+  <a>'overflow'</a> property has the value <span class='prop-value'>hidden</span>
+  or <span class='prop-value'>scroll</span>, then the user agent will
+  establish an initial clipping path equal to the bounds of the initial
+  <a href="coords.html#SVGViewport">viewport</a>; otherwise, the initial
+  clipping path is set according to the <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visufx.html#overflow">clipping rules as defined in CSS 2.1</a>
+  ([<a href="refs.html#ref-CSS21">CSS21</a>], section 11.1.1).</li>
+
+  <li>When an <a>outermost svg element</a> is stand-alone or embedded
+  inline within a parent XML grammar which does not use CSS layout
+  or XSL formatting, the
+  <a>'overflow'</a> property on the <a>outermost svg element</a> is ignored
+  for the purposes of visual rendering and the initial clipping path is set to
+  the bounds of the initial <a href="coords.html#SVGViewport">viewport</a>.</li>
+
+  <li>The initial value for <a>'overflow'</a> as defined
+  in [<a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visufx.html#overflow">CSS21-overflow</a>]
+  is 'visible', and this applies also to the <a>rootmost 'svg' element</a>; however,
+  for child elements of an SVG document, SVG's <a href="styling.html#UAStyleSheet">user agent style sheet</a>
+  overrides this initial value and sets the <a>'overflow'</a> property on
+  <a href="coords.html#ElementsThatEstablishViewports">elements that establish new viewports</a>
+  (e.g., <a>'svg'</a> elements), <a>'pattern'</a> elements and
+  <a>'marker element'</a> elements to the value 'hidden'.</li>
+</ul>
+
+<p>As a result of the above, the default behavior of SVG user agents is to
+establish a clipping path to the bounds of the initial
+<a href="coords.html#SVGViewport">viewport</a> and to establish a new clipping
+path for each <a href="coords.html#ElementsThatEstablishViewports">element which
+establishes a new viewport</a> and each <a>'pattern'</a> and
+<a>'marker element'</a> element.</p>
+
+<h3 id="AutoClipAtViewportNotViewBox">Clip to viewport vs. clip to
+<span class="attr-name">'viewBox'</span></h3>
+
+<p>It is important to note that initial values for the <a>'overflow'</a> and
+<a>'clip'</a> properties and the <a href="styling.html#UAStyleSheet">user agent
+style sheet</a> will result in an initial clipping path that is set to the
+bounds of the initial viewport. When attributes <a>'viewBox'</a> and
+<a>'preserveAspectRatio'</a> attributes are specified, it is sometime
+desirable that the clipping path be set to the bounds of the <a>'viewBox'</a>
+instead of the viewport (or reference rectangle, in the case of
+<a>'marker element'</a> and <a>'pattern'</a> elements), particularly when
+<a>'preserveAspectRatio'</a> specifies uniform scaling and the aspect ratio of
+the <a>'viewBox'</a> does not match the aspect ratio of the viewport.</p>
+
+<p>To set the initial clipping path to the bounds of the <a>'viewBox'</a>, set
+the bounds of <a>'clip'</a> property to the same rectangle as specified on the
+<a>'viewBox'</a> attribute. (Note that the parameters do not match.
+<a>'clip'</a> takes values &lt;top&gt;, &lt;right&gt;,&lt;bottom&gt; and
+&lt;left&gt;, whereas <a>'viewBox'</a> takes values &lt;min-x&gt;,
+&lt;min-y&gt;, &lt;width&gt; and &lt;height&gt;.)</p>
+
+<h3 id="InitialClippingPath">The initial clipping path</h3>
+
+<p>When an <a>'svg'</a> element is either the root element in the
+document or is embedded within a document whose layout is determined
+according to the layout rules of CSS or XSL, then the user agent must
+establish an initial clipping path for the SVG document fragment. The
+<a>'overflow'</a> property along with additional SVG
+user agent processing rules determine the initial clipping path which
+the user agent establishes for the SVG document fragment:</p>
+
+<div class="ready-for-wider-review">
+<h2 id="ClippingAndMasking">Clipping and Masking</h2>
+
+<p>SVG supports the following clipping/masking features:</p>
+
+<ul>
+  <li>clipping paths, which either uses
+  any combination of <a>'path'</a>, <a>'text'</a> and
+  <a>basic shapes</a> or basic shapes to serve as
+  the outline of a (in the absence of anti-aliasing) 1-bit
+  mask, where everything on the "inside" of the outline is
+  allowed to show through but everything on the outside is
+  masked out</li>
+
+  <li>masks, which are
+  <a>container elements</a>
+  which can contain <a>graphics elements</a>
+  or other container elements which define a set of graphics
+  that is to be used as a semi-transparent mask for compositing
+  foreground objects into the current background.</li>
+</ul>
+
+<p>Both, clipping and masking, are specified in the module CSS Masking
+[<a href="refs.html#ref-CSS-MASKING">CSS-MASKING</a>].</p>
+
+<h2 id="ObjectAndGroupOpacityProperties">Object and group opacity: the
+effect of the <span class="property">'opacity'</span> property</h2>
+
+<p class="note">See the CSS Color Module Level 3 for the definition
+of <a>'opacity'</a>. [<a href="refs.html#ref-CSS3COLOR">CSS3COLOR</a>]</p>
+
+<p>The <a>'opacity'</a> property specifies how opaque a given
+graphical element or container element will be when it is
+painted to the canvas.  When applied to a container element,
+this is known as <em>group opacity</em>, and when applied to
+an individual rendering element, it is known as <em>object
+opacity</em>.  The principle for these two operations however
+is the same.</p>
+
+<p>There are several other opacity-related properties in SVG:</p>
+
+<ul>
+  <li><a>'fill-opacity'</a>, which specifies the opacity of a fill
+  operation;</li>
+
+  <li><a>'stroke-opacity'</a>, which specifies the opacity of a stroking
+  operation;</li>
+
+  <li><a>'solid-opacity'</a>, which specifies the opacity of a solid color
+  paint server; and</li>
+
+  <li><a>'stop-opacity'</a>, which specifies the opacity of a gradient stop.</li>
+</ul>
+
+<p>These four opacity properties are involved in intermediate rendering operations.
+Object and group opacity however can be thought of as a post-processing
+operation.  Conceptually, the object or group to which <a>'opacity'</a> applies
+is rendered into an RGBA offscreen image.  The offscreen image as whole is then blended
+into the canvas with the specified <a>'opacity'</a> value used uniformly
+across the offscreen image.</p>
+
+<p>An <a>'opacity'</a> value of 0 means fully transparent and 1 means fully
+opaque. Opacity values are clamped to the range [0, 1];
+see <a href="implnote.html#RangeClamping">Clamping values which are restricted
+to a particular range</a> for details.</p>
+
+<p>The <a>'opacity'</a> property applies to the following SVG elements:
+<a>'svg'</a>, <a>'g'</a>, <a>'symbol'</a>, <a>'marker element'</a>,
+<a>'a'</a>, <a>'switch'</a>, <a>graphics elements</a> and
+<a>text content child elements</a>.</p>
+
+<div class="example">
+  <p>The following example illustrates various usage of the <a>'opacity'</a>
+  property on objects and groups.</p>
+
+  <edit:includefile href='images/masking/opacity01.svg'/>
+
+  <div class='figure'>
+    <img class='bordered' src='images/masking/opacity01.svg' alt='Image showing different groups of circles blended into the background.'/>
+    <p class='caption'>Each group of red and green circles is first rendered
+    to an offscreen image before being blended with the background
+    blue rectangle as a whole, with the given <a>'opacity'</a> values.</p>
+  </div>
+
+  <p>In the example, the top row of circles have differing opacities,
+  ranging from 1.0 to 0.2. The bottom row illustrates five <a>'g'</a> elements,
+  each of which contains overlapping red and green circles, as follows:</p>
+
+  <ul>
+    <li>The first group shows the opaque case for reference. The group has
+    opacity of 1, as do the circles.</li>
+
+    <li>The second group shows group opacity when the elements in the group are
+    opaque.</li>
+
+    <li>The third and fourth group show that opacity is not commutative. In the
+    third group (which has opacity of 1), a semi-transparent green circle is
+    drawn on top of a semi-transparent red circle, whereas in the fourth group a
+    semi-transparent red circle is drawn on top of a semi-transparent green
+    circle. Note that area where the two circles intersect display different
+    colors. The third group shows more green color in the intersection area,
+    whereas the fourth group shows more red color.</li>
+
+    <li>The fifth group shows the multiplicative effect of opacity settings.
+    Both the circles and the group itself have opacity settings of .5. The
+    result is that the portion of the red circle which does not overlap with the
+    green circle (i.e., the top/right of the red circle) will blend into the
+    blue rectangle with accumulative opacity of .25 (i.e., .5*.5), which, after
+    blending into the blue rectangle, results in a blended color which is 25%
+    red and 75% blue.</li>
+  </ul>
+</div>
+</div>
+
+</body>
+</html>
