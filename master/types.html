@@ -217,6 +217,15 @@ attributes, including presentation attributes, but not in style sheets.</p>
     ([<a href='refs.html#ref-XML10'>XML10</a>], section 2.2).</p>
   </dd>
 
+  <dt id='DataTypeWhitespace'>&lt;whitespace&gt;</dt>
+  <dd>
+    <p>White space is defined as one or more of the
+    following consecutive characters: "space" (U+0020), "tab" (U+0009), "line feed" (U+000A),
+    "form feed" (U+000C) and "carriage return" (U+000D).</p>
+
+    <pre class='grammar'><span id='WSP'>wsp</span> ::= ( #x9 | #x20 | #xA | #xC | #xD )</pre>
+  </dd>
+  
   <dt id='DataTypeChildSelector'>&lt;child-selector&gt;</dt>
   <dd>
     <p>A comma-separated list of <a>compound selectors</a>.
@@ -358,9 +367,9 @@ attributes, including presentation attributes, but not in style sheets.</p>
   <dt id='DataTypeInteger'>&lt;integer&gt;</dt>
   <dd>
     <p>An &lt;integer&gt; is specified as an optional sign character ("+" or
-    "-") followed by one or more digits "0" to "9":</p>
+    "-") followed by one or more digits "0" to "9", optionally surrounded by whitespace:</p>
 
-    <pre class='grammar'><span id='Integer'>integer</span> ::= [+-]? [0-9]+</pre>
+    <pre class='grammar'><span id='Integer'>integer</span> ::= <a href='#WSP'>wsp</a>* [+-]? [0-9]+ <a href='#WSP'>wsp</a>*</pre>
 
     <p>If the sign character is not present, the number is non-negative.</p>
 
@@ -410,7 +419,7 @@ attributes, including presentation attributes, but not in style sheets.</p>
       <li>
         <p>When a &lt;length&gt; is used in an SVG <a>presentation attribute</a>,
         the syntax must match the following pattern:</p>
-        <pre class='grammar'>length ::= <a href='#DataTypeNumber'>number</a> ("em" | "ex" | "px" | "in" | "cm" | "mm" | "pt" | "pc" | "%")?</pre>
+        <pre class='grammar'>length ::= <a href='#WSP'>wsp</a>* <a href='#DataTypeNumber'>number</a> ("em" | "ex" | "px" | "in" | "cm" | "mm" | "pt" | "pc" | "%")? <a href='#WSP'>wsp</a>*</pre>
         <p>The unit identifier, if present, must be in lower case; if
         not present, the length value represents a distance in the
         current user coordinate system.</p>
@@ -454,18 +463,14 @@ attributes, including presentation attributes, but not in style sheets.</p>
 
   <dt id="DataTypeListOfStrings">&lt;list-of-strings&gt;</dt>
   <dd>
-    <p>A &lt;list-of-strings&gt; consists of a separated sequence of &lt;string&gt;s.
-    String lists are white space-separated, where white space is defined as one or more of the
-    following consecutive characters: "space" (U+0020), "tab" (U+0009), "line feed" (U+000A) and
-    "carriage return" (U+000D).</p>
+    <p>A &lt;list-of-strings&gt; consists of a white space-separated sequence of &lt;string&gt;s.</p>
 
     <p>The following is an EBNF grammar describing the &lt;list-of-strings&gt; syntax:</p>
 
 <pre>
 list-of-strings ::= string
-                    | string wsp list-of-strings
-string          ::= [^#x9#xA#xD#x20]*
-wsp             ::= [#x9#xA#xD#x20]+
+                    | string <a href='#WSP'>wsp</a>+ list-of-strings
+string          ::= [^#x9#x20#xA#xC#xD]*
 </pre>
   </dd>
 
@@ -488,18 +493,12 @@ wsp             ::= [#x9#xA#xD#x20]+
     comma-separated, with optional white space before or after the comma,
     or white space-separated.</p>
 
-    <p>White space in lists is defined as one or more of the
-    following consecutive characters: "space" (U+0020), "tab" (U+0009),
-    "line feed" (U+000A), "carriage return" (U+000D)
-    and "form-feed" (U+000C).</p>
-
     <p>The following is a template for an EBNF grammar describing the
     &lt;list-of-<var>T</var>s&gt; syntax:</p>
 
     <pre class='grammar'><span id='ListOfTs'>list-of-<var>T</var>s</span> ::= <var>T</var>
                | <var>T</var> <a href='#CommaWSP'>comma-wsp</a> <a href='#ListOfTs'>list-of-<var>T</var>s</a>
-<span id='CommaWSP'>comma-wsp</span>  ::= (<a href='#WSP'>wsp</a>+ ","? <a href='#WSP'>wsp</a>*) | ("," <a href='#WSP'>wsp</a>*)
-<span id='WSP'>wsp</span>        ::= (#x20 | #x9 | #xD | #xA)</pre>
+<span id='CommaWSP'>comma-wsp</span>  ::= (<a href='#WSP'>wsp</a>+ ","? <a href='#WSP'>wsp</a>*) | ("," <a href='#WSP'>wsp</a>*)</pre>
 
     <p>Within the SVG DOM, values of a &lt;list-of-<var>T</var>s&gt;
     type are represented by an interface specific for the
@@ -523,8 +522,8 @@ wsp             ::= [#x9#xA#xD#x20]+
     a &lt;number&gt; is defined differently, to allow numbers with large magnitudes
     to be specified more concisely:</p>
 
-    <pre class='grammar'>number ::= <a href='#Integer'>integer</a> ([Ee] <a href='#DataTypeInteger'>integer</a>)?
-           | [+-]? [0-9]* "." [0-9]+ ([Ee] <a href='#DataTypeInteger'>integer</a>)?</pre>
+    <pre class='grammar'>number ::= <a href='#WSP'>wsp</a>* <a href='#Integer'>integer</a> ([Ee] <a href='#DataTypeInteger'>integer</a>)?
+           | [+-]? [0-9]* "." [0-9]+ ([Ee] <a href='#DataTypeInteger'>integer</a>)? <a href='#WSP'>wsp</a>*</pre>
 
     <p>Within the SVG DOM, a &lt;number&gt; is represented as a
     <span class="DOMInterfaceName">float</span>, <a>SVGNumber</a> or a
@@ -537,8 +536,8 @@ wsp             ::= [#x9#xA#xD#x20]+
     <a>&lt;number&gt;</a> is optional.</p>
 
     <pre class='grammar'>
-number-optional-number ::= <a href='#DataTypeNumber'>number</a>
-                           | <a href='#DataTypeNumber'>number</a> <a href='#CommaWSP'>comma-wsp</a> <a href='#DataTypeNumber'>number</a></pre>
+number-optional-number ::= <a href='#WSP'>wsp</a>* <a href='#DataTypeNumber'>number</a> <a href='#WSP'>wsp</a>*
+                           | <a href='#WSP'>wsp</a>* <a href='#DataTypeNumber'>number</a> <a href='#CommaWSP'>comma-wsp</a> <a href='#DataTypeNumber'>number</a> <a href='#WSP'>wsp</a>*</pre>
 
     <p>In the SVG DOM, a &lt;number-optional-number&gt; is represented
     using a pair of <a>SVGAnimatedInteger</a> or <a>SVGAnimatedNumber</a>
@@ -558,7 +557,7 @@ number-optional-number ::= <a href='#DataTypeNumber'>number</a>
   <dd>
     <p>Percentages are specified as a number followed by a "%" character:</p>
 
-    <pre class='grammar'><span id='Percentage'>percentage</span> ::= <a href='#Number'>number</a> "%"</pre>
+    <pre class='grammar'><span id='Percentage'>percentage</span> ::= <a href='#WSP'>wsp</a>* <a href='#NumberStrict'>number</a> "%" <a href='#WSP'>wsp</a>*</pre>
 
     <p>Note that the definition of <a href='#Number'>&lt;number&gt;</a> depends
     on whether the percentage is specified in a style sheet or in an
