@@ -1,0 +1,3465 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Document Structure</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_no_maturity.css"/>
+  <link rel="alternate stylesheet" title="All annotations"       type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <!--
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  -->
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>Document Structure</h1>
+
+<h2 id="NewDocument">Defining an SVG document fragment: the <span class='element-name'>'svg'</span> element</h2>
+
+<edit:with element='svg'>
+
+<h3 id="NewDocumentOverview">Overview</h3>
+
+<p>An <a>SVG document fragment</a> consists of any number of SVG elements
+contained within an <a>'svg'</a> element.</p>
+
+<p>An SVG document fragment can range from an empty fragment (i.e.,
+no content inside of the <a>'svg'</a> element), to a very simple SVG
+document fragment containing a single SVG <a>graphics element</a>
+such as a <a>'rect'</a>, to a complex, deeply nested collection of
+<a>container elements</a> and <a>graphics elements</a>.</p>
+
+<p>An SVG document fragment can stand by itself as a self-contained
+file or resource, in which case the SVG document fragment is an <a>SVG
+document</a>, or it can be embedded inline as a fragment within a parent
+XML document.</p>
+
+<p id="EmbeddedSVGExample">The following example shows simple SVG
+content embedded inline as a fragment within a parent XML document.
+Note the use of XML namespaces to indicate that the <a>'svg'</a> and
+<a>'ellipse'</a> elements belong to the SVG namespace:</p>
+
+<pre class='xml'><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<parent xmlns="http://example.org"
+        xmlns:svg="http://www.w3.org/2000/svg">
+   <!-- parent contents here -->
+   <svg:svg width="4cm" height="8cm">
+      <svg:ellipse cx="2cm" cy="4cm" rx="2cm" ry="1cm" />
+   </svg:svg>
+   <!-- ... -->
+</parent>
+]]></pre>
+
+<p>This example shows a slightly more complex (i.e., it contains
+multiple rectangles) stand-alone, self-contained SVG document:</p>
+
+<edit:example href='images/struct/StandAlone01.svg' image='no'/>
+
+<p><a>'svg'</a> elements can appear in the middle of SVG content. This
+is the mechanism by which SVG document fragments can be embedded within
+other SVG document fragments.</p>
+
+<p>Another use for <a>'svg'</a> elements within the middle
+of SVG content is to establish a new viewport. (See
+<a href="coords.html#EstablishingANewViewport">Establishing a new
+viewport</a>.)</p>
+
+<p>In all cases, for compliance with the
+<a href="http://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a> Recommendation
+[<a href="refs.html#ref-XML-NS">XML-NS</a>], an SVG namespace
+declaration must be provided so that all SVG elements are identified
+as belonging to the SVG namespace. The following are possible ways to
+provide a namespace declaration. An <span class='attr-name'>'xmlns'</span>
+attribute without a namespace prefix could be specified on an
+<a>'svg'</a> element, which means that SVG is the default namespace
+for all elements within the scope of the element with the <span class='attr-name'>'xmlns'</span> attribute:</p>
+
+<pre class='xml'><![CDATA[
+<svg xmlns="http://www.w3.org/2000/svg" …>
+  <rect …/>
+</svg>
+]]></pre>
+
+<p>If a namespace prefix is specified on the <span class='attr-name'>'xmlns'</span>
+attribute (e.g., <code class='xml'>xmlns:svg="http://www.w3.org/2000/svg"</code>),
+then the corresponding namespace is not the default namespace, so an
+explicit namespace prefix must be assigned to the elements:</p>
+
+<pre class='xml'><![CDATA[
+<svg:svg xmlns:svg="http://www.w3.org/2000/svg" …>
+  <svg:rect …/>
+</svg:svg>
+]]></pre>
+
+<p>Namespace prefixes can be specified on ancestor elements (illustrated
+in the <a href="#EmbeddedSVGExample">above example</a>). For more
+information, refer to the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a> Recommendation
+[<a href="refs.html#ref-XML-NS">XML-NS</a>].</p>
+
+<p class="issue">This section should talk about how a document's behavior
+is defined in terms of the DOM, and also explain how the HTML parser can
+create SVG fragments.</p>
+
+<h3 id="SVGElement">The <span class='element-name'>'svg'</span> element</h3>
+
+<div class="annotation svg2-requirement">
+ <table>
+  <tr>
+   <th>SVG 2 Requirement:</th>
+   <td>Should support the playbackOrder attribute to inform UA to not display controls to seek backwards.</td>
+ </tr>
+ <tr>
+   <th>Resolution:</th>
+   <td><a href="http://www.w3.org/2012/03/29-svg-irc#T20-39-02">Support the playbackOrder attribute.</a></td>
+ </tr>
+ <tr>
+   <th>Purpose:</th>
+   <td>To inform UA to not display controls to seek backwards.</td>
+ </tr>
+ <tr>
+   <th>Owner:</th>
+   <td>Cyril</td>
+ </tr>
+</table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support transforming <a>'svg'</a> elements.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/28-svg-irc#T00-23-44">We will allow <span class='attr-name'>'transform'</span> on <span class='element-name'>'svg'</span> in SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow transforms on nested <a>'svg'</a> elements, in line with author expectations.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Dirk (no action)</td>
+    </tr>
+  </table>
+</div>
+
+ <div class="annotation svg2-requirement">
+  <table>
+   <tr>
+    <th>SVG 2 Requirement:</th>
+    <td>Support a means for having SMIL animations start before their time container has fully loaded.</td>
+  </tr>
+  <tr>
+    <th>Resolution:</th>
+    <td><a href="http://www.w3.org/2012/03/29-svg-irc#T20-23-57">Timeline control.</a></td>
+  </tr>
+  <tr>
+    <th>Purpose:</th>
+    <td>To start animations before the SVG document is fully loaded (useful for large SVG documents).</td>
+  </tr>
+  <tr>
+    <th>Owner:</th>
+    <td>Cyril</td>
+  </tr>
+ </table>
+</div>
+
+<!--
+<table class="propdef eltdef">
+  <tr>
+    <th>Name:</th>
+    <td><span class="element-name" style="font-size: inherit">svg</span></td>
+  </tr>
+  <tr>
+    <th>Categories:</th>
+    <td><a href="intro.html#TermContainerElement">Container element</a>, <a href="intro.html#TermStructuralElement">structural element</a></td>
+  </tr>
+  <tr>
+    <th>Content model:</th>
+    <td>
+      <p>Any number of the following elements, in any order:</p>
+      <p>
+        <a href="intro.html#TermAnimationElement">animation elements</a>,
+        <a href="intro.html#TermDescriptiveElement">descriptive elements</a>,
+        <a href="intro.html#TermGradientElement">gradient elements</a>,
+        <a href="intro.html#TermShapeElement">shape elements</a>,
+        <a href="intro.html#TermStructuralElement">structural elements</a>,
+        <span class="element-name"><a href="linking.html#AElement"><span>a</span></a></span>, <span class="element-name"><a href="text.html#AltGlyphDefElement"><span>altGlyphDef</span></a></span>, <span class="element-name"><a href="masking.html#ClipPathElement"><span>clipPath</span></a></span>, <span class="element-name"><a href="color.html#ColorProfileElement"><span>color-profile</span></a></span>, <span class="element-name"><a href="interact.html#CursorElement"><span>cursor</span></a></span>, <span class="element-name"><a href="https://dvcs.w3.org/hg/FXTF/raw-file/tip/filters/index.html#FilterElement"><span>filter</span></a></span>, <span class="element-name"><a href="fonts.html#FontElement"><span>font</span></a></span>, <span class="element-name"><a href="fonts.html#FontFaceElement"><span>font-face</span></a></span>, <span class="element-name"><a href="extend.html#ForeignObjectElement"><span>foreignObject</span></a></span>, <span class="element-name"><a href="struct.html#ImageElement"><span>image</span></a></span>, <span class="element-name"><a href="painting.html#MarkerElement"><span>marker</span></a></span>, <span class="element-name"><a href="masking.html#MaskElement"><span>mask</span></a></span>, <span class="element-name"><a href="pservers.html#PatternElement"><span>pattern</span></a></span>, <span class="element-name"><a href="script.html#ScriptElement"><span>script</span></a></span>, <span class="element-name"><a href="styling.html#StyleElement"><span>style</span></a></span>, <span class="element-name"><a href="struct.html#SwitchElement"><span>switch</span></a></span>, <span class="element-name"><a href="text.html#TextElement"><span>text</span></a></span>, <span class="element-name"><a href="linking.html#ViewElement"><span>view</span></a></span>
+      </p>
+    </td>
+  </tr>
+  <tr>
+    <th>Common attributes:</th>
+    <td>
+      <a href="intro.html#TermConditionalProcessingAttribute">conditional processing attributes</a>,
+      <a href="intro.html#TermCoreAttribute">core attributes</a>,
+      <a href="intro.html#TermDocumentEventAttribute">document event attributes</a>,
+      <a href="intro.html#TermGraphicalEventAttribute">graphical event attributes</a>,
+      <a href="intro.html#TermPresentationAttribute">presentation attributes</a>,
+      <span class="attr-name"><a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a></span>,
+      <span class="attr-name"><a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a></span>
+    </td>
+  </tr>
+  <tr>
+    <th>Specific attributes:</th>
+    <td>
+      <span class="attr-name"><a href="struct.html#SVGElementXAttribute"><span>x</span></a></span>,
+      <span class="attr-name"><a href="struct.html#SVGElementYAttribute"><span>y</span></a></span>,
+      <span class="attr-name"><a href="struct.html#SVGElementWidthAttribute"><span>width</span></a></span>,
+      <span class="attr-name"><a href="struct.html#SVGElementHeightAttribute"><span>height</span></a></span>,
+      <span class="attr-name"><a href="struct.html#SVGElementPlaybackOrderAttribute"><span>playbackOrder</span></a></span>,
+      <span class="attr-name"><a href="struct.html#SVGElementTimelineBeginAttribute"><span>timelineBegin</span></a></span>,
+      <span class="attr-name"><a href="interact.html#ZoomAndPanAttribute"><span>zoomAndPan</span></a></span>
+    </td>
+  </tr>
+  <tr>
+    <th>DOM Interface:</th>
+    <td>
+<pre class="idl">interface <b>SVGSVGElement</b> : <a>SVGGraphicsElement</a> {
+
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__y">y</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__width">width</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__height">height</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="struct.html#__svg__SVGSVGElement__viewport">viewport</a>;
+  readonly attribute float <a href="struct.html#__svg__SVGSVGElement__pixelUnitToMillimeterX">pixelUnitToMillimeterX</a>;
+  readonly attribute float <a href="struct.html#__svg__SVGSVGElement__pixelUnitToMillimeterY">pixelUnitToMillimeterY</a>;
+  readonly attribute float <a href="struct.html#__svg__SVGSVGElement__screenPixelToMillimeterX">screenPixelToMillimeterX</a>;
+  readonly attribute float <a href="struct.html#__svg__SVGSVGElement__screenPixelToMillimeterY">screenPixelToMillimeterY</a>;
+  readonly attribute boolean <a href="struct.html#__svg__SVGSVGElement__useCurrentView">useCurrentView</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGViewSpec">SVGViewSpec</a> <a href="struct.html#__svg__SVGSVGElement__currentView">currentView</a>;
+           attribute float <a href="struct.html#__svg__SVGSVGElement__currentScale">currentScale</a>;
+  readonly attribute <a>DOMPointReadOnly</a> <a href="struct.html#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>;
+
+  unsigned long <a href="struct.html#__svg__SVGSVGElement__suspendRedraw">suspendRedraw</a>(unsigned long maxWaitMilliseconds);
+  void <a href="struct.html#__svg__SVGSVGElement__unsuspendRedraw">unsuspendRedraw</a>(unsigned long suspendHandleID);
+  void <a href="struct.html#__svg__SVGSVGElement__unsuspendRedrawAll">unsuspendRedrawAll</a>();
+  void <a href="struct.html#__svg__SVGSVGElement__forceRedraw">forceRedraw</a>();
+  void <a href="struct.html#__svg__SVGSVGElement__pauseAnimations">pauseAnimations</a>();
+  void <a href="struct.html#__svg__SVGSVGElement__unpauseAnimations">unpauseAnimations</a>();
+  boolean <a href="struct.html#__svg__SVGSVGElement__animationsPaused">animationsPaused</a>();
+  float <a href="struct.html#__svg__SVGSVGElement__getCurrentTime">getCurrentTime</a>();
+  void <a href="struct.html#__svg__SVGSVGElement__setCurrentTime">setCurrentTime</a>(float seconds);
+  <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <a href="struct.html#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a>(<a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect, <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> referenceElement);
+  <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <a href="struct.html#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a>(<a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect, <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> referenceElement);
+  boolean <a href="struct.html#__svg__SVGSVGElement__checkIntersection">checkIntersection</a>(<a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> element, <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect);
+  boolean <a href="struct.html#__svg__SVGSVGElement__checkEnclosure">checkEnclosure</a>(<a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> element, <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect);
+  void <a href="struct.html#__svg__SVGSVGElement__deselectAll">deselectAll</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGNumber">SVGNumber</a> <a href="struct.html#__svg__SVGSVGElement__createSVGNumber">createSVGNumber</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGLength">SVGLength</a> <a href="struct.html#__svg__SVGSVGElement__createSVGLength">createSVGLength</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGAngle">SVGAngle</a> <a href="struct.html#__svg__SVGSVGElement__createSVGAngle">createSVGAngle</a>();
+  <a>DOMPoint</a> <a href="struct.html#__svg__SVGSVGElement__createSVGPoint">createSVGPoint</a>();
+  <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <a href="struct.html#__svg__SVGSVGElement__createSVGMatrix">createSVGMatrix</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="struct.html#__svg__SVGSVGElement__createSVGRect">createSVGRect</a>();
+  <a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransform">createSVGTransform</a>();
+  <a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>(<a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> matrix);
+  <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-745549614">Element</a> <a href="struct.html#__svg__SVGSVGElement__getElementById">getElementById</a>(DOMString elementId);
+};
+
+<a>SVGSVGElement</a> implements <a>ViewCSS</a>;
+<a>SVGSVGElement</a> implements <a>DocumentCSS</a>;
+<a>SVGSVGElement</a> implements <a>SVGFitToViewBox</a>;
+<a>SVGSVGElement</a> implements <a>SVGZoomAndPan</a>;</pre>
+    </td>
+  </tr>
+</table>
+-->
+
+<edit:elementsummary name='svg'/>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="svg" id="SVGElementXAttribute">x</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="svg" id="SVGElementYAttribute">y</dfn></td>
+        <td><a>&lt;length&gt;</a></td>
+        <td>0</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>The <a>'x'</a> and <a>'y'</a> attributes specify the
+    top-left corner of the rectangular region into which an
+    embedded <a>'svg'</a> element is placed.  On an <a>outermost svg element</a>,
+    these attributes have no effect.</p>
+  </dd>
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="svg" id="SVGElementWidthAttribute">width</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="svg" id="SVGElementHeightAttribute">height</dfn></td>
+        <td>See <a>'width property'</a> and <a>'height property'</a></td>
+        <td>auto</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p class="note">Note that <a>'width'</a> and <a>'height'</a> are presentation attributes.</p>
+    <p>For <a>outermost svg elements</a>,
+    the <a>'width property'</a> and <a>'height property'</a> attributes specify
+    the intrinsic size of the SVG document fragment.
+    For embedded <a>'svg'</a> elements, they specify the size
+    of the rectangular region into which the <a>'svg'</a> element
+    is placed.</p>
+    <p>A negative value is an error (see <a
+    href="implnote.html#ErrorProcessing">Error processing</a>).
+    A value of zero disables rendering of the element.</p>
+    <p class="issue">When zero is used on an outer <a>'svg'</a> element,
+    does this disable rendering too?  Or does it just affect
+    the intrinsic size?</p>
+  </dd>
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="SVGElementPreserveAspectRatioAttribute">preserveAspectRatio</dfn></td>
+        <td>defer? <a>&lt;align&gt;</a> [ meet | slice ]?</td>
+        <td>xMidYMid meet</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>Specifies the fitting behavior when the aspect ratio of the <a>'svg'</a>
+    element does not match the aspect ratio of the rectangle it is placed in.
+    See the definition of <a>'preserveAspectRatio'</a> for details.</p>
+  </dd>
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="SVGElementZoomAndPanAttribute">zoomAndPan</dfn></td>
+        <td>disable | magnify</td>
+        <td>magnify</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>Specifies whether the user agent should supply a means to zoom
+    and pan the SVG content.  See the definition of <a>'zoomAndPan'</a>
+    for details.</p>
+  </dd>
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="SVGElementPlaybackOrderAttribute">playbackOrder</dfn></td>
+        <td>forwardOnly | all</td>
+        <td>all</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p class="issue">This attribute may be harmonized and/or replaced with the
+    work done as part of the <a href="https://dvcs.w3.org/hg/FXTF/raw-file/tip/web-anim/index.html">Web Animation specification</a>.</p>
+    <p>
+      Indicates whether it is possible to seek backwards in the document. In
+      earlier versions of SVG there was no need to put restrictions on the
+      direction of seeking but with the newly introduced facilities for
+      long-running documents (e.g. the <a href="#DiscardElement">
+        <span class="element-name">'discard'</span></a> element) there is
+      sometimes a need to restrict this.
+    </p>
+    <p>
+      If <span class="attr-name">'playbackOrder'</span> is set to
+      <span class="attr-value">'forwardOnly'</span>, the content will probably
+      contain <a>'discard'</a>
+      elements or scripts that destroy resources, thus seeking back in the
+      document's timeline may result in missing content.
+      If <span class="attr-name">'playbackOrder'</span> is
+      <span class="attr-value">'forwardOnly'</span>, the content should not
+      provide a way, through hyperlinking or script, of seeking backwards in
+      the timeline.  Similarly the UA should disable any controls it may
+      provide in the user interface for seeking backwards. Content with
+      <span class="attr-value">playbackOrder="forwardOnly"</span>
+      that provides a mechanism for seeking backwards in time may result in
+      undefined behavior or a document that is in error.
+    </p>
+    <p class="issue">Can't we define this so that there is no undefined behavior?</p>
+    <p>Attribute values have the following meanings:</p>
+    <dl>
+      <dt><span class="attr-value">'forwardOnly'</span></dt>
+      <dd>This file is intended to be played only in the forward direction, sequentially, therefore
+        seeking backwards should not be allowed.</dd>
+      <dt><span class="attr-value">'all'</span></dt>
+      <dd>Indicates that the document is authored appropriately for seeking in both directions.</dd>
+    </dl>
+  </dd>
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="SVGElementTimelineBeginAttribute">timelineBegin</dfn></td>
+        <td>onLoad | onStart</td>
+        <td>onLoad</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p class="issue">This attribute may be harmonized and/or replaced with
+    the work done as part of the <a href="https://dvcs.w3.org/hg/FXTF/raw-file/tip/web-anim/index.html">Web Animation specification</a>.</p>
+    <p>
+      Controls the initialization of the timeline for the document.
+    </p>
+    <p>
+      The <a>'svg'</a> element controls the <em>document timeline</em>, which is the timeline of
+      the <a>'svg'</a> element's time container. For progressively loaded animations, the author
+      would typically set this attribute to <span class="attr-value">'onStart'</span>,
+      thus allowing the timeline to begin as the document loads, rather than
+      waiting until the complete document is loaded.
+    </p>
+    <p>Attribute values have the following meanings:</p>
+    <dl>
+      <dt><span class="attr-value">'onLoad'</span></dt>
+      <dd>
+        The document's timeline starts the moment the
+        <a href="interact.html#LoadEvent"><code>load</code></a> event for the
+        <a>rootmost 'svg' element</a> is triggered.
+      </dd>
+      <dt><span class="attr-value">'onStart'</span></dt>
+      <dd>
+        The document's timeline starts at the moment the
+        <a>rootmost 'svg' element</a>'s <em>start-tag</em>
+        <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#sec-starttags">as defined in XML 1.0</a>
+        ([<a href="refs.html#ref-XML10">XML10</a>], section 3.1) is fully parsed and processed.
+        <p class="issue">What about when the SVG document fragment is within
+        an XHTML document?  Is there a single timeline for the whole document, and if so,
+        does it start at the parse time for the first <code>&lt;svg&gt;</code> start tag?
+        What about when using the HTML parser?</p>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+
+<p>If an SVG document is likely to be referenced as a component
+of another document, the author will often want to include a
+<a>'viewBox'</a> attribute on the <a>outermost svg element</a> of the
+referenced document. This attribute provides a convenient way to design
+SVG documents to scale-to-fit into an arbitrary viewport.</p>
+
+<p id="SVGElementEventHandlerAttributes">The <a>'svg'</a> element exposes as <a>event handler content attributes</a> a number of the <a>event handlers</a> of the <a>Window</a> object. It also mirrors their <a>event handler IDL attributes</a>.</p>
+
+<p>The <a href="script.html#OnBlurEventAttribute">onblur</a>, <a>'onerror'</a>, <a href="script.html#OnFocusEventAttribute">onfocus</a>, <a>'onload'</a>, and <a>'onscroll'</a> <a>event handlers</a> of the <a>Window</a> object, exposed on the <a>'svg'</a> element,
+replace the generic <a>event handlers</a> with the same names normally supported by <a>SVG elements</a>.</p>
+
+<p class="issue">The above paragraphs feel out of place just after the list
+of attributes specific to <a>'svg'</a>.</p>
+
+</edit:with>
+
+<h2 id="Groups">Grouping: the <span class='element-name'>'g'</span> element</h2>
+
+<h3 id="GroupsOverview">Overview</h3>
+
+<p>The <a>'g'</a> element is a <a>container element</a> for grouping together
+related <a>graphics elements</a>.</p>
+
+<p>Grouping constructs, when used in conjunction with the <a>'desc'</a>
+and <a>'title'</a> elements, provide information about document
+structure and semantics. Documents that are rich in structure may be
+rendered graphically, as speech, or as braille, and thus promote
+<a href="access.html">accessibility</a>.</p>
+
+<p class="issue">That generously structured content with <a>'title'</a> and
+<a>'desc'</a> is more accessible isn't necessarily true.  It also seems
+like a stretch to claim that documents "rich in structure" can be
+rendered as speech or braille, without specific references to how
+that can be achieved.  More fundamental uses of grouping that should
+be mentioned are (a) for specifying common styling of inherited
+properties, and (b) for selecting elements to apply a group effect
+like filters and group opacity.</p>
+
+<p>A group of elements, as well as individual objects, can be given
+a name using the <a>'id'</a> attribute. Named groups are needed for
+several purposes such as animation and re-usable objects.</p>
+
+<p>An example:</p>
+
+<edit:example href='images/struct/grouping01.svg' image='no' link='yes'/>
+
+<p>A <a>'g'</a> element can contain other <a>'g'</a> elements nested
+within it, to an arbitrary depth. Thus, the following is possible:</p>
+
+<pre class='xml'><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="4in" height="3in">
+  <desc>Groups can nest</desc>
+  <g>
+     <g>
+       <g>
+       </g>
+     </g>
+   </g>
+</svg>
+]]></pre>
+
+<p class="issue">This is not a particularly useful example.</p>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Have unknown elements treated as <a>'g'</a> for the purpose of rendering.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2012/01/13-svg-irc#T00-25-54">Accept having unknown elements treated as <span class='element-name'>'g'</span> for the purpose of rendering.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow fallbacks without the use of <a>'switch'</a>, and to align with the behavior of unknown elements in HTML.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Nobody (no action)</td>
+    </tr>
+  </table>
+</div>
+
+
+<p>Any element that is not contained within a <a>'g'</a> is treated (at
+least conceptually) as if it were in its own group.</p>
+
+<p class="issue">It is unclear what this sentence actually means.
+Does it mean that all operations that apply to groups (such as group
+opacity, filter effects, etc.) can apply to single elements too?
+If so, then it should say that.</p>
+
+<h3 id="GElement">The <span class='element-name'>'g'</span> element</h3>
+
+<edit:elementsummary name='g'/>
+
+<h2 id="Head">Defining content for reuse, and the <span class='element-name'>'defs'</span> element</h2>
+
+<h3 id="Overview">Overview</h3>
+
+<p>SVG allows graphical objects to be defined for later reuse.
+To do this, it makes extensive use of <a>IRI references</a>
+[<a href="refs.html#ref-RFC3987">RFC3987</a>] to these other objects.
+For example, to fill a rectangle with a linear gradient, you first
+define a <a>'linearGradient'</a> element and give it an ID, as in:</p>
+
+<pre class='xml'><![CDATA[
+<linearGradient id="MyGradient">...</linearGradient>
+]]></pre>
+
+<p>You then reference the linear gradient as the value of the
+<a>'fill'</a> property for the rectangle, as in:</p>
+
+<pre class='xml'><![CDATA[
+<rect style="fill:url(#MyGradient)"/>
+]]></pre>
+
+<p>Some types of element, such as gradients, will not by themselves produce a graphical result. They can therefore be placed anywhere convenient. However, sometimes it is desired to define a graphical object and prevent it from being directly rendered. it is only there to be referenced elsewhere. To do this, and to allow convenient grouping defined content, SVG provides the <span class='element-name'>'defs'</span> element.</p>
+
+<p>It is recommended that, wherever possible, referenced elements be defined
+inside of a <a>'defs'</a> element. Among the elements that are always
+referenced: <a>'altGlyphDef'</a>, <a>'clipPath'</a>, <a>'cursor element'</a>,
+<a>'filter element'</a>, <a>'linearGradient'</a>, <a>'marker element'</a>,
+<a>'mask element'</a>, <a>'pattern'</a>, <a>'radialGradient'</a> and
+<a>'symbol'</a>. Defining these elements inside of a <a>'defs'</a> element
+promotes understandability of the SVG content and thus promotes
+accessibility.</p>
+
+<p class="issue">Again this claim about accessibility is dubious.</p>
+
+<p class="issue">We should have a term for definition elements (since we
+now have a corresponding IDL interface) and reference it here.</p>
+
+<h3 id="DefsElement">The <span class='element-name'>'defs'</span> element</h3>
+
+<edit:elementsummary name='defs'/>
+
+<p>The <a>'defs'</a> element is a container element for
+<a href="struct.html#Head">referenced elements</a>. For understandability and
+<a href="access.html">accessibility</a> reasons, it is recommended
+that, whenever possible, referenced elements be defined inside
+of a <a>'defs'</a>.</p>
+
+<p>The content model for <a>'defs'</a> is the same as for the
+<a>'g'</a> element; thus, any element that can be a child of a
+<a>'g'</a> can also be a child of a <a>'defs'</a>, and vice versa.</p>
+
+<p>Elements that are descendants of a <a>'defs'</a> are not rendered directly;
+they are prevented from becoming part of the rendering tree
+just as if the <a>'defs'</a> element were a <a>'g'</a> element and the
+<a>'display'</a> property were set to <span class="prop-value">none</span>.
+Note, however, that the descendants of a <a>'defs'</a> are
+always present in the source tree and thus can always be
+referenced by other elements; thus, the value of the <a>'display'</a>
+property on the <a>'defs'</a> element or any of its descendants does not
+prevent those elements from being referenced by other elements.</p>
+
+<p>To provide some SVG user agents with an opportunity to
+implement efficient implementations in streaming environments,
+creators of SVG content are encouraged to place all elements
+which are targets of local IRI references within a <a>'defs'</a>
+element which is a direct child of one of the ancestors of the
+referencing element. For example:</p>
+
+<p class="issue">Is this really about efficiency of implementations?
+If anything, it looks like it is ensuring progressively rendered
+documents don't make forward references that would otherwise
+cause an incorrect rendering before the referenced element is loaded.</p>
+
+<edit:example href='images/struct/defs01.svg' link='yes'/>
+
+<p>In the document above, the linear gradient is defined within
+a <a>'defs'</a> element which is the direct child of the <a>'svg'</a>
+element, which in turn is an ancestor of the <a>'rect'</a> element which
+references the linear gradient. Thus, the above document conforms to the
+guideline.</p>
+
+<h2 id="DiscardElement">The <span class='element-name'>'discard'</span> element</h2>
+
+<p class="issue">Would this element be better as part of the Animation chapter?
+It also needs to be a member of the element categories that other animation elements
+are, and an IDL interface needs to be written for it.</p>
+
+<edit:with element='discard'>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Have the <a>'discard'</a> element to declaratively discard elements from the document tree.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2012/03/29-svg-minutes.html">SVG 2 will support the discard element.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To conserve memory while displaying long-running documents.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cyril (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3319">ACTION-3319</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<edit:elementsummary name='discard'/>
+
+<p class="issue">Need to define SVGDiscardElement DOM interface for <a>'discard'</a> element.</p>
+
+<p>
+  The <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
+  element allows authors to specify the time at which particular elements are to
+  be discarded, thereby reducing the resources required by an <a>SVG user
+  agent</a>.
+  This is particularly useful to help SVG viewers conserve memory while
+  displaying long-running documents.  This element will not be processed by
+  static SVG viewers.
+</p>
+<p>
+  The <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
+  element may occur wherever the
+  <a href="animate.html#AnimateElement"><span class="element-name">'animate'</span></a>
+  element may.
+</p>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="DiscardElementHrefAttribute">href</dfn></td>
+        <td><a>&lt;iri&gt;</a></td>
+        <td>(none)</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>
+      An <a>IRI reference</a>
+      that identifies the <a href="animate.html#TargetElement">target element</a>
+      to discard.  See the definition of
+      <a href="animate.html#HrefAttribute"><span class="attr-name">'href'</span></a>
+      on <a>animation elements</a> for details on identifying a target
+      element.
+    </p>
+    <p>
+      Note that if the target element is not part of the
+      <a>current SVG document fragment</a>
+      then whether the target element will be removed or not is defined by the
+      host language.
+    </p>
+    <p>
+      If the <a>'href'</a> attribute is not provided, then the target element
+      will be the immediate parent element of the discard element.
+    </p>
+  </dd>
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="DiscardElementBeginAttribute">begin</dfn></td>
+        <td><a href="animate.html#BeginValueListSyntax">&lt;begin-value-list&gt;</a></td>
+        <td>0s</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>
+      Indicates when the target element will be discarded.  See the definition
+      of <a href="animate.html#BeginAttribute"><span class="attr-name">'begin'</span></a>
+      on <a>animation elements</a> for details.
+    </p>
+  </dd>
+</dl>
+
+<p>
+  The <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
+  element has an implicit
+  <a href="http://www.w3.org/TR/2008/REC-SMIL3-20081201/smil-timing.html#Timing-DefiningSimpleDur">simple duration</a>
+  of <span class="attr-value">"indefinite"</span>.  As soon as the element's
+  <a href="http://www.w3.org/TR/2008/REC-SMIL3-20081201/smil-timing.html#Timing-ComputingActiveDur">active duration</a>
+  starts, the <a>SVG user agent</a>
+  discards the element identified by the
+  <a href="#DiscardElementHrefAttribute"><span class="attr-name">'href'</span></a>
+  attribute ([<a href="refs.html#ref-SMIL">SMIL</a>], section 5.4.5).
+  The removal operation acts as if
+  <a href="http://www.w3.org/TR/2012/WD-dom-20120405/#dom-node-removechild"><code>removeChild</code></a>
+  were called on the parent of the target element with the target element as
+  parameter. [<a href="refs.html#ref-DOM4">DOM4</a>] The <a>SVG user agent</a>
+  must remove the target node as well as all of its attributes and descendants.
+</p>
+<p>
+  After removal of the <a href="animate.html#TargetElement">target element</a>,
+  the <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
+  element is no longer useful. It must also be discarded following the
+  target element removal. If the
+  <a href="struct.html#DiscardElementHrefAttribute"><span class="attr-name">'href'</span></a>
+  attribute has an <a>invalid</a> IRI reference
+  (the target element did not exist, for example),
+  the <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
+  element itself must still be removed following activation.
+</p>
+<p>
+  <a href="http://www.w3.org/TR/2008/REC-SMIL3-20081201/smil-timing.html#Timing-HyperlinksAndTiming">Seeking backwards</a>
+  in the timeline ([<a href="refs.html#ref-SMIL">SMIL</a>], section 5.4.5)
+  must not re-insert the discarded elements. Discarded elements are intended to
+  be completely removed from memory. So, authors are encouraged to set the
+  <a href="#SVGElementPlaybackOrderAttribute"><span class="attr-name">'playbackOrder'</span></a>
+  attribute to <span class="attr-value">"forwardOnly"</span> when using the
+  <a href="#DiscardElement"><span class="element-name">'discard'</span></a> element.
+</p>
+<p>
+  The <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
+  element itself can be discarded prior to its activation, in which case it will
+  never trigger the removal of its own target element.
+  <a>SVG user agents</a>
+  must allow the <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
+  element to be the target of another
+  <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
+  element.
+</p>
+
+<p>
+  The following example demonstrates a simple usage of the
+  <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
+  element. The list below describes relevant behavior in the document timeline
+  of this example:
+</p>
+
+<dl>
+  <dt>At time = 0:</dt>
+  <dd>When the document timeline starts, the blue ellipse starts to move down the page.</dd>
+  <dt>At time = 1 second:</dt>
+  <dd>The red rectangle starts moving up the page.</dd>
+  <dt>At time = 2 seconds:</dt>
+  <dd>
+    The <a href="animate.html#AnimateTransformElement"><span class="element-name">'animateTransform'</span></a>
+    on the <a href="shapes.html#EllipseElement"><span class="element-name">'ellipse'</span></a>
+    ends. The <a href="shapes.html#EllipseElement"><span class="element-name">'ellipse'</span></a>
+    and its children are also discarded, as it is the
+    <a href="animate.html#TargetElement">target element</a> of a
+    <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
+    with <span class="attr-value">begin="2"</span>. The green
+    <a href="shapes.html#PolygonElement"><span class="element-name">'polygon'</span></a>
+    starts to move across the page.
+  </dd>
+  <dt>At time = 3 seconds:</dt>
+  <dd>
+    The animation on the red rectangle ends. The rectangle and its children are
+    discarded as it is the target of a
+    <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
+    element with <span class="attr-value">begin="3"</span>.
+  </dd>
+  <dt>At time = 4 seconds:</dt>
+  <dd>
+    The animation on the green triangle ends. The green
+    <a href="shapes.html#PolygonElement"><span class="element-name">'polygon'</span></a>
+    and its children are discarded as it is the target of a
+    <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
+    element with <span class="attr-value">begin="4".</span>
+  </dd>
+</dl>
+
+<edit:example href='examples/discard01.svg' name='discard01' link='yes' image='no'/>
+
+</edit:with>
+
+<h2 id="DescriptionAndTitleElements">The <span class='element-name'>'desc'</span>
+and <span class='element-name'>'title'</span> elements</h2>
+
+<div id='DescElement'>
+<edit:elementsummary name='desc'/>
+</div>
+
+<div id='TitleElement'>
+<edit:elementsummary name='title'/>
+</div>
+
+<p class="note">The attribute <a>'lang'</a> added to allow internationalization
+of the <a>'desc'</a> and <a>'title element'</a> elements.</p>
+
+<p class="annotation">Adding 'lang' resolved at Rigi Kaltbad face-to-face.
+Removed text that limited number of 'desc' and 'title' elements.</p>
+
+<p class="issue">Is there any updated wording from SVG Tiny 1.2 that we
+should be using wrt tooltips?</p>
+
+<p>Each <a>container element</a> or <a>graphics element</a> in an SVG drawing
+can supply one or more <a>'desc'</a> and/or one or more <a>'title'</a> description 
+strings where
+the description is text-only. When the current SVG document fragment is
+rendered as SVG on visual media, <a>'desc'</a> and <a>'title'</a> elements are
+not rendered as part of the graphics. User agents may, however, for example,
+display the <a>'title'</a> element as a tooltip, as the pointing device moves
+over particular elements. Alternate presentations are possible, both visual and
+aural, which display the <a>'desc'</a> and <a>'title'</a> elements but do not
+display <a>'path'</a> elements or other <a>graphics elements</a>.  This is
+readily achieved by using a different (perhaps user) style sheet. For deep
+hierarchies, and for following <a>'use'</a> element references, it is
+sometimes desirable to allow the user to control how deep they drill down into
+descriptive text.</p>
+
+<p class="issue">I don't think it is easy to use a style sheet to cause
+an element's <a>'title'</a> to be rendered in place of its graphics.</p>
+
+<p>More than one <a>'desc'</a> or <a>'title element'</a> may be
+present with different <a>'lang'</a> attributes. The text displayed
+will be the text from the element where the <a>'lang'</a> attribute
+best matches the language set by the user agent. If no match exists,
+the text from the first element is used (to allow default text to be
+given for legacy renderers). If multiple equally valid matches exist,
+the first match is used.</p>
+
+<p class="issue">'lang' should be defined here (rather than pointing to
+the glyph definition).</p>
+
+<p>The following is an example. In typical operation, the SVG user agent would
+not render the <a>'desc'</a> and <a>'title'</a> elements but would render the
+remaining contents of the <a>'g'</a> element.</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="4in" height="3in">
+  <g>
+    <title>Company sales by region</title>
+    <title lang="fr">Chiffre d'affaires par région</title>
+    <desc>Bar chart which shows company sales by region.</desc>
+    <desc lang="fr">Graphique illustrant les ventes par région.</desc>
+    <!-- Bar chart defined as vector data -->
+  </g>
+</svg>
+]]></pre>
+
+<p>Description and title elements can contain marked-up text
+from other namespaces. Here is an example:</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1" width="4in" height="3in">
+  <desc xmlns:mydoc="http://example.org/mydoc">
+    <mydoc:title>This is an example SVG file</mydoc:title>
+    <mydoc:para>The global description uses markup from the 
+      <mydoc:emph>mydoc</mydoc:emph> namespace.</mydoc:para>
+  </desc>
+  <g>
+    <!-- the picture goes here -->
+  </g>
+</svg>
+]]></pre>
+
+<p class="issue">We should say what purpose including other-namespaced
+markup in <a>'title'</a> and <a>'desc'</a> has.  If it is just that
+these are basically metadata extension points for other profiles or
+uses of SVG, then we should say that.</p>
+
+<p>Authors should always provide a <a>'title'</a> child element to the
+<a>outermost svg element</a> within a stand-alone SVG document. The
+<a>'title'</a> child element to an <a>'svg'</a> element serves the
+purposes of identifying the content of the given SVG document
+fragment. Since users often consult documents out of context,
+authors should provide context-rich titles. Thus, instead of a
+title such as "Introduction", which doesn't provide much
+contextual background, authors should supply a title such as
+"Introduction to Medieval Bee-Keeping" instead. For reasons of
+accessibility, user agents should always make the content of
+the <a>'title'</a> child element to the <a>outermost svg element</a>
+available to users. The mechanism for doing so depends on the user agent
+(e.g., as a caption, spoken).</p>
+
+<p class="issue">We have this sentence here about tooltips
+which is stronger than the earlier note that some
+implementations do this.  We should look at how HTML describes
+the <span class="attr-name">'title'</span> attribute and whether
+a tooltip is required, suggested, etc., and follow that.</p>
+
+<p class="issue">Once we have said how ARIA attributes can be used
+in SVG, we might want to define <a>'title'</a> and <a>'desc'</a>
+in a manner consistent with them, so that it is clear what it means
+for example for an element to have both a <a>'desc'</a> element
+child and an <span class="attr-name">'aria-describedby'</span>
+attribute.</p>
+
+<h2 id="SymbolElement">The <span class='element-name'>'symbol'</span> element</h2>
+
+<edit:elementsummary name='symbol'/>
+
+<p>The <a>'symbol'</a> element is used to define graphical template objects
+which can be instantiated by a <a>'use'</a> element.</p>
+
+<p>The use of <a>'symbol'</a> elements for graphics that are used multiple
+times in the same document adds structure and semantics. Documents that are rich
+in structure may be rendered graphically, as speech, or as
+braille, and thus promote <a href="access.html">accessibility</a>.</p>
+
+<p class="issue">Again this mention of accessibility through the use of
+structure (this time with <a>'symbol'</a> elements).  We should include
+an example here or in the Accessibility appendix that shows how this
+is the case and what the actual effects of structuring content with
+<a>'symbol'</a> are.</p>
+
+<p>The key distinctions between a <a>'symbol'</a> and a <a>'g'</a> are:</p>
+
+<ul>
+  <li>A <a>'symbol'</a> element itself is not rendered. Only instances of a
+  <a>'symbol'</a> element (i.e., a reference to a <a>'symbol'</a> by
+  a <a>'use'</a> element) are rendered.</li>
+
+  <li>A <a>'symbol'</a> element has attributes <a>'viewBox'</a> and
+  <a>'preserveAspectRatio'</a> which allow a <a>'symbol'</a> to scale-to-fit
+  within a rectangular viewport defined by the referencing
+  <a>'use'</a> element.</li>
+</ul>
+
+<p>Closely related to the <a>'symbol'</a> element are the
+<a>'marker element'</a> and <a>'pattern'</a> elements.</p>
+
+<p><a>'symbol'</a> elements are never rendered directly; their only usage is
+as something that can be referenced using the
+<a>'use'</a> element. The <a>'display'</a> property does not apply
+to the <a>'symbol'</a> element; thus, <a>'symbol'</a> elements are
+not directly rendered even if the <a>'display'</a> property is set to a
+value other than <span class="prop-value">none</span>, and <a>'symbol'</a>
+elements are available for referencing even when the
+<a>'display'</a> property on the <a>'symbol'</a> element or any of its
+ancestors is set to <span class="prop-value">none</span>.</p>
+
+<h2 id="UseElement">The <span class='element-name'>'use'</span> element</h2>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Allow <a>'use'</a> to reference an external document's root element by omitting the fragment.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/28-svg-irc#T00-33-43">We will relax referencing requirements to particular elements to allow dropping fragments to mean referencing root element, where it makes sense, such as with use, in SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To avoid requiring authors to modify the referenced document to add an ID to the root element.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3417">ACTION-3417</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<edit:with element='use'>
+
+<edit:elementsummary name='use'/>
+
+<p>Any <a>'svg'</a>, <a>'symbol'</a>, <a>'g'</a>, <a>graphics element</a> or
+other <a>'use'</a> is potentially a
+template object that can be re-used (i.e., "instanced") in the
+SVG document via a <a>'use'</a>
+element. The <a>'use'</a> element
+references another element and indicates that the graphical
+contents of that element is included/drawn at that given point
+in the document.</p>
+
+<p class="issue"><a>'use'</a> is described as referencing template
+objects, but the parameters of the template are limited – just
+different inherited property values.</p>
+
+<div class="ready-for-wider-review">
+<p>The <a>'use'</a> element can reference an entire SVG document
+by specifying an <a>'xlink:href'</a> value without a fragment.
+Such references are taken to be referring to the root element
+of the referenced document.</p>
+
+<p class="note">This allows an entire SVG document to be referenced
+without having to ensure that it has an ID on its root element.</p>
+</div>
+
+<p>The <a>'use'</a> element has
+optional attributes <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a> and <a>'use/height'</a> which are used to map the
+graphical contents of the referenced element onto a rectangular
+region within the current coordinate system.</p>
+
+<p>The effect of a <a>'use'</a>
+element is as if the contents of the referenced element were
+deeply cloned into a separate non-exposed DOM tree which had
+the <a>'use'</a> element as its
+parent and all of the <a>'use'</a>
+element's ancestors as its higher-level ancestors. Because the
+cloned DOM tree is non-exposed, the SVG Document Object Model
+(DOM) only contains the <a>'use'</a>
+element and its attributes. The SVG DOM does not show the
+referenced element's contents as children of <a>'use'</a> element.</p>
+
+<p class="issue">We should define the behavior of <a>'use'</a>
+in terms of Web Components.</p>
+
+<p>For user agents that support <a
+href="styling.html#StylingWithCSS">Styling with CSS</a>, the
+conceptual deep cloning of the referenced element into a
+non-exposed DOM tree also copies any property values resulting
+from <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html">the CSS cascade</a>
+([<a href="refs.html#ref-CSS21">CSS21</a>], chapter 6)
+on the referenced element and its contents. CSS2 selectors can
+be applied to the original (i.e., referenced) elements because
+they are part of the formal document structure. CSS2 selectors
+cannot be applied to the (conceptually) cloned DOM tree because
+its contents are not part of the formal document structure.</p>
+
+<p class="issue">We should be requiring CSS styling in SVG 2.
+Also, hopefully, how styles can apply or not to elements in the
+shadow tree (and how event handling works, below) should be specified by how
+we define <a>'use'</a> to work in terms of Web Components.</p>
+
+<p>Property inheritance, however, works as if the referenced
+element had been textually included as a deeply cloned child of
+the <a>'use'</a> element. The
+referenced element inherits properties from the <a>'use'</a> element and the <a>'use'</a> element's ancestors. An
+instance of a referenced element does not inherit properties
+from the referenced element's original parents.</p>
+
+<p>If event attributes are assigned to referenced elements,
+then the actual target for the event will be the
+element within the "instance tree" corresponding to the given
+referenced element.</p>
+
+<p class="issue">Should reference <a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#events">Shadow DOM</a> 
+for the event handling. Note that events will be retargeted to maintain the encapsulation, 
+ie. not to leak the original target inside a shadow tree.</p>
+
+<p>The event handling for the non-exposed tree works as if the
+referenced element had been textually included as a deeply
+cloned child of the <a>'use'</a>
+element, and events are dispatched according to the shadow tree 
+<a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#event-dispatch">event dispatching algorithm</a> [<a href="refs.html#ref-SHADOWDOM">SHADOWDOM</a>].
+The event's target and currentTarget attributes are set to the
+instance tree element that
+corresponds to the target and current target elements in the
+referenced subtree. An event propagates through the exposed and
+non-exposed portions of the tree in the same manner as it would
+in the regular document tree: first going from the root element
+to the <a>'use'</a> element and then
+through non-exposed tree elements in the capture phase,
+followed by the target phase at the target of the event, then
+bubbling back through non-exposed tree to the use element and
+then back through regular tree to the root element in bubbling
+phase. In order to maintain encapsulation events must use the
+<a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#event-retargeting">event retargeting algorithm</a> [<a href="refs.html#ref-SHADOWDOM">SHADOWDOM</a>]
+when crossing from a non-exposed tree to the regular tree.
+</p>
+
+<p>The behavior of the <a>'visibility'</a> property conforms to
+this model of property inheritance. Thus, specifying <span
+class="prop-value">'visibility:hidden'</span> on a <a>'use'</a> element does not guarantee
+that the referenced content will not be rendered. If the <a>'use'</a> element specifies <span
+class="prop-value">'visibility:hidden'</span> and the element
+it references specifies <span
+class="prop-value">'visibility:hidden'</span> or <span
+class="prop-value">'visibility:inherit'</span>, then that one
+element will be hidden. However, if the referenced element
+instead specifies <span
+class="prop-value">'visibility:visible'</span>, then that
+element will be visible even if the <a>'use'</a> element specifies <span
+class="prop-value">'visibility:hidden'</span>.</p>
+
+<p class="issue">Why is <a>'visibility'</a> called out specially?  It might
+be better just to include an example that shows this.</p>
+
+<p>Animations on a referenced element will cause the instances
+to also be animated.</p>
+
+<p>A <a>'use'</a> element has the
+same visual effect as if the <a>'use'</a> element were replaced by the
+following generated content:</p>
+
+<p class="issue">Except that the replaced content shouldn't affect
+how styles are matched.</p>
+
+<ul>
+  <li>
+    <p><strong>If the <a>'use'</a> element references a <a>'symbol'</a> element</strong>:</p>
+
+    <p>In the generated content, the <a>'use'</a> will be replaced by <a>'g'</a>, where all attributes
+    from the <a>'use'</a> element
+    except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>, <a>'use/height'</a> and <a>'use/xlink:href'</a> are transferred to
+    the generated <a>'g'</a> element. An additional
+    transformation <span class="attr-value">translate(x,y)</span>
+    is appended to the end (i.e., right-side) of the <a>'transform'</a> property on the
+    generated <a>'g'</a>, where <span
+    class="attr-value">x</span> and <span
+    class="attr-value">y</span> represent the values of the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a> element. The referenced <a>'symbol'</a> and its contents are
+    deep-cloned into the generated tree, with the exception that
+    the <a>'symbol'</a> is replaced by an <a>'svg'</a>. This generated <a>'svg'</a> will always have
+    explicit values for attributes <a>'svg/width'</a> and <a>'svg/height'</a>. If attributes <a>'use/width'</a> and/or <a>'use/height'</a> are provided on the <a>'use'</a> element, then these
+    attributes will be transferred to the generated <a>'svg'</a>. If attributes <a>'use/width'</a> and/or <a>'use/height'</a> are not specified, the
+    generated <a>'svg'</a> element will use values
+    of <span class='attr-value'>'100%'</span> for these attributes.</p>
+  </li>
+  <li>
+    <p><strong>If the <a>'use'</a> element references an <a>'svg'</a> element:</strong></p>
+    <p>In the generated content, the <a>'use'</a> will be replaced by <a>'g'</a>, where all attributes
+    from the <a>'use'</a> element
+    except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>, <a>'use/height'</a> and <a>'use/xlink:href'</a> are transferred to
+    the generated <a>'g'</a> element. An additional
+    transformation <span class="attr-value">translate(x,y)</span>
+    is appended to the end (i.e., right-side) of the <a>'transform'</a> property on the
+    generated <a>'g'</a>, where <span
+    class="attr-value">x</span> and <span
+    class="attr-value">y</span> represent the values of the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a> element. The referenced <a>'svg'</a> and its contents are
+    deep-cloned into the generated tree. If attributes <a>'use/width'</a> and/or <a>'use/height'</a> are provided on the <a>'use'</a> element, then these values
+    will override the corresponding attributes on the <a>'svg'</a> in the generated
+    tree.</p>
+  </li>
+  <li>
+    <p><strong>Otherwise:</strong></p>
+    <p>In the generated content, the <a>'use'</a> will be replaced by <a>'g'</a>, where all attributes
+    from the <a>'use'</a> element
+    except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>, <a>'use/height'</a> and <a>'use/xlink:href'</a> are transferred to
+    the generated <a>'g'</a> element. An additional
+    transformation <span class="attr-value">translate(x,y)</span>
+    is appended to the end (i.e., right-side) of the <a>'transform'</a> property on the
+    generated <a>'g'</a>, where <span
+    class="attr-value">x</span> and <span
+    class="attr-value">y</span> represent the values of the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a> element. The referenced
+    object and its contents are deep-cloned into the generated
+    tree.</p>
+  </li>
+</ul>
+
+<p>For user agents that support <a
+href="styling.html#StylingWithCSS">Styling with CSS</a>, the
+generated <a>'g'</a> element carries along with
+it the "cascaded" property values on the <a>'use'</a> element which result from
+<a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html">the CSS cascade</a>
+([<a href="refs.html#ref-CSS21">CSS21</a>], chapter 6).
+Additionally, the copy (deep clone) of the referenced resource
+carries along with it the "cascaded" property values resulting
+from the CSS cascade on the original (i.e., referenced)
+elements. Thus, the result of various CSS selectors in
+combination with the <a>'class'</a> and <a>'style attribute'</a> attributes are, in effect,
+replaced by the functional equivalent of a <a>'style attribute'</a> attribute in the generated
+content which conveys the "cascaded" property values.</p>
+
+<p><span class="example-ref">Example Use01</span> below has a
+simple <a>'use'</a> on a <a>'rect'</a>.</p>
+
+<edit:example href='images/struct/Use01.svg' name='Use01' description="Simple case of 'use' on a 'rect'" link='yes' image='yes'/>
+
+<p>The visual effect would be equivalent to the following document:</p>
+
+<edit:example href='images/struct/Use01-GeneratedContent.svg' link='yes'/>
+
+<p><span class="example-ref">Example Use02</span> below has a
+<a>'use'</a> on a <a>'symbol'</a>.</p>
+
+<edit:example href='images/struct/Use02.svg' name='Use02' description="'use' on a 'symbol'" link='yes' image='yes'/>
+
+<p>The visual effect would be equivalent to the following document:</p>
+
+<edit:example href='images/struct/Use02-GeneratedContent.svg' link='yes'/>
+
+<p><span class="example-ref">Example Use03</span> illustrates
+what happens when a <a>'use'</a> has
+a <a>'transform'</a> property.</p>
+
+<edit:example href='images/struct/Use03.svg' name='Use03' description="'use' with a 'transform' property" link='yes' image='yes'/>
+
+<p>The visual effect would be equivalent to the following document:</p>
+
+<edit:example href='images/struct/Use03-GeneratedContent.svg' link='yes'/>
+
+<p><span class="example-ref">Example Use04</span> illustrates a
+<a>'use'</a> element with various
+methods of applying CSS styling.</p>
+
+<edit:example href='images/struct/Use04.svg' name='Use04' description="'use' with CSS styling" link='yes' image='yes'/>
+
+<p>The visual effect would be equivalent to the following
+document. Observe that some of the style rules above apply to
+the generated content (i.e., rules 1-6, 10-12), whereas others
+do not (i.e., rules 7-9). The rules which do not affect the
+generated content are:</p>
+
+<ul>
+  <li>Rules 7 and 8: CSS selectors only apply to the formal
+  document tree, not on the generated tree; thus, these
+  selectors will not yield a match.</li>
+
+  <li>Rule 9: The generated tree only inherits from the
+  ancestors of the <a>'use'</a>
+  element and does not inherit from the ancestors of the
+  referenced element; thus, this rule does not affect the
+  generated content.</li>
+</ul>
+
+<p>In the generated content below, the selectors that yield a
+match have been transferred into inline <a>'style attribute'</a> attributes for
+illustrative purposes.</p>
+
+<edit:example href='images/struct/Use04-GeneratedContent.svg' link='yes'/>
+
+<p>When a <a>'use'</a> references
+another element which is another <a>'use'</a> or whose content contains a
+<a>'use'</a> element, then the deep
+cloning approach described above is recursive. However, a set
+of references that directly or indirectly reference a element
+to create a circular dependency is an error, as described in <a
+href="#Head">References and the <span class='element-name'>'defs'</span> element</a>.</p>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementXAttribute">x</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementYAttribute">y</dfn></td>
+        <td><a>&lt;length&gt;</a></td>
+        <td>0</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementWidthAttribute">width</dfn>, <dfn id="UseElementHeightAttribute">height</dfn></td>
+        <td><a>&lt;length&gt;</a></td>
+        <td>(see prose)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>The <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
+    attributes specify the positioning of the referenced element.
+    The <a>'width'</a> and <a>'height'</a> attributes have different
+    <a>lacuna values</a> depending on the type of the referenced element:</p>
+    <dl class='switch'>
+      <dt><a>'svg'</a></dt>
+      <dd>The <a>lacuna values</a> are the <a>'svg/width'</a> and <a>'svg/height'</a>
+      values from the referenced <a>'svg'</a> element.</dd>
+      <dt>anything else</dt>
+      <dd>The <a>lacuna values</a> are <span class='attr-value'>'100%'</span>.</dd>
+    </dl>
+    <p>A negative value for <a>'width'</a> or <a>'height'</a> is an error (see
+    <a href="implnote.html#ErrorProcessing">Error processing</a>).  If
+    <a>'width'</a> or <a>'height'</a> is zero then rendering of the
+    <a>'use'</a> element is disabled.</p>
+  </dd>
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="UseElementHrefAttribute">href</dfn></td>
+        <td><a>&lt;iri&gt;</a></td>
+        <td>(none)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>An <a href="linking.html#IRIReference">IRI reference</a> to the
+    element/fragment within an SVG document to be cloned for
+    rendering.</p>
+  </dd>
+</dl>
+
+</edit:with>
+
+<h2 id="ConditionalProcessing">Conditional processing</h2>
+
+<h3 id="ConditionalProcessingOverview">Conditional processing overview</h3>
+
+<p>SVG contains a <a>'switch'</a> element along with
+attributes <a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> to provide an
+ability to specify alternate viewing depending on the
+capabilities of a given user agent or the user's language.</p>
+
+<p>Attributes <a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> act as tests and
+return either true or false results. The <a>'switch'</a> renders the first of
+its children for which all of these attributes test true. If
+the given attribute is not specified, then a true value is
+assumed.</p>
+
+<p class="issue">It sounds strange to talk about attributes "returning" a value.</p>
+
+<p>Similar to the <a>'display'</a> property, conditional processing
+attributes only affect the direct rendering of elements and do
+not prevent elements from being successfully referenced by
+other elements (such as via a <a>'use'</a>).</p>
+
+<p>In consequence:</p>
+
+<ul>
+  <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes affect
+  <a>'a'</a>, <a>'altGlyph'</a>, <a>'foreignObject'</a>, <a>'textPath'</a>, <a>'tref'</a>, and <a>'tspan'</a> elements.</li>
+
+  <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes will
+  have no effect on the <a>'clipPath'</a>, <a>'filter element'</a>, <a>'marker element'</a>, <a>'mask element'</a>,
+  <a>'pattern'</a> and <a>'symbol'</a> elements or on <a>gradient elements</a>.</li>
+
+  <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes do not
+  apply to the <a>'defs'</a>, and
+  <a>'cursor element'</a> elements because
+  they are not part of the rendering tree.</li>
+
+  <li><a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes affect
+  <a>'animate'</a>, <a>'animateMotion'</a>, <a>'animateTransform'</a>, and <a>'set'</a> elements. If the
+  conditional statement on these animation elements fails, the
+  animation will never be triggered.</li>
+</ul>
+
+<h3 id="SwitchElement">The <span class='element-name'>'switch'</span> element</h3>
+
+<edit:elementsummary name='switch'/>
+
+<p>The <a>'switch'</a> element evaluates
+the <a>'requiredFeatures'</a>, <a>'requiredExtensions'</a> and
+<a>'systemLanguage'</a> attributes on its direct child elements in
+order, and then processes and renders the first child for which these
+attributes evaluate to true. All others will be bypassed and therefore
+not rendered. If the child element is a container element such as a
+<a>'g'</a>, then the entire subtree is either processed/rendered or
+bypassed/not rendered.</p>
+
+<p>Note that the values of properties <a>'display'</a> and
+<a>'visibility'</a> have no effect on <a>'switch'</a> element
+processing. In particular, setting <a>'display'</a> to
+<span class="prop-value">none</span> on a child of a <a>'switch'</a> element
+has no effect on true/false testing associated with <a>'switch'</a>
+element processing.</p>
+
+<p>The <a>'switch'</a> element does not affect processing of
+<a>'script'</a> elements.</p>
+
+<p>For more information and an example, see
+<a href="extend.html#ForeignObjectElement">Embedding foreign
+object types</a>.</p>
+
+<h3 id="ConditionalProcessingRequiredFeaturesAttribute">The <span class='attr-name'>'requiredFeatures'</span> attribute</h3>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="RequiredFeaturesAttribute">requiredFeatures</dfn></td>
+        <td><em>list-of-features</em></td>
+        <td>(none)</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p class="issue">Need a grammar for <em>list-of-features</em>.</p>
+    <p>The value is a list of feature strings, with the
+    individual values separated by white space. Determines
+    whether all of the named <em>features</em> are supported by
+    the user agent. Only feature strings defined in the <a
+    href="feature.html">Feature String</a> appendix are
+    allowed. If all of the given features are supported, then
+    the attribute evaluates to true; otherwise, the current
+    element and its children are skipped and thus will not be
+    rendered.</p>
+  </dd>
+</dl>
+
+<p>If the attribute is not present, then its implicit return
+value is "true". If a null string or empty string value is
+given to attribute <a>'requiredFeatures'</a>, the attribute
+returns "false".</p>
+
+<p><a>'requiredFeatures'</a> is often
+used in conjunction with the <a>'switch'</a> element. If the <a>'requiredFeatures'</a> is used in other
+situations, then it represents a simple switch on the given
+element whether to render the element or not.</p>
+
+<h3 id="ConditionalProcessingRequiredExtensionsAttribute">The <span class='attr-name'>'requiredExtensions'</span> attribute</h3>
+
+<p>The <a>'requiredExtensions'</a>
+attribute defines a list of required language extensions.
+Language extensions are capabilities within a user agent that
+go beyond the feature set defined in this specification. Each
+extension is identified by an <a
+href="linking.html#IRIReference">IRI reference</a>.</p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="RequiredExtensionsAttribute">requiredExtensions</dfn></td>
+        <td><em>list-of-extensions</em></td>
+        <td>(none)</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>The value is a list of <a
+    href="linking.html#IRIReference">IRI reference</a>s which
+    identify the required extensions, with the individual
+    values separated by white space. Determines whether all of
+    the named <em>extensions</em> are supported by the user
+    agent. If all of the given extensions are supported, then
+    the attribute evaluates to true; otherwise, the current
+    element and its children are skipped and thus will not be
+    rendered.</p>
+  </dd>
+</dl>
+
+<p>If a given <a href="linking.html#IRIReference">IRI
+reference</a> contains white space within itself, that white
+space must be escaped.</p>
+
+<p>If the attribute is not present, then its implicit return
+value is "true". If a null string or empty string value is
+given to attribute <a>'requiredExtensions'</a>, the attribute
+returns "false".</p>
+
+<p><a>'requiredExtensions'</a> is often
+used in conjunction with the <a>'switch'</a> element. If the <a>'requiredExtensions'</a> is used in other
+situations, then it represents a simple switch on the given
+element whether to render the element or not.</p>
+
+<p>The IRI names for the extension should include versioning
+information, such as "http://example.org/SVGExtensionXYZ/1.0",
+so that script writers can distinguish between different
+versions of a given extension.</p>
+
+<h3 id="ConditionalProcessingSystemLanguageAttribute">The <span class="attr-name">'systemLanguage'</span> attribute</h3>
+
+<p id="SystemLanguageAttribute">The attribute value is a comma-separated list of language
+names as defined in <a href="http://www.ietf.org/rfc/bcp/bcp47.txt">BCP 47</a>
+[<a href="refs.html#ref-BCP47">BCP47</a>].</p>
+
+<p>Evaluates to "true" if one of the languages indicated by
+user preferences exactly equals one of the languages given in
+the value of this parameter, or if one of the languages
+indicated by user preferences exactly equals a prefix of one of
+the languages given in the value of this parameter such that
+the first tag character following the prefix is "-".</p>
+
+<p>Evaluates to "false" otherwise.</p>
+
+<p>Note: This use of a prefix matching rule does not imply that
+language tags are assigned to languages in such a way that it
+is always true that if a user understands a language with a
+certain tag, then this user will also understand all languages
+with tags for which this tag is a prefix.</p>
+
+<p>The prefix rule simply allows the use of prefix tags if this
+is the case.</p>
+
+<p>Implementation note: When making the choice of linguistic
+preference available to the user, implementers should take into
+account the fact that users are not familiar with the details
+of language matching as described above, and should provide
+appropriate guidance. As an example, users may assume that on
+selecting "en-gb", they will be served any kind of English
+document if British English is not available. The user
+interface for setting user preferences should guide the user to
+add "en" to get the best matching behavior.</p>
+
+<p>Multiple languages MAY be listed for content that is
+intended for multiple audiences. For example, content that is
+presented simultaneously in the original Maori and English
+versions, would call for:</p>
+
+<pre>&lt;text systemLanguage="mi, en"&gt;&lt;!-- content goes here --&gt;&lt;/text&gt;</pre>
+
+<p>However, just because multiple languages are present within
+the object on which the <a>'systemLanguage'</a> test
+attribute is placed, this does not mean that it is intended for
+multiple linguistic audiences. An example would be a beginner's
+language primer, such as "A First Lesson in Latin," which is
+clearly intended to be used by an English-literate audience. In
+this case, the <a>'systemLanguage'</a> test attribute
+should only include "en".</p>
+
+<p>Authoring note: Authors should realize that if several
+alternative language objects are enclosed in a <a>'switch'</a>, and none of them
+matches, this may lead to situations where no content is
+displayed. It is thus recommended to include a "catch-all"
+choice at the end of such a <a>'switch'</a> which is acceptable in
+all cases.</p>
+
+<p>For the <a>'systemLanguage'</a>
+attribute: <span class="anim-target"><a
+href="animate.html#Animatable">Animatable</a>: no.</span></p>
+
+<p>If the attribute is not present, then its implicit return
+value is "true". If a null string or empty string value is
+given to attribute <a>'systemLanguage'</a>, the attribute returns
+"false".</p>
+
+<p><a>'systemLanguage'</a> is often used
+in conjunction with the <a>'switch'</a> element. If the <a>'systemLanguage'</a> is used in other
+situations, then it represents a simple switch on the given
+element whether to render the element or not.</p>
+
+<p class="issue">Should have an attribute definition table in this section.</p>
+
+<h3 id="ApplicabilityOfTestAttributes">Applicability of test attributes</h3>
+
+<p>The following list describes the applicability of the test
+attributes to the elements that do not directly produce
+rendering.</p>
+
+<p class="issue">This was already mentioned in the "Conditional processing overview"
+section.  We should just describe this once.</p>
+
+<ul>
+  <li>the test attributes do not effect the
+  <a>'mask element'</a>, <a>'clipPath'</a>, <a>'linearGradient'</a>,
+  <a>'radialGradient'</a> and <a>'pattern'</a> elements. The
+  test attributes on a referenced element do not affect the
+  rendering of the referencing element.</li>
+
+  <li>the test attributes do not effect the <a>'defs'</a>, and <a>'cursor element'</a> elements as they are not
+  part of the rendering tree.</li>
+
+  <li>an animation element (<a>'animate'</a>, <a>'animateMotion'</a>, <a>'animateTransform'</a> and <a>'set'</a>) will never be triggered if
+  it has a test attribute that evaluates to false.</li>
+</ul>
+
+<h2 id="CommonAttributes">Common attributes</h2>
+
+<h3 id="Core.attrib">Attributes common to all elements: <span class='attr-name'>'id'</span> and <span class='attr-name'>'xml:base'</span></h3>
+
+<p>The <a>'id'</a> and <a>'xml:base'</a> attributes are available on all SVG elements:</p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="IDAttribute">id</dfn></td>
+        <td><em>name</em></td>
+        <td>(none)</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p class="issue">Need a grammar for <em>name</em>.</p>
+    <p>Standard XML attribute for assigning a unique
+    <em>name</em> to an element. Refer to the <a href="http://www.w3.org/TR/2008/REC-xml-20081126/"><cite>Extensible
+    Markup Language (XML) 1.0</cite></a> Recommendation [<a href="refs.html#ref-XML10">XML10</a>].</p>
+  </dd>
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="XMLBaseAttribute">xml:base</dfn></td>
+        <td><a>&lt;iri&gt;</a></td>
+        <td>(none)</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>Specifies a base IRI other than the base IRI of the
+    document or external entity. Refer to the <a href="http://www.w3.org/TR/2009/REC-xmlbase-20090128/"><cite>XML Base</cite></a>
+    specification [<a href="refs.html#ref-XML-BASE">XML-BASE</a>].</p>
+  </dd>
+</dl>
+
+<p class="issue">Are we happy to keep promoting the use of <span class="attr-name">'xml:base'</span>?
+Is it a use case worth trying to include a more HTML-like syntax for – the <span class="element-name">'base'</span>
+element?  We anyway need to define somewhere what effect the HTML <span class="element-name">'base'</span>
+element has on any SVG document fragments.</p>
+
+<h3 id="LangSpaceAttrs">The <span class='attr-name'>'xml:lang'</span> and
+<span class='attr-name'>'xml:space'</span> attributes</h3>
+
+<p>Elements that might contain character data content have
+attributes <a>'xml:lang'</a> and <a>'xml:space'</a>.</p>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Deprecate the use of <span class='attr-name'>'xml:space'</span> to affect text layout and use the <span class='property'>'white-space'</span> property instead.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/03/03-svg-minutes.html#item04">We drop xml:space from SVG 2 and remove the relating tests from the SVG 1.1. test suite.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To align with CSS.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Chris (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3004">ACTION-3004</a> and
+                 <a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3005">ACTION-3005</a>, done)</td>
+    </tr>
+  </table>
+</div>
+
+<p class="issue" id="LangAttribute">Should we be moving <span class="attr-name">'lang'</span> instead
+of <span class="attr-name">'xlink:lang'</span>?</p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="XMLLangAttribute">xml:lang</dfn></td>
+        <td><em>languageID</em></td>
+        <td>(none)</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p class="issue">Need a grammar for <em>languageID</em>.</p>
+    <p>Standard XML attribute to specify the language (e.g.,
+    English) used in the contents and attribute values of
+    particular elements. Refer to the <a href="http://www.w3.org/TR/2008/REC-xml-20081126/"><cite>Extensible Markup
+    Language (XML) 1.0</cite></a> Recommendation [<a href="refs.html#ref-XML10">XML10</a>].</p>
+  </dd>
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="XMLSpaceAttribute">xml:space</dfn></td>
+        <td>default | preserve</td>
+        <td>default</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>Deprecated XML attribute to specify whether white space
+    is preserved in character data. The only possible values
+    are <span class='attr-value'>'default'</span> and <span class='attr-value'>'preserve'</span>. Refer to the
+    <a href="http://www.w3.org/TR/2008/REC-xml-20081126/"><cite>Extensible Markup Language (XML) 1.0</cite></a>
+    Recommendation [<a href="refs.html#ref-XML10">XML10</a>] and to the
+    discussion <a href="text.html#WhiteSpace">white space
+    handling</a> in SVG.</p>
+    <p>New content should use the <a>'white-space'</a> property instead.</p>
+  </dd>
+</dl>
+
+<h2 id="WAIARIAAttributes">WAI-ARIA attributes</h2>
+
+<h3 id="roleattribute">Role attribute</h3>
+
+<p>SVG elements having native semantics that are not limited to <a href="http://www.w3.org/TR/wai-aria-1.1/roles#presentation">presentation</a> (having "no role"), may have an ARIA role attribute specified. The attribute, if specified, must have a value that is a set of space-separated
+tokens representing the various WAI-ARIA roles that the element belongs to.
+These tokens are role values defined in
+<a href="http://www.w3.org/TR/wai-aria-1.1/roles#role_definitions">Definition of Roles</a>
+([<a href="refs.html#ref-ARIA">ARIA</a>], section 5.4).</p>
+
+<p>The WAI-ARIA role that an SVG element has assigned to it is the first
+non-abstract role found in the list of values generated when the role attribute
+is split on spaces. </p>
+  
+<dl class="attrdef-list">
+   <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th> 
+        <th>Value</th> 
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr> 
+      <tr>
+        <td><dfn id="RoleAttribute">role</dfn></td>
+        <td> white-space space separated tokens having values defined in <a href="http://www.w3.org/TR/wai-aria-1.1/roles#role_definitions">Definition of Roles</a> ([<a href="refs.html#ref-ARIA">ARIA</a>], section 5.4)</td>
+        <td>(see prose)</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>The role value is a set of white-space separated machine-extractable semantic information used to define the purpose of the element.
+    </p>
+    <p class="issue">The "Value" entry in the attribute definition box above should
+    be a grammar, not a sentence.  Maybe we can define a symbol &lt;role&gt; by
+    reference to the ARIA specification, and then define the attribute as taking
+    "role+".</p>
+    <p>The <a>lacuna value</a> for the <a>'role'</a> attribute is the corresponding
+    <a href="#implicit-aria-semantics">default implied ARIA semantic for SVG elements</a>.</p>
+  </dd>
+</dl>
+
+<h3 id="ARIAStateandPropertyAttributes">State and property attributes (all aria- attributes)</h3>
+
+<p>SVG elements having native semantics that are not limited to <a href="http://www.w3.org/TR/wai-aria-1.1/roles#presentation">presentation</a> (having "no role"), may have an may have WAI-ARIA state and property attributes
+specified. These attributes are defined by ARIA in
+<a href="http://www.w3.org/TR/wai-aria-1.1/states_and_properties#state_prop_def">Definitions of States and Properties (all aria-* attributes)</a>
+(<a href="https://svgwg.org/svg2-draft/refs.html#ref-ARIA">[ARIA]</a>, section 6.6).</p>
+
+<p>These attributes, if specified, must have a value that is the WAI-ARIA value
+type in the "Value" field of the definition for the state or property, mapped to
+the appropriate SVG value type according to
+<a href="http://www.w3.org/TR/wai-aria-1.1/appendices#typemapping">Mapping WAI-ARIA Value types to langauges</a>
+using the SVG mapping ([<a href="refs.html#ref-ARIA">ARIA</a>], section 10.2).</p>
+
+<p>WAI-ARIA State and Property attributes can be used on any element. They are
+not always meaningful, however, and in such cases user agents might not perform
+any processing aside from including them in the DOM. Unlike some other host
+languages, SVG is not considered to have strong native host language semantics
+in terms of the user interface, consequently state and property attributes are
+processed according to the <a href="http://www.w3.org/TR/wai-aria-1.1"><cite>ARIA</cite></a> and
+<a href="http://www.w3.org/TR/wai-aria-implementation/"><cite>ARIA User Agent Implementation Guide</cite></a>
+specifications. [<a href="refs.html#ref-ARIA">ARIA</a>] [<a href="refs.html#ref-ARIAIMPL">ARIAIMPL</a>]</p>
+
+<h3 id="implicit-aria-semantics">Implicit ARIA Semantics</h3>
+<p>The following table defines the <span>implicit native
+  semantics</span> and corresponding <span>default implicit ARIA
+  semantics</span> that apply to <a href="eltindex.html">SVG elements</a>. Each
+  language feature (element) in a cell in the first
+  column implies the ARIA semantics (role, states, and/or properties)
+  given in the cell in the second column of the same row. The third column defines restrictions as to what WAI-ARIA semantic (role, state, or property) may or may not apply.</p>
+
+  <table id="table-aria-implicit" class="vert">
+      <thead>
+          <tr><th>Language feature</th><th>Default implied ARIA semantics</th><th>Restrictions</th></tr>
+      </thead>
+
+   <tbody>
+    <tr><td><a>'a'</a></td>
+        <td><code title="attr-aria-role-link">link</code> role</td>
+        <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'altGlyph'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>  
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'altGlyphDef'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'altGlyphItem'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>  
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'animate'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'animateMotion'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'animateTransform'</a></td>
+      <td>none</td>
+      <td>no role may be appplied</td>
+    </tr>
+    <tr>
+      <td><a>'audio'</a></td>
+      <td>none</td>
+      <td>If specified, role must be <code title="attr-aria-role-application">application</code></td>
+    </tr>
+    <tr>
+      <td><a>'canvas'</a></td>
+      <td><code title="attr-group-role">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'circle'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>  
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'clipPath'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'cursor element'</a></td>
+      <td>none</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'defs'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'desc'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'discard'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'ellipse'</a></td>
+      <td>none</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'feBlend'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feColorMatrix'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feComponentTransfer'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feComposite'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feConvolveMatrix'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feCustom'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feDiffuseLighting'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feDisplacementMap'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feDistantLight'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feDropShadow'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feFlood'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feFuncA'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feFuncB'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feFuncG'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feFuncR'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feGaussianBlur'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feImage'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feMerge'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feMergeNode'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feMorphology'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feOffset'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'fePointLight'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feSpecularLighting'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feSpotLight'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feTile'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'feTurbulence'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'filter element'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'foreignObject'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'g'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'hatch'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'hatchPath'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'iframe'</a></td>
+      <td>no role</td>
+      <td>If Specified, role must be either <code title="attr-aria-role-application">application</code>, <code title="attr-aria-role-document">document</code>, or <code title="attr-aria-role-img">img</code> roles</td>
+    </tr>
+    <tr>
+      <td><a>'image'</a></td>
+      <td><code title="attr-aria-role-img">img</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'line'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'linearGradient'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'marker element'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'mask element'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'meshGradient'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'meshPatch'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'meshRow'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'metadata'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'mpath'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'path'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>    
+    <tr>
+      <td><a>'pattern'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'polygon'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'polyline'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'radialGradient'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'rect'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'script'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'set'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'solidColor'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'source'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'stop'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'style element'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'svg'</a></td>
+      <td><code title="attr-group-role">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'switch'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'symbol'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'text'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'textPath'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'title'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'track'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
+    </tr>
+    <tr>
+      <td><a>'tref'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'tspan'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'use'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'video'</a></td>
+      <td>none</td>
+      <td>If specified, role must be <code title="attr-aria-role-application">application</code></td>
+    </tr>
+    <tr>
+      <td><a>'view'</a></td>
+      <td><code title="attr-aria-role-preseentation">presentation</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, or <a>'aria-describedby'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td>no restrictions</td>
+    </tr>
+   </tbody>
+  </table>
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+
+<h3 id="InterfaceSVGDocument">Interface Document</h3>
+
+<p>The DOM Core specification defines a <a>Document</a> interface, which this specification extends.</p>
+
+<p class="note">In the case where an SVG document is embedded by reference,
+such as when an HTML document has an <span class="element-name">'object'</span>
+element whose <span class="attr-name">'href'</span> attribute references an SVG
+document (i.e., a document whose MIME type is "image/svg+xml"
+and whose root element is thus an <a>'svg'</a> element), there will exist
+two distinct DOM hierarchies. The first DOM hierarchy will be for the
+referencing document (e.g., an XHTML document). The second DOM hierarchy
+will be for the referenced SVG document.
+</p>
+
+<p>For historical reasons, <a>Window</a> objects must also have a writable, configurable,
+non-enumerable property named SVGDocument whose value is the <a>Document</a> interface object.</p>
+
+<pre class="idl">partial interface <a>Document</a> {
+  readonly attribute <a class="idlinterface" href="struct.html#InterfaceSVGSVGElement">SVGSVGElement</a> <a href="struct.html#__svg__SVGDocument__rootElement">rootElement</a>;
+};</pre>
+
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGDocument__rootElement" class="attribute first-child"><b>rootElement</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="struct.html#InterfaceSVGSVGElement">SVGSVGElement</a>)</span></dt>
+      <dd class="attribute">
+        <div>
+          The root <a>'svg'</a> in the document hierarchy.
+
+          <p>This attribute is deprecated, and may be removed in a future SVG specification.
+          Authors are encouraged to use the <a href="http://www.w3.org/TR/dom/#dom-document-documentelement">documentElement</a> attribute on <a>Document</a> instead.</p>
+        </div>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+
+<p>The following IDL fragment must be supported only if the SVG implementation is also a
+<a href="http://www.w3.org/TR/html/infrastructure.html#interactive">Web browser or other interactive user agent</a>,
+and therefore implements HTML.</p>
+
+<pre class="idl"><span class='comment'>// must only be implemented in certain implementations</span>
+partial interface <a>Document</a> {
+  readonly attribute DOMString title;
+  readonly attribute DOMString referrer;
+  readonly attribute DOMString domain;
+  readonly attribute Element? <a href="struct.html#__svg__SVGDocument__activeElement">activeElement</a>;
+};</pre>
+
+<p class='note'>This is because the interface members below are already defined in HTML,
+and in implementations that support SVG and HTML we they cannot be duplicated.</p>
+
+<p>The title, referrer, domain and <span id="__svg__SVGDocument__activeElement">activeElement</span> IDL attributes must behave the same as
+<a href="http://www.w3.org/TR/html/dom.html#document">the corresponding IDL attributes defined in HTML</a>.</p>
+
+<p class='issue'>Issues have been filed on HTML so that title and activeElement work
+on SVG documents (by looking at <a>'title'</a> elements in the SVG namespace,
+and by defaulting to the root <a>'svg'</a> element rather than the <span class='element-name'>body</span>
+element, respectively).</p>
+
+<h3 id="InterfaceSVGSVGElement">Interface SVGSVGElement</h3>
+
+
+
+<edit:with element='svg'>
+
+<p>A key interface definition is the <a>SVGSVGElement</a> interface,
+which is the interface that corresponds to the <a>'svg'</a> element. This
+interface contains various miscellaneous commonly-used utility
+methods, such as matrix operations and the ability to control the
+time of redraw on visual rendering devices.</p>
+
+<p><a>SVGSVGElement</a> implements <a>ViewCSS</a> and <a>DocumentCSS</a> to
+provide access to the computed values of properties and the override style
+sheet as described in <a href="http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/"><cite>DOM Level 2 Style</cite></a>
+[<a href="refs.html#ref-DOM2STYLE">DOM2STYLE</a>].</p>
+
+<p class="issue">Does it make sense for <a>SVGSVGElement</a> to implement <a>ViewCSS</a> and <a>DocumentCSS</a>?
+Shouldn't the former be on Window and the latter on <a>Document</a> or <a>SVGDocument</a>?</p>
+
+<pre class="idl">interface <b>SVGSVGElement</b> : <a>SVGGraphicsElement</a> {
+
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__y">y</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__width">width</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__height">height</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="struct.html#__svg__SVGSVGElement__viewport">viewport</a>;
+  readonly attribute float <a href="struct.html#__svg__SVGSVGElement__pixelUnitToMillimeterX">pixelUnitToMillimeterX</a>;
+  readonly attribute float <a href="struct.html#__svg__SVGSVGElement__pixelUnitToMillimeterY">pixelUnitToMillimeterY</a>;
+  readonly attribute float <a href="struct.html#__svg__SVGSVGElement__screenPixelToMillimeterX">screenPixelToMillimeterX</a>;
+  readonly attribute float <a href="struct.html#__svg__SVGSVGElement__screenPixelToMillimeterY">screenPixelToMillimeterY</a>;
+  readonly attribute boolean <a href="struct.html#__svg__SVGSVGElement__useCurrentView">useCurrentView</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGViewSpec">SVGViewSpec</a> <a href="struct.html#__svg__SVGSVGElement__currentView">currentView</a>;
+           attribute float <a href="struct.html#__svg__SVGSVGElement__currentScale">currentScale</a>;
+  readonly attribute <a>DOMPointReadOnly</a> <a href="struct.html#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>;
+
+  unsigned long <a href="struct.html#__svg__SVGSVGElement__suspendRedraw">suspendRedraw</a>(unsigned long maxWaitMilliseconds);
+  void <a href="struct.html#__svg__SVGSVGElement__unsuspendRedraw">unsuspendRedraw</a>(unsigned long suspendHandleID);
+  void <a href="struct.html#__svg__SVGSVGElement__unsuspendRedrawAll">unsuspendRedrawAll</a>();
+  void <a href="struct.html#__svg__SVGSVGElement__forceRedraw">forceRedraw</a>();
+  void <a href="struct.html#__svg__SVGSVGElement__pauseAnimations">pauseAnimations</a>();
+  void <a href="struct.html#__svg__SVGSVGElement__unpauseAnimations">unpauseAnimations</a>();
+  boolean <a href="struct.html#__svg__SVGSVGElement__animationsPaused">animationsPaused</a>();
+  float <a href="struct.html#__svg__SVGSVGElement__getCurrentTime">getCurrentTime</a>();
+  void <a href="struct.html#__svg__SVGSVGElement__setCurrentTime">setCurrentTime</a>(float seconds);
+  <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <a href="struct.html#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a>(<a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect, <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> referenceElement);
+  <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <a href="struct.html#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a>(<a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect, <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> referenceElement);
+  boolean <a href="struct.html#__svg__SVGSVGElement__checkIntersection">checkIntersection</a>(<a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> element, <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect);
+  boolean <a href="struct.html#__svg__SVGSVGElement__checkEnclosure">checkEnclosure</a>(<a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> element, <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> rect);
+  void <a href="struct.html#__svg__SVGSVGElement__deselectAll">deselectAll</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGNumber">SVGNumber</a> <a href="struct.html#__svg__SVGSVGElement__createSVGNumber">createSVGNumber</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGLength">SVGLength</a> <a href="struct.html#__svg__SVGSVGElement__createSVGLength">createSVGLength</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGAngle">SVGAngle</a> <a href="struct.html#__svg__SVGSVGElement__createSVGAngle">createSVGAngle</a>();
+  <a>DOMPoint</a> <a href="struct.html#__svg__SVGSVGElement__createSVGPoint">createSVGPoint</a>();
+  <a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <a href="struct.html#__svg__SVGSVGElement__createSVGMatrix">createSVGMatrix</a>();
+  <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <a href="struct.html#__svg__SVGSVGElement__createSVGRect">createSVGRect</a>();
+  <a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransform">createSVGTransform</a>();
+  <a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>(<a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> matrix);
+  <a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-745549614">Element</a> <a href="struct.html#__svg__SVGSVGElement__getElementById">getElementById</a>(DOMString elementId);
+};
+
+<a>SVGSVGElement</a> implements <a>ViewCSS</a>;
+<a>SVGSVGElement</a> implements <a>DocumentCSS</a>;
+<a>SVGSVGElement</a> implements <a>SVGFitToViewBox</a>;
+<a>SVGSVGElement</a> implements <a>SVGZoomAndPan</a>;
+<a>SVGSVGElement</a> implements <a>WindowEventHandlers</a>;</pre>
+
+<dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGSVGElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given <a>'svg'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given <a>'svg'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__width" class="attribute"><b>width</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'width'</a> on the given <a>'svg'</a>
+element.
+<p class="issue">What value should be returned here (since this is now a presentation attribute)?</p>
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__height" class="attribute"><b>height</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'height'</a> on the given <a>'svg'</a>
+element.
+<p class="issue">What value should be returned here (since this is now a presentation attribute)?</p>
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__viewport" class="attribute"><b>viewport</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a>)</span></dt>
+<dd class="attribute">
+<div>
+
+<p>The position and size of the viewport (implicit or explicit) that
+corresponds to this <a>'svg'</a> element. When the user agent is actually
+rendering the content, then the position and size values represent the
+actual values when rendering. The position and size values are unitless
+values in the coordinate system of the parent element. If no parent element
+exists (i.e., <a>'svg'</a> element represents the root of the document
+tree), if this SVG document is embedded as part of another document (e.g.,
+via the HTML <span class="element-name">'object'</span> element), then the
+position and size are unitless values in the coordinate system of the parent
+document. (If the parent uses CSS or XSL layout, then unitless values
+represent pixel units for the current CSS or XSL viewport, as described in
+the CSS2 specification.) If the parent element does not have a coordinate
+system, then the user agent should provide reasonable default values for
+this attribute.
+</p>
+
+
+<p>The <a>SVGRect</a> object is <a href="types.html#ReadOnlyRect">read only</a>.
+</p>
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__pixelUnitToMillimeterX" class="attribute"><b>pixelUnitToMillimeterX</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
+<dd class="attribute">
+<div>
+Size of a pixel units (as defined by CSS2) along the x-axis of
+the viewport, which represents a unit somewhere in the range
+of 70dpi to 120dpi, and, on systems that support this, might
+actually match the characteristics of the target medium. On
+systems where it is impossible to know the size of a pixel, a
+suitable default pixel size is provided.
+
+<p class="issue">Should this and the next three IDL attributes be removed?
+Are they implemented?</p>
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__pixelUnitToMillimeterY" class="attribute"><b>pixelUnitToMillimeterY</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
+<dd class="attribute">
+<div>
+Corresponding size of a pixel unit along the y-axis of the viewport.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__screenPixelToMillimeterX" class="attribute"><b>screenPixelToMillimeterX</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
+<dd class="attribute">
+<div>
+User interface (UI) events in DOM Level 2 indicate the screen
+positions at which the given UI event occurred. When the user
+agent actually knows the physical size of a "screen unit", this
+attribute will express that information; otherwise, user agents
+will provide a suitable default value such as .28mm.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__screenPixelToMillimeterY" class="attribute"><b>screenPixelToMillimeterY</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
+<dd class="attribute">
+<div>
+Corresponding size of a screen pixel along the y-axis of the viewport.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__useCurrentView" class="attribute"><b>useCurrentView</b><span class="idl-type-parenthetical"> (readonly boolean)</span></dt>
+<dd class="attribute">
+<div>
+The initial view (i.e., before magnification and panning) of 
+the current innermost SVG document fragment can be either the 
+"standard" view (i.e., based on attributes on the <a>'svg'</a> 
+element such as <a>'svg/viewBox'</a>) or to a "custom" view (i.e., a
+hyperlink into a particular <a>'view'</a> or other element - see 
+<a href="linking.html#LinksIntoSVG">Linking into SVG content:
+IRI fragments and SVG views</a>). If the initial view is the
+"standard" view, then this attribute is false. If the initial
+view is a "custom" view, then this attribute is true.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__currentView" class="attribute"><b>currentView</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGViewSpec">SVGViewSpec</a>)</span></dt>
+<dd class="attribute">
+<div>
+
+<p>The definition of the initial view (i.e., before magnification
+and panning) of the current innermost SVG document fragment. The
+meaning depends on the situation:
+</p>
+
+<ul>
+
+<li>
+If the initial view was a "standard" view, then: 
+
+<ul>
+
+<li>the values for <a>SVGFitToViewBox::viewBox</a>,
+<a>SVGFitToViewBox::preserveAspectRatio</a> and
+<a>SVGZoomAndPan::zoomAndPan</a> within <a>currentView</a>
+will match the values for the corresponding DOM attributes
+that are on SVGSVGElement directly
+</li>
+
+
+<li>the values for <a>SVGViewSpec::transform</a> and
+<a>SVGViewSpec::viewTarget</a> within <a>currentView</a>
+will be null
+</li>
+
+</ul>
+
+</li>
+
+<li>
+If the initial view was a link into a <a>'view'</a> element, then: 
+
+<ul>
+
+<li>the values for <a>SVGFitToViewBox::viewBox</a>,
+<a>SVGFitToViewBox::preserveAspectRatio</a> and
+<a>SVGZoomAndPan::zoomAndPan</a> within <a>currentView</a>
+will correspond to the corresponding attributes for the
+given <a>'view'</a> element
+</li>
+
+
+<li>the values for <a>SVGViewSpec::transform</a> and
+<a>SVGViewSpec::viewTarget</a> within <a>currentView</a>
+will be null
+</li>
+
+</ul>
+
+</li>
+
+<li>
+If the initial view was a link into another element (i.e.,
+other than a <a>'view'</a>), then:
+
+<ul>
+
+<li>the values for <a>SVGFitToViewBox::viewBox</a>,
+<a>SVGFitToViewBox::preserveAspectRatio</a> and
+<a>SVGZoomAndPan::zoomAndPan</a> within <a>currentView</a>
+will match the values for the corresponding DOM attributes
+that are on SVGSVGElement directly for the closest ancestor
+<a>'svg'</a> element
+</li>
+
+
+<li>the values for <a>SVGViewSpec::transform</a> within
+<a>currentView</a> will be null
+</li>
+
+
+<li>the <a>SVGViewSpec::viewTarget</a> within
+<a>currentView</a> will represent the target of the
+link
+</li>
+
+</ul>
+
+</li>
+
+<li>
+If the initial view was a link into the SVG document fragment
+using an SVG view specification fragment identifier (i.e.,
+#svgView(...)), then:
+
+<ul>
+
+<li>the values for <a>SVGFitToViewBox::viewBox</a>,
+<a>SVGFitToViewBox::preserveAspectRatio</a>,
+<a>SVGZoomAndPan::zoomAndPan</a>,
+<a>SVGViewSpec::transform</a> and
+<a>SVGViewSpec::viewTarget</a> within <a>currentView</a>
+will correspond to the values from the SVG view
+specification fragment identifier
+</li>
+
+</ul>
+
+</li>
+
+</ul>
+
+
+<p>The object itself and its contents are both read only.</p>
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__currentScale" class="attribute"><b>currentScale</b><span class="idl-type-parenthetical"> (float)</span></dt>
+<dd class="attribute">
+<div>
+On an <a>outermost svg element</a>, this attribute indicates the
+current scale factor
+relative to the initial view to take into account user
+magnification and panning operations, as described under
+<a href="interact.html#ZoomAndPanAttribute">Magnification
+and panning</a>. DOM attributes <a>currentScale</a> and
+<a>currentTranslate</a>
+are equivalent to the 2x3 matrix [a b c d e f] =
+[currentScale 0 0 currentScale currentTranslate.x currentTranslate.y].
+If "magnification" is enabled (i.e., <span class="attr-value">zoomAndPan="magnify"</span>),
+then the effect is as if an extra transformation were placed at the
+outermost level on the SVG document fragment (i.e., outside the
+<a>outermost svg element</a>).
+
+<p>The value of a transform property on the <a>outermost svg element</a> does not affect the value of this attribute.</p>
+
+<p>When accessed on an <a>'svg'</a> element that is not an
+<a>outermost svg element</a>, this attribute must return 1 as scaling factor.
+</p>
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__currentTranslate" class="attribute"><b>currentTranslate</b><span class="idl-type-parenthetical"> (readonly <a>DOMPointReadOnly</a>)</span></dt>
+<dd class="attribute">
+<div>
+On an <a>outermost svg element</a>, the corresponding translation factor
+that takes into account user "magnification".
+
+<p>The value of a transform property on the <a>outermost svg element</a> does not affect the value of this attribute.</p>
+
+<p>When accessed on an <a>'svg'</a> element that is not an
+<a>outermost svg element</a>, this attribute must return an DOMPointReadOnly at the coordinates (0, 0).
+</p>
+
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="operations-header">Operations:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGSVGElement__suspendRedraw" class="operation first-child">unsigned long <b>suspendRedraw</b>(unsigned long <var>maxWaitMilliseconds</var>)
+</dt>
+<dd class="operation">
+<div>
+This method is deprecated, and is only kept due to
+compatibility with legacy content. Calling this method has no
+effect on redrawing.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>unsigned long <var>maxWaitMilliseconds</var></div> 
+<div> This parameter is ignored.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The returned value is always <span class="attr-value">1</span>.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__unsuspendRedraw" class="operation">void <b>unsuspendRedraw</b>(unsigned long <var>suspendHandleID</var>)
+</dt>
+<dd class="operation">
+<div>
+This method is deprecated, and is only kept due to
+compatibility with legacy content. Calling this method has no
+effect on redrawing.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>unsigned long <var>suspendHandleID</var></div> 
+<div> This parameter is ignored.
+
+</div>
+</li>
+</ol>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__unsuspendRedrawAll" class="operation">void <b>unsuspendRedrawAll</b>()
+</dt>
+<dd class="operation">
+<div>
+This method is deprecated, and is only kept due to
+compatibility with legacy content. Calling this method has no
+effect on redrawing.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__forceRedraw" class="operation">void <b>forceRedraw</b>()
+</dt>
+<dd class="operation">
+<div>
+In rendering environments supporting interactivity, forces the user agent
+to immediately redraw all regions of the viewport that require updating. 
+
+<p class="issue">Should this method be neutered as suspendRedraw and friends
+have been?  Do implementations actually support painting in the middle of
+a running script by calling this method?</p>
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__pauseAnimations" class="operation">void <b>pauseAnimations</b>()
+</dt>
+<dd class="operation">
+<div>
+Suspends (i.e., pauses) all currently running animations that are defined
+within the SVG document fragment corresponding to this <a>'svg'</a>
+element, causing the animation clock corresponding to this document
+fragment to stand still until it is unpaused.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__unpauseAnimations" class="operation">void <b>unpauseAnimations</b>()
+</dt>
+<dd class="operation">
+<div>
+Unsuspends (i.e., unpauses) currently running animations that are defined
+within the SVG document fragment, causing the animation clock to continue
+from the time at which it was suspended.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__animationsPaused" class="operation">boolean <b>animationsPaused</b>()
+</dt>
+<dd class="operation">
+<div>
+Returns true if this SVG document fragment is in a paused state.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> Boolean indicating whether this SVG document fragment is in a
+paused state.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__getCurrentTime" class="operation">float <b>getCurrentTime</b>()
+</dt>
+<dd class="operation">
+<div>
+Returns the current time in seconds relative to the start time for the
+current SVG document fragment.
+
+If <span class="dom-method-name">getCurrentTime</span> is called before
+the document timeline has begun (for example, by script running in a
+<a>'script'</a>  element before the document's
+<a href="interact.html#LoadEvent">load</a> event is dispatched),
+then 0 is returned. 
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The current time in seconds, or 0 if the document timeline has not yet begun.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__setCurrentTime" class="operation">void <b>setCurrentTime</b>(float <var>seconds</var>)
+</dt>
+<dd class="operation">
+<div>
+Adjusts the clock for this SVG document fragment, establishing a new
+current time.
+
+If <span class="dom-method-name">setCurrentTime</span> is called
+before the document timeline has begun (for example, by script running
+in a <a>'script'</a> element before the document's
+<a href="interact.html#LoadEvent">load</a> event is dispatched),
+then the value of <var>seconds</var> in the last invocation of the method
+gives the time that the document will seek to once the document
+timeline has begun.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>float <var>seconds</var></div> 
+<div> The new current time in seconds relative to the start
+time for the current SVG document fragment.
+
+</div>
+</li>
+</ol>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__getIntersectionList" class="operation"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <b>getIntersectionList</b>(<a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>, <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>referenceElement</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns the list of graphics elements whose rendered content intersects
+the supplied rectangle. Each candidate graphics element is to
+be considered a match only if the same graphics element can be a 
+<a href="interact.html#PointerEventsProperty">target of pointer events</a> 
+as defined in <a>'pointer-events'</a> processing.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var></div> 
+<div> The test rectangle. The values are in the <a>initial coordinate
+system</a> for the current <a>'svg'</a> element.
+
+</div>
+</li>
+<li class="parameter">
+<div><a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>referenceElement</var></div> 
+<div> If not null, then any intersected element that 
+doesn't have the referenceElement as ancestor must not be included 
+in the returned NodeList.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> A list of Elements whose content intersects the supplied rectangle.
+The <a>NodeList</a> that is returned is <a href="http://www.w3.org/TR/dom/#concept-collection-static">static</a> ([<a href="refs.html#ref-DOM4">DOM4</a>], section 5.2.7).
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__getEnclosureList" class="operation"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-536297177">NodeList</a> <b>getEnclosureList</b>(<a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>, <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>referenceElement</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns the list of graphics elements whose rendered content is entirely
+contained within the supplied rectangle. Each candidate graphics element is to
+be considered a match only if the same graphics element can be a 
+<a href="interact.html#PointerEventsProperty">target of pointer events</a> 
+as defined in <a>'pointer-events'</a> processing.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var></div> 
+<div> The test rectangle. The values are in the <a>initial coordinate
+system</a> for the current <a>'svg'</a> element.
+
+</div>
+</li>
+<li class="parameter">
+<div><a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>referenceElement</var></div> 
+<div> If not null, then any intersected element that 
+doesn't have the referenceElement as ancestor must not be included 
+in the returned NodeList.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> A list of Elements whose content is enclosed by the supplied rectangle.
+The <a>NodeList</a> that is returned is <a href="http://www.w3.org/TR/dom/#concept-collection-static">static</a> ([<a href="refs.html#ref-DOM4">DOM4</a>], section 5.2.7).
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__checkIntersection" class="operation">boolean <b>checkIntersection</b>(<a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var>, <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns true if the rendered content of the given element intersects the
+supplied rectangle. Each candidate graphics element is to
+be considered a match only if the same graphics element can be a 
+<a href="interact.html#PointerEventsProperty">target of pointer events</a> 
+as defined in <a>'pointer-events'</a> processing.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div><a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var></div> 
+<div> The element on which to perform the given test.
+
+</div>
+</li>
+<li class="parameter">
+<div><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var></div> 
+<div> The test rectangle. The values are in the <a>initial coordinate
+system</a> for the current <a>'svg'</a> element.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> True or false, depending on whether the given element intersects
+the supplied rectangle.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__checkEnclosure" class="operation">boolean <b>checkEnclosure</b>(<a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var>, <a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var>)
+</dt>
+<dd class="operation">
+<div>
+Returns true if the rendered content of the given element is entirely
+contained within the supplied rectangle. Each candidate graphics element is to
+be considered a match only if the same graphics element can be a 
+<a href="interact.html#PointerEventsProperty">target of pointer events</a> 
+as defined in <a>'pointer-events'</a> processing.
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div><a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> <var>element</var></div> 
+<div> The element on which to perform the given test.
+
+</div>
+</li>
+<li class="parameter">
+<div><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <var>rect</var></div> 
+<div> The test rectangle. The values are in the <a>initial coordinate
+system</a> for the current <a>'svg'</a> element.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> True or false, depending on whether the given element is enclosed
+by the supplied rectangle.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__deselectAll" class="operation">void <b>deselectAll</b>()
+</dt>
+<dd class="operation">
+<div>
+Unselects any selected objects, including any selections of text strings
+and type-in bars.
+
+<p class="issue">What is a type-in bar?  Do we need <code>deselectAll</code> given
+we have DOM Selection?</p>
+</div>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGNumber" class="operation"><a class="idlinterface" href="types.html#InterfaceSVGNumber">SVGNumber</a> <b>createSVGNumber</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>SVGNumber</a> object outside of any document trees. The
+object is initialized to a value of zero.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGNumber</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGLength" class="operation"><a class="idlinterface" href="types.html#InterfaceSVGLength">SVGLength</a> <b>createSVGLength</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>SVGLength</a> object outside of any document trees. The
+object is initialized to the value of 0 user units. 
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGLength</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGAngle" class="operation"><a class="idlinterface" href="types.html#InterfaceSVGAngle">SVGAngle</a> <b>createSVGAngle</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>SVGAngle</a> object outside of any document trees. The
+object is initialized to the value 0 degrees (unitless). 
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGAngle</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGPoint" class="operation"><a>DOMPoint</a> <b>createSVGPoint</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>DOMPoint</a> object outside of any document trees. The
+object is initialized to the point (0,0) in the user coordinate system.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>DOMPoint</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGMatrix" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <b>createSVGMatrix</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>SVGMatrix</a> object outside of any document trees. The
+object is initialized to the identity matrix.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGMatrix</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGRect" class="operation"><a class="idlinterface" href="types.html#InterfaceSVGRect">SVGRect</a> <b>createSVGRect</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>SVGRect</a> object outside of any document trees. The
+object is initialized such that all values are set to 0 user units.
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGRect</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGTransform" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <b>createSVGTransform</b>()
+</dt>
+<dd class="operation">
+<div>
+Creates an <a>SVGTransform</a> object outside of any document trees. The
+object is initialized to an identity matrix transform
+(SVG_TRANSFORM_MATRIX).
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGTransform</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__createSVGTransformFromMatrix" class="operation"><a class="idlinterface" href="coords.html#InterfaceSVGTransform">SVGTransform</a> <b>createSVGTransformFromMatrix</b>(<a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <var>matrix</var>)
+</dt>
+<dd class="operation">
+<div>
+
+<p xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+Creates an <a>SVGTransform</a> object outside of any document trees. The
+object is initialized to the given matrix transform (i.e.,
+SVG_TRANSFORM_MATRIX).  The values from the parameter <var>matrix</var>
+are copied, the <var>matrix</var> parameter is not adopted as
+<a edit:format="expanded">SVGTransform::matrix</a>.
+
+</p>
+
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div><a class="idlinterface" href="coords.html#InterfaceSVGMatrix">SVGMatrix</a> <var>matrix</var></div> 
+<div> The transform matrix.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> An <a>SVGTransform</a> object.
+
+</div>
+</dd>
+</dl>
+</dd>
+
+<dt id="__svg__SVGSVGElement__getElementById" class="operation"><a class="idlinterface"
+   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-745549614">Element</a> <b>getElementById</b>(DOMString <var>elementId</var>)
+</dt>
+<dd class="operation">
+<div>
+Searches this SVG document fragment (i.e., the search is restricted to a
+subset of the document tree) for an Element whose id is given by
+<var>elementId</var>. If an Element is found, that Element is returned. If
+no such element exists, returns null. Behavior is not defined if more
+than one element has this id.
+
+<p class="issue">Do we need this?  If so, can we define it in terms of
+calling Document.getElementById and checking whether the returned
+element is within the subtree?</p>
+
+</div>
+<dl class="operation">
+<dt class="parameters-header">Parameters</dt>
+<dd>
+<ol class="parameters">
+<li class="parameter first-child">
+<div>DOMString <var>elementId</var></div> 
+<div> The unique id value for an element.
+
+</div>
+</li>
+</ol>
+</dd>
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The matching element.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGGElement">Interface SVGGElement</h3>
+
+
+<edit:with element='g'>
+
+The <a>SVGSVGElement</a> interface corresponds to the <a>'g'</a> element.
+<pre class="idl">interface <b>SVGGElement</b> : <a>SVGGraphicsElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGDefsElement">Interface SVGDefsElement</h3>
+
+
+<edit:with element='defs'>
+
+The <a>SVGDefsElement</a> interface corresponds to the <a>'defs'</a>
+element.
+<pre class="idl">interface <b>SVGDefsElement</b> : <a>SVGGraphicsElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGDescElement">Interface SVGDescElement</h3>
+
+
+<edit:with element='desc'>
+
+The <a>SVGDescElement</a> interface corresponds to the <a>'desc'</a>
+element.
+<pre class="idl">interface <b>SVGDescElement</b> : <a>SVGElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGTitleElement">Interface SVGTitleElement</h3>
+
+
+<edit:with element='title'>
+
+The <a>SVGTitleElement</a> interface corresponds to the <a>'title'</a>
+element.
+<pre class="idl">interface <b>SVGTitleElement</b> : <a>SVGElement</a> {
+};</pre>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGSymbolElement">Interface SVGSymbolElement</h3>
+
+
+<edit:with element='symbol'>
+
+The <a>SVGSymbolElement</a> interface corresponds to the <a>'symbol'</a>
+element.
+<pre class="idl">interface <b>SVGSymbolElement</b> : <a>SVGElement</a> {
+};
+
+<a>SVGSymbolElement</a> implements <a>SVGFitToViewBox</a>;</pre>
+
+</edit:with>
+
+<h3 id="InterfaceSVGUseElement">Interface SVGUseElement</h3>
+
+
+<edit:with element='use'>
+
+<p>The <a>SVGUseElement</a> interface corresponds to the <a>'use'</a> element.</p>
+
+<pre class="idl">interface <b>SVGUseElement</b> : <a>SVGGraphicsElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__y">y</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__width">width</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__height">height</a>;
+};
+
+<a>SVGUseElement</a> implements <a>SVGURIReference</a>;</pre>
+
+<dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGUseElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given <a>'use'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGUseElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given <a>'use'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGUseElement__width" class="attribute"><b>width</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'width'</a> on the given <a>'use'</a>
+element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGUseElement__height" class="attribute"><b>height</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'height'</a> on the given <a>'use'</a>
+element.
+
+</div>
+</dd>
+
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGSwitchElement">Interface SVGSwitchElement</h3>
+
+
+<edit:with element='switch'>
+
+The <a>SVGSwitchElement</a> interface corresponds to the <a>'switch'</a>
+element.
+<pre class="idl">interface <b>SVGSwitchElement</b> : <a>SVGGraphicsElement</a> {
+};</pre>
+
+</edit:with>
+
+<h3 id="InterfaceGetSVGDocument">Interface GetSVGDocument</h3>
+
+
+
+<p>This interface provides access to an SVG document embedded by reference
+in another DOM-based language. The expectation is that the interface is
+implemented on DOM objects that allow such SVG document references, such as
+the DOM <a>Element</a> object that corresponds to an HTML
+<span class="element-name">'object'</span> element. Such DOM objects are
+often also required to implement the <a>EmbeddingElement</a> defined in the
+Window specification [<a href="refs.html#ref-WINDOW">WINDOW</a>].
+</p>
+
+
+<p>This interface is deprecated and may be dropped from future versions of
+the SVG specification. Authors are suggested to use the
+<code>contentDocument</code> attribute on the <a>EmbeddingElement</a>
+interface to obtain a referenced SVG document, if that interface is
+available.
+</p>
+<pre class="idl">[NoInterfaceObject]
+interface <b>GetSVGDocument</b> {
+  <a class="idlinterface" href="struct.html#InterfaceSVGDocument">SVGDocument</a> <a href="struct.html#__svg__GetSVGDocument__getSVGDocument">getSVGDocument</a>();
+};</pre><dl class="interface">
+<dt class="operations-header">Operations:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__GetSVGDocument__getSVGDocument" class="operation first-child"><a class="idlinterface" href="struct.html#InterfaceSVGDocument">SVGDocument</a> <b>getSVGDocument</b>()
+</dt>
+<dd class="operation">
+<div>
+
+<p> This method must return the <a>Document</a> object embedded content
+in an embedding element, or null if there is no document.
+</p>
+
+
+<p>Note that this is equivalent to fetching the value of the
+<code>EmbeddingElement::contentDocument</code> attribute of the embedding
+element, if the <a>EmbeddingElement</a> interface is also implemented.
+The author is advised to check that the document element of the returned
+<a>Document</a> is indeed an <a>'svg'</a> element instead of assuming
+that that will always be the case.
+</p>
+
+
+</div>
+<dl class="operation">
+<dt class="returns-header">Returns</dt>
+<dd>
+<div> The <a>Document</a> object for the referenced document, or null
+if there is no document.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</body>
+</html>

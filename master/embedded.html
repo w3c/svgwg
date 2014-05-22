@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<head>
+  <title>Embedded Content</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet"           title="Default"               type="text/css" media="screen" href="style/default_no_maturity.css"/>
+  <link rel="alternate stylesheet" title="All annotations"       type="text/css" media="screen" href="style/default_svg.css"/>
+  <link rel="alternate stylesheet" title="No issues/annotations" type="text/css" media="screen" href="style/default_no_issues.css"/>
+  <!--
+  <link rel="alternate stylesheet" title="CSS3 Unmodified"       type="text/css" media="screen" href="style/default.css"/>
+  <link rel="alternate stylesheet" title="SVG 1.1"               type="text/css" media="screen" href="style/svg-style.css"/>
+  -->
+  <!-- W3C style sheet will be added here during processing. -->
+</head>
+<body>
+
+<h1>Embedded Content</h1>
+<div class="annotation svg2-requirement">
+ <table>
+  <tr>
+   <th>SVG 2 Requirement:</th>
+   <td>- <a href="http://www.w3.org/Graphics/SVG/WG/wiki/SVG2_Requirements_Commitments">Have a video element in SVG namespace with the same characteristics as the HTML 5 video element.</a><br/>- <a href="http://www.w3.org/Graphics/SVG/WG/wiki/SVG2_Requirements_Commitments">Support 'canvas' element in SVG 2 </a><br/>- <a href="http://www.w3.org/Graphics/SVG/WG/wiki/SVG2_Requirements_Input#the_.3Cvideo.3E_element">the 'video' element </a><br/>- <a href="http://www.w3.org/Graphics/SVG/WG/wiki/SVG2_Requirements_Input#the_.3Caudio.3E_element">the 'audio' element </a>
+   </td>
+ </tr>
+ <tr>
+   <th>Resolution:</th>
+   <td>- <a href="http://www.w3.org/2013/02/06-svg-minutes.html#item09">Keep the "Allow video elements to have captions, tracks, etc" SVG 2 requirement.</a><br/>- <a href="http://www.w3.org/2013/02/06-svg-minutes.html#item09">The "Provide a way to control audio level and playback" SVG 2 requirement does not need any action, as we will get this functionality from HTMLAudioElement.</a><br/>- <a href="http://www.w3.org/2013/02/06-svg-minutes.html#item09">We will keep the "Allow video elements to have captions, tracks, etc" SVG 2 requirement.</a><br/>- <a href="http://www.w3.org/2012/09/18-svg-minutes.html#item05">Add an iframe-like element to SVG that includes declarative support for dynamic loading</a>
+   </td>
+ </tr>
+ <tr>
+   <th>Purpose:</th>
+   <td>To allow various HTML embedded content elements to be used directly in SVG and support dynamic loading of content.</td>
+ </tr>
+ <tr>
+   <th>Owner:</th>
+   <td>stakagi (<a href="https://www.w3.org/Graphics/SVG/WG/track/actions/3432">ACTION-3432</a>)</td>
+ </tr>
+</table>
+</div>
+
+
+
+ 
+<h2 id="Overview">Overview</h2>
+<p>SVG supports embedded content similar to the <a href="http://www.w3.org/TR/html5/">HTML5's</a> <a href="http://www.w3.org/TR/html5/embedded-content-0.html">embedded content</a>. Embedded content is content that imports another resource into the document, or content from another vocabulary that is inserted into the document. </p>
+<p>The embedded content elements which SVG supports are <a>'image'</a>, <a>'video'</a>, <a>'audio'</a>, <a>'iframe'</a>, <a>'canvas'</a> and <a>'foreignObject'</a>. </p>
+
+<p>Except <a>'canvas'</a> and <a>'foreignObject'</a>, embedded content supports <a href="https://dvcs.w3.org/hg/webperf/raw-file/tip/specs/ResourcePriorities/Overview.html">Resource Priorities</a> for hinting of downloading external resources. The normative reference is <a href="https://dvcs.w3.org/hg/webperf/raw-file/tip/specs/ResourcePriorities/Overview.html">Resource Priorities</a>. </p>
+<p class="issue">Stakagi: The current Resource Priorities draft does not support embedded content elements which is going to be added by SVG2.0, such as video. <a href="http://www.w3.org/Graphics/SVG/WG/wiki/Proposals/ResourcePriorities_for_SVG">Besides, the consideration for mapping and its tiling use cases may be insufficient. It may be better to describe detailed behavior of Resource Priorities in SVG at SVG specifications.</a></p>
+
+
+<h2 id="Placement">Placement and scaling of the referenced resource</h2>
+<p>Some embedding elements which refer to an external resource establish a new viewport for the referenced content as described in <a href='coords.html#EstablishingANewViewport'>Establishing a new viewport</a>. The bounds for the new viewport are defined by attributes <a>'iframe/x'</a>, <a>'iframe/y'</a>, <a>'iframe/width'</a> and <a>'iframe/height'</a><!-- <edit:attributecategory name='embedding placement'/> and <edit:attributecategory name='embedding size'/>-->. The placement and scaling of the referenced resource are controlled by the <a>'preserveAspectRatio'</a> attribute on the corresponding element. </p>
+
+<p class="issue">Brian: I think it's not obvious that we want to add preserveAspectRatio to these elements since <a href="http://dev.w3.org/csswg/css-images-3/">CSS3 Images</a> is trying to define similar functionality. Maybe make this an issue? </p>
+<p><em>Attribute definitions:</em></p>
+<dl class="attrdef-list">
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="image,iframe,video,audio" id="PlacementXAttribute">x</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="image,iframe,video,audio" id="PlacementYAttribute">y</dfn></td>
+        <td><a>&lt;length&gt;</a></td>
+        <td>0</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="image,iframe,video" id="PlacementWidthAttribute">width</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="image,iframe,video" id="PlacementHeightAttribute">height</dfn></td>
+        <td><a>&lt;length&gt;</a> | auto</td>
+        <td>0</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>The <a>'iframe/x'</a>, <a>'iframe/y'</a>, <a>'iframe/width'</a> and <a>'iframe/height'</a><!--<edit:attributecategory name='embedding placement'/>, <edit:attributecategory name='embedding size'/>--> attributes specify the rectangular region into which the referenced resource is placed.</p> 
+    <p>A negative value for <edit:attributecategory name='embedding size'/> is invalid (see Error processing). A value of zero for either attribute disables rendering of the element. </p>
+    <p class="ready-for-wider-review">The <span class="attr-value">'auto'</span> value for <edit:attributecategory name='embedding size'/> is used to size the corresponding element automatically based on the intrinsic size or aspect ratio of the referenced resource. If the intrinsic aspect ratio of the referenced resource is unknown, it is assumed to be 2:1. If the intrinsic size of the referenced resource is unknown, it is assumed to be 300x150, just as is required for CSS replaced elements. If <span class="attr-value">'auto'</span> is specified for just one of <a>'iframe/width'</a> or <a>'iframe/height'</a>, then the other is determined based on the intrinsic aspect ratio. The automatically determined <edit:attributecategory name='embedding size'/> values are interpreted as user units, and are reflected in the x and y IDL attributes as <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</a> values.</p>
+  </dd>
+</dl>
+
+<p>Since the pixel coordinate system which some embedded contents has is not always equivalent SVG coordinate system to embed, <a>'canvas'</a> and <a>'iframe'</a> have intrinsic width and height as <a>'canvas/canvasWidth'</a> and <a>'canvas/canvasHeight'</a> for <a>'canvas'</a>, <a>'iframe/frameWidth'</a> and <a>'iframe/frameHeight'</a> for <a>'iframe'</a> to assign its intrinsic content size.</p>
+
+
+
+<h2 id="ImageElement">The <span class='element-name'>'image'</span> element</h2>
+
+<edit:with element='image'>
+
+<edit:elementsummary name='image'/>
+
+<p>The <a>'image'</a> element
+indicates that the contents of a complete file are to be
+rendered into a given rectangle within the current user
+coordinate system. The <a>'image'</a> element can refer to raster
+image files such as PNG or JPEG or to files with MIME type of
+"image/svg+xml". <a
+href="conform.html#ConformingSVGViewers">Conforming SVG
+viewers</a> need to support at least PNG, JPEG and SVG format
+files.</p>
+
+<p>The result of processing an <a>'image'</a> is always a four-channel
+RGBA result. When an <a>'image'</a>
+element references a raster image file such as PNG or JPEG
+files which only has three channels (RGB), then the effect is
+as if the object were converted into a 4-channel RGBA image
+with the alpha channel uniformly set to 1. For a single-channel
+raster image, the effect is as if the object were converted
+into a 4-channel RGBA image, where the single channel from the
+referenced object is used to compute the three color channels
+and the alpha channel is uniformly set to 1.</p>
+
+<p>When an <a>'image'</a> element
+references an SVG image, the <a>'clip'</a> and <a>'overflow'</a> properties on the root element in
+the referenced SVG image are ignored (in the same manner as the
+<a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> attributes are ignored). Unless the value of
+<a>'preserveAspectRatio'</a> on the <a>'image'</a> element starts with 'defer', 
+the <a>'preserveAspectRatio'</a> attribute on the root element in
+the referenced SVG image is also ignored (see <a>'preserveAspectRatio'</a>
+for details).  Instead, the <a>'preserveAspectRatio'</a> attribute on
+the referencing <a>'image'</a>
+element defines how the SVG image content is fitted into the
+viewport and the <a>'clip'</a> and <a>'overflow'</a> properties on the <a>'image'</a> element define how the SVG
+image content is clipped (or not) relative to the viewport.</p>
+
+<p class="issue">Why does it make sense to override <a>'clip'</a>
+but not <a>'clip-path'</a>?</p>
+
+<p>The value of the <a>'viewBox'</a> attribute to use when
+evaluating the <a>'preserveAspectRatio'</a> attribute is
+defined by the referenced content. For content that clearly
+identifies a viewBox (e.g. an SVG file with the <a>'viewBox'</a> attribute on the
+<a>outermost svg element</a>) that value should be used. For most
+raster content (PNG, JPEG) the bounds of the image should be
+used (i.e. the <a>'image'</a>
+element has an implicit <a>'viewBox'</a> of <span class='attr-value'>'0 0 raster-image-width
+raster-image-height'</span>). Where no value is readily available
+(e.g. an SVG file with no <a>'viewBox'</a> attribute on the
+<a>outermost svg element</a>) the <a>'preserveAspectRatio'</a> attribute is
+ignored, and only the translation due to the <a>'x'</a> &amp; <a>'y'</a> attributes of the viewport is
+used to display the content.</p>
+
+<p class="issue">We should say how the use of an <code>#xywh</code>
+media fragment interacts with the the above.</p>
+
+<p>For example, if the image element referenced a PNG or JPEG
+and <span class="attr-value">preserveAspectRatio="xMinYMin
+meet"</span>, then the aspect ratio of the raster would be
+preserved (which means that the scale factor from image's
+coordinates to current user space coordinates would be the same
+for both X and Y), the raster would be sized as large as
+possible while ensuring that the entire raster fits within the
+viewport, and the top/left of the raster would be aligned with
+the top/left of the viewport as defined by the attributes <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> on the <a>'image'</a> element.  If the value
+of <a>'preserveAspectRatio'</a> was <span class='attr-value'>'none'</span>
+then aspect ratio of the image would not be preserved. The
+image would be fitted such that the top/left corner of the
+raster exactly aligns with coordinate (<a>'x'</a>, <a>'y'</a>) and the bottom/right corner of
+the raster exactly aligns with coordinate (<a>'x'</a>+<a>'width'</a>, <a>'y'</a>+<a>'height'</a>).</p>
+
+<p>The resource referenced by the <a>'image'</a> element represents a
+separate document which generates its own parse tree and
+document object model (if the resource is XML). Thus, there is
+no inheritance of properties into the image.</p>
+
+<p>Unlike <a>'use'</a>, the <a>'image'</a> element cannot reference
+elements within an SVG file.</p>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support auto-sized images.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-52-24">We will allow auto-sized images in SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow raster images to use their own size without the need to set width and height.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3340">ACTION-3340</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support selecting part of an <a>'image'</a> for display.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-45-13">We will have a method for <span class='element-name'>'image'</span> to select a part of an image to display, maybe by allowing <span class='attr-name'>'viewBox'</span> on it.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow selection of part of an image without requiring the author to manually slice the image.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Nobody</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support the <span class='property'>'object-fit'</span> and <span class='property'>'object-position'</span> properties from css3-images.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item08">SVG 2 will depend on CSS3 Image Values and CSS4 Image Values.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To align with the CSS way of specifying image fitting that <a>'preserveAspectRatio'</a> provides.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron or Erik (no action)</td>
+    </tr>
+  </table>
+</div>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="image" id="ImageElementHrefAttribute">xlink:href</dfn></td>
+        <td><a>&lt;iri&gt;</a></td>
+        <td>(none)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>An <a href="linking.html#IRIReference">IRI reference</a>
+    identifying the image to render.</p>
+  </dd>
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="image" id="ImageElementPreserveAspectRatioAttribute">preserveAspectRatio</dfn></td>
+        <td>defer? <a>&lt;align&gt;</a> [ meet | slice ]?</td>
+        <td>xMidYMid meet</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>Specifies the fitting behavior when the aspect ratio of the referenced image
+    does not match the aspect ratio of the rectangle it is placed in.
+    See the definition of <a>'preserveAspectRatio'</a> for details.</p>
+  </dd>
+</dl>
+
+<p>An example:</p>
+
+<pre>
+&lt;?xml version="1.0" standalone="no"?&gt;
+&lt;svg width="4in" height="3in"
+     xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"&gt;
+  &lt;desc&gt;This graphic links to an external image
+  &lt;/desc&gt;
+  &lt;image x="200" y="200" width="100px" height="100px"
+         xlink:href="myimage.png"&gt;
+    &lt;title&gt;My image&lt;/title&gt;
+  &lt;/image&gt;
+&lt;/svg&gt;
+</pre>
+
+</edit:with>
+
+
+<h2 id="VideoElement">The <span class='element-name'>'video'</span> element</h2>
+<edit:with element='video'>
+<edit:elementsummary name='video'/>
+
+<p>The <a>'video'</a> element introduces the function that is almost equivalent to <a href='http://www.w3.org/TR/html5/embedded-content-0.html#the-video-element'>'video' element of html5.0</a> into svg. But, from the difference of the model of svg and html, it has some differences. This chapter describe them mainly. Therefore, except for any SVG-specific rules explicitly mentioned in this specification, the normative definition for this element is the <a href='http://www.w3.org/TR/html5/embedded-content-0.html#the-video-element'>'video' element of html5.0.</a> </p>
+
+<p>To refer a video resource, 'video' element uses <a>'src'</a> attribute insted of 'xlink:href'. </p>
+
+<p>Placement of video resources is established in accordance with <a href='#Placement'>Placement and scaling of the referenced resource</a> using ‘x’, ‘y’, ‘width’, ‘height’ and ‘preserveAspectRatio’ attributes. </p>
+
+
+
+</edit:with>
+
+<h2 id="AudioElement">The <span class='element-name'>'audio'</span> element</h2>
+<edit:with element='audio'>
+<edit:elementsummary name='audio'/>
+
+<p>The <a>'audio'</a> element introduces the function that is almost equivalent to <a href='http://www.w3.org/TR/html5/embedded-content-0.html#the-audio-element'>'audio' element of html5.0</a> into svg. Except for any SVG-specific rules explicitly mentioned in this specification, the normative definition for this element is the <a href='http://www.w3.org/TR/html5/embedded-content-0.html#the-audio-element'>'audio' element of html5.0.</a> The 'audio' element is not rendered on screen unless it has 'controls' boolean attribute of true. </p>
+
+<p>If <a>'controls'</a> boolean attribute is present, the <a>'x'</a>, <a>'y'</a> attributes specify the upper left corner of built-in controller. Otherwise those attributes has no effects. </p>
+
+</edit:with>
+
+<h2 id="IframeElement">The <span class='element-name'>'iframe'</span> element</h2>
+<edit:with element='iframe'>
+<edit:elementsummary name='iframe'/>
+
+<p>The <a>'iframe'</a> element introduces the function that is almost equivalent to <a href='http://www.w3.org/TR/html5/embedded-content-0.html#the-iframe-element'>'iframe' element of html5.0</a> into svg. Except for any SVG-specific rules explicitly mentioned in this specification, the normative definition for this element is the <a href='http://www.w3.org/TR/html5/embedded-content-0.html#the-iframe-element'>'iframe' element of html5.0.</a></p>
+
+<p>The <a>'iframe'</a> element introduces a new nested browsing context. Placement of browsing context is established in accordance with placement and scaling of the referenced resource using <a>'x'</a>, <a>'y'</a>, <a>'width'</a>, <a>'height'</a>, <a>'frameWidth'</a>, <a>'frameHeight'</a> and <a>'preserveAspectRatio'</a> attributes.</p>
+
+<p>The <a>'frameWidth'</a> and <a>'frameHeight'</a> specifies the natural (intrinsic) size (dimension) of browsing context(in CSS pixel) in non negative value. Unlike from <a>'canvas'</a>, floating point values are acceptable as intrinsic width and height. (See also <a href='http://dev.w3.org/csswg/css-images/#sizing'>CSS Image Values and Replaced Content Module Level 4 #sizing</a>) </p>
+
+<p>If <a>'frameWidth'</a> or <a>'frameHeight'</a> attributes are not specified, values of <a>'width'</a> or <a>'height'</a> are assigned to corresponding DOM attributes.</p>
+<p class="issue">Are 'frameWidth' and 'frameHeight' really required? They may only be the same as 'width' and 'height'.</p>
+
+<p>Differ from <a>'image'</a> element, even if <a>'iframe'</a> element references an SVG document, placement and scaling is achieved toward browsing context based on its intrinsic size. After that, referred SVG document will be arranged based on <a href='coords.html#ViewportSpace'>initial viewport establishment process</a> for browsing context. </p>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="iframe" id="FrameWidthAttribute">frameWidth</dfn></td>
+        <td><a>&lt;length&gt;</a></td>
+        <td>0</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="iframe" id="FrameHeightAttribute">frameHeight</dfn></td>
+        <td><a>&lt;length&gt;</a></td>
+        <td>0</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd></dd>
+</dl>
+
+</edit:with>
+
+<h2 id="CanvasElement">The <span class='element-name'>'canvas'</span> element</h2>
+<edit:with element='canvas'>
+<edit:elementsummary name='canvas'/>
+
+<p>The <a>'canvas'</a> element introduces the function that is almost equivalent to <a href='http://www.w3.org/TR/html5/scripting-1.html#the-canvas-element'>'canvas' element of html5.0</a> into svg. Except for any SVG-specific rules explicitly mentioned in this specification, the normative definition for this element is the <a href='http://www.w3.org/TR/html5/scripting-1.html#the-canvas-element'>'canvas' element of html5.0.</a> </p>
+
+<p>The <a>'canvasWidth'</a> and <a>'canvasHeight'</a> specifies the natural size(dimension) of canvas object in non negative integer. Therefore it corresponds to html:canvas's 'width' and 'height'. (See also <a href='http://dev.w3.org/csswg/css-images/#sizing'>CSS Image Values and Replaced Content Module Level 4 #sizing</a>)</p>
+
+<p>On the other hand, <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> attributes specify the rectangular region into which the canvas object is placed considering <a>'preserveAspectRatio'</a> attribute in accordance with <a href='embedded.html#Placement'>Placement and scaling of the referenced resource</a>.</p>
+
+<p>If <a>'canvasWidth'</a> or <a>'canvasHeight'</a> are not specified, INT(<a>'width'</a>) or INT(<a>'height'</a>) are assigned to corresponding DOM attributes. In this case, if <a>'width'</a> or <a>'height'</a> is less than 1 , then the canvas object is not generated. </p>
+
+<p class="issue">Are 'canvasWidth' and 'canvasHeight' really required? They may only be the same as INT('width') and INT('height').</p>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="canvas" id="CanvasWidthAttribute">canvasWidth</dfn></td>
+        <td><a>&lt;length&gt;</a></td>
+        <td>0</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="canvas" id="CanvasHeightAttribute">canvasHeight</dfn></td>
+        <td><a>&lt;length&gt;</a></td>
+        <td>0</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd></dd>
+</dl>
+
+</edit:with>
+
+<h2 id="ForeignObjectElement">The <span class='element-name'>'foreignObject'</span> element</h2>
+<p><a>'foreignObject'</a></p>
+
+<p class='issue'>Stakagi: Should 'foreignObject' be in an Embedded Content chapter? Or should it still be an Extensibility chapter? </p>
+
+<h2 id="SourceElement">The <span class='element-name'>'source'</span> element</h2>
+<edit:with element='source'>
+<edit:elementsummary name='source'/>
+<p>The source element allows authors to specify multiple alternative media resources for media elements. Except for any SVG-specific rules explicitly mentioned in this specification, the normative definition for this element is the <a href='http://www.w3.org/TR/html5/embedded-content-0.html#the-source-element'>'source' element of html5.0.</a> </p>
+</edit:with>
+
+<h2 id="TrackElement">The <span class='element-name'>'track'</span> element</h2>
+<edit:with element='track'>
+<edit:elementsummary name='track'/>
+<p>The track element allows authors to specify explicit external timed text tracks for media elements. Except for any SVG-specific rules explicitly mentioned in this specification, the normative definition for this element is the <a href='http://www.w3.org/TR/html5/embedded-content-0.html#the-track-element'>'track' element of html5.0.</a> </p>
+</edit:with>
+
+<h2 id="DOMInterfaces">DOM interfaces</h2>
+<p class="issue">Stakagi: In this draft, elements which introduced from HTML inherits HTMLElement as a result. Does this cause problems?</p>
+
+
+<h3 id="InterfaceSVGImageElement">Interface SVGImageElement</h3>
+
+<edit:with element='image'>
+
+<p>The <a>SVGImageElement</a> interface corresponds to the <a>'image'</a> element.</p>
+
+<pre class="idl">interface <b>SVGImageElement</b> : <a>SVGGraphicsElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__y">y</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__width">width</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__height">height</a>;
+  readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedPreserveAspectRatio">SVGAnimatedPreserveAspectRatio</a> <a href="embedded.html#__svg__SVGImageElement__preserveAspectRatio">preserveAspectRatio</a>;
+};
+
+<a>SVGImageElement</a> implements <a>SVGURIReference</a>;</pre>
+
+<dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGImageElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given <a>'image'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGImageElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given <a>'image'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGImageElement__width" class="attribute"><b>width</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'width'</a> on the given <a>'image'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGImageElement__height" class="attribute"><b>height</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'height'</a> on the given <a>'image'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGImageElement__preserveAspectRatio" class="attribute"><b>preserveAspectRatio</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedPreserveAspectRatio">SVGAnimatedPreserveAspectRatio</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'preserveAspectRatio'</a> on the given <a>'image'</a> element.
+
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+
+<h3 id="InterfaceSVGVideoElement">Interface SVGVideoElement</h3>
+
+<edit:with element='video'>
+
+<p>The <a>SVGVideoElement</a> interface corresponds to the <a>'video'</a> element. 
+This interface introduces the function that is almost equivalent to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmlvideoelement">'HTMLVideoElement'</a> interface of html5.0 into svg.</p>
+
+<pre class="idl">interface <b>SVGVideoElement</b> : <a>SVGGraphicsElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGVideoElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGVideoElement__y">y</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGVideoElement__width">width</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGVideoElement__height">height</a>;
+  readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedPreserveAspectRatio">SVGAnimatedPreserveAspectRatio</a> <a href="embedded.html#__svg__SVGVideoElement__preserveAspectRatio">preserveAspectRatio</a>;
+};
+<a>SVGVideoElement</a> implements <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmlvideoelement">HTMLVideoElement</a>;
+</pre>
+
+<dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGVideoElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given <a>'video'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGVideoElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given <a>'video'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGVideoElement__width" class="attribute first-child"><b>width</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'width'</a> on the given <a>'video'</a> element.
+</div>
+</dd>
+
+<dt id="__svg__SVGVideoElement__height" class="attribute first-child"><b>height</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'height'</a> on the given <a>'video'</a> element.
+</div>
+</dd>
+
+<dt id="__svg__SVGVideoElement__preserveAspectRatio" class="attribute"><b>preserveAspectRatio</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedPreserveAspectRatio">SVGAnimatedPreserveAspectRatio</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'preserveAspectRatio'</a> on the given <a>'video'</a> element.
+
+</div>
+</dd>
+
+
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGAudioElement">Interface SVGAudioElement</h3>
+
+<edit:with element='audio'>
+
+<p>The <a>SVGAudioElement</a> interface corresponds to the <a>'audio'</a> element. This interface introduces the function that is almost equivalent to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmlaudioelement">'HTMLAudioElement'</a> interface of html5.0 into svg.</p>
+
+<pre class="idl">
+interface <b>SVGAudioElement</b> : <a>SVGGraphicsElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGAudioElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGAudioElement__y">y</a>;
+};
+<a>SVGAudioElement</a> implements <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmlaudioelement">HTMLAudioElement</a>;
+</pre>
+
+<dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGAudioElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given <a>'audio'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGAudioElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given <a>'audio'</a> element.
+
+</div>
+</dd>
+
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGIframeElement">Interface SVGIframeElement</h3>
+
+<edit:with element='iframe'>
+
+<p>The <a>SVGIframeElement</a> interface corresponds to the <a>'iframe'</a> element. This interface introduces the function that is almost equivalent to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmliframeelement">'HTMLIframeElement'</a> interface of html5.0 into svg.</p>
+<pre class="idl">interface <b>SVGIframeElement</b> : <a>SVGGraphicsElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGIframeElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGIframeElement__y">y</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGIframeElement__width">width</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGIframeElement__height">height</a>;
+  readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedPreserveAspectRatio">SVGAnimatedPreserveAspectRatio</a> <a href="embedded.html#__svg__SVGIframeElement__preserveAspectRatio">preserveAspectRatio</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGIframeElement__frameWidth">frameWidth</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGIframeElement__frameHeight">frameHeight</a>;
+};
+
+<a>SVGIframeElement</a> implements <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmliframeelement">HTMLIframeElement</a>;
+</pre>
+
+<p class="issue">Brian: Is it possible to use SVGIFrameElement implements <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmliframeelement">HTMLIFrameElement</a>? (fixed)</p>
+
+<dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGIframeElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given <a>'iframe'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGIframeElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given <a>'iframe'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGIframeElement__width" class="attribute"><b>width</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'width'</a> on the given <a>'iframe'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGIframeElement__height" class="attribute"><b>height</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'height'</a> on the given <a>'iframe'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGIframeElement__preserveAspectRatio" class="attribute"><b>preserveAspectRatio</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedPreserveAspectRatio">SVGAnimatedPreserveAspectRatio</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'preserveAspectRatio'</a> on the given <a>'iframe'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGIframeElement__frameWidth" class="attribute"><b>frameWidth</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'frameWidth'</a> on the given <a>'iframe'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGIframeElement__frameHeight" class="attribute"><b>frameHeight</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'frameHeight'</a> on the given <a>'iframe'</a> element.
+
+</div>
+</dd>
+
+
+</dl>
+</dd>
+</dl>
+
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGCanvasElement">Interface SVGCanvasElement</h3>
+
+<edit:with element='canvas'>
+
+<p>The <a>SVGCanvasElement</a> interface corresponds to the <a>'canvas'</a> element. This interface introduces the function that is almost equivalent to <a href="http://www.w3.org/TR/html5/scripting-1.html#htmlcanvaselement">'HTMLCanvasElement'</a> interface of html5.0 into svg.</p>
+
+
+<pre class="idl">interface <b>SVGCanvasElement</b> : <a>SVGGraphicsElement</a> {
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGCanvasElement__x">x</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGCanvasElement__y">y</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGCanvasElement__width">width</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGCanvasElement__height">height</a>;
+  readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedPreserveAspectRatio">SVGAnimatedPreserveAspectRatio</a> <a href="embedded.html#__svg__SVGCanvasElement__preserveAspectRatio">preserveAspectRatio</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGCanvasElement__canvasWidth">canvasWidth</a>;
+  readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGCanvasElement__canvasHeight">canvasHeight</a>;
+};
+<a>SVGCanvasElement</a> implements <a href="http://www.w3.org/TR/html5/scripting-1.html#htmlcanvaselement">HTMLCanvasElement</a>;
+</pre>
+
+<dl class="interface">
+<dt class="attributes-header">Attributes:</dt>
+<dd>
+<dl class="attributes">
+
+<dt id="__svg__SVGCanvasElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'x'</a> on the given <a>'canvas'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGCanvasElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'y'</a> on the given <a>'canvas'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGCanvasElement__width" class="attribute"><b>width</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'width'</a> on the given <a>'canvas'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGCanvasElement__height" class="attribute"><b>height</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'height'</a> on the given <a>'canvas'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGCanvasElement__preserveAspectRatio" class="attribute"><b>preserveAspectRatio</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedPreserveAspectRatio">SVGAnimatedPreserveAspectRatio</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute <a>'preserveAspectRatio'</a> on the given <a>'canvas'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGCanvasElement__canvasWidth" class="attribute"><b>canvasWidth</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute INT(<a>'canvasWidth'</a>) on the given <a>'canvas'</a> element.
+
+</div>
+</dd>
+
+<dt id="__svg__SVGCanvasElement__canvasHeight" class="attribute"><b>canvasHeight</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a>)</span></dt>
+<dd class="attribute">
+<div>
+Corresponds to attribute INT(<a>'canvasHeight'</a>) on the given <a>'canvas'</a> element.
+
+</div>
+</dd>
+
+
+</dl>
+</dd>
+</dl>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGSourceElement">Interface SVGSourceElement</h3>
+
+<edit:with element='source'>
+
+<p>The <a>SVGSourceElement</a> interface corresponds to the <a>'source'</a> element. This interface introduces the function that is almost equivalent to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmlsourceelement">'HTMLSourceElement'</a> interface of html5.0 into svg.</p>
+
+
+<pre class="idl">interface <b>SVGSourceElement</b> : <a>SVGElement</a> { };
+<a>SVGSourceElement</a> implements <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmlsourceelement">HTMLSourceElement</a>;
+</pre>
+
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGTrackElement">Interface SVGTrackElement</h3>
+
+<edit:with element='track'>
+
+<p>The <a>SVGTrackElement</a> interface corresponds to the <a>'track'</a> element. This interface introduces the function that is almost equivalent to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmltrackelement">'HTMLTrackElement'</a> interface of html5.0 into svg.</p>
+
+
+<pre class="idl">interface <b>SVGTrackElement</b> : <a>SVGElement</a> { };
+<a>SVGTrackElement</a> implements <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmltrackelement">HTMLTrackElement</a>;
+</pre>
+
+</edit:with>
+
+
+</body>
+</html>
