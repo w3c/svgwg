@@ -605,8 +605,8 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
     <a>content area</a> is determined by a <a>'text/width'</a>
     or <a>'text/height'</a> attribute, the initial <a>current text
     position</a> is determined by the <a>'tspan/x'</a> and
-    <a>'tspan/y'</a> values of the <a>'text'</a>, <a>'tspan'</a>,
-    <a>'tref'</a>, or <a>'altGlyph'</a> element which contains the
+    <a>'tspan/y'</a> values of the <a>'text'</a>, <a>'tspan'</a> or
+    <a>'altGlyph'</a> element which contains the
     first rendered character.
 
     For auto-wrapped text in a shape or text on a path see
@@ -1569,96 +1569,6 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
 
   </edit:with>
 
-<h2 id="TRefElement">The <span class="element-name">'tref'</span> element</h2>
-
-  <div class="annotation svg2-requirement">
-    <table>
-      <tr>
-	<th>SVG 2 Requirement:</th>
-	<td>Allow <a>'tref'</a> to point to non-SVG elements.</td>
-      </tr>
-      <tr>
-	<th>Resolution:</th>
-	<td><a href="http://lists.w3.org/Archives/Public/public-svg-wg/2009JulSep/att-0094/26-svg-minutes-last-topic.html#item01">We agree to remove the restriction of <span class="element-name">'tref'</span> pointing to only an SVG document fragment.</a></td>
-      </tr>
-      <tr>
-	<th>Purpose:</th>
-	<td>To allow easier text substitution.</td>
-      </tr>
-      <tr>
-	<th>Owner:</th>
-	<td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3130">ACTION-3130</a>)</td>
-      </tr>
-    </table>
-  </div>
-
-  <edit:with element='tref'>
-
-  <p>
-    The textual content for a <a>'text'</a> can be either character data
-    directly embedded within the <a>'text'</a> element or the character data
-    content of a referenced element, where the referencing is specified with a
-    <a>'tref'</a> element.
-  </p>
-
-  <edit:elementsummary name='tref'/>
-
-<h3 id="TRefAttributes">Attributes</h3>
-
-  <dl class="attrdef-list-svg2">
-
-    <dt id="TRefElementHrefAttribute"><span class="adef">xlink:href</span></dt>
-    <dd>
-
-      <p>
-	An <a>IRI reference</a> to an element whose character data
-        content shall be used as character data for this <a>'tref'</a>
-        element.
-      </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a href="types.html#DataTypeIRI">&lt;iri&gt;</a></dd>
-	<dt><a>Lacuna value</a></dt>  <dd>As if not specified.</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-
-    </dd>
-  </dl>
-
-<h3 id="TRefNotes">Notes</h3>
-
-  <p>
-    All character data within the referenced element, including
-    character data enclosed within additional markup, will be
-    rendered.
-  </p>
-  <p>
-    The <a>'x'</a>, <a>'y'</a>, <a>'dx'</a>, <a>'dy'</a>
-    and <a>'rotate'</a> attributes have the same meanings as for
-    the <a>'tspan'</a> element. The attributes are applied as if
-    the <a>'tref'</a> element was replaced by a
-    <a>'tspan'</a> with the referenced character data (stripped of all
-    supplemental markup) embedded within the hypothetical
-    <a>'tspan'</a> element.
-  </p>
-
-  <p id="ExampleTRef01">
-    <span class="example-ref">Example tref01</span> shows how to use
-    character data from a different element as the character data for
-    a given <a>'tspan'</a> element. The first <a>'text'</a> element
-    (with <span class='attr-value'>id="ReferencedText"</span>) will
-    not draw because it is part of a <a>'defs'</a> element. The
-    second <a>'text'</a> element draws the string "Inline character
-    data". The third <a>'text'</a> element draws the string "Reference
-    character data" because it includes a <a>'tref'</a> element which
-    is a reference to element "ReferencedText", and that element's
-    character data is "Referenced character data".
-  </p>
-
-  <edit:example href='images/text/tref01.svg' name='tref01' description="inline vs reference text content" image='yes' link='yes'/>
-
-</edit:with>
-
 <h2 id="TextLayout">Text layout &#x2013; Introduction</h2>
 
   <div class="annotation svg2-requirement">
@@ -2582,7 +2492,7 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
     inline-progression-direction for a <a>'text'</a> element shall be
     left-to-right, right-to-left, or top-to-bottom. The
     <a>'writing-mode'</a> property applies only to <a>'text'</a>
-    elements; the property is ignored for <a>'tspan'</a>, <a>'tref'</a>,
+    elements; the property is ignored for <a>'tspan'</a>,
     <a>'altGlyph'</a>, and <a>'textPath'</a> sub-elements. (Note that
     the inline-progression-direction can change within a <a>'text'</a>
     element due to the Unicode bidirectional algorithm and
@@ -2744,8 +2654,7 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
     The processing model for bidirectional text is as follows. The
     user agent processes the characters which are provided in
     <em>logical order</em> (i.e., the order the characters appear in
-    the original document, either via direct inclusion or via indirect
-    reference due a <a>'tref'</a> element). The user agent determines
+    the original document). The user agent determines
     the set of independent blocks within each of which it should apply
     the Unicode bidirectional algorithm. Each
     <a href="text.html#TextChunk">text chunk</a> represents an
@@ -2760,7 +2669,7 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
     which are now in left-to-right rendering order. Simultaneous with
     re-ordering of the characters, the <a>'tspan/dx'</a>,
     <a>'tspan/dy'</a>, and <a>'tspan/rotate'</a> attributes on the
-    <a>'tspan'</a> and <a>'tref'</a> elements are also re-ordered to
+    <a>'tspan'</a> elements are also re-ordered to
     maintain the original correspondence between characters and
     attribute values. While kerning or ligature processing might be
     font-specific, the preferred model is that kerning and ligature
@@ -3323,8 +3232,8 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
   <ul>
     <li>At the start of a <a>'text'</a> element</li>
     <li>At the start of each <a>'textPath'</a> element</li>
-    <li>For each character within a <a>'text'</a>, <a>'tspan'</a>,
-    <a>'tref'</a> and <a>'altGlyph'</a> element which for
+    <li>For each character within a <a>'text'</a>, <a>'tspan'</a> and
+    <a>'altGlyph'</a> element which for
     pre-formatted text has an explicit
     <span class='attr-name'>'x'</span> or
     <span class='attr-name'>'y'</span> value,
@@ -3625,8 +3534,8 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
     Any features in the SVG language or the SVG DOM that are based
     on character position number, such as the <a>'tspan/x'</a>,
     <a>'tspan/y'</a>, <a>'tspan/dx'</a>, <a>'tspan/dy'</a> and
-    <a>'tspan/rotate'</a> attributes on the <a>'text'</a>, <a>'tspan'</a>,
-    <a>'tref'</a> and <a>'altGlyph'</a> elements, are based on
+    <a>'tspan/rotate'</a> attributes on the <a>'text'</a>, <a>'tspan'</a>
+    and <a>'altGlyph'</a> elements, are based on
     character position after applying the white space handling rules
     described here.  In particular,
     if <span class='attr-value'>xml:space="default"</span>, it is
@@ -4280,7 +4189,7 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
 	the value of the dominant-baseline component is 'central'.
       </p>
       <p>
-	If this property occurs on a <a>'tspan'</a>, <a>'tref'</a>,
+	If this property occurs on a <a>'tspan'</a>,
 	<a>'altGlyph'</a> or <a>'textPath'</a> element, then the
 	dominant-baseline and the baseline-table components remain the
 	same as those of the parent <a>text content element</a>. If
@@ -4451,7 +4360,7 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
     </tr>
     <tr>
       <th>Applies to:</th>
-      <td><a>'tspan'</a>, <a>'tref'</a>, <a>'altGlyph'</a>, <a>'textPath'</a> elements</td>
+      <td><a>'tspan'</a>, <a>'altGlyph'</a>, <a>'textPath'</a> elements</td>
     </tr>
     <tr>
       <th>Inherited:</th>
@@ -4570,7 +4479,7 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
     </tr>
     <tr>
       <th>Applies to:</th>
-      <td><a>'tspan'</a>, <a>'tref'</a>, <a>'altGlyph'</a>, <a>'textPath'</a> elements</td>
+      <td><a>'tspan'</a>, <a>'altGlyph'</a>, <a>'textPath'</a> elements</td>
     </tr>
     <tr>
       <th>Inherited:</th>
@@ -4789,7 +4698,7 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
     types of adjustments can be made. The first uses the
     <a>'tspan/x'</a>, <a>'tspan/y'</a>, <a>'tspan/dx'</a>,
     <a>'tspan/dy'</a>, <a>'tspan/rotate'</a> attributes to reposition
-    glyphs with in a <a>'tspan'</a>, <a>'tref'</a>, or
+    glyphs with in a <a>'tspan'</a>, or
     <a>'altGlyph'</a> element. The second uses the
     <a>'text-anchor'</a> property to realign lines of text.
   </p>
@@ -4819,8 +4728,8 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
     coordinate system resulting from (depending on context)
     application of the <a>'text/x'</a> and <a>'text/y'</a> attributes
     on the <a>'text'</a> element, any <a>'tspan/x'</a>
-    or <a>'tspan/y'</a> attribute values on a <a>'tspan'</a>,
-    <a>'tref'</a> or <a>'altGlyph'</a> element assigned explicitly to
+    or <a>'tspan/y'</a> attribute values on a <a>'tspan'</a>
+    or <a>'altGlyph'</a> element assigned explicitly to
     the first rendered character in a text chunk, or determination of
     the initial current text position for a <a>'textPath'</a> element.
   </p>
@@ -4964,7 +4873,7 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
   <p>
     Except when used to determine the initial <a>current text
     position</a>, all values <a>'tspan/x'</a> and <a>'tspan/y'</a>
-    are ignored on <a>'text'</a>, <a>'tspan'</a>, and <a>'tref'</a>
+    are ignored on <a>'text'</a>, and <a>'tspan'</a>
     elements.
   </p>
 
@@ -5635,19 +5544,19 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> d="..." fill="
     When the
     <a href="text.html#SettingInlineProgressionDirection">inline-progression-direction</a>
     is horizontal, then any <span class="attr-name">'x'</span>
-    attributes on <a>'text'</a>, <a>'tspan'</a>, <a>'tref'</a>
+    attributes on <a>'text'</a>, <a>'tspan'</a>
     or <a>'altGlyph'</a> elements represent new absolute offsets along
     the path, thus providing explicit new values for
     startpoint-on-the-path. Any <span class="attr-name">'y'</span>
-    attributes on <a>'text'</a>, <a>'tspan'</a>, <a>'tref'</a>
+    attributes on <a>'text'</a>, <a>'tspan'</a>
     or <a>'altGlyph'</a> elements are ignored. When the
     <a href="text.html#SettingInlineProgressionDirection">inline-progression-direction</a>
     is vertical, then any <span class="attr-name">'y'</span>
-    attributes on <a>'text'</a>, <a>'tspan'</a>, <a>'tref'</a>
+    attributes on <a>'text'</a>, <a>'tspan'</a>
     or <a>'altGlyph'</a> elements represent new absolute offsets along
     the path, thus providing explicit new values for
     startpoint-on-the-path. Any <span class="attr-name">'x'</span>
-    attributes on <a>'text'</a>, <a>'tspan'</a>, <a>'tref'</a> or
+    attributes on <a>'text'</a>, <a>'tspan'</a> or
     <a>'altGlyph'</a> elements are ignored.
   </p>
 
@@ -7088,13 +6997,11 @@ defined on this interface.
 <dd class="operation">
 <div>
 Returns the total number of characters available for rendering within
-the current element, which includes referenced characters from
-<a>'tref'</a> reference, regardless of whether they will be rendered.
+the current element, regardless of whether they will be rendered.
 Effectively, this is equivalent to the length of the
 <a href="http://www.w3.org/TR/dom/#dom-node-textcontent">Node::textContent</a>
 attribute from DOM4 ([<a href="refs.html#ref-DOM4">DOM4</a>],
-section 5.4), if that attribute also expanded <a>'tref'</a>
-elements.
+section 5.4).
 
 
 </div>
@@ -7585,20 +7492,6 @@ The <a>SVGTSpanElement</a> interface corresponds to the <a>'tspan'</a>
 element.
 <pre class="idl">interface <b>SVGTSpanElement</b> : <a>SVGTextPositioningElement</a> {
 };</pre>
-
-</edit:with>
-
-<h3 id="InterfaceSVGTRefElement">Interface SVGTRefElement</h3>
-
-
-<edit:with element='tref'>
-
-The <a>SVGTRefElement</a> interface corresponds to the <a>'tref'</a>
-element.
-<pre class="idl">interface <b>SVGTRefElement</b> : <a>SVGTextPositioningElement</a> {
-};
-
-<a>SVGTRefElement</a> implements <a>SVGURIReference</a>;</pre>
 
 </edit:with>
 
