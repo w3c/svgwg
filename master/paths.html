@@ -794,6 +794,71 @@ href="implnote.html#ArcImplementationNotes">Elliptical arc
 implementation notes</a> for detailed implementation notes for
 the path data elliptical arc commands.</p>
 
+<h3 id="PathDataCatmullRomCommand">The Catmull-Rom curve commands</h3>
+
+<p>The Catmull-Rom curve commands (<strong>R</strong> or <strong>r</strong>)
+specify control points for a Catmull-Rom curve.  The Catmull-Rom curve
+commands are:</p>
+
+<table class="PathDataTable">
+  <tr>
+    <th>Command</th>
+    <th>Name</th>
+    <th>Parameters</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>R</strong> (absolute)<br/>
+      <strong>r</strong> (relative)</td>
+    <td>Catmull-Rom</td>
+    <td>x1 y1 x2 y2 (x y)+</td>
+    <td><p>Draws a Catmull-Rom curve using the specified points as its
+    control points.  The curve is drawn starting from (x1, y1),
+    passing through each subsequent point, before stopping at
+    the second-last point given.  The current point preceding the command
+    provides the first control point of the curve and controls its tangent
+    coming out of (x1, y1).  The final point of the command
+    provides the final control point and controls the tangent
+    of the curve coming in to the second-last point.
+    <strong>R</strong> (uppercase) indicates that absolute coordinates
+    will follows; <strong>r</strong> (lowercase) indicates that
+    relative coordinates will follow.</p>
+    <p>The current point after drawing the Catmull-Rom curve
+    is left at the second-last point of the command, i.e. the point
+    at which the curve ends visually.</p></td>
+  </tr>
+</table>
+
+<p>When a relative <strong>r</strong>
+command is used, each of the relative coordinate pairs
+is computed as for those in an <strong>m</strong> command.
+For example, the second control point of the curve – the first
+listed in the command – is (<var>cpx</var> + <var>x1</var> cos <var>cb</var>
++ <var>y1</var> sin <var>cb</var>, <var>cpy</var> +
+<var>x1</var> sin <var>cb</var> + <var>y1</var> cos <var>cb</var>).</p>
+
+<p class="issue">Should we broaden this and allow for a tension parameter
+to be specified, and thus be cardinal spline rather than a Catmull-Rom spline?</p>
+
+<p class="issue">Should we allow for fewer than three coordinate pair arguments
+to the command and try to do something sensible with them, rather than causing
+the path data to become invalid?</p>
+
+<p class="issue">Is it a problem that the command will move then pen from the current
+position to (x1, y1) without drawing anything?  If so, should we made the
+first control point explicit in the command rather than implicitly taken
+from the current position?  That would then mirror the behavior written
+above for how the current position is left at the second-last control
+point.</p>
+
+<p class="issue">Where should we link to for a definition of Catmull-Rom
+curves so that we don't have to redefine them here?</p>
+
+<p class="issue">We should clarify what it means to have two consecutive
+<strong>R</strong> or <strong>r</strong> commands.</p>
+
+<p class="issue">We should add an example.</p>
+
 <div class="ready-for-wider-review">
 
 <h3 id="PathDataBearingCommands">The bearing commands</h3>
@@ -905,6 +970,7 @@ drawto-command:
     | smooth-curveto
     | quadratic-bezier-curveto
     | smooth-quadratic-bezier-curveto
+    | catmull-rom
     | elliptical-arc
     | bearing
 moveto:
@@ -964,8 +1030,12 @@ elliptical-arc-argument-sequence:
 elliptical-arc-argument:
     number <a>comma-wsp</a>? number <a>comma-wsp</a>? 
         number <a>comma-wsp</a> flag <a>comma-wsp</a>? flag <a>comma-wsp</a>? coordinate-pair
+catmull-rom:
+    ( "R" | "r" ) <a>wsp</a>* catmull-rom-argument-sequence
+catmull-rom-argument-sequence:
+    coordinate-pair coordinate-pair coordinate-pair+
 bearing:
-    ( "B" | "b") <a>wsp</a>* bearing-argument-sequence
+    ( "B" | "b" ) <a>wsp</a>* bearing-argument-sequence
 bearing-argument-sequence:
     number
     | number <a>comma-wsp</a>? bearing-argument-sequence
