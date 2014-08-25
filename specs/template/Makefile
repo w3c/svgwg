@@ -1,1 +1,1 @@
-include ../../../svg2-tools/spec.mk
+include ../../tools/spec.mk

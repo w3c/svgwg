@@ -1,15 +1,10 @@
 # Makefile for SVG 2.
 
-all-with-tools-check : tools-check all
+all :
+	@./tools/build.py
 
 all-specs : all
 	@for spec in specs/*; do [ -f $$spec/Makefile ] && make -C $$spec/ all; done
-
-tools-check :
-	@bash -c "REMOTE_REV=$$(hg id -i http://svgwg.org/hg/svg2-tools 2>/dev/null); [ \$$? = 0 -a \"\$$REMOTE_REV\" != \"\" ] || exit 0; LOCAL_REV=$$(hg id -i ../svg2-tools); [ \"\$$LOCAL_REV\" = \"\$$REMOTE_REV\" -o \"\$$LOCAL_REV\" = \"\$$REMOTE_REV\"+ ] || (echo \"You must update your svg2-tools repository! (Remote repository has revision \$$REMOTE_REV, but you are at \$$LOCAL_REV.)\"; exit 1)"
-
-all :
-	@../svg2-tools/build.py
 
 pdf : all
 	prince --no-author-style -s build/publish/style/svg-style.css -s http://www.w3.org/StyleSheets/TR/W3C-REC -s build/publish/style/svg-style-print.css build/publish/single-page.html -o build/publish/single-page.pdf
@@ -32,5 +27,5 @@ zip : all
 	rm -rf build/publish/$(ZIPDIR)
 
 clean :
-	@../svg2-tools/build.py -c
+	@./tools/build.py -c
 
