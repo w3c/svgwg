@@ -119,8 +119,8 @@ if getstatus("which nodejs") == 0:
     node = "nodejs"
 elif getstatus("which node") == 0:
     node = "node"
-elif getstatus("[ -f $HOME/bin/node ]") == 0:
-    node = join(os.environ.get("HOME"), "bin", "node")
+elif getstatus("[ -e /home/svgwg/bin/node ]") == 0:
+    node = "/home/svgwg/bin/node"
 else:
     exit(1, 'FAIL: could not find "nodejs" or "node" on the PATH')
   
