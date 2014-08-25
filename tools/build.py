@@ -1,0 +1,222 @@
+#!/usr/bin/env python
+
+# -c == clean
+
+
+# Note that we have to change directory below to make sure that build output
+# goes in the 'build' directory, not in the 'master' directory. For that
+# reason it's important that we use absolute paths!
+
+'''
+'''
+
+import os, sys, signal, commands
+from os.path import isfile, abspath, getmtime, exists, join, normpath
+from xml.dom import minidom
+import shutil
+
+def exit(code, *message):
+  if len(message):
+    if code == 0:
+      print message[0]
+    else:
+      sys.stderr.write(message[0] + '\n')
+  sys.exit(code)
+
+def native_path(s):
+  if exists("/usr/bin/cygpath.exe"):
+    return commands.getoutput("cygpath -a -w %s" % s)
+  return s
+
+# Multiplatform alternative to commands.getstatusoutput from
+# http://stackoverflow.com/questions/1193583/what-is-the-multiplatform-alternative-to-subprocess-getstatusoutput-older-comma
+def getstatusoutput(cmd): 
+  """Return (status, output) of executing cmd in a shell."""
+  """This new implementation should work on all platforms."""
+  import subprocess
+  pipe = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True,
+                          universal_newlines=True)  
+  output = "".join(pipe.stdout.readlines()) 
+  sts = pipe.wait()
+  if sts is None: sts = 0
+  return sts, output
+
+def getstatus(cmd):
+    status, output = getstatusoutput(cmd)
+    return status
+
+# could allow this to be passed in:
+repo_dir = os.getcwd()
+
+master_dir = join(repo_dir, 'master')
+build_dir = join(repo_dir, 'build')
+publish_dir = join(build_dir, 'publish')
+tools_dir = join(repo_dir, 'tools')
+
+if not exists(master_dir):
+  exit(1, 'FAIL: build.py must be run from the root of the \'svg2\' repository '
+          'or from one of the directories under \'specs/\'.')
+
+if not exists(tools_dir):
+  tools_dir = normpath(join(repo_dir, '..', '..', 'tools'))
+  if not exists(tools_dir):
+    exit(1, 'FAIL: could not find \'tools\' directory')
+
+publishjs_dir = join(tools_dir, 'publish')
+
+if not exists(publish_dir):
+  assert os.pardir not in publish_dir
+  os.makedirs(publish_dir)
+
+# Add clean-up handler for SIGINT:
+
+def handle_SIGINT(signal, frame):
+  done()
+  sys.exit(1)
+
+signal.signal(signal.SIGINT, handle_SIGINT)
+
+# Utility functions:
+
+toremove = []
+
+def done():
+  global toremove
+  if toremove:
+    print "Error, removing " + " ".join(toremove)
+    for file in toremove:
+      os.remove(file)
+    return 1
+
+built_something = False
+
+def run(cmd):
+  global built_something
+  print cmd
+  if os.system(cmd):
+    done()
+    sys.exit(1)
+  built_something = True
+
+# clean and exit if given -c option:
+
+if len(sys.argv) == 2 and sys.argv[1] == "-c":
+  # clean build (and publish) directory
+  readme = join(build_dir, 'README.txt')
+  for parent, dirs, files in os.walk(build_dir, topdown=False):
+    for file in files[:]:
+      file = join(parent, file)
+      if file != readme:
+        os.remove(file)
+    for dir in dirs[:]:
+      os.rmdir(join(parent, dir))
+  sys.exit(0)
+
+# See if we should call "node" or "nodejs":
+
+status, output = getstatusoutput("which nodejs")
+if getstatus("which nodejs") == 0:
+    node = "nodejs"
+elif getstatus("which node") == 0:
+    node = "node"
+else:
+    exit(1, 'FAIL: could not find "nodejs" or "node" on the PATH')
+  
+# Get all the pages and resources from publish.xml:
+
+os.chdir(master_dir)
+status, output = getstatusoutput(node + " \"" +
+    native_path(join(tools_dir, "publish/publish.js")) + "\" --list-pages")
+print node + " \"" + native_path(join(tools_dir, "publish/publish.js")) + "\" --list-pages"
+os.chdir(repo_dir)
+if status != 0:
+  exit(1, 'FAIL: could not get list of specification pages')
+
+all = output.split()
+
+os.chdir(master_dir)
+status, output = getstatusoutput(node + " \"" +
+    native_path(join(tools_dir, "publish/publish.js")) + "\" --list-resources")
+os.chdir(repo_dir)
+if status != 0:
+  exit(1, 'FAIL: could not get list of resources')
+
+resources = output.split()
+
+# Build chapters as required:
+
+deps = [
+  join(master_dir, "publish.xml"),
+  join(master_dir, "definitions.xml"),
+]
+for filename in os.listdir(publishjs_dir):
+  path = join(publishjs_dir, filename)
+  if os.path.isfile(path):
+    deps.append(path)
+deptimes = [getmtime(file) for file in deps]
+tobuild = []
+tobuild_names = []
+for name in all:
+  pub_path = join(publish_dir, name + ".html")
+  src_path = join(master_dir, name + ".html")
+  if not isfile(pub_path):
+    tobuild.append(pub_path)
+    tobuild_names.append(name)
+    continue
+  desttime = getmtime(pub_path)
+  for srctime in deptimes + [getmtime(src_path)]:
+    if srctime > desttime:
+      tobuild.append(pub_path)
+      tobuild_names.append(name)
+      break
+
+if tobuild:
+  toremove = tobuild
+  os.chdir(master_dir)
+  run(node + " \"" +
+      native_path(join(tools_dir, join("publish","publish.js"))) +
+      "\" --build " +
+      " ".join(tobuild_names) +
+      (" --local-style" if os.environ.get("SVG_BUILD_LOCAL_STYLE_SHEETS") else ""))
+  toremove = []
+  os.chdir(repo_dir) # chdir back
+
+# Build single page spec as required:
+
+if len(all) > 1:
+  buildSinglePage = False
+  single_page = join(publish_dir, "single-page.html")
+  
+  if not isfile(single_page):
+    buildSinglePage = True
+  else:
+    singlePageTime = getmtime(single_page)
+    for name in all:
+      if getmtime(join(publish_dir, name + ".html")) > singlePageTime:
+        buildSinglePage = True
+        break
+  
+  if buildSinglePage:
+    os.chdir(master_dir)
+    run(node + " \"" +
+        native_path(join(tools_dir, join("publish","publish.js"))) +
+        "\" --build-single-page")
+    os.chdir(repo_dir) # chdir back
+
+# Copy over anything else that needs to be copied to 'publish':
+for f in resources:
+  tocopypath = join(master_dir, f)
+  if os.path.exists(tocopypath):
+    copyto = os.path.join(publish_dir,os.path.basename(tocopypath))
+    shutil.rmtree(copyto, ignore_errors=True)
+    if os.path.isdir(tocopypath):
+      shutil.copytree(tocopypath, copyto)
+    else:
+      shutil.copyfile(tocopypath, copyto)
+
+# Done:
+
+if not built_something:
+  print "Nothing to do."
+
+done()
