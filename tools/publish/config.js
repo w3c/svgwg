@@ -124,9 +124,9 @@ function Config(filename) {
   this._publicationDate = new Date;
   if (pubDate) {
     var dateParts = pubDate.split('-');
-    this._publicationDate.setFullYear(dateParts[0]);
-    this._publicationDate.setMonth(dateParts[1] - 1, 1);
-    this._publicationDate.setDate(dateParts[2]);
+    this._publicationDate.setUTCFullYear(dateParts[0]);
+    this._publicationDate.setUTCMonth(dateParts[1] - 1, 1);
+    this._publicationDate.setUTCDate(dateParts[2]);
   }
 
   var versions = child(root, 'versions');
@@ -225,13 +225,13 @@ Config.prototype = {
   },
 
   get publicationYear() {
-    return this._publicationDate.getFullYear();
+    return this._publicationDate.getUTCFullYear();
   },
 
   get publicationDate() {
     var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     var d = this._publicationDate;
-    return (d.getDate() < 10 ? '0' : '') + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    return (d.getUTCDate() < 10 ? '0' : '') + d.getUTCDate() + ' ' + months[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
   },
 
   get thisVersion() {
