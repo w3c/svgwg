@@ -147,13 +147,25 @@ else:
 
 os.chdir(master_dir)
 status, output = getstatusoutput(node + " \"" +
-    native_path(join(tools_dir, "publish/publish.js")) + "\" --list-pages")
-print node + " \"" + native_path(join(tools_dir, "publish/publish.js")) + "\" --list-pages"
+    native_path(join(tools_dir, "publish/publish.js")) + "\" --list-toc-pages")
+print node + " \"" + native_path(join(tools_dir, "publish/publish.js")) + "\" --list-toc-pages"
 os.chdir(repo_dir)
 if status != 0:
   exit(1, 'FAIL: could not get list of specification pages')
 
-all = output.split()
+tocpages = output.split()
+
+os.chdir(master_dir)
+status, output = getstatusoutput(node + " \"" +
+    native_path(join(tools_dir, "publish/publish.js")) + "\" --list-nontoc-pages")
+print node + " \"" + native_path(join(tools_dir, "publish/publish.js")) + "\" --list-nontoc-pages"
+os.chdir(repo_dir)
+if status != 0:
+  exit(1, 'FAIL: could not get list of specification pages')
+
+nontocpages = output.split()
+
+all = tocpages + nontocpages
 
 os.chdir(master_dir)
 status, output = getstatusoutput(node + " \"" +
@@ -178,6 +190,12 @@ deptimes = [getmtime(file) for file in deps]
 tobuild = []
 tobuild_names = []
 for name in all:
+  localdeps = []
+  if name in tocpages:
+    # pages with spec-wide ToCs on them depend on all chapters for
+    # their headings
+    localdeps += [join(master_dir, page + ".html") for page in nontocpages]
+  localdeptimes = [getmtime(file) for file in localdeps]
   pub_path = join(publish_dir, name + ".html")
   src_path = join(master_dir, name + ".html")
   if not isfile(pub_path):
@@ -193,7 +211,7 @@ for name in all:
     # date has changed; rebuild so the page header/footer has the right date
     tobuild.append(pub_path)
     tobuild_names.append(name)
-  for srctime in deptimes + [getmtime(src_path)]:
+  for srctime in deptimes + localdeptimes + [getmtime(src_path)]:
     # a dependency is newer; rebuild
     if srctime > desttime:
       tobuild.append(pub_path)

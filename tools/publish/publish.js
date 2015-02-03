@@ -12,6 +12,8 @@ function syntax() {
   console.error('');
   console.error('Options:');
   console.error('  --list-pages            Print the names of all pages of the specification.');
+  console.error('  --list-nontoc-pages     Print the names of all non-ToC pages of the specification.');
+  console.error('  --list-toc-pages        Print the names of all ToC pages of the specification.');
   console.error('  --list-resources        Print the names of all resource files/directories');
   console.error('                            to be copied to the publish directory.');
   console.error('  --build [PAGE ...]      Builds the specified pages, or all pages if');
@@ -27,6 +29,16 @@ function parseOptions() {
     switch (process.argv[i]) {
       case '--list-pages':
         opts.listPages = true;
+        opts.listPagesToC = true;
+        opts.listPagesNonToC = true;
+        break;
+      case '--list-nontoc-pages':
+        opts.listPages = true;
+        opts.listPagesNonToC = true;
+        break;
+      case '--list-toc-pages':
+        opts.listPages = true;
+        opts.listPagesToC = true;
         break;
       case '--list-resources':
         opts.listResources = true;
@@ -54,8 +66,15 @@ function parseOptions() {
   return opts;
 }
 
-function listPages() {
-  console.log(conf.pageOrder.join('\n'));
+function listPages(toc, nontoc) {
+  function include(page) {
+    if (page == conf.tocPage || page == conf.index) {
+      return toc;
+    }
+    return nontoc;
+  }
+
+  console.log(conf.pageOrder.filter(include).join('\n'));
 }
 
 function listResources() {
@@ -209,7 +228,7 @@ if (opts.help || (!!opts.listPages + !!opts.listResources + !!opts.build + !!opt
   conf = config.load('publish.xml');
   conf.localStyleSheets = opts.localStyle;
   if (opts.listPages) {
-    listPages();
+    listPages(opts.listPagesToC, opts.listPagesNonToC);
   } else if (opts.listResources) {
     listResources();
   } else if (opts.build) {
