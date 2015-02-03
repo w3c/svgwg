@@ -10,7 +10,7 @@
 '''
 '''
 
-import os, sys, signal, commands
+import commands, os, sys, signal, time
 from os.path import isfile, abspath, getmtime, exists, join, normpath
 from xml.dom import minidom
 import shutil
@@ -181,11 +181,20 @@ for name in all:
   pub_path = join(publish_dir, name + ".html")
   src_path = join(master_dir, name + ".html")
   if not isfile(pub_path):
+    # destination doesn't exist; build it
     tobuild.append(pub_path)
     tobuild_names.append(name)
     continue
   desttime = getmtime(pub_path)
+  desttime_s = time.gmtime(desttime)
+  now_s = time.gmtime()
+  if ((desttime_s.tm_year, desttime_s.tm_mon, desttime_s.tm_mday) !=
+      (now_s.tm_year, now_s.tm_mon, now_s.tm_mday)):
+    # date has changed; rebuild so the page header/footer has the right date
+    tobuild.append(pub_path)
+    tobuild_names.append(name)
   for srctime in deptimes + [getmtime(src_path)]:
+    # a dependency is newer; rebuild
     if srctime > desttime:
       tobuild.append(pub_path)
       tobuild_names.append(name)
