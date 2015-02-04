@@ -210,6 +210,9 @@ function findClosestInterfaceDefinition(n) {
 }
 
 Definitions.prototype.formatTermLink = function(name, n) {
+  if (this.terms[name]) {
+    return this.terms[name].formatLink();
+  }
   if (this.terms[normalizeTermName(name)]) {
     return this.terms[normalizeTermName(name)].formatLink();
   }
@@ -443,7 +446,10 @@ function loadInto(filename, base, specid, defs) {
       term.markup = utils.cloneChildren(t);
     }
 
-    defs.terms[normalizeTermName(term.name)] = term;
+    defs.terms[term.name] = term;
+    if (!defs.terms[normalizeTermName(term.name)]) {
+      defs.terms[normalizeTermName(term.name)] = term;
+    }
   });
 }
 
