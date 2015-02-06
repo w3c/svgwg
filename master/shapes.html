@@ -40,6 +40,10 @@ shapes.</p>
 an element refers to the equivalent path for the element, so
 that it is clear for example where dashing would start.</p>
 
+<p class="issue">Most attribute definition tables in this chapter need to be
+replaced with something that references the new
+<a href="layout.html">layout properties</a>.</p>
+
 <h2 id="RectElement">The <span class="element-name">'rect'</span> element</h2>
 
 <edit:with element='rect'>
@@ -437,7 +441,7 @@ and ends at another.</p>
       </tr>
       <tr>
         <td><dfn id="LineElementX1Attribute">x1</dfn>, <dfn id="LineElementY1Attribute">y1</dfn></td>
-        <td><a>&lt;length&gt;</a></td>
+        <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a></td>
         <td>0</td>
         <td>yes</td>
       </tr>
@@ -456,7 +460,7 @@ and ends at another.</p>
       </tr>
       <tr>
         <td><dfn id="LineElementX2Attribute">x2</dfn>, <dfn id="LineElementY2Attribute">y2</dfn></td>
-        <td><a>&lt;length&gt;</a></td>
+        <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a></td>
         <td>0</td>
         <td>yes</td>
       </tr>
@@ -520,20 +524,33 @@ shapes.</p>
       </tr>
       <tr>
         <td><dfn id="PolylineElementPointsAttribute">points</dfn></td>
-        <td><a href="shapes.html#PointsBNF">&lt;list-of-points&gt;</a></td>
+	<td><a>&lt;points&gt;</a></td>
         <td>(none)</td>
         <td>yes</td>
       </tr>
     </table>
   </dt>
   <dd>
+    <p>where:</p>
+    <div class="definition">
+      <dfn id="DataTypePoints">&lt;points&gt;</dfn> =
+      <div style="margin-left: 4em">[<a>&lt;number&gt;</a> ,? <a>&lt;number&gt;</a> ,?]+</div>
+    </div>
     <p>The points that make up the polyline. All coordinate
     values are in the user coordinate system.</p>
     <p>If an odd number of coordinates is provided, then the element is in
     error, with the same user agent behavior as occurs with an incorrectly
     specified <a>'path'</a> element.</p>
+		<p class="issue">Does that mean it should drop the final, odd coordinate
+		but otherwise render the shape?  We should be explicit.</p>
     <p class="ready-for-wg-review">The lacuna value, (none), indicates that the polyline element
     is valid but does not render.</p>
+		<p class="ready-for-wg-review">
+		If data not matching the grammar is encountered, then the points specification is in error
+		(see <a href="implnote.html#ErrorProcessing">Error Processing</a>).</p>
+		<p class="issue">It shouldn't be necessary to say this here;
+		we should have a general rule that says if an attribute fails to
+		parse according to the grammar it has, then it is in error.</p>
   </dd>
 </dl>
 
@@ -579,7 +596,7 @@ set of connected straight line segments.</p>
       </tr>
       <tr>
         <td><dfn id="PolygonElementPointsAttribute">points</dfn></td>
-        <td><a href="shapes.html#PointsBNF">&lt;list-of-points&gt;</a></td>
+	<td><a>&lt;points&gt;</a></td>
         <td>(none)</td>
         <td>yes</td>
       </tr>
@@ -619,64 +636,6 @@ on the <a>'svg'</a> element.</p>
 <edit:example href='images/shapes/polygon01.svg' name='polygon01' description='star and hexagon' link='yes' image='yes'/>
 
 </edit:with>
-
-<h3 id="PointsBNF">The grammar for points specifications in
-<span class="element-name">'polyline'</span> and
-<span class="element-name">'polygon'</span> elements</h3>
-
-<p>The following is the Extended Backus-Naur Form (EBNF) for points specifications
-in <a>'polyline'</a> and <a>'polygon'</a> elements. The following
-notation is used:</p>
-
-<ul>
-  <li>*: 0 or more</li>
-  <li>+: 1 or more</li>
-  <li>?: 0 or 1</li>
-  <li>(): grouping</li>
-  <li>|: separates alternatives</li>
-  <li>double quotes surround literals</li>
-</ul>
-
-<pre class='grammar'>
-list-of-points:
-    <a>wsp</a>* coordinate-pairs? <a>wsp</a>*
-coordinate-pairs:
-    coordinate-pair
-    | coordinate-pair <a>comma-wsp</a> coordinate-pairs
-coordinate-pair:
-    coordinate <a>comma-wsp</a> coordinate
-    | coordinate negative-coordinate
-coordinate:
-    number
-number:
-    sign? integer-constant
-    | sign? floating-point-constant
-negative-coordinate:
-    "-" integer-constant
-    | "-" floating-point-constant
-integer-constant:
-    digit-sequence
-floating-point-constant:
-    fractional-constant exponent?
-    | digit-sequence exponent
-fractional-constant:
-    digit-sequence? "." digit-sequence
-    | digit-sequence "."
-exponent:
-    ( "e" | "E" ) sign? digit-sequence
-sign:
-    "+" | "-"
-digit-sequence:
-    digit
-    | digit digit-sequence
-digit:
-    "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-</pre>
-
-<p class="ready-for-wg-review">
-If data not matching the grammar is encountered, then the points specification is in error
-(see <a href="implnote.html#ErrorProcessing">Error Processing</a>).
-</p>
 
 <h2 id="DOMInterfaces">DOM interfaces</h2>
 

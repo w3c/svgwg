@@ -16,199 +16,116 @@
 
 <h1>Basic Data Types and Interfaces</h1>
 
-<h2 id="syntax">Syntax</h2>
+<h2 id="syntax">Attribute syntax</h2>
 
-<p>The EBNF grammar is as used in the
-<a href="http://www.w3.org/TR/REC-xml/#sec-notation">XML specification</a>,
-with the addition of <strong>~</strong>, a <em>case-insensitive literal</em>:
-characters in the ASCII range (only) are declared to be case-insensitive. For
-example, ~"Hello" will match (H|h)(e|E)(l|L)(l|L)(o|O). This makes the
-productions much easier to read.</p>
+<div class='ready-for-wg-review'>
 
-<table>
-  <tr><td>?</td><td>optional, zero or one</td></tr>
-  <tr><td>+</td><td>one or more</td></tr>
-  <tr><td>*</td><td>zero or more</td></tr>
-  <tr><td>|</td><td>alternation</td></tr>
-  <tr><td>"string"</td><td>literal</td></tr>
-  <tr><td>~"string"</td><td>case-insensitive literal</td></tr>
-  <tr><td>[]</td><td>a character range</td></tr>
-  <tr><td>[^]</td><td>excluded character range</td></tr>
-  <tr><td>()</td><td>grouping</td></tr>
+<p>In this specification, attributes are defined with an attribute definition
+table, which looks like this:</p>
+
+<table class="propdef attrdef">
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Lacuna&nbsp;value</th>
+    <th>Animatable</th>
+  </tr>
+  <tr>
+    <td><dfn>exampleattr</dfn></td>
+    <td><a>&lt;length&gt;</a> | none</td>
+    <td>none</td>
+    <td>yes</td>
+  </tr>
 </table>
 
-<h2 id="BasicDataTypes">Basic data types</h2>
+<p>In the Value column is a description of the attribute's syntax.  There are
+four methods for describing an attribute's syntax:</p>
 
-<p class="issue">We should reference css3-values, and not redefine a bunch of
-types in this chapter.</p>
+<ol>
+  <li>Using the <a href="http://www.w3.org/TR/css-values/#value-defs">CSS Value
+  Definition Syntax</a> [<a href="refs.html#ref-CSS3VALUES">CSS3VALUES</a>].
+  This is the notation used to define the syntax for most attributes in this
+  specification and is the default.</li>
 
-<p>This section defines a number of common data types used in the definitions
-of SVG properties and attributes.  Some data types that are not referenced by
-multiple properties and attributes are defined inline in subsequent chapters.</p>
-  
-<p>Note that, as mentioned below, the specification of some types is different
-for CSS property values in style sheets (in the <a>'style attribute'</a> attribute,
-<a>'style element'</a> element or an external style sheet) than it is for for
-XML attribute values (including <a>presentation attribute</a>s). This is due to
-restrictions in the CSS grammar. For example, scientific notation is allowed in
-attributes, including presentation attributes, but not in style sheets.</p>
+  <li>By reference to an
+  <a href="http://www.w3.org/TR/REC-xml/#sec-notation">EBNF symbol</a> defined
+  in this or another specification [<a href="refs.html#ref-XML10">XML10</a>].  This is
+  indicated by <span class="syntax">[EBNF]</span> appearing in the Value
+  column.</li>
 
-<dl class='definitions'>
+  <li>By reference to an
+  <a href="http://tools.ietf.org/html/std68">ABNF symbol</a> defined
+  in another specification [<a href="refs.html#ref-STD68">STD68</a>].  This is
+  indicated by <span class="syntax">[ABNF]</span> appearing in the Value
+  column.</li>
 
-  <dt id='DataTypeAnything'>&lt;anything&gt;</dt>
-  <dd>
-    <p>The basic type &lt;anything&gt; is a sequence of zero or more characters.
-    Specifically:</p>
+  <li>As a URL as defined by the <a href="https://url.spec.whatwg.org/">URL
+  Standard</a> [<a href="refs.html#ref-URL">URL</a>].  This is indicated by
+  <span class="syntax">[URL]</span> appearing in the Value column.</li>
 
-    <pre class='grammar'><span id='Anything'>anything</span> ::= <a href='http://www.w3.org/TR/2008/REC-xml-20081126/#NT-Char'>Char</a>*</pre>
+  <li>In prose, below the attibute definition table.  This is indicated by the
+  text "(see below)" appearing in the Value column.</li>
+</ol>
 
-    <p>where <a href='http://www.w3.org/TR/2008/REC-xml-20081126/#NT-Char'>Char</a> is the
-    production for a character, as defined in XML 1.0
-    ([<a href='refs.html#ref-XML10'>XML10</a>], section 2.2).</p>
-  </dd>
+<p id="presentation-attribute-css-value">When a <a>presentation attribute</a>
+defined using the CSS Value Definition Syntax is parsed, this is done as
+follows:</p>
 
-  <dt id='DataTypeWhitespace'>&lt;whitespace&gt;</dt>
-  <dd>
-    <p>White space is defined as one or more of the
-    following consecutive characters: "space" (U+0020), "tab" (U+0009), "line feed" (U+000A),
-    "form feed" (U+000C) and "carriage return" (U+000D).</p>
+<ol>
+  <li>Let <var>value</var> be the value of the attribute.</li>
+  <li>Let <var>grammar</var> be the grammar given in the attribute definition
+  table's Value column.</li>
+  <li>Replace all instances of <a>&lt;length&gt;</a> in <var>grammar</var> with
+  [<a>&lt;length&gt;</a> | <a>&lt;number&gt;</a>].</li>
+  <li>Replace all instances of <a>&lt;angle&gt;</a> in <var>grammar</var> with
+  [<a>&lt;angle&gt;</a> | <a>&lt;number&gt;</a>].</li>
+  <li>Return the result of
+  <a href="http://dev.w3.org/csswg/css-syntax/#parse-grammar">parsing
+  <var>value</var> with <var>grammar</var></a>.</li>
+</ol>
 
-    <pre class='grammar'><span id='WSP'>wsp</span> ::= ( #x9 | #x20 | #xA | #xC | #xD )</pre>
-  </dd>
-  
-  <dt id='DataTypeChildSelector'>&lt;child-selector&gt;</dt>
-  <dd>
-    <p>A comma-separated list of <a>compound selectors</a>.
-       When used, the scope in which the selectors are evaluated is also
-       defined.
-       Typically only the first matching element in <a>tree order</a> (as
-       defined in [<a href="refs.html#ref-DOM4">DOM4</a>]) as a result of
-       evaluating the list of selectors is used.
-    </p>
-    <pre>child-selector ::= select(<a>compound selector</a>#)</pre>
-  </dd>
+<p class="note">The insertion of the <a>&lt;number&gt;</a> symbols allows for
+unitless length and angles to be used in presentation attribute while
+disallowing them in corresponding property values.</p>
 
-  <dt id='DataTypeICCColor'>&lt;icccolor&gt;</dt>
-  <dd>
-    <p>An &lt;icccolor&gt; is an ICC color specification.  In SVG 1.1,
-    an ICC color specification is given by a name, which references
-    an <a href="color.html#ColorProfileAtRule">@color-profile rule</a>, and one or more color component
-    values.  The grammar is as follows:</p>
+<p class="note">Note that all <a>presentation attributes</a>, since they are
+defined by reference to their corresponding CSS properties, are defined using
+the CSS Value Definition Syntax.</p>
 
-    <pre class='grammar'><span id='ICCColor'>icccolor</span> ::= "icc-color(" author-ident (<a href='#CommaWSP'>comma-wsp</a> <a href='#Number'>number</a>)+ ")"</pre>
-  </dd>
-  
-  <dt id="DataTypeLanguageID">&lt;languageID&gt;</dt>
-  <dd>A language identifier specifies the language of text or other items in SVG.
-  The syntax is given by [<a href='refs.html#ref-BCP47'>BCP47</a>].</dd>
-  
-  <dt id="DataTypeListOfFamilyNames">&lt;list-of-family-names&gt;</dt>
-  <dd>A &lt;list-of-family-names&gt; is a list of font family names using the same syntax
-  as the <a href='text.html#FontFamilyProperty'><span class='property'>'font-family'</span></a>
-  property, excluding the &lt;generic-family&gt; and <span class='attr-value'>'inherit'</span>
-  values.</dd>
+<p id="attribute-css-value">When any other attribute defined using the CSS Value
+Definition Syntax is parsed, this is done by
+<a href="http://dev.w3.org/csswg/css-syntax/#parse-grammar">parsing the
+attribute's value according to the grammar given in attribute definition
+table</a> with the exception that CSS comments and escapes are not allowed;
+instead, they are parsed as
+<a href="http://dev.w3.org/csswg/css-syntax/#typedef-delim-token">&lt;delim-token&gt;</a>s
+with values set to U+002F SOLIDUS (/), U+002A ASTERISK (*) or U+005C REVERSE
+SOLIDUS (\) as appropriate.</p>
 
-<!--
-  <dt id="DataTypeListOfLanguageIDs">&lt;list-of-language-ids&gt;</dt>
-  <dd>
-    <p>
-      A &lt;list-of-language-ids&gt; is a comma separated list of
-      non-empty <a href='#DataTypeLanguageID'>&lt;language-id&gt;</a> values.  White space
-      may be used before or after the commas.
-    </p>
-  </dd>
--->
+<p class="issue">We should either allow accepting CSS comments and escapes in
+attributes defined using CSS Value Definition Syntax or get the parser entry
+point to take a Boolean that turns off comments and escapes.</p>
 
-  <dt id="DataTypeListOfStrings">&lt;list-of-strings&gt;</dt>
-  <dd>
-    <p>A &lt;list-of-strings&gt; consists of a white space-separated sequence of &lt;string&gt;s.</p>
+<p id="attribute-url">When an attribute defined as a URL is parsed, this is
+done by invoking the
+<a href="https://url.spec.whatwg.org/#concept-url-parser">URL parser</a> with
+the attribute's value as <var>input</var> and the document's URL as
+<var>base</var> [<a href="refs.html#ref-URL">URL</a>].</p>
 
-    <p>The following is an EBNF grammar describing the &lt;list-of-strings&gt; syntax:</p>
+<p class="issue">Reference discussion about lacuna values, which has not been added
+to the spec yet.</p>
 
-<pre>
-list-of-strings ::= string
-                    | string <a href='#WSP'>wsp</a>+ list-of-strings
-string          ::= [^#x9#x20#xA#xC#xD]*
-</pre>
-  </dd>
+<p>The Animatable column indicates whether the attribute can be animated using
+<a>animation elements</a>; see the <a href="animate.html">Animation</a> chapter
+for details.</p>
 
-  <dt id='DataTypeList'>
-    <span id='DataTypeListOfURL'>
-      <span id='DataTypeNumbers'>
-        <span id='DataTypeLengths'>
-          <span class='SVG-Term'>&lt;list-of-<var>T</var>s&gt;</span>
-        </span>  
-      </span>
-    </span>
-  </dt>
-  <dd>
-    <p>(Where <var>T</var> is a type other than
-    &lt;string&gt;<!--,
-    <a href='#DataTypeLanguageID'>&lt;language-id&gt;</a>--> and
-    &lt;family-name&gt;.)
-    A list consists of a separated sequence of values. Unless explicitly described
-    differently, lists within SVG's XML attributes can be either
-    comma-separated, with optional white space before or after the comma,
-    or white space-separated. A single optional trailing <a>comma-wsp</a> is
-    allowed.</p>
+<p>The following common definitions are used for attributes that are defined in
+terms of an EBNF grammar:</p>
 
-    <p>The following is a template for an EBNF grammar describing the
-    &lt;list-of-<var>T</var>s&gt; syntax:</p>
+<pre class='grammar'><span id='WSP'>wsp</span> ::= (#x9 | #x20 | #xA | #xC | #xD)
+<span id='CommaWSP'>comma-wsp</span> ::= (<a href='#WSP'>wsp</a>+ ","? <a href='#WSP'>wsp</a>*) | ("," <a href='#WSP'>wsp</a>*)</pre>
 
-    <pre class='grammar'><span id='ListOfTs'>list-of-<var>T</var>s</span> ::= <var>T</var> <a href='#CommaWSP'>comma-wsp</a>?
-               | <var>T</var> <a href='#CommaWSP'>comma-wsp</a> <a href='#ListOfTs'>list-of-<var>T</var>s</a>
-<span id='CommaWSP'>comma-wsp</span>  ::= (<a href='#WSP'>wsp</a>+ ","? <a href='#WSP'>wsp</a>*) | ("," <a href='#WSP'>wsp</a>*)</pre>
-
-    <p>Within the SVG DOM, values of a &lt;list-of-<var>T</var>s&gt;
-    type are represented by an interface specific for the
-    particular type <var>T</var>.  For example, a &lt;list-of-lengths&gt;
-    is represented in the SVG DOM using an <a>SVGLengthList</a>
-    or <a>SVGAnimatedLengthList</a> object.</p>
-  </dd>
-
-  <dt id='DataTypeNumberOptionalNumber'>&lt;number-optional-number&gt;</dt>
-  <dd>
-    <p>A pair of <a>&lt;number&gt;</a>s, where the second
-    <a>&lt;number&gt;</a> is optional.</p>
-
-    <pre class='grammar'>
-number-optional-number ::= <a href='#WSP'>wsp</a>* <a>&lt;number&gt;</a> <a href='#WSP'>wsp</a>*
-                           | <a href='#WSP'>wsp</a>* <a>&lt;number&gt;</a> <a href='#CommaWSP'>comma-wsp</a> <a>&lt;number&gt;</a> <a href='#WSP'>wsp</a>*</pre>
-
-    <p>In the SVG DOM, a &lt;number-optional-number&gt; is represented
-    using a pair of <a>SVGAnimatedInteger</a> or <a>SVGAnimatedNumber</a>
-    objects.</p>
-  </dd>
-
-<!--
-  <dt id="DataTypeURI">&lt;uri&gt;</dt>
-  <dd>
-    <p>A &lt;uri&gt; is a Uniform Resource Identifier reference.
-    A URI is the address of a resource on the Web. For the specification of
-    URI references in SVG, see
-    <a href="struct.html#URIReference">URI references</a>.</p>
-    <p>Within the SVG DOM, a &lt;uri&gt; value is represented using a
-    <span class="DOMInterfaceName">DOMString</span> value or an
-    <a>SVGAnimatedString</a> object.</p>
-  </dd>
--->
-
-  <dt id='DataTypeURL'>&lt;url&gt;</dt>
-  <dd>
-    <p>A Uniform Resource Locator (see <a>URL</a>).
-    For the specification of <a>URL</a> references in SVG, see
-    <a href="linking.html#URLReference">URL references</a>.</p>
-  </dd>
-  
-  <dt id="DataTypeXML-Name">&lt;XML-Name&gt;</dt>
-  <dd>
-    <p>An XML name, as defined by the
-    <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#NT-Name">Name</a>
-    production in
-    <a href="http://www.w3.org/TR/2006/REC-xml-20060816/"><cite>Extensible Markup Language (XML) 1.0</cite></a> ([<a href="refs.html#ref-XML10">XML10</a>], section 2.3).</p>
-  </dd>
-
-</dl>
+</div>
 
 <h2 id="Precision">Real number precision</h2>
 
@@ -248,6 +165,9 @@ floating point for intermediate calculations on certain numerical operations.</p
     </tr>
   </table>
 </div>
+
+<p class="issue">We need some explicit wording about attributes being "reflected"
+using these interfaces.</p>
 
 <h3 id="InterfaceSVGElement">Interface SVGElement</h3>
 

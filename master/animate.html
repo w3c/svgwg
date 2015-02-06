@@ -352,7 +352,7 @@ elements and identifies the target element for the animation.</p>
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="animate" id="HrefAttribute">xlink:href</dfn></td>
-        <td><a>&lt;url&gt;</a></td>
+        <td>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></td>
         <td>(none)</td>
         <td>no</td>
       </tr>
@@ -364,9 +364,9 @@ elements and identifies the target element for the animation.</p>
     time.</p>
     <p>The target element must be part of the <a>current
     SVG document fragment</a>.</p>
-    <p>&lt;url&gt; must point to exactly one target element which
+    <p>The URL must point to exactly one target element which
     is capable of being the target of the given animation. If
-    &lt;url&gt; points to multiple target elements, if the
+    the URL points to multiple target elements, if the
     given target element is not capable of being a target of
     the given animation, or if the given target element is not
     part of the current SVG document fragment, then the
@@ -411,7 +411,7 @@ over time.</p>
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="animate" id="AttributeNameAttribute">attributeName</dfn></td>
-        <td><a>&lt;XML-Name&gt;</a></td>
+        <td><a href="http://www.w3.org/TR/xml/#NT-Name">Name</a> <a href="types.html#syntax" class="syntax">[EBNF]</a></td>
         <td>(none)</td>
         <td>no</td>
       </tr>
@@ -518,11 +518,10 @@ values are <var>n</var>-dimensional vectors (including scalars, which are
 <a>&lt;length&gt;</a> value is a scalar
 value, and a <a>&lt;color&gt;</a> value
 is a 3-dimensional vector. Thus attributes of these types can have paced
-animation applied to them.  On the other hand, a
-<a>&lt;list-of-lengths&gt;</a>
+animation applied to them.  On the other hand, a <a>&lt;dasharray&gt;</a>
 (as used by <a href="painting.html#StrokeDasharrayProperty"><span class="property">'stroke-dasharray'</span></a>)
 is a list of scalars (1-dimensional vectors), and
-<a href="shapes.html#PointsBNF">&lt;list-of-points&gt;</a> (as used by
+<a>&lt;points&gt;</a> (as used by
 the <a href="shapes.html#PolygonElementPointsAttribute"><span class="attr-name">'points'</span></a>
 attribute on a <a href="shapes.html#PolygonElement"><span class="element-name">'polygon'</span></a>)
 is a list of 2-dimensional vectors.  Therefore, these types do not have a
@@ -660,6 +659,7 @@ S ::= (#x20 | #x9 | #xD | #xA)*
     </table>
   </dt>
   <dd>
+    <p class="issue">Attribute syntax needs fixing.</p>
     <p>Defines when the element should begin (i.e. become
     active).</p>
     <p>The attribute value is a semicolon separated list of
@@ -783,6 +783,7 @@ S ::= (#x20 | #x9 | #xD | #xA)*
     </table>
   </dt>
   <dd>
+    <p class="issue">Attribute syntax needs fixing.</p>
     <p>Specifies the simple duration.</p>
     <p>The attribute value can be one of the following:</p>
     <dl>
@@ -830,6 +831,7 @@ S ::= (#x20 | #x9 | #xD | #xA)*
     </table>
   </dt>
   <dd>
+    <p class="issue">Attribute syntax needs fixing.</p>
     <p>Defines an end value for the animation that can constrain
     the active duration. The attribute value is a semicolon
     separated list of values.</p>
@@ -891,6 +893,7 @@ S ::= (#x20 | #x9 | #xD | #xA)*
     </table>
   </dt>
   <dd>
+    <p class="issue">Attribute syntax needs fixing.</p>
     <p>The <a>'min'</a> and <a>'max'</a> attributes specify the minimum and
     maximum value of the active duration, respectively.</p>
     <p>The attribute values can be either of the following:</p>
@@ -1013,6 +1016,7 @@ S ::= (#x20 | #x9 | #xD | #xA)*
     </table>
   </dt>
   <dd>
+    <p class="issue">Attribute syntax needs fixing.</p>
     <p>Specifies the total duration for repeat. It can have the
     following attribute values:</p>
     <dl>
@@ -1226,25 +1230,32 @@ interpolation method between discrete values.</p>
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="animate" id="ValuesAttribute">values</dfn></td>
-        <td>&lt;list&gt;</td>
+        <td>(see below)</td>
         <td>(none)</td>
         <td>no</td>
       </tr>
     </table>
   </dt>
   <dd>
-    <p>A semicolon-separated list of one or more values.
-    Vector-valued attributes are supported using the vector
-    syntax of the <a>'attributeType'</a> domain. Per the SMIL
-    specification, leading and trailing white space,
-    and white space before and after semicolon separators,
-    is allowed and will be ignored.
+    <div class='ready-for-wg-review'>
+    <p>The <a>'values'</a> attribute specifies a sequence of values to use over
+    the course of the animation.</p>
+    <p>The attribute is parsed as follows:</p>
+    <ol>
+      <li>Let <var>attribute</var> be the value of the <a>'values'</a>
+      attribute.</li>
+      <li>Let <var>values</var> be a list of strings formed by splitting
+      <var>attribute</var> at each U+003B SEMICOLON character.</li>
+      <li>Strip any leading and trailing <a>white space characters</a>
+      from each value of <var>values</var>.</li>
+      <li>Remove the final value in <var>values</var> if it is the empty string.</li>
+      <li>Parse each value in <var>values</var> using the rules for parsing
+      the attribute identified by <a>'xlink:href'</a>, <a>'attributeName'</a>
+      and <a>'attributeType'</a> attributes.</li>
+    </ol>
+    </div>
 
-    If the last semicolon separator is followed by either just white space
-    or no more characters, ignore both the separator and the implied
-    empty value at the end.
-
-     Except for
+    <p>Except for
     any SVG-specific rules explicitly mentioned in this
     specification, the normative definition for this attribute
     is the
@@ -1262,7 +1273,7 @@ interpolation method between discrete values.</p>
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="animate" id="KeyTimesAttribute">keyTimes</dfn></td>
-        <td>&lt;list&gt;</td>
+        <td><a>&lt;number&gt;</a> [; <a>&lt;number&gt;</a>]* ;?</td>
         <td>(none)</td>
         <td>no</td>
       </tr>
@@ -1273,21 +1284,17 @@ interpolation method between discrete values.</p>
     the pacing of the animation. Each time in the list
     corresponds to a value in the <a>'values'</a>
     attribute list, and defines when the value is used in the
-    animation function.
+    animation function.</p>
 
-	Leading and trailing white space,
-    and white space before and after semicolon separators,
-    is allowed and will be ignored.
-
-    If the last semicolon separator is followed by either just white space
-    or no more characters, ignore both the separator and the trailing
-    white space.
-
-    Each time value in the
+    <p>Each time value in the
     <a>'keyTimes'</a> list is specified as a floating
     point value between 0 and 1 (inclusive), representing a
     proportional offset into the simple duration of the
     animation element.</p>
+
+    <p>If the last semicolon separator is followed by either just white space
+    or no more characters, ignore both the separator and the trailing
+    white space.</p>
 
     <p>For animations specified with a <a>'values'</a> list, the
     <a>'keyTimes'</a> attribute if specified must have exactly as many
@@ -1350,28 +1357,27 @@ interpolation method between discrete values.</p>
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="animate" id="KeySplinesAttribute">keySplines</dfn></td>
-        <td>&lt;list&gt;</td>
+        <td><a>&lt;control-point&gt;</a> [; <a>&lt;control-point&gt;</a>]* ;?</td>
         <td>(none)</td>
         <td>no</td>
       </tr>
     </table>
   </dt>
   <dd>
+    <p>where:</p>
+    <p class="definition"><dfn id="DataTypeControlPoint">&lt;control-point&gt;</dfn> =
+    <a>&lt;number&gt;</a> ,? <a>&lt;number&gt;</a> ,? <a>&lt;number&gt;</a> ,? <a>&lt;number&gt;</a></p>
     <p>A set of Bézier control points associated with
     the <a>'keyTimes'</a> list, defining a cubic
     Bézier function that controls interval pacing. The
     attribute value is a semicolon-separated list of control
-    point descriptions.
+    point descriptions.</p>
 
-    Leading and trailing white space,
-    and white space before and after semicolon separators,
-    is allowed and will be ignored.
-
-    If the last semicolon separator is followed by either just white space
+    <p>If the last semicolon separator is followed by either just white space
     or no more characters, ignore both the separator and the trailing
-    white space.
+    white space.</p>
 
-    Each control point description is a set
+    <p>Each control point description is a set
     of four values: <code>x1 y1 x2 y2</code>, describing the
     Bézier control points for one time segment. Note:
     <a href="http://www.w3.org/TR/2008/REC-SMIL3-20081201/smil-animation.html#adef-keySplines">SMIL</a>
@@ -1413,7 +1419,7 @@ interpolation method between discrete values.</p>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="animate" id="FromAttribute">from</dfn>,
             <dfn id="ToAttribute">to</dfn>,
             <dfn id="ByAttribute">by</dfn></td>
-        <td>&lt;value&gt;</td>
+        <td>(see below)</td>
         <td>(none)</td>
         <td>no</td>
       </tr>
@@ -1423,6 +1429,18 @@ interpolation method between discrete values.</p>
     <p>The <a>'from'</a> and <a>'to'</a> attributes specify the starting
     and ending value of the animation, while the <a>'by'</a> attribute
     specifies a relative offset value for the animation.</p>
+
+    <div class='ready-for-wg-review'>
+    <p>All three attributes must be parsed using the rules for parsing
+    the attribute identified by the <a>'xlink:href'</a>, <a>'attributeName'</a>
+    and <a>'attributeType'</a> attributes.</p>
+
+    <p class="note">For example, if <a>'xlink:href'</a> identified a
+    <a>'circle'</a> element and <a>'attributeName'</a> is
+    <span class='attr-value'>'stroke-width'</span>, then the
+    <a>'from'</a>, <a>'to'</a> or <a>'by'</a> attribute is parsed
+    as a [<a>&lt;percentage&gt;</a> | <a>&lt;length&gt;</a>].</p>
+    </div>
 
     <p>Except for any SVG-specific rules explicitly mentioned in
     this specification, the normative definition for these
@@ -1880,7 +1898,7 @@ In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-2001090
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="animateMotion" id="AnimateMotionElementPathAttribute">path</dfn></td>
-        <td>&lt;path-data&gt;</td>
+        <td><a href="#PathDataBNF">svg-path</a> <a href="types.html#syntax" class="syntax">[EBNF]</a></td>
         <td>(none)</td>
         <td>no</td>
       </tr>
@@ -1906,7 +1924,7 @@ In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-2001090
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="animate" id="KeyPointsAttribute">keyPoints</dfn></td>
-        <td>&lt;list-of-numbers&gt;</td>
+        <td><a>&lt;number&gt;</a> [; <a>&lt;number&gt;</a>]* ;?</td>
         <td>(none)</td>
         <td>no</td>
       </tr>
@@ -1927,6 +1945,9 @@ In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-2001090
     must be exactly as many values in the
     <a>'keyPoints'</a> list as in the <a>'keyTimes'</a>
     list.</p>
+    <p>If the last semicolon separator is followed by either just white space
+    or no more characters, ignore both the separator and the trailing
+    white space.</p>
     <p>If there are any errors in the <a>'keyPoints'</a>
     specification (bad values, too many or too few values),
     then the document is in error (see <a
@@ -2013,7 +2034,7 @@ In particular, see <a href="http://www.w3.org/TR/2001/REC-smil-animation-2001090
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="mpath" id="MPathElementHrefAttribute">xlink:href</dfn></td>
-        <td><a>&lt;url&gt;</a></td>
+        <td>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></td>
         <td>(none)</td>
         <td>no</td>
       </tr>
@@ -2513,7 +2534,7 @@ as follows:</p>
 
 <p class='indented'><span class="anim-target">Animatable: yes (non-additive).</span></p>
 
-<p>SVG has a defined set of <a href="types.html#BasicDataTypes">basic data types</a>
+<p>SVG has a number of different data types used
 for its various supported attributes and properties. For those
 attributes and properties that can be animated, the following
 table indicates which animation elements can be used to animate
@@ -2583,14 +2604,6 @@ is not possible.</p>
       <td>&nbsp;</td>
     </tr>
     <tr>
-      <th><a href="types.html#DataTypeList">&lt;list-of-<var>T</var>s&gt;</a></th>
-      <td>no</td>
-      <td>yes</td>
-      <td>yes</td>
-      <td>no</td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
       <th><a>&lt;number&gt;</a></th>
       <td>yes</td>
       <td>yes</td>
@@ -2623,7 +2636,7 @@ is not possible.</p>
       <td>&nbsp;</td>
     </tr>
     <tr>
-      <th><a>&lt;url&gt;</a></th>
+      <th>URL</th>
       <td>no</td>
       <td>yes</td>
       <td>yes</td>
