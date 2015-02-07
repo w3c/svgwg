@@ -31,18 +31,26 @@ is technically <em>in error</em>:</p>
 <ul>
   <li>When the content does not conform to the <a href="http://www.w3.org/TR/2008/REC-xml-20081126/">XML 1.0
   specification</a> [<a href="refs.html#ref-XML10">XML10</a>], such as the
-  use of incorrect XML syntax</li>
+  use of incorrect XML syntax
+  <p class="issue">This would theoretically cause all HTML5 svg documents to stop render, we need to update this to be specifically about when SVG is parsed by the XML parser.</p>
+  </li>
 
   <li>When an element in the SVG namespace is encountered which is not listed
   as being a valid child of its parent according to the parent element's
-  definition</li>
+  definition
+  <p class="issue">This sounds like a good requirement for a validator, but not for a viewer.</p>
+  </li>
   
   <li>When an attribute in no namespace is encountered on an SVG element,
   and the attribute is not listed as being a valid attribute for that element
-  according to the element's definition</li>
+  according to the element's definition
+  <p class="issue">This sounds like a good requirement for a validator, but not for a viewer.</p>
+  </li>
 
   <li>When an element has an attribute or property value which
-  is not permissible according to this specification</li>
+  is not permissible according to this specification
+  <p class="issue">This sounds awfully similar to the point below.</p>
+  </li>
 
   <li>Other situations that are described as being <em>in error</em> in this
   specification</li>
@@ -77,6 +85,12 @@ is in error:</p>
       the <a>'polyline'</a> or <a>'polygon'</a> up to the segment
       with the error.</li>
     </ul>
+    <p class="issue">What does <em>The document shall be rendered up to, but not including,
+    the first element which has an error</em> mean exactly?
+    Most viewers continue rendering other elements after the one that was "in error".
+    See e.g <a href="http://jsfiddle.net/nsrvv1j1/">example</a>.
+    Proposal: drop the requirement, and say that rendering must continue even if something was "in error". 
+    </p>
     This approach will provide a visual clue to the user or
     developer about where the error might be in the document.
   </li>
@@ -85,13 +99,19 @@ is in error:</p>
   at the point at which an error is encountered and the visual
   presentation of the document shall reflect the animated
   status of the document at the point the error was
-  encountered.</li>
+  encountered.
+  <p class="issue">This is hard to guarantee, and it's unclear what the actual requirement is here.
+  Should all animation cease in the document? Should just the particular element that had an error
+  stop?</p>
+  </li>
 
   <li>A highly perceivable indication of error shall occur. For
   visual rendering situations, an example of an indication of
   error would be to render a translucent colored pattern such
   as a checkerboard on top of the area where the SVG content is
-  rendered.</li>
+  rendered.
+  <p class="issue">Proposal: drop this requirement.</p>
+  </li>
 
   <li>If the user agent has access to an error reporting
   capability such as status bar, it is recommended that the
@@ -101,14 +121,13 @@ is in error:</p>
   message along with a line number and character number at
   which the error was encountered.</li>
 </ul>
+<p class="issue">The above list should perhaps also mention something about how <a>lacuna values</a> work.</p>
 
 <p>Because of situations where a block of scripting changes
 might cause a given SVG document fragment to go into and out of
 error, error processing shall occur only at times when document
 presentation (e.g., rendering to the display device) is
-updated. In particular, error processing shall be disabled
-whenever redraw has been suspended via DOM calls to
-<a>SVGSVGElement::suspendRedraw</a>.</p>
+updated.</p>
 
 <h2 id="VersionControl">Version control</h2>
 

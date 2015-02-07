@@ -999,7 +999,7 @@ and <span class="property">'stroke-dashadjust'</span> properties</h3>
 <p>where:</p>
 
 <p class="definition"><dfn id="DataTypeDasharray">&lt;dasharray&gt;</dfn> =
-[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]#*</p>
+[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]#*</p>
 
 <p>The <a>'stroke-dasharray'</a> property controls
 the pattern of dashes and gaps used to form the shape of
@@ -3903,7 +3903,7 @@ following meanings:</p>
   <tr>
     <td><dfn id="MarkerWidthAttribute">markerWidth</dfn>,
     <dfn id="MarkerHeightAttribute">markerHeight</dfn></td>
-    <td><a>&lt;length&gt;</a></td>
+    <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a></td>
     <td>3</td>
     <td>yes</td>
   </tr>
@@ -3932,13 +3932,13 @@ for either attribute is an error (see
   </tr>
   <tr>
     <td><dfn id="MarkerElementRefXAttribute">refX</dfn></td>
-    <td><a>&lt;length&gt;</a> | left | center | right</td>
+    <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> | left | center | right</td>
     <td>0</td>
     <td>yes</td>
   </tr>
   <tr>
     <td><dfn id="MarkerElementRefYAttribute">refY</dfn></td>
-    <td><a>&lt;length&gt;</a> | top | center | bottom</td>
+    <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> | top | center | bottom</td>
     <td>0</td>
     <td>yes</td>
   </tr>
@@ -3996,6 +3996,26 @@ Values have the following meaning:</p>
     indicates that the marker is oriented such that its positive
     x-axis is pointing in the direction of the path at the point
     it is placed.</p>
+
+    <p class="issue">This needs to reference a definition for how
+    directionality of a given start/mid/end vertex is calculated.
+    Part of that (which should be moved somewhere more appropriate) is in 
+    the <a href="implnote.html#PathElementImplementationNotes">path element implementation notes</a>.
+    Some wording from SVG 1.1 appears to have been lost, compare with <a href="http://www.w3.org/TR/SVG11/painting.html#OrientAttribute">this</a>.
+	<br/><br/>
+    Here's an example that is a bit unclear currently:
+    <code style="white-space:pre">
+&lt;svg>
+  &lt;marker id="m" orient="auto" overflow="visible">
+    &lt;rect x="-1" y="-0.5" width="1" height="1" fill="green"/>
+  &lt;/marker>
+  &lt;path d="M50,0C50,50 50,100 50,100" marker-end="url(#m)" stroke-width="100" stroke="red"/>
+&lt;/svg>
+	</code>
+	<br/>
+	The second control point and the endpoint coincide, should this mean that the direction of the endpoint is a) <em>unknown [aka default to 0 degrees]</em> or 
+	b) <em>that you have to look at the previous segment(s)/command(s) until a direction can be established</em>?
+    </p>
 
     <p>If the marker is a <a>segment marker</a>, then
     the direction the marker is oriented is, if considering the
@@ -4066,7 +4086,7 @@ section below for an illustrative example.</p>
   </tr>
   <tr>
     <td><dfn id="PositionAttribute">position</dfn></td>
-    <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a></td>
+    <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a></td>
     <td>as&#160;if&#160;not&#160;specified</td>
     <td>yes</td>
   </tr>
@@ -4097,7 +4117,7 @@ an "in error" / "unsupported" value?</p>
   </tr>
   <tr>
     <td><dfn id="HrefAttribute">href</dfn></td>
-    <td><a>&lt;url&gt;</a></td>
+    <td>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></td>
     <td>as&#160;if&#160;not&#160;specified</td>
     <td>yes</td>
   </tr>
@@ -4239,6 +4259,13 @@ processed.</p>
     child |<br/>
     <a>&lt;child-selector&gt;</a>
   </div>
+</div>
+
+<p>where:</p>
+
+<div class="definition">
+  <dfn id="DataTypeChildSelector">&lt;child-selector&gt;</dfn> =
+  <div style="margin-left: 4em">select(<a>compound selector</a>#)</div>
 </div>
 
 <p>Values have the following meaning</p>
@@ -4510,7 +4537,7 @@ property</h3>
 
 <div class="definition">
   <dfn id="DataTypeMarkerGap">&lt;marker-gap&gt;</dfn> =
-  <div style="margin-left: 4em"><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a></div>
+  <div style="margin-left: 4em"><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a></div>
 </div>
 
 <div class="definition">
@@ -4541,8 +4568,8 @@ Values have the following meanings:</p>
 </dl>
 
 <p>If a value other than <span class="prop-value">none</span> is given,
-and the sum of the <a>&lt;length&gt;</a>s and <a>&lt;percentage&gt;</a>s
-is not positive, then it is an <a>invalid value</a>.</p>
+and the sum of the <a>&lt;length&gt;</a>s, <a>&lt;percentage&gt;</a>s
+and <a>&lt;number&gt;</a>s is not positive, then it is an <a>invalid value</a>.</p>
 
 <p>Unlike <a>vertex markers</a>, the orientation of an <span class="attr-value">orient="auto"</span>
 <a>repeating marker</a> that happens to lie on a vertex does not take into
@@ -4600,7 +4627,7 @@ property</h3>
         [ / <a class="property" href="#MarkerPatternProperty">&lt;‘marker-pattern’&gt;</a> ]?
       </div>
       <div style="margin-left: 2em">
-        | <a>&lt;marker-ref&gt;</a>{0,4} [ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ] [ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;marker-ref&gt;</a> ]*
+        | <a>&lt;marker-ref&gt;</a>{0,4} [ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ] [ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> | <a>&lt;marker-ref&gt;</a> ]*
       </div>
     </td>
   </tr>
@@ -4728,14 +4755,14 @@ knockout shapes is welcome.</p>
 
 <div class="definition">
   <dfn id="DataTypeKnockoutOffset">&lt;knockout-offset&gt;</dfn> =
-  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]</div>
+  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]</div>
 </div>
 
 <div class="definition">
   <dfn id="DataTypeKnockoutShape">&lt;knockout-shape&gt;</dfn> =
-  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ] inverted? circle |</div>
-  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]{2} inverted? ellipse |</div>
-  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]{1,2} inverted? [ rectangle | triangle ]</div>
+  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ] inverted? circle |</div>
+  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]{2} inverted? ellipse |</div>
+  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]{1,2} inverted? [ rectangle | triangle ]</div>
 </div>
 
 <p class="note">New in SVG 2.  Added to allow authors to specify
@@ -4764,7 +4791,7 @@ is the left or right side of the knockout shape.  Values have the
 following meanings:</p>
 
 <dl>
-  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]{2} inverted? ellipse</span></dt>
+  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]{2} inverted? ellipse</span></dt>
   <dd>
     <p>The knockout shape side is an arc.  The lengths or percentages specified
     are the x-radius and y-radius of the ellipse from which the arc is taken.
@@ -4799,7 +4826,7 @@ following meanings:</p>
     is the final knockout shape side.</p>
   </dd>
 
-  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ] inverted? circle</span></dt>
+  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ] inverted? circle</span></dt>
   <dd>
     <p>The knockout shape side is an arc.  The shape is computed in the same
     way as the <span class="prop-value">ellipse</span> shape, but with
@@ -4807,7 +4834,7 @@ following meanings:</p>
     and with a percentage referring to the size of the marker contents viewport.</p>
   </dd>
 
-  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]{1,2} inverted? rectangle</span></dt>
+  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]{1,2} inverted? rectangle</span></dt>
   <dd>
     <p>The knockout shape side comprises one or two rectangles.  These
     rectangles are aligned such that their top and bottom edges are
@@ -4844,7 +4871,7 @@ following meanings:</p>
     or the end of the path if this is the right knockout shape side.</p>
   </dd>
 
-  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]{1,2} inverted? rectangle</span></dt>
+  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]{1,2} inverted? rectangle</span></dt>
   <dd>
     <p>The knockout shape side comprises one or two rectangles.  These
     rectangles are aligned such that their top and bottom edges are
@@ -4881,7 +4908,7 @@ following meanings:</p>
     or the end of the path if this is the right knockout shape side.</p>
   </dd>
 
-  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ]{1,2} inverted? triangle</span></dt>
+  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]{1,2} inverted? triangle</span></dt>
   <dd>
     <p class="issue">...</p>
   </dd>
