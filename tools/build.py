@@ -211,6 +211,7 @@ for name in all:
     # date has changed; rebuild so the page header/footer has the right date
     tobuild.append(pub_path)
     tobuild_names.append(name)
+    continue
   for srctime in deptimes + localdeptimes + [getmtime(src_path)]:
     # a dependency is newer; rebuild
     if srctime > desttime:
