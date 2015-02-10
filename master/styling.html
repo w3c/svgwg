@@ -226,9 +226,7 @@ following two ways:</p>
     above (i.e., tool interoperability). Because it is
     straightforward to assign values to XML attributes from
     XSLT, the presentation attributes are well-suited to usage
-    scenario 2 above (i.e., SVG generation from XSLT). (See <a
-    href="styling.html#StylingWithXSL">Styling with XSL</a>
-    below.)</p>
+    scenario 2 above (i.e., SVG generation from XSLT).</p>
 
     <p><a
     href="conform.html#ConformingSVGInterpreters">Conforming
@@ -396,71 +394,6 @@ as occurs with animating the corresponding property with
 <span class='attr-value'>attributeType="CSS"</span> (see
 <a>'set/attributeType'</a>).</p>
     
-<h2 id='StylingWithXSL'>Styling with XSL</h2>
-
-<p class="issue">How much do we really need to mention XSLT?
-Probably the only thing worth mentioning is that <code>&lt;?xml-stylesheet?&gt;</code> 
-can be used in an XML serialized SVG document (not that we
-require support for this, though).</p>
-
-<p>XSL style sheets [<a href="refs.html#ref-XSLT">XSLT</a>] [<a href="refs.html#ref-XSLT2">XSLT2</a>] define how to
-transform XML content into something else, usually other XML.
-When XSLT is used in conjunction with SVG, sometimes SVG
-content will serve as both input and output for XSL style
-sheets. Other times, XSL style sheets will take non-SVG content
-as input and generate SVG content as output.</p>
-
-<p>The following example uses an external XSL style sheet to
-transform SVG content into modified SVG content (see <a
-href="styling.html#ReferencingExternalStyleSheets">Referencing
-external style sheets</a>). The style sheet sets the
-<a>'fill'</a> and <a>'stroke'</a> properties on all
-rectangles to red and blue, respectively:</p>
-
-<pre>
-<strong>mystyle.xsl</strong>
-&lt;?xml version="1.0" standalone="no"?&gt;
-&lt;xsl:stylesheet version="1.0"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:svg="http://www.w3.org/2000/svg"&gt;
-  &lt;xsl:output
-    method="xml"
-    encoding="utf-8"&gt;
-  &lt;!-- Add version to topmost 'svg' element --&gt;
-  &lt;xsl:template match="/svg:svg"&gt;
-    &lt;xsl:copy&gt;
-      &lt;xsl:copy-of select="@*"/&gt;
-      &lt;xsl:attribute name="version"&gt;1.1&lt;/xsl:attribute&gt;
-      &lt;xsl:apply-templates/&gt;
-    &lt;/xsl:copy&gt;
-  &lt;/xsl:template&gt;
-  &lt;!-- Add styling to all 'rect' elements --&gt;
-  &lt;xsl:template match="svg:rect"&gt;
-    &lt;xsl:copy&gt;
-      &lt;xsl:copy-of select="@*"/&gt;
-      &lt;xsl:attribute name="fill"&gt;red&lt;/xsl:attribute&gt;
-      &lt;xsl:attribute name="stroke"&gt;blue&lt;/xsl:attribute&gt;
-      &lt;xsl:attribute name="stroke-width"&gt;3&lt;/xsl:attribute&gt;
-    &lt;/xsl:copy&gt;
-  &lt;/xsl:template&gt;
-&lt;/xsl:stylesheet&gt;
-
-<strong>SVG file to be transformed by mystyle.xsl</strong>
-&lt;?xml version="1.0" standalone="no"?&gt;
-&lt;?xml-stylesheet href="mystyle.xsl" type="application/xml"?&gt;
-&lt;svg xmlns="http://www.w3.org/2000/svg"
-     width="10cm" height="5cm"&gt;
-  &lt;rect x="2cm" y="1cm" width="6cm" height="3cm"/&gt;
-&lt;/svg&gt;
-
-<strong>SVG content after applying mystyle.xsl</strong>
-&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;svg xmlns="http://www.w3.org/2000/svg"
-     width="10cm" height="5cm"&gt;
-  &lt;rect x="2cm" y="1cm" width="6cm" height="3cm" fill="red" stroke="blue" stroke-width="3"/&gt;
-&lt;/svg&gt;
-</pre>
-
 <h2 id='StylingWithCSS'>Styling with CSS</h2>
 
 <p>SVG implementations that support CSS are required to support
