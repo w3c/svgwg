@@ -4,7 +4,7 @@ all :
 	@./tools/build.py
 
 all-specs : all
-	@for spec in specs/*; do [ -f $$spec/Makefile ] && make -C $$spec/ all; done
+	@for spec in specs/*; do if [ -f $$spec/Makefile -a $$spec != 'specs/template' ]; then echo "Building $$spec" && make -C $$spec/ all; fi; done
 
 pdf : all
 	prince --no-author-style -s build/publish/style/svg-style.css -s http://www.w3.org/StyleSheets/TR/W3C-REC -s build/publish/style/svg-style-print.css build/publish/single-page.html -o build/publish/single-page.pdf
