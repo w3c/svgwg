@@ -117,6 +117,7 @@ exports.extend = function(object, properties) {
 exports.resolveURL = function(base, url) {
   if (!base) return url;
   if (url[0] == '/') throw "can't handle absolute paths";
+  if (url.indexOf(':') != -1) return url;
   if (url[0] == '#') {
     return base.replace(/(#.*)?$/, url);
   }
