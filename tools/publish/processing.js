@@ -272,7 +272,12 @@ exports.addSectionNumbers = function(conf, page, doc) {
                                    { number: conf.isSingleChapter ? '' : (conf.pages[page].formattedNumber + '.'),
                                      section: conf.pages[page].sections[id].number }),
                        n.firstChild);
-        n.setAttribute('class', 'heading');
+        var cls = n.getAttribute('class') || '';
+        if (cls != '') {
+          cls += ' ';
+        }
+        cls += 'heading';
+        n.setAttribute('class', cls);
         n.appendChild(utils.parse('<a class="self-link" href="#' + id + '"></a>'));
       }
     }
