@@ -243,8 +243,7 @@ paint servers.</p>
   <ul>
     <li>If the element is within a <a>'marker element'</a>, and
     is being rendered as part of that marker due to being referenced
-    via a <a>marker property</a> or with the <a>'marker/href'</a>
-    attribute of a <a>positioned marker</a>, then the context element
+    via a <a>marker property</a>, then the context element
     is the element referencing that <a>'marker element'</a>.</li>
     <li>If the element is within a sub-tree that is instantiated
     with a <a>'use'</a> element, then the context element is
@@ -2139,7 +2138,6 @@ a subpath is determined as follows:</p>
   <var>P<sub>2</sub></var> and <var>P<sub>3</sub></var> are degenerate, the
   curvature will be infinite and a line should be used in constructing the join.</p>
 
-
 <h2 id="VisibilityControl">Controlling visibility: the effect of the <span
 class="property">'display'</span> and <span class="property">'visibility'</span>
 properties</h2>
@@ -2208,6 +2206,8 @@ and does affect text layout.</p>
 Note that since <a>'visibility'</a> is an inherited property,
 although it has no effect on a <a>container element</a> itself,
 its inherited value can affect descendant elements.</p>
+
+</div>
 
 <h2 id="VectorEffects">Vector Effects</h2>
 <div class="annotation svg2-requirement">
@@ -3903,41 +3903,26 @@ When <span class="prop-value">screen</span> value is specified, <a>user agent</a
 
 <p>A marker is a graphical object that is painted at particular positions along
 a <a>'path'</a>, <a>'line'</a>, <a>'polyline'</a> or <a>'polygon'</a>
-element, together known as the <a>markable elements</a>.  There are four ways
-markers can be placed on these elements:</p>
+element, together known as the <a>markable elements</a>.</p>
 
-<ul>
-  <li>The <a>'marker-start'</a> and <a>'marker-end'</a> properties
-  can be used to place markers at the first and last vertex, and the
-  <a>'marker-mid'</a> property can be used to place markers at every
-  other vertex (aside from the first and last).  The <a>'marker-start'</a> and
-  <a>'marker-end'</a> can be used for example to add arrowheads to paths.
-  Markers placed using these properties are known as
-  <dfn id="TermVertexMarker">vertex markers</dfn>.</li>
+<p>The <a>'marker-start'</a> and <a>'marker-end'</a> properties
+can be used to place markers at the first and last vertex, and the
+<a>'marker-mid'</a> property can be used to place markers at every
+other vertex (aside from the first and last).  The <a>'marker-start'</a> and
+<a>'marker-end'</a> can be used for example to add arrowheads to paths.
+Markers placed using these properties are known as
+<dfn id="TermVertexMarker">vertex markers</dfn>.</p>
 
-  <li>The <a>'marker-segment'</a> property can be used to place markers
-  at the center of every path segment.  These markers are known as
-  <dfn id="TermSegmentMarker">segment markers</dfn>.</li>
-
-  <li>The <a>'marker-pattern'</a> property can be used to define
-  a regular repeating pattern of markers to place along the length of the
-  path.  Markers placed with <a>'marker-pattern'</a> are known as
-  <dfn id="TermRepeatingMarker">repeating markers</dfn>.</li>
-
-  <li>A child <a>'marker element'</a> element with a <a>'position'</a> attribute
-  can be used to place a marker at a particular location along the path.
-  Such markers are known as <dfn id="TermPositionedMarker">positioned
-  markers</dfn>.</li>
-</ul>
+<p class='note'>In SVG 2, vertex markers are the only kind of markers
+available.  Other specifications will extend marker functionality.</p>
 
 <p class="issue">There are probably better terms to use than "vertex" and
 "segment" markers.  At least, "vertex" would go more naturally with "edge",
 but we should use more natural sounding names.</p>
 
 <p>The graphics for a marker are defined by a <a>'marker element'</a> element.
-The <a>'marker-start'</a>, <a>'marker-end'</a>, <a>'marker-mid'</a>,
-<a>'marker-segment'</a> and <a>'marker-pattern'</a> properties, together known
-as the <dfn id="TermMarkerProperties">marker properties</dfn>, reference
+The <a>'marker-start'</a>, <a>'marker-end'</a> and <a>'marker-mid'</a> properties,
+together known as the <dfn id="TermMarkerProperties">marker properties</dfn>, reference
 <a>'marker element'</a> elements.</p>
 
 <p>Markers can be animated, and as with <a>'use'</a> elements, the animated
@@ -3949,14 +3934,7 @@ bottom to top:</p>
 <ul>
   <li>any marker specified by <a>'marker-start'</a></li>
 
-  <li>alternating <a>'marker-mid'</a> and <a>'marker-segment'</a> markers,
-  in order of their position along the path</li>
-
-  <li>any <a>repeating markers</a>, in order of their position along
-  the path</li>
-
-  <li>any <a>positioned markers</a>, in document order of the
-  <a>'marker element'</a> element children</li>
+  <li>the <a>'marker-mid'</a> markers, in order of their position along the path</li>
 </ul>
 
 <h3 id="MarkerElement">The <span class="element-name">'marker'</span> element</h3>
@@ -4138,12 +4116,6 @@ Values have the following meaning:</p>
 	b) <em>that you have to look at the previous segment(s)/command(s) until a direction can be established</em>?
     </p>
 
-    <p>If the marker is a <a>segment marker</a>, then
-    the direction the marker is oriented is, if considering the
-    incoming and outgoing directions as unit vectors, in the
-    direction of the sum of these two vectors.  If this sum
-    is zero, then the marker is oriented in the incoming direction.</p>
-
     <p>If the marker is on the first or last vertex of a closed subpath, then the
     incoming direction taken from the final path segment and the outgoing
     direction is taken from:</p>
@@ -4197,72 +4169,6 @@ section below for an illustrative example.</p>
 
 </dd>
 
-<dt>
-<table class="propdef attrdef">
-  <tr>
-    <th>Name</th>
-    <th>Value</th>
-    <th>Lacuna value</th>
-    <th>Animatable</th>
-  </tr>
-  <tr>
-    <td><dfn id="PositionAttribute">position</dfn></td>
-    <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a></td>
-    <td>as&#160;if&#160;not&#160;specified</td>
-    <td>yes</td>
-  </tr>
-</table>
-
-</dt>
-<dd>
-<p>If the <a>'marker element'</a> element is a child of a <a>markable element</a>,
-then the presence of a <a>'position'</a> attribute indicates that the marker is
-a <a>positioned marker</a> and that it will be painted at the specified
-distance along the path.  If the value is negative or greater than the length
-of the path, then no marker will be painted.  If this attribute is specified on
-a <a>'marker element'</a> that is not a child of a <a>markable element</a>, then
-it has no effect beyond being exposed in the DOM.</p>
-
-<p class="issue">Should a negative or greater than path length value be
-an "in error" / "unsupported" value?</p>
-
-</dd>
-<dt>
-
-<table class="propdef attrdef">
-  <tr>
-    <th>Name</th>
-    <th>Value</th>
-    <th>Lacuna value</th>
-    <th>Animatable</th>
-  </tr>
-  <tr>
-    <td><dfn id="HrefAttribute">href</dfn></td>
-    <td>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></td>
-    <td>as&#160;if&#160;not&#160;specified</td>
-    <td>yes</td>
-  </tr>
-</table>
-
-</dt>
-<dd>
-<p>When a <a>'marker element'</a> element is being used as a <a>positioned marker</a>,
-the <a>'href'</a> attribute indicates that the <a>'marker element'</a>
-referenced by the attribute is to be used as the definition of the marker.  The
-graphical content of the referencing <a>'marker element'</a> element and any of
-its attributes that affect marker processing are ignored.  Authors must not
-place any child graphical content in the referencing <a>'marker element'</a> or
-specify the <a>'viewBox'</a>, <a>'preserveAspectRatio'</a>, <a>'refX'</a>,
-<a>'refY'</a>, <a>'markerUnits'</a>, <a>'markerWidth'</a>, <a>'markerHeight'</a>
-or <a>'orient'</a> attributes on it.</p>
-
-<p class="issue">We should say something about referencing <a>'marker element'</a>
-elements that have an <a>'href'</a> with the <a>marker properties</a>.
-I suspect we should just allow this.  Whether we want to allow the full
-element-referencing thing that you can do with gradients, with selective
-overriding of attributes, I'm not sure.</p>
-
-</dd>
 </dl>
 
 <!--
@@ -4301,11 +4207,7 @@ value for the <a>'fill'</a> or <a>'stroke'</a> on elements in its definition,
 a single marker can be designed to match the style of the element referencing
 the marker.</span></p>
 
-<p><a>'marker element'</a> elements are only rendered directly
-when they are used as children of a <a>markable element</a>
-and have a <a>'position'</a> attribute specified.  This causes the
-marker to be painted as a <a>positioned marker</a>.  All other
-<a>'marker element'</a> elements are not rendered directly
+<p><a>'marker element'</a> elements are not rendered directly
 and must be referenced by one of the <a>marker properties</a>
 to be rendered.  The <a>'display'</a> property does not apply to the
 <a>'marker element'</a> element; thus, <a>'marker element'</a> elements are not
@@ -4313,61 +4215,13 @@ directly rendered even if the <a>'display'</a> property is
 set to a value other than <span class="prop-value">none</span>, and
 <a>'marker element'</a> elements are available for referencing even when the
 <a>'display'</a> property on the <a>'marker element'</a> element or any of its
-ancestors is set to <span class="prop-value">none</span>.  <a>'marker element'</a>
-elements that are used as <a>positioned markers</a> can simultaneously be referenced
-by the <a href='#TermMarkerProperties'>marker properties</a> to be used as
-<a>segment markers</a> and <a>repeating markers</a>.</p>
+ancestors is set to <span class="prop-value">none</span>.</p>
 
 <p><a href="script.html#EventAttributes">Event attributes</a> and
 <a href="svgdom.html#EventListeners">event listeners</a> attached
 to the contents of a <a>'marker element'</a> element are not processed;
 only the rendering aspects of <a>'marker element'</a> elements are
 processed.</p>
-
-<p class="issue">Make interaction work on <a>positioned markers</a>.</p>
-
-<div class="example">
-  <p>The following example shows the use of <a>positioned markers</a> to
-  place symbols at particular distances along a path.</p>
-
-  <pre><![CDATA[
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="600" height="200" viewBox="0 0 600 200">
-
-   <defs>
-     <marker id="Square" markerWidth="10" markerHeight="10"
-             refX="5" refY="5" orient="auto">
-       <path d="M 5,1 L 9,5 5,9 1,5 z" fill="#6a9100"/>
-     </marker>
-     <marker id="Circle" markerWidth="10" markerHeight="10"
-             refX="5" refY="5" orient="auto">
-       <circle cx="5" cy="5" r="2" fill="dodgerblue"/>
-     </marker>
-   </defs>
-
-   <path d="M 100,50 C 100,250 500,-50 300,150"
-         fill="none" stroke="deeppink" stroke-width="3">
-     <marker href="#Square" position="0"/>
-     <marker href="#Square" position="100%"/>
-     <marker href="#Circle" position="50px"/>
-     <marker href="#Circle" position="calc(100% - 50px)"/>
-     <marker refX="5" refY="5" position="50%">
-       <!-- the cross -->
-       <path d="M 3,3 L 7,7 M 3,7 L 7,3"
-             fill="none" stroke="black" stroke-width="2"/>
-     </marker>
-   </path>
-</svg>
-]]></pre>
-
-  <div class="figure">
-    <img class="bordered" src="images/painting/markers-positioned.svg"
-         alt="Image showing the use of positioned markers."/>
-    <p class="caption">Child <a>'marker element'</a> elements are used to position
-    two square and two circular markers.  The cross marker is defined inline
-    and does not need an ID.</p>
-  </div>
-</div>
 
 <h3 id="MarkerReferences">Referencing <span class="element-name">'marker'</span> elements</h3>
 
@@ -4509,229 +4363,6 @@ refer to the first and last vertex of the entire path, not each subpath.</p>
 </div>
 </div>
 
-<h3 id="SegmentMarkers">Segment markers: the <span class="property">'marker-segment'</span>
-property</h3>
-
-<table class="propdef">
-  <tr>
-    <th>Name:</th>
-    <td><dfn id="MarkerSegmentProperty">marker-segment</dfn></td>
-  </tr>
-  <tr>
-    <th>Value:</th>
-    <td>none | <a>&lt;marker-ref&gt;</a></td>
-  </tr>
-  <tr>
-    <th>Initial:</th>
-    <td>none</td>
-  </tr>
-  <tr>
-    <th>Applies to:</th>
-    <td><a>markable elements</a></td>
-  </tr>
-  <tr>
-    <th>Inherited:</th>
-    <td>yes</td>
-  </tr>
-  <tr>
-    <th>Percentages:</th>
-    <td>N/A</td>
-  </tr>
-  <tr>
-    <th>Media:</th>
-    <td>visual</td>
-  </tr>
-  <tr>
-    <th>Computed&#160;value:</th>
-    <td>as specified, but with <a>&lt;url&gt;</a> values (that are part of
-    a <a>&lt;marker-ref&gt;</a>) made absolute</td>
-  </tr>
-  <tr>
-    <th><a>Animatable</a>:</th>
-    <td>yes</td>
-  </tr>
-</table>
-
-<p class="note">New in SVG 2.  Added to allow automatically placing marker symbols
-on path edges, as is common in for example line graphs.</p>
-
-<p>The <a>'marker-segment'</a> property is used to specify the marker that will
-be drawn at the center of each length path segment.  Possible values
-are:</p>
-
-<dl>
-  <dt><span class='prop-value'>none</span></dt>
-  <dd>Indicates that no marker symbol will be drawn at the given
-  vertex or vertices.</dd>
-
-  <dt><span class='prop-value'>&lt;marker-ref&gt;</span></dt>
-  <dd>Indicates that the <a>'marker element'</a> element referenced
-  by the <a>&lt;marker-ref&gt;</a> value will be drawn at the center
-  of each path segment.
-  If the reference is not valid, then no marker will be drawn at the path
-  segment centers.</dd>
-</dl>
-
-<div class="example">
-  <p>The following example shows the use of both <a>vertex markers</a> and
-  <a>segment markers</a> to construct a line graph.</p>
-
-  <pre><![CDATA[
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200">
-
-  <marker id="Circle" markerWidth="8" markerHeight="8" refX="4" refY="4"
-          markerUnits="userSpaceOnUse">
-    <circle cx="4" cy="4" r="3" fill="deeppink"/>
-  </marker>
-
-  <marker id="Cross" markerWidth="10" markerHeight="10" refX="0" refY="0"
-          viewBox="-5 -5 10 10" markerUnits="userSpaceOnUse"
-          fill="none">
-    <path d="M -4,-4 L 4,4 M -4,4 L 4,-4" stroke="white" stroke-width="4"/>
-    <path d="M -4,-4 L 4,4 M -4,4 L 4,-4" stroke="black" stroke-width="2"/>
-  </marker>
-
-  <!-- grid lines -->
-  <path stroke="#888" d="M 40,20 360,20 M 40,40 360,40 M 40,60 360,60
-                         M 40,80 360,80 M 40,100 360,100 M 40,120 360,120
-                         M 40,140 360,140 M 40,160 360,160 M 40,180 360,180"/>
-
-  <!-- the graph line -->
-  <polyline points="50,100 100,20 150,50 200,130 250,80 300,170 350,100"
-            fill="none" stroke="deeppink" stroke-width="2"
-            marker="url(#Circle)" marker-segment="url(#Cross)"/>
-</svg>
-]]></pre>
-
-  <div class="figure">
-    <img class="bordered" src="images/painting/markers-segment.svg"
-         alt="Image showing the use of segment markers."/>
-    <p class="caption">Segment markers are used to place crosses at the center
-    of each line segment in the line graph.</p>
-  </div>
-</div>
-
-<h3 id="RepeatingMarkers">Repeating markers: the <span class="property">'marker-pattern'</span>
-property</h3>
-
-<table class="propdef">
-  <tr>
-    <th>Name:</th>
-    <td><dfn id="MarkerPatternProperty">marker-pattern</dfn></td>
-  </tr>
-  <tr>
-    <th>Value:</th>
-    <td><a>&lt;marker-gap&gt;</a>? <a>&lt;marker-ref-group&gt;</a> [ <a>&lt;marker-gap&gt;</a> <a>&lt;marker-ref-group&gt;</a> ]* <a>&lt;marker-gap&gt;</a>?</td>
-  </tr>
-  <tr>
-    <th>Initial:</th>
-    <td>none</td>
-  </tr>
-  <tr>
-    <th>Applies to:</th>
-    <td><a>markable elements</a></td>
-  </tr>
-  <tr>
-    <th>Inherited:</th>
-    <td>yes</td>
-  </tr>
-  <tr>
-    <th>Percentages:</th>
-    <td>refer to the length of the path</td>
-  </tr>
-  <tr>
-    <th>Media:</th>
-    <td>visual</td>
-  </tr>
-  <tr>
-    <th>Computed&#160;value:</th>
-    <td>as specified, but with <a>&lt;url&gt;</a> values (that are part of
-    a <a>&lt;marker-ref&gt;</a>) made absolute</td>
-  </tr>
-  <tr>
-    <th><a>Animatable</a>:</th>
-    <td>yes</td>
-  </tr>
-</table>
-
-<p>where:</p>
-
-<div class="definition">
-  <dfn id="DataTypeMarkerGap">&lt;marker-gap&gt;</dfn> =
-  <div style="margin-left: 4em"><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a></div>
-</div>
-
-<div class="definition">
-  <dfn id="DataTypeMarkerRefGroup">&lt;marker-ref-group&gt;</dfn> =
-  <div style="margin-left: 4em">none | <a>&lt;marker-ref&gt;</a>+</div>
-</div>
-
-<p class="note">New in SVG 2.  Added to allow markers to be placed along a path
-at positions unrelated to the segments used to form the path.</p>
-
-<p>The <a>'marker-pattern'</a> property is used to specify a pattern
-of markers and gaps to be repeated along the length of the <a>markable element</a>.
-Values have the following meanings:</p>
-
-<dl>
-  <dt><span class="prop-value">none</span></dt>
-  <dd>Indicates that no marker will be painted at the current
-  position along the path.</dd>
-
-  <dt><span class="prop-value"><a>&lt;marker-gap&gt;</a></span></dt>
-  <dd>Indicates the length of a gap in the repeated
-  pattern of markers.</dd>
-
-  <dt><span class="prop-value"><a>&lt;marker-ref&gt;</a></span></dt>
-  <dd>A reference to a <a>'marker element'</a> that will be placed at the
-  current position along the path.  If the reference is not valid, then no
-  marker for that <a>&lt;marker-ref&gt;</a> will be painted.</dd>
-</dl>
-
-<p>If a value other than <span class="prop-value">none</span> is given,
-and the sum of the <a>&lt;length&gt;</a>s, <a>&lt;percentage&gt;</a>s
-and <a>&lt;number&gt;</a>s is not positive, then it is an <a>invalid value</a>.</p>
-
-<p>Unlike <a>vertex markers</a>, the orientation of an <span class="attr-value">orient="auto"</span>
-<a>repeating marker</a> that happens to lie on a vertex does not take into
-account the incoming and outgoing directions.  Instead, it is simply oriented
-such that its positive x-axis is aligned with the direction of the path
-at its position.</p>
-
-<div class="example">
-  <p>The following example shows the use of the <a>'marker-pattern'</a> property
-  to specify a repeating pattern of two different markers spaced along a
-  path.</p>
-
-  <pre><![CDATA[
-<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200">
-
-  <marker id="DoubleDash" markerWidth="8" markerHeight="12" refX="0" refY="0"
-          viewBox="-4 -6 8 12" markerUnits="userSpaceOnUse" orient="auto">
-    <rect x="-3" y="-5" width="2" height="10"/>
-    <rect x="1" y="-5" width="2" height="10"/>
-  </marker>
-  <marker id="SingleDash" markerWidth="4" markerHeight="12" refX="0" refY="0"
-          viewBox="-2 -6 4 12" markerUnits="userSpaceOnUse" orient="auto">
-    <rect x="-1" y="-5" width="2" height="10"/>
-  </marker>
-
-  <path d="M 50,100 S 100,132 150,86 200,173 250,76 300,81
-                      350,136 400,87 450,166 500,87 550,96"
-        stroke="deeppink" stroke-width="2" fill="none"
-        marker-pattern="40 url(#DoubleDash) 40 url(#SingleDash)"/>
-</svg>
-]]></pre>
-
-  <div class="figure">
-    <img class="bordered" src="images/painting/markers-repeating.svg"
-         alt="Image showing the use of repeating markers."/>
-    <p class="caption">Markers specified with the <a>'marker-pattern'</a> property
-    are placed along the path at fixed distances, not relative to the path
-    vertices.</p>
-  </div>
-</div>
-
 <h3 id="MarkerShorthand">Marker shorthand: the <span class="property">'marker'</span>
 property</h3>
 
@@ -4742,15 +4373,7 @@ property</h3>
   </tr>
   <tr>
     <th>Value:</th>
-    <td style="white-space: nowrap">
-      <div>
-        [ none | <a>&lt;marker-ref&gt;</a> ]{1,4}
-        [ / <a class="property" href="#MarkerPatternProperty">&lt;‘marker-pattern’&gt;</a> ]?
-      </div>
-      <div style="margin-left: 2em">
-        | <a>&lt;marker-ref&gt;</a>{0,4} [ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ] [ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> | <a>&lt;marker-ref&gt;</a> ]*
-      </div>
-    </td>
+    <td>none | <a>&lt;marker-ref&gt;</a></td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -4783,312 +4406,9 @@ property</h3>
 </table>
 
 <p>The <a>'marker property'</a> property sets values for the
-<a>'marker-start'</a>, <a>'marker-mid'</a>, <a>'marker-end'</a>,
-<a>'marker-segment'</a> and <a>'marker-pattern'</a> properties.
-Values for have the following meanings:</p>
-
-<dl>
-  <dt><span class="prop-value">none | <a>&lt;marker-ref&gt;</a></span></dt>
-  <dd>Sets <a>'marker-start'</a>, <a>'marker-mid'</a> and <a>'marker-end'</a>
-  to the specified value, and sets <a>'marker-segment'</a> and
-  <a>'marker-pattern'</a> to <span class="prop-value">none</span>.</dd>
-
-  <dt><span class="prop-value">[ none | <a>&lt;marker-ref&gt;</a> ]{2}</span></dt>
-  <dd>Sets <a>'marker-start'</a> and <a>'marker-end'</a> to the two
-  values specified, and sets <a>'marker-mid'</a>, <a>'marker-segment'</a> and
-  <a>'marker-pattern'</a> to <span class="prop-value">none</span>.</dd>
-
-  <dt><span class="prop-value">[ none | <a>&lt;marker-ref&gt;</a> ]{3}</span></dt>
-  <dd>Sets <a>'marker-start'</a>, <a>'marker-mid'</a> and <a>'marker-end'</a> to
-  the three values specified, and sets <a>'marker-segment'</a> and
-  <a>'marker-pattern'</a> to <span class="prop-value">none</span>.</dd>
-    
-  <dt><span class="prop-value">[ none | <a>&lt;marker-ref&gt;</a> ]{4}</span></dt>
-  <dd>Sets <a>'marker-start'</a>, <a>'marker-segment'</a>, <a>'marker-mid'</a>
-  and <a>'marker-end'</a> to the four <a>&lt;marker-ref&gt;</a> values
-  specified, and sets <a>'marker-pattern'</a> to
-  <span class="prop-value">none</span>.</dd>
-
-  <dt><span class="prop-value">[ none | <a>&lt;marker-ref&gt;</a> ]{1,4} / <a class="property" href="#MarkerPatternProperty">&lt;‘marker-pattern’&gt;</a></span></dt>
-  <dd>Sets <a>'marker-start'</a>, <a>'marker-segment'</a>, <a>'marker-mid'</a>
-  and <a>'marker-end'</a> to the four <a>&lt;marker-ref&gt;</a> values
-  specified before the slash, and sets <a>'marker-pattern'</a> to
-  the value after the slash.</dd>
-
-  <dt>anything else</dt>
-  <dd>Sets <a>'marker-start'</a>, <a>'marker-segment'</a>, <a>'marker-mid'</a>
-  and <a>'marker-end'</a> to <span class="prop-value">none</span>,
-  and sets <a>'marker-pattern'</a> to the specified value.</dd>
-</dl>
-
-</edit:with>
-</div>
-<edit:with element='marker'>
-
-<h3 id="MarkerKnockout">Knocking out the stroke: the
-<span class="property">'marker-knockout-left'</span> and
-<span class="property">'marker-knockout-right'</span> properties</h3>
-
-<p class="issue">The marker knockout properties are still under heavy development
-and are subject to change. Feedback on how authors might prefer to specify marker
-knockout shapes is welcome.</p>
-
-<table class="propdef">
-  <tr>
-    <th>Name:</th>
-    <td><dfn id="MarkerKnockoutLeftProperty">marker-knockout-left</dfn>, <dfn id="MarkerKnockoutRightProperty">marker-knockout-right</dfn></td>
-  </tr>
-  <tr>
-    <th>Value:</th>
-    <td><a>&lt;knockout-offset&gt;</a> | <a>&lt;knockout-shape&gt;</a> [ at <a>&lt;knockout-offset&gt;</a> ]?</td>
-  </tr>
-  <tr>
-    <th>Initial:</th>
-    <td>0</td>
-  </tr>
-  <tr>
-    <th>Applies to:</th>
-    <td><a>'marker element'</a></td>
-  </tr>
-  <tr>
-    <th>Inherited:</th>
-    <td>no</td>
-  </tr>
-  <tr>
-    <th>Percentages:</th>
-    <td>see prose</td>
-  </tr>
-  <tr>
-    <th>Media:</th>
-    <td>visual</td>
-  </tr>
-  <tr>
-    <th>Computed&#160;value:</th>
-    <td>as specified</td>
-  </tr>
-  <tr>
-    <th><a>Animatable</a>:</th>
-    <td>yes</td>
-  </tr>
-</table>
-
-<p>where:</p>
-
-<div class="definition">
-  <dfn id="DataTypeKnockoutOffset">&lt;knockout-offset&gt;</dfn> =
-  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]</div>
-</div>
-
-<div class="definition">
-  <dfn id="DataTypeKnockoutShape">&lt;knockout-shape&gt;</dfn> =
-  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ] inverted? circle |</div>
-  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]{2} inverted? ellipse |</div>
-  <div style="margin-left: 4em">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]{1,2} inverted? [ rectangle | triangle ]</div>
-</div>
-
-<p class="note">New in SVG 2.  Added to allow authors to specify
-parts of a stroke that should be clipped away when a marker is
-placed on a path.  This helps with arrowheads, where the stroke
-must not be visible behind the pointy end, and with hollow markers
-as seen in metro maps, where the center of a marker is transparent
-and the stroke should not show through.</p>
-
-<p>When specified on a <a>'marker element'</a> element, the
-<a>'marker-knockout-left'</a> and <a>'marker-knockout-right'</a> properties
-together specify a shape to clip away when when painting the stroke of an
-element that uses the marker.  <a>'marker-knockout-left'</a> specifies the
-left side of the shape and <a>'marker-knockout-right'</a> the right side.
-These two sides are joined together with straight lines.</p>
-
-<p>The <a>&lt;knockout-offset&gt;</a> part of the value, if specified,
-is the offset from the marker position, outwards, along the tangent,
-that the knockout shape side is placed at.  This is the <em>knockout shape
-side position</em>.  If it is omitted, then the offset is assumed to be zero.
-The value can be negative.  Percentage values refer to the width of the marker
-contents viewport.</p>
-
-<p>The <a>&lt;knockout-shape&gt;</a> part of the value, if specified,
-is the left or right side of the knockout shape.  Values have the
-following meanings:</p>
-
-<dl>
-  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]{2} inverted? ellipse</span></dt>
-  <dd>
-    <p>The knockout shape side is an arc.  The lengths or percentages specified
-    are the x-radius and y-radius of the ellipse from which the arc is taken.
-    A length is interpreted as being in the marker contents coordinate system.
-    If the first value is a percentage, then it refers to the width of the
-    marker contents viewport, and if the second value is a percentage then
-    it refers to the height of the marker contents viewport.</p>
-
-    <p>If the <span class="prop-value">inverted</span> keyword is not specified,
-    then the arc is constructed by placing the center of the ellipse at the knockout
-    shape side position.  First we consider only the 180° arc of the ellipse which
-    points in the direction of the start of the start of the path, if this is
-    the left knockout shape side, or the end of the path if this is the right knockout
-    shape side.  If the y-radius is less than or equal to half of the stroke width of
-    the path the marker is on, then this 180° arc is the final knockout shape side.
-    Otherwise, we intersect the arc with the two lines that are offset, by half
-    of the stroke width, from the tangent to the marker orientation.
-    The resulting arc with its start and end points on these two lines is the
-    final knockout shape side.</p>
-
-    <p>If the <span class="prop-value">inverted</span> keyword <em>is</em> specified,
-    then the arc is constructed by placing the center of the ellipse at a distance
-    of two times its x-radius along the tangent to the marker orientation,
-    in the direction of the start of the path if this is the left knockout shape
-    side, or the end of the path if this is the right knockout shape side.
-    We consider only the 180° arc of the ellipse that is pointing in the opposite
-    direction.  If the y-radius is less or equal to half of the stroke width
-    of the path the marker is on, then this 180° arc is the final knockout shape
-    side.  Otherwise, we intersect the arc with the two lines that are offset,
-    by half of the stroke width, from the tangent to the marker orientation.
-    The resulting arc with its side and end points on these two lines
-    is the final knockout shape side.</p>
-  </dd>
-
-  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ] inverted? circle</span></dt>
-  <dd>
-    <p>The knockout shape side is an arc.  The shape is computed in the same
-    way as the <span class="prop-value">ellipse</span> shape, but with
-    both radii of the ellipse being the specified length or percentage,
-    and with a percentage referring to the size of the marker contents viewport.</p>
-  </dd>
-
-  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]{1,2} inverted? rectangle</span></dt>
-  <dd>
-    <p>The knockout shape side comprises one or two rectangles.  These
-    rectangles are aligned such that their top and bottom edges are
-    parallel to the tangent to the marker orientation.
-    The length or percentage is a width and the second, if specified,
-    is a height.  Percentage values here refer to the width and height
-    of the marker contents viewport, respectively.</p>
-
-    <p>If the <span class="prop-value">inverted</span> keyword is not specified,
-    then the knockout shape side is a single rectangle.  The width of the
-    rectangle is the specified width value.  The height of the rectangle is the maximum
-    of the stroke width of the path on which the marker exists and the specified
-    height value, if it is specified.  If it is not specified, then the height of the
-    rectangle is just the stroke width.
-    The rectangle is posisioned such that the center of its right hand edge
-    is positioned at the knockout shape side position
-    and the extent of its width is in the direction of the start of the path,
-    if this is the left knockout shape side, or the end of the path if this
-    is the right knockout shape side.</p>
-
-    <p>If the <span class="prop-value">inverted</span> keyword is specified,
-    then the knockout shape side comprises two rectangles.  If the specified
-    height is greater than or equal to the stroke width, then the height
-    of these rectangles is zero; otherwise, their heights are half of the
-    difference between the stroke width and the specified height.  The
-    top edge of one of the rectangles is half of the stroke width away
-    from the marker orientation tangent line, with its bottom edge closer to the tangent line.
-    The other rectangle has its bottom edge half of the stroke width
-    away from the tangent line and its top edge closer to the tangent line.
-    The right edges of the rectangles are aligned with each other and
-    also with the line perpendicular to the marker orientation tangent line.
-    The extent of the widths of the rectangles is in the direction
-    of the start of the path, if this is the left knockout shape side,
-    or the end of the path if this is the right knockout shape side.</p>
-  </dd>
-
-  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]{1,2} inverted? rectangle</span></dt>
-  <dd>
-    <p>The knockout shape side comprises one or two rectangles.  These
-    rectangles are aligned such that their top and bottom edges are
-    parallel to the tangent to the marker orientation.
-    The length or percentage is a width and the second, if specified,
-    is a height.  Percentage values here refer to the width and height
-    of the marker contents viewport, respectively.</p>
-
-    <p>If the <span class="prop-value">inverted</span> keyword is not specified,
-    then the knockout shape side is a single rectangle.  The width of the
-    rectangle is the specified width value.  The height of the rectangle is the maximum
-    of the stroke width of the path on which the marker exists and the specified
-    height value, if it is specified.  If it is not specified, then the height of the
-    rectangle is just the stroke width.
-    The rectangle is posisioned such that the center of its right hand edge
-    is positioned at the knockout shape side position
-    and the extent of its width is in the direction of the start of the path,
-    if this is the left knockout shape side, or the end of the path if this
-    is the right knockout shape side.</p>
-
-    <p>If the <span class="prop-value">inverted</span> keyword is specified,
-    then the knockout shape side comprises two rectangles.  If the specified
-    height is greater than or equal to the stroke width, then the height
-    of these rectangles is zero; otherwise, their heights are half of the
-    difference between the stroke width and the specified height.  The
-    top edge of one of the rectangles is half of the stroke width away
-    from the marker orientation tangent line, with its bottom edge closer to the tangent line.
-    The other rectangle has its bottom edge half of the stroke width
-    away from the tangent line and its top edge closer to the tangent line.
-    The right edges of the rectangles are aligned with each other and
-    also with the line perpendicular to the marker orientation tangent line.
-    The extent of the widths of the rectangles is in the direction
-    of the start of the path, if this is the left knockout shape side,
-    or the end of the path if this is the right knockout shape side.</p>
-  </dd>
-
-  <dt><span class="prop-value">[ <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a> ]{1,2} inverted? triangle</span></dt>
-  <dd>
-    <p class="issue">...</p>
-  </dd>
-</dl>
-
-<p class="issue">A diagram showing the construction of these shapes
-would be helpful.</p>
-
-<p class="issue">Need to define how the two shape sides are joined together.
-It's taking the top and bottom points from both shapes, drawing vertical
-lines to the edge of the stroke shape, then drawing two horizontal lines
-to join them together.</p>
-
-<p>The two knockout shape sides must not intersect, although they may
-touch.  If they do intersect, then no knockout is performed for that
-marker when painting the stroke.</p>
-
-<p class="note">For example, using <span class="prop-value">8px inverted
-triangle at -4px</span> for <a>'marker-knockout-left'</a> and
-<span class="prop-value">8px triangle</span> for <a>'marker-knockout-right'</a>
-is allowed, as the two straight lines that form the left shape side do not intersect
-with either of the two straight lines that form the right shape side.
-However, using <span class="prop-value">8px triangle at -4px</span> for
-both properties would obviously cause an intersection, and so would not
-be allowed.</p>
-
-<div class="figure">
-  <img class="bordered" src="images/painting/knockout-shapes.svg" style="max-width: none"
-       alt="Image showing various marker knockout shapes."/>
-  <p class="caption">An illustration of the use of inverted and non-inverted circle,
-  rectangle and triangle knockout shapes, at both 0px and 10px offsets.
-  The value beneath each pink stroke is used for both <a>'marker-knockout-left'</a>
-  and <a>'marker-knockout-right'</a>.  (The marker itself here has no
-  content and does not render anything.)</p>
-</div>
-
-<div class="issue">
-  <p>While this is nice for straight line segments, if the
-  path is curved at the marker position then it might be preferable to
-  have the knockout shapes aligned with the tangent at the knockout shape
-  side position, rather than with the marker orientation.  Especially
-  if the knockout is being used as a fancy dash pattern.  Then we would
-  likely want to join the left and right sides of the shape with a curved
-  shape (along the stroke) and not just a rectangle.  If we allow this,
-  then computing that shape is going to be hard, and will mean that
-  determining whether the left and right sides of the knockout shape
-  intersect, and determining what the intersections of all of the knockout shapes
-  on a path are, is also going to be hard.  Perhaps that can be handled by
-  extending dashing line caps with these shapes rather than here?  Regardless of
-  whether it is handled by marker knockouts or new line caps, it's going
-  to be non-trivial to compute the right shapes.</p>
-
-  <p>Another thing to note is that knockouts here are like setting up
-  a clipping path to remove parts of the stroke when it's painted.  That
-  means that if the stroke intersects itself over the knockout areas,
-  it's going to be knocked out of all bits of the stroke that go
-  through those areas.  That may or may not be fine depending on
-  your use cases.</p>
-</div>
+<a>'marker-start'</a>, <a>'marker-mid'</a> and <a>'marker-end'</a>
+properties.  The value of the <a>'marker property'</a> is used
+directly for all three of the corresponding longhand properties.</p>
 
 <h3 id="MarkerAlgorithm">Details on how markers are rendered</h3>
 
@@ -6189,166 +5509,7 @@ bounding box of the entire <a>'text'</a> element. (See the discussion of
 
 <h2 id="DOMInterfaces">DOM interfaces</h2>
 
-<div class="ready-for-wider-review">
-<h3 id="InterfaceSVGMarkerInstance">Interface SVGMarkerInstance</h3>
-
-<p>The <a>SVGMarkerInstance</a> interface is used to represent an instance
-of a marker that is on a <a>markable element</a>.  An <a>SVGMarkerInstance</a>
-can represent any kind of marker, including <a>positioned markers</a>.</p>
-
-<p class="issue">What should we do about liveness?  If it is live, we
-could have it know what index it is for, and always return information
-about the marker at that index (and return null for the element if
-that index is no longer valid).</p>
-
-<pre class='idl'>interface <b>SVGMarkerInstance</b> {
-  readonly attribute <a>SVGMarkerElement</a> element;
-  readonly attribute float position;
-  readonly attribute <a>DOMPointReadOnly</a> point;
-  readonly attribute float angle;
-};</pre>
-
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGMarkerInstance__element" class="attribute first-child"><b>element</b><span class="idl-type-parenthetical"> (readonly <a>SVGMarkerElement</a>)</span></dt>
-      <dd class="attribute">The <a>'marker element'</a> element that defines
-      the marker.  If the marker is a <a>vertex marker</a>, <a>segment marker</a>
-      or <a>repeating marker</a>, then this will be the <a>'marker element'</a>
-      element that the relevant marker property referenced.  If the marker is
-      a <a>positioned marker</a>, then this will be the child <a>'marker element'</a>
-      element of the <a>markable element</a>.</dd>
-
-      <dt id="__svg__SVGMarkerInstance__position" class="attribute"><b>position</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
-      <dd class="attribute">The distance along the <a>equivalent path</a> of the
-      <a>markable element</a> that the marker is positioned at.</dd>
-
-      <dt id="__svg__SVGMarkerInstance__point" class="attribute"><b>point</b><span class="idl-type-parenthetical"> (readonly <a>DOMPointReadOnly</a>)</span></dt>
-      <dd class="attribute">The point, in the user space of the
-      <a>markable element</a>, that the marker is positioned at.
-      The <a>DOMPointReadOnly</a> object is read only.</dd>
-
-      <dt id="__svg__SVGMarkerInstance__angle" class="attribute"><b>angle</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
-      <dd class="attribute">The orientation of the marker relative to a
-      vector pointing in the direction of the positive y-axis of the
-      <a>markable element</a>'s user space.</dd>
-    </dl>
-  </dd>
-</dl>
-
-
-<h3 id="InterfaceSVGMarkerList">Interface SVGMarkerList</h3>
-
-<p>The <a>SVGMarkerList</a> interface is used to expose the list of markers that
-are painted on a given <a>markable element</a>.  This list includes all
-<a>vertex markers</a>, <a>segment markers</a>, <a>repeating markers</a> and
-<a>positioned markers</a>.  The list of <a>SVGMarkerInstance</a> objects
-is maintained in the order that the markers are painted (see
-<a href='painting.html#Markers'>Markers</a>).</p>
-
-<p>The <a href='http://dev.w3.org/2006/webapi/WebIDL/#dfn-supported-property-indices'>supported property indices</a>
-of an <a>SVGPathSegList</a> object is all non-negative integers less than
-the length of the list.</p>
-
-<pre class='idl'>interface <b>SVGMarkerList</b> {
-  readonly attribute unsigned long <a href='#__svg__SVGMarkerList__length'>length</a>;
-  getter <a>SVGMarkerInstance</a>? <a href='#__svg__SVGMarkerList__item'>item</a>(unsigned long index);
-};</pre>
-
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGMarkerList__length" class="attribute first-child"><b>length</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
-      <dd class="attribute">The number of markers on this element.</dd>
-    </dl>
-  </dd>
-  <dt class="operations-header">Operations:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGMarkerList__item" class="operation first-child"><a>SVGMarkerInstance</a>? <b>item</b>(unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        Gets the <a>SVGMarkerInstance</a> at the given position in the
-        list of markers on this element.
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the <a>SVGMarkerInstance</a> to return.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>Returns the <a>SVGMarkerInstance</a> at position <var>index</var>
-          in the list of markers on this element, or null if <var>index</var>
-          is out of range.</dd>
-        </dl>
-      </dd>
-    </dl>
-  </dd>
-</dl>
-
-
-<h3 id="InterfaceSVGMarkableElement">Interface SVGMarkableElement</h3>
-
-<p>The <a>SVGMarkableElement</a> interface is implemented on all
-<a>markable elements</a>, and provides access to the markers that are placed on
-the element's path.</p>
-
-<pre class='idl'>[NoInterfaceObject]
-interface <b>SVGMarkableElement</b> {
-  readonly attribute <a>SVGMarkerList</a> <a href='#__svg__SVGMarkableElement__markers'>markers</a>;
-
-  long <a href='#__svg__SVGMarkableElement__getMarkerIndexFromPoint'>getMarkerIndexFromPoint</a>(<a>DOMPoint</a> point);
-};</pre>
-
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGMarkableElement__markers" class="attribute first-child"><b>markers</b><span class="idl-type-parenthetical"> (readonly <a>SVGMarkerList</a>)</span></dt>
-      <dd class="attribute">The list of markers on this element.</dd>
-    </dl>
-  </dd>
-  <dt class="operations-header">Operations:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGMarkableElement__getMarkerIndexFromPoint" class="operation first-child">long <b>getMarkerIndexFromPoint</b>(<a>DOMPoint</a> point)</dt>
-      <dd class="operation">
-        Returns the index into the <a>SVGMarkerList</a> of the marker that is at
-        the specified point.  Normal hit testing rules apply; the value of the
-        <a>'pointer-events'</a> property on the elements that comprise the markers,
-        as well as its value on this element, is honored, and the top-most marker
-        is selected when there are multiple markers whose content is at the given
-        point.
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>DOMPoint</a> <var>point</var></div>
-                <div>The point to check for intersection with the markers
-                on this element.  The <a>DOMPoint</a> is interpreted as a
-                point in the user space of this element.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>The index into this element's <a>SVGMarkerList</a> of the marker
-          at the given point, or -1 if there is no such marker.</dd>
-        </dl>
-      </dd>
-    </dl>
-  </dd>
-</dl>
-</div>
-
-
 <h3 id="InterfaceSVGMarkerElement">Interface SVGMarkerElement</h3>
-
 
 <edit:with element='marker'>
 
