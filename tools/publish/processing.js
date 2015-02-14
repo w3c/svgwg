@@ -623,6 +623,15 @@ function doElementIndex(conf, page, n) {
   utils.replace(n, index);
 }
 
+function doIDLIndex(conf, page, n) {
+  var interfaces = Object.keys(conf.definitions.interfaces)
+                     .filter(function(name) { return conf.definitions.interfaces[name].href.indexOf(':') == -1 })
+                     .sort().map(function(name) { return conf.definitions.formatInterfaceLink(name) });
+  var index = utils.parse('<ul>{{interfaces}}</ul>',
+                          { interfaces: interfaces.map(function(e) { return utils.parse('<li>{{link}}</li>', { link: e }) }) });
+  utils.replace(n, index);
+}
+
 function doElementCategory(conf, page, n) {
   var cat = conf.definitions.elementCategories[n.getAttribute('name')];
   var elts = cat.elements.concat().sort();
@@ -702,6 +711,7 @@ var replacementFunctions = {
   locallink: doLocalLink,
   attributetable: doAttributeTable,
   elementindex: doElementIndex,
+  idlindex: doIDLIndex,
   elementcategory: doElementCategory,
   attributecategory: doAttributeCategory,
   elementswithattributecategory: doElementsWithAttributeCategory,
