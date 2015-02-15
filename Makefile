@@ -9,6 +9,9 @@ all-specs : all
 pdf : all
 	prince --no-author-style -s build/publish/style/svg-style.css -s http://www.w3.org/StyleSheets/TR/W3C-REC -s build/publish/style/svg-style-print.css build/publish/single-page.html -o build/publish/single-page.pdf
 
+stabilize-issues :
+	@./tools/build.py -s
+
 ZIPDIR=REC-SVG11-20110802
 
 zip : all

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # -c == clean
+# -s == stabilize issues
 
 
 # Note that we have to change directory below to make sure that build output
@@ -219,7 +220,17 @@ for name in all:
       tobuild_names.append(name)
       break
 
+if tobuild and len(sys.argv) == 2 and sys.argv[1] == "-s":
+  # stabilize issues
+  os.chdir(master_dir)
+  for page in tobuild_names:
+    run("perl \"" + native_path(join(tools_dir, "stabilizer.pl")) + "\" " +
+        page + ".html issue-state.txt")
+  os.chdir(repo_dir) # chdir back
+  sys.exit(0)
+
 if tobuild:
+  # build chapters
   toremove = tobuild
   os.chdir(master_dir)
   run(node + " \"" +
