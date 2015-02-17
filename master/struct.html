@@ -254,8 +254,8 @@ create SVG fragments.</p>
       <span class="attr-name"><a href="struct.html#SVGElementYAttribute"><span>y</span></a></span>,
       <span class="attr-name"><a href="struct.html#SVGElementWidthAttribute"><span>width</span></a></span>,
       <span class="attr-name"><a href="struct.html#SVGElementHeightAttribute"><span>height</span></a></span>,
-      <span class="attr-name"><a href="struct.html#SVGElementPlaybackOrderAttribute"><span>playbackOrder</span></a></span>,
-      <span class="attr-name"><a href="struct.html#SVGElementTimelineBeginAttribute"><span>timelineBegin</span></a></span>,
+      <span class="attr-name"><a href="struct.html#SVGElementPlaybackorderAttribute"><span>playbackOrder</span></a></span>,
+      <span class="attr-name"><a href="struct.html#SVGElementTimelinebeginAttribute"><span>timelinebegin</span></a></span>,
       <span class="attr-name"><a href="interact.html#ZoomAndPanAttribute"><span>zoomAndPan</span></a></span>
     </td>
   </tr>
@@ -440,10 +440,10 @@ create SVG fragments.</p>
     </p>
     <p>
       If <span class="attr-name">'playbackorder'</span> is set to
-      <span class="attr-value">'forwardonly'</span>, the content will probably
+      <span class="attr-value">'forwardonly'</span>, the content will likely
       contain <a>'discard'</a>
       elements or scripts that destroy resources, thus seeking back in the
-      document's timeline may result in missing content.
+      document fragment's timeline may result in missing content.
       If <span class="attr-name">'playbackorder'</span> is
       <span class="attr-value">'forwardonly'</span>, the content should not
       provide a way, through hyperlinking or script, of seeking backwards in
@@ -473,44 +473,48 @@ create SVG fragments.</p>
       </tr>
       <tr>
         <td><dfn id="SVGElementTimelinebeginAttribute">timelinebegin</dfn></td>
-        <td>onload | onstart</td>
-        <td>onload</td>
+        <td>loadend | loadbegin</td>
+        <td>loadend</td>
         <td>no</td>
       </tr>
     </table>
   </dt>
   <dd>
-    <p class="issue" data-issue="7">This attribute may be harmonized and/or replaced with
-    the work done as part of the <a href="https://dvcs.w3.org/hg/FXTF/raw-file/tip/web-anim/index.html">Web Animation specification</a>.</p>
     <p>
-      Controls the initialization of the timeline for the document.
+      Controls the initialization of the timeline for the <a>SVG document
+      fragment</a>.
     </p>
     <p>
-      The <a>'svg'</a> element controls the <em>document timeline</em>, which is the timeline of
-      the <a>'svg'</a> element's time container. For progressively loaded animations, the author
-      would typically set this attribute to <span class="attr-value">'onstart'</span>,
+      The <a>outermost svg element</a> of an <a>SVG document fragment</a> 
+      defines a <em>timeline</em>.
+      Absolute times used by <a>animation elements</a> in an <a>SVG document
+      fragment</a> are relative to the document fragment's <em>timeline</em>.
+    </p>
+    <p>
+      By default, the <em>timeline</em> is initialized when the document
+      fragment's <a href="interact.html#LoadEvent"><code>load</code></a> event
+      is fired but for progressively loaded animations, the author may set this
+      attribute to <span class="attr-value">'loadend'</span>,
       thus allowing the timeline to begin as the document loads, rather than
       waiting until the complete document is loaded.
     </p>
     <p>Attribute values have the following meanings:</p>
     <dl>
-      <dt><span class="attr-value">'onload'</span></dt>
+      <dt><span class="attr-value">'loadend'</span></dt>
       <dd>
-        The document's timeline starts the moment the
+        The document fragment's timeline starts the moment the
         <a href="interact.html#LoadEvent"><code>load</code></a> event for the
         <a>outermost svg element</a> is triggered.
       </dd>
-      <dt><span class="attr-value">'onstart'</span></dt>
+      <dt><span class="attr-value">'loadbegin'</span></dt>
       <dd>
         The document's timeline starts at the moment the
-        <a>outermost svg element</a>'s <em>start-tag</em>
-        <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#sec-starttags">as defined in XML 1.0</a>
-        ([<a href="refs.html#ref-XML10">XML10</a>], section 3.1) is fully parsed and processed.
-        <p class="issue" data-issue="8">What about when the SVG document fragment is within
-        an XHTML document?  Is there a single timeline for the whole document, and if so,
-        does it start at the parse time for the first <code>&lt;svg&gt;</code> start tag?
-        What about when using the HTML parser?</p>
-        <p class="issue" data-issue="9">"timelinebegin=onstart" isn't very descriptive.</p>
+        <a>outermost svg element</a>'s <em>start-tag</em> (as defined in
+        <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#sec-starttags">XML
+        1.0</a> [<a href="refs.html#ref-XML10">XML10</a>] or <a
+        href="http://www.w3.org/TR/html5/syntax.html#syntax-start-tag">HTML</a>
+        [<a href="refs.html#ref-HTML">HTML</a>] when using the HTML parser) is
+        fully parsed.
       </dd>
     </dl>
   </dd>
@@ -3035,23 +3039,29 @@ paused state.
 </dt>
 <dd class="operation">
 <div>
-Returns the current time in seconds relative to the start time for the
-current SVG document fragment.
+<p>
+  Returns the current time in seconds relative to the start time for the
+  <a>current SVG document fragment</a>.
+  If <span class="dom-method-name">getCurrentTime</span> is called before
+  the <a>SVG document fragment</a> timeline has begun, then 0 is returned.
+</p>
 
-If <span class="dom-method-name">getCurrentTime</span> is called before
-the document timeline has begun (for example, by script running in a
-<a>'script'</a>  element before the document's
-<a href="interact.html#LoadEvent">load</a> event is dispatched),
-then 0 is returned. 
-<p class="issue" data-issue="53">The for example bit might want to refer to <a>'timelinebegin'</a> instead.</p>
+<p>
+  For example, if the <a>outermost SVG element</a> of an
+  <a>SVG document fragment</a> has a <a>'timelinebegin'</a> value of
+  <span class="attr-value">loadend</span>, any script running in a
+  <a>'script'</a> element that does not wait for the document fragment's
+  <a href="interact.html#LoadEvent">load</a> event to fire, will run
+  before the timeline begins and any calls to this method will return 0.
+</p>
 
 </div>
 <dl class="operation">
 <dt class="returns-header">Returns</dt>
 <dd>
-<div> The current time in seconds, or 0 if the document timeline has not yet begun.
-
-</div>
+  <div>The current time in seconds, or 0 if the <a>SVG document fragment</a>
+       timeline has not yet started.
+  </div>
 </dd>
 </dl>
 </dd>
@@ -3060,17 +3070,14 @@ then 0 is returned.
 </dt>
 <dd class="operation">
 <div>
-Adjusts the clock for this SVG document fragment, establishing a new
+Adjusts the clock for this <a>SVG document fragment</a>, establishing a new
 current time.
 
 If <span class="dom-method-name">setCurrentTime</span> is called
-before the document timeline has begun (for example, by script running
-in a <a>'script'</a> element before the document's
-<a href="interact.html#LoadEvent">load</a> event is dispatched),
-then the value of <var>seconds</var> in the last invocation of the method
-gives the time that the document will seek to once the document
-timeline has begun.
-
+before the document timeline has begun,
+the the value of <var>seconds</var> in the last invocation of the method
+gives the time that the document will seek to once the document timeline has
+begun.
 
 </div>
 <dl class="operation">
