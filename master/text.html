@@ -675,8 +675,8 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
     possible adjustments due to the value of the
     <a>'text-anchor'</a> property or the <a>'text-align'</a> property).
     For pre-formatted text and for auto-wrapped text where the
-    <a>content area</a> is determined by a <a>'text/width'</a>
-    or <a>'text/height'</a> attribute, the initial <a>current text
+    <a>content area</a> is determined by the <a>'text/extent'</a>
+    attribute, the initial <a>current text
     position</a> is determined by the <a>'tspan/x'</a> and
     <a>'tspan/y'</a> values of the <a>'text'</a> or <a>'tspan'</a>
     element which contains the first rendered character.
@@ -916,38 +916,20 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
       </p>
     </dd>
 
-    <dt id="TextElementHeightAttribute"><span class="adef">height</span></dt>
+    <dt id="TextElementExtentAttribute"><span class="adef">extent</span></dt>
     <dd>
-      <p class="annotation">Added according to Resolution from June 27th, 2013.</p>
-      <p>
-	Establishes a rectangular <a>content area</a> for vertical
-	text with the specified height. If <a>'width'</a> is also
-	given, defines the height of a rectangular <a>content
-	area</a> for horizontal text. It does not establish a
-	<a>content area</a> for horizontal text if <a>'width'</a>
-	is not also specified. See
-	the <a href="text.html#TextLayoutContentArea">Content Area</a>
-	section.
+      <p class="annotation">
+	'extent' added by resolution from
+	<a href="http://www.w3.org/2015/02/12-svg-minutes.html#action17">February
+	  12th, 2015</a>. 'extent' replaces the 'width' and 'height'
+	  attributes, added by resolution from June 27th, 2013.
       </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a></dd>
-	<dt><a>Lacuna value</a></dt>  <dd>As if not specified.</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-
-    </dd>
-
-    <dt id="TextElementWidthAttribute"><span class="adef">width</span></dt>
-    <dd>
-      <p class="annotation">Redefined according to Resolution from June 27th, 2013.</p>
       <p>
-	Establishes a rectangular <a>content area</a> for horizontal
-	text with the specified width. If <a>'height'</a> is also
-	given, defines the width of a rectangular <a>content
-	area</a> for vertical text. It does not establish a
-	<a>content area</a> for vertical text if <a>'height'</a>
-	is not also specified. See
+	Establishes a rectangular <a>content area</a>. The value
+	of <a>'extent'</a> give the width of the rectangle for
+	horizontal text and the height for vertical text. The other
+	dimension (height for horizontal text, width for vertical
+	text) is of infinite length. See
 	the <a href="text.html#TextLayoutContentArea">Content Area</a>
 	section.
       </p>
@@ -1325,7 +1307,7 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
     SVG 1.1). Note that the <a>'x'</a> and <a>'y'</a> attributes are
     ignored for auto-wrapped text (except for the initial <a>current
     text position</a> when the <a>content area</a> is specified by
-    a <a>'text/width'</a> or <a>'text/height'</a> attribute).
+    the <a>'text/extent'</a> attribute).
   </p>
   <p class="issue" data-issue="2">
     Are 'dx', 'dy', and 'rotate'  also ignored
@@ -1673,8 +1655,7 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
   <p>
     Text is first laid out inside a <a>content area</a>.
     The <a>content area</a> may be explictly declared by setting the
-    <a>'text/width'</a> attribute (for horizontal text) or the
-    <a>'text/height'</a> attribute (for vertical text), or by setting
+    <a>'text/extent'</a> attribute or by setting
     the <a>'shape-inside'</a> property that defines or references an
     SVG <a>shape</a>. If a <a>content area</a> is not declared, it
     defaults to a rectangle of infinite width and height. The rules
@@ -1751,7 +1732,7 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
 	<div class="figure">
 	  <img class="bordered" src="images/text/text-wrapped.svg"
                alt="Image showing auto-wrapped text on two lines."/>
-	  <p class="caption">Auto-wrapped text. The <a>'text/width'</a>
+	  <p class="caption">Auto-wrapped text. The <a>'text/extent'</a>
 	    parameter defines a rectangular content area (shown
 	    in light blue).</p>
 	</div>
@@ -1831,9 +1812,8 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
 
   <p>
     A <dfn>content area</dfn> is defined by specifying in
-    a <a>'text'</a> element either a <a>'text/width'</a> attribute
-    (for horizontal text), a <a>'text/height'</a> attribute (for
-    vertical text), or a <a>'shape-inside'</a> property that defines
+    a <a>'text'</a> element a <a>'text/extent'</a> attribute
+    or a <a>'shape-inside'</a> property that defines
     or references an SVG <a>shape</a>. If no <a>content area</a> is
     provided, the <a>content area</a> defaults to a rectangle of
     infinite width and height (see the
@@ -1870,69 +1850,48 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
   </p>
 
 
-<h3 id='TextLayoutWidthHeight'>The 'width' and/or 'height' attributes</h3>
+<h3 id='TextLayoutExtent'>The 'extent' attribute</h3>
 
   <p>
-    There are three possible ways to define a <a>content area</a> using the
-    <a>'text'</a> element attributes <a>'text/width'</a> and
-    <a>'text/height'</a>:
+    The <a>content area</a> can be defined using the
+    <a>'text'</a> element attribute <a>'text/extent'</a>:
   </p>
 
   <dl>
-    <dt><a>'text/width'</a> only</dt>
+    <dt>Horizontal text</dt>
     <dd>
-      For horizontal text, specifies a width for a
-      "rectangular" <a>content area</a> of infinite height.
+      Specifies the width of a "rectangular" <a>content area</a> of
+      infinite height.
 
-      For left-to-right text, the initial <a>current text
-      position</a> is at the left of the rectangle. For
-      right-to-left text it is at the right of the rectangle.
-
-      For vertical text, it is ignored.
+      For left-to-right text, the initial <a>current text position</a>
+      is at the left of the rectangle. For right-to-left text it is at
+      the right of the rectangle.
     </dd>
 
-    <dt><a>'text/height'</a> only</dt>
+    <dt>Vertical text</dt>
     <dd>
-      For vertical text specifies, a height for a
-      "rectangular" <a>content area</a> of infinite width. The
-      initial <a>current text position</a> is at the top of the
-      rectangle.
-
-      For horizontal text, it is ignored.
+      Specifies the height of a "rectangular" <a>content area</a> of
+      infinite width. The initial <a>current text position</a> is at
+      the top of the rectangle.
     </dd>
 
-    <dt><a>'text/height'</a> and <a>'text/width'</a></dt>
-    <dd>
-      For both horizontal and vertical text, specifies a height and
-      with for a "rectangular" <a>content area</a>.
-
-      <p class="issue" data-issue="4">
-        This is really, really ugly due to the normal positioning of
-        the initial current text position. We could avoid the issue
-        of shifting x and y (e.g. using baseline='text-before-edge')
-        by not allowing this option. It is trivial to define a
-        rectangluar box content area using
-        shape-inside="inset(&lt;offset-values>)" as shown in
-        the example in the <a>'shape-inside'</a> section.
-      </p>
-    </dd>
   </dl>
 
   <p>
-    In all cases, the initial <a>current text position</a> is taken
+    In both cases, the initial <a>current text position</a> is taken
     from the <a>'text/x'</a> and <a>'text/y'</a> attributes of
     the <a>'text'</a> element.
   </p>
 
 
   <div class="example">
-    <p>An example of using <a>'text/width'</a> for wrapping horizontal text.</p>
+    <p>An example of using <a>'text/extent'</a> for wrapping horizontal text.</p>
 
     <pre><![CDATA[
 <svg xmlns="http://www.w3.org/2000/svg"
      width="300" height="100" viewBox="0 0 300 100">
 
-  <text x="50" y="30" width="200" 
+  <text x="50" y="30" extent="200" 
         font-family="sans-serif"
 	font-size="20px" >This text wraps at 200 pixels.</text>
 
@@ -1946,20 +1905,19 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
 	Horizontal text wrapping. The light-blue lines indicate the
 	limits of the <a>content area</a>. Note that the content
 	area is of infinite height. The red dot shows the initial
-	<a>current text
-	  position</a>.
+	<a>current text position</a>.
       </p>
     </div>
   </div>
 
   <div class="example">
-    <p>An example of using <a>'text/width'</a> for wrapping right to left horizontal text.</p>
+    <p>An example of using <a>'text/extent'</a> for wrapping right to left horizontal text.</p>
 
     <pre><![CDATA[
 <svg xmlns="http://www.w3.org/2000/svg"
      width="300" height="100" viewBox="0 0 300 100">
 
-  <text x="250" y="30" width="200" 
+  <text x="250" y="30" extent="200" 
 	writing-mode="rl-tb"
         font-family="PakType Naqsh"
 	font-size="20px" >هذا النص يلتف في 200 بكسل.</text>
@@ -1979,19 +1937,20 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
 	  position</a>.
       </p>
     </div>
-    <p class="issue" data-issue="5">Check Arabic text.</p>
-    <p class="issue" data-issue="6">None of the browsers render this SVG 1.1 figure
-      correctly. Only Batik seems to get it right.</p>
+    <p class="issue" data-issue="6">Some browser may not render this
+      SVG 1.1 figure correctly. Batik and Firefox seems to get it
+      right.
+    </p>
   </div>
 
   <div class="example">
-    <p>An example of using <a>'text/height'</a> for wrapping vertical text.</p>
+    <p>An example of using <a>'text/extent'</a> for wrapping vertical text.</p>
 
     <pre><![CDATA[
 <svg xmlns="http://www.w3.org/2000/svg"
      width="100" height="300" viewBox="0 0 100 300">
 
-  <text x="62.5" y="25" height="200"
+  <text x="62.5" y="25" extent="200"
 	writing-mode="tb-rl"
         font-family="IPAMincho"
 	font-size="25px" >テキストは１０文字後に折り返されます。</text>
@@ -2010,8 +1969,12 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
 	  position</a>.
       </p>
     </div>
-    <p class="issue" data-issue="7">This SVG image doesn't work in Firefox, even nightly.</p>
-    <p class="issue" data-issue="8">Check translation.</p>
+    <p class="issue" data-issue="7">This SVG 1.1 image doesn't work in
+      Firefox, even nightly. The "period" is in the incorrect place in
+      Chrome (should be at upper-right of cell). It appears that
+      horizontal to vertical glyph substitution is not being
+      done. librsvg does do the correct glyph substitution.
+    </p>
   </div>
 
 <h3 id='TextShapeInside'>The <span class="property">'shape-inside'</span> property</h3>
@@ -4938,7 +4901,7 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
 
   <p>
     In the case where the <a>content area</a> is defined by the by
-    the <a>'text/height'</a> or <a>'text/width'</a> attributes,
+    the <a>'text/extent'</a> attribute,
     the <a>'tspan/x'</a> and <a>'tspan/y'</a> attributes
     corresponding to the first rendered glyph define the
     initial <a>current text position</a>.  When the <a>content
@@ -5739,7 +5702,7 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> d="..." fill="
     Note that the effect of <a>'text-overflow'</a> is purely visual,
     the ellipsis itself does not become part of the DOM.  For all the
     DOM methods it's as if <a>'text-overflow'</a> wasn't applied, and
-    as if <a>'text/width'</a> didn't constrain the text.
+    as if <a>'text/extent'</a> didn't constrain the text.
   </p>
 
   <p class="issue" data-issue="39">Need updated example.</p>
