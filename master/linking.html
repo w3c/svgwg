@@ -353,46 +353,82 @@ or frame to be replaced by the W3C home page.</p>
       </tr>
       <tr>
         <td><dfn id="AElementTargetAttribute">target</dfn></td>
-        <td>_replace | _self | _parent | _top | _blank | &lt;XML-Name&gt;</td>
+        <td> _self | _parent | _top | _blank | &lt;XML-Name&gt;</td>
         <td>_self</td>
         <td>yes</td>
       </tr>
     </table>
   </dt>
   <dd>
-    <p class="issue" data-issue="3">This should reference "valid browsing context name or
-    keyword" from HTML.</p>
+    <p class="issue" data-issue="3">Should the remaining differences with the
+        <a href="http://www.w3.org/TR/html5/browsers.html#valid-browsing-context-name-or-keyword">"valid browsing context name or keyword"</a> 
+        definition from HTML be harmonized?
+        Specifically: HTML keywords are case-insensitive; 
+        HTML allows any string that doesn't start with "_" as a custom name,
+       (requiring an XML name is more restrictive).
+    </p>
     <p>This attribute should be used when there are multiple possible targets for
-    the ending resource, such as when the parent document is a
-    multi-frame HTML or XHTML document. This attribute specifies the
-    name or portion of the target window, frame, pane, tab, or other
-    relevant presentation context (e.g., an HTML or XHTML frame, iframe, or object element) into
+    the ending resource, such as when the parent document is embedded within an HTML
+    or XHTML document, or is viewed with a tabbed browser. This attribute specifies the
+    name of the browsing context 
+    (e.g., a browser tab or an SVG, HTML, or XHTML iframe or object element) into
     which a document is to be opened when the link is activated:</p>
     <dl>
-      <dt><span class="attr-value">_replace</span></dt>
-      <dd>The current SVG image is replaced by the linked content in the
-      same rectangular area in the same frame as the current SVG image.</dd>
       <dt><span class="attr-value">_self</span></dt>
       <dd>The current SVG image is replaced by the linked content in the
-      same frame as the current SVG image.</dd>
+      same browsing context as the current SVG image.</dd>
       <dt><span class="attr-value">_parent</span></dt>
-      <dd>The immediate frameset parent of the SVG image is replaced by the
-      linked content.</dd>
+      <dd>The immediate parent browsing context of the SVG image is replaced by the
+      linked content, if it exists and can be securely accessed from this document.</dd>
       <dt><span class="attr-value">_top</span></dt>
-      <dd>The content of the full window or tab, including any frames, is
-      replaced by the linked content</dd>
+      <dd>The content of the full active window or tab is replaced by the linked content, 
+          if it exists and can be securely accessed from this document</dd>
       <dt><span class="attr-value">_blank</span></dt>
       <dd>A new un-named window or tab is requested for the display of the
-      linked content. If this fails, the result is the same as <span class="attr-value">_top</span></dd>
+      linked content, if this document can securely do so. 
+      If the user agent does not support multiple windows/tabs, 
+      the result is the same as <span class="attr-value">_top</span>.</dd>
       <dt><span class="attr-value">&lt;XML-Name&gt;</span></dt>
-      <dd>Specifies the name of the frame, pane, or other relevant
-      presentation context for display of the linked content. If this
-      already exists, it is re-used, replacing the existing content.  If
-      it does not exist, it is created (the same as <span class="attr-value">'_blank'</span>, except that
-      it now has a name).
-      <!-- Note that frame-target must be an XML Name [XML11]. --></dd>
+      <dd>Specifies the name of the browsing context (tab, inline frame, object, etc.) 
+      for display of the linked content. If a context with this name
+      already exists, and can be securely accessed from this document, it is re-used,
+      replacing the existing content.  If it does not exist, it is created 
+      (the same as <span class="attr-value">'_blank'</span>, except that
+      it now has a name).  The name must be a valid XML Name [XML11], and should not start
+      with an underscore (U+005F LOW LINE character), to meet the requirements of a
+      <a href="http://www.w3.org/TR/html5/browsers.html#valid-browsing-context-name">valid
+      browsing context name</a> from HTML.</dd>
     </dl>
-    <p>Note: The value <span class="attr-value">'_new'</span> is <em>not</em> a legal value for target (use <span class="attr-value">'_blank'</span>).</p>
+    <p> The normative definitions for browsing contexts and security 
+        restrictions on navigation actions between browsing contexts 
+        is HTML 5 [<a href="refs.html#ref-HTML">HTML</a>], specifically 
+        <a href="http://www.w3.org/TR/html5/browsers.html">the chapter on 
+            loading web pages</a>.
+    </p>
+    <!--
+       The SVG 1.1 text for "_blank" was: 
+
+      <dt><span class="attr-value">_blank</span></dt>
+      <dd>A new un-named window or tab is requested for the display of the
+      linked content. If this fails, the result is the same as <span class="attr-value">_top</span></dd>  
+
+        However, under HTML 5 a request for a new tab may fail 
+        because of sandboxing/no-popups, in which case the link is simply not followed.
+        The new language reflects this restriction while still supporting the old
+        behavior in single-window SVG viewers (if such exist).
+    -->
+    <div class="note">
+        <p>Previous versions of SVG defined the special target value 
+            <span class="attr-value">'_replace'</span>.  It was never well implemented, 
+            and the distinction between <span class="attr-value">'_replace'</span>
+            and <span class="attr-value">'_self'</span> has been made redundant by
+            changes in the HTML definition of browsing contexts.  Use 
+             <span class="attr-value">'_self'</span> to replace the current 
+            SVG document.</p>
+        <p>The value <span class="attr-value">'_new'</span> is <em>not</em> a 
+            legal value for target.  Use <span class="attr-value">'_blank'</span>
+            to open a document in a new tab/window.</p>
+    </div>
   </dd>
 </dl>
 
