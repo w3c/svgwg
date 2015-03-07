@@ -493,12 +493,18 @@ locate resources of MIME media type "image/svg+xml".</p>
   same meaning as the corresponding attributes on a <a>'view'</a> element, or,
   in the case of <span class='attr-value'>transform(...)</span>, the same
   meaning as the corresponding attribute has on a
-  <a>'g'</a> element).</li>
-  
+  <a>'g'</a> element).
+    <div class="issue">
+    Clearly define how a transform on a view should be implemented, in a manner 
+    consistent with the CSS Transforms spec.      
+    </div>
+  </li>
+    
   <li><em>Basic media fragments identifiers</em> of type spatial or temporal
   (e.g., <span class="attr-value">MyDrawing.svg#xywh=0,200,1000,1000 or MyAnimation.svg#t=10)</span>)
   as defined in [<a href="refs.html#ref-MEDIAFRAGMENTSURI">Media Fragments URI 1.0 (basic)</a>] and possibly combined using the &amp; sign (e.g. <span class="attr-value">MyDrawing.svg#xywh=0,200,1000,1000&amp;t=10</span>).
-  <p class="issue" data-issue="4">This implies that it is not possible anymore in SVG 2.0 to define id for elements starting with 'xywh=' or 't='.</p>
+  <p class="issue" data-issue="4">This implies that it is not possible to define id for elements starting with 'xywh=' or 't='.  However, an '=' is not a valid character in an 
+      XML name, so this is not a problem in valid SVG file, anyway.</p>
   </li>
 </ul>
 
@@ -542,7 +548,12 @@ viewTargetSpec ::= 'viewTarget(' ViewTargetParams ')'
 
   <li><span class="code-fragment">TransformParams</span> corresponds to the
   parameter values for the <a>'transform'</a> property that is available on
-  many elements. For example, <span class="attr-value">transform(scale(5))</span>.</li>
+  many elements. For example, <span class="attr-value">transform(scale(5))</span>.
+    <div class="issue">
+        Should there be new options for other transformation style properties,
+        such as 'transform-origin'?
+    </div>
+    </li>
 
   <li><span class="code-fragment">ZoomAndPanParams</span> corresponds to the
   parameter values for the <a>'zoomAndPan'</a> attribute on the <a>'view'</a>
@@ -562,6 +573,11 @@ and semicolons are used to separate attributes (e.g.,
 <p>Semicolons used to separate 'SVGViewAttribute' in SVG fragments may be url-escaped (as %3B); 
 this is useful when animating a (semi-colon separated) list of URLs because
 otherwise the semicolon would be interpreted as a list separator.</p>
+
+<p class="issue">
+    The previous two paragraphs do not reflect actual browser support (spaces <i>are</i>
+    usually supported, commas and URL escaping not always).  
+</p>
 
 <p>The five types of <span class="code-fragment">SVGViewAttribute</span> may occur
 in any order, but each type may only occur at most one time in a correctly
@@ -607,18 +623,38 @@ as follows:</p>
   then the closest ancestor <a>'svg'</a> element is displayed in the viewport.
   Any view specification attributes included on the given <a>'view'</a>
   element override the corresponding view specification attributes on the
-  closest ancestor <a>'svg'</a> element.</li>
+  closest ancestor <a>'svg'</a> element.
+  <div class="issue">
+      What is the expected effect if the closest ancestor 'svg' element
+      is not the root element?
+  </div>  
+  </li>
 
   <li>If the SVG fragment identifier addresses specific SVG view (e.g.,
   <span class="attr-value">MyDrawing.svg#svgView(viewBox(0,200,1000,1000))</span>),
   then the document fragment defined by the closest ancestor <a>'svg'</a>
   element is displayed in the viewport using the SVG view specification
-  provided by the SVG fragment identifier.</li>
+  provided by the SVG fragment identifier.
+  <div class="issue">
+      Need to clarify: is the svgView a complete specification (reseting all
+      other values to defaults, as implemented in Blink/webkit) or are the
+      specified values applied as an override to the root (as they are for 
+      a 'view' element, and as implemented in Firefox and Internet Explorer).  
+      Also, what is the purpose of mentioning the 
+      closest ancestor <a>'svg'</a> element?
+  </div>  
+  </li>
 
   <li>If the SVG fragment identifier addresses any element other than a
   <a>'view'</a> element, then the document defined by the closest ancestor
   <a>'svg'</a> element is displayed in the viewport using the view
-  specification attributes on that <a>'svg'</a> element.</li>
+  specification attributes on that <a>'svg'</a> element.
+  <div class="issue">
+      What is the purpose of mentioning the closest ancestor 'svg' element,
+      as opposed to simply the document?  What is the effect when there are 
+      nested 'svg' elements?
+  </div>  
+  </li>
   
    <li>If the SVG fragment identifier addresses a combination of the above 
    non-time related identifiers with a time-related identifier (ie. a timesegment),
@@ -658,6 +694,10 @@ as follows:</p>
   <dd>
     Indicates the target object associated with the view.  This attribute
     must be any value other than the empty string.
+      <div class="issue">
+          Define the expected effect of declaring a 'viewTarget', here or in
+          an svgView target fragment.
+      </div>
   </dd>
 </dl>
 
@@ -665,6 +705,11 @@ as follows:</p>
 
 <h3 id="ViewHighlight">Highlighting views</h3>
 
+    <div class="issue">
+      This section and example needs to be updated subject to a decision on 
+      whether 'viewTarget' should cause a match to the ':target' pseudoclass.
+    </div>
+    
 <p>It is helpful to users if the target element(s) are highlighted. The visual
 styling of this highlight should be decided by the document author, because the
 <a>SVG user agent</a> has no way to determine what changes would make the
