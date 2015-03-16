@@ -878,7 +878,22 @@ can supply one or more <a>'desc'</a> and/or one or more <a>'title'</a> descripti
 strings where
 the description is text-only. When the current SVG document fragment is
 rendered as SVG on visual media, <a>'desc'</a> and <a>'title'</a> elements are
-not rendered as part of the graphics. User agents may, however, for example,
+not rendered as part of the graphics. The <a>'title'</a> child element represents advisory information for the element, such as would be appropriate for a tooltip. On a link, this could be the title or a description of the target resource; on an image or drawing object, it could be the image credit or short description of the image; it could be further information about the source; on interactive content, it could be a label for, or instructions for, use of the element; and so forth. The value is text. The <a>'desc'</a> element represents more detailed, textual information, for the element. This is typically exposed to assistive technologies to provide more detailed information, such as help information about the element. The value is text. 
+</p>
+<p>
+Authors are provided two vehicles for providing a visible label with a drawing element. The first way is to embed text within the drawing element. The second is to associate visible text with a drawing element through the use of <a>'aria-labelledby'</a> on the element being labelled. Authors may provide a non-visible label to a drawing element by applying an <a>'aria-label'</a> to it but also by providing a descendant <a>'title'</a> element. An author may also expose a hidden label on an element to an assistive technologies through the use of <a>'aria-labelledby'</a> when it points to content that is hidden and contains text. It is common for user agents to render the <a>'title'</a> element as a tooltip. Tooltips are an important way to convey alternative text information for a drawing object where the text label is either not readily visible or could be rendered in a clearer way in response to passing over the drawing element with a pointing device. One benefit of using a descendant 'title' element can be seen when using SVG to to produce an image button or small drawing that has no visible text but it is important to be able to render a short textual equivalent label, or tooltip, when a pointing device passes over the button. 
+</p>
+<p>
+Authors should provide a <a>'title'</a> child element to the outermost svg element within a stand-alone SVG document. Since users often consult documents out of context, authors should provide context-rich titles. Thus, instead of a title such as "Introduction", which doesn't provide much contextual background, authors should supply a title such as "Introduction to Medieval Bee-Keeping" instead. For reasons of accessibility, user agents should always make the content of the ‘title’ child element to the outermost svg element available to users. The mechanism for doing so depends on the user agent (e.g., as a caption, spoken).
+</p>
+<p>
+If the SVG document is embedded in an HTML document, the outermost svg element may only serve to act as a container for SVG drawings and applying a <a>'title'</a> child element may not be of value.  Applying a <a>'title'</a> element to the outermost SVG element in this may may result in a tooltip being generated. 
+</p>
+<p>
+Unlike the desc element, authors also have the ability to associate more detailed information with content that includes visible text. This can be achieved by applying <a>'aria-describedby'</a> to the element, or container of elements being described and passing an ID reference to content that includes text that describes the element in question. However, if the text describing the object is hidden the text within the description would be exposed to assistive technologies as detailed text information, similar to a descendant <a>'desc'</a> element. The <a>'aria-describedby'</a> attribute takes precedence over the child <a>'desc'</a> when providing a description.   
+</p>
+<p>
+User agents may, however, for example,
 display the <a>'title'</a> element as a tooltip, as the pointing device moves
 over particular elements. Alternate presentations are possible, both visual and
 aural, which display the <a>'desc'</a> and <a>'title'</a> elements but do not
@@ -920,20 +935,6 @@ from other namespaces.</p>
 markup in <a>'title'</a> and <a>'desc'</a> has.  If it is just that
 these are basically metadata extension points for other profiles or
 uses of SVG, then we should say that.</p>
-
-<p>Authors should always provide a <a>'title'</a> child element to the
-<a>outermost svg element</a> within a stand-alone SVG document. The
-<a>'title'</a> child element to an <a>'svg'</a> element serves the
-purposes of identifying the content of the given SVG document
-fragment. Since users often consult documents out of context,
-authors should provide context-rich titles. Thus, instead of a
-title such as "Introduction", which doesn't provide much
-contextual background, authors should supply a title such as
-"Introduction to Medieval Bee-Keeping" instead. For reasons of
-accessibility, user agents should always make the content of
-the <a>'title'</a> child element to the <a>outermost svg element</a>
-available to users. The mechanism for doing so depends on the user agent
-(e.g., as a caption, spoken).</p>
 
 <p class="issue" data-issue="24">We have this sentence here about tooltips
 which is stronger than the earlier note that some
@@ -2007,7 +2008,7 @@ of <span class="attr-name">'xml:lang'</span>? At minimum allow both lang and xml
   <dt id="TermARIAAttribute"><dfn>ARIA attributes</dfn></dt>
   <dd>These are the attributes used consisting of WAI-ARIA states and properties as well as 
   the role attribute whose values are defined defined in WAI-ARIA. See WAI-ARIA 
-  <a href="http://www.w3.org/TR/wai-aria/roles#role_definitions">WAI-ARIA Definition of Roles</a> 
+  <a href="http://www.w3.org/TR/wai-aria-1.1/#role_definitions">WAI-ARIA Definition of Roles</a> 
  and WAI-ARIA <a href="http://www.w3.org/TR/wai-aria/states_and_properties">Supported States and Properties</a>.
   The aria attributes are <edit:attributecategory name='aria'/>.</dd>
 </dl>
@@ -2017,7 +2018,7 @@ of <span class="attr-name">'xml:lang'</span>? At minimum allow both lang and xml
 <p>SVG elements having native semantics that are not limited to <a href="http://www.w3.org/TR/wai-aria-1.1/roles#presentation">presentation</a> (having "no role"), may have an ARIA role attribute specified. The attribute, if specified, must have a value that is a set of space-separated
 tokens representing the various WAI-ARIA roles that the element belongs to.
 These tokens are role values defined in
-<a href="http://www.w3.org/TR/wai-aria-1.1/roles#role_definitions">Definition of Roles</a>
+<a href="http://www.w3.org/TR/wai-aria-1.1/#role_definitions">Definition of Roles</a>
 ([<a href="refs.html#ref-ARIA">ARIA</a>], section 5.4).</p>
 
 <p>The WAI-ARIA role that an SVG element has assigned to it is the first
@@ -2043,7 +2044,7 @@ is split on spaces. </p>
   </dt>
   <dd>
     <p>The <a>'role'</a> attribute must be a 
-    set of white-space, space-separated tokens having values defined in <a href="http://www.w3.org/TR/wai-aria-1.1/roles#role_definitions">Definition of Roles</a> ([<a href="refs.html#ref-ARIA">ARIA</a>], section 5.4)</p>
+    set of white-space, space-separated tokens having values defined in <a href="http://www.w3.org/TR/wai-aria-1.1/#role_definitions">Definition of Roles</a> ([<a href="refs.html#ref-ARIA">ARIA</a>], section 5.4)</p>
     <p>The role value is a set of white-space separated machine-extractable semantic information used to define the purpose of the element.</p>
     <p class="issue" data-issue="46">We should perhaps call into HTML's algorithm to parse
     a "set of space-separated tokens".</p>
@@ -2056,13 +2057,13 @@ is split on spaces. </p>
 
 <p>SVG elements having native semantics that are not limited to <a href="http://www.w3.org/TR/wai-aria-1.1/roles#presentation">presentation</a> (having "no role"), may have an may have WAI-ARIA state and property attributes
 specified. These attributes are defined by ARIA in
-<a href="http://www.w3.org/TR/wai-aria-1.1/states_and_properties#state_prop_def">Definitions of States and Properties (all aria-* attributes)</a>
+<a href="http://www.w3.org/TR/wai-aria-1.1/#state_prop_def">Definitions of States and Properties (all aria-* attributes)</a>
 (<a href="https://svgwg.org/svg2-draft/refs.html#ref-ARIA">[ARIA]</a>, section 6.6).</p>
 
 <p>These attributes, if specified, must have a value that is the WAI-ARIA value
 type in the "Value" field of the definition for the state or property, mapped to
 the appropriate SVG value type according to
-<a href="http://www.w3.org/TR/wai-aria-1.1/appendices#typemapping">Mapping WAI-ARIA Value types to langauges</a>
+<a href="http://www.w3.org/TR/wai-aria-1.1/#typemapping">Mapping WAI-ARIA Value types to languages</a>
 using the SVG mapping ([<a href="refs.html#ref-ARIA">ARIA</a>], section 10.2).</p>
 
 <p>WAI-ARIA State and Property attributes can be used on any element. They are
@@ -2071,8 +2072,8 @@ any processing aside from including them in the DOM. Unlike some other host
 languages, SVG is not considered to have strong native host language semantics
 in terms of the user interface, consequently state and property attributes are
 processed according to the <a href="http://www.w3.org/TR/wai-aria-1.1"><cite>ARIA</cite></a> and
-<a href="http://www.w3.org/TR/wai-aria-implementation/"><cite>ARIA User Agent Implementation Guide</cite></a>
-specifications. [<a href="refs.html#ref-ARIA">ARIA</a>] [<a href="refs.html#ref-ARIAIMPL">ARIAIMPL</a>]</p>
+<a href="http://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings</cite></a> specification 
+specifications. [<a href="refs.html#ref-ARIA">ARIA</a>] [<a href="refs.html#ref-SVGAAM">SVG-AAM</a>]</p>
 
 <h3 id="implicit-aria-semantics">Implicit ARIA Semantics</h3>
 <p>The following table defines the <span>implicit native
