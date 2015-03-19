@@ -284,6 +284,22 @@ exports.addSectionNumbers = function(conf, page, doc) {
   });
 }
 
+// -- Add id="" attributes to spec issues -------------------------------------
+
+exports.addIssueIDs = function(config, page, doc) {
+  utils.forEachNode(doc, function(n) {
+    if (n.nodeType == n.ELEMENT_NODE) {
+      var issue = n.getAttribute("data-issue");
+      if (issue) {
+        var id = "issue" + issue;
+        n.setAttribute("id", id);
+        n.insertBefore(utils.parse('<a class="self-link" href="#' + id + '"></a>'),
+                       n.firstChild);
+      }
+    }
+  });
+}
+
 // -- Process edit:* element replacements -------------------------------------
 
 function doMiniTOC(conf, page, n) {

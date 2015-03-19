@@ -117,6 +117,7 @@ function buildPage(page) {
    processing.processReplacements,
    processing.processLinks,
    processing.addSectionNumbers,
+   processing.addIssueIDs,
    processing.formatQuotes,
    // processing.formatIDL,
    processing.formatMarkup].forEach(function(fn) { fn(conf, page, doc); });
