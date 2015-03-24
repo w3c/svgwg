@@ -49,10 +49,6 @@
 <p>Implementations of SVG are expected to behave as though they
 implement a rendering (or imaging) model corresponding to the
 one described in this chapter. <span class="ready-for-wg-review">
-<s>A real implementation is not
-required to implement the model in this way, but the result on
-any device supported by the implementation shall match that
-described by this model.</s>
 Real implementations may choose to implement the model in the way
 that they see fit, but the result on any device supported by the
 implementation must, in most cases, match this model.</span></p>
@@ -60,8 +56,8 @@ implementation must, in most cases, match this model.</span></p>
 <p>The appendix on <a href="conform.html">conformance
 requirements</a> describes the extent to which an actual
 implementation may deviate from this description. In practice
-an actual implementation <span class="ready-for-wg-review"><s>
-will</s>may</span> deviate slightly because of
+an actual implementation <span class="ready-for-wg-review">may</span>
+deviate slightly because of
 limitations of the output device (e.g. only a limited range of
 colors might be supported) and because of practical limitations
 in implementing a precise mathematical model (e.g. for
@@ -89,19 +85,12 @@ The rules governing these painting operations are outlined in the
 </div>
 
 <h2 id="RenderingOrder">Rendering order</h2>
-
-<p><s>Elements in an SVG document fragment have an implicit
-drawing order, with the first elements in the SVG document
-fragment being "painted" first. Subsequent elements are
-painted on top of previously painted elements.</s>
-</p>
-
 <p>
 <span class="ready-for-wg-review">
 Elements in SVG are positioned in three dimensions. In addition to their
 position on the x and y axis of the <a>viewport</a>, SVG elements are also
 positioned on the z-axis. The position on the z-axis defines the order that 
-they are painted. (Luke: is 'order in which they are painted' wrong?)
+they are painted.
 <br/><br/>
 Along the z-axis, elements are grouped into 'stacking contexts', each stacking
 context has an associated stack level.
@@ -129,98 +118,6 @@ of <a>'z-index'</a>. [<a href="refs.html#ref-CSS21">CSS21</a>]</p>
 <p>The <a>'z-index'</a> property allows an element to be assigned to a 
 stack level.
 </p>
-
-<div style="background:lightgrey">
-<p class="issue" data-issue="8">Should we keep the non-normative text here?</p>
-<p><i>The following text is non-normative.</i></p>
-<p><s>SVG elements are normally painted in document order using the painters model.
-However, sometimes it is desirable to be able to
-force an element to a higher or lower position visually without changing its
-position in the DOM tree. This functionality is provided by the <a>'z-index'</a>
-property.</s></p>
-<p><s>Understanding the <a>'z-index'</a> property involves understanding the
-terms "stack level" and "stacking context". Let's consider each in turn:</s></p>
-
-<p>The <a>'z-index'</a> property moves an element up or down a conceptual z-axis
-into layers called "stack levels". By default all the elements in a document are
-in stack level 0. By setting <a>'z-index'</a> on an element to an integer other
-than 0, an author can force an element into a higher or lower stack level,
-thereby pushing that element above or below the elements in other stack levels.
-Documents are rendered by painting each stack level in turn, from lowest to
-highest, and painting the elements in each stack level in document order.</p>
-
-<div class="example">
-  <p>Here is a simple example:</p>
-  <pre>&lt;svg xmlns="http://www.w3.org/2000/svg"&gt;
-  &lt;rect x="0"  width="100" height="100" fill="red"    z-index="-1"/&gt;
-  &lt;rect x="40" width="100" height="100" fill="lime"/&gt;
-  &lt;rect x="80" width="100" height="100" fill="blue"   z-index="1"/&gt;
-  &lt;rect x="60" width="100" height="100" fill="aqua"/&gt;
-  &lt;rect x="20" width="100" height="100" fill="yellow" z-index="-1"/&gt;
-&lt;/svg&gt;</pre>
-  <p>In this example there are three stack levels: -1, 0 (the default) and 1. The red
-  and yellow rects are in stack level -1, the lime and aqua rects are in stack
-  level 0 (the default), and the blue rect is in stack level 1. Going from lowest
-  stack level to highest, and painting the elements in each stack level in
-  document order, the painting order is: red, yellow, lime, aqua, blue.</p>
-</div>
-
-<p>In addition to putting an element into a stack level, setting an element's
-<a>'z-index'</a> property to an integer value also creates something called a "stacking
-context". A stacking context is a stack level container that groups together an
-entirely new set of stack levels for that element's descendants. A <a>'z-index'</a>
-property on any descendant will then place that descendant into one of the stack
-level in this new stacking context (descendants go into its level 0 by default),
-not into the stack levels of the parent or any other stacking context. When an
-element that creates a new stacking context is painted, so is the new stacking
-context that it created, along with all of that stacking context's stack levels
-and the elements that they contain.</p>
-
-<p>Stacking contexts allow self contained document fragments to use <a>'z-index'</a> without
-needing to worry about their children interleaving badly with other elements
-(z-indexed or otherwise) in other parts of the document.</p>
-
-<div class="example">
-  <p>In the following example, the <a>'z-index'</a> property on the <a>'g'</a>
-  element is set to zero. This creates a new stacking context to contain the
-  <a>'g'</a> element's children without moving the <a>'g'</a> to a different
-  level in the document's root stacking context:</p>
-  <pre>&lt;svg xmlns="http://www.w3.org/2000/svg"&gt;
-  &lt;g z-index="0"&gt;
-    &lt;!-- this is a self contained graphic --&gt;
-    &lt;rect x="40" width="100" height="100" fill="lime" z-index="1"/&gt;
-    &lt;rect x="20" width="100" height="100" fill="yellow"/&gt;
-  &lt;/g&gt;
-  &lt;rect x="60" width="100" height="100" fill="aqua"/&gt;
-  &lt;rect x="0" width="100" height="100" fill="red" z-index="-1"/&gt;
-&lt;/svg&gt;</pre>
-
-  <p>The example's root stacking context contains two stack levels: -1 and 0. The red
-  <a>'rect'</a> is in level -1, and the <a>'g'</a> element and aqua <a>'rect'</a> are in level 0. Inside
-  stack level 0, the <a>'g'</a> element's <a>'z-index'</a> property creates a new nested stacking
-  context at the <a>'g'</a> for the <a>'g'</a> element's children. In this child stacking
-  context there are two stack levels: 0 and 1. The yellow <a>'rect'</a> is in level 0 (the
-  default), and the lime <a>'rect'</a> is in level 1.</p>
-
-  <p>Painting of this example starts with the stack levels of the root stacking
-  context. First the red rect is painted in level -1, then in level 0 the <a>'g'</a>
-  element is painted followed by the aqua rect. When the <a>'g'</a> element is painted,
-  the child stacking context that its z-index created and all of that context's
-  stack levels are also painted. In this child stacking context, first the yellow
-  rect in level 0 is painted, followed by the lime rect in level 1. It's only
-  after the <a>'g'</a> and the stacking context that it creates has been painted that the
-  aqua rect is painted. Note that this means that although the z-index of 1 for
-  the lime rect is a higher value than the (implicit) z-index of 0 for the aqua
-  rect, the containment provided by the <a>'g'</a>'s child stacking context results in the
-  aqua rect painting over the lime rect. The painting order is therefore: red,
-  yellow, lime, aqua.</p>
-</div>
-
-<p>Note that setting <a>'z-index'</a> to an integer value is not the only way that a new
-stacking contexts is triggered for an element's descendants. See the normative
-text below for a full list.</p>
-</div>
-<p><i>The following text is normative.</i></p>
 
 <p class="ready-for-wg-review">
 The rules governing behaviour for SVG elements with the <a>'z-index'</a>
@@ -262,6 +159,22 @@ to apply to them.</p>
   a new stacking context, in which case its stack level is 0. The
   element does not establish a new local stacking context.</dd>
 </dl>
+
+<div class="example">
+  <p>Here is a simple example:</p>
+  <pre>&lt;svg xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;rect x="0"  width="100" height="100" fill="red"    z-index="-1"/&gt;
+  &lt;rect x="40" width="100" height="100" fill="lime"/&gt;
+  &lt;rect x="80" width="100" height="100" fill="blue"   z-index="1"/&gt;
+  &lt;rect x="60" width="100" height="100" fill="aqua"/&gt;
+  &lt;rect x="20" width="100" height="100" fill="yellow" z-index="-1"/&gt;
+&lt;/svg&gt;</pre>
+  <p>In this example there are three stack levels: -1, 0 (the default) and 1. The red
+  and yellow rects are in stack level -1, the lime and aqua rects are in stack
+  level 0 (the default), and the blue rect is in stack level 1. Going from lowest
+  stack level to highest, and painting the elements in each stack level in
+  document order, the painting order is: red, yellow, lime, aqua, blue.</p>
+</div>
 
 <p>A new stacking context must be established at an SVG element for its descendants if:</p>
 
@@ -345,6 +258,42 @@ stacking order for a stacking context created by an SVG element is:</p>
 <p>Since the <a>'foreignObject'</a> element creates a "fixed position containing block" in
 CSS terms, the normative rules for the stacking order of the stacking context
 created by <a>'foreignObject'</a> elements are the rules in Appendix E of CSS 2.1.</p>
+
+<div class="example">
+  <p>In the following example, the <a>'z-index'</a> property on the <a>'g'</a>
+  element is set to zero. This creates a new stacking context to contain the
+  <a>'g'</a> element's children without moving the <a>'g'</a> to a different
+  level in the document's root stacking context:</p>
+  <pre>&lt;svg xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;g z-index="0"&gt;
+    &lt;!-- this is a self contained graphic --&gt;
+    &lt;rect x="40" width="100" height="100" fill="lime" z-index="1"/&gt;
+    &lt;rect x="20" width="100" height="100" fill="yellow"/&gt;
+  &lt;/g&gt;
+  &lt;rect x="60" width="100" height="100" fill="aqua"/&gt;
+  &lt;rect x="0" width="100" height="100" fill="red" z-index="-1"/&gt;
+&lt;/svg&gt;</pre>
+
+  <p>The example's root stacking context contains two stack levels: -1 and 0. The red
+  <a>'rect'</a> is in level -1, and the <a>'g'</a> element and aqua <a>'rect'</a> are in level 0. Inside
+  stack level 0, the <a>'g'</a> element's <a>'z-index'</a> property creates a new nested stacking
+  context at the <a>'g'</a> for the <a>'g'</a> element's children. In this child stacking
+  context there are two stack levels: 0 and 1. The yellow <a>'rect'</a> is in level 0 (the
+  default), and the lime <a>'rect'</a> is in level 1.</p>
+
+  <p>Painting of this example starts with the stack levels of the root stacking
+  context. First the red rect is painted in level -1, then in level 0 the <a>'g'</a>
+  element is painted followed by the aqua rect. When the <a>'g'</a> element is painted,
+  the child stacking context that its z-index created and all of that context's
+  stack levels are also painted. In this child stacking context, first the yellow
+  rect in level 0 is painted, followed by the lime rect in level 1. It's only
+  after the <a>'g'</a> and the stacking context that it creates has been painted that the
+  aqua rect is painted. Note that this means that although the z-index of 1 for
+  the lime rect is a higher value than the (implicit) z-index of 0 for the aqua
+  rect, the containment provided by the <a>'g'</a>'s child stacking context results in the
+  aqua rect painting over the lime rect. The painting order is therefore: red,
+  yellow, lime, aqua.</p>
+</div>
 
 <h2 id="Grouping">How groups are rendered</h2>
 <div class="ready-for-wider-review">
