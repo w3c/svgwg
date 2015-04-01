@@ -12,6 +12,9 @@ pdf : all
 stabilize-issues :
 	@./tools/build.py -s
 
+stabilize-issues-all-specs : stabilize-issues
+	@for spec in specs/*; do if [ -f $$spec/Makefile -a $$spec != 'specs/template' ]; then make -C $$spec/ stabilize-issues; fi; done
+
 ZIPDIR=REC-SVG11-20110802
 
 zip : all

@@ -1,4 +1,4 @@
-# Makefile for specs under http://svgwg.org/hg/svg2/specs/.
+# Makefile for specs under https://github.com/w3c/svgwg/tree/master/specs.
 
 TOOLS=../../tools
 
@@ -8,4 +8,7 @@ all :
 clean :
 	@$(TOOLS)/build.py -c
 
-.PHONY : all clean
+stabilize-issues :
+	@$(TOOLS)/build.py -s
+
+.PHONY : all clean stabilize-issues
