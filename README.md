@@ -10,5 +10,6 @@ Editor's drafts:
 * [SVG Streaming](https://svgwg.org/specs/streaming/)
 * [svg:transform for Mapping](https://svgwg.org/specs/transform/)
 * [SVG Markers](https://svgwg.org/specs/markers/)
+* [SVG Strokes](https://svgwg.org/specs/strokes/)
 
 All of the above spec drafts are automatically rebuilt on pushes to this repository.
