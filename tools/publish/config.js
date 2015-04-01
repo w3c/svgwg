@@ -145,15 +145,22 @@ function Config(filename) {
   this.attributeIndex = attr(root, 'attributeindex', 'href');
   this.propertyIndex = attr(root, 'propertyindex', 'href');
 
+  this.specs = { };
+
   var definitionInfos = [];
   for (var n = root.firstChild; n; n = n.nextSibling) {
     if (n.nodeName == 'definitions') {
+      var specid = n.getAttribute('specid') || null;
+      var base = n.getAttribute('base') || null;
       definitionInfos.push({
         href: n.getAttribute('href'),
-        base: n.getAttribute('base') || null,
-        specid: n.getAttribute('specid') || null,
+        base: base,
+        specid: specid,
         mainspec: n.getAttribute('mainspec') || null
       });
+      if (specid && base) {
+        this.specs[specid] = base;
+      }
     }
   }
   var allDefinitions = definitions.load(definitionInfos);

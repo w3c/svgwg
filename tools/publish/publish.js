@@ -116,6 +116,7 @@ function buildPage(page) {
    processing.addTableOfContents,
    processing.processReplacements,
    processing.processLinks,
+   processing.processSpecRelativeLinks,
    processing.addSectionNumbers,
    processing.addIssueIDs,
    processing.formatQuotes,
