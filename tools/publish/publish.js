@@ -11,16 +11,21 @@ function syntax() {
   console.error('Usage: node publish.js options');
   console.error('');
   console.error('Options:');
-  console.error('  --list-pages            Print the names of all pages of the specification.');
-  console.error('  --list-nontoc-pages     Print the names of all non-ToC pages of the specification.');
-  console.error('  --list-toc-pages        Print the names of all ToC pages of the specification.');
-  console.error('  --list-resources        Print the names of all resource files/directories');
-  console.error('                            to be copied to the publish directory.');
-  console.error('  --build [PAGE ...]      Builds the specified pages, or all pages if');
-  console.error('                            none specified.');
-  console.error('  --build-single-page     Builds the single page version of the specification.');
-  console.error('  --local-style           Link to local W3C style sheets rather than w3.org.');
-  console.error('  --help                  Show this message.');
+  console.error('  --list-pages             Print the names of all pages of the specification.');
+  console.error('  --list-nontoc-pages      Print the names of all non-ToC pages of the');
+  console.error('                             specification.');
+  console.error('  --list-toc-pages         Print the names of all ToC pages of the ');
+  console.error('                             specification.');
+  console.error('  --list-resources         Print the names of all resource files/directories');
+  console.error('                             to be copied to the publish directory.');
+  console.error('  --list-definition-files  Print the names of all referenced definition XML ');
+  console.error('                             files.');
+  console.error('  --build [PAGE ...]       Builds the specified pages, or all pages if');
+  console.error('                             none specified.');
+  console.error('  --build-single-page      Builds the single page version of the ');
+  console.error('                             specification.');
+  console.error('  --local-style            Link to local W3C style sheets rather than w3.org.');
+  console.error('  --help                   Show this message.');
 }
 
 function parseOptions() {
@@ -42,6 +47,9 @@ function parseOptions() {
         break;
       case '--list-resources':
         opts.listResources = true;
+        break;
+      case '--list-definition-files':
+        opts.listDefinitionFiles = true;
         break;
       case '--build':
         opts.build = true;
@@ -79,6 +87,10 @@ function listPages(toc, nontoc) {
 
 function listResources() {
   console.log(conf.resources.join('\n'));
+}
+
+function listDefinitionFiles() {
+  console.log(conf.definitionFiles.join('\n'));
 }
 
 function checkAllPagesValid(pages) {
@@ -223,7 +235,7 @@ function buildSinglePage() {
 }
 
 var opts = parseOptions();
-if (opts.help || (!!opts.listPages + !!opts.listResources + !!opts.build + !!opts.buildSinglePage) != 1) {
+if (opts.help || (!!opts.listPages + !!opts.listResources + !!opts.listDefinitionFiles + !!opts.build + !!opts.buildSinglePage) != 1) {
   syntax();
   process.exit(opts.help ? 0 : 1);
 } else {
@@ -233,6 +245,8 @@ if (opts.help || (!!opts.listPages + !!opts.listResources + !!opts.build + !!opt
     listPages(opts.listPagesToC, opts.listPagesNonToC);
   } else if (opts.listResources) {
     listResources();
+  } else if (opts.listDefinitionFiles) {
+    listDefinitionFiles();
   } else if (opts.build) {
     buildPages(opts.rest);
   } else if (opts.buildSinglePage) {

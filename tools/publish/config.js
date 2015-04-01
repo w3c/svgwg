@@ -148,18 +148,23 @@ function Config(filename) {
   this.specs = { };
 
   var definitionInfos = [];
+  this.definitionFiles = [];
   for (var n = root.firstChild; n; n = n.nextSibling) {
     if (n.nodeName == 'definitions') {
       var specid = n.getAttribute('specid') || null;
       var base = n.getAttribute('base') || null;
+      var href = n.getAttribute('href') || null;
       definitionInfos.push({
-        href: n.getAttribute('href'),
+        href: href,
         base: base,
         specid: specid,
         mainspec: n.getAttribute('mainspec') || null
       });
       if (specid && base) {
         this.specs[specid] = base;
+      }
+      if (href) {
+        this.definitionFiles.push(href);
       }
     }
   }

@@ -146,43 +146,26 @@ else:
   
 # Get all the pages and resources from publish.xml:
 
-os.chdir(master_dir)
-status, output = getstatusoutput(node + " \"" +
-    native_path(join(tools_dir, "publish/publish.js")) + "\" --list-toc-pages")
-print node + " \"" + native_path(join(tools_dir, "publish/publish.js")) + "\" --list-toc-pages"
-os.chdir(repo_dir)
-if status != 0:
-  exit(1, 'FAIL: could not get list of specification pages')
+def get_list(arg, desc):
+    os.chdir(master_dir)
+    cmd = node + " \"" + native_path(join(tools_dir, "publish/publish.js")) + "\" " + arg
+    print cmd
+    status, output = getstatusoutput(cmd)
+    os.chdir(repo_dir)
+    if status != 0:
+      exit(1, 'FAIL: could not get list of ' + desc)
+    return output.split()
 
-tocpages = output.split()
-
-os.chdir(master_dir)
-status, output = getstatusoutput(node + " \"" +
-    native_path(join(tools_dir, "publish/publish.js")) + "\" --list-nontoc-pages")
-print node + " \"" + native_path(join(tools_dir, "publish/publish.js")) + "\" --list-nontoc-pages"
-os.chdir(repo_dir)
-if status != 0:
-  exit(1, 'FAIL: could not get list of specification pages')
-
-nontocpages = output.split()
+tocpages    = get_list("--list-toc-pages", "specification pages")
+nontocpages = get_list("--list-nontoc-pages", "specification pages")
+resources   = get_list("--list-resources", "resources")
+defs        = get_list("--list-definition-files", "definition files")
 
 all = tocpages + nontocpages
 
-os.chdir(master_dir)
-status, output = getstatusoutput(node + " \"" +
-    native_path(join(tools_dir, "publish/publish.js")) + "\" --list-resources")
-os.chdir(repo_dir)
-if status != 0:
-  exit(1, 'FAIL: could not get list of resources')
-
-resources = output.split()
-
 # Build chapters as required:
 
-deps = [
-  join(master_dir, "publish.xml"),
-  join(master_dir, "definitions.xml"),
-]
+deps = [join(master_dir, "publish.xml")] + [join(master_dir, f) for f in defs]
 for filename in os.listdir(publishjs_dir):
   path = join(publishjs_dir, filename)
   if os.path.isfile(path):
