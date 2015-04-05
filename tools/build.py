@@ -161,7 +161,6 @@ if len(sys.argv) == 2 and (sys.argv[1] == "-L" or sys.argv[1] == "-l"):
 def get_list(arg, desc):
     os.chdir(master_dir)
     cmd = node + " \"" + native_path(join(tools_dir, "publish/publish.js")) + "\" " + arg
-    print cmd
     status, output = getstatusoutput(cmd)
     os.chdir(repo_dir)
     if status != 0:
@@ -218,6 +217,7 @@ for name in all:
 if tobuild and len(sys.argv) == 2 and sys.argv[1] == "-s":
   # stabilize issues
   os.chdir(master_dir)
+  print "stabilizing issues in " + ", ".join(tobuild_names)
   for page in tobuild_names:
     run("perl \"" + native_path(join(tools_dir, "stabilizer.pl")) + "\" " +
         page + ".html issue-state.txt")
@@ -228,6 +228,7 @@ if tobuild:
   # build chapters
   toremove = tobuild
   os.chdir(master_dir)
+  print "building " + ", ".join(tobuild_names)
   run(node + " \"" +
       native_path(join(tools_dir, join("publish","publish.js"))) +
       "\" --build " +
@@ -253,6 +254,7 @@ if len(all) > 1:
   
   if buildSinglePage:
     os.chdir(master_dir)
+    print "building single page spec"
     run(node + " \"" +
         native_path(join(tools_dir, join("publish","publish.js"))) +
         "\" --build-single-page")
