@@ -277,16 +277,16 @@ exports.forEachNode = function(n, fn, stackfn, stackval) {
 };
 
 exports.warn = function(message, node) {
-  if (node) {
-    console.warn([node.ownerDocument.documentURI, node.lineNumber, node.columnNumber, ' warning: ' + message].join(':'));
-  } else {
-    console.warn('warning: ' + message);
-  }
+  exports.info(message, 'warning: ' + node);
 };
 
 exports.info = function(message, node) {
   if (node) {
-    console.warn([node.ownerDocument.documentURI, node.lineNumber, node.columnNumber, ' ' + message].join(':'));
+    if (node.nodeType) {
+      console.warn([node.ownerDocument.documentURI, node.lineNumber, node.columnNumber, ' ' + message].join(':'));
+    } else {
+      console.warn(node.concat(' ' + message).join(':'));
+    }
   } else {
     console.warn(message);
   }

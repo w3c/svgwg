@@ -149,6 +149,34 @@ function listExternalLinks() {
 }
 
 function lint(pages) {
+  function checkLocalLink(href, doc, n) {
+    if (/^([^/]+)\.html$/.test(href)) {
+      // link to a chapter
+      if (conf.pageOrder.indexOf(RegExp.$1) == -1) {
+        utils.info('broken link ' + href, n);
+      }
+    } else if (/^([^/]+)\.html#(.*)$/.test(href)) {
+      // link to an anchor in a chapter
+      var fragment = RegExp.$2;
+      if (conf.pageOrder.indexOf(RegExp.$1) == -1) {
+        utils.info('broken link ' + href, n);
+      } else {
+        var otherPage = conf.getPageDocument(RegExp.$1);
+        if (!otherPage.getElementById(fragment)) {
+          utils.info('broken link ' + href + ' (fragment not found)', n);
+        }
+      }
+    } else if (/^#(.*)$/.test(href)) {
+      if (!doc || !doc.getElementById(RegExp.$1)) {
+        utils.info('broken link ' + href + ' (fragment not found)', n);
+      }
+    }
+  }
+
+  conf.definitions.locations.forEach(function(l) {
+    checkLocalLink(l[0], conf.getPageDocument(conf.index), l.slice(1));
+  });
+
   pages.forEach(function(page) {
     var doc = conf.getPageDocument(page);
     utils.forEachNode(doc, function(n) {
@@ -164,27 +192,7 @@ function lint(pages) {
       if (n.localName == 'a' &&
           n.hasAttribute('href')) {
         var href = n.getAttribute('href');
-        if (/^([^/]+)\.html$/.test(href)) {
-          // link to a chapter
-          if (conf.pageOrder.indexOf(RegExp.$1) == -1) {
-            utils.info('broken link ' + href, n);
-          }
-        } else if (/^([^/]+)\.html#(.*)$/.test(href)) {
-          // link to an anchor in a chapter
-          var fragment = RegExp.$2;
-          if (conf.pageOrder.indexOf(RegExp.$1) == -1) {
-            utils.info('broken link ' + href, n);
-          } else {
-            var otherPage = conf.getPageDocument(RegExp.$1);
-            if (!otherPage.getElementById(fragment)) {
-              utils.info('broken link ' + href + ' (fragment not found)', n);
-            }
-          }
-        } else if (/^#(.*)$/.test(href)) {
-          if (!doc.getElementById(RegExp.$1)) {
-            utils.info('broken link ' + href + ' (fragment not found)', n);
-          }
-        }
+        checkLocalLink(href, doc, n);
       }
     });
   });
