@@ -22,6 +22,7 @@ function syntax() {
   console.error('                             files.');
   console.error('  --list-external-links    Print all of the external links used in the ');
   console.error('                             specification.');
+  console.error('  --lint                   Lints the specification and prints any problems.');
   console.error('  --build [PAGE ...]       Builds the specified pages, or all pages if');
   console.error('                             none specified.');
   console.error('  --build-single-page      Builds the single page version of the ');
@@ -55,6 +56,9 @@ function parseOptions() {
         break;
       case '--list-external-links':
         opts.listExternalLinks = true;
+        break;
+      case '--lint':
+        opts.lint = true;
         break;
       case '--build':
         opts.build = true;
@@ -141,6 +145,22 @@ function listExternalLinks() {
     if (/\/\//.test(l[0])) {
       console.log([l[1], l[2], l[3], l[0]].join(':'));
     }
+  });
+}
+
+function lint() {
+  conf.pageOrder.forEach(function(page) {
+    var doc = conf.getPageDocument(page);
+    utils.forEachNode(doc, function(n) {
+      if (n.nodeType != n.ELEMENT_NODE) {
+        return;
+      }
+
+      if (/^h[2-6]$/.test(n.localName) &&
+          !n.hasAttribute('id')) {
+        utils.info('heading element must have an id="" attribute', n);
+      }
+    });
   });
 }
 
@@ -286,7 +306,7 @@ function buildSinglePage() {
 }
 
 var opts = parseOptions();
-if (opts.help || (!!opts.listPages + !!opts.listResources + !!opts.listDefinitionFiles + !!opts.listExternalLinks + !!opts.build + !!opts.buildSinglePage) != 1) {
+if (opts.help || (!!opts.listPages + !!opts.listResources + !!opts.listDefinitionFiles + !!opts.listExternalLinks + !!opts.lint + !!opts.build + !!opts.buildSinglePage) != 1) {
   syntax();
   process.exit(opts.help ? 0 : 1);
 } else {
@@ -300,6 +320,8 @@ if (opts.help || (!!opts.listPages + !!opts.listResources + !!opts.listDefinitio
     listDefinitionFiles();
   } else if (opts.listExternalLinks) {
     listExternalLinks();
+  } else if (opts.lint) {
+    lint();
   } else if (opts.build) {
     buildPages(opts.rest);
   } else if (opts.buildSinglePage) {

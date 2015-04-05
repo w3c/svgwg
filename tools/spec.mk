@@ -14,4 +14,7 @@ stabilize-issues :
 list-external-links :
 	@$(TOOLS)/build.py -L
 
-.PHONY : all clean stabilize-issues list-external-links
+lint :
+	$(TOOLS)/build.py -l
+
+.PHONY : all clean stabilize-issues list-external-links lint

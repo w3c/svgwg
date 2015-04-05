@@ -3,6 +3,7 @@
 # -c == clean
 # -s == stabilize issues
 # -L == list external links
+# -l == lint
 
 
 # Note that we have to change directory below to make sure that build output
@@ -145,12 +146,13 @@ elif getstatus("[ -e /home/svgwg/bin/node ]") == 0:
 else:
     exit(1, 'FAIL: could not find "nodejs" or "node" on the PATH')
   
-if len(sys.argv) == 2 and sys.argv[1] == "-L":
-  # list links
+if len(sys.argv) == 2 and (sys.argv[1] == "-L" or sys.argv[1] == "-l"):
+  # list links or lint
+  arg = "--list-external-links" if sys.argv[1] == "-L" else "--lint"
   os.chdir(master_dir)
   run(node + " \"" +
       native_path(join(tools_dir, join("publish","publish.js"))) +
-      "\" --list-external-links")
+      "\" " + arg)
   os.chdir(repo_dir) # chdir back
   sys.exit(0)
 

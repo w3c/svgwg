@@ -18,6 +18,9 @@ stabilize-issues-all-specs : stabilize-issues
 list-external-links :
 	@./tools/build.py -L
 
+lint :
+	@./tools/build.py -l
+
 ZIPDIR=REC-SVG11-20110802
 
 zip : all

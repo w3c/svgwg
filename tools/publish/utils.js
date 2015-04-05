@@ -284,6 +284,14 @@ exports.warn = function(message, node) {
   }
 };
 
+exports.info = function(message, node) {
+  if (node) {
+    console.warn([node.ownerDocument.documentURI, node.lineNumber, node.columnNumber, ' ' + message].join(':'));
+  } else {
+    console.warn(message);
+  }
+};
+
 exports.allEqual = function(a) {
   if (a.length == 0) {
     return true;
