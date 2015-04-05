@@ -148,8 +148,8 @@ function listExternalLinks() {
   });
 }
 
-function lint() {
-  conf.pageOrder.forEach(function(page) {
+function lint(pages) {
+  pages.forEach(function(page) {
     var doc = conf.getPageDocument(page);
     utils.forEachNode(doc, function(n) {
       if (n.nodeType != n.ELEMENT_NODE) {
@@ -159,6 +159,32 @@ function lint() {
       if (/^h[2-6]$/.test(n.localName) &&
           !n.hasAttribute('id')) {
         utils.info('heading element must have an id="" attribute', n);
+      }
+
+      if (n.localName == 'a' &&
+          n.hasAttribute('href')) {
+        var href = n.getAttribute('href');
+        if (/^([^/]+)\.html$/.test(href)) {
+          // link to a chapter
+          if (conf.pageOrder.indexOf(RegExp.$1) == -1) {
+            utils.info('broken link ' + href, n);
+          }
+        } else if (/^([^/]+)\.html#(.*)$/.test(href)) {
+          // link to an anchor in a chapter
+          var fragment = RegExp.$2;
+          if (conf.pageOrder.indexOf(RegExp.$1) == -1) {
+            utils.info('broken link ' + href, n);
+          } else {
+            var otherPage = conf.getPageDocument(RegExp.$1);
+            if (!otherPage.getElementById(fragment)) {
+              utils.info('broken link ' + href + ' (fragment not found)', n);
+            }
+          }
+        } else if (/^#(.*)$/.test(href)) {
+          if (!doc.getElementById(RegExp.$1)) {
+            utils.info('broken link ' + href + ' (fragment not found)', n);
+          }
+        }
       }
     });
   });
@@ -182,6 +208,7 @@ function checkAllPagesValid(pages) {
 function buildPages(pages) {
   pages = pages || conf.pageOrder.concat();
   checkAllPagesValid(pages);
+  lint(pages);
   pages.forEach(buildPage);
 }
 
@@ -321,7 +348,7 @@ if (opts.help || (!!opts.listPages + !!opts.listResources + !!opts.listDefinitio
   } else if (opts.listExternalLinks) {
     listExternalLinks();
   } else if (opts.lint) {
-    lint();
+    lint(conf.pageOrder);
   } else if (opts.build) {
     buildPages(opts.rest);
   } else if (opts.buildSinglePage) {
