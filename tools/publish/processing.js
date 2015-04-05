@@ -824,29 +824,40 @@ exports.formatMarkup = function(conf, page, doc) {
 
 // -- Handle automatic linking with <a>. --------------------------------------
 
+function resolveSpecRelativeLink(conf, n) {
+  if (n.nodeType != n.ELEMENT_NODE ||
+      n.localName != 'a' ||
+      !n.hasAttribute('href')) {
+    return;
+  }
+
+  var href = n.getAttribute('href');
+  if (!/^\[(\S+)\]([^#]*)(#.*)?/.test(href)) {
+    return;
+  }
+
+  var specid = RegExp.$1;
+  var path = RegExp.$2;
+  var ref = RegExp.$3 || '';
+  if (!conf.specs[specid]) {
+    throw 'unknown spec [' + specid + ']';
+  }
+  var base = conf.specs[specid];
+  if (/\/$/.test(base) && /^\//.test(path)) {
+    path = path.substr(1);
+  } else if (!/\/$/.test(base) && path != '' && !/^\//.test(path)) {
+    path = '/' + path;
+  }
+  return base + path + ref;
+}
+
+exports.resolveSpecRelativeLink = resolveSpecRelativeLink;
+
 exports.processSpecRelativeLinks = function(conf, page, doc) {
   utils.forEachNode(doc, function(n) {
-    if (n.nodeType != n.ELEMENT_NODE ||
-        n.localName != 'a' ||
-        !n.hasAttribute('href')) {
-      return;
-    }
-
-    var href = n.getAttribute('href');
-    if (/^\[(\S+)\]([^#]*)(#.*)?/.test(href)) {
-      var specid = RegExp.$1;
-      var path = RegExp.$2;
-      var ref = RegExp.$3 || '';
-      if (!conf.specs[specid]) {
-        throw 'unknown spec [' + specid + ']';
-      }
-      var base = conf.specs[specid];
-      if (/\/$/.test(base) && /^\//.test(path)) {
-        path = path.substr(1);
-      } else if (!/\/$/.test(base) && path != '' && !/^\//.test(path)) {
-        path = '/' + path;
-      }
-      n.setAttribute('href', base + path + ref);
+    var href = resolveSpecRelativeLink(conf, n);
+    if (href) {
+      n.setAttribute('href', href);
     }
   });
 };

@@ -129,16 +129,18 @@ function Config(filename) {
     this._publicationDate.setUTCDate(dateParts[2]);
   }
 
+  var locs = this.locations = [];
+  var vers = this.versions = { };
+
   var versions = child(root, 'versions');
-  this.versions = {
-    cvs:        attr(versions, 'cvs', 'href'),
-    cvsSingle:  attr(versions, 'cvs-single', 'href'),
-    "this":     attr(versions, 'this', 'href'),
-    thisSingle: attr(versions, 'this-single', 'href'),
-    previous:   attr(versions, 'previous', 'href'),
-    latest:     attr(versions, 'latest', 'href'),
-    latestRec:  attr(versions, 'latestRec', 'href')
-  };
+  ['cvs', 'cvs-single', 'this', 'this-single', 'previous', 'latest', 'latestRec'].forEach(function(name) {
+    var key = name.replace(/-[a-z]/, function(s) { return s.toUpperCase() });
+    vers[key] = attr(versions, name, 'href');
+    if (vers[key]) {
+      var e = child(versions, name);
+      locs.push([vers[key], e.ownerDocument.documentURI, e.lineNumber, e.columnNumber]);
+    }
+  });
 
   this.toc = attr(root, 'toc', 'href');
   this.elementIndex = attr(root, 'elementindex', 'href');
@@ -162,6 +164,9 @@ function Config(filename) {
       });
       if (specid && base) {
         this.specs[specid] = base;
+      }
+      if (base) {
+        locs.push([base, n.ownerDocument.documentURI, n.lineNumber, n.columnNumber]);
       }
       if (href) {
         this.definitionFiles.push(href);

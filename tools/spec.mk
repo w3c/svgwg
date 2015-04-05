@@ -11,4 +11,7 @@ clean :
 stabilize-issues :
 	@$(TOOLS)/build.py -s
 
-.PHONY : all clean stabilize-issues
+list-external-links :
+	@$(TOOLS)/build.py -L
+
+.PHONY : all clean stabilize-issues list-external-links

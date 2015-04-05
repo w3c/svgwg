@@ -20,6 +20,8 @@ function syntax() {
   console.error('                             to be copied to the publish directory.');
   console.error('  --list-definition-files  Print the names of all referenced definition XML ');
   console.error('                             files.');
+  console.error('  --list-external-links    Print all of the external links used in the ');
+  console.error('                             specification.');
   console.error('  --build [PAGE ...]       Builds the specified pages, or all pages if');
   console.error('                             none specified.');
   console.error('  --build-single-page      Builds the single page version of the ');
@@ -50,6 +52,9 @@ function parseOptions() {
         break;
       case '--list-definition-files':
         opts.listDefinitionFiles = true;
+        break;
+      case '--list-external-links':
+        opts.listExternalLinks = true;
         break;
       case '--build':
         opts.build = true;
@@ -91,6 +96,52 @@ function listResources() {
 
 function listDefinitionFiles() {
   console.log(conf.definitionFiles.join('\n'));
+}
+
+function gatherAllLinks() {
+  var locs = conf.locations.concat(conf.definitions.locations);
+  conf.pageOrder.forEach(function(page) {
+    var doc = conf.getPageDocument(page);
+    utils.forEachNode(doc, function(n) {
+      if (n.nodeType != n.ELEMENT_NODE ||
+          n.localName != 'a' ||
+          !n.hasAttribute('href')) {
+        return;
+      }
+
+      var href = processing.resolveSpecRelativeLink(conf, n);
+      if (href) {
+        locs.push([href, n.ownerDocument.documentURI, n.lineNumber, n.columnNumber]);
+        return;
+      }
+
+      href = n.getAttribute('href');
+      if (/^(.*):/.test(href) &&
+          RegExp.$1 != 'http' &&
+          RegExp.$1 != 'https') {
+        return;
+      }
+
+      locs.push([href, n.ownerDocument.documentURI, n.lineNumber, n.columnNumber]);
+    });
+  });
+  return locs.sort(function(a, b) {
+      if (a[1] < b[1]) return -1;
+      if (a[1] > b[1]) return 1;
+      if (a[2] < b[2]) return -1;
+      if (a[2] > b[2]) return 1;
+      if (a[3] < b[3]) return -1;
+      if (a[3] > b[3]) return 1;
+      return 0;
+    })
+}
+
+function listExternalLinks() {
+  gatherAllLinks().forEach(function(l) {
+    if (/\/\//.test(l[0])) {
+      console.log([l[1], l[2], l[3], l[0]].join(':'));
+    }
+  });
 }
 
 function checkAllPagesValid(pages) {
@@ -235,7 +286,7 @@ function buildSinglePage() {
 }
 
 var opts = parseOptions();
-if (opts.help || (!!opts.listPages + !!opts.listResources + !!opts.listDefinitionFiles + !!opts.build + !!opts.buildSinglePage) != 1) {
+if (opts.help || (!!opts.listPages + !!opts.listResources + !!opts.listDefinitionFiles + !!opts.listExternalLinks + !!opts.build + !!opts.buildSinglePage) != 1) {
   syntax();
   process.exit(opts.help ? 0 : 1);
 } else {
@@ -247,6 +298,8 @@ if (opts.help || (!!opts.listPages + !!opts.listResources + !!opts.listDefinitio
     listResources();
   } else if (opts.listDefinitionFiles) {
     listDefinitionFiles();
+  } else if (opts.listExternalLinks) {
+    listExternalLinks();
   } else if (opts.build) {
     buildPages(opts.rest);
   } else if (opts.buildSinglePage) {

@@ -313,6 +313,14 @@ Definitions.prototype.formatNameLink = function(name, context, omitQuotes) {
 function loadInto(filename, base, specid, defs) {
   var doc = utils.parseXML(filename);
 
+  if (!defs.locations) {
+    defs.locations = [];
+  }
+
+  function noteLocation(thingWithHref, node) {
+    defs.locations.push([thingWithHref.href, node.ownerDocument.documentURI, node.lineNumber, node.columnNumber]);
+  }
+
   // XXX Handle <import>.
 
   forEachChild(doc.documentElement, 'element', function(e) {
@@ -329,15 +337,18 @@ function loadInto(filename, base, specid, defs) {
       categories: { },
       specid: specid
     });
+    noteLocation(element, e);
 
     forEachChild(e, 'attribute', function(c) {
-      element.specificAttributes.push(new Attribute({
+      var attribute = new Attribute({
         name: c.getAttribute('name'),
         href: utils.resolveURL(base, c.getAttribute('href')),
         animatable: c.getAttribute('animatable') == 'yes',
         specific: true,
         specid: specid
-      }));
+      });
+      noteLocation(attribute, c);
+      element.specificAttributes.push(attribute);
     });
 
     forEachChild(e, 'contentmodel', function(c) {
@@ -354,6 +365,7 @@ function loadInto(filename, base, specid, defs) {
       elements: utils.splitList(ec.getAttribute('elements')),
       specid: specid
     });
+    noteLocation(category, ec);
 
     defs.elementCategories[category.name] = category;
   });
@@ -366,6 +378,7 @@ function loadInto(filename, base, specid, defs) {
       common: true,
       specid: specid
     });
+    noteLocation(attribute, a);
     if (a.hasAttribute('elements')) {
       attribute.elements = utils.set(utils.splitList(a.getAttribute('elements')));
       defs.commonAttributesForElements.push(attribute);
@@ -383,15 +396,18 @@ function loadInto(filename, base, specid, defs) {
       presentationAttributes: utils.splitList(ac.getAttribute('presentationattributes')),
       specid: specid
     });
+    noteLocation(category, ac);
 
     forEachChild(ac, 'attribute', function(a) {
-      category.attributes.push(new Attribute({
+      var attribute = new Attribute({
         name: a.getAttribute('name'),
         href: utils.resolveURL(base, a.getAttribute('href')),
         animatable: a.getAttribute('animatable') == 'yes',
         category: category,
         specid: specid
-      }));
+      });
+      noteLocation(attribute, a);
+      category.attributes.push(attribute);
     });
 
     defs.attributeCategories[category.name] = category;
@@ -403,6 +419,7 @@ function loadInto(filename, base, specid, defs) {
       href: utils.resolveURL(base, p.getAttribute('href')),
       specid: specid
     });
+    noteLocation(property, p);
 
     defs.properties[property.name] = property;
 
@@ -421,6 +438,7 @@ function loadInto(filename, base, specid, defs) {
       href: utils.resolveURL(base, i.getAttribute('href')),
       specid: specid
     });
+    noteLocation(intf, i);
 
     defs.interfaces[intf.name] = intf;
   });
@@ -431,6 +449,7 @@ function loadInto(filename, base, specid, defs) {
       href: utils.resolveURL(base, s.getAttribute('href')),
       specid: specid
     });
+    noteLocation(symbol, s);
 
     defs.symbols[symbol.name] = symbol;
   });
@@ -441,6 +460,7 @@ function loadInto(filename, base, specid, defs) {
       href: utils.resolveURL(base, t.getAttribute('href')),
       specid: specid
     });
+    noteLocation(term, t);
 
     if (t.firstChild) {
       term.markup = utils.cloneChildren(t);

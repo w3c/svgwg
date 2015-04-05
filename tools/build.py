@@ -2,6 +2,7 @@
 
 # -c == clean
 # -s == stabilize issues
+# -L == list external links
 
 
 # Note that we have to change directory below to make sure that build output
@@ -144,6 +145,15 @@ elif getstatus("[ -e /home/svgwg/bin/node ]") == 0:
 else:
     exit(1, 'FAIL: could not find "nodejs" or "node" on the PATH')
   
+if len(sys.argv) == 2 and sys.argv[1] == "-L":
+  # list links
+  os.chdir(master_dir)
+  run(node + " \"" +
+      native_path(join(tools_dir, join("publish","publish.js"))) +
+      "\" --list-external-links")
+  os.chdir(repo_dir) # chdir back
+  sys.exit(0)
+
 # Get all the pages and resources from publish.xml:
 
 def get_list(arg, desc):
