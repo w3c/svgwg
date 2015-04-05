@@ -1,6 +1,6 @@
 # Makefile for specs under https://github.com/w3c/svgwg/tree/master/specs.
 
-TOOLS=../../tools
+TOOLS?=../../tools
 
 all :
 	@$(TOOLS)/build.py
@@ -15,6 +15,6 @@ list-external-links :
 	@$(TOOLS)/build.py -L
 
 lint :
-	$(TOOLS)/build.py -l
+	@$(TOOLS)/build.py -l
 
 .PHONY : all clean stabilize-issues list-external-links lint

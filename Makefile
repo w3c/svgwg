@@ -1,7 +1,7 @@
 # Makefile for SVG 2.
 
-all :
-	@./tools/build.py
+TOOLS=./tools
+include tools/spec.mk
 
 all-specs : all
 	@for spec in specs/*; do if [ -f $$spec/Makefile -a $$spec != 'specs/template' ]; then echo "Building $$spec" && make -C $$spec/ all; fi; done
@@ -9,17 +9,8 @@ all-specs : all
 pdf : all
 	prince --no-author-style -s build/publish/style/svg-style.css -s http://www.w3.org/StyleSheets/TR/W3C-REC -s build/publish/style/svg-style-print.css build/publish/single-page.html -o build/publish/single-page.pdf
 
-stabilize-issues :
-	@./tools/build.py -s
-
 stabilize-issues-all-specs : stabilize-issues
 	@for spec in specs/*; do if [ -f $$spec/Makefile -a $$spec != 'specs/template' ]; then make -C $$spec/ stabilize-issues; fi; done
-
-list-external-links :
-	@./tools/build.py -L
-
-lint :
-	@./tools/build.py -l
 
 ZIPDIR=REC-SVG11-20110802
 
@@ -37,7 +28,3 @@ zip : all
 	find build/publish/$(ZIPDIR)/images/ -name CVS | xargs rm -rf
 	cd build/publish/ && zip -r $(ZIPDIR).zip $(ZIPDIR)
 	rm -rf build/publish/$(ZIPDIR)
-
-clean :
-	@./tools/build.py -c
-
