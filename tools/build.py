@@ -113,7 +113,7 @@ built_something = False
 
 def run(cmd):
   global built_something
-  print cmd
+  # print cmd
   if os.system(cmd):
     done()
     sys.exit(1)
