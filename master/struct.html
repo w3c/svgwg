@@ -3565,35 +3565,37 @@ element.
 
 </edit:with>
 
+
 <h3 id="InterfaceGetSVGDocument">Interface GetSVGDocument</h3>
-
-
 
 <p>This interface provides access to an SVG document embedded by reference
 in another DOM-based language. The expectation is that the interface is
-implemented on DOM objects that allow such SVG document references, such as
-the DOM <a>Element</a> object that corresponds to an HTML
-<span class="element-name">'object'</span> element. Such DOM objects are
-often also required to implement the <a>EmbeddingElement</a> defined in the
-Window specification [<a href="refs.html#ref-WINDOW">WINDOW</a>].
-</p>
-
+implemented on DOM objects that allow such SVG document references.</p>
 
 <p>This interface is deprecated and may be dropped from future versions of
-the SVG specification. Authors are suggested to use the
-<code>contentDocument</code> attribute on the <a>EmbeddingElement</a>
-interface to obtain a referenced SVG document, if that interface is
-available.
-</p>
+the SVG specification.  To access the SVG document inside an
+<span class="element-name">'iframe'</span> or
+<span class="element-name">'object'</span> element,
+authors are suggested to use the <code>contentDocument</code>
+attribute on the <a>HTMLIFrameElement</a> or <a>HTMLObjectElement</a>
+interface, respectively.</p>
+
+<p class="note">The <a>HTMLIFrameElement</a>, <a>HTMLEmbedElement</a>
+and <a>HTMLObjectElement</a> interfaces all define their own getSVGDocument
+method, which provides access to the SVG document in the same way that 
+the <a>GetSVGDocument</a> does.  Those three interfaces therefore do not need
+to implement <a>GetSVGDocument</a>.  Still, authors are strongly recommended
+to use contentDocument instead.</p>
+
 <pre class="idl">[NoInterfaceObject]
 interface <b>GetSVGDocument</b> {
-  <a class="idlinterface" href="struct.html#InterfaceSVGDocument">SVGDocument</a> <a href="struct.html#__svg__GetSVGDocument__getSVGDocument">getSVGDocument</a>();
+  <a>SVGDocument</a> <a href="struct.html#__svg__GetSVGDocument__getSVGDocument">getSVGDocument</a>();
 };</pre><dl class="interface">
 <dt class="operations-header">Operations:</dt>
 <dd>
 <dl class="attributes">
 
-<dt id="__svg__GetSVGDocument__getSVGDocument" class="operation first-child"><a class="idlinterface" href="struct.html#InterfaceSVGDocument">SVGDocument</a> <b>getSVGDocument</b>()
+<dt id="__svg__GetSVGDocument__getSVGDocument" class="operation first-child"><a>SVGDocument</a> <b>getSVGDocument</b>()
 </dt>
 <dd class="operation">
 <div>
@@ -3602,15 +3604,9 @@ interface <b>GetSVGDocument</b> {
 in an embedding element, or null if there is no document.
 </p>
 
-
-<p>Note that this is equivalent to fetching the value of the
-<code>EmbeddingElement::contentDocument</code> attribute of the embedding
-element, if the <a>EmbeddingElement</a> interface is also implemented.
-The author is advised to check that the document element of the returned
+<p>The author is advised to check that the document element of the returned
 <a>Document</a> is indeed an <a>'svg'</a> element instead of assuming
-that that will always be the case.
-</p>
-
+that that will always be the case.</p>
 
 </div>
 <dl class="operation">
