@@ -2757,177 +2757,126 @@ is included here for easy reference.</p>
 <h3 id="InterfaceTimeEvent">Interface TimeEvent</h3>
 
 <p>The <a>TimeEvent</a>
-interface, defined in <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#DOMSupport">
-SMIL Animation: Supported interfaces</a>, provides specific
-contextual information associated with Time events.
-</p>
+interface, defined in <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#DOMSupport">SMIL Animation: Supported interfaces</a>, provides specific
+contextual information associated with Time events.</p>
 
 <p>The different types of events that can occur are:</p>
 
 <dl>
+  <dt><strong>beginEvent</strong></dt>
+  <dd>This event is raised when the element local timeline begins
+  to play. It will be raised each time the element begins the
+  active duration (i.e. when it restarts, but not when it
+  repeats). It may be raised both in the course of normal
+  (i.e. scheduled or interactive) timeline play, as well as
+  in the case that the element was begun with the
+  <a>SVGAnimationElement::beginElement</a> or
+  <a>SVGAnimationElement::beginElementAt</a> methods. Note that if an
+  element is restarted while it is currently playing, the
+  element will raise an end event and another begin event, as
+  the element restarts. 
 
-<dt><strong>beginEvent</strong></dt>
+    <ul>
+      <li>Bubbles: No</li>
+      <li>Cancelable: No</li>
+      <li>Context Info: None</li>
+    </ul>
+  </dd>
+  <dt><strong>endEvent</strong></dt>
+  <dd>This event is raised at the active end of the element. Note
+  that this event is not raised at the simple end of each
+  repeat. This event may be raised both in the course of
+  normal (i.e. scheduled or interactive) timeline play, as
+  well as in the case that the element was ended with the
+  <a>SVGAnimationElement::endElement</a> or <a>SVGAnimationElement::endElementAt</a>
+  methods. Note that if an element is restarted while it is
+  currently playing, the element will raise an end event and
+  another begin event, as the element restarts. 
 
-<dd>
-This event is raised when the element local timeline begins
-to play. It will be raised each time the element begins the
-active duration (i.e. when it restarts, but not when it
-repeats). It may be raised both in the course of normal
-(i.e. scheduled or interactive) timeline play, as well as
-in the case that the element was begun with the
-<a>SVGAnimationElement::beginElement</a> or
-<a>SVGAnimationElement::beginElementAt</a> methods. Note that if an
-element is restarted while it is currently playing, the
-element will raise an end event and another begin event, as
-the element restarts. 
+    <ul>
+      <li>Bubbles: No</li>
+      <li>Cancelable: No</li>
+      <li>Context Info: None</li>
+    </ul>
+  </dd>
+  <dt><strong>repeatEvent</strong></dt>
+  <dd>This event is raised when an element local timeline
+  repeats. It will be raised each time the element repeats,
+  after the first iteration.<br/>
+  The event provides a numerical indication of which repeat
+  iteration is beginning. The value is a 0-based integer, but
+  the repeat event is not raised for the first iteration and
+  so the observed values of the detail attribute will be
+  >= 1. 
 
-<ul>
-
-<li>Bubbles: No</li>
-
-<li>Cancelable: No</li>
-
-<li>Context Info: None</li>
-
-</ul>
-
-</dd>
-
-<dt><strong>endEvent</strong></dt>
-
-<dd>
-This event is raised at the active end of the element. Note
-that this event is not raised at the simple end of each
-repeat. This event may be raised both in the course of
-normal (i.e. scheduled or interactive) timeline play, as
-well as in the case that the element was ended with the
-<a>SVGAnimationElement::endElement</a> or <a>SVGAnimationElement::endElementAt</a>
-methods. Note that if an element is restarted while it is
-currently playing, the element will raise an end event and
-another begin event, as the element restarts. 
-
-<ul>
-
-<li>Bubbles: No</li>
-
-<li>Cancelable: No</li>
-
-<li>Context Info: None</li>
-
-</ul>
-
-</dd>
-
-<dt><strong>repeatEvent</strong></dt>
-
-<dd>
-This event is raised when an element local timeline
-repeats. It will be raised each time the element repeats,
-after the first iteration.<br />
-The event provides a numerical indication of which repeat
-iteration is beginning. The value is a 0-based integer, but
-the repeat event is not raised for the first iteration and
-so the observed values of the detail attribute will be
-&gt;= 1. 
-
-<ul>
-
-<li>Bubbles: No</li>
-
-<li>Cancelable: No</li>
-
-<li>Context Info: detail (current iteration)</li>
-
-</ul>
-
-</dd>
-
+    <ul>
+      <li>Bubbles: No</li>
+      <li>Cancelable: No</li>
+      <li>Context Info: detail (current iteration)</li>
+    </ul>
+  </dd>
 </dl>
-<pre class="idl">interface <b>TimeEvent</b> : <a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-Event">Event</a> {
 
-  readonly attribute <a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> <a href="animate.html#__svg__TimeEvent__view">view</a>;
+<pre class="idl">interface <b>TimeEvent</b> : <a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-Event">Event</a> {
+
+  readonly attribute <a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> <a href="animate.html#__svg__TimeEvent__view">view</a>;
   readonly attribute long <a href="animate.html#__svg__TimeEvent__detail">detail</a>;
 
-  void <a href="animate.html#__svg__TimeEvent__initTimeEvent">initTimeEvent</a>(DOMString typeArg, <a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> viewArg, long detailArg);
-};</pre><dl class="interface">
-<dt class="attributes-header">Attributes:</dt>
-<dd>
-<dl class="attributes">
+  void <a href="animate.html#__svg__TimeEvent__initTimeEvent">initTimeEvent</a>(DOMString typeArg, <a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> viewArg, long detailArg);
+};</pre>
 
-<dt id="__svg__TimeEvent__view" class="attribute first-child"><b>view</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a>)</span></dt>
-<dd class="attribute">
-<div>
-The <a>TimeEvent::view</a> attribute identifies the <a>AbstractView</a>
-[<a href="refs.html#ref-DOM2VIEWS">DOM2VIEWS</a>] from which the event
-was generated.
-
-</div>
-</dd>
-
-<dt id="__svg__TimeEvent__detail" class="attribute"><b>detail</b><span class="idl-type-parenthetical"> (readonly long)</span></dt>
-<dd class="attribute">
-<div>
-Specifies some detail information about the Event, depending on the type
-of the event. For this event type, indicates the repeat number for the
-animation.
-
-</div>
-</dd>
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__TimeEvent__view" class="attribute first-child"><b>view</b><span class="idl-type-parenthetical"> (readonly <a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a>)</span></dt>
+      <dd class="attribute">
+        <div>The <a>TimeEvent::view</a> attribute identifies the <a>AbstractView</a>
+        [<a href="refs.html#ref-DOM2VIEWS">DOM2VIEWS</a>] from which the event
+        was generated.</div>
+      </dd>
+      <dt id="__svg__TimeEvent__detail" class="attribute"><b>detail</b><span class="idl-type-parenthetical"> (readonly long)</span></dt>
+      <dd class="attribute">
+        <div>Specifies some detail information about the Event, depending on the type
+        of the event. For this event type, indicates the repeat number for the
+        animation.</div>
+      </dd>
+    </dl>
+  </dd>
+  <dt class="operations-header">Operations:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__TimeEvent__initTimeEvent" class="operation first-child">void <b>initTimeEvent</b>(DOMString <var>typeArg</var>, <a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> <var>viewArg</var>, long <var>detailArg</var>)</dt>
+      <dd class="operation">
+        <div>The <a>TimeEvent::initTimeEvent</a> method is used to initialize the value of a
+        <a>TimeEvent</a> created with <code>document.createEvent()</code>. This
+        method may only be called before the <a>TimeEvent</a> has been dispatched
+        via the dispatchEvent method, though it may be called multiple times
+        during that phase if necessary. If called multiple times, the final
+        invocation takes precedence.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>DOMString <var>typeArg</var></div>
+                <div>Specifies the event type.</div>
+              </li>
+              <li class="parameter">
+                <div><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> <var>viewArg</var></div>
+                <div>Specifies the Event's <a>AbstractView</a>.</div>
+              </li>
+              <li class="parameter">
+                <div>long <var>detailArg</var></div>
+                <div>Specifies the Event's detail.</div>
+              </li>
+            </ol>
+          </dd>
+        </dl>
+      </dd>
+    </dl>
+  </dd>
 </dl>
-</dd>
-<dt class="operations-header">Operations:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__svg__TimeEvent__initTimeEvent" class="operation first-child">void <b>initTimeEvent</b>(DOMString <var>typeArg</var>, <a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> <var>viewArg</var>, long <var>detailArg</var>)
-</dt>
-<dd class="operation">
-<div>
-The <a>TimeEvent::initTimeEvent</a> method is used to initialize the value of a
-<a>TimeEvent</a> created with <code>document.createEvent()</code>. This
-method may only be called before the <a>TimeEvent</a> has been dispatched
-via the dispatchEvent method, though it may be called multiple times
-during that phase if necessary. If called multiple times, the final
-invocation takes precedence. 
-
-
-</div>
-<dl class="operation">
-<dt class="parameters-header">Parameters</dt>
-<dd>
-<ol class="parameters">
-<li class="parameter first-child">
-<div>DOMString <var>typeArg</var></div> 
-<div> Specifies the event type.
-
-</div>
-</li>
-<li class="parameter">
-<div><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Views/views.html#Views-AbstractView">AbstractView</a> <var>viewArg</var></div> 
-<div> Specifies the Event's <a>AbstractView</a>.
-
-</div>
-</li>
-<li class="parameter">
-<div>long <var>detailArg</var></div> 
-<div> Specifies the Event's detail.
-
-</div>
-</li>
-</ol>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-
 
 <h3 id="InterfaceSVGAnimationElement">Interface SVGAnimationElement</h3>
 
@@ -2935,7 +2884,6 @@ invocation takes precedence.
 of the animation element interfaces: <a>SVGAnimateElement</a>,
 <a>SVGSetElement</a>,
 <a>SVGAnimateMotionElement</a> and <a>SVGAnimateTransformElement</a>.</p>
-
 
 <p>Unlike other SVG DOM interfaces, the SVG DOM does not specify
 convenience DOM properties corresponding to the various language
@@ -2956,7 +2904,7 @@ are used to begin and end the active duration of an element. Authors can
 (but are not required to) declare the timing to respond to the DOM using
 the following syntax:</p>
 
-<pre>&lt;animate begin="indefinite" end="indefinite" .../&gt;</pre>
+<pre>&lt;animate begin="indefinite" end="indefinite" .../></pre>
 
 <p>If a DOM method call is made to begin or end the element (using
 <code>beginElement()</code>, <code>beginElementAt()</code>,
@@ -2966,16 +2914,13 @@ These times are then interpreted as part of the semantics of lists of
 times, as described in
 <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-EvaluationOfBeginEndTimeLists">Evaluation of begin and end time lists</a>.</p>
 
-
 <ul>
   <li>The instance time associated with a <code>beginElement()</code> or
   <code>endElement()</code> call is the current presentation time at the
   time of the DOM method call.</li>
-
   <li>The instance time associated with a <code>beginElementAt()</code> or
   <code>endElementAt()</code> call is the current presentation time at the
   time of the DOM method call, plus or minus the specified offset.</li>
-
   <li>Note that <code>beginElement()</code> is subject to the <a>'animate/restart'</a>
   attribute in the same manner that event-based begin timing is.  Refer
   also to <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Restart">SMIL Animation: Restarting animation</a>
@@ -3003,230 +2948,146 @@ times, as described in
 <a>SVGAnimationElement</a> implements <a>SVGTests</a>;</pre>
 
 <dl class="interface">
-<dt class="attributes-header">Attributes:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__svg__SVGAnimationElement__targetElement" class="attribute first-child"><b>targetElement</b><span class="idl-type-parenthetical"> (readonly <a>SVGElement</a>)</span></dt>
-<dd class="attribute">
-<div>
-The element which is being animated.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGAnimationElement__onbegin" class="attribute"><b>onbegin</b><span class="idl-type-parenthetical"> (<a>EventHandler</a>)</span></dt>
-<dd class="attribute">
-<div>
-The event handler for the <a class="event-name" href="interact.html#BeginEvent">beginEvent</a>.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGAnimationElement__onend" class="attribute"><b>onend</b><span class="idl-type-parenthetical"> (<a>EventHandler</a>)</span></dt>
-<dd class="attribute">
-<div>
-The event handler for the <a class="event-name" href="interact.html#EndEvent">endEvent</a>.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGAnimationElement__onrepeat" class="attribute"><b>onrepeat</b><span class="idl-type-parenthetical"> (<a>EventHandler</a>)</span></dt>
-<dd class="attribute">
-<div>
-The event handler for the <a class="event-name" href="interact.html#RepeatEvent">repeatEvent</a>.
-
-</div>
-</dd>
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGAnimationElement__targetElement" class="attribute first-child"><b>targetElement</b><span class="idl-type-parenthetical"> (readonly <a>SVGElement</a>)</span></dt>
+      <dd class="attribute">
+        <div>The element which is being animated.</div>
+      </dd>
+      <dt id="__svg__SVGAnimationElement__onbegin" class="attribute"><b>onbegin</b><span class="idl-type-parenthetical"> (<a>EventHandler</a>)</span></dt>
+      <dd class="attribute">
+        <div>The event handler for the <a class="event-name" href="interact.html#BeginEvent">beginEvent</a>.</div>
+      </dd>
+      <dt id="__svg__SVGAnimationElement__onend" class="attribute"><b>onend</b><span class="idl-type-parenthetical"> (<a>EventHandler</a>)</span></dt>
+      <dd class="attribute">
+        <div>The event handler for the <a class="event-name" href="interact.html#EndEvent">endEvent</a>.</div>
+      </dd>
+      <dt id="__svg__SVGAnimationElement__onrepeat" class="attribute"><b>onrepeat</b><span class="idl-type-parenthetical"> (<a>EventHandler</a>)</span></dt>
+      <dd class="attribute">
+        <div>The event handler for the <a class="event-name" href="interact.html#RepeatEvent">repeatEvent</a>.</div>
+      </dd>
+    </dl>
+  </dd>
+  <dt class="operations-header">Operations:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGAnimationElement__getStartTime" class="operation first-child">float <b>getStartTime</b>()</dt>
+      <dd class="operation">
+        <div>Returns the begin time, in seconds, for this animation element's current
+        interval, if it exists, regardless of whether the interval has begun yet.
+        If there is no current interval, then a DOMException with code
+        INVALID_STATE_ERR is thrown.</div>
+        <dl class="operation">
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The start time, in seconds, of this animation element's current
+            interval.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code INVALID_STATE_ERR</dt>
+              <dd class="exception">The animation element does not
+              have a current interval.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGAnimationElement__getCurrentTime" class="operation">float <b>getCurrentTime</b>()</dt>
+      <dd class="operation">
+        <div>Returns the current time in seconds relative to time zero for the given
+        time container.</div>
+        <dl class="operation">
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The current time in seconds relative to time zero for the given
+            time container.</div>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGAnimationElement__getSimpleDuration" class="operation">float <b>getSimpleDuration</b>()</dt>
+      <dd class="operation">
+        <div>Returns the number of seconds for the simple duration for this animation.
+        If the simple duration is undefined (e.g., the end time is indefinite),
+        then an exception is raised.</div>
+        <dl class="operation">
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>number of seconds for the simple duration for this animation.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a class="idlinterface" href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NOT_SUPPORTED_ERR</dt>
+              <dd class="exception">The simple duration is not
+              determined on the given element.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGAnimationElement__beginElement" class="operation first-child">void <b>beginElement</b>()</dt>
+      <dd class="operation">
+        <div>Creates a begin instance time for the current time. The new instance
+        time is added to the <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>begin instance times list</em></a>.
+        The behavior of this method is equivalent to <code>beginElementAt(0)</code>.</div>
+      </dd>
+      <dt id="__svg__SVGAnimationElement__beginElementAt" class="operation">void <b>beginElementAt</b>(float <var>offset</var>)</dt>
+      <dd class="operation">
+        <div>Creates a begin instance time for the current time plus the specified
+        offset. The new instance time is added to the
+        <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>begin instance times list</em></a>.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>float <var>offset</var></div>
+                <div>The offset from the current document time, in seconds, at
+                which to begin the element.</div>
+              </li>
+            </ol>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGAnimationElement__endElement" class="operation">void <b>endElement</b>()</dt>
+      <dd class="operation">
+        <div>Creates an end instance time for the current time. The new instance time is added to the
+        <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>end instance times list</em></a>.
+        The behavior of this method is equivalent to <code>endElementAt(0)</code>.</div>
+      </dd>
+      <dt id="__svg__SVGAnimationElement__endElementAt" class="operation">void <b>endElementAt</b>(float <var>offset</var>)</dt>
+      <dd class="operation">
+        <div>Creates a end instance time for the current time plus the specified
+        offset. The new instance time is added to the
+        <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>end instance times list</em></a>.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>float <var>offset</var></div>
+                <div>The offset from the current document time, in seconds, at
+                which to end the element.</div>
+              </li>
+            </ol>
+          </dd>
+        </dl>
+      </dd>
+    </dl>
+  </dd>
 </dl>
-</dd>
-
-<dt class="operations-header">Operations:</dt>
-<dd>
-<dl class="attributes">
-
-<dt id="__svg__SVGAnimationElement__getStartTime" class="operation first-child">float <b>getStartTime</b>()
-</dt>
-<dd class="operation">
-<div>
-Returns the begin time, in seconds, for this animation element's current
-interval, if it exists, regardless of whether the interval has begun yet.
-If there is no current interval, then a DOMException with code
-INVALID_STATE_ERR is thrown.
-
-
-</div>
-<dl class="operation">
-<dt class="returns-header">Returns</dt>
-<dd>
-<div> The start time, in seconds, of this animation element's current
-interval.
-
-</div>
-</dd>
-<dt class="exceptions-header">Exceptions</dt>
-<dd>
-<dl class="exceptions">
-<dt class="exception first-child"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code INVALID_STATE_ERR
-</dt>
-<dd class="exception"> The animation element does not
-have a current interval.
-
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGAnimationElement__getCurrentTime" class="operation">float <b>getCurrentTime</b>()
-</dt>
-<dd class="operation">
-<div>
-Returns the current time in seconds relative to time zero for the given
-time container.
-
-
-</div>
-<dl class="operation">
-<dt class="returns-header">Returns</dt>
-<dd>
-<div> The current time in seconds relative to time zero for the given
-time container.
-
-</div>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGAnimationElement__getSimpleDuration" class="operation">float <b>getSimpleDuration</b>()
-</dt>
-<dd class="operation">
-<div>
-Returns the number of seconds for the simple duration for this animation.
-If the simple duration is undefined (e.g., the end time is indefinite),
-then an exception is raised.
-
-
-</div>
-<dl class="operation">
-<dt class="returns-header">Returns</dt>
-<dd>
-<div> number of seconds for the simple duration for this animation.
-
-</div>
-</dd>
-<dt class="exceptions-header">Exceptions</dt>
-<dd>
-<dl class="exceptions">
-<dt class="exception first-child"><a class="idlinterface"
-   href="http://www.w3.org/TR/DOM-Level-2-Core/core.html#ID-17189187">DOMException</a>, code NOT_SUPPORTED_ERR
-</dt>
-<dd class="exception"> The simple duration is not
-determined on the given element.
-
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGAnimationElement__beginElement" class="operation first-child">void <b>beginElement</b>()
-</dt>
-<dd class="operation">
-<div>
-Creates a begin instance time for the current time. The new instance
-time is added to the <a
-   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>begin instance times list</em></a>.
-The behavior of this method is equivalent to <code>beginElementAt(0)</code>.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGAnimationElement__beginElementAt" class="operation">void <b>beginElementAt</b>(float <var>offset</var>)
-</dt>
-<dd class="operation">
-<div>
-Creates a begin instance time for the current time plus the specified
-offset. The new instance time is added to the
-<a
-   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>begin instance times list</em></a>.
-
-
-</div>
-<dl class="operation">
-<dt class="parameters-header">Parameters</dt>
-<dd>
-<ol class="parameters">
-<li class="parameter first-child">
-<div>float <var>offset</var></div> 
-<div> The offset from the current document time, in seconds, at
-which to begin the element.
-
-</div>
-</li>
-</ol>
-</dd>
-</dl>
-</dd>
-
-<dt id="__svg__SVGAnimationElement__endElement" class="operation">void <b>endElement</b>()
-</dt>
-<dd class="operation">
-<div>
-Creates an end instance time for the current time. The new instance time is added to the
-<a
-   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>end instance times list</em></a>.
-The behavior of this method is equivalent to <code>endElementAt(0)</code>.
-
-</div>
-</dd>
-
-<dt id="__svg__SVGAnimationElement__endElementAt" class="operation">void <b>endElementAt</b>(float <var>offset</var>)
-</dt>
-<dd class="operation">
-<div>
-Creates a end instance time for the current time plus the specified
-offset. The new instance time is added to the
-<a
-   href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#Timing-BeginEnd-InstanceTimesLists"><em>end instance times list</em></a>.
-
-
-</div>
-<dl class="operation">
-<dt class="parameters-header">Parameters</dt>
-<dd>
-<ol class="parameters">
-<li class="parameter first-child">
-<div>float <var>offset</var></div> 
-<div>The offset from the current document time, in seconds, at
-which to end the element.
-
-</div>
-</li>
-</ol>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
-
 
 <h3 id="InterfaceSVGAnimateElement">Interface SVGAnimateElement</h3>
 
-
-
-<edit:with element='animate'>
+<edit:with element="animate">
 
 <p>The <a>SVGAnimateElement</a> interface corresponds to the <a>'animate'</a>
-element.
-</p>
-
+element.</p>
 
 <p>Object-oriented access to the attributes of the <a>'animate'</a> element
-via the SVG DOM is not available.
-</p>
+via the SVG DOM is not available.</p>
+
 <pre class="idl">interface <b>SVGAnimateElement</b> : <a>SVGAnimationElement</a> {
 };</pre>
 
@@ -3234,18 +3095,14 @@ via the SVG DOM is not available.
 
 <h3 id="InterfaceSVGSetElement">Interface SVGSetElement</h3>
 
-
-
-<edit:with element='set'>
+<edit:with element="set">
 
 <p>The <a>SVGSetElement</a> interface corresponds to the <a>'set'</a>
-element.
-</p>
-
+element.</p>
 
 <p>Object-oriented access to the attributes of the <a>'set'</a> element
-via the SVG DOM is not available.
-</p>
+via the SVG DOM is not available.</p>
+
 <pre class="idl">interface <b>SVGSetElement</b> : <a>SVGAnimationElement</a> {
 };</pre>
 
@@ -3253,18 +3110,14 @@ via the SVG DOM is not available.
 
 <h3 id="InterfaceSVGAnimateMotionElement">Interface SVGAnimateMotionElement</h3>
 
-
-
-<edit:with element='animateMotion'>
+<edit:with element="animateMotion">
 
 <p>The <a>SVGAnimateMotionElement</a> interface corresponds to the
-<a>'animateMotion'</a> element.
-</p>
-
+<a>'animateMotion'</a> element.</p>
 
 <p>Object-oriented access to the attributes of the <a>'animateMotion'</a>
-element via the SVG DOM is not available.
-</p>
+element via the SVG DOM is not available.</p>
+
 <pre class="idl">interface <b>SVGAnimateMotionElement</b> : <a>SVGAnimationElement</a> {
 };</pre>
 
@@ -3272,13 +3125,11 @@ element via the SVG DOM is not available.
 
 <h3 id="InterfaceSVGMPathElement">Interface SVGMPathElement</h3>
 
-
-
-<edit:with element='mpath'>
+<edit:with element="mpath">
 
 <p>The <a>SVGMPathElement</a> interface corresponds to the <a>'mpath'</a>
-element.
-</p>
+element.</p>
+
 <pre class="idl">interface <b>SVGMPathElement</b> : <a>SVGElement</a> {
 };
 
@@ -3286,21 +3137,16 @@ element.
 
 </edit:with>
 
-
 <h3 id="InterfaceSVGAnimateTransformElement">Interface SVGAnimateTransformElement</h3>
 
-
-
-<edit:with element='animateTransform'>
+<edit:with element="animateTransform">
 
 <p>The <a>SVGAnimateTransformElement</a> interface corresponds to the
-<a>'animateTransform'</a> element.
-</p>
-
+<a>'animateTransform'</a> element.</p>
 
 <p>Object-oriented access to the attributes of the
-<a>'animateTransform'</a> element via the SVG DOM is not available.
-</p>
+<a>'animateTransform'</a> element via the SVG DOM is not available.</p>
+
 <pre class="idl">interface <b>SVGAnimateTransformElement</b> : <a>SVGAnimationElement</a> {
 };</pre>
 
