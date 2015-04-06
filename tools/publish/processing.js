@@ -817,6 +817,11 @@ exports.formatMarkup = function(conf, page, doc) {
   }
   head.insertBefore(utils.parse('<meta charset="UTF-8"/>'), head.firstChild);
 
+  // Remove the existing DOCTYPE node.
+  if (doc.firstChild.nodeType == doc.DOCUMENT_TYPE_NODE) {
+    doc.removeChild(doc.firstChild);
+  }
+
   // Add an HTML5 DOCTYPE.
   doc.insertBefore(doc.implementation.createDocumentType("html", "", ""), doc.firstChild);
 };
