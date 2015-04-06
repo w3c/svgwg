@@ -340,6 +340,138 @@ function buildSinglePage() {
   fs.writeFileSync(outputFilename, doc.toString());
 }
 
+/*
+// Hacky function to do some automatic reformatting of source files.
+function x() {
+  function isBlock(n) {
+    return n.localName == "div" ||
+           n.localName == "dl" ||
+           n.localName == "dt" ||
+           n.localName == "dd" ||
+           n.localName == "p" ||
+           n.localName == "ul" ||
+           n.localName == "ol" ||
+           n.localName == "li" ||
+           n.localName == "pre";
+  }
+
+  function reformat(n, level) {
+    var indent = "", indentMinusOne = "", indentMinusTwo = "", indentPlusOne = "";
+    for (var i = 0; i < level - 2; i++) {
+      indentMinusTwo += "  ";
+    }
+    for (var i = 0; i < level - 1; i++) {
+      indentMinusOne += "  ";
+    }
+    for (var i = 0; i < level; i++) {
+      indent += "  ";
+    }
+    for (var i = 0; i < level + 1; i++) {
+      indentPlusOne += "  ";
+    }
+
+    if (n.nodeType == n.TEXT_NODE) {
+      var s = n.textContent;
+      s = s.replace(/\n\n\n+/g, "\n\n");
+      if (!n.previousSibling && n.parentNode.getAttribute("class") != "idl-type-parenthetical") {
+        s = s.replace(/^\s+/, "");
+      }
+      s = s.replace(/\n *(\S)/g, function() { return "\n" + indentMinusTwo + RegExp.$1; });
+      if (!n.nextSibling) {
+        s = s.replace(/\s+$/, "");
+      }
+      if (s == "") {
+        n.parentNode.removeChild(n);
+      } else {
+        utils.replace(n, n.ownerDocument.createTextNode(s));
+      }
+    }
+
+    if (n.nodeType != n.ELEMENT_NODE) {
+      return;
+    }
+
+    if (n.localName == "pre") {
+      return;
+    }
+
+    for (var c = n.firstChild; c; c = c.nextSibling) {
+      var nextLevel;
+      if (c.nodeType == c.ELEMENT_NODE &&
+          (c.localName == "with" ||
+           (c.localName == "div" && c.hasAttribute("class") && /ready-for/.test(c.getAttribute("class"))) ||
+           !isBlock(c))) {
+        nextLevel = level;
+      } else {
+        nextLevel = level + 1;
+      }
+      reformat(c, nextLevel);
+    }
+
+    if (n.localName == "with") {
+      if (n.firstChild) {
+        if (n.firstChild.nodeType == n.TEXT_NODE) {
+          n.firstChild.data = "\n\n" + n.firstChild.data;
+        } else {
+          n.insertBefore(n.ownerDocument.createTextNode("\n\n"), n.firstChild);
+        }
+      }
+      if (n.lastChild) {
+        if (n.lastChild.nodeType == n.TEXT_NODE) {
+          n.lastChild.data += "\n\n";
+        } else {
+          n.appendChild(n.ownerDocument.createTextNode("\n\n"));
+        }
+      }
+    } else if (isBlock(n)) {
+      if (n.firstChild && n.firstChild.nodeType == n.TEXT_NODE && /^\s+$/.test(n.firstChild.data)) {
+        n.firstChild.data = "\n" + indent;
+      } else if (n.firstChild && n.firstChild.nodeType == n.ELEMENT_NODE && isBlock(n.firstChild)) {
+        n.insertBefore(n.ownerDocument.createTextNode("\n" + indent), n.firstChild);
+      }
+      if (n.nextSibling && n.nextSibling.nodeType == n.TEXT_NODE && /^\s+$/.test(n.nextSibling) && n.nextSibling.nextSibling && isBlock(n.nextSibling.nextSibling)) {
+        n.parentNode.removeChild(n.nextSibling);
+      }
+      if (n.nextSibling && n.nextSibling.nodeType == n.TEXT_NODE && /^\s+$/.test(n.nextSibling) && !n.nextSibling.nextSibling) {
+        n.appendChild(n.ownerDocument.createTextNode("\n" + indentMinusOne));
+      }
+      if (n.nextSibling && n.nextSibling.nodeType == n.ELEMENT_NODE && isBlock(n.nextSibling)) {
+        n.parentNode.insertBefore(n.ownerDocument.createTextNode("\n" + indentMinusOne), n.nextSibling);
+      }
+      if (n.lastChild && n.lastChild.nodeType == n.ELEMENT_NODE && isBlock(n.lastChild)) {
+        n.appendChild(n.ownerDocument.createTextNode("\n" + indentMinusOne));
+      }
+    }
+    if (n.lastChild && n.lastChild.previousSibling && n.lastChild.nodeType == n.TEXT_NODE && n.lastChild.previousSibling.nodeType == n.TEXT_NODE) {
+      n.lastChild.previousSibling.data += n.lastChild.data;
+      n.removeChild(n.lastChild);
+    }
+    if (n.previousSibling && n.previousSibling.nodeType == n.TEXT_NODE) {
+      n.previousSibling.data = n.previousSibling.data.replace(/\n *$/, "\n" + indentMinusOne);
+    }
+    if (n.lastChild && n.lastChild.nodeType == n.TEXT_NODE && /\S/.test(n.lastChild.data)) {
+      n.lastChild.data = n.lastChild.data.replace(/\s+$/, "");
+    }
+  }
+
+  conf.pageOrder.forEach(function(page) {
+    var doc = utils.parseXHTML(page + '.html');
+
+    // Format the document from the "DOMInterfaces" element onwards.
+    var h2 = doc.getElementById("DOMInterfaces") || doc.getElementById("idl") || doc.getElementById("BasicDOMInterfaces");
+    if (!h2) {
+      return;
+    }
+
+    for (var n = h2.nextSibling; n; n = n.nextSibling) {
+      reformat(n, 0);
+    }
+
+    fs.writeFileSync(page + ".html.new", doc.toString());
+  });
+}
+*/
+
 var opts = parseOptions();
 if (opts.help || (!!opts.listPages + !!opts.listResources + !!opts.listDefinitionFiles + !!opts.listExternalLinks + !!opts.lint + !!opts.build + !!opts.buildSinglePage) != 1) {
   syntax();
