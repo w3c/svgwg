@@ -521,7 +521,7 @@ function formatElementInterfaces(conf, element, n) {
 function doElementSummary(conf, page, n) {
   var name = n.getAttribute('name');
   var element = conf.definitions.elements[name];
-  var e = utils.parse('<div class="element-summary"><div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element" data-export id="elementdef-{{name}}">{{name}}</dfn>’</span></div><dl>' +
+  var e = utils.parse('<div class="element-summary"><div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element" data-export="" id="elementdef-{{name}}">{{name}}</dfn>’</span></div><dl>' +
                       '<dt>Categories:</dt><dd>{{categories}}</dd>' +
                       '<dt>Content model:</dt><dd>{{contentmodel}}</dd>' +
                       '<dt>Attributes:</dt><dd>{{attributes}}</dd>' +
