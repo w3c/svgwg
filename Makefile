@@ -4,7 +4,7 @@ TOOLS=./tools
 include tools/spec.mk
 
 all-specs : all
-	@for spec in specs/*; do if [ -f $$spec/Makefile -a $$spec != 'specs/template' ]; then echo -e "\nBuilding $$spec" && make -s -C $$spec/ all; fi; done
+	@for spec in specs/*; do if [ -f $$spec/Makefile -a $$spec != 'specs/template' ]; then echo && echo "Building $$spec" && make -s -C $$spec/ all; fi; done
 
 pdf : all
 	prince --no-author-style -s build/publish/style/svg-style.css -s http://www.w3.org/StyleSheets/TR/W3C-REC -s build/publish/style/svg-style-print.css build/publish/single-page.html -o build/publish/single-page.pdf
