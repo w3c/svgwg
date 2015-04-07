@@ -207,14 +207,14 @@ demonstrates each of SVG's four animation elements.</p>
         the rectangle grows to ultimately fill the viewport. -->
   <rect id="RectElement" x="300" y="100" width="300" height="100"
         fill="rgb(255,255,0)"  >
-    <animate attributeName="x" attributeType="XML"
-             begin="0s" dur="9s" fill="freeze" from="300" to="0" />
-    <animate attributeName="y" attributeType="XML"
-             begin="0s" dur="9s" fill="freeze" from="100" to="0" />
-    <animate attributeName="width" attributeType="XML"
-             begin="0s" dur="9s" fill="freeze" from="300" to="800" />
-    <animate attributeName="height" attributeType="XML"
-             begin="0s" dur="9s" fill="freeze" from="100" to="300" />
+    <animate attributeName="x" begin="0s" dur="9s"
+             fill="freeze" from="300" to="0" />
+    <animate attributeName="y" begin="0s" dur="9s"
+             fill="freeze" from="100" to="0" />
+    <animate attributeName="width" begin="0s" dur="9s"
+             fill="freeze" from="300" to="800" />
+    <animate attributeName="height" begin="0s" dur="9s"
+             fill="freeze" from="100" to="300" />
   </rect>
   <!-- Set up a new user coordinate system so that
         the text string's origin is at (0,0), allowing
@@ -231,17 +231,17 @@ demonstrates each of SVG's four animation elements.</p>
     <text id="TextElement" x="0" y="0"
           font-family="Verdana" font-size="35.27" visibility="hidden"  > 
       It's alive!
-      <set attributeName="visibility" attributeType="CSS" to="visible"
+      <set attributeName="visibility" to="visible"
            begin="3s" dur="6s" fill="freeze" />
       <animateMotion path="M 0 0 L 100 100" 
            begin="3s" dur="6s" fill="freeze" />
-      <animate attributeName="fill" attributeType="CSS"
+      <animate attributeName="fill"
            from="rgb(0,0,255)" to="rgb(128,0,0)"
            begin="3s" dur="6s" fill="freeze" />
-      <animateTransform attributeName="transform" attributeType="XML"
+      <animateTransform attributeName="transform"
            type="rotate" from="-30" to="0"
            begin="3s" dur="6s" fill="freeze" />
-      <animateTransform attributeName="transform" attributeType="XML"
+      <animateTransform attributeName="transform"
            type="scale" from="1" to="3" additive="sum"
            begin="3s" dur="6s" fill="freeze" />
     </text>
@@ -348,10 +348,9 @@ elements and identifies the target element for the animation.</p>
 
 <h3 id="TargetAttributes">Attributes to identify the target attribute or property for an animation</h3>
 
-<p>The following attributes are the <dfn id='animation-attribute-target-attributes'>animation attribute target attributes</dfn>,
-which identify the target attribute or property for the given 
-<a href="animate.html#TargetElement">target element</a> whose value changes
-over time.</p>
+<p>The following attribute identifies the target attribute or property for the
+given <a href="animate.html#TargetElement">target element</a> whose value
+changes over time.</p>
 
 <p><em>Attribute definitions:</em></p>
 
@@ -373,69 +372,48 @@ over time.</p>
     </table>
   </dt>
   <dd>
-    <p>Specifies the name of the target attribute. An XMLNS
-    prefix may be used to indicate the XML namespace for the
-    attribute. The prefix will be interpreted in the scope of
-    the current (i.e., the referencing) animation
-    element.</p>
+    <p>Specifies the name of the target property or attribute.</p>
+    <p>Unlike <a
+    href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL
+    Animation</cite></a>, the <span class="element-name">attributeType</span>
+    attribute is not supported by SVG.
+    SVG's animation elements follow the behavior defined for the <span
+    class="attr-value">auto</span> value of <span
+    class="element-name">attributeType</span>. That is, when determining if
+    <a>'attributeName'</a> corresponds to an attribute name or a CSS property
+    name, the implementation must first search through the list of CSS
+    properties for a matching property name.
+    If no matching property is found, the implementation must search for a
+    matching attribute on the target element.</p>
+    <p>
+    When referencing an attribute, an XMLNS prefix may be used to indicate the
+    XML namespace for the attribute. The prefix will be interpreted in the
+    scope of the current (i.e., the referencing) animation element.
+    Otherwise the implementation must use the default XML
+    namespace for the target element.
+    </p>
+    <div class="note">
+      <p>
+        Note that, as a result of the behavior, it is not possible to animate
+        the list of coordinates specified by the <a>'text/x'</a> and
+        <a>'text/y'</a> attributes on <a>'text'</a> and <a>'tspan'</a> elements.
+        This is because <span class="property-name">'x'</span> and <span
+        class="property-name">'y'</span> are also CSS properties where they
+        only accept a single length as a value.
+      </p>
+      <p>
+        Due to the complex mapping between characters and glyphs, using the
+        list-based syntax for <a>'text/x'</a> and <a>'text/y'</a> to specify
+        glyph positions does not scale well to anything beyond very simple Latin
+        text and its use is discouraged.
+        Authors who nevertheless wish to animate this list of coordinates
+        may be able to achieve a comparable effect using the <a>'text/dx'</a>
+        and <a>'text/dy'</a> attributes instead since these names to not overlap
+        with CSS properties.
+      </p>
+    </div>
     <p>Except for any SVG-specific rules explicitly mentioned in
     this specification, the normative definition for this
-    attribute is the <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a>
-    specification.
-    In particular, see <a
-    href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/#SpecifyingAnimationTarget">
-    SMIL Animation: Specifying the animation target</a>
-    ([<a href="refs.html#ref-SMILANIM">SMILANIM</a>], section 3.1).</p>
-  </dd>
-  <dt>
-    <table class="propdef attrdef">
-      <tr>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Lacuna value</th>
-        <th>Animatable</th>
-      </tr>
-      <tr>
-        <td><dfn data-dfn-type="element-attr" data-dfn-for="animate" id="AttributeTypeAttribute">attributeType</dfn></td>
-        <td>CSS | XML | auto</td>
-        <td>auto</td>
-        <td>no</td>
-      </tr>
-    </table>
-  </dt>
-  <dd>
-    <p>Specifies the namespace in which the target attribute and
-    its associated values are defined. The attribute value is
-    one of the following (values are case-sensitive):</p>
-    <dl>
-      <dt><span class='attr-value'>CSS</span></dt>
-      <dd>This specifies that the value of <a>'attributeName'</a> is
-      the name of a CSS property defined as animatable in
-      this specification.</dd>
-      <dt><span class='attr-value'>XML</span></dt>
-      <dd>This specifies that the value of <a>'attributeName'</a> is
-      the name of an XML attribute defined in the default XML
-      namespace for the target element. If the value for
-      <a>'attributeName'</a> has an XMLNS prefix, the
-      implementation must use the associated namespace as
-      defined in the scope of the target element. The
-      attribute must be defined as animatable in this
-      specification.</dd>
-      <dt><span class='attr-value'>auto</span></dt>
-      <dd>The implementation should match the
-      <a>'attributeName'</a> to an attribute for the
-      target element. The implementation must first search
-      through the list of CSS properties for a matching
-      property name, and if none is found, search the default
-      XML namespace for the element.</dd>
-    </dl>
-    <p class="issue" data-issue="1">For all the attributes that have been promoted to presentation attributes <em>auto defaults to CSS</em> poses a problem.
-    E.g if you had a text element and an animation of the <a>'text/x'</a> attribute, for compat with such old content the default would have to be smarter, since
-    the <a>'x'</a> property doesn't apply to text (currently also an issue).
-    </p>
-    
-    <p>Except for any SVG-specific rules explicitly mentioned
-    in this specification, the normative definition for this
     attribute is the <a href="http://www.w3.org/TR/2001/REC-smil-animation-20010904/"><cite>SMIL Animation</cite></a>
     specification.
     In particular, see <a
@@ -1211,8 +1189,8 @@ interpolation method between discrete values.</p>
       from each value of <var>values</var>.</li>
       <li>Remove the final value in <var>values</var> if it is the empty string.</li>
       <li>Parse each value in <var>values</var> using the rules for parsing
-      the attribute identified by <a>'xlink:href'</a>, <a>'attributeName'</a>
-      and <a>'attributeType'</a> attributes.</li>
+      the attribute identified by the <a>'xlink:href'</a>, and
+      <a>'attributeName'</a> attributes.</li>
     </ol>
     </div>
 
@@ -1393,8 +1371,8 @@ interpolation method between discrete values.</p>
 
     <div class='ready-for-wider-review'>
     <p>All three attributes must be parsed using the rules for parsing
-    the attribute identified by the <a>'xlink:href'</a>, <a>'attributeName'</a>
-    and <a>'attributeType'</a> attributes.</p>
+    the attribute identified by the <a>'xlink:href'</a> and
+    <a>'attributeName'</a> attributes.</p>
 
     <p class="note">For example, if <a>'xlink:href'</a> identified a
     <a>'circle'</a> element and <a>'attributeName'</a> is
@@ -1728,7 +1706,7 @@ used to animate a single attribute or property over time.</p>
 
 <pre><![CDATA[
 <rect>
-  <animate attributeType="CSS" attributeName="opacity" 
+  <animate attributeName="opacity" 
          from="1" to="0" dur="5s" repeatCount="indefinite" />
 </rect>
 ]]></pre>
@@ -2307,10 +2285,10 @@ transformation matrix corresponding to the transformation defined by this
 
 <pre><![CDATA[
 <rect transform="skewX(30)"...>
-  <animateTransform attributeName="transform" attributeType="XML"
+  <animateTransform attributeName="transform"
                     type="rotate" from="0" to="90" dur="5s"
                     additive="replace" fill="freeze"/>
-  <animateTransform attributeName="transform" attributeType="XML"
+  <animateTransform attributeName="transform"
                     type="scale" from="1" to="2" dur="5s"
                     additive="replace" fill="freeze"/>
 </rect>
@@ -2334,10 +2312,10 @@ following static rectangle:</p>
 <div class="example">
 <pre><![CDATA[
 <rect transform="skewX(30)"...>
-  <animateTransform attributeName="transform" attributeType="XML"
+  <animateTransform attributeName="transform"
                     type="rotate" from="0" to="90" dur="5s" 
                     additive="sum" fill="freeze"/>
-  <animateTransform attributeName="transform" attributeType="XML"
+  <animateTransform attributeName="transform"
                     type="scale" from="1" to="2" dur="5s"
                     additive="sum" fill="freeze"/>
 </rect>
@@ -2368,7 +2346,7 @@ to its original size at time 5s (since the animated transform list value is
 
 <pre><![CDATA[
 <rect width="100" height="100">
-  <animateTransform attributeName="transform" attributeType="XML"
+  <animateTransform attributeName="transform"
                     type="scale" by="1" dur="5s" fill="freeze"/>
 </rect>
 ]]></pre>
@@ -2387,7 +2365,7 @@ code snippet, 3 is added to the scale value at the start of each repetition:</p>
 
 <pre><![CDATA[
 <rect width="100" height="100">
-  <animateTransform attributeName="transform" attributeType="XML"
+  <animateTransform attributeName="transform"
                     type="scale" from="2" to="3" repeatCount="3" dur="4s"
                     fill="freeze"/>
 </rect>
@@ -2440,7 +2418,7 @@ animation of type <span class='attr-value'>'rotate'</span>:</p>
 
 <pre><![CDATA[
 <rect width="100" height="100">
-  <animateTransform attributeName="transform" attributeType="XML"
+  <animateTransform attributeName="transform"
                     type="rotate" from="0 30 40" to="10 30 40"
                     repeatCount="2" dur="1s" fill="freeze"/>
 </rect>
