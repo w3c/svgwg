@@ -106,7 +106,7 @@ toremove = []
 def done():
   global toremove
   if toremove:
-    print "Error, removing " + " ".join(toremove)
+    print "* error, removing " + " ".join(toremove)
     for file in toremove:
       os.remove(file)
     return 1
@@ -217,7 +217,7 @@ for name in all:
 if tobuild and len(sys.argv) == 2 and sys.argv[1] == "-s":
   # stabilize issues
   os.chdir(master_dir)
-  print "stabilizing issues in " + ", ".join(tobuild_names)
+  print "* stabilizing issues in " + ", ".join(tobuild_names)
   for page in tobuild_names:
     run("perl \"" + native_path(join(tools_dir, "stabilizer.pl")) + "\" " +
         page + ".html issue-state.txt")
@@ -228,7 +228,7 @@ if tobuild:
   # build chapters
   toremove = tobuild
   os.chdir(master_dir)
-  print "building " + ", ".join(tobuild_names)
+  print "* building " + ", ".join(tobuild_names)
   run(node + " \"" +
       native_path(join(tools_dir, join("publish","publish.js"))) +
       "\" --build " +
@@ -254,7 +254,7 @@ if len(all) > 1:
   
   if buildSinglePage:
     os.chdir(master_dir)
-    print "building single page spec"
+    print "* building single page spec"
     run(node + " \"" +
         native_path(join(tools_dir, join("publish","publish.js"))) +
         "\" --build-single-page")
@@ -274,6 +274,6 @@ for f in resources:
 # Done:
 
 if not built_something:
-  print "Nothing to do."
+  print "* nothing to do"
 
 done()
