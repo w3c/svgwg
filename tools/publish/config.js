@@ -134,7 +134,7 @@ function Config(filename) {
 
   var versions = child(root, 'versions');
   ['cvs', 'cvs-single', 'this', 'this-single', 'previous', 'latest', 'latestRec'].forEach(function(name) {
-    var key = name.replace(/-[a-z]/, function(s) { return s.toUpperCase() });
+    var key = name.replace(/-[a-z]/, function(s) { return s.substr(1).toUpperCase(); });
     vers[key] = attr(versions, name, 'href');
     if (vers[key]) {
       var e = child(versions, name);
