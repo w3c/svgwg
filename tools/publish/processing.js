@@ -387,7 +387,31 @@ function doFullTOC(conf, page, n) {
 }
 
 function doCompleteIDL(conf, page, n) {
-  return utils.parse('<p class="issue">Complete IDL to be generated here from IDL fragments in the rest of the document.</p>');
+  var idl = [];
+  conf.pageOrder.forEach(function(p) {
+    var doc = conf.getPageDocument(p);
+    utils.forEachNode(doc, function(n) {
+      if (n.nodeType == n.ELEMENT_NODE &&
+          n.localName == "pre" &&
+          n.getAttribute("class") == "idl" &&
+          n.getAttributeNS(namespaces.edit, "excludefromidl") != "true") {
+        if (idl.length) {
+          idl.push(n.ownerDocument.createTextNode("\n\n"));
+        }
+        var clone = utils.cloneChildren(n);
+        utils.forEachNode(clone, function(n) {
+          if (n.nodeType == n.ELEMENT_NODE &&
+              n.localName == "b") {
+            utils.replace(n, utils.parse('<a>{{name}}</a>',
+                                         { name: utils.cloneChildren(n) }));
+          }
+        });
+        idl.push(clone);
+      }
+    });
+  });
+  utils.replace(n, utils.parse('<pre class="idl">{{idl}}</pre>',
+                               { idl: idl }));
 }
 
 function doInterface(conf, page, n) {
