@@ -186,9 +186,10 @@ tobuild = []
 tobuild_names = []
 for name in all:
   localdeps = []
-  if name in tocpages:
+  if name in tocpages or name == "idl":
     # pages with spec-wide ToCs on them depend on all chapters for
-    # their headings
+    # their headings; also, the IDL appendix must be rebuilt to pick
+    # up IDL changes in individual chapters
     localdeps += [join(master_dir, page + ".html") for page in nontocpages]
   localdeptimes = [getmtime(file) for file in localdeps]
   pub_path = join(publish_dir, name + ".html")
