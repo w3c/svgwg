@@ -4975,14 +4975,23 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
 <edit:with element='textPath'>
 
   <p>
-    In addition to text drawn in a straight line, SVG also includes
-    the ability to place text so that it follows the path in
-    a <a>'path'</a> element.  To specify that a block of text is to be
-    rendered along the shape of a <a>'path'</a>, include the given
-    text within a <a>'textPath'</a> element which includes
-    an <a>'href'</a> attribute with an <a>URL reference</a> to
-    a <a>'path'</a> element, or a <a>'d'</a> attribute that specifies
-    the path data directly.
+    SVG can place text along a path defined either by a <a>'path'</a>
+    element or the path equivalent of a <a>basic shape</a>. This is
+    specified by including text within a <a>'textPath'</a> element
+    that has either an <a>'href'</a> attribute with an <a>URL
+    reference</a> pointing to a <a>'path'</a> element or <a>basic
+    shape</a>, or by including a <a>'d'</a> attribute that specifies
+    path data directly.
+  </p>
+
+  <p class="note">
+    The ability to place text along a basic shape is new in SVG 2.
+  </p>
+
+  <p class="annotation">
+    Placing text along a basic shape was resolved at the
+    <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item05">Sydney
+    (2015)</a> meeting.
   </p>
 
   <p>
@@ -5041,6 +5050,42 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
         start point of the path and
         <span class="attr-value">startOffset="100%"</span> indicates
         the end point of the path.
+      </p>
+
+      <p>
+	For an open path, glyphs with mid-points that are not on the
+	path are not rendered.
+      </p>
+      <div class="figure">
+	<img alt="Three paths with various values of 'startOffset' showing clipping
+		  when glyphs are outside path region."
+	     src="images/text/text-path-startoffset.svg" />
+	<p class="caption">
+	  Rendering for different values of the <a>'startOffset'</a>
+	  attribute. From left to right: default value, 50%, -50%.
+	</p>
+      </div>
+
+      <p>
+	For a closed path (including an equivalent path for a <a>basic
+	shape</a>), the path is considered to wrap around in both
+	directions. All glyphs are rendered.
+      </p>
+      <div class="figure">
+	<img alt="Two circular path with different values of
+		  'startOffset' showing that all glyphs are rendered."
+		  src="images/text/text-path-startoffset2.svg" />
+	<p class="caption">
+	  Rendering for text on a path referencing a <a>'circle'</a>
+	  with different values of the <a>'startOffset'</a>
+	  attribute. Left: 0. Right: 75% or -25%.
+	</p>
+      </div>
+
+      <p class="annotation">
+	Rendering all glyphs was agreed to for basic shapes at the
+	<a href="http://www.w3.org/2015/02/12-svg-minutes.html#item05">Sydney
+	  (2015)</a> meeting (but missing in minutes).
       </p>
 
       <dl class="attrdef-svg2">
@@ -5143,6 +5188,46 @@ swash forms, old-style figures etc. while also ensuring that a font is provided 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd><a href="paths.html#PathDataBNF">svg-path</a> <a href="types.html#syntax" class="syntax">[EBNF]</a></dd>
 	<dt><a>Lacuna value</a></dt>  <dd>See above.</dd>
+	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="TextPathElementSideAttribute"><span class="adef">side</span></dt>
+    <dd>
+      <p>
+        Determines the side of the path the text is placed on
+	(relative to the path direction). Specifying a value
+	of <span class="attr-value">right</span> effectively reverses
+	the path.
+      </p>
+      <div class="figure">
+	<img alt="Two circular path with different values of 'side'
+		  showing glyphs rendered outside the circle for
+		  'left' and inside the circle for 'right'."
+		  src="images/text/text-path-side.svg" />
+	<p class="caption">
+	  Rendering for text on a path referencing a <a>'circle'</a>
+	  with different values of the <a>'side'</a>
+	  attribute. Left: <span class="attr-value">left</span>.
+	  Right: <span class="attr-value">right</span>.
+	</p>
+      </div>
+
+      <p class="note">
+	Added in SVG 2 to allow text either inside or outside
+	closed paths and <a>basic shapes</a> (e.g. rectangles,
+	circles, and ellipses).
+      </p>
+      <p class="annotation">
+	Adding 'side' was resolved at the
+	<a href="http://www.w3.org/2015/02/12-svg-minutes.html#item05">Sydney
+	  (2015)</a> meeting.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd>left | right</dd>
+	<dt><a>Lacuna value</a></dt>  <dd>left</dd>
 	<dt><a>Animatable</a></dt>    <dd>yes</dd>
       </dl>
 
@@ -5443,7 +5528,7 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> d="..." fill="
     </li>
 
     <li>
-      Glyphs whose midpoint-on-the-path are off either end of the path
+      Glyphs whose midpoint-on-the-path are off either end of an open path
       are not rendered.
     </li>
 
@@ -5528,7 +5613,7 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> d="..." fill="
 
     <li>
       Glyphs whose midpoint-on-the-path are off either end of
-      the path are not rendered.
+      an open path are not rendered.
     </li>
 
     <li>
