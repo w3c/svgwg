@@ -42,14 +42,14 @@ http://example.com/someDrawing.svg#Lamppost
 
 <!-- from 1.2T - add this too?
 
-<h4 id="AlteringXlinkHref">Altering the <span class="attr-name">'xlink:href'</span> attribute</h4>
+<h4 id="AlteringHref">Altering the <span class="attr-name">'href'</span> attribute</h4>
 
-<p>If the <a href="animate.html#HrefAttribute"><span class="attr-name">'xlink:href'</span></a>
+<p>If the <a href="animate.html#HrefAttribute"><span class="attr-name">'href'</span></a>
 attribute of an element in the tree is altered by any means (e.g. script, declarative 
 animation) such that a new resource is referenced, the new resource must replace 
 the existing resource, and must be rendered as appropriate.  For specific effects
 on the scripting context when a <a>'script'</a> element's 
-<a>'script/xlink:href'</a> attribute is altered, see
+<a>'script/href'</a> attribute is altered, see
 <a href="script.html#ScriptContentProcessing">Script processing</a>.</p>
     
 -->
@@ -80,19 +80,17 @@ which has since become an IETF Proposed Standard. Other W3C specifications are
 expected to be revised over time to remove these duplicate descriptions of the
 escaping procedure and to refer to <a>URL</a> directly.</p>
 
-<h3 id="URLforms">Syntactic forms: URL and FuncURL</h3>
+<h3 id="URLforms">Syntactic forms: URL and &lt;url&gt;</h3>
 
-<p class="issue" data-issue="1">FuncURL has been removed. This section needs to be rewritten.</p>
-    
-<p>URLs are used in the <a>'animate/xlink:href'</a> attribute. Some attributes
-allow both URLs and text strings as content. To disambiguate a text string from
-a relative URL, the functional notation
-FuncURL is used. This is simply
-an URL delimited with a functional notation. <strong>Note:</strong> For
-historical reasons, the delimiters are "url(" and ")", for compatibility with
-the CSS specifications. The FuncURL form is used in <a href="styling.html#StylingUsingPresentationAttributes">presentation attributes</a><!--
-not in 1.1
-and <a href="interact.html#navigation">navigation attributes</a> -->.</p>
+<p>In most cases, URLs are specified using an <a href="#linkRefAttrs"><span
+class="attr-name">'href'</span></a> attribute.
+However, some attributes allow both URLs and text strings as content.
+To disambiguate a text string from a relative URL, the <a>&lt;url&gt;</a>
+production is used [<a href="refs.html#ref-CSS3VALUES">CSS3VALUES</a>].
+This is simply a URL delimited with a functional notation.
+This form is used in <a
+href="styling.html#StylingUsingPresentationAttributes">presentation
+attributes</a>.</p>
 
 <p>SVG makes extensive use of <a>URL</a> references, both absolute and relative,
 to other objects. For example, to <a>fill</a> a rectangle with a linear
@@ -205,7 +203,7 @@ references and the valid target types for those references:</p>
   <li>An invalid local URL reference (i.e., an invalid references to a node
   within the current document) represents an error (see
   <a href="implnote.html#ErrorProcessing">Error processing</a>), apart from the
-  <a>'a/xlink:href'</a> attribute on the <a>'a'</a> element and the properties
+  <a>'a/href'</a> attribute on the <a>'a'</a> element and the properties
   that allow for backup values in the case where the URL reference is invalid
   (see <a>'fill'</a> and <a>'stroke'</a>).</li>
 
@@ -213,23 +211,14 @@ references and the valid target types for those references:</p>
   <a href="implnote.html#ErrorProcessing">Error processing</a>).</li>
 </ul>
 
-<h3 id="xlinkRefAttrs">URL reference attributes</h3>
+<h3 id="linkRefAttrs">URL reference attributes</h3>
 
-<p id="xlinkRefAttrsEmbed"><a>URL references</a> are normally specified with an
-<span class="attr-name">'href'</span> attribute in the XLink
-[<a href="http://www.w3.org/TR/xlink/">XLink</a>] namespace. For example, if the
-prefix of 'xlink' is used for attributes in the XLink namespace, then the
-attribute is <!-- not "shall be"; could also have duplicate prefixes defined.-->
-specified as <span class="attr-name">'xlink:href'</span>. The value of this
-attribute forms a reference for the desired resource (or secondary resource, if
-there is a fragment identifier).</p>
-
-<p>The value of the <span class="attr-name">'href'</span>
-attribute must be an URL.</p>
-
-<p>If the protocol, such as HTTP, does not support <a>URLs</a> directly,
-the <a>URL</a> is converted to a URI by the SVG implementation, as described
-in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specification</a> [<a href="refs.html#ref-RFC3987">RFC3987</a>].</p>
+<p id="linkRefAttrsEmbed"><a>URL references</a> are normally specified with an
+<span class="attr-name">'href'</span> attribute.
+The value of this attribute forms a reference for the desired resource (or
+secondary resource, if there is a fragment identifier).
+The value of the <span class="attr-name">'href'</span>
+attribute must be a URL.</p>
 
 <p>Because it is impractical for any application to check that
 a value is an <a>URL reference</a>, this specification follows the lead
@@ -240,36 +229,101 @@ requirement on SVG applications.</p>
 <p>If the <a>URL reference</a> is relative, its absolute version must be computed by the method described in
 <a href="http://www.w3.org/TR/xmlbase/">XML Base</a> before use [<a href="refs.html#ref-XML-BASE">XML-BASE</a>].</p>
 
-    <div class="adef-list">
-      <dl>
-        <dt><a id="XLinkTitleAttribute" ></a> <span
-            class="adef">xlink:title</span> = "<span class="attr-value">&lt;anything&gt;</span>"</dt>
-        <dd><p>The title attribute shall be used to describe the meaning of
-          a link or resource in a human-readable fashion, along the
-          same lines as the role or arcrole attribute. A value is
-          optional; if a value is supplied, it shall contain a
-          string that describes the resource. In general it is preferable
-          to  use a <a href="struct.html#TitleElement"><span class="element-name">'title'</span></a> child element
-          rather than a <span class="attr-name">'title'</span> attribute. The use of this
-          information is highly dependent on the type of processing
-          being done. It may be used, for example, to make titles
-          available to applications used by visually impaired users,
-          or to create a table of links, or to present help text that
-          appears when a user lets a mouse pointer hover over a
-          starting resource.
-          Refer to the <a href="http://www.w3.org/TR/xlink/">XML Linking Language (XLink)</a> [<a href="refs.html#ref-XLINK">XLINK</a>].</p>
-          <p class="anim-target"><a
-            href="animate.html#Animatable">Animatable</a>:
-            no.</p></dd>
-      </dl>
-    </div>
+<p>If the protocol, such as HTTP, does not support <a>URLs</a> directly,
+the <a>URL</a> is converted to a URI by the SVG implementation, as described
+in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specification</a> [<a href="refs.html#ref-RFC3987">RFC3987</a>].</p>
 
-<p class='issue'>Need an attribute definition table.</p>
+<h3 id="XLinkRefAttrs">Deprecated XLink URL reference attributes</h3>
 
-<p>In all cases, for compliance with either the "Namespaces in XML 1.0" or the "Namespaces in XML 1.1"
-Recommendation [<a href="http://www.w3.org/TR/REC-xml-names/">XML-NS10</a>][<a href="http://www.w3.org/TR/xml-names11/">XML-NS</a>],
-an explicit XLink namespace declaration must be provided whenever
-one of the above XLink attributes is used within SVG content.
+<p>In previous versions of SVG, the <span class="attr-name">'href'</span>
+attribute was specified in the XLink namespace [<a
+href="refs.html#ref-XLINK">XLINK</a>] namespace.
+This usage is now deprecated and instead <a>URL references</a> should be
+specified using the <span class="attr-name">'href'</span> attribute without
+a namespace.</p>
+
+<p>For backwards compatibility, the deprecated <a>'xlink:href'</a> attribute
+is defined below along with the <a>'xlink:title'</a> attribute which has also
+been deprecated.</p>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="XLinkHrefAttribute">xlink:href</dfn></td>
+        <td>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></td>
+        <td>(none)</td>
+        <td>(see below)</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>For backwards compatibility, elements with an <span
+    class="attr-name">'href'</span> attribute also recognize an <span
+    class="attr-name">'href'</span> attribute in the XLink namespace [<a
+    href="refs.html#ref-XLINK">XLINK</a>].</p>
+
+    <p>When the <span class="attr-name">'href'</span> attribute is present in
+    <em>both</em> the the XLink namespace and without a namespace, the
+    value of the attribute without a namespace shall be used. The attribute in
+    the XLink namespace shall be ignored.</p>
+
+    <p>A <a>conforming SVG generator</a> must generate <span
+    class="attr-name">'href'</span> attributes without a namespace.
+    However, it may <em>also</em> generate <span class="attr-name">'href'</span>
+    attributes in the XLink namespace to provide backwards compatibility.</p>
+
+    <p>This attribute is <a>animatable</a> if and only if the corresponding
+    <span class="attr-name">'href'</span> attribute is defined to be
+    animatable.</p>
+  </dd>
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Lacuna value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="XLinkTitleAttribute">xlink:title</dfn></td>
+        <td>&lt;anything&gt;</td>
+        <td>(none)</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>Deprecated attribute to describe the meaning of
+    a link or resource in a human-readable fashion.
+    New content should use a <a href="struct.html#TitleElement"><span
+    class="element-name">'title'</span></a> child element rather than a <span
+    class="attr-name">'xlink:title'</span> attribute.</p>
+    <p>The use of this information is highly dependent on the type of processing
+    being done. It may be used, for example, to make titles
+    available to applications used by visually impaired users,
+    or to create a table of links, or to present help text that
+    appears when a user lets a mouse pointer hover over a
+    starting resource.</p>
+    <p>The <span class="attr-name">'title'</span> attribute, if used, must be
+    in the XLink namespace.
+    Refer to the <a href="http://www.w3.org/TR/xlink/">XML Linking Language
+    (XLink)</a> [<a href="refs.html#ref-XLINK">XLINK</a>].</p>
+  </dd>
+</dl>
+
+<p>When using the deprecated XLink attributes <a>'xlink:href'</a> or
+<a>'xlink:title'</a> an explicit XLink namespace declaration must be provided
+[<a href="refs.html#ref-XML-NS">XML-NS</a>],
+
 One simple way to provide such an XLink namespace declaration
 is to include an <span class="attr-name">'xmlns'</span> attribute
 for the XLink namespace on the <a>'svg'</a> element for content that uses
@@ -303,7 +357,7 @@ each rendered element within an <a>'a'</a> element, the given rendered
 element is the local resource (the source anchor for the link).</p>
 
 <p>The remote resource (the destination for the link) is defined by
-an <a>URL</a> specified by the <a>'xlink:href'</a> attribute on the <a>'a'</a>
+an <a>URL</a> specified by the <a>'href'</a> attribute on the <a>'a'</a>
 element. The remote resource may be any Web resource (e.g., an image, a video
 clip, a sound bite, a program, another SVG document, an HTML document, an
 element within the current document, an element within a different document, etc.).
@@ -335,7 +389,7 @@ or frame to be replaced by the W3C home page.</p>
         <th>Animatable</th>
       </tr>
       <tr>
-        <td><dfn id="AElementXLinkHrefAttribute">xlink:href</dfn></td>
+        <td><dfn id="AElementHrefAttribute">href</dfn></td>
         <td>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></td>
         <td>(none)</td>
         <td>yes</td>
@@ -344,6 +398,8 @@ or frame to be replaced by the W3C home page.</p>
   </dt>
   <dd>
     The location of the referenced object, expressed as an <a>URL reference</a>.
+    Refer to the common handling defined for <a
+    href="linking.html#linkRefAttrs">URL reference attributes</a>.
   </dd>
   <dt>
     <table class="propdef attrdef">
