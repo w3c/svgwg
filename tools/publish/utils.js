@@ -277,7 +277,7 @@ exports.forEachNode = function(n, fn, stackfn, stackval) {
 };
 
 exports.warn = function(message, node) {
-  exports.info(message, 'warning: ' + node);
+  exports.info('warning: ' + message, node);
 };
 
 exports.info = function(message, node) {
