@@ -285,7 +285,7 @@ exports.info = function(message, node) {
     if (node.nodeType) {
       console.warn([node.ownerDocument.documentURI, node.lineNumber, node.columnNumber, ' ' + message].join(':'));
     } else {
-      console.warn(node.concat(' ' + message).join(':'));
+      console.warn(node.concat(' ' + message));
     }
   } else {
     console.warn(message);
