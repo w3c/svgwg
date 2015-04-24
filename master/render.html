@@ -297,37 +297,55 @@ created by <a>'foreignObject'</a> elements are the rules in Appendix E of CSS 2.
 
 <h2 id="Grouping">How groups are rendered</h2>
 <div class="ready-for-wider-review">
-<p>
+<p><s>
 Grouping elements, such as the <a>'g'</a> element (see <a>container elements</a>
 ) create a <a>compositing group</a>.
 The compositing group will composite and blend with the <a>group backdrop</a>
 with behaviour depending on the values
-of the compositing and blending properties, such as <!--<a>knock-out</a>, and-->
+of the compositing and blending properties, such as <a>knock-out</a>, and
 <a>isolation</a>. See
 <a href="http://www.w3.org/TR/compositing/">Compositing and Blending Specification</a>.
+</s></p>
+</div>
+<div class="ready-for-wg-review">
+<p>
+Grouping elements, such as the <a>'g'</a> element (see <a>container elements</a>
+) create a <a>compositing group</a>. The Compositing and Blending specification
+[<a href="refs.html#ref-COMPOSITINGBLENDING">COMPOSITING-BLENDING</a>]
+normatively describes how to render <a>compositing groups</a>.
+In SVG, effects may be applied to a group. For example, Filter Effects or 
+masking. These effects are applied to the rendered result of the group
+immediately before the group is blended and composited with the
+<a>group backdrop</a>. Applying any such effects to a group makes that 
+group isolated.
+<br/><br/>
+Thus, rendering a <a>compositing group</a> follows the following steps:
+<p>
+If the group is isolated:
+<ol>
+<li>The <a>initial backdrop</a> is set to a new buffer initialised with
+rgba(0,0,0,0)</li>
+<li>The contents of the group are rendered
+<a href="#RenderingOrder">in order</a> into the <a>initial backdrop</a></li>
+<li>Filter Effects and other effects that modify the group canvas are applied</li>
+<li>The group canvas is blended and composited with the <a>group backdrop</a></li>
+</ol>
+else (the group is not isolated):
+<ol>
+<li>The <a>initial backdrop</a> is set to the group backdrop</li>
+<li>The contents of the group are rendered,
+<a href="#RenderingOrder">in order</a>, onto the <a>initial backdrop</a></li>
+</ol>
 </p>
-<p class="issue" data-issue="2">What is the status of the knock-out
-property?</p>
+</p>
 </div>
 
 <h2 id="Elements">How elements are rendered</h2>
 <div class="ready-for-wider-review">
 <p>
 Individual <a>graphics elements</a> are rendered as if each graphics element
-represented its own <a>compositing group</a>; thus, the effect is as if
-a temporary separate canvas is created for each graphics element.
-The element is first painted onto the temporary canvas (see
-<a href="render.html#PaintingShapesAndText">Painting shapes and text</a> and
-<a href="render.html#PaintingRasterImages">Painting raster images</a> below).
-Then any <a href="render.html#FilteringPaintRegions">filter effects</a>
-specified for the graphics element are applied to create a
-modified temporary canvas. The modified temporary canvas is
-then composited into the background, taking into account any
-<a href="render.html#ClippingMaskingObjectOpacity">clipping,
-masking and object opacity</a> settings on the graphics
-element.
+represented its own <a>compositing group</a>.
 </p>
-<p class="issue" data-issue="3">Should this mention blending as well?</p>
 </div>
 
 <h2 id="TypesOfGraphicsElements">Types of graphics elements</h2>
@@ -350,14 +368,15 @@ that can be rendered onto the canvas:</p>
 
 <p>Shapes and text can be <a>filled</a> (i.e., apply paint to the
 interior of the shape) and <a>stroked</a> (i.e., apply paint
-along the outline of the shape). A stroke operation is centered
+along the outline of the shape). <s>A stroke operation is centered
 on the outline of the object; thus, in effect, half of the
 paint falls on the interior of the shape and half of the paint
-falls outside of the shape.</p>
+falls outside of the shape.</s></p>
 
 <p>For certain types of shapes, <a href="painting.html#Markers">marker
 symbols</a> (which themselves can consist of any combination of shapes,
-text and images) can be drawn at selected vertices. Each marker symbol
+text and images) can be drawn at <s>selected vertices</s>positions along the
+shape boundary. Each marker symbol
 is painted as if its graphical content were expanded into the
 SVG document tree just after the shape object which is using
 the given marker symbol. The graphical contents of a marker
@@ -377,19 +396,20 @@ semi-transparently drawn solid color, with different opacity
 values for the fill and stroke operations.</p>
 
 <p>The fill and stroke operations are entirely independent
-painting operations; thus, if you both fill and stroke a shape,
-half of the stroke will be painted on top of part of the
-fill.</p>
+painting operations; thus, <s>if you both fill and stroke a shape,
+half of the stroke will</s> any stroke applied to the shape will be painted on
+top of part of the fill.</p>
 
-<p>SVG supports the following built-in types of paint which can
-be used in fill and stroke operations:</p>
-
+<p>SVG supports numerous built-in types of paint which can
+be used in fill and stroke operations. These are described in
+<a href="pservers.html">Paint Servers</a>.</p>
+<s>
 <ul>
   <li><a href="http://www.w3.org/TR/css3-color/">solid color</a></li>
-  <li><a href="pservers.html#Gradients">gradients</a> (linear and radial)</li>
+  <li><a href="pservers.html#Gradients">radients</a> (linear and radial)</li>
   <li><a href="pservers.html#Patterns">patterns</a></li>
 </ul>
-<p class="issue" data-issue="4">Mention hatches, mesh gradients?</p>
+</s>
 
 <h3 id="PaintingRasterImages">Painting raster images</h3>
 
