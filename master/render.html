@@ -295,6 +295,14 @@ created by <a>'foreignObject'</a> elements are the rules in Appendix E of CSS 2.
   yellow, lime, aqua.</p>
 </div>
 
+<h2 id="Elements">How elements are rendered</h2>
+<div class="ready-for-wg-review">
+<p>
+Individual <a>graphics elements</a> are rendered as if each graphics element
+represented its own group. See <a href="#Grouping">How groups are rendered</a>.
+</p>
+</div>
+
 <h2 id="Grouping">How groups are rendered</h2>
 <div class="ready-for-wider-review">
 <p><s>
@@ -302,7 +310,7 @@ Grouping elements, such as the <a>'g'</a> element (see <a>container elements</a>
 ) create a <a>compositing group</a>.
 The compositing group will composite and blend with the <a>group backdrop</a>
 with behaviour depending on the values
-of the compositing and blending properties, such as <a>knock-out</a>, and
+of the compositing and blending properties, such as knock-out, and
 <a>isolation</a>. See
 <a href="http://www.w3.org/TR/compositing/">Compositing and Blending Specification</a>.
 </s></p>
@@ -313,15 +321,15 @@ Grouping elements, such as the <a>'g'</a> element (see <a>container elements</a>
 ) create a <a>compositing group</a>. The Compositing and Blending specification
 [<a href="refs.html#ref-COMPOSITINGBLENDING">COMPOSITING-BLENDING</a>]
 normatively describes how to render <a>compositing groups</a>.
-In SVG, effects may be applied to a group. For example, Filter Effects or 
-masking. These effects are applied to the rendered result of the group
+In SVG, effects may be applied to a group. For example, opacity, Filter Effects
+or masking. These effects are applied to the rendered result of the group
 immediately before the group is blended and composited with the
 <a>group backdrop</a>. Applying any such effects to a group makes that 
 group isolated.
 <br/><br/>
 Thus, rendering a <a>compositing group</a> follows the following steps:
-<p>
 If the group is isolated:
+</p>
 <ol>
 <li>The <a>initial backdrop</a> is set to a new buffer initialised with
 rgba(0,0,0,0)</li>
@@ -332,20 +340,103 @@ rgba(0,0,0,0)</li>
 </ol>
 else (the group is not isolated):
 <ol>
-<li>The <a>initial backdrop</a> is set to the group backdrop</li>
+<li>The <a>initial backdrop</a> is set to the <a>group backdrop</a></li>
 <li>The contents of the group are rendered,
 <a href="#RenderingOrder">in order</a>, onto the <a>initial backdrop</a></li>
 </ol>
-</p>
-</p>
 </div>
 
-<h2 id="Elements">How elements are rendered</h2>
-<div class="ready-for-wider-review">
-<p>
-Individual <a>graphics elements</a> are rendered as if each graphics element
-represented its own <a>compositing group</a>.
+<h3 id="ObjectAndGroupOpacityProperties">Object and group opacity: the
+effect of the <span class="property">'opacity'</span> property</h3>
+
+<p class="note">See the CSS Color Module Level 3 for the definition
+of <a>'opacity'</a>. [<a href="refs.html#ref-CSS3COLOR">CSS3COLOR</a>]</p>
+
+<p>The <a>'opacity'</a> property specifies how opaque a given
+graphical element or container element will be when it is
+painted to the canvas.  When applied to a container element,
+this is known as <em>group opacity</em>, and when applied to
+an individual rendering element, it is known as <em>object
+opacity</em>.  The principle for these two operations however
+is the same.</p>
+
+<p>There are several other opacity-related properties in SVG:</p>
+
+<ul>
+  <li><a>'fill-opacity'</a>, which specifies the opacity of a fill
+  operation;</li>
+
+  <li><a>'stroke-opacity'</a>, which specifies the opacity of a stroking
+  operation;</li>
+
+  <li><a>'solid-opacity'</a>, which specifies the opacity of a solid color
+  paint server; and</li>
+
+  <li><a>'stop-opacity'</a>, which specifies the opacity of a gradient stop.</li>
+</ul>
+
+<p>These four opacity properties are involved in intermediate rendering operations.
+Object and group opacity however can be thought of as a post-processing operation.
+<s>Conceptually, the object or group to which <a>'opacity'</a> applies
+is rendered into an RGBA offscreen image.  The offscreen image as whole is then blended
+into the canvas with the specified <a>'opacity'</a> value used uniformly
+across the offscreen image.</s>
+<span class="ready-for-wg-review">
+Thus, the presence of the opacity property forces the group to be isolated.
+(See Compositing and Blending section 3.3).
+</span>
 </p>
+
+<p><s>An <a>'opacity'</a> value of 0 means fully transparent and 1 means fully
+opaque. Opacity values are clamped to the range [0, 1];
+see <a href="implnote.html#RangeClamping">Clamping values which are restricted
+to a particular range</a> for details.</s></p>
+
+<p>The <a>'opacity'</a> property applies to the following SVG elements:
+<a>'svg'</a>, <a>'g'</a>, <a>'symbol'</a>, <a>'marker element'</a>,
+<a>'a'</a>, <a>'switch'</a>, <a>graphics elements</a> and
+<a>text content child elements</a>.</p>
+
+<div class="example">
+  <p>The following example illustrates various usage of the <a>'opacity'</a>
+  property on objects and groups.</p>
+
+  <edit:includefile href='images/masking/opacity01.svg'/>
+
+  <div class='figure'>
+    <img class='bordered' src='images/masking/opacity01.svg' alt='Image showing different groups of circles blended into the background.'/>
+    <p class='caption'>Each group of red and green circles is first rendered
+    to an offscreen image before being blended with the background
+    blue rectangle as a whole, with the given <a>'opacity'</a> values.</p>
+  </div>
+
+  <p>In the example, the top row of circles have differing opacities,
+  ranging from 1.0 to 0.2. The bottom row illustrates five <a>'g'</a> elements,
+  each of which contains overlapping red and green circles, as follows:</p>
+
+  <ul>
+    <li>The first group shows the opaque case for reference. The group has
+    opacity of 1, as do the circles.</li>
+
+    <li>The second group shows group opacity when the elements in the group are
+    opaque.</li>
+
+    <li>The third and fourth group show that opacity is not commutative. In the
+    third group (which has opacity of 1), a semi-transparent green circle is
+    drawn on top of a semi-transparent red circle, whereas in the fourth group a
+    semi-transparent red circle is drawn on top of a semi-transparent green
+    circle. Note that area where the two circles intersect display different
+    colors. The third group shows more green color in the intersection area,
+    whereas the fourth group shows more red color.</li>
+
+    <li>The fifth group shows the multiplicative effect of opacity settings.
+    Both the circles and the group itself have opacity settings of .5. The
+    result is that the portion of the red circle which does not overlap with the
+    green circle (i.e., the top/right of the red circle) will blend into the
+    blue rectangle with accumulative opacity of .25 (i.e., .5*.5), which, after
+    blending into the blue rectangle, results in a blended color which is 25%
+    red and 75% blue.</li>
+  </ul>
 </div>
 
 <h2 id="TypesOfGraphicsElements">Types of graphics elements</h2>
@@ -439,6 +530,7 @@ rules given in <a href="http://www.w3.org/TR/filter-effects/">Filter Effects</a>
 filtered by the processes defined in
 <a href="http://www.w3.org/TR/filter-effects/">Filter Effects</a>.</p>
 
+<s>
 <h2 id="ClippingMaskingObjectOpacity">Clipping, masking and object opacity</h2>
 
 <p>SVG allows any painting operation to be limited to a
@@ -481,6 +573,33 @@ In this case the mask is infinite, with a color of white and an
 alpha channel of the given opacity value. (See the <a>'opacity'</a>
 property.)</p>
 </div>
+</s>
+
+<div class="ready-for-wider-review">
+<h2 id="ClippingAndMasking">Clipping and Masking</h2>
+
+<p>SVG supports the following clipping/masking features:</p>
+
+<ul>
+  <li>clipping paths, which either uses
+  any combination of <a>'path'</a>, <a>'text'</a> and
+  <a>basic shapes</a> or basic shapes to serve as
+  the outline of a (in the absence of anti-aliasing) 1-bit
+  mask, where everything on the "inside" of the outline is
+  allowed to show through but everything on the outside is
+  masked out</li>
+
+  <li>masks, which are
+  <a>container elements</a>
+  which can contain <a>graphics elements</a>
+  or other container elements which define a set of graphics
+  that is to be used as a semi-transparent mask for compositing
+  foreground objects into the current background.</li>
+</ul>
+
+<p>Both, clipping and masking, are specified in the module CSS Masking
+[<a href="refs.html#ref-CSS-MASKING">CSS-MASKING</a>].</p>
+</div>
 
 <h2 id="ParentCompositing">Parent Compositing</h2>
 
@@ -488,6 +607,10 @@ property.)</p>
 environments (e.g., Web browsers), the SVG document fragment
 has a final compositing step where the document as a whole is
 blended translucently into the background canvas.</p>
+<p class="todo">This is defined as the Page Group in Compositing and Blending - there was some
+discussion about what the page group should composite with - find that and check
+text</p>
+
 
 <h2 id="OverflowAndClipProperties">The <span class="property">'overflow'</span>
 property</h2>
@@ -641,120 +764,6 @@ establish an initial clipping path for the SVG document fragment. The
 <a>'overflow'</a> property along with additional SVG
 user agent processing rules determine the initial clipping path which
 the user agent establishes for the SVG document fragment:</p>
-
-<div class="ready-for-wider-review">
-<h2 id="ClippingAndMasking">Clipping and Masking</h2>
-
-<p>SVG supports the following clipping/masking features:</p>
-
-<ul>
-  <li>clipping paths, which either uses
-  any combination of <a>'path'</a>, <a>'text'</a> and
-  <a>basic shapes</a> or basic shapes to serve as
-  the outline of a (in the absence of anti-aliasing) 1-bit
-  mask, where everything on the "inside" of the outline is
-  allowed to show through but everything on the outside is
-  masked out</li>
-
-  <li>masks, which are
-  <a>container elements</a>
-  which can contain <a>graphics elements</a>
-  or other container elements which define a set of graphics
-  that is to be used as a semi-transparent mask for compositing
-  foreground objects into the current background.</li>
-</ul>
-
-<p>Both, clipping and masking, are specified in the module CSS Masking
-[<a href="refs.html#ref-CSS-MASKING">CSS-MASKING</a>].</p>
-
-<h2 id="ObjectAndGroupOpacityProperties">Object and group opacity: the
-effect of the <span class="property">'opacity'</span> property</h2>
-
-<p class="note">See the CSS Color Module Level 3 for the definition
-of <a>'opacity'</a>. [<a href="refs.html#ref-CSS3COLOR">CSS3COLOR</a>]</p>
-
-<p>The <a>'opacity'</a> property specifies how opaque a given
-graphical element or container element will be when it is
-painted to the canvas.  When applied to a container element,
-this is known as <em>group opacity</em>, and when applied to
-an individual rendering element, it is known as <em>object
-opacity</em>.  The principle for these two operations however
-is the same.</p>
-
-<p>There are several other opacity-related properties in SVG:</p>
-
-<ul>
-  <li><a>'fill-opacity'</a>, which specifies the opacity of a fill
-  operation;</li>
-
-  <li><a>'stroke-opacity'</a>, which specifies the opacity of a stroking
-  operation;</li>
-
-  <li><a>'solid-opacity'</a>, which specifies the opacity of a solid color
-  paint server; and</li>
-
-  <li><a>'stop-opacity'</a>, which specifies the opacity of a gradient stop.</li>
-</ul>
-
-<p>These four opacity properties are involved in intermediate rendering operations.
-Object and group opacity however can be thought of as a post-processing
-operation.  Conceptually, the object or group to which <a>'opacity'</a> applies
-is rendered into an RGBA offscreen image.  The offscreen image as whole is then blended
-into the canvas with the specified <a>'opacity'</a> value used uniformly
-across the offscreen image.</p>
-
-<p>An <a>'opacity'</a> value of 0 means fully transparent and 1 means fully
-opaque. Opacity values are clamped to the range [0, 1];
-see <a href="implnote.html#RangeClamping">Clamping values which are restricted
-to a particular range</a> for details.</p>
-
-<p>The <a>'opacity'</a> property applies to the following SVG elements:
-<a>'svg'</a>, <a>'g'</a>, <a>'symbol'</a>, <a>'marker element'</a>,
-<a>'a'</a>, <a>'switch'</a>, <a>graphics elements</a> and
-<a>text content child elements</a>.</p>
-
-<div class="example">
-  <p>The following example illustrates various usage of the <a>'opacity'</a>
-  property on objects and groups.</p>
-
-  <edit:includefile href='images/masking/opacity01.svg'/>
-
-  <div class='figure'>
-    <img class='bordered' src='images/masking/opacity01.svg' alt='Image showing different groups of circles blended into the background.'/>
-    <p class='caption'>Each group of red and green circles is first rendered
-    to an offscreen image before being blended with the background
-    blue rectangle as a whole, with the given <a>'opacity'</a> values.</p>
-  </div>
-
-  <p>In the example, the top row of circles have differing opacities,
-  ranging from 1.0 to 0.2. The bottom row illustrates five <a>'g'</a> elements,
-  each of which contains overlapping red and green circles, as follows:</p>
-
-  <ul>
-    <li>The first group shows the opaque case for reference. The group has
-    opacity of 1, as do the circles.</li>
-
-    <li>The second group shows group opacity when the elements in the group are
-    opaque.</li>
-
-    <li>The third and fourth group show that opacity is not commutative. In the
-    third group (which has opacity of 1), a semi-transparent green circle is
-    drawn on top of a semi-transparent red circle, whereas in the fourth group a
-    semi-transparent red circle is drawn on top of a semi-transparent green
-    circle. Note that area where the two circles intersect display different
-    colors. The third group shows more green color in the intersection area,
-    whereas the fourth group shows more red color.</li>
-
-    <li>The fifth group shows the multiplicative effect of opacity settings.
-    Both the circles and the group itself have opacity settings of .5. The
-    result is that the portion of the red circle which does not overlap with the
-    green circle (i.e., the top/right of the red circle) will blend into the
-    blue rectangle with accumulative opacity of .25 (i.e., .5*.5), which, after
-    blending into the blue rectangle, results in a blended color which is 25%
-    red and 75% blue.</li>
-  </ul>
-</div>
-</div>
 
 
 </body>
