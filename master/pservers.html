@@ -1046,12 +1046,50 @@ server.</p>
 
 <edit:with element='mesh'>
 
-<p class="note">New in SVG 2. Added to allow shadings along curved lines. This
-is needed, for example, in creating life-like drawings.</p>
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support photorealistic gradients.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item04">Mesh gradients are accepted by the WG for SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow more complex gradients such as those found in nature.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Tav (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3121">ACTION-3121</a>)</td>
+    </tr>
+  </table>
+</div>
 
-<p>The mesh gradients in SVG are based on an array of Coons Patches.
-A Coons Patch is a shading defined by colors place at the corners
-of an area enclosed by four Bézier curves.</p>
+<div class="annotation">
+  <p>Resolution: Rename stop-path to 'd' or 'path' (Coons patch syntax).</p>
+  <p><a href="http://www.w3.org/Graphics/SVG/WG/wiki/SVG2_Resolutions#Rename_stop-path_to_.27d.27_or_.27path.27_.28Coons_patch_syntax.29">Seattle 2011 F2F day 3</a></p>
+</div>
+
+<div class="annotation">
+  <p>Resolution: We will allow just C/c/L/l in mesh path data. We will leave out tensor control points.
+  We will not allow multiple colors at mesh intersections, just use zero size patches instead.</p>
+  <p><a href="http://lists.w3.org/Archives/Public/www-svg/2011Oct/0046.html">Boston 2011 F2F</a></p>
+</div>
+
+<p class="note">
+  New in SVG 2. Added to allow complex shadings. This is needed, for
+  example, in creating life-like drawings or in interpolating data
+  points on a two-dimensional grid.
+</p>
+
+<p>
+  The mesh gradients in SVG are based on an array of Coons Patches.  A
+  Coons Patch is a shading defined by colors place at the corners of
+  an area enclosed by four Bézier curves. The interpolation of the
+  corner colors into the patch can either be bilinear or bicubic.
+</p>
 
 <div class="figure">
   <img
@@ -1061,15 +1099,18 @@ of an area enclosed by four Bézier curves.</p>
   <p class="caption">A single Coons-Mesh patch.</p>
 </div>
 
-<p class="annotation">A Coons Patch is equivalent to a bi-cubic Ferguson patch
-where the distance between a cubic Bézier end point and its nearest control
-point is one-third the length of the corresponding Ferguson tangent line.</p>
+<p class="annotation">
+  A Coons Patch is equivalent to a bi-cubic Ferguson patch where the
+  distance between a cubic Bézier end point and its nearest control
+  point is one-third the length of the corresponding Ferguson tangent
+  line.
+</p>
     
 <p>
   The corner colors are mapped to the patch area with a two step
   process.  First the colors are placed at the corners of a unit
-  square and the area inside the square is then colored using
-  bilinear interpolation. Second, the points
+  square and the area inside the square is then colored using either
+  bilinear interpolation or bicubic interpolation. Second, the points
   inside the square are mapped to points inside the patch using the
   following formula:
 </p>
@@ -1336,18 +1377,31 @@ point is one-third the length of the corresponding Ferguson tangent line.</p>
   patch can be rendered as a path.</p>
 </div>
 
-<p>For a mesh, the individual patches are placed in an array. There
-are two reasons for using an array. The first is that an array of
-meshes is a natural result for most content creation processes
-(start with a path and then subdivide its area into rows and
-columns of patches).  The second is that the data can be compacted
-by sharing sides and corners. The array structure is conceptual
-only. The actual mesh can be distorted in any way possible. The
-mesh gradient syntax is designed so that it is easy to simulate
-other types of gradients such as conical gradients or triangle
-meshes as shown in the examples below.</p>
+<p>
+  Unlike other paint servers, a mesh defined outside of a
+  <a>'defs'</a> section is rendered. In this case, <a>'x'</a> and
+  <a>'y'</a> are interpreted in the current user coordinate system and
+  the mesh itself determines its own bounding box.
+</p>
 
-<p>The structure of a mesh gradient is as follows:</p>
+<h4 id="MeshStructure">Mesh Structure</h4>
+
+<p>
+  For a mesh, the individual patches are placed in an array. There
+  are two reasons for using an array. The first is that an array of
+  meshes is a natural result for most content creation processes
+  (start with a path and then subdivide its area into rows and
+  columns of patches). The second is that the data can be compacted
+  by sharing sides and corners. The array structure is conceptual
+  only. The actual mesh can be distorted in any way possible. The
+  mesh gradient syntax is designed so that it is easy to simulate
+  other types of gradients such as conical gradients or triangle
+  meshes as shown in the examples below.
+</p>
+
+<p>
+  The structure of a mesh gradient:
+</p>
 
 <div class="example">
 <pre>
@@ -1369,43 +1423,117 @@ meshes as shown in the examples below.</p>
 </div>
 
 <p>
-  Unlike other paint servers, a mesh defined outside of a
-  <a>'defs'</a> section is rendered. In this case, <a>'x'</a> and
-  <a>'y'</a> are interpreted in the current user coordinate system and
-  the mesh itself determines its own bounding box.
+  The first <a>'meshpatch'</a> in the first <a>'meshrow'</a> contains
+  four <a>'stop'</a> elements. These elements correspond conceptually,
+  in order, to the top, right, bottom, and left edges of the first
+  patch. The following patches in the first row contains
+  three <a>'stop'</a> elements, corresponding to the top, right, and
+  bottom edges of the patch. The left edge of one of these patches is
+  taken from the (reversed) right edge of the previous patch. The
+  first patch of following rows contains three <a>'stop'</a> elements,
+  corresponding to the right, bottom, and left edges. The top edge is
+  taken from the (reversed) bottom edge of the first patch in the row
+  above. The remaining patches contain two <a>'stop'</a> elements,
+  corresponding to the right and bottom edges of the patch. The top
+  edge is taken from the patch directly above in the array of patches
+  while the left edge is taken from the previous patch in the same
+  row.
+</p>
+<p>
+  Each <a>'stop'</a> element contains a <a>'path'</a> attribute
+  which consists of a single 'c', 'C', 'l', or 'L' path command. The
+  initial point for the path command is taken from the last point of
+  the previous edge of the patch (which for the first <a>'stop'</a> in
+  a patch is defined in the patch to the left or top), except for the
+  first patch in the first row where the initial point is given by the
+  'x' and 'y' attributes in the <a>'mesh'</a> element. The path
+  command in the last <a>'stop'</a> element of a <a>'meshpatch'</a>
+  has one less point than normal as this "missing" point necessary to
+  close the path is already defined.
+</p>
+<p>
+  For each <a>'stop'</a> element there is a color and opacity
+  that correspond to the patch corner at the initial point of
+  the stop's edge. This color and opacity are defined inside
+  the <a>'stop'</a> by the <a>'stop-color'</a>
+  and <a>'stop-opacity'</a> properties except for the first
+  stop in all patches other than the first patch in the first
+  row where the stop color and opacity are already defined by a
+  previous patch.
 </p>
 
-<div class="annotation svg2-requirement">
-  <table>
-    <tr>
-      <th>SVG 2 Requirement:</th>
-      <td>Support photorealistic gradients.</td>
-    </tr>
-    <tr>
-      <th>Resolution:</th>
-      <td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item04">Mesh gradients are accepted by the WG for SVG 2.</a></td>
-    </tr>
-    <tr>
-      <th>Purpose:</th>
-      <td>To allow more complex gradients such as those found in nature.</td>
-    </tr>
-    <tr>
-      <th>Owner:</th>
-      <td>Tav (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3121">ACTION-3121</a>)</td>
-    </tr>
-  </table>
+<p>
+  Here is an annotated example of a two by two mesh:
+</p>
+
+<div class="example">
+  <pre>
+&lt;mesh x="50" y="50" id="example"&gt; &lt;!-- x, y used for initial point in first patch. --&gt;
+  &lt;meshrow&gt; &lt;!-- No attributes, used only to define begin/end of row. --&gt;
+	&lt;meshpatch&gt;
+	  &lt;stop path="c  25,-25  75, 25  100,0" stop-color="lightblue" /&gt;
+	  &lt;stop path="c  25, 25 -25, 75  0,100" stop-color="purple" /&gt;
+	  &lt;stop path="c -25, 25 -75,-25 -100,0" stop-color="red" /&gt;
+	  &lt;stop path="c -25,-25, 25,-75"        stop-color="purple" /&gt; &lt;!-- Last point not needed (closed path). --&gt;
+	&lt;/meshpatch&gt;
+	&lt;meshpatch&gt;
+	  &lt;stop path="c  25,-25  75, 25  100,0" /&gt; &lt;!-- stop-color from previous patch. --&gt;
+	  &lt;stop path="c  25, 25 -25, 75  0,100" stop-color="lightblue" /&gt;
+	  &lt;stop path="c -25, 25 -75,-25"        stop-color="purple" /&gt; &lt;!-- Last point not needed (closed path). --&gt;
+	  &lt;!-- Last path (left side) taken from right side of previous path (with points reversed). --&gt;
+	&lt;/meshpatch&gt;
+  &lt;/meshrow&gt;
+  &lt;meshrow&gt; &lt;!-- New row. --&gt;
+	&lt;meshpatch&gt;
+	  &lt;!-- First path (top side) taken from bottom path of patch above. --&gt;
+	  &lt;stop path="c  25, 25 -25, 75  0,100" /&gt; &lt;!-- stop-color from patch above. --&gt;
+	  &lt;stop path="c -25, 25 -75,-25 -100,0" stop-color="purple" /&gt;
+	  &lt;stop path="c -25,-25, 25,-75"        stop-color="lightblue" /&gt; &lt;!-- Last point not needed (closed path). --&gt;
+	&lt;/meshpatch&gt;
+	&lt;meshpatch&gt;
+	  &lt;!-- First path (top side) taken from bottom path of patch above (with points reversed). --&gt;
+	  &lt;stop path="c  25, 25 -25, 75  0,100" /&gt; &lt;!-- stop-color from patch above. --&gt;
+	  &lt;stop path="c -25, 25 -75,-25"        stop-color="lightblue" /&gt; &lt;!-- Last point not needed (closed path). --&gt;
+	  &lt;!-- Last path (left side) taken from right side of previous path (with points reversed). --&gt;
+	&lt;/meshpatch&gt;
+  &lt;/meshrow&gt;
+&lt;/mesh&gt;
+  </pre>
 </div>
 
-<div class="annotation">
-  <p>Resolution: Rename stop-path to 'd' or 'path' (Coons patch syntax).</p>
-  <p><a href="http://www.w3.org/Graphics/SVG/WG/wiki/SVG2_Resolutions#Rename_stop-path_to_.27d.27_or_.27path.27_.28Coons_patch_syntax.29">Seattle 2011 F2F day 3</a></p>
+<p>
+  The above mesh is rendered as:
+</p>
+
+<div class="figure">
+  <img
+     alt="Rendering of a two by two mesh."
+     src="images/pservers/mesh_example.png"
+     style="width:300px"/>
+  <p class="caption">
+    The rendering for the above two by two mesh example. The overlaid
+    paths show the order in which the patch edges are defined.
+  </p>
 </div>
 
-<div class="annotation">
-  <p>Resolution: We will allow just C/c/L/l in mesh path data. We will leave out tensor control points.
-  We will not allow multiple colors at mesh intersections, just use zero size patches instead.</p>
-  <p><a href="http://lists.w3.org/Archives/Public/www-svg/2011Oct/0046.html">Boston 2011 F2F</a></p>
+<p>
+  Coons patch meshes can simulate other types of gradients. Here is
+  an example of a conic gradient:
+</p>
+
+<div class="figure">
+  <img
+     alt="Rendering of a one by four mesh where each mesh covers
+          a conic section."
+     src="images/pservers/mesh_conic.png"
+     style="width:300px"/>
+  <p class="caption">
+    The rendering for a one row by four column mesh that simulates
+    a conic gradient. The bottom edge of each patch is of zero
+    length.
+  </p>
 </div>
+
 
 <p id="MeshElement">Mesh gradients are defined by a <a>'mesh'</a>
 element.</p>
@@ -1660,7 +1788,10 @@ colors..." but "ramp" is used nowhere else in this section.</p>
       </dl>
 
       <p>
-	A description of mesh path data.
+	Mesh path data consists of a single 'l', 'L', 'c', or 'C'
+	path command (as defined for the <a href="paths.html#PathData">Path</a>
+	<a>'path/d'</a> attribute). See the <a>'mesh'</a> section
+	above for how the path data is interpreted.
       </p>
 
     </dd>
@@ -2569,7 +2700,7 @@ processed.</p>
 <h4 id="HatchpathNotes">Notes on hatch paths</h4>
 
 <p>Hatch paths are defined with the same <a href="paths.html#PathData">Path
-data</a> used in the <a>'d'</a> attribute of the <a>'path'</a>
+data</a> used in the <a>'path/d'</a> attribute of the <a>'path'</a>
 element. The path is defined relative to the origin of each strip
 translated in the <var>x</var> direction by the <a>'offset'</a>
 (the <var>y</var> direction is aligned along the infinite axis of the
