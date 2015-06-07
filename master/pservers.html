@@ -1078,6 +1078,11 @@ server.</p>
   <p><a href="http://lists.w3.org/Archives/Public/www-svg/2011Oct/0046.html">Boston 2011 F2F</a></p>
 </div>
 
+<div class="annotation">
+  <p>Resolution: We will have a type="smooth-bicubic" or similar on &lt;mesh&gt;. (Note: In the resolution, the attribute is incorrectly placed on &lt;patch&gt;; see the minutes.)</p>
+  <p><a href="http://www.w3.org/2015/02/12-svg-minutes.html#item18">Sydney 2015 F2F</a></p>
+</div>
+
 <p class="note">
   New in SVG 2. Added to allow complex shadings. This is needed, for
   example, in creating life-like drawings or in interpolating data
@@ -1106,6 +1111,165 @@ server.</p>
   line.
 </p>
     
+<p>
+  Unlike other paint servers, a mesh defined outside of a
+  <a>'defs'</a> section is rendered. In this the case, the mesh has a
+  bounding box determined by its maximum extent, taking into account
+  all of its patches.
+</p>
+
+<h4 id="MeshStructure">Mesh Structure</h4>
+
+<p>
+  A mesh consists of patches placed in an array. There
+  are two reasons for using an array. The first is that an array of
+  meshes is a natural result for most content creation processes
+  (start with a path and then subdivide its area into rows and
+  columns of patches). The second is that the data can be compacted
+  by sharing sides and corners. The array structure is conceptual
+  only. The actual mesh can be distorted in any way possible. The
+  mesh gradient syntax is designed so that it is easy to simulate
+  other types of gradients such as conical gradients or triangle
+  meshes as shown in the examples below.
+</p>
+
+<p>
+  The structure of a mesh gradient:
+</p>
+
+<div class="example">
+<pre>
+&lt;mesh x="100" y="100"&gt;
+  &lt;meshrow&gt;
+    &lt;meshpatch&gt;
+      &lt;stop .../&gt;
+        Up to four stops in first patch. See details below.
+    &lt;/meshpatch&gt;
+    &lt;meshpatch&gt;
+      Any number of meshpatches in row.
+    &lt;/meshpatch&gt;
+  &lt;/meshrow&gt;
+  &lt;meshrow&gt;
+    Any number of meshrows, each with the same number of meshpatches as in the first row.
+  &lt;/meshrow&gt;
+&lt;/mesh&gt;
+</pre>
+</div>
+
+<p>
+  The first <a>'meshpatch'</a> in the first <a>'meshrow'</a> contains
+  four <a>'stop'</a> elements. These elements correspond conceptually,
+  in order, to the top, right, bottom, and left edges of the first
+  patch. The following patches in the first row contains
+  three <a>'stop'</a> elements, corresponding to the top, right, and
+  bottom edges of the patch. The left edge of one of these patches is
+  taken from the (reversed) right edge of the previous patch. The
+  first patch of following rows contains three <a>'stop'</a> elements,
+  corresponding to the right, bottom, and left edges. The top edge is
+  taken from the (reversed) bottom edge of the first patch in the row
+  above. The remaining patches contain two <a>'stop'</a> elements,
+  corresponding to the right and bottom edges of the patch. The top
+  edge is taken from the patch directly above in the array of patches
+  while the left edge is taken from the previous patch in the same
+  row.
+</p>
+<p>
+  Each <a>'stop'</a> element contains a <a>'path'</a> attribute
+  which consists of a single 'c', 'C', 'l', or 'L' path command. The
+  initial point for the path command is taken from the last point of
+  the previous edge of the patch (which for the first <a>'stop'</a> in
+  a patch is defined in the patch to the left or top), except for the
+  first patch in the first row where the initial point is given by the
+  <a>'mesh/x'</a> and <a>'mesh/y'</a> attributes in the <a>'mesh'</a>
+  element. The path command in the last <a>'stop'</a> element of
+  a <a>'meshpatch'</a> has one less point than normal as this
+  "missing" point necessary to close the path is already defined.
+</p>
+<p>
+  For each <a>'stop'</a> element there is a color and opacity
+  that correspond to the patch corner at the initial point of
+  the stop's edge. This color and opacity are defined inside
+  the <a>'stop'</a> by the <a>'stop-color'</a>
+  and <a>'stop-opacity'</a> properties except for the first
+  stop in all patches other than the first patch in the first
+  row where the stop color and opacity are already defined by a
+  previous patch.
+</p>
+
+<p>
+  Here is an annotated example of a two by two mesh:
+</p>
+
+<div class="example">
+  <pre>
+&lt;mesh x="50" y="50" id="example"&gt; &lt;!-- x, y used for initial point in first patch. --&gt;
+  &lt;meshrow&gt; &lt;!-- No attributes, used only to define begin/end of row. --&gt;
+	&lt;meshpatch&gt;
+	  &lt;stop path="c  25,-25  75, 25  100,0" stop-color="lightblue" /&gt;
+	  &lt;stop path="c  25, 25 -25, 75  0,100" stop-color="purple" /&gt;
+	  &lt;stop path="c -25, 25 -75,-25 -100,0" stop-color="red" /&gt;
+	  &lt;stop path="c -25,-25, 25,-75"        stop-color="purple" /&gt; &lt;!-- Last point not needed (closed path). --&gt;
+	&lt;/meshpatch&gt;
+	&lt;meshpatch&gt;
+	  &lt;stop path="c  25,-25  75, 25  100,0" /&gt; &lt;!-- stop-color from previous patch. --&gt;
+	  &lt;stop path="c  25, 25 -25, 75  0,100" stop-color="lightblue" /&gt;
+	  &lt;stop path="c -25, 25 -75,-25"        stop-color="purple" /&gt; &lt;!-- Last point not needed (closed path). --&gt;
+	  &lt;!-- Last path (left side) taken from right side of previous path (with points reversed). --&gt;
+	&lt;/meshpatch&gt;
+  &lt;/meshrow&gt;
+  &lt;meshrow&gt; &lt;!-- New row. --&gt;
+	&lt;meshpatch&gt;
+	  &lt;!-- First path (top side) taken from bottom path of patch above. --&gt;
+	  &lt;stop path="c  25, 25 -25, 75  0,100" /&gt; &lt;!-- stop-color from patch above. --&gt;
+	  &lt;stop path="c -25, 25 -75,-25 -100,0" stop-color="purple" /&gt;
+	  &lt;stop path="c -25,-25, 25,-75"        stop-color="lightblue" /&gt; &lt;!-- Last point not needed (closed path). --&gt;
+	&lt;/meshpatch&gt;
+	&lt;meshpatch&gt;
+	  &lt;!-- First path (top side) taken from bottom path of patch above (with points reversed). --&gt;
+	  &lt;stop path="c  25, 25 -25, 75  0,100" /&gt; &lt;!-- stop-color from patch above. --&gt;
+	  &lt;stop path="c -25, 25 -75,-25"        stop-color="lightblue" /&gt; &lt;!-- Last point not needed (closed path). --&gt;
+	  &lt;!-- Last path (left side) taken from right side of previous path (with points reversed). --&gt;
+	&lt;/meshpatch&gt;
+  &lt;/meshrow&gt;
+&lt;/mesh&gt;
+  </pre>
+</div>
+
+<p>
+  The above mesh is rendered as:
+</p>
+
+<div class="figure">
+  <img
+     alt="Rendering of a two by two mesh."
+     src="images/pservers/mesh_example.png"
+     style="width:300px"/>
+  <p class="caption">
+    The rendering for the above two by two mesh example. The overlaid
+    paths show the order in which the patch edges are defined.
+  </p>
+</div>
+
+<p>
+  Coons patch meshes can simulate other types of gradients. Here is
+  an example of a conic gradient:
+</p>
+
+<div class="figure">
+  <img
+     alt="Rendering of a one by four mesh where each mesh covers
+          a conic section."
+     src="images/pservers/mesh_conic.png"
+     style="width:300px"/>
+  <p class="caption">
+    The rendering for a one row, four patch mesh that simulates
+    a conic gradient. The bottom edge of each patch is of zero
+    length.
+  </p>
+</div>
+
+<h4 id="MeshPatchPainting">Painting a Mesh Patch</h4>
+
 <p>
   The corner colors are mapped to the patch area with a two step
   process.  First the colors are placed at the corners of a unit
@@ -1378,162 +1542,353 @@ server.</p>
 </div>
 
 <p>
-  Unlike other paint servers, a mesh defined outside of a
-  <a>'defs'</a> section is rendered. In this case, <a>'x'</a> and
-  <a>'y'</a> are interpreted in the current user coordinate system and
-  the mesh itself determines its own bounding box.
+  Bilinear interpolation of the corner colors depends only on the
+  values of the corner colors. The color profile along two opposite
+  edges is first computed and then corresponding points along those
+  edges are interpolated to fill in the interior. The color profile
+  across a patch boundary may not be smooth, leading to an optical
+  phenomena known as Mach banding.
 </p>
-
-<h4 id="MeshStructure">Mesh Structure</h4>
-
 <p>
-  For a mesh, the individual patches are placed in an array. There
-  are two reasons for using an array. The first is that an array of
-  meshes is a natural result for most content creation processes
-  (start with a path and then subdivide its area into rows and
-  columns of patches). The second is that the data can be compacted
-  by sharing sides and corners. The array structure is conceptual
-  only. The actual mesh can be distorted in any way possible. The
-  mesh gradient syntax is designed so that it is easy to simulate
-  other types of gradients such as conical gradients or triangle
-  meshes as shown in the examples below.
+  Bicubic interpolation requires knowing not only the value of the
+  corner colors but also their derivatives. The derivatives are chosen
+  to ensure a smooth transition across patch boundaries and that there
+  are no color value minima or maxima in the patch interior
+  (i.e. a <i>monotone cubic interpolation</i>). Only the derivatives in
+  <i>x</i> and <i>y</i> (where the <i>x</i> and <i>y</i> are the
+  directions along the rows and columns of the conceptual mesh grid)
+  are used (the cross derivatives are set to zero).
 </p>
 
 <p>
-  The structure of a mesh gradient:
+  To calculate the derivatives:
+  Let
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+    <msub><mi>c</mi><mi>k</mi></msub></math> be
+  the color value at the point
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+    <msub><mi>p</mi><mi>k</mi></msub></math>,
+  where
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+    <mi>k</mi><mo>=</mo><mn>0</mn><mo>, ... ,</mo><mi>n</mi></math>.
 </p>
+<ol>
+  <li>
+    First compute the secant lines:
+    <div role="math" aria-describedby="math-meshpatch-secant">
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+	<msub>
+	  <mi mathvariant="normal">&#x0394;<!-- Δ --></mi>
+	  <mi>k</mi>
+	</msub>
+	<mo>=</mo>
+	<mrow class="MJX-TeXAtom-ORD">
+	  <mfrac>
+	    <mrow class="MJX-TeXAtom-ORD">
+              <msub>
+		<mi>c</mi>
+		<mrow class="MJX-TeXAtom-ORD">
+		  <mi>k</mi>
+		  <mo>+</mo>
+		  <mn>1</mn>
+		</mrow>
+              </msub>
+              <mo>&#x2212;<!-- − --></mo>
+              <msub>
+		<mi>c</mi>
+		<mi>k</mi>
+              </msub>
+	    </mrow>
+	    <mrow class="MJX-TeXAtom-ORD">
+              <mo fence="false" stretchy="false">&#x2223;<!-- ∣ --></mo>
+              <msub>
+		<mi>p</mi>
+		<mrow class="MJX-TeXAtom-ORD">
+		  <mi>k</mi>
+		  <mo>+</mo>
+		  <mn>1</mn>
+		</mrow>
+              </msub>
+              <mo>&#x2212;<!-- − --></mo>
+              <msub>
+		<mi>p</mi>
+		<mi>k</mi>
+              </msub>
+              <mo fence="false" stretchy="false">&#x2223;<!-- ∣ --></mo>
+	    </mrow>
+	  </mfrac>
+	</mrow>
+      </math>
+      <pre id="math-meshpatch-secant">
+	\Delta_k = {{c_{k+1}-c_k}\over{\lvert p_{k+1}-p_k\rvert}}
+      </pre>
+    </div>
+    If
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+      <msub><mi>p</mi><mi>k</mi></msub>
+      <mo>=</mo>
+      <msub><mi>p</mi><mrow class="MJX-TeXAtom-ORD"><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub>
+    </math>, set
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+      <msub>
+	<mi mathvariant="normal">&#x0394;<!-- Δ --></mi>
+	<mi>k</mi>
+      </msub>
+      <mo>=</mo>
+      <mn>0</mn>
+    </math>.
+  </li>
+  <li>
+    The provisional derivative at
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+      <msub><mi>p</mi><mi>k</mi></msub></math> is then
+    <div role="math" aria-describedby="math-meshpatch-provisional-derivative">
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+	<msub>
+	  <mi>&#x03B4;<!-- δ --></mi>
+	  <mi>k</mi>
+	</msub>
+	<mo>=</mo>
+	<mrow class="MJX-TeXAtom-ORD">
+	  <mfrac>
+	    <mrow>
+              <msub>
+		<mi mathvariant="normal">&#x0394;<!-- Δ --></mi>
+		<mrow class="MJX-TeXAtom-ORD">
+		  <mi>k</mi>
+		  <mo>&#x2212;<!-- − --></mo>
+		  <mn>1</mn>
+		</mrow>
+              </msub>
+              <mo>+</mo>
+              <msub>
+		<mi mathvariant="normal">&#x0394;<!-- Δ --></mi>
+		<mi>k</mi>
+              </msub>
+	    </mrow>
+	    <mn>2</mn>
+	  </mfrac>
+	</mrow>
+      </math>
+      <pre id="math-meshpatch-provisional-derivative">
+	$ \delta_k = {\Delta_{k-1} + \Delta_k\over 2}  $
+      </pre>
+    </div>
+    for
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+      <mi>k</mi><mo>=</mo><mn>1</mn><mo>, ... ,</mo>
+      <mi>n</mi><mo>&#x2212;<!-- − --></mo><mn>1</mn></math>.
+    The derivatives for
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+      <mi>k</mi><mo>=</mo><mn>0</mn></math> and
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+      <mi>k</mi><mo>=</mo><mi>n</mi></math> are calculated later (see below).
+  </li>
+  <li>
+    If
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+      <msub>
+	<mi mathvariant="normal">&#x0394;<!-- Δ --></mi>
+	<mrow class="MJX-TeXAtom-ORD">
+	  <mi>k</mi>
+	  <mo>&#x2212;<!-- − --></mo>
+	  <mn>1</mn>
+	</mrow>
+      </msub>
+    </math>
+    and
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+      <msub>
+	<mi mathvariant="normal">&#x0394;<!-- Δ --></mi>
+	<mi>k</mi>
+      </msub>
+    </math>
+    are of opposite sign then set
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+      <msub>
+	<mi>&#x03B4;<!-- δ --></mi>
+	<mi>k</mi>
+      </msub>
+      <mo>=</mo>
+      <mn>0</mn>
+    </math>. (This is a local minima or maxima.) Skip the remaining steps.
+  </li>
+  <li>
+    If
+      <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+	<mo fence="false" stretchy="false">&#x2223;<!-- ∣ --></mo>
+	<msub>
+	  <mi>&#x03B4;<!-- δ --></mi>
+	  <mi>k</mi>
+	</msub>
+	<mo fence="false" stretchy="false">&#x2223;<!-- ∣ --></mo>
+	<mo>&gt;</mo>
+	<mo fence="false" stretchy="false">&#x2223;<!-- ∣ --></mo>
+	<mn>3</mn>
+	<mo>&#x00D7;<!-- × --></mo>
+	<msub>
+	  <mi mathvariant="normal">&#x0394;<!-- Δ --></mi>
+	  <mrow class="MJX-TeXAtom-ORD">
+	    <mi>k</mi>
+	    <mo>&#x2212;<!-- − --></mo>
+	    <mn>1</mn>
+	  </mrow>
+	</msub>
+	<mo fence="false" stretchy="false">&#x2223;<!-- ∣ --></mo>
+      </math>
+      then set
+      <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+	<msub>
+	  <mi>&#x03B4;<!-- δ --></mi>
+	  <mi>k</mi>
+	</msub>
+	<mo>=</mo>
+	<mn>3</mn>
+	<mo>&#x00D7;<!-- × --></mo>
+	<msub>
+	  <mi mathvariant="normal">&#x0394;<!-- Δ --></mi>
+	  <mrow class="MJX-TeXAtom-ORD">
+	    <mi>k</mi>
+	    <mo>&#x2212;<!-- − --></mo>
+	    <mn>1</mn>
+	  </mrow>
+	</msub>
+      </math>.
+      This step and the following step ensure that the interpolation is
+      monotonic.
+  </li>
+  <li>
+    If
+      <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+	<mo fence="false" stretchy="false">&#x2223;<!-- ∣ --></mo>
+	<msub>
+	  <mi>&#x03B4;<!-- δ --></mi>
+	  <mi>k</mi>
+	</msub>
+	<mo fence="false" stretchy="false">&#x2223;<!-- ∣ --></mo>
+	<mo>&gt;</mo>
+	<mo fence="false" stretchy="false">&#x2223;<!-- ∣ --></mo>
+	<mn>3</mn>
+	<mo>&#x00D7;<!-- × --></mo>
+	<msub>
+	  <mi mathvariant="normal">&#x0394;<!-- Δ --></mi>
+	  <mi>k</mi>
+	</msub>
+	<mo fence="false" stretchy="false">&#x2223;<!-- ∣ --></mo>
+      </math>
+    then set
+      <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+	<msub>
+	  <mi>&#x03B4;<!-- δ --></mi>
+	  <mi>k</mi>
+	</msub>
+	<mo>=</mo>
+	<mn>3</mn>
+	<mo>&#x00D7;<!-- × --></mo>
+	<msub>
+	  <mi mathvariant="normal">&#x0394;<!-- Δ --></mi>
+	  <mi>k</mi>
+	</msub>
+      </math>.
+  </li>
+  <li>
+    Find the end point derivatives:
+    If <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+      <mi>n</mi><mo>&gt;</mo><mn>2</mn>
+    </math> then:
+    <div role="math" aria-describedby="math-meshpatch-endpoint1">
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+	<msub>
+	  <mi>&#x03B4;<!-- δ --></mi>
+	  <mn>0</mn>
+	</msub>
+	<mo>=</mo>
+	<mn>2</mn>
+	<mo>&#x00D7;<!-- × --></mo>
+	<msub>
+	  <mi mathvariant="normal">&#x0394;<!-- Δ --></mi>
+	  <mn>0</mn>
+	</msub>
+	<mo>&#x2212;<!-- − --></mo>
+	<msub>
+	  <mi>&#x03B4;<!-- δ --></mi>
+	  <mn>1</mn>
+	</msub>
+      </math>
+      <pre id="math-meshpatch-endpoint1">
+	$ \delta_1 = 2\times\Delta_1 - \delta_2  $
+      </pre>
+    </div>
+    <div role="math" aria-describedby="math-meshpatch-endpointn">
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+	<msub>
+	  <mi>&#x03B4;<!-- δ --></mi>
+	  <mi>n</mi>
+	</msub>
+	<mo>=</mo>
+	<mn>2</mn>
+	<mo>&#x00D7;<!-- × --></mo>
+	<msub>
+	  <mi mathvariant="normal">&#x0394;<!-- Δ --></mi>
+	  <mrow class="MJX-TeXAtom-ORD">
+	    <mi>n</mi>
+	    <mo>&#x2212;<!-- − --></mo>
+	    <mn>1</mn>
+	  </mrow>
+	</msub>
+	<mo>&#x2212;<!-- − --></mo>
+	<msub>
+	  <mi>&#x03B4;<!-- δ --></mi>
+	  <mrow class="MJX-TeXAtom-ORD">
+	    <mi>n</mi>
+	    <mo>&#x2212;<!-- − --></mo>
+	    <mn>1</mn>
+	  </mrow>
+	</msub>
+      </math>
+      <pre id="math-meshpatch-endpointn">
+	$ \delta_n = 2\times\Delta_{n-1} - \delta_{n-1}  $
+      </pre>
+    </div>
+    else
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="inline">
+      <msub>
+	<mi>&#x03B4;<!-- δ --></mi>
+	<mn>1</mn>
+      </msub>
+      <mo>=</mo>
+      <msub>
+	<mi>&#x03B4;<!-- δ --></mi>
+	<mi>n</mi>
+      </msub>
+      <mo>=</mo>
+      <msub>
+	<mi mathvariant="normal">&#x0394;<!-- Δ --></mi>
+	<mn>0</mn>
+      </msub>
+    </math>.
+  </li>
+</ol>
 
-<div class="example">
-<pre>
-&lt;mesh x="100" y="100"&gt;
-  &lt;meshrow&gt;
-    &lt;meshpatch&gt;
-      &lt;stop .../&gt;
-        Up to four stops in first patch. See details below.
-    &lt;/meshpatch&gt;
-    &lt;meshpatch&gt;
-      Any number of meshpatches in row.
-    &lt;/meshpatch&gt;
-  &lt;/meshrow&gt;
-  &lt;meshrow&gt;
-    Any number of meshrows, each with the same number of meshpatches as in the first row.
-  &lt;/meshrow&gt;
-&lt;/mesh&gt;
-</pre>
-</div>
-
-<p>
-  The first <a>'meshpatch'</a> in the first <a>'meshrow'</a> contains
-  four <a>'stop'</a> elements. These elements correspond conceptually,
-  in order, to the top, right, bottom, and left edges of the first
-  patch. The following patches in the first row contains
-  three <a>'stop'</a> elements, corresponding to the top, right, and
-  bottom edges of the patch. The left edge of one of these patches is
-  taken from the (reversed) right edge of the previous patch. The
-  first patch of following rows contains three <a>'stop'</a> elements,
-  corresponding to the right, bottom, and left edges. The top edge is
-  taken from the (reversed) bottom edge of the first patch in the row
-  above. The remaining patches contain two <a>'stop'</a> elements,
-  corresponding to the right and bottom edges of the patch. The top
-  edge is taken from the patch directly above in the array of patches
-  while the left edge is taken from the previous patch in the same
-  row.
+<p class="note">
+  The typical method for dealing with the start or end of a bicubic
+  interpolation is to add an extra point before and an extra point
+  after the given points. The value of the point before (after) is
+  assigned either the value of the first (last) point or a value so
+  that the secant before (after) is the same as the secant after
+  (before) the first (last) point. The method described here does not
+  rely on the addition of points but instead fits a quadratic curve
+  to the color values and the already determined derivative at the
+  other edge of the patch. This produces an interpolation that does
+  not have an inflection point inside the patch.
 </p>
-<p>
-  Each <a>'stop'</a> element contains a <a>'path'</a> attribute
-  which consists of a single 'c', 'C', 'l', or 'L' path command. The
-  initial point for the path command is taken from the last point of
-  the previous edge of the patch (which for the first <a>'stop'</a> in
-  a patch is defined in the patch to the left or top), except for the
-  first patch in the first row where the initial point is given by the
-  'x' and 'y' attributes in the <a>'mesh'</a> element. The path
-  command in the last <a>'stop'</a> element of a <a>'meshpatch'</a>
-  has one less point than normal as this "missing" point necessary to
-  close the path is already defined.
+<p class="note">
+  Bicubic interpolation will produce smooth patch boundaries when a
+  mesh is laid out on a rectangular grid and where the patch edges are
+  linear. If the grid is distorted or the patch edges are not lines
+  (i.e. they are Bézier curves), it is still possible to produce
+  non-smooth transitions across patch boundaries.
 </p>
-<p>
-  For each <a>'stop'</a> element there is a color and opacity
-  that correspond to the patch corner at the initial point of
-  the stop's edge. This color and opacity are defined inside
-  the <a>'stop'</a> by the <a>'stop-color'</a>
-  and <a>'stop-opacity'</a> properties except for the first
-  stop in all patches other than the first patch in the first
-  row where the stop color and opacity are already defined by a
-  previous patch.
-</p>
-
-<p>
-  Here is an annotated example of a two by two mesh:
-</p>
-
-<div class="example">
-  <pre>
-&lt;mesh x="50" y="50" id="example"&gt; &lt;!-- x, y used for initial point in first patch. --&gt;
-  &lt;meshrow&gt; &lt;!-- No attributes, used only to define begin/end of row. --&gt;
-	&lt;meshpatch&gt;
-	  &lt;stop path="c  25,-25  75, 25  100,0" stop-color="lightblue" /&gt;
-	  &lt;stop path="c  25, 25 -25, 75  0,100" stop-color="purple" /&gt;
-	  &lt;stop path="c -25, 25 -75,-25 -100,0" stop-color="red" /&gt;
-	  &lt;stop path="c -25,-25, 25,-75"        stop-color="purple" /&gt; &lt;!-- Last point not needed (closed path). --&gt;
-	&lt;/meshpatch&gt;
-	&lt;meshpatch&gt;
-	  &lt;stop path="c  25,-25  75, 25  100,0" /&gt; &lt;!-- stop-color from previous patch. --&gt;
-	  &lt;stop path="c  25, 25 -25, 75  0,100" stop-color="lightblue" /&gt;
-	  &lt;stop path="c -25, 25 -75,-25"        stop-color="purple" /&gt; &lt;!-- Last point not needed (closed path). --&gt;
-	  &lt;!-- Last path (left side) taken from right side of previous path (with points reversed). --&gt;
-	&lt;/meshpatch&gt;
-  &lt;/meshrow&gt;
-  &lt;meshrow&gt; &lt;!-- New row. --&gt;
-	&lt;meshpatch&gt;
-	  &lt;!-- First path (top side) taken from bottom path of patch above. --&gt;
-	  &lt;stop path="c  25, 25 -25, 75  0,100" /&gt; &lt;!-- stop-color from patch above. --&gt;
-	  &lt;stop path="c -25, 25 -75,-25 -100,0" stop-color="purple" /&gt;
-	  &lt;stop path="c -25,-25, 25,-75"        stop-color="lightblue" /&gt; &lt;!-- Last point not needed (closed path). --&gt;
-	&lt;/meshpatch&gt;
-	&lt;meshpatch&gt;
-	  &lt;!-- First path (top side) taken from bottom path of patch above (with points reversed). --&gt;
-	  &lt;stop path="c  25, 25 -25, 75  0,100" /&gt; &lt;!-- stop-color from patch above. --&gt;
-	  &lt;stop path="c -25, 25 -75,-25"        stop-color="lightblue" /&gt; &lt;!-- Last point not needed (closed path). --&gt;
-	  &lt;!-- Last path (left side) taken from right side of previous path (with points reversed). --&gt;
-	&lt;/meshpatch&gt;
-  &lt;/meshrow&gt;
-&lt;/mesh&gt;
-  </pre>
-</div>
-
-<p>
-  The above mesh is rendered as:
-</p>
-
-<div class="figure">
-  <img
-     alt="Rendering of a two by two mesh."
-     src="images/pservers/mesh_example.png"
-     style="width:300px"/>
-  <p class="caption">
-    The rendering for the above two by two mesh example. The overlaid
-    paths show the order in which the patch edges are defined.
-  </p>
-</div>
-
-<p>
-  Coons patch meshes can simulate other types of gradients. Here is
-  an example of a conic gradient:
-</p>
-
-<div class="figure">
-  <img
-     alt="Rendering of a one by four mesh where each mesh covers
-          a conic section."
-     src="images/pservers/mesh_conic.png"
-     style="width:300px"/>
-  <p class="caption">
-    The rendering for a one row by four column mesh that simulates
-    a conic gradient. The bottom edge of each patch is of zero
-    length.
-  </p>
-</div>
-
 
 <p id="MeshElement">Mesh gradients are defined by a <a>'mesh'</a>
 element.</p>
@@ -1693,6 +2048,22 @@ element.</p>
 	<dt><a>Animatable</a></dt>    <dd>yes</dd>
       </dl>
 
+    </dd>
+
+    <dt id="MeshElementTypeAttribute">
+      <span class="adef">type</span>
+    </dt>
+    <dd>
+      <p>
+	Determines the type of interpolation to use when painting
+	a patch.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd>bilinear | bicubic</dd>
+	<dt><a>Lacuna value</a></dt>  <dd>bilinear</dd>
+	<dt><a>Animatable</a></dt>    <dd>no</dd>
+      </dl>
     </dd>
   </dl>
 
