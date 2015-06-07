@@ -1011,8 +1011,12 @@ has unspecified directionality.</p>
 when the viewport width/height/size is zero.
 (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3722">ACTION-3722</a> on Cameron.)</p>
 
-<p class="issue" data-issue="7">Explain that we don't intend to add new constant enum values for new units in this (and other) interface(s). 
-Should we also mark the existing constants and the methods that accept these enums as deprecated?</p>
+<p class="note">The use of numeric length unit type constants is an anti-pattern and
+new constant values will not be introduced for any other units or length types supported by
+<a>SVGLength</a>.  If other types of lengths are supported and used, the <a>SVGLength</a>
+uses the <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a>
+unit type.  See below for details on how the other properties of an <a>SVGLength</a>
+operate with these types of lengths.</p>
 
 <pre class="idl">[<a href="#__svg__SVGLength__constructor">Constructor</a>,
  <a href="#__svg__SVGLength__constructor1">Constructor</a>(float value, optional unsigned short unitType),
@@ -1117,16 +1121,27 @@ interface <b>SVGLength</b> {
       <dt id="__svg__SVGLength__unitType" class="attribute first-child"><b>unitType</b><span class="idl-type-parenthetical"> (readonly unsigned short)</span></dt>
       <dd class="attribute">
         <div>The type of the value as specified by one of the SVG_LENGTHTYPE_*
-        constants defined on this interface.</div>
+        constants defined on this interface.
+        The SVG_LENGTHTYPE_UNKNOWN unit type is returned when the
+        length value uses a unit that does not correspond to one of the
+        integer constants, such as <span class='attr-value'>ch</span>, or is a
+        non-scalar value, such as a <span class='attr-value'>calc()</span>
+        value.</div>
       </dd>
       <dt id="__svg__SVGLength__value" class="attribute"><b>value</b><span class="idl-type-parenthetical"> (float)</span></dt>
       <dd class="attribute">
-        <div>The value of the length in user units.
-        On getting, returns the value converted to user units.  If
-        the type of the <a>SVGLength</a> is unknown, or it is a percentage
-        but the object has no associated element, the numerical factor
-        of the length is returned.  On setting, sets the numerical
-        factor to the assigned value and the unit type to user units.</div>
+        <div><p>The value of the length in user units.</p>
+        <p>On getting, returns the value converted to user units.
+        If the length cannot be converted to user units,
+        for example because it is a percentage with no
+        basis against which to resolve the percentage,
+        then the value of <a href="#__svg__SVGLength__valueInSpecifiedUnits">valueInSpecifiedUnits</a>
+        is returned.</p>
+        <p class="note">For example, <code>(new SVGLength("10%")).value</code>
+        evalutes to 10, since the <a>SVGLength</a> is not associated with
+        an element and thus has no percentage basis to resolve against.</p>
+        <p>On setting, sets the numerical factor to the assigned value and
+        the unit type to user units.</p></div>
         <dl class="attribute">
           <dt class="exceptions-header">Exceptions on setting</dt>
           <dd>
@@ -1139,7 +1154,20 @@ interface <b>SVGLength</b> {
       </dd>
       <dt id="__svg__SVGLength__valueInSpecifiedUnits" class="attribute"><b>valueInSpecifiedUnits</b><span class="idl-type-parenthetical"> (float)</span></dt>
       <dd class="attribute">
-        <div>The numerical factor of the length value.</div>
+        <div>
+          <p>The numerical factor of the length value.</p>
+          <p>On getting, returns the numerical factor
+          if the length is a scalar value (such as <span class='attr-value'>'20px'</span>
+          or <span class='attr-value'>'50%'</span>), or
+          returns 0 if the length is not a scalar value (such as a
+          <span class='attr-value'>calc()</span> value).</p>
+          <p>On setting, modifies the numerical factor of
+          the length value using the same unit.  If the length
+          not a scalar value, then assigning to
+          <a href="#__svg__SVGLength__valueInSpecifiedUnits">valueInSpecifiedUnits</a>
+          sets the length to be the specified number of
+          user units.</p>
+        </div>
         <dl class="attribute">
           <dt class="exceptions-header">Exceptions on setting</dt>
           <dd>
@@ -1164,6 +1192,8 @@ interface <b>SVGLength</b> {
             <li>Otherwise, the string is the result of concatenating the numeric
             factor converted to a string with the CSS length unit in lowercase.</li>
           </ul>
+          <p class="issue">What about serializing non-scalar values, such
+          as <span class='attr-value'>calc()</span> values?</p>
           <p>On setting, updates the numeric factor and units type of the
           <a>SVGLength</a> object according to the result of parsing the
           assigned string as a <a>&lt;length></a> or <a>&lt;percentage></a>.</p>
@@ -1752,6 +1782,13 @@ where the unit is degrees, radians, grads, unitless numbers or "unknown".</p>
 which means that attempts to modify the object will result in an exception
 being thrown, as described below.</p>
 
+<p class="note">The use of numeric angle unit type constants is an anti-pattern and
+new constant values will not be introduced for any other units or angle types supported by
+<a>SVGAngle</a>.  If other types of angles are supported and used, the <a>SVGAngle</a>
+uses the <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</a>
+unit type.  See below for details on how the other properties of an <a>SVGAngle</a>
+operate with these types of angles.</p>
+
 <pre class="idl">[<a href="#__svg__SVGAngle__constructor">Constructor</a>,
  <a href="#__svg__SVGAngle__constructor1">Constructor</a>(float value, optional unsigned short unitType),
  <a href="#__svg__SVGAngle__constructor2">Constructor</a>(DOMString value)]
@@ -1825,7 +1862,10 @@ interface <b>SVGAngle</b> {
       <dt id="__svg__SVGAngle__unitType" class="attribute first-child"><b>unitType</b><span class="idl-type-parenthetical"> (readonly unsigned short)</span></dt>
       <dd class="attribute">
         <div>The type of the value as specified by one of the SVG_ANGLETYPE_*
-        constants defined on this interface.</div>
+        constants defined on this interface.
+        The SVG_ANGLETYPE_UNKNOWN unit type is returned when the
+        length value uses a unit that does not correspond to one of the
+        integer constants, such as <span class='attr-value'>turn</span>.</div>
       </dd>
       <dt id="__svg__SVGAngle__value" class="attribute"><b>value</b><span class="idl-type-parenthetical"> (float)</span></dt>
       <dd class="attribute">
