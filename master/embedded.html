@@ -41,7 +41,7 @@
 
 
 
- 
+
 <h2 id="Overview">Overview</h2>
 <p>SVG supports embedded content similar to the <a href="http://www.w3.org/TR/html5/">HTML5's</a> <a href="http://www.w3.org/TR/html5/embedded-content-0.html">embedded content</a>. Embedded content is content that imports another resource into the document, or content from another vocabulary that is inserted into the document. </p>
 <p>The embedded content elements which SVG supports are <a>'image'</a>, <a>'video'</a>, <a>'audio'</a>, <a>'iframe'</a>, <a>'canvas'</a> and <a>'foreignObject'</a>. </p>
@@ -79,7 +79,7 @@
     </table>
   </dt>
   <dd>
-    <p>The <a>'iframe/x'</a>, <a>'iframe/y'</a>, <a>'iframe/width'</a> and <a>'iframe/height'</a><!--<edit:attributecategory name='embedding placement'/>, <edit:attributecategory name='embedding size'/>--> attributes specify the rectangular region into which the referenced resource is placed.</p> 
+    <p>The <a>'iframe/x'</a>, <a>'iframe/y'</a>, <a>'iframe/width'</a> and <a>'iframe/height'</a><!--<edit:attributecategory name='embedding placement'/>, <edit:attributecategory name='embedding size'/>--> attributes specify the rectangular region into which the referenced resource is placed.</p>
     <p>A negative value for <edit:attributecategory name='embedding size'/> is invalid (see Error processing). A value of zero for either attribute disables rendering of the element. </p>
     <p class="ready-for-wider-review">The <span class="attr-value">'auto'</span> value for <edit:attributecategory name='embedding size'/> is used to size the corresponding element automatically based on the intrinsic size or aspect ratio of the referenced resource. If the intrinsic aspect ratio of the referenced resource is unknown, it is assumed to be 2:1. If the intrinsic size of the referenced resource is unknown, it is assumed to be 300x150, just as is required for CSS replaced elements. If <span class="attr-value">'auto'</span> is specified for just one of <a>'iframe/width'</a> or <a>'iframe/height'</a>, then the other is determined based on the intrinsic aspect ratio. The automatically determined <edit:attributecategory name='embedding size'/> values are interpreted as user units, and are reflected in the x and y IDL attributes as <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</a> values.</p>
   </dd>
@@ -120,7 +120,7 @@ and the alpha channel is uniformly set to 1.</p>
 references an SVG image, the <a>'clip'</a> and <a>'overflow'</a> properties on the root element in
 the referenced SVG image are ignored (in the same manner as the
 <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> attributes are ignored). Unless the value of
-<a>'preserveAspectRatio'</a> on the <a>'image'</a> element starts with 'defer', 
+<a>'preserveAspectRatio'</a> on the <a>'image'</a> element starts with 'defer',
 the <a>'preserveAspectRatio'</a> attribute on the root element in
 the referenced SVG image is also ignored (see <a>'preserveAspectRatio'</a>
 for details).  Instead, the <a>'preserveAspectRatio'</a> attribute on
@@ -279,7 +279,7 @@ elements within an SVG file.</p>
     Refer to the common handling defined for <a
     href="linking.html#linkRefAttrs">URL reference attributes</a> and
     <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.</p>
-    <p>To get the referenced resource, do a <a>potentially CORS-enabled fetch</a> of the absolute URL that resulted from the earlier step, with the <em>mode</em> being the current state of the 
+    <p>To get the referenced resource, do a <a>potentially CORS-enabled fetch</a> of the absolute URL that resulted from the earlier step, with the <em>mode</em> being the current state of the
     element's <a>'crossorigin'</a> attribute, the <em>origin</em> being the <a>origin</a> of the <a>'image'</a> element's <a>Document</a>, and the <em>default origin behaviour</em> set to <em>taint</em>.
     For <a>origin</a>, the rules defined for the html <a href="http://www.w3.org/TR/html5/embedded-content-0.html#the-img-element">'img'</a> element apply the same way to the svg <a>'image'</a> element.
     </p>
@@ -441,7 +441,202 @@ elements within an SVG file.</p>
 <h2 id="ForeignObjectElement">The <span class='element-name'>'foreignObject'</span> element</h2>
 <p><a>'foreignObject'</a></p>
 
-<p class='issue' data-issue="7">Stakagi: Should 'foreignObject' be in an Embedded Content chapter? Or should it still be an Extensibility chapter? </p>
+<p>SVG allows inclusion of elements from foreign namespaces
+anywhere with the SVG content. In general, the SVG user agent
+will include the unknown elements in the DOM but will otherwise
+ignore unknown elements. (The notable exception is described
+under <a href="#ForeignObjectElement">Embedding Foreign Object
+Types</a>.)</p>
+
+<p>Additionally, SVG allows inclusion of attributes from
+foreign namespaces on any SVG element. The SVG user agent will
+include unknown attributes in the DOM but with otherwise ignore
+unknown attributes.</p>
+
+<p>SVG's ability to include foreign namespaces can be used for
+the following purposes:</p>
+
+<ul>
+  <li>Application-specific information so that authoring
+  applications can include model-level data in the SVG content
+  to serve their "roundtripping" purposes (i.e., the ability to
+  write, then read a file without loss of higher-level
+  information).</li>
+
+  <li>Supplemental data for extensibility. For example, suppose
+  you have an extrusion extension which takes any 2D graphics
+  and extrudes it in three dimensions. When applying the
+  extrusion extension, you probably will need to set some
+  parameters. The parameters can be included in the SVG content
+  by inserting elements from an extrusion extension
+  namespace.</li>
+</ul>
+
+<p>To illustrate, a business graphics authoring application
+might want to include some private data within an SVG document
+so that it could properly reassemble the chart (a pie chart in
+this case) upon reading it back in:</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg width="4in" height="3in"
+     xmlns = 'http://www.w3.org/2000/svg'>
+  <defs>
+    <myapp:piechart xmlns:myapp="http://example.org/myapp"
+                    title="Sales by Region">
+      <myapp:pieslice label="Northern Region" value="1.23"/>
+      <myapp:pieslice label="Eastern Region" value="2.53"/>
+      <myapp:pieslice label="Southern Region" value="3.89"/>
+      <myapp:pieslice label="Western Region" value="2.04"/>
+      <!-- Other private data goes here -->
+    </myapp:piechart>
+  </defs>
+  <desc>This chart includes private data in another namespace
+  </desc>
+  <!-- In here would be the actual SVG graphics elements which
+       draw the pie chart -->
+</svg>
+]]></pre>
+
+<h2 id="EmbeddingForeignObjects">Embedding foreign object types</h2>
+
+<p>One goal for SVG is to provide a mechanism by which other
+XML language processors can render into an area within an SVG
+drawing, with those renderings subject to the various
+transformations and compositing parameters that are currently
+active at a given point within the SVG content tree. One
+particular example of this is to provide a frame for XML
+content styled with CSS or XSL so that dynamically reflowing
+text (subject to SVG transformations and compositing) could be
+inserted into the middle of some SVG content. Another example
+is inserting a <a
+href="http://www.w3.org/TR/2003/REC-MathML2-20031021/">MathML</a> expression into
+an SVG drawing [<a href='refs.html#ref-MATHML'>MATHML</a>].</p>
+
+<p>The <a>'foreignObject'</a>
+element allows for inclusion of a foreign namespace which has
+its graphical content drawn by a different user agent. The
+included foreign graphical content is subject to SVG
+transformations, filters, clipping, masking and compositing.</p>
+
+<p>The contents of <a>'foreignObject'</a> are assumed to be
+from a different namespace. Any SVG elements within a <a>'foreignObject'</a> will not be drawn,
+except in the situation where a properly defined SVG
+subdocument with a proper <span class="attr-name">'xmlns'</span>
+(see <a href="http://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a>
+[<a href="refs.html#ref-XML-NS">XML-NS</a>])
+attribute specification is embedded recursively. One situation
+where this can occur is when an SVG document fragment is
+embedded within another non-SVG document fragment, which in
+turn is embedded within an SVG document fragment (e.g., an SVG
+document fragment contains an XHTML document fragment which in
+turn contains yet another SVG document fragment).</p>
+
+<p>Usually, a <a>'foreignObject'</a>
+will be used in conjunction with the <a>'switch'</a> element and
+the <a>'requiredExtensions'</a> attribute to
+provide proper checking for user agent support and provide an
+alternate rendering in case user agent support is not
+available.</p>
+
+<h2 id="ForeignObjectElement">The <span class="element-name">'foreignObject'</span> element</h2>
+
+<edit:with element='foreignObject'>
+<edit:elementsummary name='foreignObject'/>
+
+  <dl class="attrdef-list">
+    <dt>
+      <table class="propdef attrdef">
+        <tr>
+          <th>Name</th>
+          <th>Value</th>
+          <th>Lacuna value</th>
+          <th>Animatable</th>
+        </tr>
+        <tr>
+          <td><dfn data-dfn-type="element-attr" data-dfn-for="foreignObject" id="ForeignObjectElementXAttribute">x</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="foreignObject" id="ForeignObjectElementYAttribute">y</dfn></td>
+          <td><a>&lt;length&gt;</a></td>
+          <td>0</td>
+          <td>yes</td>
+        </tr>
+      </table>
+    </dt>
+    <dd>
+      The coordinates of the left and top edges of the 'foreignObject', in the current user coordinate system.
+    </dd>
+    <dt>
+      <table class="propdef attrdef">
+        <tr>
+          <th>Name</th>
+          <th>Value</th>
+          <th>Lacuna value</th>
+          <th>Animatable</th>
+        </tr>
+        <tr>
+          <td><dfn data-dfn-type="element-attr" data-dfn-for="foreignObject" id="ForeignObjectElementWidthAttribute">width</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="foreignObject" id="ForeignObjectElementHeightAttribute">height</dfn></td>
+          <td><a>&lt;length&gt;</a></td>
+          <td>0</td>
+          <td>yes</td>
+        </tr>
+      </table>
+    </dt>
+    <dd>
+      The width and height of the 'foreignObject'. A negative value for either
+      attribute is an error (see <a href="implnote.html#ErrorProcessing">Error processing</a>).
+      A value of zero for either attribute disables rendering of the element.
+    </dd>
+  </dl>
+
+</edit:with>
+
+<p>An example:</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg width="4in" height="3in"
+ xmlns = 'http://www.w3.org/2000/svg'>
+  <desc>This example uses the 'switch' element to provide a
+        fallback graphical representation of an paragraph, if
+        XMHTML is not supported.</desc>
+  <!-- The 'switch' element will process the first child element
+       whose testing attributes evaluate to true.-->
+  <switch>
+    <!-- Process the embedded XHTML if the requiredExtensions attribute
+         evaluates to true (i.e., the user agent supports XHTML
+         embedded within SVG). -->
+    <foreignObject width="100" height="50"
+                   requiredExtensions="http://example.com/SVGExtensions/EmbeddedXHTML">
+      <!-- XHTML content goes here -->
+      <body xmlns="http://www.w3.org/1999/xhtml">
+        <p>Here is a paragraph that requires word wrap</p>
+      </body>
+    </foreignObject>
+    <!-- Else, process the following alternate SVG.
+         Note that there are no testing attributes on the 'text' element.
+         If no testing attributes are provided, it is as if there
+         were testing attributes and they evaluated to true.-->
+    <text font-size="10" font-family="Verdana">
+      <tspan x="10" y="10">Here is a paragraph that</tspan>
+      <tspan x="10" y="20">requires word wrap.</tspan>
+    </text>
+  </switch>
+</svg>
+]]></pre>
+
+<p>It is not required that SVG user agent support the ability
+to invoke other arbitrary user agents to handle embedded
+foreign object types; however, all conforming SVG user agents
+would need to support the <a>'switch'</a> element and
+must be able to render valid SVG elements when they appear as
+one of the alternatives within a <a>'switch'</a>
+element.</p>
+
+<p>Ultimately, it is expected that commercial Web browsers will
+support the ability for SVG to embed content from other XML
+grammars which use CSS or XSL to format their content, with the
+resulting CSS- or XSL-formatted content subject to SVG
+transformations and compositing. At this time, such a
+capability is not a requirement.</p>
 
 <h2 id="SourceElement">The <span class='element-name'>'source'</span> element</h2>
 <edit:with element='source'>
@@ -514,7 +709,7 @@ elements within an SVG file.</p>
 
 <edit:with element="video">
 
-<p>The <a>SVGVideoElement</a> interface corresponds to the <a>'video'</a> element. 
+<p>The <a>SVGVideoElement</a> interface corresponds to the <a>'video'</a> element.
 This interface introduces the function that is almost equivalent to <a href="http://www.w3.org/TR/html5/embedded-content-0.html#htmlvideoelement">'HTMLVideoElement'</a> interface of html5.0 into svg.</p>
 
 <pre class="idl">interface <b>SVGVideoElement</b> : <a>SVGGraphicsElement</a> {
@@ -693,6 +888,52 @@ interface <b>SVGAudioElement</b> : <a>SVGGraphicsElement</a> {
       <dt id="__svg__SVGCanvasElement__canvasHeight" class="attribute"><b>canvasHeight</b><span class="idl-type-parenthetical"> (readonly <a>SVGAnimatedLength</a>)</span></dt>
       <dd class="attribute">
         <div>Corresponds to attribute INT(<a>'canvasHeight'</a>) on the given <a>'canvas'</a> element.</div>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+
+</edit:with>
+
+<h3 id="InterfaceSVGForeignObjectElement">Interface SVGForeignObjectElement</h3>
+
+<edit:with element="foreignObject">
+
+The <a>SVGForeignObjectElement</a> interface corresponds to the
+<a>'foreignObject'</a> element.
+
+<pre class="idl">interface <b>SVGForeignObjectElement</b> : <a>SVGGraphicsElement</a> {
+  readonly attribute <a>SVGAnimatedLength</a> <a href="extend.html#__svg__SVGForeignObjectElement__x">x</a>;
+  readonly attribute <a>SVGAnimatedLength</a> <a href="extend.html#__svg__SVGForeignObjectElement__y">y</a>;
+  readonly attribute <a>SVGAnimatedLength</a> <a href="extend.html#__svg__SVGForeignObjectElement__width">width</a>;
+  readonly attribute <a>SVGAnimatedLength</a> <a href="extend.html#__svg__SVGForeignObjectElement__height">height</a>;
+};</pre>
+
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGForeignObjectElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a>SVGAnimatedLength</a>)</span></dt>
+      <dd class="attribute">
+        <div>Corresponds to attribute <a>'x'</a> on the given <a>'foreignObject'</a>
+        element.</div>
+      </dd>
+      <dt id="__svg__SVGForeignObjectElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a>SVGAnimatedLength</a>)</span></dt>
+      <dd class="attribute">
+        <div>Corresponds to attribute <a>'y'</a> on the given <a>'foreignObject'</a>
+        element.</div>
+      </dd>
+      <dt id="__svg__SVGForeignObjectElement__width" class="attribute"><b>width</b><span class="idl-type-parenthetical"> (readonly <a>SVGAnimatedLength</a>)</span></dt>
+      <dd class="attribute">
+        <div>Corresponds to attribute <a>'width'</a> on the given <a>'foreignObject'</a>
+        element.
+        </div>
+      </dd>
+      <dt id="__svg__SVGForeignObjectElement__height" class="attribute"><b>height</b><span class="idl-type-parenthetical"> (readonly <a>SVGAnimatedLength</a>)</span></dt>
+      <dd class="attribute">
+        <div>Corresponds to attribute <a>'height'</a> on the given <a>'foreignObject'</a>
+        element.
+        </div>
       </dd>
     </dl>
   </dd>
