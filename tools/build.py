@@ -241,7 +241,7 @@ if tobuild:
 
 # Build single page spec as required:
 
-if len(all) > 1:
+if len(all) > 1 and not os.environ.get("SVG_BUILD_NO_SINGLE_PAGE"):
   buildSinglePage = False
   single_page = join(publish_dir, "single-page.html")
   
