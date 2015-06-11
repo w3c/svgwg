@@ -533,6 +533,26 @@ function formatElementAttributes(conf, element, n) {
   return ul;
 }
 
+function formatElementGeometryProperties(conf, element, n) {
+  if (!element.geometryProperties) {
+    return null;
+  }
+
+  var ul = utils.parse('<ul class="no-bullets"></ul>');
+
+  element.geometryProperties.forEach(function(pn) {
+    var prop = conf.definitions.properties[pn];
+    if (!prop) {
+      throw "bad property name " + pn;
+    }
+    var li = utils.parse('<li>{{property}}</li>',
+                         { property: prop.formatLink() });
+    ul.appendChild(li);
+  });
+
+  return ul;
+}
+
 function formatElementInterfaces(conf, element, n) {
   var ul = utils.parse('<ul class="no-bullets"></ul>');
   element.interfaces.forEach(function(name) {
@@ -545,10 +565,15 @@ function formatElementInterfaces(conf, element, n) {
 function doElementSummary(conf, page, n) {
   var name = n.getAttribute('name');
   var element = conf.definitions.elements[name];
+  var geometry = formatElementGeometryProperties(conf, element, n) || '';
+  if (geometry) {
+    geometry = '<dt>Geometry properties:</dt><dd>' + geometry + '</dd>';
+  }
   var e = utils.parse('<div class="element-summary"><div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element" data-export="" id="elementdef-{{name}}">{{name}}</dfn>’</span></div><dl>' +
                       '<dt>Categories:</dt><dd>{{categories}}</dd>' +
                       '<dt>Content model:</dt><dd>{{contentmodel}}</dd>' +
                       '<dt>Attributes:</dt><dd>{{attributes}}</dd>' +
+                      geometry +
                       '<dt>DOM Interfaces:</dt><dd>{{interfaces}}</dd></dl></div>',
                       { name: name,
                         categories: formatElementCategories(conf, element, n),

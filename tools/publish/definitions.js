@@ -106,6 +106,7 @@ function Definitions() {
   this.terms = { };
   this.commonAttributesForElements = [];
   this.commonAttributes = { };
+  this.geometryProperties = [];
   this.presentationAttributes = { };
 }
 
@@ -334,6 +335,7 @@ function loadInto(filename, base, specid, defs) {
       commonAttributes: utils.splitList(e.getAttribute('attributes')),
       interfaces: utils.splitList(e.getAttribute('interfaces')),
       specificAttributes: [],
+      geometryProperties: utils.splitList(e.getAttribute('geometryproperties')),
       categories: { },
       specid: specid
     });
