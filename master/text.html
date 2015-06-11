@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
 <head>
@@ -180,7 +180,7 @@
       that serves as a standalone element for a unit of text, and
       which may optionally contain certain child <a>text content
       elements</a> (e.g.
-      <a href="text.html#TSpanElement"><span class="element-name">'tspan'</span></a>).
+      <a href="text.html#TextElement"><span class="element-name">'tspan'</span></a>).
       <!--SVG Tiny 1.2 defines two text content block elements:
 	<a href="text.html#TextElement"><span class="element-name">'text'</span></a>
 	and
@@ -516,38 +516,46 @@
     which combines, usually with some re-ordering, multiple consonants
     and vowel glyphs.
   </p>
-
-<h2 id="TextElement">The <span class="element-name">'text'</span> element</h2>
-
-  <edit:with element='text'>
+    
+<h2 id="TextElement">The <span class="element-name">'text'</span> and
+  <span class="element-name">'tspan'</span> elements</h2>
 
   <p>
     The <a>'text'</a> element defines a graphics element consisting of
-    text. The XML character data within the <a>'text'</a> element,
+    text. The <a>'tspan'</a> element within a <a>'text'</a> or another
+    <a>'tspan'</a> element, allows one to switch the style and/or
+    adjust the position of the rendered text inside the <a>'tspan'</a>
+    element relative to the parent element.
+  </p>
+  <p>
+    The XML character data within the <a>'text'</a> and <a>'tspan'</a>
+    elements,
     along with relevant attributes and properties, and
     character-to-glyph mapping tables within the font itself, define
     the glyphs to be rendered. (See
     <a href="text.html#CharactersAndGlyphs">Characters and their
     corresponding glyphs</a>.) The attributes and properties on
-    the <a>'text'</a> element indicate such things as the writing
-    direction, font specification, and painting attributes which
-    describe how exactly to render the characters. Subsequent sections
-    of this chapter describe the relevant text-specific attributes and
-    properties, particular <a href="text.html#TextLayout">text
-    layout</a> and
+    the <a>'text'</a> and <a>'tspan'</a> elements indicate such things
+    as the writing direction, font specification, and painting
+    attributes which describe how exactly to render the
+    characters. Subsequent sections of this chapter describe the
+    relevant text-specific attributes and properties,
+    particular <a href="text.html#TextLayout">text layout</a> and
     <a href="text.html#RelationshipWithBiDirectionality">bidirectionality</a>.
   </p>
 
   <p>
-    Since <a>'text'</a> elements are rendered using the same rendering
-    methods as other graphics elements, all of the same
-    <a href="coords.html">coordinate system transformations</a>,
-    <a href="painting.html">painting</a>,
-    <a href="render.html#ClippingAndMasking">clipping</a>, and
-    <a href="render.html#ClippingAndMasking">masking</a> features that apply to
-    <a>shapes</a> such as <a href="paths.html">paths</a> and
+    Since <a>'text'</a> and <a>'tspan'</a> elements are rendered using
+    the same rendering methods as other graphics elements, all of the
+    same
+    <a href="coords.html">coordinate system transformations</a>, and
+    <a href="painting.html">painting</a> features that apply to
+    <a>shapes</a> such as <a href="paths.html">paths</a> and 
     <a href="shapes.html#RectElement">rectangles</a> also apply to
-    <a>'text'</a> elements.
+    <a>'text'</a> and <a>'tspan'</a> elements. In addition,
+    <a href="render.html#ClippingAndMasking">clipping</a>, and
+    <a href="render.html#ClippingAndMasking">masking</a> can be applied
+    to the <a>'text'</a> element as a whole.
   </p>
 
   <p id="ObjectBoundingBoxUnitsTextObjects">
@@ -591,136 +599,277 @@
     of glyph placement and glyph advance.
   </p>
 
+  <p id="ExampleText01">
+    <span class="example-ref">Example text01</span> below contains the
+    text string "Hello, out there" which will be rendered onto the
+    canvas using the Verdana font family with the glyphs filled with
+    the color blue.
+  </p>
+
+  <edit:example href='images/text/text01.svg' name='test01' description="'Hello, out there' in blue" image='yes' link='yes'/>
+
+
+  <div class="annotation svg2-requirement">
+    <table>
+      <tr>
+	<th>SVG 2 Requirement:</th>
+	<td>Allow transforms on <a>'tspan'</a>.</td>
+      </tr>
+      <tr>
+	<th>Resolution:</th>
+	<td><a href="http://www.w3.org/2011/12/01-svg-irc#T21-02-34">SVG 2 will allow transforms on <span class="element-name">'tspan'</span>.</a></td>
+      </tr>
+      <tr>
+	<th>Purpose:</th>
+	<td>Align with other elements such as <a>'a'</a> which already allow transforms.</td>
+      </tr>
+      <tr>
+	<th>Owner:</th>
+	<td>Cameron (no action)</td>
+      </tr>
+    </table>
+  </div>
+
+  <edit:with element='text'>
   <edit:elementsummary name='text'/>
 
-<h3 id="TextAttributes">Attributes</h3>
+<h3 id="TSpanAttributes">Attributes</h3>
 
   <dl class="attrdef-list-svg2">
 
-    <dt id="TextElementXAttribute"><span class="adef">x</span></dt>
+    <dt>
+      <table class="propdef attrdef">
+	<tr>
+          <th>Name</th>
+          <th>Value</th>
+          <th>Initial value</th>
+          <th>Animatable</th>
+	</tr>
+	<tr>
+          <td><dfn data-dfn-type="element-attr" data-dfn-for="text" id="TextElementXAttribute">x</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="text" id="TextElementYAttribute">y</dfn></td>
+          <td>[<a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a>]#+ ,?</td>
+          <td>0</td>
+          <td>yes</td>
+	</tr>
+      </table>
+    </dt>
     <dd>
-
       <p>
 	If a single
-        <a>&lt;length&gt;</a> is
-        provided, then the value represents the new absolute X
+	<a>&lt;length&gt;</a> is
+        provided, then the value represents the new absolute X (Y)
         coordinate for the <a>current text position</a> for rendering
         the glyphs that correspond to the first character within this
         element or any of its descendants.
       </p>
       <p>
+	If a comma- or space-separated list of <var>n</var>
+	<a>&lt;length&gt;</a>s is provided, then the values represent
+        new absolute X (Y) coordinates for the <a>current text
+        position</a> for rendering the glyphs corresponding to each of
+        the first <var>n</var> characters within this element or any
+        of its descendants.
+      </p>
+      <p>
+	If more <a>&lt;length&gt;</a>s are provided than characters,
+        then the extra <a>&lt;length&gt;</a>s will have no effect on
+        glyph positioning.
+      </p>
+      <p>
+	If more characters exist than <a>&lt;length&gt;</a>s, then for
+	each of these extra characters:
+
+	(a) if an ancestor <a>'text'</a> or <a>'tspan'</a> element
+        specifies an absolute X (Y) coordinate for the given character
+        via an <span class="attr-name">'x'</span>
+        (<span class="attr-name">'y'</span>) attribute, then that
+        absolute X (Y) coordinate is used as the starting X (Y)
+        coordinate for that character (nearest ancestor has
+        precedence), else
+        
+	(b) the starting X (Y) coordinate for rendering the glyphs
+        corresponding to the given character is the X (Y) coordinate
+        of the resulting <a>current text position</a> from the most
+        recently rendered glyph for the current <a>'text'</a> element.
+      </p>
+      <p>
+        If the attribute is not specified:
+
+	(a) if an ancestor <a>'text'</a> or <a>'tspan'</a> element
+        specifies an absolute X (Y) coordinate for a given character
+        via an <span class="attr-name">'x'</span>
+        (<span class="attr-name">'y'</span>) attribute, then that
+        absolute X (Y) coordinate is used (nearest ancestor has
+        precedence), else
+
+        (b) the starting X (Y) coordinate for rendering the glyphs
+        corresponding to a given character is the X (Y) coordinate of
+        the resulting <a>current text position</a> from the most
+        recently rendered glyph for the current <a>'text'</a> element.
+      </p>
+    </dd>
+
+    <dt>
+      <table class="propdef attrdef">
+	<tr>
+          <th>Name</th>
+          <th>Value</th>
+          <th>Initial value</th>
+          <th>Animatable</th>
+	</tr>
+	<tr>
+          <td><dfn data-dfn-type="element-attr" data-dfn-for="text" id="TextElementDXAttribute">dx</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="text" id="TextElementDYAttribute">dy</dfn></td>
+          <td>[<a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a>]#+ ,?</td>
+          <td>See below</td>
+          <td>yes</td>
+	</tr>
+      </table>
+    </dt>
+    <dd>
+      <p>
+	If a single <a>&lt;length&gt;</a> is provided, this value
+        represents the new relative X (Y) coordinate for the <a>current
+        text position</a> for rendering the glyphs corresponding to
+        the first character within this element or any of its
+        descendants. The <a>current text position</a> is shifted along
+        the x-axis (y-axis) of the current user coordinate system
+        by <a>&lt;length&gt;</a> before the first character's glyphs
+        are rendered.
+      </p>
+      <p>
         If a comma- or space-separated list of <var>n</var>
-	<a>&lt;length&gt;</a>s is
-        provided, then the values represent new absolute X coordinates
-        for the <a>current text position</a> for rendering the glyphs
-        corresponding to each of the first <var>n</var> characters
-        within this element or any of its descendants.
+	<a>&lt;length&gt;</a>s is provided, then the values represent
+        incremental shifts along the x-axis (y-axis) for
+        the <a>current text position</a> before rendering the glyphs
+        corresponding to the first <var>n</var> characters within this
+        element or any of its descendants. Thus, before the glyphs are
+        rendered corresponding to each character, the <a >current text
+        position</a> resulting from drawing the glyphs for the
+        previous character within the current <a>'text'</a> element is
+        shifted along the x-axis (y-axis) of the current user
+        coordinate system by <a>&lt;length&gt;</a>.
       </p>
       <p>
-        For additional processing rules, refer to the description of
-        the <a>'tspan/x'</a> attribute on the <a>'tspan'</a> element.
+        If more <a>&lt;length&gt;</a>s are provided than characters,
+        then any extra <a>&lt;length&gt;</a>s will have no effect on
+        glyph positioning.
       </p>
+      <p>
+	If more characters exist than <a>&lt;length&gt;</a>s, then for
+        each of these extra characters:
 
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd>[<a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a>]#+ ,?</dd>
-	<dt><a>Initial value</a></dt>  <dd>0</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
+	(a) if an ancestor <a>'text'</a> or <a>'tspan'</a> element
+        specifies a relative X (Y) coordinate for the given character
+        via a <span class="attr-name">'dx'</span>
+        (<span class="attr-name">'dy'</span>) attribute, then
+        the <a >current text position</a> is shifted along the x-axis
+        (y-axis) of the current user coordinate system by that amount
+        (nearest ancestor has precedence), else
 
+	(b) no extra shift along the x-axis (y-axis) occurs.
+      </p>
+      <p>
+	If the attribute is not specified:
+
+	(a) if an ancestor <a>'text'</a> or <a>'tspan'</a> element
+        specifies a relative X (Y) coordinate for a given character via a
+        <span class="attr-name">'dx'</span>
+        (<span class="attr-name">'dy'</span>) attribute, then
+        the <a>current text position</a> is shifted along the x-axis
+        (y-axis) of the current user coordinate system by that amount
+        (nearest ancestor has precedence), else
+
+	(b) no extra shift along the x-axis (y-axis) occurs.
+      </p>
     </dd>
 
-    <dt id="TextElementYAttribute"><span class="adef">y</span></dt>
+    <dt>
+      <table class="propdef attrdef">
+	<tr>
+          <th>Name</th>
+          <th>Value</th>
+          <th>Initial value</th>
+          <th>Animatable</th>
+	</tr>
+	<tr>
+          <td><dfn data-dfn-type="element-attr" data-dfn-for="text" id="TextElementRotateAttribute">rotate</dfn></td>
+          <td><a>&lt;number&gt;</a>#+ ,?</td>
+          <td>See below</td>
+          <td>yes (non-additive).</td>
+	</tr>
+      </table>
+    </dt>
     <dd>
-
-      <p>
-	The corresponding list of absolute Y coordinates for the
-        glyphs corresponding to the characters within this
-        element. The processing rules for the <a>'y'</a> attribute
-        parallel the processing rules for the <a>'x'</a> attribute.
-      </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd>[<a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a>]#+ ,?</dd>
-	<dt><a>Initial value</a></dt>  <dd>0</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-
-    </dd>
-
-    <dt id="TextElementDXAttribute"><span class="adef">dx</span></dt>
-    <dd>
-
-      <p>
-	Shifts in the <a>current text position</a> along the x-axis
-        for the characters within this element or any of its
-        descendants.
-      </p>
-      <p>
-        Refer to the description of the <a>'tspan/dx'</a> attribute on
-        the <a>'tspan'</a> element.
-      </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd>[<a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a>]#+ ,?</dd>
-	<dt><a>Initial value</a></dt>  <dd>If not specified on this element or any of its descendants, no supllemental shifts along the x-axis will occur.</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-
-    </dd>
-
-    <dt id="TextElementDYAttribute"><span class="adef">dy</span></dt>
-    <dd>
-
-      <p>
-	Shifts in the <a>current text position</a> along the y-axis
-        for the characters within this element or any of its
-        descendants.
-      </p>
-      <p>
-        Refer to the description of the <a>'tspan/dy'</a> attribute on
-        the <a>'tspan'</a> element.
-      </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd>[<a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a>]#+ ,?</dd>
-	<dt><a>Initial value</a></dt>  <dd>If not specified on this element or any of its descendants, no supllemental shifts along the y-axis will occur.</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-
-    </dd>
-
-    <dt id="TextElementRotateAttribute"><span class="adef">rotate</span></dt>
-    <dd>
-
       <p>
         The supplemental rotation about the <a>current text
         position</a> that will be applied to all of the glyphs
         corresponding to each character within this element.
       </p>
       <p>
-        Refer to the description of the <a>'tspan/rotate'</a> attribute on the
-        <a>'tspan'</a> element.
+        If a comma- or space-separated list of <a>&lt;number&gt;</a>s
+        is provided, then the first <a>&lt;number&gt;</a> represents
+        the supplemental rotation for the glyphs corresponding to the
+        first character within this element or any of its descendants,
+        the second <a>&lt;number&gt;</a> represents the supplemental
+        rotation for the glyphs that correspond to the second
+        character, and so on.
       </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;number&gt;</a># ,?</dd>
-	<dt><a>Initial value</a></dt>  <dd>If not specified on this element or any of its descendants, no supllemental rotations will occur.</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes (non-additive).</dd>
-      </dl>
-
+      <p>
+	If more <a>&lt;number&gt;</a>s are provided than there are
+        characters, then the extra <a>&lt;number&gt;</a>s will be
+        ignored.
+      </p>
+      <p>
+	If more characters are provided than <a>&lt;number&gt;</a>s,
+        then for each of these extra characters the rotation value
+        specified by the last number must be used.
+      </p>
+      <p>
+        If the attribute is not specified and if an ancestor of a
+        <a>'tspan'</a> element specifies a supplemental rotation for a
+        given character via a <a>'rotate'</a> attribute, then the
+        given supplemental rotation is applied to the given character
+        (nearest ancestor has precedence). If there are more
+        characters than <a>&lt;number&gt;</a>s specified in the
+        ancestor's <a>'rotate'</a> attribute, then for each of these
+        extra characters the rotation value specified by the last
+        number must be used.
+      </p>
+      <p>
+        This supplemental rotation has no impact on the rules by
+        which <a>current text position</a> is modified as glyphs get
+        rendered and is supplemental to any rotation due to
+        <a href="text.html#TextLayoutPath">text on a path</a> and
+        to <a>'glyph-orientation-horizontal'</a>
+        or <a>'glyph-orientation-vertical'</a>.
+      </p>
     </dd>
 
-    <dt id="TextElementTextLengthAttribute"><span class="adef">textLength</span></dt>
+    <dt>
+      <table class="propdef attrdef">
+	<tr>
+          <th>Name</th>
+          <th>Value</th>
+          <th>Initial value</th>
+          <th>Animatable</th>
+	</tr>
+	<tr>
+          <td><dfn data-dfn-type="element-attr" data-dfn-for="text" id="TextElementTextLengthAttribute">textLength</dfn></td>
+          <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a></td>
+          <td>See below</td>
+          <td>yes</td>
+	</tr>
+      </table>
+    </dt>
     <dd>
-
       <p>
 	The author's computation of the total sum of all of the
         advance values that correspond to character data within this
         element, including the advance value on the glyph (horizontal
-        or vertical), the effect of properties
-        <a>'letter-spacing'</a> and <a>'word-spacing'</a> and
-        adjustments due to attributes <a>'tspan/dx'</a> and
-        <a>'tspan/dy'</a> on <a>'tspan'</a> elements. This value is
+        or vertical), the effect of properties <a>'letter-spacing'</a>
+        and <a>'word-spacing'</a> and adjustments due to attributes
+        <a>'dx'</a> and <a>'dy'</a> on this <a>'text'</a>
+        or <a>'tspan'</a> element or any descendants. This value is
         used to calibrate the user agent's own calculations with that
         of the author.
       </p>
@@ -738,12 +887,25 @@
         expand/compress the text string to fit within a length of
         <a>'textLength'</a>.
       </p>
+      <p>
+        If attribute <a>'textLength'</a> is specified on a given
+        element and also specified on an ancestor, the adjustments on
+        all character data within this element are controlled by the
+        value of <a>'textLength'</a> on this element exclusively, with
+        the possible side-effect that the adjustment ratio for the
+        contents of this element might be different than the
+        adjustment ratio used for other content that shares the same
+        ancestor. The user agent must assume that the total advance
+        values for the other content within that ancestor is the
+        difference between the advance value on that ancestor and the
+        advance value for this element.
+      </p>
       <p class="note">
-	This property is not intended for use to obtain effects such
+	This attribute is not intended for use to obtain effects such
 	as shrinking or expanding text.
       </p>
       <p>
-        A negative value is an error
+	A negative value is an error
         (see <a href="implnote.html#ErrorProcessing">Error
         processing</a>).
       </p>
@@ -753,30 +915,25 @@
         computation exactly matched the value calculated by the user
         agent; thus, no advance adjustments are made.
       </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>See above.</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-
     </dd>
 
-    <dt id="TextElementLengthAdjustAttribute"><span class="adef">lengthAdjust</span></dt>
+    <dt>
+      <table class="propdef attrdef">
+	<tr>
+          <th>Name</th>
+          <th>Value</th>
+          <th>Initial value</th>
+          <th>Animatable</th>
+	</tr>
+	<tr>
+          <td><dfn data-dfn-type="element-attr" data-dfn-for="text" id="TextElementLengthAdjustAttribute">lengthAdjust</dfn></td>
+          <td>spacing | spacingAndGlyphs</td>
+          <td>spacing</td>
+          <td>yes</td>
+	</tr>
+      </table>
+    </dt>
     <dd>
-
-      <p>
-        Indicates the type of adjustments which the user agent
-        shall make to make the rendered length of the text match
-        the value specified on the <a>'textLength'</a> attribute.
-      </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd>spacing | spacingAndGlyphs</dd>
-	<dt><a>Initial value</a></dt>  <dd>spacing</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-
       <dl class="attrdef-values">
 
 	<dt>spacing</dt>
@@ -820,6 +977,7 @@
 	  attributes, added by resolution from June 27th, 2013.
       </p>
       <p>
+	Only valid on a <a>'text'</a> element.
 	Establishes a rectangular <a>content area</a>. The value
 	of <a>'extent'</a> gives the width of the rectangle for
 	horizontal text and the height for vertical text. The other
@@ -834,359 +992,8 @@
 	<dt><a>Initial value</a></dt>  <dd>As if not specified.</dd>
 	<dt><a>Animatable</a></dt>    <dd>yes</dd>
       </dl>
-
     </dd>
 
-  </dl>
-
-  <p id="ExampleText01">
-    <span class="example-ref">Example text01</span> below contains the
-    text string "Hello, out there" which will be rendered onto the
-    canvas using the Verdana font family with the glyphs filled with
-    the color blue.
-  </p>
-
-
-  <edit:example href='images/text/text01.svg' name='test01' description="'Hello, out there' in blue" image='yes' link='yes'/>
-
-  </edit:with>
-
-<h2 id="TSpanElement">The <span class="element-name">'tspan'</span> element</h2>
-
-  <div class="annotation svg2-requirement">
-    <table>
-      <tr>
-	<th>SVG 2 Requirement:</th>
-	<td>Allow transforms on <a>'tspan'</a>.</td>
-      </tr>
-      <tr>
-	<th>Resolution:</th>
-	<td><a href="http://www.w3.org/2011/12/01-svg-irc#T21-02-34">SVG 2 will allow transforms on <span class="element-name">'tspan'</span>.</a></td>
-      </tr>
-      <tr>
-	<th>Purpose:</th>
-	<td>Align with other elements such as <a>'a'</a> which already allow transforms.</td>
-      </tr>
-      <tr>
-	<th>Owner:</th>
-	<td>Cameron (no action)</td>
-      </tr>
-    </table>
-  </div>
-
-  <edit:with element='tspan'>
-
-  <p>
-    Within a <a>'text'</a> element, text and font properties can be
-    changed by including a <span class="element-name">'tspan'</span>
-    element.
-
-    A <span class="element-name">'tspan'</span> element can also be
-    used to adjust the <a>current text position</a> with absolute or
-    relative coordinate values (some restrictions apply for
-    auto-wrapped text and text on a path).
-  </p>
-
-  <edit:elementsummary name='tspan'/>
-
-<h3 id="TSpanAttributes">Attributes</h3>
-
-  <dl class="attrdef-list-svg2">
-
-    <dt id="TSpanElementXAttribute"><span class="adef">x</span></dt>
-    <dd>
-
-      <p>
-	If a single
-	<a>&lt;length&gt;</a> is
-        provided, then the value represents the new absolute X
-        coordinate for the <a>current text position</a> for rendering
-        the glyphs that correspond to the first character within this
-        element or any of its descendants.
-      </p>
-      <p>
-	If a comma- or space-separated list of <var>n</var>
-	<a>&lt;length&gt;</a>s is
-        provided, then the values represent new absolute X coordinates
-        for the <a>current text position</a> for rendering the glyphs
-        corresponding to each of the first <var>n</var> characters
-        within this element or any of its descendants.
-      </p>
-      <p>
-	If more
-        <a>&lt;length&gt;</a>s are
-        provided than characters, then the extra
-        <a>&lt;length&gt;</a>s will
-        have no effect on glyph positioning.
-      </p>
-      <p>
-	If more characters exist than
-	<a>&lt;length&gt;</a>s,
-	then for each of these extra characters:
-
-	(a) if an ancestor <a>'text'</a> or <a>'tspan'</a> element
-        specifies an absolute X coordinate for the given character via
-        an <span class="attr-name">'x'</span> attribute, then that
-        absolute X coordinate is used as the starting X coordinate for
-        that character (nearest ancestor has precedence), else
-
-	(b) the starting X coordinate for rendering the glyphs
-        corresponding to the given character is the X coordinate of
-        the resulting <a>current text position</a> from the most
-        recently rendered glyph for the current <a>'text'</a> element.
-      </p>
-      <p>
-        If the attribute is not specified:
-
-	(a) if an ancestor <a>'text'</a> or <a>'tspan'</a> element
-        specifies an absolute X coordinate for a given character via
-        an <span class="attr-name">'x'</span> attribute, then that
-        absolute X coordinate is used (nearest ancestor has
-        precedence), else
-
-        (b) the starting X coordinate for rendering the glyphs
-        corresponding to a given character is the X coordinate of the
-        resulting <a>current text position</a> from the most recently
-        rendered glyph for the current <a>'text'</a> element.
-      </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd>[<a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a>]#+ ,?</dd>
-	<dt><a>Initial value</a></dt>  <dd>0</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-
-    </dd>
-
-    <dt id="TSpanElementYAttribute"><span class="adef">y</span></dt>
-    <dd>
-
-      <p>
-	The corresponding list of absolute Y coordinates for the
-        glyphs corresponding to the characters within this
-        element. The processing rules for the <a>'y'</a> attribute
-        parallel the processing rules for the <a>'x'</a> attribute.
-      </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd>[<a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a>]#+ ,?</dd>
-	<dt><a>Initial value</a></dt>  <dd>0</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-
-    </dd>
-
-
-    <dt id="TSpanElementDXAttribute"><span class="adef">dx</span></dt>
-    <dd>
-
-      <p>
-	If a single
-        <a>&lt;length&gt;</a> is
-        provided, this value represents the new relative X coordinate
-        for the <a>current text position</a> for rendering the glyphs
-        corresponding to the first character within this element or
-        any of its descendants. The <a>current text position</a> is
-        shifted along the x-axis of the current user coordinate system
-        by <a>&lt;length&gt;</a>
-        before the first character's glyphs are rendered.
-      </p>
-      <p>
-        If a comma- or space-separated list of
-        <var>n</var> <a>&lt;length&gt;</a>s
-        is provided, then the values represent incremental shifts
-        along the x-axis for the <a>current text position</a> before
-        rendering the glyphs corresponding to the first <var>n</var>
-        characters within this element or any of its
-        descendants. Thus, before the glyphs are rendered
-        corresponding to each character, the <a >current text
-        position</a> resulting from drawing the glyphs for the
-        previous character within the current <a>'text'</a> element is
-        shifted along the X axis of the current user coordinate system
-        by <a>&lt;length&gt;</a>.
-      </p>
-      <p>
-        If more
-        <a>&lt;length&gt;</a>s are
-        provided than characters, then any extra
-        <a>&lt;length&gt;</a>s will
-        have no effect on glyph positioning.
-      </p>
-      <p>
-	If more characters exist than
-        <a>&lt;length&gt;</a>s, then
-        for each of these extra characters:
-
-	(a) if an ancestor <a>'text'</a> or <a>'tspan'</a> element
-        specifies a relative X coordinate for the given character via
-        a <span class="attr-name">'dx'</span> attribute, then
-        the <a >current text position</a> is shifted along the x-axis
-        of the current user coordinate system by that amount (nearest
-        ancestor has precedence), else
-
-	(b) no extra shift along the x-axis occurs.
-      </p>
-      <p>
-	If the attribute is not specified:
-
-	(a) if an ancestor <a>'text'</a> or <a>'tspan'</a> element
-        specifies a relative X coordinate for a given character via a
-        <span class="attr-name">'dx'</span> attribute, then
-        the <a>current text position</a> is shifted along the x-axis
-        of the current user coordinate system by that amount (nearest
-        ancestor has precedence), else
-
-	(b) no extra shift along the x-axis occurs.
-      </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd>[<a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a>]#+ ,?</dd>
-	<dt><a>Initial value</a></dt>  <dd>See above.</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-
-    </dd>
-
-    <dt id="TSpanElementDYAttribute"><span class="adef">dy</span></dt>
-    <dd>
-
-      <p>
-	The corresponding list of relative Y coordinates for the
-        characters within the <a>'tspan'</a> element. The processing
-        rules for the <a>'dy'</a> attribute parallel the processing
-        rules for the <a>'dx'</a> attribute.
-      </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd>[<a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a>]#+ ,?</dd>
-	<dt><a>Initial value</a></dt>  <dd>See <a>'text/dx'</a> attribute above.</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-
-    </dd>
-
-    <dt id="TSpanElementRotateAttribute"><span class="adef">rotate</span></dt>
-    <dd>
-
-      <p>
-        The supplemental rotation about the <a>current text
-        position</a> that will be applied to all of the glyphs
-        corresponding to each character within this element.
-      </p>
-      <p>
-        If a comma- or space-separated list of
-	<a>&lt;number&gt;</a>s is
-        provided, then the first
-	<a>&lt;number&gt;</a>
-        represents the supplemental rotation for the glyphs
-        corresponding to the first character within this element or
-        any of its descendants, the second
-        <a>&lt;number&gt;</a>
-        represents the supplemental rotation for the glyphs that
-        correspond to the second character, and so on.
-      </p>
-      <p>
-	If more
-        <a>&lt;number&gt;</a>s are
-        provided than there are characters, then the extra
-        <a>&lt;number&gt;</a>s
-        will be ignored.
-      </p>
-      <p>
-	If more characters are provided than
-        <a>&lt;number&gt;</a>s, then
-        for each of these extra characters the rotation value
-        specified by the last number must be used.
-      </p>
-      <p>
-        If the attribute is not specified and if an ancestor <a>'text'</a> or
-        <a>'tspan'</a> element specifies a supplemental rotation for a
-        given character via a <a>'rotate'</a> attribute, then the
-        given supplemental rotation is applied to the given character
-        (nearest ancestor has precedence). If there are more
-        characters than
-        <a>&lt;number&gt;</a>s
-        specified in the ancestor's <a>'rotate'</a> attribute, then
-        for each of these extra characters the rotation value
-        specified by the last number must be used.
-      </p>
-      <p>
-        This supplemental rotation has no impact on the rules by
-        which <a>current text position</a> is modified as glyphs get
-        rendered and is supplemental to any rotation due to
-        <a href="text.html#TextLayoutPath">text on a path</a> and
-        to <a>'glyph-orientation-horizontal'</a>
-        or <a>'glyph-orientation-vertical'</a>.
-      </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;number&gt;</a>#+ ,?</dd>
-	<dt><a>Initial value</a></dt>  <dd>See above.</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes (non-additive).</dd>
-      </dl>
-
-    </dd>
-
-    <dt id="TSpanElementTextLengthAttribute"><span class="adef">textLength</span></dt>
-    <dd>
-
-      <p>
-	The author's computation of the total sum of all of the
-        advance values that correspond to character data within this
-        element, including the advance value on the glyph (horizontal
-        or vertical), the effect of properties
-        <a>'letter-spacing'</a> and <a>'word-spacing'</a> and
-        adjustments due to attributes <a>'tspan/dx'</a> and
-        <a>'tspan/dy'</a> on this <a>'tspan'</a> element or any
-        descendants. This value is used to calibrate the user agent's
-        own calculations with that of the author.
-      </p>
-      <p>
-        The purpose of this attribute is to allow the author to
-        achieve exact alignment, in visual rendering order after
-        any <a href="text.html#RelationshipWithBiDirectionality">bidirectional
-        reordering</a>, for the first and last rendered glyphs that
-        correspond to this element; thus, for the last rendered
-        character (in visual rendering order after
-        any <a href="text.html#RelationshipWithBiDirectionality">bidirectional
-        reordering</a>), any supplemental inter-character spacing
-        beyond normal glyph advances are ignored (in most cases) when
-        the user agent determines the appropriate amount to
-        expand/compress the text string to fit within a length of
-        <a>'textLength'</a>.
-      </p>
-      <p>
-        If attribute <a>'textLength'</a> is specified on a given
-        element and also specified on an ancestor, the adjustments on
-        all character data within this element are controlled by the
-        value of <a>'textLength'</a> on this element exclusively, with
-        the possible side-effect that the adjustment ratio for the
-        contents of this element might be different than the
-        adjustment ratio used for other content that shares the same
-        ancestor. The user agent must assume that the total advance
-        values for the other content within that ancestor is the
-        difference between the advance value on that ancestor and the
-        advance value for this element.
-      </p>
-      <p>
-	A negative value is an error
-        (see <a href="implnote.html#ErrorProcessing">Error
-        processing</a>).
-      </p>
-      <p>
-	If the attribute is not specified anywhere within a
-        <a>'text'</a> element, the effect is as if the author's
-        computation exactly matched the value calculated by the user
-        agent; thus, no advance adjustments are made.
-      </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>See above.</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-
-    </dd>
   </dl>
 
 <h3 id="TSpanNotes">Notes on 'x', 'y', 'dx', 'dy' and 'rotate'</h3>
