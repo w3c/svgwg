@@ -311,31 +311,40 @@ members of that group. See <a href="#Grouping">How groups are rendered</a>.
 <div class="ready-for-wg-review">
 <p>
 Grouping elements, such as the <a>'g'</a> element (see <a>container elements</a>
-) create a <a>compositing group</a>. The Compositing and Blending specification
-[<a href="refs.html#ref-COMPOSITINGBLENDING">COMPOSITING-BLENDING</a>]
-normatively describes how to render <a>compositing groups</a>.
+) create a <a>compositing group</a>. The <a>Compositing and Blending</a> 
+specification normatively describes how to render <a>compositing groups</a>.
 In SVG, effects may be applied to a group. For example, opacity, Filter Effects
 or masking. These effects are applied to the rendered result of the group
+immediately before any transforms on the group are applied, which are applied
 immediately before the group is blended and composited with the
 <a>group backdrop</a>. Applying any such effects to a group makes that 
 group isolated.
 <br/><br/>
-Thus, rendering a <a>compositing group</a> follows the following steps:
+When rendering an SVG group, unknown elements and their children are discarded
+from the group.
+<br/><br/>
+Thus, rendering a <a>compositing group</a> follows the following steps:<br/>
 If the group is isolated:
 </p>
 <ol>
 <li>The <a>initial backdrop</a> is set to a new buffer initialised with
 rgba(0,0,0,0)</li>
-<li>The contents of the group are rendered
-<a href="#RenderingOrder">in order</a> into the <a>initial backdrop</a></li>
+<li>The contents of the group that are <a>graphics elements</a> or
+<a>'g element'</a> elements are rendered
+<a href="#RenderingOrder">in order</a>, onto the 
+<a>initial backdrop</a></li>
 <li>Filter Effects and other effects that modify the group canvas are applied</li>
+<li>Group transforms are applied</li>
 <li>The group canvas is blended and composited with the <a>group backdrop</a></li>
 </ol>
 else (the group is not isolated):
 <ol>
 <li>The <a>initial backdrop</a> is set to the <a>group backdrop</a></li>
-<li>The contents of the group are rendered,
-<a href="#RenderingOrder">in order</a>, onto the <a>initial backdrop</a></li>
+<li>The contents of the group that are <a>graphics elements</a> or
+<a>'g element'</a> elements are rendered
+<a href="#RenderingOrder">in order</a>, onto the 
+<a>initial backdrop</a>. The group transforms are applied to each element
+as they are rendered.</li>
 </ol>
 </div>
 
