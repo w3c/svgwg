@@ -1284,14 +1284,27 @@ class="prop-value">'visibility:hidden'</span>.</p>
 be better just to include an example that shows this.</p>
 
 <div class="ready-for-wg-review">
-<p>Support for referencing external resources with <a>'use'</a> is optional in this version of svg.
-If external resources are supported, note the following:</p>
-<ul>
-  <li>Whether scripts and animations run in such external resources is undefined.</li>
-  <li>How cascading values from the <a>'use'</a> element across the conceptual document boundary works is undefined.</li>
-</ul>
-<p class="issue" data-issue="33">How should @media rules work when an external resource is referenced? Is there a viewport defined in all cases?
-See <a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3730">ACTION-3730</a> (ed).
+<p>
+The element referenced by <a>'use'</a> may be in a separate document. However,
+this specification does not define how or if the user agent will process
+stylesheets in that document, or what viewport will be used for
+resolving percentages and media queries in such documents, if animations run
+in the separate document and which document controls the animation timeline. Script elements in the
+resource document must not be executed, and the corresponding conceptually cloned script elements
+must also not execute.
+</p>
+<p class="note">
+When re-using external assets, therefore, authors are advised not to include any scripts in the external
+file and to use inline styles or presentation attributes only. Percentage
+lengths should only be used if the re-used assets define their own viewport 
+(i.e., if the re-used element is an <a>'svg'</a> or <a>'symbol'</a>). Declarative animations in
+external assets should not be used.
+</p>
+<p>
+User agents may restrict restrict external resource documents for security
+reasons. In particular, this specification does not allow cross-origin resource requests in <a>'use'</a>.
+A future version of this or another specification may provide a method of securely enabling cross-origin re-use
+of assets.
 </p>
 </div>
 
