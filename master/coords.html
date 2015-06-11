@@ -1242,14 +1242,27 @@ ignored.</p>
 <h2 id="IntrinsicSizing">Intrinsic sizing properties of the viewport of SVG content</h2>
 
 <p>SVG needs to specify how to calculate some intrinsic sizing properties  to
-enable inclusion within other languages. The intrinsic width and height
-of the <a>viewport</a> of SVG content must be determined from the <a>'width property'</a>
-and <a>'height property'</a> presentation attributes.  If either of these are not specified, a
-value of <span class="attr-value">'auto'</span> must be assumed.
-Specifically, percentage values <em>do not provide an intrinsic width or height.</em>.
+enable inclusion within other host documents. The intrinsic width and height
+of the <a>SVG viewport</a> of SVG content must be determined from the <a>'width property'</a>
+and <a>'height property'</a> properties. If either of these are not specified,
+the used value is the initial value <span class="attr-value">'auto'</span>.
+Specifically, percentage values <em>do not provide an intrinsic width or height</em>.
 </p>
 
-<p>The intrinsic aspect ratio of the <a>viewport</a> of SVG content is necessary
+
+<div class="issue">
+<p>We have the problem that either <a>'width'</a> and <a>'height'</a> are</p>
+<ul>
+  <li><span class="attr-value">'auto'</span></li>
+  <li>percentage values</li>
+</ul>
+<p>Furthermore we can have a intrinsic ratio with <a>'svg/viewBox'</a>. We need
+to describe all combinations and what happens in these cases in detail. The
+current text does not seem sufficient enough to describe all cases.</p>
+<p>The outcome of this should be a intrinsic ratio for all cases.</p>
+</div>
+
+<p>The intrinsic aspect ratio of the <a>SVG viewport</a> of SVG content is necessary
 for example, when including SVG from an <span class="element-name">'object'</span> element in HTML styled with
 CSS.  It is possible (indeed, common) for an SVG graphic to have an intrinsic aspect ratio but not to have an intrinsic width or height.
 The intrinsic aspect ratio must be calculated based upon the
@@ -1261,13 +1274,15 @@ following rules:</p>
   <li>If the <a>'width'</a> and <a>'height'</a> properties
   of the <a>outermost svg element</a> are both specified with
   unit identifiers (in, mm, cm, pt, pc, px, em, ex) or in <a>user units</a>, then the aspect ratio is
-  calculated from the <a>'width'</a> and <a>'height'</a> properties after resolving both values to user units.</li>
+  calculated from the <a>'width'</a> and <a>'height'</a> properties after resolving both values to user units.
+  <span class="issue">We should use the terms relative and absolute length here.</span></li>
 
   <li>If either/both of the <a>'width'</a> and <a>'height'</a> of the <a>outermost svg element</a> are in
-  percentage units (or omitted), the aspect ratio is calculated from the width and
+  percentage units (or omitted) <span class="issue">(used value is auto)</span>, the aspect ratio is calculated from the width and
   height values of the <a>'svg/viewBox'</a> specified for the <a>current SVG document fragment</a>.
-  If the <a>'svg/viewBox'</a> is not correctly specified, or set to <span class="attr-value">'none'</span>,
-  the intrinsic aspect ratio cannot be calculated and is considered unspecified.</li>
+  If the <a>'svg/viewBox'</a> is not correctly specified,
+  the intrinsic aspect ratio cannot be calculated and is considered unspecified.<span class="issue">How is
+the host document supposed to handle a "unspecified" ratio and dimension? Probably use the 300x150 size?</span></li>
 </ul>
 
 <p>Examples:</p>
