@@ -997,7 +997,7 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
 <p>
   For the <span class='prop-value'>miter</span> or the
   <span class='prop-value'>miter-clip</span> values, given
-  the angle <var>θ</var> between the segments in user space,
+  the angle <var>θ</var> between the segments in local coordinate system,
   the miter length is calculated by:
 </p>
 
@@ -2079,24 +2079,24 @@ its inherited value can affect descendant elements.</p>
             paint, then stroke the outline with a specified paint. </dd>
          <dt class="prop-value"> non-scaling-stroke </dt>
          <dd> Modifies the way an object is stroked. Normally stroking involves calculating stroke
-            outline of the shape's path in current <a href="intro.html#TermUserSpace"><span class="svg-term">user space</span></a> and filling that outline with the
+            outline of the shape's path in current <a>local coordinate system</a> and filling that outline with the
             stroke paint (color or gradient). With the non-scaling-stroke vector effect, stroke outline
-            shall be calculated in the "host" coordinate space instead of user coordinate space.
+            shall be calculated in the "host" coordinate space instead of <a>local coordinate system</a>.
             More precisely: a user agent establishes a host coordinate space which in SVG Tiny 1.2 is
             always the same as "screen coordinate space". The stroke outline is calculated in the
             following manner: first, the shape's path is transformed into the host coordinate space.
             Stroke outline is calculated in the host coordinate space. The resulting outline is
-            transformed back to the <a href="intro.html#TermUserCoordinateSystem"><span class="svg-term">user coordinate system</span></a>.
-            (Stroke outline is always filled with stroke paint in the current user space). The resulting visual effect of this
+            transformed back to the <a>local coordinate system</a>.
+            (Stroke outline is always filled with stroke paint in the current local coordinate system). The resulting visual effect of this
             modification is that stroke width is not dependant on the transformations of the element
             (including non-uniform scaling and shear transformations) and zoom level. </dd>
           <dt class="prop-value"> non-scaling-size </dt>
-          <dd> Specifies special <a href="intro.html#TermUserSpace"><span class="svg-term">user space</span></a> toward this element and its descendant by constrained transformations with the following characteristics. The scale of the <a href="intro.html#TermUserSpace"><span class="svg-term">user space</span></a> do not change in spite of change of <a>CTM</a>s from a host coordinate space. However, it does not specify the suppression of rotation and skew. Also, it does not specify the fixation of placement of <a href="intro.html#TermUserSpace"><span class="svg-term">user space</span></a>. Since non-scaling-size suppresses scaling of <a>user space</a>, it also has the characteristic of non-scaling-stroke. The transformation formula and the example behavior are indicated to the following chapter. </dd>
+          <dd> Specifies special <a>local coordinate system</a> toward this element and its descendant by constrained transformations with the following characteristics. The scale of the <a>local coordinate system</a> do not change in spite of change of <a>CTM</a>s from a host coordinate space. However, it does not specify the suppression of rotation and skew. Also, it does not specify the fixation of placement of <a>local coordinate system</a>. Since non-scaling-size suppresses scaling of <a>local coordinate system</a>, it also has the characteristic of non-scaling-stroke. The transformation formula and the example behavior are indicated to the following chapter. </dd>
           <dt class="prop-value"> non-rotation </dt>
-          <dd> Specifies special <a href="intro.html#TermUserSpace"><span class="svg-term">user space</span></a> toward this element and its descendant by constrained transformations with the following characteristics. The rotation and skew of the <a href="intro.html#TermUserSpace"><span class="svg-term">user space</span></a> is suppressd in spite of change of <a>CTM</a>s from a host coordinate space. However, it does not specify the suppression of scaling. Also, it does not specify the fixation of placement of <a href="intro.html#TermUserSpace"><span class="svg-term">user space</span></a>.
+          <dd> Specifies special <a>local coordinate system</a> toward this element and its descendant by constrained transformations with the following characteristics. The rotation and skew of the <a>local coordinate system</a> is suppressd in spite of change of <a>CTM</a>s from a host coordinate space. However, it does not specify the suppression of scaling. Also, it does not specify the fixation of placement of <a>local coordinate system</a>.
 The transformation formula and the example behavior are indicated to the following chapter. </dd>
           <dt class="prop-value"> fixed-position </dt>
-          <dd> Specifies special <a href="intro.html#TermUserSpace"><span class="svg-term">user space</span></a> toward this element and its descendant by constrained transformations with the following characteristics. The placement of <a href="intro.html#TermUserSpace"><span class="svg-term">user space</span></a> is fixed in spite of change of <a>CTM</a>s from a host coordinate space. However, it does not specify the suppression of rotation, skew and scaling. When the element that has fixed-position effect and also has <span class="property-name"><a>'transform'</a></span> property, that property is consumed for this effect. The shift conponents <var>e</var> and <var>f</var> of matrix of <span class="property-name"><a>'transform'</a></span> property are used to transfer the origin of fixed <a href="intro.html#TermUserSpace"><span class="svg-term">user space</span></a>. The transformation formula and the example behavior are indicated to the following chapter. </dd>
+          <dd> Specifies special <a>local coordinate system</a> toward this element and its descendant by constrained transformations with the following characteristics. The placement of <a>local coordinate system</a> is fixed in spite of change of <a>CTM</a>s from a host coordinate space. However, it does not specify the suppression of rotation, skew and scaling. When the element that has fixed-position effect and also has <span class="property-name"><a>'transform'</a></span> property, that property is consumed for this effect. The shift conponents <var>e</var> and <var>f</var> of matrix of <span class="property-name"><a>'transform'</a></span> property are used to transfer the origin of fixed <a>local coordinate system</a>. The transformation formula and the example behavior are indicated to the following chapter. </dd>
       </dl>
 
       <p>These values can be enumerated. Thereby, the effect which has these characteristics simultaneously can be specified. </p>
@@ -2114,7 +2114,7 @@ The transformation formula and the example behavior are indicated to the followi
 
 <h3 id="VectorEffectsCalculation">Computing the vector effects</h3>
       <p>This section shows the list of transformation formulas regarding combinations of the values for clarification of the behavior of vector effects excluding <span class="prop-value"> non-scaling-stroke </span> which has clear implications.</p>
-      <p>The normal coordinate transformation formula from <a>user coordinate system</a> to <a>viewport coordinate system</a> is as follows.
+      <p>The normal coordinate transformation formula from <a>local coordinate system</a> to <a>viewport coordinate system</a> is as follows.
       <!-- a formula for the coordinate system of the device is as follows.-->
       </p>
 
@@ -3238,7 +3238,7 @@ CSS Transforms Level 1 <a href="http://www.w3.org/TR/css3-transforms/#svg-three-
 </table>
 
 <h3 id="NestedVectorEffectsCalculation">Computing the vector effects for nested viewport coordinate systems</h3>
-<p>Below is normal coordinate transformation formula for nested viewport coordinate systems without vector effects. <b>x<sub>viewport(UA)</sub></b> and <b>y<sub>viewport(UA)</sub></b> are coordinates which under the immediate control of <a>user agent</a>. <b>CTM<sub>this</sub></b> is <a>CTM</a> for the transformation matrix from <a>user coordinate system</a> of an target graphic to <a>viewport coordinate system</a> to which it belongs. <b>CTM<sub>parent</sub></b> is <a>CTM</a> for the transformation matrix from aforementioned <a>viewport coordinate system</a> to <a>viewport coordinate system</a> of the parent of that. And, <b>CTM<sub>root</sub></b> is <a>CTM</a> for rootmost viewport coordinate system (UA).</p>
+<p>Below is normal coordinate transformation formula for nested viewport coordinate systems without vector effects. <b>x<sub>viewport(UA)</sub></b> and <b>y<sub>viewport(UA)</sub></b> are coordinates which under the immediate control of <a>user agent</a>. <b>CTM<sub>this</sub></b> is <a>CTM</a> for the transformation matrix from <a>local coordinate system</a> of an target graphic to <a>viewport coordinate system</a> to which it belongs. <b>CTM<sub>parent</sub></b> is <a>CTM</a> for the transformation matrix from aforementioned <a>viewport coordinate system</a> to <a>viewport coordinate system</a> of the parent of that. And, <b>CTM<sub>root</sub></b> is <a>CTM</a> for rootmost viewport coordinate system (UA).</p>
 
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -3539,10 +3539,10 @@ When <span class="prop-value">screen</span> value is specified, <a>user agent</a
 
 	<rect x="-50" y="-50" width="500" height="500" stroke="orange" stroke-width="3" fill="none"></rect>
 
-	<!-- Nested user space is transformed by this transform attribute -->
+	<!-- Nested local coordinate system is transformed by this transform attribute -->
 	<g id="base" transform="matrix(2.1169438081370817,0.3576047954311102,-0.3576047954311102,1.4700998667618626,0,0) translate(-50,-50)">
 		<svg viewBox="-50,-50,500,500" height="500" width="500">
-		<!-- Graph paper on the this svg's base user space -->
+		<!-- Graph paper on the this svg's base local coordinate system -->
 		<g stroke="green" stroke-width="1" fill="none">
 			<circle cx="0" cy="0" r="10"></circle>
 			<circle cx="150" cy="150" r="7"></circle>
@@ -3566,7 +3566,7 @@ When <span class="prop-value">screen</span> value is specified, <a>user agent</a
 		</g>
 
 		<!-- Figure having vector effect -->
-		<!-- An thick red right arrow and small rectangle on this figure's nested user space origin -->
+		<!-- An thick red right arrow and small rectangle on this figure's nested local coordinate system origin -->
 		<path id="ve" vector-effect="none" stroke="red" stroke-width="3" fill="none" transform="matrix(1,0,0,1,150,150)" d="M-50,-50 L50,-50 50,-100 150,0 50,100 50,50 -50,50 -50,-50z M5 0 L0 -5  -5 0 0 5z"></path>
 		</svg>
 	</g>
@@ -3947,7 +3947,7 @@ Values have the following meaning:</p>
   <dt><span class="attr-value"><a>&lt;number&gt;</a></span></dt>
   <dd>
     <p>An <a>&lt;angle&gt;</a> value represents the angle the marker's
-    positive x-axis makes with the positive x-axis in the user space
+    positive x-axis makes with the positive x-axis in the local coordinate system
     of the <a>markable element</a>, and a <a>&lt;number&gt;</a> value
     with no unit represents an angle in degrees.  For example, if a value of
     <span class="attr-value">'0'</span> is given, then the marker will be drawn
@@ -3955,7 +3955,7 @@ Values have the following meaning:</p>
     space of the graphic object referencing the marker.
     A value of <span class="attr-value">'90deg'</span> will result in the
     marker being drawn with its positive x-axis in the direction
-    of the positive y-axis of the <a>markable element</a>'s user space.</p>
+    of the positive y-axis of the <a>markable element</a>'s local coordinate system.</p>
   </dd>
 </dl>
 

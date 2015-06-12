@@ -21,25 +21,69 @@
 <dl class='definitions'  data-dfn-type="dfn" data-export="">
 
   <dt id="TermCanvas">canvas</dt>
-  <dd>A surface onto which graphics elements are drawn, which
-  can be real physical media such as a display or paper or an
-  abstract surface such as a allocated region of computer
-  memory.</dd>
-
-  <dt id="TermSVGCanvas">SVG canvas</dt>
-  <dd>The <a>canvas</a> onto which the SVG
-  content is rendered.</dd>
+  <dd>A infinite surface onto which graphics elements are drawn.</dd>
 
   <dt id="TermSVGViewport">SVG viewport</dt>
   <dd>The <a>viewport</a> within the
-  <a>SVG canvas</a> which defines the rectangular region
+  <a>canvas</a> which defines the rectangular region
   into which SVG content is rendered. See the discussion of the
   <a>SVG viewport</a> in the chapter on
   <a href="coords.html">Coordinate Systems, Transformations and Units</a>.</dd>
 
+
+  <dt id="TermUserSpace">local coordinate system</dt>
+  <dt id="TermUserCoordinateSystem">user coordinate system</dt>
+  <dd>In general, a coordinate system defines locations and
+  distances on the current <a>canvas</a>.
+  The current user coordinate system is the coordinate system that is currently
+  active and which is used to define how coordinates and
+  lengths are located and computed, respectively, on the
+  current <a>canvas</a>. See
+  <a href="coords.html#SVGInitialUserCoordinateSystem">initial user coordinate
+  system</a>.</dd>
+
+  <dt id="TermUserUnits">user units</dt>
+  <dd>A coordinate value or length expressed in user units
+  represents a coordinate value or length in the current
+  <a>local coordinate system</a>.
+  Thus, 10 user units represents a length of 10 units in the
+  current user coordinate system. If not specified otherwise, one user unit
+  is also equal to one CSS pixel in current
+  <a>local coordinate system</a>.</dd>
+
+  <dt id="TermViewport">viewport</dt>
+  <dd>A rectangular region within the current
+  <a>canvas</a> onto which <a>graphics elements</a> are to be
+  rendered. See the discussion of the
+  <a>SVG viewport</a> in the
+  chapter on <a href="coords.html">Coordinate Systems,
+  Transformations and Units</a>.</dd>
+
+  <dt id="TermViewportCoordinateSystem">viewport coordinate system</dt>
+  <dd>In general, a coordinate system defines locations and
+  distances on the current <a>canvas</a>.
+  The viewport coordinate system is the coordinate system that is active at the
+  start of processing of an <a>'svg'</a> element, before
+  processing the optional <a>'viewBox'</a> attribute. In the
+  case of an SVG document fragment that is embedded within a
+  parent document which uses CSS to manage its layout, then the
+  viewport coordinate system will have the same orientation and
+  lengths as in CSS, with the origin at the top-left on the
+  <a>viewport</a>. See <a href="coords.html#ViewportSpace">The initial viewport</a> and
+  <a href="coords.html#EstablishingANewSVGViewport">Establishing a
+  new viewport</a>.</dd>
+
+  <dt id="TermViewportUnits">viewport units</dt>
+  <dd>A coordinate value or length expressed in viewport units
+  represents a coordinate value or length in the
+  <a>viewport coordinate system</a>.
+  Thus, 10 viewport units represents a length of 10 units in the viewport
+  coordinate system.
+<p class="issue" data-issue="6">People might mix this up with the CSS viewport which is relevant in SVG as well. We should be explicit here.</p></dd>
+
 </dl>
 
-<p>For all media, the <dfn id="SVGCanvas">SVG canvas</dfn>
+<p>For all media, the canvas
 describes "the space where the SVG content is rendered." The
 canvas is infinite for each dimension of the space, but
 rendering occurs relative to a finite rectangular region of the
@@ -68,16 +112,14 @@ the SVG user agent is provided the following information:</p>
 
 <p id="SVGInitialUserCoordinateSystem">Using the above information, the SVG user agent determines
 the <a>viewport</a>, an initial <a>viewport coordinate system</a> and an
-initial <a>user coordinate system</a>
+initial <a>local coordinate system</a>
 such that the two coordinates systems are identical. Both
 coordinates systems are established such that the origin
 matches the origin of the viewport (for the root viewport, the
 viewport origin is at the top/left corner), and one unit in the
 initial coordinate system equals one CSS pixel in the <a>viewport</a>.
 (See <a href="coords.html#InitialCoordinateSystem">Initial
-coordinate system</a>.) The viewport coordinate system is also
-called <a>viewport space</a> and the user coordinate system is also called
-<a>user space</a>.</p>
+coordinate system</a>.)</p>
 
 <p>New SVG viewports can be established. By <a
 href="#EstablishingANewSVGViewport">establishing a new
@@ -173,7 +215,7 @@ path</a>.</p>
 
 <p>For the <a>outermost svg element</a>, the SVG user
 agent determines an initial <a>viewport coordinate system</a> and an
-initial <a>user coordinate system</a> such that the
+initial <a>local coordinate system</a> such that the
 two coordinates systems are identical. The origin of both
 coordinate systems is at the origin of the viewport, and one
 unit in the initial coordinate system equals one "pixel" (i.e.,
@@ -295,7 +337,7 @@ viewport.</p>
    attribute to automatically create an initial user coordinate
    system which causes the graphic to scale to fit into the
    viewport no matter what size the viewport is.&lt;/desc&gt;
-  &lt;!-- This rectangle goes from (0,0) to (1500,1000) in user space.
+  &lt;!-- This rectangle goes from (0,0) to (1500,1000) in local coordinate system.
        Because of the viewBox attribute above,
        the rectangle will end up filling the entire area
        reserved for the SVG content. --&gt;
@@ -343,7 +385,7 @@ this example as SVG (SVG-enabled browsers only)</a><br />
 <p>The effect of the <a>'viewBox'</a>
 attribute is that the user agent automatically supplies the
 appropriate transformation matrix to map the specified
-rectangle in user space to the bounds of a designated region
+rectangle in local coordinate system to the bounds of a designated region
 (often, the viewport). To achieve the effect of the example on
 the left, with viewport dimensions of 300 by 200 pixels, the
 user agent needs to automatically insert a transformation which
