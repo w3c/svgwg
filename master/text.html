@@ -5500,21 +5500,28 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> d="..." fill="
 
 <h2 id="TextRenderingOrder">Text rendering order</h2>
 
-  <p>
-    The glyphs associated with the characters within a <a>'text'</a>
-    element are rendered in the logical order of the characters in the
-    original document, independent of any re-ordering necessary to
-    implement bidirectionality. Thus, for text that goes right-to-left
-    visually, the glyphs associated with the rightmost character are
-    rendered before the glyphs associated with the other characters.
-  </p>
+<p>A <a>'text'</a> element is rendered in one or more chunks.
+Each chunk (as produced by the <a href="#TextLayout">text layout algorithm</a>)
+is rendered, one after the other, in document order.  Each
+rendered chunk, which consists of one or more glyphs,
+is filled and stroked as if it were a single path.</p>
 
-  <p>
-    Additionally, each distinct glyph is rendered in its entirety
-    (i.e., it is filled and stroked as specified by the <a>'fill'</a>
-    and <a>'stroke'</a> properties) before the next glyph gets
-    rendered.
-  </p>
+<p>For the purposes of painting, a <a>'text'</a> has zero, one, or more
+<a>equivalent paths</a>, one for each chunk.  Each equivalent path
+consists of one subpath per glyph within that chunk.</p>
+
+<p class="note">Since the <a>'fill-rule'</a> property does not apply
+to SVG text elements, the specific order of the subpaths within
+the <a>equivalent path</a> does not matter.</p>
+
+<p>The specific position of the start of each subpath, and the direction
+that the path progresses around glyph shape, is not defined.</p>
+
+<p class="note">This means that dashed strokes on text may not place
+the dash pattern at the same positions across different implementations.</p>
+
+<p class="issue">Make sure these chunks are not confused with the
+text anchoring chunks.</p>
 
 <h3 id='TextOverflowProcessing'>Text overflow processing:
   the <span class="property">'text-overflow'</span> property</h3>
