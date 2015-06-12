@@ -534,7 +534,7 @@ function formatElementAttributes(conf, element, n) {
 }
 
 function formatElementGeometryProperties(conf, element, n) {
-  if (!element.geometryProperties) {
+  if (!element.geometryProperties || !element.geometryProperties.length) {
     return null;
   }
 
