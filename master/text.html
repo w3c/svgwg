@@ -603,8 +603,8 @@
     possible adjustments due to the value of the
     <a>'text-anchor'</a> property or the <a>'text-align'</a> property).
     For pre-formatted text and for auto-wrapped text where the
-    <a>content area</a> is determined by the <a>'text/extent'</a>
-    attribute, the initial <a>current text
+    <a>content area</a> is determined by the <a>'inline-size'</a>
+    property, the initial <a>current text
     position</a> is determined by the <a>'tspan/x'</a> and
     <a>'tspan/y'</a> values of the <a>'text'</a> or <a>'tspan'</a>
     element which contains the first rendered character.
@@ -1030,32 +1030,6 @@
       </p>
     </dd>
 
-    <dt id="TextElementExtentAttribute"><span class="adef">extent</span></dt>
-    <dd>
-      <p class="annotation">
-	'extent' added by resolution from
-	<a href="http://www.w3.org/2015/02/12-svg-minutes.html#action17">February
-	  12th, 2015</a>. 'extent' replaces the 'width' and 'height'
-	  attributes, added by resolution from June 27th, 2013.
-      </p>
-      <p>
-	Only valid on a <a>'text'</a> element.
-	Establishes a rectangular <a>content area</a>. The value
-	of <a>'extent'</a> gives the width of the rectangle for
-	horizontal text and the height for vertical text. The other
-	dimension (height for horizontal text, width for vertical
-	text) is of infinite length. See
-	the <a href="text.html#TextLayoutContentArea">Content Area</a>
-	section.
-      </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>As if not specified.</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-    </dd>
-
   </dl>
 
 <h3 id="TSpanNotes">Notes on 'x', 'y', 'dx', 'dy' and 'rotate'</h3>
@@ -1072,7 +1046,7 @@
     <a>'dy'</a>, and <a>'rotate'</a> attributes are
     ignored for auto-wrapped text (except for the initial <a>current
     text position</a> when the <a>content area</a> is specified by
-    the <a>'text/extent'</a> attribute).
+    the <a>'inline-size'</a> property).
   </p>
 
   <p class="annotation" data-issue="2">
@@ -1416,7 +1390,7 @@
     elements.
 
     The <a>content area</a> may be explictly declared by setting the
-    <a>'text/extent'</a> attribute or by setting
+    <a>'inline-size'</a> property, or by setting
     the <a>'shape-inside'</a> property that defines or references an
     SVG <a>shape</a>. If a <a>content area</a> is not declared, it
     defaults to a rectangle of infinite width and height. The rules
@@ -1507,8 +1481,8 @@
 	<div class="figure">
 	  <img class="bordered" src="images/text/text-wrapped.svg"
                alt="Image showing auto-wrapped text on two lines."/>
-	  <p class="caption">Auto-wrapped text. The <a>'text/extent'</a>
-	    parameter defines a rectangular content area (shown
+	  <p class="caption">Auto-wrapped text. The <a>'inline-size'</a>
+	    property defines a rectangular content area (shown
 	    in light blue).</p>
 	</div>
       </div>
@@ -1583,12 +1557,15 @@
 
   <p>
     A <dfn>content area</dfn> is defined by specifying in
-    a <a>'text'</a> element a <a>'text/extent'</a> attribute
+    a <a>'text'</a> element a <a>'inline-size'</a> property,
     or a <a>'shape-inside'</a> property that defines
     or references an SVG <a>shape</a>. If no <a>content area</a> is
     provided, the <a>content area</a> defaults to a rectangle of
     infinite width and height (see the
     <a href="text.html#TextLayoutPre">pre-formatted text</a> section).
+    If both an <a>'inline-size'</a> property and a
+    <a>'shape-inside'</a> property with value other than 'none' are
+    given, the <a>'shape-inside'</a> property is used.
   </p>
 
   <p id="TextLayoutWrappingArea">
@@ -1606,48 +1583,90 @@
     causes an additional inset to the <a>wrapping area</a>.
   </p>
 
-<h3 id='TextLayoutExtent'>The 'extent' attribute</h3>
 
-  <p>
-    The <a>content area</a> can be defined using the
-    <a>'text'</a> element attribute <a>'text/extent'</a>:
+<h3 id='InlineSize'>The <span class="property">'inline-size'</span> property</h3>
+
+  <p class="annotation">
+    'extent' added by resolution from
+    <a href="http://www.w3.org/2015/02/12-svg-minutes.html#action17">February
+      12th, 2015</a>. 'extent' replaces the 'width' and 'height'
+    attributes, added by resolution from June 27th, 2013.
+    Replaced by 'inline-size' presentation attribute per resolution from
+    <a href="http://www.w3.org/2015/06/11-svg-minutes.html#item09">Linkoping
+      F2F, June 11, 2015</a>.
   </p>
 
-  <dl>
-    <dt>Horizontal text</dt>
-    <dd>
-      Specifies the width of a "rectangular" <a>content area</a> of
-      infinite height.
-
-      For left-to-right text, the initial <a>current text position</a>
-      is at the left of the rectangle. For right-to-left text it is at
-      the right of the rectangle.
-    </dd>
-
-    <dt>Vertical text</dt>
-    <dd>
-      Specifies the height of a "rectangular" <a>content area</a> of
-      infinite width. The initial <a>current text position</a> is at
-      the top of the rectangle.
-    </dd>
-
-  </dl>
-
   <p>
-    In both cases, the initial <a>current text position</a> is taken
-    from the <a>'text/x'</a> and <a>'text/y'</a> attributes of
-    the <a>'text'</a> element.
+    The <a>'inline-size'</a> property allows one to set the
+    <a>content area</a> to a rectangluar shape. The computed value of
+    the property sets the width of the rectangle for horizontal text
+    and the height of the rectangle for vertical text. The other
+    dimension (height for horizontal text, width for vertical text) is
+    of infinite length.
   </p>
 
+  <p>
+    The initial <a>current text position</a> is taken from the
+    <a>'text/x'</a> and <a>'text/y'</a> attributes of the
+    <a>'text'</a> element (or first child <a>'tspan'</a> element
+    if the attributes are not given on the <a>'text'</a> element).
+
+    For left-to-right text, the initial <a>current text position</a>
+    is at the left of the rectangle. For right-to-left text it is at
+    the right of the rectangle.
+
+    For vertical text, the initial <a>current text position</a> is at
+    the top of the rectangle.
+  </p>
+
+  <table class="propdef">
+    <tr>
+      <th>Name:</th>
+      <td><dfn id="InlineSizeProperty">inline-size</dfn></td>
+    </tr>
+    <tr>
+      <th>Value:</th>
+      <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> | <a>&lt;number&gt;</a></td>
+    </tr>
+    <tr>
+      <th>Initial:</th>
+      <td>As if not specified.</td>
+    </tr>
+    <tr>
+      <th>Applies to:</th>
+      <td><a>'text'</a> elements</td>
+    </tr>
+    <tr>
+      <th>Inherited:</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>Percentages:</th>
+      <td>Refer to the width (for horizontal text) or height (for vertical text) of the current viewport
+	(see <a href="coords.html#Units">Units</a>)</td>
+    </tr>
+    <tr>
+      <th>Media:</th>
+      <td>visual</td>
+    </tr>
+    <tr>
+      <th>Computed&#160;value:</th>
+      <td>absolute length or percentage</td>
+    </tr>
+    <tr>
+      <th><a>Animatable</a>:</th>
+      <td>yes</td>
+    </tr>
+  </table>
 
   <div class="example">
-    <p>An example of using <a>'text/extent'</a> for wrapping horizontal text.</p>
+    <p>An example of using <a>'inline-size'</a> for wrapping horizontal text.</p>
 
     <pre><![CDATA[
 <svg xmlns="http://www.w3.org/2000/svg"
      width="300" height="100" viewBox="0 0 300 100">
 
-  <text x="50" y="30" extent="200"
+  <text x="50" y="30" inline-size="200"
         font-family="sans-serif"
 	font-size="20px" >This text wraps at 200 pixels.</text>
 
@@ -1667,13 +1686,13 @@
   </div>
 
   <div class="example">
-    <p>An example of using <a>'text/extent'</a> for wrapping right to left horizontal text.</p>
+    <p>An example of using <a>'inline-size'</a> for wrapping right to left horizontal text.</p>
 
     <pre><![CDATA[
 <svg xmlns="http://www.w3.org/2000/svg"
      width="300" height="100" viewBox="0 0 300 100">
 
-  <text x="250" y="30" extent="200"
+  <text x="250" y="30" inline-size="200"
 	writing-mode="rl-tb"
         font-family="PakType Naqsh"
 	font-size="20px" >هذا النص يلتف في 200 بكسل.</text>
@@ -1700,13 +1719,13 @@
   </div>
 
   <div class="example">
-    <p>An example of using <a>'text/extent'</a> for wrapping vertical text.</p>
+    <p>An example of using <a>'inline-size'</a> for wrapping vertical text.</p>
 
     <pre><![CDATA[
 <svg xmlns="http://www.w3.org/2000/svg"
      width="100" height="300" viewBox="0 0 100 300">
 
-  <text x="62.5" y="25" extent="200"
+  <text x="62.5" y="25" inline-size="200"
 	writing-mode="tb-rl"
         font-family="IPAMincho"
 	font-size="25px" >テキストは１０文字後に折り返されます。</text>
@@ -1732,6 +1751,7 @@
       done. librsvg does do the correct glyph substitution.
     </p>
   </div>
+
 
 <h3 id='TextShapeInside'>The <span class="property">'shape-inside'</span> property</h3>
 
@@ -2178,19 +2198,19 @@
     </li>
 
     <li>
-      If the <a>'text'</a> element has an <a>'text/extent'</a>
+      If the <a>'text'</a> element has an <a>'inline-size'</a>
       attribute, then lay out <var>root</var> with its <a>block
-      size</a> set to the <a>'text/extent'</a> attribute's value and
+      size</a> set to the <a>'inline-size'</a> attribute's value and
       with an unconstrained <a>inline size</a>.
       <p class='note'>
 	This means that <var>root</var> is laid out with its
-	width set to the <a>'text/extent'</a> value, if <a>'writing-mode'</a>
+	width set to the <a>'inline-size'</a> value, if <a>'writing-mode'</a>
 	is <span class='prop-value'>horizontal-tb</span>, and its height otherwise.
       </p>
     </li>
 
     <li>
-      Otherwise, <a>'text/extent'</a> was not specified.  Lay
+      Otherwise, <a>'inline-size'</a> was not specified.  Lay
       out <var>root</var> with an unconstrained width and height.
     </li>
 
@@ -2456,7 +2476,7 @@
 
   <p>
     In the case where the <a>content area</a> is defined by the by
-    the <a>'text/extent'</a> attribute,
+    the <a>'inline-size'</a> attribute,
     the <a>'tspan/x'</a> and <a>'tspan/y'</a> attributes
     corresponding to the first rendered glyph define the
     initial <a>current text position</a>.  When the <a>content
@@ -3339,7 +3359,7 @@ text anchoring chunks.</p>
     Note that the effect of <a>'text-overflow'</a> is purely visual,
     the ellipsis itself does not become part of the DOM.  For all the
     DOM methods it's as if <a>'text-overflow'</a> wasn't applied, and
-    as if <a>'text/extent'</a> didn't constrain the text.
+    as if <a>'inline-size'</a> didn't constrain the text.
   </p>
 
   <p class="issue" data-issue="39">Need updated example.</p>
