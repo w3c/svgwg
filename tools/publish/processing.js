@@ -845,6 +845,7 @@ exports.formatMarkup = function(conf, page, doc) {
         }
       }
       n.removeAttribute("edit:toc");
+      n.removeAttribute("edit:excludefromidl");
     }
   });
 
