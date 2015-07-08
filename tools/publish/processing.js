@@ -400,10 +400,17 @@ function doCompleteIDL(conf, page, n) {
         }
         var clone = utils.cloneChildren(n);
         utils.forEachNode(clone, function(n) {
-          if (n.nodeType == n.ELEMENT_NODE &&
-              n.localName == "b") {
-            utils.replace(n, utils.parse('<a>{{name}}</a>',
-                                         { name: utils.cloneChildren(n) }));
+          if (n.nodeType == n.ELEMENT_NODE) {
+            if (n.localName == "b") {
+              utils.replace(n, utils.parse('<a>{{name}}</a>',
+                                           { name: utils.cloneChildren(n) }));
+            } else if (n.localName == "a" &&
+                       n.hasAttribute("href")) {
+              var href = n.getAttribute("href");
+              if (href[0] == "#") {
+                n.setAttribute("href", p + ".html" + href);
+              }
+            }
           }
         });
         idl.push(clone);
