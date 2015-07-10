@@ -1708,12 +1708,6 @@
     In SVG absolute and percentage values are defined relative to the
     current <a>local coordinate system</a> and the <a>'viewBox'</a>.
   </p>
-  <p class="issue" data-issue="9">
-    The values 'outside-shape' and 'auto' are probably not useful in SVG.
-    A new value of 'none' is probably needed for SVG. This would indicate
-    that the text should be rendered using a 'width' and/or 'height' attribute,
-    or absent those attributes, as pre-formatted text.
-  </p>
 
   <table class="propdef">
     <tr>
@@ -1722,11 +1716,11 @@
     </tr>
     <tr>
       <th>Value:</th>
-      <td>none | &lt;basic-shape&gt; | &lt;uri&gt;</td>
+      <td>auto | &lt;basic-shape&gt; | &lt;uri&gt;</td>
     </tr>
     <tr>
       <th>Initial:</th>
-      <td>none</td>
+      <td>auto</td>
     </tr>
     <tr>
       <th>Applies to:</th>
@@ -1755,22 +1749,18 @@
   </table>
 
   <dl>
-    <dt><span class="attr-value">outside-shape</span></dt>
-    <dd>
-      The shape is computed based on the computed value of the ‘shape-outside’ property.
-      <p class="issue" data-issue="10">This value is probably not useful.</p>
-    </dd>
-
     <dt><span class="attr-value">auto</span></dt>
     <dd>
-      The shape is computed based on the content box of the element.
-      <p class="issue" data-issue="11">This value is probably not useful.</p>
+      For the purposes of SVG, the 'auto' value indicates that the
+      content area should be defined using the <a>'inline-size'</a>
+      property or as for pre-formatted text.
     </dd>
 
     <dt><span class="attr-value">&lt;basic-shape&gt;</span></dt>
     <dd>
-      The shape is computed based on the values of one of
-      inset,‘ circle’, ‘ellipse’ or ‘polygon’.
+      The shape is computed based on the values of one of 'circle()',
+      'ellipse()' or 'polygon()'. The CSS value of 'inset()' is
+      invalid for SVG.
 
       <div class="example">
 	<p>
@@ -1827,9 +1817,6 @@
       &lt;uri&gt; does not reference an SVG shape element or an
       image, the effect is as if the value ‘auto’ had been
       specified.
-      <p class="issue" data-issue="13">Check if we allow referencing an image. There
-	are security issues. If we allow it, then the
-	'shape-image-threshold' property is also required.</p>
 
       <div class="example">
 	<p>
@@ -1865,6 +1852,9 @@
 
   </dl>
 
+  <p>
+    The CSS values of 'outside-shape' and 'shape-box' are invalid for SVG.
+  </p>
 
   <p class="note">
     Except as noted, see the CSS Shapes Module Level 2 for the definition of
@@ -1945,8 +1935,9 @@
   <dl>
     <dt><span class="attr-value">&lt;basic-shape&gt;</span></dt>
     <dd>
-      The shape is computed based on the values of one of
-      ‘inset’,‘ circle’, ‘ellipse’ or ‘polygon’.
+      The shape is computed based on the values of one of 'circle()',
+      'ellipse()' or 'polygon()'. The CSS value of 'inset()' is
+      invalid for SVG.
     </dd>
 
     <dt><span class="attr-value">&lt;uri&gt;</span></dt>
@@ -1958,11 +1949,6 @@
       &lt;uri&gt; does not reference an SVG shape element or an
       image, the effect is as if the value ‘auto’ had been
       specified.
-      <p class="issue" data-issue="15">
-	Check if we allow referencing an image. There are security
-	issues. If we allow it, then the 'shape-image-threshold'
-	property is also required.
-      </p>
     </dd>
 
   </dl>
@@ -2010,10 +1996,32 @@
     </div>
   </div>
 
+  <p>
+    The CSS value of 'shape-box' are invalid for SVG.
+  </p>
+
   <p class="note">
     Except as noted, see the CSS Shapes Module Level 1 for the definition of
     <a href="http://dev.w3.org/csswg/css-shapes/#shape-outside-property">'shape-outside'</a>.
-    [<a href="refs.html#ref-CSS21">CSSXX</a>]
+    [<a href="refs.html#ref-CSSSHAPES1">CSSSHAPES1</a>]
+  </p>
+
+<h3 id='TextShapeImageValue'>The <span class='property'>shape-image-threshold</span> property</h3>
+
+  <p>
+    The shape-image-threshold defines the alpha channel threshold used
+    to extract the shape using an image. A value of 0.5 means that the
+    shape will enclose all the pixels that are more than 50% opaque.
+  </p>
+
+  <p>
+    For the purposes of SVG, this property applies to <a>'text'</a> elements.
+  </p>
+
+  <p class="note">
+    Except as noted, see the CSS Shapes Module Level 1 for the definition of
+    <a href="http://dev.w3.org/csswg/css-shapes/#shape-image-threshold-property">'shape-image-threshold'</a>.
+    [<a href="refs.html#ref-CSSSHAPES1">CSSSHAPES1</a>]
   </p>
 
 <h3 id='TextShapeMargin'>The <span class="property">'shape-margin'</span> property</h3>
@@ -2067,7 +2075,7 @@
   <p class="note">
     Except as noted, see the CSS Shapes Module Level 1 for the definition of
     See <a href="http://dev.w3.org/csswg/css-shapes/#shape-margin-property">'shape-margin'</a>.
-    [<a href="refs.html#ref-CSS21">CSSXX</a>]
+    [<a href="refs.html#ref-CSSSHAPES1">CSSSHAPES1</a>]
   </p>
 
 <h3 id='TextShapePadding'>The <span class="property">'shape-padding'</span> property</h3>
@@ -2115,8 +2123,7 @@
 
   <p class="note">
     Except as noted, see the CSS Shapes Module Level 2 for the definition of
-    <a href="http://www.w3.org/TR/2012/WD-css3-exclusions-20120503/#wrap-padding-property">'shape-padding'</a>
-    (wrap-padding renamed to shape-padding).
+    <a href="http://dev.w3.org/csswg/css-shapes-2/#shape-padding-property">'shape-padding'</a>.
   </p>
 
 <h2 id="TextLayoutAlgorithm">Text layout &#x2013; Algorithm</h2>
