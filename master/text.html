@@ -237,15 +237,21 @@
 
   <p>
     A font consists of a collection of glyphs together with other
-    information (collectively, the font tables) necessary to use those glyphs to
-    present characters on some visual medium. The combination of the
-    collection of glyphs and the font tables is called the <em>font
-    data</em>. The font tables include the information necessary to
-    map characters to glyphs, to determine the size of glyph areas and
-    to position the glyph area. <!-- next sentence is loose and should be impoved -->
-    Each font table consists of one or
-    more font characteristics, such as the font-weight and
-    font-style.
+    information (collectively, the font tables) necessary to use those
+    glyphs to present characters on some visual medium. The
+    combination of the collection of glyphs and the font tables is
+    called the <em>font data</em>.
+  </p>
+
+  <p>
+    A font may supply supply substitution and positioning tables that
+    can be used by a formatter (shaper) to re-order, combine and
+    position a sequence of glyphs to make one or more composite
+    glyphs. The combination may be as simple as a ligature, or as
+    complex as an indic syllable which combines, usually with some
+    re-ordering, multiple consonants and vowel glyphs. The tables may
+    be language dependent allowing the use of language appropriate
+    letter forms.
   </p>
 
   <div class="annotation svg2-requirement">
@@ -270,7 +276,9 @@
   </div>
 
   <p>
-    SVG requires support for downloadable fonts as defined in the
+    Proper text rendering may depend on using the same font as used
+    during authoring. For this reason SVG requires support for
+    downloadable fonts as defined in the
     <a href="http://dev.w3.org/csswg/css-fonts-3/#font-resources">Font
     Resources</a> section of the
     <a href="http://dev.w3.org/csswg/css3-fonts/">CSS Fonts
@@ -285,6 +293,13 @@
     discretionary ligatures, swashes, old-style numbers, and so
     on. WOFF also allows the fonts to be compressed, subsetted, and
     include licensing information.
+  </p>
+
+  <p>
+    Glyph selection and positioning is normally handled according to
+    the rules of CSS. In some cases, though, the final layout of text
+    in SVG requires knowledge of the geometry properties of individual
+    glyphs.
   </p>
 
   <p>
@@ -347,46 +362,23 @@
     Base table for vertical writing-modes.
   </p>
 
-  <div class="annotation svg2-requirement">
-    <table>
-      <tr>
-	<th>SVG 2 Requirement:</th>
-	<td>Support text aligned to different baselines.</td>
-      </tr>
-      <tr>
-	<th>Resolution:</th>
-	<td><a href="http://www.w3.org/2012/03/15-svg-irc#T21-07-21">SVG 2 will support glyphs being aligned to different baselines, perhaps by using existing or improved CSS properties.</a></td>
-      </tr>
-      <tr>
-	<th>Purpose:</th>
-	<td>To allow glyphs in horizontal text to have different vertical alignments for stylistic effects.</td>
-      </tr>
-      <tr>
-	<th>Owner:</th>
-	<td>Chris (no action)</td>
-      </tr>
-    </table>
-  </div>
-
   <p>
-    In horizontal writing-modes, the glyphs of a given script
-    are positioned so that a particular point on each glyph, the
-    <em><a href="text.html#AlignmentPoint">alignment-point</a></em>,
-    is aligned with the alignment-points of the other glyphs in that
-    script. The glyphs of different scripts, for example, Western,
-    Northern Indic and Far-Eastern scripts, are typically aligned at
-    different points on the glyph. For example, Western glyphs are
-    aligned on the bottoms of the capital letters, northern indic
-    glyphs are aligned at the top of a horizontal stroke near the top
-    of the glyphs and far-eastern glyphs are aligned either at the
-    bottom or center of the glyph. Within a script and within a line
-    of text having a single font-size, the sequence of
-    alignment-points defines, in the inline- progression-direction, a
-    geometric line called a <em>baseline</em>. Western and most other
-    alphabetic and syllabic glyphs are aligned to an "alphabetic"
-    baseline, the northern indic glyphs are aligned to a "hanging"
-    baseline and the far-eastern glyphs are aligned to an
-    "ideographic" baseline.
+    Glyphs are position relative to a particular point on each glyph
+    known as the <em><dfn><a>alignment point</a></dfn></em>.  For
+    horizontal writing-modes, the glyphs' alignment points are
+    vertically aligned while for vertical writing-modes, they are
+    horizontally aligned. The position of the alignment point depends
+    on the script. For example, Western glyphs are aligned on the
+    bottoms of the capital letters, northern indic glyphs are aligned
+    at the top of a horizontal stroke near the top of the glyphs, and
+    far-eastern glyphs are aligned either at the bottom or center of
+    the glyph. Within a script and within a line of text having a
+    single font-size, the sequence of alignment points defines, in the
+    inline- progression-direction, a geometric line called
+    a <em>baseline</em>. Western and most other alphabetic and
+    syllabic glyphs are aligned to an "alphabetic" baseline, the
+    northern indic glyphs are aligned to a "hanging" baseline and the
+    far-eastern glyphs are aligned to an "ideographic" baseline.
   </p>
 
   <div class="figure">
@@ -396,6 +388,33 @@
       Example baselines (red lines) in three different scripts. From
       left to right: alphabetic, hanging, ideographic. The EM box is
       shown in blue for the ideographic script.
+    </p>
+  </div>
+
+  <p>
+    As glyphs are sequencially placed along a baseline, the
+    alignment point of a glyph is typically positioned at the
+    <dfn><a>current text position</a></dfn>. After each glyph is
+    placed, the <a>current text position</a> is advanced by the
+    glyph's <em>advance</em> value (typically the width for horizontal
+    text or height for vertical text) with any correction for kerning
+    or other spacing adjustment. The initial and final current text
+    positions are used for alignment (e.g. when the
+    <a>'text-anchor'</a> value is either 'start' or 'end').  The
+    glyph's width is needed when placing text along a path.
+  </p>
+
+  <div class="figure">
+    <img class="bordered" src="images/text/font_metrics.svg"
+         alt="Baseline example in three different scripts."/>
+    <p class="caption">
+      Example of font metrics. The blue boxes show the geometric
+      boxes for the three glyphs. The labeled small circles show the
+      <a>current text position</a> before glyph placement. The
+      small square shows the final <a>current text position</a>
+      after placing the last glyph. Note that the left side of
+      the 'a' glyph's box is not aligned with the right side of
+      the 'V' glyph's box due to kerning.
     </p>
   </div>
 
@@ -422,14 +441,14 @@
   <p>
     SVG further assumes that for each glyph in the font data for a
     font, there are two width values, two alignment-baselines and two
-    alignment-points, one each for horizontal writing-modes and the
+    alignment points, one each for horizontal writing-modes and the
     other for vertical writing-modes. (Even though it is specified as
     a width, for vertical writing-modes the width is used in the
     vertical direction.) The script to which a glyph belongs
     determines an alignment-baseline to which the glyph is to be
     aligned. The
     <a href="text.html#InlineProgressionDirection">inline-progression-direction</a>
-    position of the alignment-point is on the start-edge of the glyph.
+    position of the alignment point is on the start-edge of the glyph.
   </p>
 
   <p>
@@ -446,16 +465,27 @@
     [<a href="refs.html#ref-CSSWRITINGMODES3">CSSWRITINGMODES3</a>])
   </p>
 
-  <p>
-    In addition to the font characteristics required above, a font may
-    also supply substitution and positioning tables that can be used
-    by a formatter to re-order, combine and position a sequence of
-    glyphs to make one or more composite glyphs. The combination may
-    be as simple as a ligature, or as complex as an indic syllable
-    which combines, usually with some re-ordering, multiple consonants
-    and vowel glyphs.
-  </p>
-    
+  <div class="annotation svg2-requirement">
+    <table>
+      <tr>
+	<th>SVG 2 Requirement:</th>
+	<td>Support text aligned to different baselines.</td>
+      </tr>
+      <tr>
+	<th>Resolution:</th>
+	<td><a href="http://www.w3.org/2012/03/15-svg-irc#T21-07-21">SVG 2 will support glyphs being aligned to different baselines, perhaps by using existing or improved CSS properties.</a></td>
+      </tr>
+      <tr>
+	<th>Purpose:</th>
+	<td>To allow glyphs in horizontal text to have different vertical alignments for stylistic effects.</td>
+      </tr>
+      <tr>
+	<th>Owner:</th>
+	<td>Chris (no action)</td>
+      </tr>
+    </table>
+  </div>
+
 <h2 id="TextElement">The <span class="element-name">'text'</span> and
   <span class="element-name">'tspan'</span> elements</h2>
 
@@ -4281,8 +4311,8 @@ text anchoring chunks.</p>
 
   <p id="AlignmentPoint">
     For each glyph to be rendered, the SVG user agent determines an
-    appropriate <dfn>alignment-point</dfn> on the glyph which will be
-    placed exactly at the current text position. The alignment-point is
+    appropriate <dfn>alignment point</dfn> on the glyph which will be
+    placed exactly at the current text position. The alignment point is
     determined based on glyph cell metrics in the glyph itself, the
     current <a href="text.html#SettingInlineProgressionDirection">inline-progression-direction</a>
     and the <a href="text.html#GlyphOrientation">glyph orientation</a>
@@ -4293,7 +4323,7 @@ text anchoring chunks.</p>
     <span class='attr-value'>text-anchor:start</span>, and
     <span class='attr-value'>alignment-baseline:baseline</span>)
 
-    the alignment-point in the glyph will be the intersection of left
+    the alignment point in the glyph will be the intersection of left
     edge of the glyph cell (or some other glyph-specific x-axis
     coordinate indicating a left-side origin point) with the Latin
     baseline of the glyph. For many cases with top-to-bottom vertical
@@ -5500,7 +5530,7 @@ text anchoring chunks.</p>
     text to stay aligned across font size changes. It defaults to the
     baseline with the same name as the computed value of the
     alignment-baseline property. That is, the position of
-    "ideographic" alignment-point in the
+    "ideographic" alignment point in the
     <b>block-progression-direction</b> is the position of the
     "ideographic" baseline in the baseline-table of the object being
     aligned.
@@ -5517,47 +5547,47 @@ text anchoring chunks.</p>
       the parent.</dd>
 
     <dt><b>baseline</b></dt>
-    <dd>The alignment-point of the object being aligned is
+    <dd>The alignment point of the object being aligned is
       aligned with the dominant-baseline of the parent <a>text content element</a>.</dd>
 
     <dt><b>before-edge</b></dt>
-    <dd>The alignment-point of the object being aligned is
+    <dd>The alignment point of the object being aligned is
       aligned with the "before-edge" baseline of the parent <a>text content element</a>.</dd>
 
     <dt><b>text-before-edge</b></dt>
-    <dd>The alignment-point of the object being aligned is
+    <dd>The alignment point of the object being aligned is
       aligned with the "text-before-edge" baseline of the parent <a>text content element</a>.</dd>
 
     <dt><b>middle</b></dt>
-    <dd>The alignment-point of the object being aligned is
+    <dd>The alignment point of the object being aligned is
       aligned with the "middle" baseline of the parent <a>text content element</a>.</dd>
 
     <dt><b>central</b></dt>
-    <dd>The alignment-point of the object being aligned is
+    <dd>The alignment point of the object being aligned is
       aligned with the "central" baseline of the parent <a>text content element</a>.</dd>
 
     <dt><b>after-edge</b></dt>
-    <dd>The alignment-point of the object being aligned is
+    <dd>The alignment point of the object being aligned is
       aligned with the "after-edge" baseline of the parent <a>text content element</a>.</dd>
 
     <dt><b>text-after-edge</b></dt>
-    <dd>The alignment-point of the object being aligned is
+    <dd>The alignment point of the object being aligned is
       aligned with the "text-after-edge" baseline of the parent <a>text content element</a>.</dd>
 
     <dt><b>ideographic</b></dt>
-    <dd>The alignment-point of the object being aligned is
+    <dd>The alignment point of the object being aligned is
       aligned with the "ideographic" baseline of the parent <a>text content element</a>.</dd>
 
     <dt><b>alphabetic</b></dt>
-    <dd>The alignment-point of the object being aligned is
+    <dd>The alignment point of the object being aligned is
       aligned with the "alphabetic" baseline of the parent <a>text content element</a>.</dd>
 
     <dt><b>hanging</b></dt>
-    <dd>The alignment-point of the object being aligned is
+    <dd>The alignment point of the object being aligned is
       aligned with the "hanging" baseline of the parent <a>text content element</a>.</dd>
 
     <dt><b>mathematical</b></dt>
-    <dd>The alignment-point of the object being aligned is
+    <dd>The alignment point of the object being aligned is
       aligned with the "mathematical" baseline of the parent <a>text content element</a>.</dd>
   </dl>
 
