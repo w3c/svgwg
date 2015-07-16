@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
 <head>
@@ -37,15 +37,9 @@ redefine them here. -->
 <ul>
   <li><a href="#Solidcolors">Solid colors</a>,</li>
   <li><a href="#Gradients">Gradients</a>,</li>
-  <li><a href="#Patterns">Patterns</a>.</li>
+  <li><a href="#Patterns">Patterns</a>,</li>
   <li><a href="#Hatches">Hatches</a>.</li>
 </ul>
-
-<p class="issue" data-issue="1">
-  SVG1.1 refers to
-  "<a href="http://www.w3.org/TR/SVG/pservers.html#Introduction">built-in</a>"
-  paint servers. Is there any other kind?
-</p>
 
 <div class="annotation svg2-requirement">
   <table>
@@ -137,6 +131,12 @@ and used consistently throughout a document. It is also useful as
 away of animating a palette colors.  (See CSS3 Color for a more general
 discussion of color [<a href="refs.html#ref-CSS3COLOR">CSS3COLOR</a>].)</p>
 
+<p class="note">
+  In SVG 1.1, <em>1-stop</em> gradients can be used to to produce a
+  palette.  This method for creating a palette fails, however, when a
+  palette color is to be used for a gradient stop, a flood-fill, etc.
+</p>
+
 <edit:with element='solidcolor'>
 
 <p id="SolidcolorElement">Solid colors are defined by a <a>'solidcolor'</a>
@@ -217,12 +217,6 @@ element.</p>
 
 <h2 id="Gradients">Gradients</h2>
 
-<dl class='definitions'  data-dfn-type="dfn" data-export="">
-  <dt id="TermGradientElement">gradient element</dt>
-  <dd>A gradient element is one that defines a gradient paint server.
-  This specification defines the following gradient elements: <edit:elementcategory name='gradient'/>.</dd>
-</dl>
-
 <p>Gradients consist of smooth color transitions between points on a
 drawing surface. SVG provides for three types of gradients:</p>
 
@@ -231,52 +225,41 @@ drawing surface. SVG provides for three types of gradients:</p>
   <li><a href="#RadialGradients">radial gradients</a>,</li>
   <li><a href="#MeshGradients">mesh gradients</a>.</li>
 </ul>
-<p class="issue" data-issue="2">The above text and definition may need to be merged</p>
 
 <p>Once a gradient is defined, a <a>graphics element</a> can be
 filled or stroked with the gradient by setting the <a>'fill'</a>
 or <a>'stroke'</a> properties to reference the gradient.</p>
 
-<p>Color transitions for linear and radial gradients are defined by a
-series of color <a href="#GradientStops">stops</a> along a gradient
-vector. A gradient normal defines how the colors in a vector are
-painted to the surface. For a linear gradient, the normal
-corresponds to lines with the same color. It is perpendicular to the
-vector in an untransformed gradient.
-
-When a <a>graphics element</a> references a gradient, conceptually the
-<a>graphics element</a> should take a copy of the gradient vector and
-gradient normal and treat it as part of its own geometry. Any transformations
-applied to the <a>graphics element</a> geometry also apply to the copied
-gradient vector and gradient normal. Any gradient transforms that are
-specified on the reference gradient are applied before any <a>graphics element</a>
-transformations are applied to the gradient.</p>
+<p>
+  Color transitions for linear and radial gradients are defined by a
+  series of color <a href="#GradientStops">stops</a> along a gradient
+  vector. A gradient normal defines how the colors in a vector are
+  painted to the surface. For a linear gradient, a normal is a line
+  perpendicular to the vector. For a radial gradient, a normal is a
+  circle intersecting the vector at a right angle. Each gradient
+  normal is painted with one color determined by the vector.
+</p>
+<p>
+  When a <a>graphics element</a> references a gradient, conceptually the
+  <a>graphics element</a> should take a copy of the gradient vector
+  with gradient normals and treat it as part of its own geometry. Any
+  transformations applied to the <a>graphics element</a> geometry also
+  apply to the copied gradient vector and gradient normals. Any
+  gradient transforms that are specified on the reference gradient are
+  applied before any <a>graphics element</a> transformations are
+  applied to the gradient.
+</p>
 
 <div class="figure">
   <img
      alt="Image of linear and radial gradients with vectors and normals indicated."
-     src="images/pservers/gradient_vector_and_normal.png"/>
+     src="images/pservers/gradient_vector_and_normal_alt.png"/>
 
-  <p class="caption">Linear and radial gradients with the gradient vector and gradient
-  normal indicated. The vector consists of three stops shown by small circles.</p>
-</div>
-
-<div class="issue" data-issue="3">
-  <p>Would it be better to just refer to the normal as the line where color is
-  constant.  In this case, it would be a circle for an untransformed radial
-  gradient.</p>
-
-  <p>Alternative figure:</p>
-
-  <div class="figure">
-    <img
-       alt="Image of linear and radial gradients with vectors and normals indicated."
-       src="images/pservers/gradient_vector_and_normal_alt.png"/>
-
-    <p class="caption">Linear and radial gradients with the gradient vector
+  <p class="caption">
+    Linear and radial gradients with the gradient vector
     indicated. The vector consists of three stops shown by small
-    circles. One gradient normal is shown for each gradient.</p>
-  </div>
+    circles. One gradient normal is shown for each gradient.
+  </p>
 </div>
 
 <p>Color transitions for mesh gradients are defined by an array of
@@ -284,6 +267,16 @@ color <a href="#GradientStops">stops</a>. The mapping of colors to
 the drawing surface in this case is done by geometric data located
 in the stops. This is discussed in detail in the
 <a href="#MeshGradients">mesh gradients</a> section.</p>
+
+<h3 id="Definitions">Definitions</h3>
+
+<dl class='definitions'  data-dfn-type="dfn" data-export="">
+  <dt id="TermGradientElement">gradient element</dt>
+  <dd>A gradient element is one that defines a gradient paint server.
+    This specification defines the following gradient elements:
+    <edit:elementcategory name='gradient'/>.
+  </dd>
+</dl>
 
 <h3 id="LinearGradients">Linear gradients</h3>
 
@@ -3002,20 +2995,21 @@ processed.</p>
 -->
 <div class="example">
 <pre><![CDATA[
-<hatch pitch="5" rotate="135">
+<hatch hatchUnits="userSpaceOnUse" pitch="5" rotate="135">
   <hatchpath stroke="#a080ff" stroke-width="2"/>
 </hatch>
 ]]></pre>
 <div class="figure">
   <img
      alt="A hatch example with parallel lines filling a rectangle at a 45 degree angle."
-     src="images/pservers/hatch01.png"/>
+     src="images/pservers/hatch01_svg1.svg"/>
   <p class="caption">A hatch with a single <a>'hatchpath'</a>.
   </p>
+  <p class="view-as-svg"><a href="images/pservers/hatch01.svg">View
+      this example as SVG (SVG 2-enabled browsers only)</a><br />
+    &nbsp;</p>
 </div>
 </div>
-
-<p class="issue" data-issue="8">Proper examples with links to the SVG need to be given.</p>
 
 </edit:with>
 
@@ -3118,60 +3112,72 @@ solid color paint servers are allowed for the <a>'stroke'</a> property.</p>
 <div class="example">
 <pre><![CDATA[
 <hatch  hatchUnits="userSpaceOnUse" pitch="6">
-    <hatchpath stroke-width="1" d="c 0,4 8,6 8,10 8,14 0,16 0,20"/>
+    <hatchpath stroke-width="1" d="C 0,4 8,6 8,10 8,14 0,16 0,20"/>
 </hatch>]]></pre>
 <div class="figure">
   <img
      alt="A hatch example with squiggly lines filling a rectangle."
-     src="images/pservers/hatch02.png"/>
+     src="images/pservers/hatch02_svg1.svg"/>
   <p class="caption">A hatch fill with a continuous squiggly <a>'hatchpath'</a>.
   </p>
+  <p class="view-as-svg"><a href="images/pservers/hatch02.svg">View
+      this example as SVG (SVG 2-enabled browsers only)</a><br />
+    &nbsp;</p>
 </div>
 </div>
 
 <div class="example">
 <pre><![CDATA[
 <hatch  hatchUnits="userSpaceOnUse" pitch="20">
-    <hatchpath stroke-width="2" d="L 0,0 10,50"/>
+    <hatchpath stroke="#a080ff" stroke-width="2" d="L 0,0 10,50"/>
 </hatch>]]></pre>
 <div class="figure">
   <img
      alt="A hatch example with a zigzag line."
-     src="images/pservers/hatch03.png"/>
+     src="images/pservers/hatch03_svg1.svg"/>
   <p class="caption">A hatch fill with a zigzag <a>'hatchpath'</a>.
     The <a>'d'</a> path data describes two line segments, the first
     starting at (10, 0). The repeating sections are joined.
   </p>
+  <p class="view-as-svg"><a href="images/pservers/hatch03.svg">View
+      this example as SVG (SVG 2-enabled browsers only)</a><br />
+    &nbsp;</p>
 </div>
 </div>
 
 <div class="example">
 <pre><![CDATA[
 <hatch  hatchUnits="userSpaceOnUse" pitch="20">
-    <hatchpath stroke-width="2" d="M 0,0 10,50"/>
+    <hatchpath stroke="#a080ff" stroke-width="2" d="M 0,0 10,50"/>
 </hatch>]]></pre>
 <div class="figure">
   <img
      alt="A hatch example with diagonal lines segments filling a rectangle."
-     src="images/pservers/hatch04.png"/>
+     src="images/pservers/hatch04_svg1.svg"/>
   <p class="caption">A hatch fill with diagonal line segments. The
     repeating sections are not joined.
   </p>
+  <p class="view-as-svg"><a href="images/pservers/hatch04.svg">View
+      this example as SVG (SVG 2-enabled browsers only)</a><br />
+    &nbsp;</p>
 </div>
 </div>
 
 <div class="example">
 <pre><![CDATA[
 <hatch  hatchUnits="userSpaceOnUse" pitch="20">
-    <hatchpath stroke-width="2"/>
-    <hatchpath stroke-width="2" offset="5" stroke-dasharray="10 4 2 4"/>
+    <hatchpath stroke="#a080ff" stroke-width="2"/>
+    <hatchpath stroke="#a080ff" stroke-width="2" offset="5" stroke-dasharray="10 4 2 4"/>
 </hatch>]]></pre>
 <div class="figure">
   <img
      alt="A hatch example with two alternating lines, one dashed."
-     src="images/pservers/hatch05.png"/>
+     src="images/pservers/hatch05_svg1.svg"/>
   <p class="caption">A hatch fill with two <a>'hatchpath'</a>s, one dashed.
   </p>
+  <p class="view-as-svg"><a href="images/pservers/hatch05.svg">View
+      this example as SVG (SVG 2-enabled browsers only)</a><br />
+    &nbsp;</p>
 </div>
 </div>
 
