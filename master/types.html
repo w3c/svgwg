@@ -179,8 +179,26 @@ conformance class, as described in <a href="conform.html">Conformance Criteria</
   </table>
 </div>
 
-<p class="issue" data-issue="3">We need some explicit wording about attributes being "reflected"
-using these interfaces.</p>
+<div class="ready-for-wg-review">
+<p>Some IDL attributes <dfn id="TermReflect">reflect</dfn> the value of a content attribute
+or a property.  The way this reflection is done depends on the type of the IDL attribute:</p>
+
+<ul>
+  <li>If the type of the reflecting IDL attribute is a primitive type, such as
+  DOMString (as used by <a href="styling.html#__svg__SVGStyleElement__title">title</a>
+  on <a>SVGStyleElement</a>), then the rules for
+  <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#reflect">reflecting
+  content attributes in IDL attributes</a> in HTML are used.</li>
+
+  <li>If the type of the reflecting IDL attribute is an <a>SVGAnimatedBoolean</a>,
+  <a>SVGAnimatedString</a>, <a>SVGAnimatedEnumeration</a>, <a>SVGAnimatedNumber</a>,
+  <a>SVGAnimatedNumberList</a>, <a>SVGAnimatedLength</a>, <a>SVGAnimatedLengthList</a>,
+  <a>SVGAnimatedAngle</a> or <a>SVGAnimatedRect</a>, then the rules in the corresponding
+  section below defining the reflecting interface are used.  At a high level, the object's
+  baseVal is used to reflect the value of the content attribute, while its animVal is used
+  to reflect the current animated value of the attribute.</li>
+</ul>
+</div>
 
 <p class="issue" data-issue="17">This should also describe how reflection works for attributes that were
 promoted to properties, such as <a>'transform'</a>.
@@ -264,33 +282,48 @@ attribute can be accessed in the same way as on HTML elements.</p>
   </dd>
 </dl>
 
+<div class="ready-for-wg-review">
 <h3 id="InterfaceSVGAnimatedBoolean">Interface SVGAnimatedBoolean</h3>
 
-<p>Used for attributes of type boolean which can be animated.</p>
+<p>An <a>SVGAnimatedBoolean</a> object is used to <a>reflect</a> an
+animatable attribute that takes a boolean value.</p>
 
 <pre class="idl">interface <b>SVGAnimatedBoolean</b> {
            attribute boolean <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>;
   readonly attribute boolean <a href="types.html#__svg__SVGAnimatedBoolean__animVal">animVal</a>;
 };</pre>
 
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGAnimatedBoolean__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (boolean)</span></dt>
-      <dd class="attribute">
-        <div>The base value of the given attribute before applying any animations.</div>
-      </dd>
-      <dt id="__svg__SVGAnimatedBoolean__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly boolean)</span></dt>
-      <dd class="attribute">
-        <div>If the given attribute or property is being animated, contains the
-        current animated value of the attribute or property. If the given
-        attribute or property is not currently being animated, contains the
-        same value as <a>baseVal</a>.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<p>The <b id="__svg__SVGAnimatedBoolean__baseVal">baseVal</b> IDL attribute
+represents the current non-animated value of the reflected attribute.
+On getting <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>,
+the following steps are run:</p>
+
+<ol>
+  <li>Let <var>value</var> be the value of the reflected attribute,
+  or the empty string if it is not present.</li>
+  <li>If <var>value</var> is not "true" or "false", then set <var>value</var>
+  to the reflected attribute's <a>initial value</a>.</li>
+  <li>Return true if <var>value</var> is "true", and false otherwise.</li>
+</ol>
+
+<p>On setting <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>,
+the reflected attribute is set to "true" if the value is true, and "false"
+otherwise.</p>
+
+<p>The <b id="__svg__SVGAnimatedBoolean__animVal">animVal</b> IDL attribute
+represents the current animated value of the reflected attribute.
+On getting <a href="types.html#__svg__SVGAnimatedBoolean__animVal">animVal</a>,
+the following steps are run:</p>
+
+<ol>
+  <li>If the reflected attribute is not currently being animated, then
+  return the same value that would be returned by
+  <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>.</li>
+  <li>Return true if the reflected attribute's current animated value
+  is "true", and false otherwise.</li>
+</ol>
+</div>
+
 
 <h3 id="InterfaceSVGAnimatedString">Interface SVGAnimatedString</h3>
 
