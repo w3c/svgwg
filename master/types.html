@@ -156,56 +156,7 @@ possible precision and to prevent round-off errors.</p>
 are required to perform numerical computation in accordance with their
 conformance class, as described in <a href="conform.html">Conformance Criteria</a>.</p>
 
-<h2 id="BasicDOMInterfaces">Basic DOM interfaces</h2>
-
-<div class="annotation svg2-requirement">
-  <table>
-    <tr>
-      <th>SVG 2 Requirement:</th>
-      <td>Make the SVGList* interfaces a bit more like other lists/arrays.</td>
-    </tr>
-    <tr>
-      <th>Resolution:</th>
-      <td><a href="http://www.w3.org/2011/02/28-svg-minutes.html#item04">Add array style indexing and .length and .item to svg list types.</a></td>
-    </tr>
-    <tr>
-      <th>Purpose:</th>
-      <td>To align with other array types (e.g. NodeList).  Already implemented in Opera and Firefox.</td>
-    </tr>
-    <tr>
-      <th>Owner:</th>
-      <td>Erik (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/2975">ACTION-2975</a>)</td>
-    </tr>
-  </table>
-</div>
-
-<div class="ready-for-wg-review">
-<p>Some IDL attributes <dfn id="TermReflect">reflect</dfn> the value of a content attribute
-or a property.  The way this reflection is done depends on the type of the IDL attribute:</p>
-
-<ul>
-  <li>If the type of the reflecting IDL attribute is a primitive type, such as
-  DOMString (as used by <a href="styling.html#__svg__SVGStyleElement__title">title</a>
-  on <a>SVGStyleElement</a>), then the rules for
-  <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#reflect">reflecting
-  content attributes in IDL attributes</a> in HTML are used.</li>
-
-  <li>If the type of the reflecting IDL attribute is an <a>SVGAnimatedBoolean</a>,
-  <a>SVGAnimatedString</a>, <a>SVGAnimatedEnumeration</a>, <a>SVGAnimatedNumber</a>,
-  <a>SVGAnimatedNumberList</a>, <a>SVGAnimatedLength</a>, <a>SVGAnimatedLengthList</a>,
-  <a>SVGAnimatedAngle</a> or <a>SVGAnimatedRect</a>, then the rules in the corresponding
-  section below defining the reflecting interface are used.  At a high level, the object's
-  baseVal is used to reflect the value of the content attribute, while its animVal is used
-  to reflect the current animated value of the attribute.</li>
-</ul>
-</div>
-
-<p class="issue" data-issue="17">This should also describe how reflection works for attributes that were
-promoted to properties, such as <a>'transform'</a>.
-<a href="http://www.w3.org/2015/02/11-svg-minutes.html#item12">(Some discussion.)</a></p>
-
-<p class="issue" data-issue="18">Consider combining the definitions of all the list interfaces;
-there is a lot of duplicated text currently.</p>
+<h2 id="DOMInterfacesForSVGElements">DOM interfaces for SVG elements</h2>
 
 <h3 id="InterfaceSVGElement">Interface SVGElement</h3>
 
@@ -282,400 +233,233 @@ attribute can be accessed in the same way as on HTML elements.</p>
   </dd>
 </dl>
 
-<div class="ready-for-wg-review">
-<h3 id="InterfaceSVGAnimatedBoolean">Interface SVGAnimatedBoolean</h3>
 
-<p>An <a>SVGAnimatedBoolean</a> object is used to <a>reflect</a> an
-animatable attribute that takes a boolean value.</p>
+<h3 id="InterfaceSVGGraphicsElement">Interface SVGGraphicsElement</h3>
 
-<pre class="idl">interface <b>SVGAnimatedBoolean</b> {
-           attribute boolean <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>;
-  readonly attribute boolean <a href="types.html#__svg__SVGAnimatedBoolean__animVal">animVal</a>;
-};</pre>
-
-<p>The <b id="__svg__SVGAnimatedBoolean__baseVal">baseVal</b> IDL attribute
-represents the current non-animated value of the reflected attribute.
-On getting <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>,
-the following steps are run:</p>
-
-<ol class="algorithm">
-  <li>Let <var>value</var> be the value of the reflected attribute,
-  or the empty string if it is not present.</li>
-  <li>If <var>value</var> is not "true" or "false", then set <var>value</var>
-  to the reflected attribute's <a>initial value</a>.</li>
-  <li>Return true if <var>value</var> is "true", and false otherwise.</li>
-</ol>
-
-<p>On setting <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>,
-the reflected attribute is set to "true" if the value is true, and "false"
-otherwise.</p>
-
-<p>The <b id="__svg__SVGAnimatedBoolean__animVal">animVal</b> IDL attribute
-represents the current animated value of the reflected attribute.
-On getting <a href="types.html#__svg__SVGAnimatedBoolean__animVal">animVal</a>,
-the following steps are run:</p>
-
-<ol class="algorithm">
-  <li>If the reflected attribute is not currently being animated, then
-  return the same value that would be returned by
-  <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>.</li>
-  <li>Return true if the reflected attribute's current animated value
-  is "true", and false otherwise.</li>
-</ol>
-
-
-<h3 id="InterfaceSVGAnimatedString">Interface SVGAnimatedString</h3>
-
-<p>An <a>SVGAnimatedString</a> object is used to <a>reflect</a> an
-animatable attribute that takes a string value.</p>
-
-<pre class="idl">interface <b>SVGAnimatedString</b> {
-           attribute DOMString <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>;
-  readonly attribute DOMString <a href="types.html#__svg__SVGAnimatedString__animVal">animVal</a>;
-};</pre>
-
-<p>The <b id="__svg__SVGAnimatedString__baseVal">baseVal</b> IDL attribute
-represents the current non-animated value of the reflected attribute.
-On getting <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>,
-the following steps are run:</p>
-
-<ol class="algorithm">
-  <li>If the reflected attribute is not present, then:
-    <ol>
-      <li>If the reflected attribute has an <a>initial value</a>, return it.</li>
-      <li>Otherwise, return the empty string.</li>
-    </ol>
-  </li>
-  <li>Return the value of the reflected attribute.</li>
-</ol>
-
-<p>On setting <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>,
-the reflected attribute is set to specified value.</p>
-
-<p>The <b id="__svg__SVGAnimatedString__animVal">animVal</b> IDL attribute
-represents the current animated value of the reflected attribute.
-On getting <a href="types.html#__svg__SVGAnimatedString__animVal">animVal</a>,
-the following steps are run:</p>
-
-<ol class="algorithm">
-  <li>If the reflected attribute is not currently being animated, then
-  return the same value that would be returned by
-  <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>.</li>
-  <li>Otherwise, return the value of the reflected attribute.</li>
-</ol>
+<div class="annotation svg2-requirement">
+  <table>
+    <tr><th>SVG 2 Requirement:</th>
+    <td>Detect if a mouse event is on the fill or stroke of a shape.</td></tr>
+    <tr><th>Resolution:</th>
+    <td><a href="http://www.w3.org/2012/03/22-svg-irc#T20-20-03">SVG 2 will make it easier to detect if an mouse event is on the stroke or fill of an element.</a></td></tr>
+    <tr><th>Purpose:</th>
+    <td>To allow authors to discriminate between pointer events on the fill and stroke of an element without having to duplicate the element</td></tr>
+    <tr><th>Owner:</th>
+    <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3279">ACTION-3279</a>)</td></tr>
+  </table>
 </div>
 
+<p>Interface <a>SVGGraphicsElement</a> represents SVG elements whose primary purpose
+is to directly render graphics into a group. The
+<a>'transform'</a> property applies to all <a>SVGGraphicsElement</a>. All <a>SVGGraphicsElement</a>
+have a bounding box in current local coordinate system.</p>
 
-<h3 id="InterfaceSVGStringList">Interface SVGStringList</h3>
+<pre class="idl">dictionary <b id="SVGBoundingBoxOptions">SVGBoundingBoxOptions</b> {
+  boolean fill = true;
+  boolean stroke = false;
+  boolean markers = false;
+  boolean clipped = false;
+};
 
-<p>This interface defines a list of DOMString values.</p>
+interface <b>SVGGraphicsElement</b> : <a>SVGElement</a> {
+  readonly attribute <a>SVGAnimatedTransformList</a> <a href="types.html#__svg__SVGGraphicsElement__transform">transform</a>;
 
-<p><a>SVGStringList</a> has the same attributes and methods as other
-SVGxxxList interfaces.</p>
+  <a>DOMRect</a> <a href="types.html#__svg__SVGGraphicsElement__getBBox">getBBox</a>(optional <a>SVGBoundingBoxOptions</a> options);
+  <a>DOMMatrix</a>? <a href="types.html#__svg__SVGGraphicsElement__getCTM">getCTM</a>();
+  <a>DOMMatrix</a>? <a href="types.html#__svg__SVGGraphicsElement__getScreenCTM">getScreenCTM</a>();
+  <a>DOMMatrix</a> <a href="types.html#__svg__SVGGraphicsElement__getTransformToElement">getTransformToElement</a>(<a>SVGGraphicsElement</a> element);
+};
 
-<p>The <a href="http://heycam.github.io/webidl/#dfn-supported-property-indices">supported property indices</a>
-of an <a>SVGStringList</a> object is all non-negative integers less than
-the length of the list.</p>
-
-<pre class="idl">interface <b>SVGStringList</b> {
-
-  readonly attribute unsigned long <a href="types.html#__svg__SVGStringList__length">length</a>;
-  readonly attribute unsigned long <a href="types.html#__svg__SVGStringList__numberOfItems">numberOfItems</a>;
-
-  void <a href="types.html#__svg__SVGStringList__clear">clear</a>();
-  DOMString <a href="types.html#__svg__SVGStringList__initialize">initialize</a>(DOMString newItem);
-  getter DOMString <a href="types.html#__svg__SVGStringList__getItem">getItem</a>(unsigned long index);
-  DOMString <a href="types.html#__svg__SVGStringList__insertItemBefore">insertItemBefore</a>(DOMString newItem, unsigned long index);
-  DOMString <a href="types.html#__svg__SVGStringList__replaceItem">replaceItem</a>(DOMString newItem, unsigned long index);
-  DOMString <a href="types.html#__svg__SVGStringList__removeItem">removeItem</a>(unsigned long index);
-  DOMString <a href="types.html#__svg__SVGStringList__appendItem">appendItem</a>(DOMString newItem);
-  <a href="#__svg__SVGStringList__setter">setter</a> void (unsigned long index, DOMString newItem);
-};</pre>
+<a>SVGGraphicsElement</a> implements <a>SVGTests</a>;</pre>
 
 <dl class="interface">
   <dt class="attributes-header">Attributes:</dt>
   <dd>
     <dl class="attributes">
-      <dt id="__svg__SVGStringList__length" class="attribute first-child"><b>length</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
+      <dt id="__svg__SVGGraphicsElement__transform" class="attribute first-child"><b>transform</b><span class="idl-type-parenthetical"> (readonly <a>SVGAnimatedTransformList</a>)</span></dt>
       <dd class="attribute">
-        <div>The number of items in the list.</div>
-      </dd>
-      <dt id="__svg__SVGStringList__numberOfItems" class="attribute first-child"><b>numberOfItems</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
-      <dd class="attribute">
-        <div>The number of items in the list.</div>
+        <div>Corresponds to attribute <a>'transform'</a> on the given element.</div>
+        <p class="issue" data-issue="12">This needs to be updated to reflect the value of the <a>'transform'</a>
+        property.</p>
       </dd>
     </dl>
   </dd>
   <dt class="operations-header">Operations:</dt>
   <dd>
+    <div class="ready-for-wider-review">
     <dl class="attributes">
-      <dt id="__svg__SVGStringList__clear" class="operation first-child">void <b>clear</b>()</dt>
+      <dt id="__svg__SVGGraphicsElement__getBBox" class="operation first-child"><a>DOMRect</a> <b>getBBox</b>(optional <a>SVGBoundingBoxOptions</a> <var>options</var>)</dt>
       <dd class="operation">
-        <div>Clears all existing current items from the list, with the result being
-        an empty list.</div>
+        <div>
+          <p>Returns the result of invoking the <a href="coords.html#BoundingBoxes">bounding box algorithm</a>
+          for the element, with <var>fill</var>, <var>stroke</var>, <var>markers</var>
+          and <var>clipped</var> members of the <var>options</var> dictionary argument
+          used to control which parts of the element are included in the bounding box,
+          using the element's local coordinate system as the coordinate system to return the
+          bounding box in.</p>
+        </div>
         <dl class="operation">
-          <dt class="exceptions-header">Exceptions</dt>
+          <dt class="returns-header">Returns</dt>
           <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-            </dl>
+            <div>An <a>DOMRect</a> object that defines the bounding box.</div>
           </dd>
         </dl>
       </dd>
-      <dt id="__svg__SVGStringList__initialize" class="operation">DOMString <b>initialize</b>(DOMString <var>newItem</var>)</dt>
+    </dl>
+  </div>
+    <dl class="attributes">
+      <dt id="__svg__SVGGraphicsElement__getCTM" class="operation"><a>DOMMatrix</a>? <b>getCTM</b>()</dt>
       <dd class="operation">
-        <div>Clears all existing current items from the list and re-initializes the
-        list to hold the single item specified by the parameter.</div>
+        <div>Returns the transformation matrix from current user units (i.e., after
+        application of the <a>'transform'</a> property) to the viewport
+        coordinate system for the nearest viewport element (<a>CTM</a>). Note that null
+        is returned if this element is not hooked into the document tree.
+          <p class="issue" data-issue="13">What is the expected result if you call getCTM on an <a>'svg'</a> element?
+          See <a href="https://lists.w3.org/Archives/Public/www-svg/2013May/0047.html">thread</a>. Also see <a href="http://jsfiddle.net/05tz2zur/">example</a>.
+          (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3724">ACTION-3724</a> on Dirk.)</p>
+        </div>
+        <dl class="operation">
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>An <a>DOMMatrix</a> object that defines the <a>CTM</a>.</div>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGGraphicsElement__getScreenCTM" class="operation"><a>DOMMatrix</a>? <b>getScreenCTM</b>()</dt>
+      <dd class="operation">
+        <div>Returns the transformation matrix from current user units (i.e., after
+        application of the <a>'transform'</a> property) to the parent
+        user agent's notion of a "pixel". For display devices, ideally this
+        represents a physical screen pixel. For other devices or environments
+        where physical pixel sizes are not known, then an algorithm similar to
+        the CSS 2.1 definition of a "pixel" can be used instead.  Note that null
+        is returned if this element is not hooked into the document tree. This
+        method would have been more aptly named as <code>getClientCTM</code>,
+        but the name <code>getScreenCTM</code> is kept for historical reasons.
+
+          <p class="issue" data-issue="14">Should this take into account the 'transform' on the <a>'svg'</a> element itself?
+          See <a href="http://jsfiddle.net/05tz2zur/">example</a>. Chrome/Opera/IE: returns the identity matrix for this example,
+          Firefox: difference between transform style and attribute, and is not an identity matrix.</p>
+        </div>
+        <dl class="operation">
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>An <a>DOMMatrix</a> object that defines the given
+            transformation matrix.</div>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGGraphicsElement__getTransformToElement" class="operation"><a>DOMMatrix</a> <b>getTransformToElement</b>(<a>SVGGraphicsElement</a> <var>element</var>)</dt>
+      <dd class="operation">
+        <div>Returns the transformation matrix from the user coordinate system on the
+        current element (after application of the <a>'transform'</a> property)
+        to the user coordinate system on parameter <var>element</var>
+        (after application of its <a>'transform'</a> property).
+          <p class="issue" data-issue="15">If the passed in element is in another document, what should happen?
+          <a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3725">Measurements.</a>
+          <a href="http://www.w3.org/2015/02/11-svg-minutes.html#item12">Proposal to limit this to the same fragment
+          if not removeable.</a>
+          </p>
+        </div>
         <dl class="operation">
           <dt class="parameters-header">Parameters</dt>
           <dd>
             <ol class="parameters">
               <li class="parameter first-child">
-                <div>DOMString <var>newItem</var></div>
-                <div>The item which should become the only member of the list.</div>
+                <div><a>SVGElement</a> <var>element</var></div>
+                <div>The target element.</div>
               </li>
             </ol>
           </dd>
           <dt class="returns-header">Returns</dt>
           <dd>
-            <div>The item being inserted into the list.</div>
+            <div>An <a>DOMMatrix</a> object that defines the transformation.</div>
           </dd>
           <dt class="exceptions-header">Exceptions</dt>
           <dd>
             <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
+              <dt class="exception first-child"><a>InvalidStateError</a></dt>
+              <dd class="exception">Raised if the currently
+              defined transformation matrices make it impossible to compute the
+              given matrix (e.g., because one of the transformations is singular).</dd>
             </dl>
           </dd>
         </dl>
-      </dd>
-      <dt id="__svg__SVGStringList__getItem" class="operation">DOMString <b>getItem</b>(unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Returns the specified item from the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item from the list which is to be
-                returned.  The first item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The selected item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGStringList__insertItemBefore" class="operation">DOMString <b>insertItemBefore</b>(DOMString <var>newItem</var>, unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Inserts a new item into the list at the specified position. The first
-        item is number 0.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>DOMString <var>newItem</var></div>
-                <div>The item which is to be inserted into the list.</div>
-              </li>
-              <li class="parameter">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item before which the new item is to be
-                inserted. The first item is number 0.  If the index is equal to 0,
-                then the new item is inserted at the front of the list. If the index
-                is greater than or equal to <a>numberOfItems</a>, then the new item is
-                appended to the end of the list.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGStringList__replaceItem" class="operation">DOMString <b>replaceItem</b>(DOMString <var>newItem</var>, unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Replaces an existing item in the list with a new item.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>DOMString <var>newItem</var></div>
-                <div>The item which is to be inserted into the list.</div>
-              </li>
-              <li class="parameter">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item which is to be replaced. The first
-                item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGStringList__removeItem" class="operation">DOMString <b>removeItem</b>(unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Removes an existing item from the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item which is to be removed. The first
-                item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The removed item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGStringList__appendItem" class="operation">DOMString <b>appendItem</b>(DOMString <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Inserts a new item at the end of the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>DOMString <var>newItem</var></div>
-                <div>The item which is to be inserted. The first item is
-                number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGStringList__setter" class="operation"><b>setter</b> void (unsigned long <var>index</var>, DOMString <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Replaces the item at index <var>index</var> with <var>newItem</var>.</div>
       </dd>
     </dl>
   </dd>
 </dl>
 
-<h3 id="InterfaceSVGAnimatedEnumeration">Interface SVGAnimatedEnumeration</h3>
 
-<p>Used for attributes whose value must be a constant from a particular
-enumeration and which can be animated.</p>
+<div class="ready-for-wider-review">
 
-<pre class="idl">interface <b>SVGAnimatedEnumeration</b> {
-           attribute unsigned short <a href="types.html#__svg__SVGAnimatedEnumeration__baseVal">baseVal</a>;
-  readonly attribute unsigned short <a href="types.html#__svg__SVGAnimatedEnumeration__animVal">animVal</a>;
+<h3 id="InterfaceSVGGeometryElement">Interface SVGGeometryElement</h3>
+
+<p>Interface <a>SVGGeometryElement</a> represents SVG elements whose rendering
+is defined by geometry and which can be filled and stroked.  This includes
+paths, text and the basic shapes.</p>
+
+<pre class="idl">interface <b>SVGGeometryElement</b> : <a>SVGGraphicsElement</a> {
+  boolean isPointInFill(<a>DOMPoint</a> point);
+  boolean isPointInStroke(<a>DOMPoint</a> point);
 };</pre>
 
 <dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
+  <dt class="operations-header">Operations:</dt>
   <dd>
     <dl class="attributes">
-      <dt id="__svg__SVGAnimatedEnumeration__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="attribute">
-        <div>The base value of the given attribute before applying any animations.</div>
+      <dt id="__svg__SVGGeometryElement__isPointInFill" class="operation first-child">boolean <b>isPointInFill</b>(<a>DOMPoint</a> point)</dt>
+      <dd class="operation">Returns whether the specified point is within the fill of the element.
+      Normal hit testing rules apply; the value of the <a>'pointer-events'</a>
+      property on the element determines whether a point is considered to be
+      within the fill.
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div><a>DOMPoint</a> <var>point</var></div>
+                <div>The point to check for intersection with the fill
+                of this element.  The <a>DOMPoint</a> is interpreted as a
+                as a point in the local coordinate system of this element.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>true if the point is within the fill of this shape,
+          or false otherwise.</dd>
+        </dl>
       </dd>
-      <dt id="__svg__SVGAnimatedEnumeration__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly unsigned short)</span></dt>
-      <dd class="attribute">
-        <div>If the given attribute or property is being animated, contains the
-        current animated value of the attribute or property. If the given
-        attribute or property is not currently being animated, contains the
-        same value as <a>baseVal</a>.</div>
+      <dt id="__svg__SVGGeometryElement__isPointInStroke" class="operation">boolean <b>isPointInStroke</b>(<a>DOMPoint</a> point)</dt>
+      <dd class="operation">Returns whether the specified point is within the stroke of the element.
+      Normal hit testing rules apply; the value of the <a>'pointer-events'</a>
+      property on the element determines whether a point is considered to be
+      within the stroke.
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div><a>DOMPoint</a> <var>point</var></div>
+                <div>The point to check for intersection with the stroke
+                of this element.  The <a>DOMPoint</a> is interpreted as a
+                as a point in the local coordinate system of this element.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>true if the point is within the stroke of this shape,
+          or false otherwise.</dd>
+        </dl>
       </dd>
     </dl>
   </dd>
 </dl>
 
-<h3 id="InterfaceSVGAnimatedInteger">Interface SVGAnimatedInteger</h3>
+</div>
 
-<p>Used for attributes of basic type
-<a>&lt;integer></a> which can be
-animated.</p>
 
-<pre class="idl">interface <b>SVGAnimatedInteger</b> {
-           attribute long <a href="types.html#__svg__SVGAnimatedInteger__baseVal">baseVal</a>;
-  readonly attribute long <a href="types.html#__svg__SVGAnimatedInteger__animVal">animVal</a>;
-};</pre>
-
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGAnimatedInteger__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (long)</span></dt>
-      <dd class="attribute">
-        <div>The base value of the given attribute before applying any animations.</div>
-      </dd>
-      <dt id="__svg__SVGAnimatedInteger__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly long)</span></dt>
-      <dd class="attribute">
-        <div>If the given attribute or property is being animated, contains the
-        current animated value of the attribute or property. If the given
-        attribute or property is not currently being animated, contains the
-        same value as <a>baseVal</a>.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<h2 id="DOMInterfacesForBasicDataTypes">DOM interfaces for basic data types</h2>
 
 <h3 id="InterfaceSVGNumber">Interface SVGNumber</h3>
 
@@ -698,339 +482,6 @@ animated.</p>
   </dd>
 </dl>
 
-<h3 id="InterfaceSVGAnimatedNumber">Interface SVGAnimatedNumber</h3>
-
-<p>Used for attributes of basic type
-<a>&lt;number></a> which can be
-animated.</p>
-
-<pre class="idl">interface <b>SVGAnimatedNumber</b> {
-           attribute float <a href="types.html#__svg__SVGAnimatedNumber__baseVal">baseVal</a>;
-  readonly attribute float <a href="types.html#__svg__SVGAnimatedNumber__animVal">animVal</a>;
-};</pre>
-
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGAnimatedNumber__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (float)</span></dt>
-      <dd class="attribute">
-        <div>The base value of the given attribute before applying any animations.</div>
-      </dd>
-      <dt id="__svg__SVGAnimatedNumber__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
-      <dd class="attribute">
-        <div>If the given attribute or property is being animated, contains the
-        current animated value of the attribute or property. If the given
-        attribute or property is not currently being animated, contains the
-        same value as <a>baseVal</a>.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
-
-<h3 id="InterfaceSVGNumberList">Interface SVGNumberList</h3>
-
-<p>This interface defines a list of SVGNumber objects.</p>
-<p><a>SVGNumberList</a> has the same attributes and methods as other
-SVGxxxList interfaces.</p>
-
-<p>The <a href="http://heycam.github.io/webidl/#dfn-supported-property-indices">supported property indices</a>
-of an <a>SVGNumberList</a> object is all non-negative integers less than
-the length of the list.</p>
-
-<p id="ReadOnlyNumberList">An <a>SVGNumberList</a> object can be designated as <em>read only</em>,
-which means that attempts to modify the object will result in an exception
-being thrown, as described below.</p>
-
-<pre class="idl">interface <b>SVGNumberList</b> {
-
-  readonly attribute unsigned long <a href="types.html#__svg__SVGNumberList__length">length</a>;
-  readonly attribute unsigned long <a href="types.html#__svg__SVGNumberList__numberOfItems">numberOfItems</a>;
-
-  void <a href="types.html#__svg__SVGNumberList__clear">clear</a>();
-  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__initialize">initialize</a>(<a>SVGNumber</a> newItem);
-  getter <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__getItem">getItem</a>(unsigned long index);
-  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__insertItemBefore">insertItemBefore</a>(<a>SVGNumber</a> newItem, unsigned long index);
-  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__replaceItem">replaceItem</a>(<a>SVGNumber</a> newItem, unsigned long index);
-  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__removeItem">removeItem</a>(unsigned long index);
-  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__appendItem">appendItem</a>(<a>SVGNumber</a> newItem);
-  <a href="#__svg__SVGNumberList__setter">setter</a> void (unsigned long index, <a>SVGNumber</a> newItem);
-};</pre>
-
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGNumberList__length" class="attribute first-child"><b>length</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
-      <dd class="attribute">
-        <div>The number of items in the list.</div>
-      </dd>
-      <dt id="__svg__SVGNumberList__numberOfItems" class="attribute first-child"><b>numberOfItems</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
-      <dd class="attribute">
-        <div>The number of items in the list.</div>
-      </dd>
-    </dl>
-  </dd>
-  <dt class="operations-header">Operations:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGNumberList__clear" class="operation first-child">void <b>clear</b>()</dt>
-      <dd class="operation">
-        <div>Clears all existing current items from the list, with the result being
-        an empty list.</div>
-        <dl class="operation">
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyNumberList">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__initialize" class="operation"><a>SVGNumber</a> <b>initialize</b>(<a>SVGNumber</a> <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Clears all existing current items from the list and re-initializes the
-        list to hold a single item specified by the parameter.  If <var>newItem</var>
-        is in a list, then a new <a>SVGNumber</a> object is created with the same
-        values as <var>newItem</var> and this item is inserted into the list.
-        Otherwise, <var>newItem</var> itself is inserted into the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGNumber</a> <var>newItem</var></div>
-                <div>The item which should become the only member of the list.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The item being inserted into the list.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyNumberList">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__getItem" class="operation"><a>SVGNumber</a> <b>getItem</b>(unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Returns the specified item from the list.  The returned item is the
-        item itself and not a copy.  Any changes made to the item are
-        immediately reflected in the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item from the list which is to be
-                returned.  The first item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The selected item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__insertItemBefore" class="operation"><a>SVGNumber</a> <b>insertItemBefore</b>(<a>SVGNumber</a> <var>newItem</var>, unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Inserts a new item into the list at the specified position. The first
-        item is number 0. If <var>newItem</var> is already in a list, then
-        a new <a>SVGNumber</a> object is created with the same values as
-        <var>newItem</var> and this item is inserted into the list.  Otherwise,
-        <var>newItem</var> itself is inserted into the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGNumber</a> <var>newItem</var></div>
-                <div>The item which is to be inserted into the list.</div>
-              </li>
-              <li class="parameter">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item before which the new item is to be
-                inserted. The first item is number 0.  If the index is equal to 0,
-                then the new item is inserted at the front of the list. If the index
-                is greater than or equal to <a>numberOfItems</a>, then the new item is
-                appended to the end of the list.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyNumberList">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__replaceItem" class="operation"><a>SVGNumber</a> <b>replaceItem</b>(<a>SVGNumber</a> <var>newItem</var>, unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Replaces an existing item in the list with a new item. If
-        <var>newItem</var> is already in a list, then a new <a>SVGNumber</a>
-        object is created with the same values as <var>newItem</var> and
-        this item is inserted into the list.  Otherwise, <var>newItem</var>
-        itself is inserted into the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGNumber</a> <var>newItem</var></div>
-                <div>The item which is to be inserted into the list.</div>
-              </li>
-              <li class="parameter">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item which is to be replaced. The first
-                item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyNumberList">read only</a>.</dd>
-              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__removeItem" class="operation"><a>SVGNumber</a> <b>removeItem</b>(unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Removes an existing item from the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item which is to be removed. The first
-                item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The removed item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__appendItem" class="operation"><a>SVGNumber</a> <b>appendItem</b>(<a>SVGNumber</a> <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Inserts a new item at the end of the list. If <var>newItem</var> is
-        already in a list, then a new <a>SVGNumber</a> object is created
-        with the same values as <var>newItem</var> and this item is inserted
-        into the list.  Otherwise, <var>newItem</var> itself is inserted into
-        the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGNumber</a> <var>newItem</var></div>
-                <div>The item which is to be inserted. The first item is
-                number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__setter" class="operation"><b>setter</b> void (unsigned long <var>index</var>, <a>SVGNumber</a> <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Replaces the item at index <var>index</var> with <var>newItem</var>.
-        If the list is <a href="#ReadOnlyNumberList">read only</a>, then a
-        <a href="http://heycam.github.io/webidl/#nomodificationallowederror">NoModificationAllowedError</a>
-        is thrown.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
-
-<h3 id="InterfaceSVGAnimatedNumberList">Interface SVGAnimatedNumberList</h3>
-
-<p>Used for attributes which take a list of numbers and which can be animated.</p>
-
-<pre class="idl">interface <b>SVGAnimatedNumberList</b> {
-  readonly attribute <a>SVGNumberList</a> <a href="types.html#__svg__SVGAnimatedNumberList__baseVal">baseVal</a>;
-  readonly attribute <a>SVGNumberList</a> <a href="types.html#__svg__SVGAnimatedNumberList__animVal">animVal</a>;
-};</pre>
-
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGAnimatedNumberList__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGNumberList</a>)</span></dt>
-      <dd class="attribute">
-        <div>The base value of the given attribute before applying any animations.</div>
-      </dd>
-      <dt id="__svg__SVGAnimatedNumberList__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGNumberList</a>)</span></dt>
-      <dd class="attribute">
-        <div>A <a href="#ReadOnlyNumberList">read only</a> <a>SVGNumberList</a> representing the current animated value of
-        the given attribute.  If the given attribute is not currently being
-        animated, then the <a>SVGNumberList</a> will have the same contents
-        as <a>baseVal</a>.  The object referenced by <a>animVal</a> will always
-        be distinct from the one referenced by <a>baseVal</a>, even when
-        the attribute is not animated.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
 
 <h3 id="InterfaceSVGLength">Interface SVGLength</h3>
 
@@ -1315,52 +766,517 @@ operate with these types of lengths.</p>
   </dd>
 </dl>
 
-<h3 id="InterfaceSVGAnimatedLength">Interface SVGAnimatedLength</h3>
 
-<!--
+<h3 id="InterfaceSVGAngle">Interface SVGAngle</h3>
+
+<p>The <a>SVGAngle</a> interface corresponds to the
+<a>&lt;angle></a> basic data type,
+and represents an angle that consists of a numerical factor and a unit,
+where the unit is degrees, radians, grads, unitless numbers or "unknown".</p>
+
+<p id="ReadOnlyAngle">An <a>SVGAngle</a> object can be designated as <em>read only</em>,
+which means that attempts to modify the object will result in an exception
+being thrown, as described below.</p>
+
+<p class="note">The use of numeric angle unit type constants is an anti-pattern and
+new constant values will not be introduced for any other units or angle types supported by
+<a>SVGAngle</a>.  If other types of angles are supported and used, the <a>SVGAngle</a>
+uses the <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</a>
+unit type.  See below for details on how the other properties of an <a>SVGAngle</a>
+operate with these types of angles.</p>
+
+<pre class="idl">interface <b>SVGAngle</b> {
+
+  // Angle Unit Types
+  const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</a> = 0;
+  const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNSPECIFIED">SVG_ANGLETYPE_UNSPECIFIED</a> = 1;
+  const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_DEG">SVG_ANGLETYPE_DEG</a> = 2;
+  const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_RAD">SVG_ANGLETYPE_RAD</a> = 3;
+  const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_GRAD">SVG_ANGLETYPE_GRAD</a> = 4;
+
+  readonly attribute unsigned short <a href="types.html#__svg__SVGAngle__unitType">unitType</a>;
+           attribute float <a href="types.html#__svg__SVGAngle__value">value</a>;
+           attribute float <a href="types.html#__svg__SVGAngle__valueInSpecifiedUnits">valueInSpecifiedUnits</a>;
+           attribute DOMString <a href="types.html#__svg__SVGAngle__valueAsString">valueAsString</a>;
+
+  void <a href="types.html#__svg__SVGAngle__newValueSpecifiedUnits">newValueSpecifiedUnits</a>(unsigned short unitType, float valueInSpecifiedUnits);
+  void <a href="types.html#__svg__SVGAngle__convertToSpecifiedUnits">convertToSpecifiedUnits</a>(unsigned short unitType);
+};</pre>
+
+<dl class="interface">
+  <dt class="constants-header">Constants in group “Angle Unit Types”:</dt>
+  <dd>
+    <dl class="constants">
+      <dt id="__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN" class="constant first-child"><b>SVG_ANGLETYPE_UNKNOWN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>The unit type is not one of predefined unit types. It is invalid to
+        attempt to define a new value of this type or to attempt to switch an
+        existing value to this type.</div>
+      </dd>
+      <dt id="__svg__SVGAngle__SVG_ANGLETYPE_UNSPECIFIED" class="constant"><b>SVG_ANGLETYPE_UNSPECIFIED</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>No unit type was provided (i.e., a unitless value was specified). For
+        angles, a unitless value is treated the same as if degrees were
+        specified.</div>
+      </dd>
+      <dt id="__svg__SVGAngle__SVG_ANGLETYPE_DEG" class="constant"><b>SVG_ANGLETYPE_DEG</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>The unit type was explicitly set to degrees.</div>
+      </dd>
+      <dt id="__svg__SVGAngle__SVG_ANGLETYPE_RAD" class="constant"><b>SVG_ANGLETYPE_RAD</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>The unit type is radians.</div>
+      </dd>
+      <dt id="__svg__SVGAngle__SVG_ANGLETYPE_GRAD" class="constant"><b>SVG_ANGLETYPE_GRAD</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
+      <dd class="constant">
+        <div>The unit type is grads.</div>
+      </dd>
+    </dl>
+  </dd>
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGAngle__unitType" class="attribute first-child"><b>unitType</b><span class="idl-type-parenthetical"> (readonly unsigned short)</span></dt>
+      <dd class="attribute">
+        <div>The type of the value as specified by one of the SVG_ANGLETYPE_*
+        constants defined on this interface.
+        The SVG_ANGLETYPE_UNKNOWN unit type is returned when the
+        length value uses a unit that does not correspond to one of the
+        integer constants, such as <span class='attr-value'>turn</span>.</div>
+      </dd>
+      <dt id="__svg__SVGAngle__value" class="attribute"><b>value</b><span class="idl-type-parenthetical"> (float)</span></dt>
+      <dd class="attribute">
+        <div>The value of the angle in degrees.
+        On getting, returns the value converted to degrees.  If
+        the type of the <a>SVGAngle</a> is unknown, the numerical factor
+        of the angle is returned.  On setting, sets the numerical
+        factor to the assigned value and the unit type to unitless numbers.</div>
+        <dl class="attribute">
+          <dt class="exceptions-header">Exceptions on setting</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the angle is <a href="#ReadOnlyAngle">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGAngle__valueInSpecifiedUnits" class="attribute"><b>valueInSpecifiedUnits</b><span class="idl-type-parenthetical"> (float)</span></dt>
+      <dd class="attribute">
+        <div>The numerical factor of the angle value.</div>
+        <dl class="attribute">
+          <dt class="exceptions-header">Exceptions on setting</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the angle is <a href="#ReadOnlyAngle">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGAngle__valueAsString" class="attribute"><b>valueAsString</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
+      <dd class="attribute">
+        <div>
+          <p>The angle value as a string.  On getting, returns a
+          string as follows:</p>
+          <ul>
+            <li>If the unit type of the angle is unknown or unitless numbers,
+            the string is simply the numeric factor converted to a string.</li>
+            <li>Otherwise, the string is the result of concatenating the numeric
+            factor converted to a string with the CSS angle unit in lowercase.</li>
+          </ul>
+          <p>On setting, updates the numeric factor and units type of the
+          <a>SVGAngle</a> object according to the result of parsing the
+          assigned string as an <a>&lt;angle></a>.</p>
+        </div>
+        <dl class="attribute">
+          <dt class="exceptions-header">Exceptions on setting</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception"><a>DOMException</a>, code SYNTAX_ERR</dt>
+              <dd class="exception">Raised if the assigned string cannot be parsed as a valid <a>&lt;angle></a>.</dd>
+              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the angle is <a href="#ReadOnlyLength">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+    </dl>
+  </dd>
+  <dt class="operations-header">Operations:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGAngle__newValueSpecifiedUnits" class="operation first-child">void <b>newValueSpecifiedUnits</b>(unsigned short <var>unitType</var>, float <var>valueInSpecifiedUnits</var>)</dt>
+      <dd class="operation">
+        <div>Sets the numeric factor of the angle value to <var>valueInSpecifiedUnits</var>
+        and the unit type to <var>unitType</var>.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>unsigned short <var>unitType</var></div>
+                <div>The unit type for the value (e.g., <a>SVG_ANGLETYPE_DEG</a>).</div>
+              </li>
+              <li class="parameter">
+                <div>float <var>valueInSpecifiedUnits</var></div>
+                <div>The new value.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NOT_SUPPORTED_ERR</dt>
+              <dd class="exception">Raised if unitType is SVG_ANGLETYPE_UNKNOWN
+              or not a valid unit type constant (one of the other SVG_ANGLETYPE_* constants
+              defined on this interface).</dd>
+              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the angle is <a href="#ReadOnlyAngle">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGAngle__convertToSpecifiedUnits" class="operation">void <b>convertToSpecifiedUnits</b>(unsigned short <var>unitType</var>)</dt>
+      <dd class="operation">
+        <div>
+          <p>Sets the unit type of the angle value to the type specified by
+          <var>unitType</var> and sets the numeric factor value such that it
+          represents the same absolute angle.
+          For example, if the original value were "180deg" and the method was
+          invoked to convert to radians, then <a>unitType</a> would return
+          <a>SVG_ANGLETYPE_RAD</a> and <a>valueInSpecifiedUnits</a> would return the
+          numeric value π.</p>
+        </div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>unsigned short <var>unitType</var></div>
+                <div>The unit type to switch to (e.g., <a>SVG_ANGLETYPE_DEG</a>).</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NOT_SUPPORTED_ERR</dt>
+              <dd class="exception">Raised if unitType is SVG_ANGLETYPE_UNKNOWN
+              or not a valid unit type constant (one of the other SVG_ANGLETYPE_* constants
+              defined on this interface).</dd>
+              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the angle is <a href="#ReadOnlyAngle">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+
+
+<h3 id="ListInterfaces">List interfaces</h3>
+
 <div class="annotation svg2-requirement">
   <table>
-    <tr><th>SVG 2 Requirement:</th>
-    <td>Make it easier to read and write to attributes in the SVG DOM.</td></tr>
-    <tr><th>Resolution:</th>
-    <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-19-13">We will make it easier to read and write to attributes in the SVG DOM in SVG2.</a></td></tr>
-    <tr><th>Purpose:</th>
-    <td>To avoid the awkward access to the base values of <a>SVGAnimatedLength</a>s.</td></tr>
-    <tr><th>Owner:</th>
-    <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3414">ACTION-3414</a>)</td></tr>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Make the SVGList* interfaces a bit more like other lists/arrays.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/02/28-svg-minutes.html#item04">Add array style indexing and .length and .item to svg list types.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To align with other array types (e.g. NodeList).  Already implemented in Opera and Firefox.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Erik (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/2975">ACTION-2975</a>)</td>
+    </tr>
   </table>
 </div>
--->
 
-<p>Used for attributes of basic type
-<a>&lt;length></a> which can be
-animated.</p>
+<p class="issue" data-issue="18">Consider combining the definitions of all the list interfaces;
+there is a lot of duplicated text currently.</p>
 
-<pre class="idl">interface <b>SVGAnimatedLength</b> {
-  readonly attribute <a>SVGLength</a> <a href="types.html#__svg__SVGAnimatedLength__baseVal">baseVal</a>;
-  readonly attribute <a>SVGLength</a> <a href="types.html#__svg__SVGAnimatedLength__animVal">animVal</a>;
+
+<h3 id="InterfaceSVGNumberList">Interface SVGNumberList</h3>
+
+<p>This interface defines a list of SVGNumber objects.</p>
+<p><a>SVGNumberList</a> has the same attributes and methods as other
+SVGxxxList interfaces.</p>
+
+<p>The <a href="http://heycam.github.io/webidl/#dfn-supported-property-indices">supported property indices</a>
+of an <a>SVGNumberList</a> object is all non-negative integers less than
+the length of the list.</p>
+
+<p id="ReadOnlyNumberList">An <a>SVGNumberList</a> object can be designated as <em>read only</em>,
+which means that attempts to modify the object will result in an exception
+being thrown, as described below.</p>
+
+<pre class="idl">interface <b>SVGNumberList</b> {
+
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNumberList__length">length</a>;
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNumberList__numberOfItems">numberOfItems</a>;
+
+  void <a href="types.html#__svg__SVGNumberList__clear">clear</a>();
+  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__initialize">initialize</a>(<a>SVGNumber</a> newItem);
+  getter <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__getItem">getItem</a>(unsigned long index);
+  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__insertItemBefore">insertItemBefore</a>(<a>SVGNumber</a> newItem, unsigned long index);
+  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__replaceItem">replaceItem</a>(<a>SVGNumber</a> newItem, unsigned long index);
+  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__removeItem">removeItem</a>(unsigned long index);
+  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__appendItem">appendItem</a>(<a>SVGNumber</a> newItem);
+  <a href="#__svg__SVGNumberList__setter">setter</a> void (unsigned long index, <a>SVGNumber</a> newItem);
 };</pre>
 
 <dl class="interface">
   <dt class="attributes-header">Attributes:</dt>
   <dd>
     <dl class="attributes">
-      <dt id="__svg__SVGAnimatedLength__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGLength</a>)</span></dt>
+      <dt id="__svg__SVGNumberList__length" class="attribute first-child"><b>length</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
       <dd class="attribute">
-        <div>The base value of the given attribute before applying any animations.</div>
+        <div>The number of items in the list.</div>
       </dd>
-      <dt id="__svg__SVGAnimatedLength__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGLength</a>)</span></dt>
+      <dt id="__svg__SVGNumberList__numberOfItems" class="attribute first-child"><b>numberOfItems</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
       <dd class="attribute">
-        <div>A <a href="#ReadOnlyLength">read only</a> <a>SVGLength</a> representing the current animated value of
-        the given attribute.  If the given attribute is not currently being
-        animated, then the <a>SVGLength</a> will have the same contents
-        as <a>baseVal</a>.  The object referenced by <a>animVal</a> will always
-        be distinct from the one referenced by <a>baseVal</a>, even when
-        the attribute is not animated.</div>
+        <div>The number of items in the list.</div>
+      </dd>
+    </dl>
+  </dd>
+  <dt class="operations-header">Operations:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGNumberList__clear" class="operation first-child">void <b>clear</b>()</dt>
+      <dd class="operation">
+        <div>Clears all existing current items from the list, with the result being
+        an empty list.</div>
+        <dl class="operation">
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the list is
+              <a href="#ReadOnlyNumberList">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGNumberList__initialize" class="operation"><a>SVGNumber</a> <b>initialize</b>(<a>SVGNumber</a> <var>newItem</var>)</dt>
+      <dd class="operation">
+        <div>Clears all existing current items from the list and re-initializes the
+        list to hold a single item specified by the parameter.  If <var>newItem</var>
+        is in a list, then a new <a>SVGNumber</a> object is created with the same
+        values as <var>newItem</var> and this item is inserted into the list.
+        Otherwise, <var>newItem</var> itself is inserted into the list.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div><a>SVGNumber</a> <var>newItem</var></div>
+                <div>The item which should become the only member of the list.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The item being inserted into the list.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the list is
+              <a href="#ReadOnlyNumberList">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGNumberList__getItem" class="operation"><a>SVGNumber</a> <b>getItem</b>(unsigned long <var>index</var>)</dt>
+      <dd class="operation">
+        <div>Returns the specified item from the list.  The returned item is the
+        item itself and not a copy.  Any changes made to the item are
+        immediately reflected in the list.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>unsigned long <var>index</var></div>
+                <div>The index of the item from the list which is to be
+                returned.  The first item is number 0.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The selected item.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
+              <dd class="exception">Raised if the index number is
+              greater than or equal to <a>numberOfItems</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGNumberList__insertItemBefore" class="operation"><a>SVGNumber</a> <b>insertItemBefore</b>(<a>SVGNumber</a> <var>newItem</var>, unsigned long <var>index</var>)</dt>
+      <dd class="operation">
+        <div>Inserts a new item into the list at the specified position. The first
+        item is number 0. If <var>newItem</var> is already in a list, then
+        a new <a>SVGNumber</a> object is created with the same values as
+        <var>newItem</var> and this item is inserted into the list.  Otherwise,
+        <var>newItem</var> itself is inserted into the list.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div><a>SVGNumber</a> <var>newItem</var></div>
+                <div>The item which is to be inserted into the list.</div>
+              </li>
+              <li class="parameter">
+                <div>unsigned long <var>index</var></div>
+                <div>The index of the item before which the new item is to be
+                inserted. The first item is number 0.  If the index is equal to 0,
+                then the new item is inserted at the front of the list. If the index
+                is greater than or equal to <a>numberOfItems</a>, then the new item is
+                appended to the end of the list.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The inserted item.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the list is
+              <a href="#ReadOnlyNumberList">read only</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGNumberList__replaceItem" class="operation"><a>SVGNumber</a> <b>replaceItem</b>(<a>SVGNumber</a> <var>newItem</var>, unsigned long <var>index</var>)</dt>
+      <dd class="operation">
+        <div>Replaces an existing item in the list with a new item. If
+        <var>newItem</var> is already in a list, then a new <a>SVGNumber</a>
+        object is created with the same values as <var>newItem</var> and
+        this item is inserted into the list.  Otherwise, <var>newItem</var>
+        itself is inserted into the list.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div><a>SVGNumber</a> <var>newItem</var></div>
+                <div>The item which is to be inserted into the list.</div>
+              </li>
+              <li class="parameter">
+                <div>unsigned long <var>index</var></div>
+                <div>The index of the item which is to be replaced. The first
+                item is number 0.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The inserted item.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the list is
+              <a href="#ReadOnlyNumberList">read only</a>.</dd>
+              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
+              <dd class="exception">Raised if the index number is
+              greater than or equal to <a>numberOfItems</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGNumberList__removeItem" class="operation"><a>SVGNumber</a> <b>removeItem</b>(unsigned long <var>index</var>)</dt>
+      <dd class="operation">
+        <div>Removes an existing item from the list.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>unsigned long <var>index</var></div>
+                <div>The index of the item which is to be removed. The first
+                item is number 0.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The removed item.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the list
+              cannot be modified.</dd>
+              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
+              <dd class="exception">Raised if the index number is
+              greater than or equal to <a>numberOfItems</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGNumberList__appendItem" class="operation"><a>SVGNumber</a> <b>appendItem</b>(<a>SVGNumber</a> <var>newItem</var>)</dt>
+      <dd class="operation">
+        <div>Inserts a new item at the end of the list. If <var>newItem</var> is
+        already in a list, then a new <a>SVGNumber</a> object is created
+        with the same values as <var>newItem</var> and this item is inserted
+        into the list.  Otherwise, <var>newItem</var> itself is inserted into
+        the list.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div><a>SVGNumber</a> <var>newItem</var></div>
+                <div>The item which is to be inserted. The first item is
+                number 0.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The inserted item.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the list
+              cannot be modified.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGNumberList__setter" class="operation"><b>setter</b> void (unsigned long <var>index</var>, <a>SVGNumber</a> <var>newItem</var>)</dt>
+      <dd class="operation">
+        <div>Replaces the item at index <var>index</var> with <var>newItem</var>.
+        If the list is <a href="#ReadOnlyNumberList">read only</a>, then a
+        <a href="http://heycam.github.io/webidl/#nomodificationallowederror">NoModificationAllowedError</a>
+        is thrown.</div>
       </dd>
     </dl>
   </dd>
 </dl>
+
 
 <h3 id="InterfaceSVGLengthList">Interface SVGLengthList</h3>
 
@@ -1636,28 +1552,210 @@ being thrown, as described below.</p>
   </dd>
 </dl>
 
-<h3 id="InterfaceSVGAnimatedLengthList">Interface SVGAnimatedLengthList</h3>
 
-<p>Used for attributes of type <a>SVGLengthList</a> which can be animated.</p>
 
-<pre class="idl">interface <b>SVGAnimatedLengthList</b> {
-  readonly attribute <a>SVGLengthList</a> <a href="types.html#__svg__SVGAnimatedLengthList__baseVal">baseVal</a>;
-  readonly attribute <a>SVGLengthList</a> <a href="types.html#__svg__SVGAnimatedLengthList__animVal">animVal</a>;
+<h2 id="DOMInterfacesForReflectingSVGAttributes">DOM interfaces for reflecting SVG attributes</h2>
+
+<div class="ready-for-wg-review">
+<p>Some IDL attributes <dfn id="TermReflect">reflect</dfn> the value of a content attribute
+or a property.  The way this reflection is done depends on the type of the IDL attribute:</p>
+
+<ul>
+  <li>If the type of the reflecting IDL attribute is a primitive type, such as
+  DOMString (as used by <a href="styling.html#__svg__SVGStyleElement__title">title</a>
+  on <a>SVGStyleElement</a>), then the rules for
+  <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#reflect">reflecting
+  content attributes in IDL attributes</a> in HTML are used.</li>
+
+  <li>If the type of the reflecting IDL attribute is an <a>SVGAnimatedBoolean</a>,
+  <a>SVGAnimatedString</a>, <a>SVGAnimatedEnumeration</a>, <a>SVGAnimatedNumber</a>,
+  <a>SVGAnimatedNumberList</a>, <a>SVGAnimatedLength</a>, <a>SVGAnimatedLengthList</a>,
+  <a>SVGAnimatedAngle</a> or <a>SVGAnimatedRect</a>, then the rules in the corresponding
+  section below defining the reflecting interface are used.  At a high level, the object's
+  baseVal is used to reflect the value of the content attribute, while its animVal is used
+  to reflect the current animated value of the attribute.</li>
+</ul>
+</div>
+
+<p class="issue" data-issue="17">This should also describe how reflection works for attributes that were
+promoted to properties, such as <a>'transform'</a>.
+<a href="http://www.w3.org/2015/02/11-svg-minutes.html#item12">(Some discussion.)</a></p>
+
+
+<div class="ready-for-wg-review">
+<h3 id="InterfaceSVGAnimatedBoolean">Interface SVGAnimatedBoolean</h3>
+
+<p>An <a>SVGAnimatedBoolean</a> object is used to <a>reflect</a> an
+animatable attribute that takes a boolean value.</p>
+
+<pre class="idl">interface <b>SVGAnimatedBoolean</b> {
+           attribute boolean <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>;
+  readonly attribute boolean <a href="types.html#__svg__SVGAnimatedBoolean__animVal">animVal</a>;
+};</pre>
+
+<p>The <b id="__svg__SVGAnimatedBoolean__baseVal">baseVal</b> IDL attribute
+represents the current non-animated value of the reflected attribute.
+On getting <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>,
+the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the value of the reflected attribute,
+  or the empty string if it is not present.</li>
+  <li>If <var>value</var> is not "true" or "false", then set <var>value</var>
+  to the reflected attribute's <a>initial value</a>.</li>
+  <li>Return true if <var>value</var> is "true", and false otherwise.</li>
+</ol>
+
+<p>On setting <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>,
+the reflected attribute is set to "true" if the value is true, and "false"
+otherwise.</p>
+
+<p>The <b id="__svg__SVGAnimatedBoolean__animVal">animVal</b> IDL attribute
+represents the current animated value of the reflected attribute.
+On getting <a href="types.html#__svg__SVGAnimatedBoolean__animVal">animVal</a>,
+the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the reflected attribute is not currently being animated, then
+  return the same value that would be returned by
+  <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>.</li>
+  <li>Return true if the reflected attribute's current animated value
+  is "true", and false otherwise.</li>
+</ol>
+</div>
+
+
+<h3 id="InterfaceSVGAnimatedEnumeration">Interface SVGAnimatedEnumeration</h3>
+
+<p>Used for attributes whose value must be a constant from a particular
+enumeration and which can be animated.</p>
+
+<pre class="idl">interface <b>SVGAnimatedEnumeration</b> {
+           attribute unsigned short <a href="types.html#__svg__SVGAnimatedEnumeration__baseVal">baseVal</a>;
+  readonly attribute unsigned short <a href="types.html#__svg__SVGAnimatedEnumeration__animVal">animVal</a>;
 };</pre>
 
 <dl class="interface">
   <dt class="attributes-header">Attributes:</dt>
   <dd>
     <dl class="attributes">
-      <dt id="__svg__SVGAnimatedLengthList__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGLengthList</a>)</span></dt>
+      <dt id="__svg__SVGAnimatedEnumeration__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
       <dd class="attribute">
         <div>The base value of the given attribute before applying any animations.</div>
       </dd>
-      <dt id="__svg__SVGAnimatedLengthList__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGLengthList</a>)</span></dt>
+      <dt id="__svg__SVGAnimatedEnumeration__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly unsigned short)</span></dt>
       <dd class="attribute">
-        <div>A <a href="#ReadOnlyLengthList">read only</a> <a>SVGLengthList</a> representing the current animated value of
+        <div>If the given attribute or property is being animated, contains the
+        current animated value of the attribute or property. If the given
+        attribute or property is not currently being animated, contains the
+        same value as <a>baseVal</a>.</div>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+
+
+<h3 id="InterfaceSVGAnimatedInteger">Interface SVGAnimatedInteger</h3>
+
+<p>Used for attributes of basic type
+<a>&lt;integer></a> which can be
+animated.</p>
+
+<pre class="idl">interface <b>SVGAnimatedInteger</b> {
+           attribute long <a href="types.html#__svg__SVGAnimatedInteger__baseVal">baseVal</a>;
+  readonly attribute long <a href="types.html#__svg__SVGAnimatedInteger__animVal">animVal</a>;
+};</pre>
+
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGAnimatedInteger__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (long)</span></dt>
+      <dd class="attribute">
+        <div>The base value of the given attribute before applying any animations.</div>
+      </dd>
+      <dt id="__svg__SVGAnimatedInteger__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly long)</span></dt>
+      <dd class="attribute">
+        <div>If the given attribute or property is being animated, contains the
+        current animated value of the attribute or property. If the given
+        attribute or property is not currently being animated, contains the
+        same value as <a>baseVal</a>.</div>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+
+
+<h3 id="InterfaceSVGAnimatedNumber">Interface SVGAnimatedNumber</h3>
+
+<p>Used for attributes of basic type
+<a>&lt;number></a> which can be
+animated.</p>
+
+<pre class="idl">interface <b>SVGAnimatedNumber</b> {
+           attribute float <a href="types.html#__svg__SVGAnimatedNumber__baseVal">baseVal</a>;
+  readonly attribute float <a href="types.html#__svg__SVGAnimatedNumber__animVal">animVal</a>;
+};</pre>
+
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGAnimatedNumber__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (float)</span></dt>
+      <dd class="attribute">
+        <div>The base value of the given attribute before applying any animations.</div>
+      </dd>
+      <dt id="__svg__SVGAnimatedNumber__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly float)</span></dt>
+      <dd class="attribute">
+        <div>If the given attribute or property is being animated, contains the
+        current animated value of the attribute or property. If the given
+        attribute or property is not currently being animated, contains the
+        same value as <a>baseVal</a>.</div>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+
+
+<h3 id="InterfaceSVGAnimatedLength">Interface SVGAnimatedLength</h3>
+
+<!--
+<div class="annotation svg2-requirement">
+  <table>
+    <tr><th>SVG 2 Requirement:</th>
+    <td>Make it easier to read and write to attributes in the SVG DOM.</td></tr>
+    <tr><th>Resolution:</th>
+    <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-19-13">We will make it easier to read and write to attributes in the SVG DOM in SVG2.</a></td></tr>
+    <tr><th>Purpose:</th>
+    <td>To avoid the awkward access to the base values of <a>SVGAnimatedLength</a>s.</td></tr>
+    <tr><th>Owner:</th>
+    <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3414">ACTION-3414</a>)</td></tr>
+  </table>
+</div>
+-->
+
+<p>Used for attributes of basic type
+<a>&lt;length></a> which can be
+animated.</p>
+
+<pre class="idl">interface <b>SVGAnimatedLength</b> {
+  readonly attribute <a>SVGLength</a> <a href="types.html#__svg__SVGAnimatedLength__baseVal">baseVal</a>;
+  readonly attribute <a>SVGLength</a> <a href="types.html#__svg__SVGAnimatedLength__animVal">animVal</a>;
+};</pre>
+
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGAnimatedLength__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGLength</a>)</span></dt>
+      <dd class="attribute">
+        <div>The base value of the given attribute before applying any animations.</div>
+      </dd>
+      <dt id="__svg__SVGAnimatedLength__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGLength</a>)</span></dt>
+      <dd class="attribute">
+        <div>A <a href="#ReadOnlyLength">read only</a> <a>SVGLength</a> representing the current animated value of
         the given attribute.  If the given attribute is not currently being
-        animated, then the <a>SVGLengthList</a> will have the same contents
+        animated, then the <a>SVGLength</a> will have the same contents
         as <a>baseVal</a>.  The object referenced by <a>animVal</a> will always
         be distinct from the one referenced by <a>baseVal</a>, even when
         the attribute is not animated.</div>
@@ -1666,213 +1764,6 @@ being thrown, as described below.</p>
   </dd>
 </dl>
 
-<h3 id="InterfaceSVGAngle">Interface SVGAngle</h3>
-
-<p>The <a>SVGAngle</a> interface corresponds to the
-<a>&lt;angle></a> basic data type,
-and represents an angle that consists of a numerical factor and a unit,
-where the unit is degrees, radians, grads, unitless numbers or "unknown".</p>
-
-<p id="ReadOnlyAngle">An <a>SVGAngle</a> object can be designated as <em>read only</em>,
-which means that attempts to modify the object will result in an exception
-being thrown, as described below.</p>
-
-<p class="note">The use of numeric angle unit type constants is an anti-pattern and
-new constant values will not be introduced for any other units or angle types supported by
-<a>SVGAngle</a>.  If other types of angles are supported and used, the <a>SVGAngle</a>
-uses the <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</a>
-unit type.  See below for details on how the other properties of an <a>SVGAngle</a>
-operate with these types of angles.</p>
-
-<pre class="idl">interface <b>SVGAngle</b> {
-
-  // Angle Unit Types
-  const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</a> = 0;
-  const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNSPECIFIED">SVG_ANGLETYPE_UNSPECIFIED</a> = 1;
-  const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_DEG">SVG_ANGLETYPE_DEG</a> = 2;
-  const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_RAD">SVG_ANGLETYPE_RAD</a> = 3;
-  const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_GRAD">SVG_ANGLETYPE_GRAD</a> = 4;
-
-  readonly attribute unsigned short <a href="types.html#__svg__SVGAngle__unitType">unitType</a>;
-           attribute float <a href="types.html#__svg__SVGAngle__value">value</a>;
-           attribute float <a href="types.html#__svg__SVGAngle__valueInSpecifiedUnits">valueInSpecifiedUnits</a>;
-           attribute DOMString <a href="types.html#__svg__SVGAngle__valueAsString">valueAsString</a>;
-
-  void <a href="types.html#__svg__SVGAngle__newValueSpecifiedUnits">newValueSpecifiedUnits</a>(unsigned short unitType, float valueInSpecifiedUnits);
-  void <a href="types.html#__svg__SVGAngle__convertToSpecifiedUnits">convertToSpecifiedUnits</a>(unsigned short unitType);
-};</pre>
-
-<dl class="interface">
-  <dt class="constants-header">Constants in group “Angle Unit Types”:</dt>
-  <dd>
-    <dl class="constants">
-      <dt id="__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN" class="constant first-child"><b>SVG_ANGLETYPE_UNKNOWN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>The unit type is not one of predefined unit types. It is invalid to
-        attempt to define a new value of this type or to attempt to switch an
-        existing value to this type.</div>
-      </dd>
-      <dt id="__svg__SVGAngle__SVG_ANGLETYPE_UNSPECIFIED" class="constant"><b>SVG_ANGLETYPE_UNSPECIFIED</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>No unit type was provided (i.e., a unitless value was specified). For
-        angles, a unitless value is treated the same as if degrees were
-        specified.</div>
-      </dd>
-      <dt id="__svg__SVGAngle__SVG_ANGLETYPE_DEG" class="constant"><b>SVG_ANGLETYPE_DEG</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>The unit type was explicitly set to degrees.</div>
-      </dd>
-      <dt id="__svg__SVGAngle__SVG_ANGLETYPE_RAD" class="constant"><b>SVG_ANGLETYPE_RAD</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>The unit type is radians.</div>
-      </dd>
-      <dt id="__svg__SVGAngle__SVG_ANGLETYPE_GRAD" class="constant"><b>SVG_ANGLETYPE_GRAD</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>The unit type is grads.</div>
-      </dd>
-    </dl>
-  </dd>
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGAngle__unitType" class="attribute first-child"><b>unitType</b><span class="idl-type-parenthetical"> (readonly unsigned short)</span></dt>
-      <dd class="attribute">
-        <div>The type of the value as specified by one of the SVG_ANGLETYPE_*
-        constants defined on this interface.
-        The SVG_ANGLETYPE_UNKNOWN unit type is returned when the
-        length value uses a unit that does not correspond to one of the
-        integer constants, such as <span class='attr-value'>turn</span>.</div>
-      </dd>
-      <dt id="__svg__SVGAngle__value" class="attribute"><b>value</b><span class="idl-type-parenthetical"> (float)</span></dt>
-      <dd class="attribute">
-        <div>The value of the angle in degrees.
-        On getting, returns the value converted to degrees.  If
-        the type of the <a>SVGAngle</a> is unknown, the numerical factor
-        of the angle is returned.  On setting, sets the numerical
-        factor to the assigned value and the unit type to unitless numbers.</div>
-        <dl class="attribute">
-          <dt class="exceptions-header">Exceptions on setting</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the angle is <a href="#ReadOnlyAngle">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGAngle__valueInSpecifiedUnits" class="attribute"><b>valueInSpecifiedUnits</b><span class="idl-type-parenthetical"> (float)</span></dt>
-      <dd class="attribute">
-        <div>The numerical factor of the angle value.</div>
-        <dl class="attribute">
-          <dt class="exceptions-header">Exceptions on setting</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the angle is <a href="#ReadOnlyAngle">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGAngle__valueAsString" class="attribute"><b>valueAsString</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
-      <dd class="attribute">
-        <div>
-          <p>The angle value as a string.  On getting, returns a
-          string as follows:</p>
-          <ul>
-            <li>If the unit type of the angle is unknown or unitless numbers,
-            the string is simply the numeric factor converted to a string.</li>
-            <li>Otherwise, the string is the result of concatenating the numeric
-            factor converted to a string with the CSS angle unit in lowercase.</li>
-          </ul>
-          <p>On setting, updates the numeric factor and units type of the
-          <a>SVGAngle</a> object according to the result of parsing the
-          assigned string as an <a>&lt;angle></a>.</p>
-        </div>
-        <dl class="attribute">
-          <dt class="exceptions-header">Exceptions on setting</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception"><a>DOMException</a>, code SYNTAX_ERR</dt>
-              <dd class="exception">Raised if the assigned string cannot be parsed as a valid <a>&lt;angle></a>.</dd>
-              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the angle is <a href="#ReadOnlyLength">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-    </dl>
-  </dd>
-  <dt class="operations-header">Operations:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGAngle__newValueSpecifiedUnits" class="operation first-child">void <b>newValueSpecifiedUnits</b>(unsigned short <var>unitType</var>, float <var>valueInSpecifiedUnits</var>)</dt>
-      <dd class="operation">
-        <div>Sets the numeric factor of the angle value to <var>valueInSpecifiedUnits</var>
-        and the unit type to <var>unitType</var>.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned short <var>unitType</var></div>
-                <div>The unit type for the value (e.g., <a>SVG_ANGLETYPE_DEG</a>).</div>
-              </li>
-              <li class="parameter">
-                <div>float <var>valueInSpecifiedUnits</var></div>
-                <div>The new value.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NOT_SUPPORTED_ERR</dt>
-              <dd class="exception">Raised if unitType is SVG_ANGLETYPE_UNKNOWN
-              or not a valid unit type constant (one of the other SVG_ANGLETYPE_* constants
-              defined on this interface).</dd>
-              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the angle is <a href="#ReadOnlyAngle">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGAngle__convertToSpecifiedUnits" class="operation">void <b>convertToSpecifiedUnits</b>(unsigned short <var>unitType</var>)</dt>
-      <dd class="operation">
-        <div>
-          <p>Sets the unit type of the angle value to the type specified by
-          <var>unitType</var> and sets the numeric factor value such that it
-          represents the same absolute angle.
-          For example, if the original value were "180deg" and the method was
-          invoked to convert to radians, then <a>unitType</a> would return
-          <a>SVG_ANGLETYPE_RAD</a> and <a>valueInSpecifiedUnits</a> would return the
-          numeric value π.</p>
-        </div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned short <var>unitType</var></div>
-                <div>The unit type to switch to (e.g., <a>SVG_ANGLETYPE_DEG</a>).</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NOT_SUPPORTED_ERR</dt>
-              <dd class="exception">Raised if unitType is SVG_ANGLETYPE_UNKNOWN
-              or not a valid unit type constant (one of the other SVG_ANGLETYPE_* constants
-              defined on this interface).</dd>
-              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the angle is <a href="#ReadOnlyAngle">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-    </dl>
-  </dd>
-</dl>
 
 <h3 id="InterfaceSVGAnimatedAngle">Interface SVGAnimatedAngle</h3>
 
@@ -1905,6 +1796,50 @@ that can be animated.</p>
   </dd>
 </dl>
 
+
+<div class="ready-for-wg-review">
+<h3 id="InterfaceSVGAnimatedString">Interface SVGAnimatedString</h3>
+
+<p>An <a>SVGAnimatedString</a> object is used to <a>reflect</a> an
+animatable attribute that takes a string value.</p>
+
+<pre class="idl">interface <b>SVGAnimatedString</b> {
+           attribute DOMString <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>;
+  readonly attribute DOMString <a href="types.html#__svg__SVGAnimatedString__animVal">animVal</a>;
+};</pre>
+
+<p>The <b id="__svg__SVGAnimatedString__baseVal">baseVal</b> IDL attribute
+represents the current non-animated value of the reflected attribute.
+On getting <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>,
+the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the reflected attribute is not present, then:
+    <ol>
+      <li>If the reflected attribute has an <a>initial value</a>, return it.</li>
+      <li>Otherwise, return the empty string.</li>
+    </ol>
+  </li>
+  <li>Return the value of the reflected attribute.</li>
+</ol>
+
+<p>On setting <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>,
+the reflected attribute is set to specified value.</p>
+
+<p>The <b id="__svg__SVGAnimatedString__animVal">animVal</b> IDL attribute
+represents the current animated value of the reflected attribute.
+On getting <a href="types.html#__svg__SVGAnimatedString__animVal">animVal</a>,
+the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the reflected attribute is not currently being animated, then
+  return the same value that would be returned by
+  <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>.</li>
+  <li>Otherwise, return the value of the reflected attribute.</li>
+</ol>
+</div>
+
+
 <h3 id="InterfaceSVGAnimatedRect">Interface SVGAnimatedRect</h3>
 
 <p>Used for attributes of type <a>DOMRect</a> which can be animated.</p>
@@ -1934,6 +1869,326 @@ that can be animated.</p>
     </dl>
   </dd>
 </dl>
+
+
+<h3 id="InterfaceSVGAnimatedNumberList">Interface SVGAnimatedNumberList</h3>
+
+<p>Used for attributes which take a list of numbers and which can be animated.</p>
+
+<pre class="idl">interface <b>SVGAnimatedNumberList</b> {
+  readonly attribute <a>SVGNumberList</a> <a href="types.html#__svg__SVGAnimatedNumberList__baseVal">baseVal</a>;
+  readonly attribute <a>SVGNumberList</a> <a href="types.html#__svg__SVGAnimatedNumberList__animVal">animVal</a>;
+};</pre>
+
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGAnimatedNumberList__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGNumberList</a>)</span></dt>
+      <dd class="attribute">
+        <div>The base value of the given attribute before applying any animations.</div>
+      </dd>
+      <dt id="__svg__SVGAnimatedNumberList__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGNumberList</a>)</span></dt>
+      <dd class="attribute">
+        <div>A <a href="#ReadOnlyNumberList">read only</a> <a>SVGNumberList</a> representing the current animated value of
+        the given attribute.  If the given attribute is not currently being
+        animated, then the <a>SVGNumberList</a> will have the same contents
+        as <a>baseVal</a>.  The object referenced by <a>animVal</a> will always
+        be distinct from the one referenced by <a>baseVal</a>, even when
+        the attribute is not animated.</div>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+
+
+
+<h3 id="InterfaceSVGAnimatedLengthList">Interface SVGAnimatedLengthList</h3>
+
+<p>Used for attributes of type <a>SVGLengthList</a> which can be animated.</p>
+
+<pre class="idl">interface <b>SVGAnimatedLengthList</b> {
+  readonly attribute <a>SVGLengthList</a> <a href="types.html#__svg__SVGAnimatedLengthList__baseVal">baseVal</a>;
+  readonly attribute <a>SVGLengthList</a> <a href="types.html#__svg__SVGAnimatedLengthList__animVal">animVal</a>;
+};</pre>
+
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGAnimatedLengthList__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGLengthList</a>)</span></dt>
+      <dd class="attribute">
+        <div>The base value of the given attribute before applying any animations.</div>
+      </dd>
+      <dt id="__svg__SVGAnimatedLengthList__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGLengthList</a>)</span></dt>
+      <dd class="attribute">
+        <div>A <a href="#ReadOnlyLengthList">read only</a> <a>SVGLengthList</a> representing the current animated value of
+        the given attribute.  If the given attribute is not currently being
+        animated, then the <a>SVGLengthList</a> will have the same contents
+        as <a>baseVal</a>.  The object referenced by <a>animVal</a> will always
+        be distinct from the one referenced by <a>baseVal</a>, even when
+        the attribute is not animated.</div>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+
+
+<h3 id="InterfaceSVGStringList">Interface SVGStringList</h3>
+
+<p>This interface defines a list of DOMString values.</p>
+
+<p><a>SVGStringList</a> has the same attributes and methods as other
+SVGxxxList interfaces.</p>
+
+<p>The <a href="http://heycam.github.io/webidl/#dfn-supported-property-indices">supported property indices</a>
+of an <a>SVGStringList</a> object is all non-negative integers less than
+the length of the list.</p>
+
+<pre class="idl">interface <b>SVGStringList</b> {
+
+  readonly attribute unsigned long <a href="types.html#__svg__SVGStringList__length">length</a>;
+  readonly attribute unsigned long <a href="types.html#__svg__SVGStringList__numberOfItems">numberOfItems</a>;
+
+  void <a href="types.html#__svg__SVGStringList__clear">clear</a>();
+  DOMString <a href="types.html#__svg__SVGStringList__initialize">initialize</a>(DOMString newItem);
+  getter DOMString <a href="types.html#__svg__SVGStringList__getItem">getItem</a>(unsigned long index);
+  DOMString <a href="types.html#__svg__SVGStringList__insertItemBefore">insertItemBefore</a>(DOMString newItem, unsigned long index);
+  DOMString <a href="types.html#__svg__SVGStringList__replaceItem">replaceItem</a>(DOMString newItem, unsigned long index);
+  DOMString <a href="types.html#__svg__SVGStringList__removeItem">removeItem</a>(unsigned long index);
+  DOMString <a href="types.html#__svg__SVGStringList__appendItem">appendItem</a>(DOMString newItem);
+  <a href="#__svg__SVGStringList__setter">setter</a> void (unsigned long index, DOMString newItem);
+};</pre>
+
+<dl class="interface">
+  <dt class="attributes-header">Attributes:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGStringList__length" class="attribute first-child"><b>length</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
+      <dd class="attribute">
+        <div>The number of items in the list.</div>
+      </dd>
+      <dt id="__svg__SVGStringList__numberOfItems" class="attribute first-child"><b>numberOfItems</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
+      <dd class="attribute">
+        <div>The number of items in the list.</div>
+      </dd>
+    </dl>
+  </dd>
+  <dt class="operations-header">Operations:</dt>
+  <dd>
+    <dl class="attributes">
+      <dt id="__svg__SVGStringList__clear" class="operation first-child">void <b>clear</b>()</dt>
+      <dd class="operation">
+        <div>Clears all existing current items from the list, with the result being
+        an empty list.</div>
+        <dl class="operation">
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the list
+              cannot be modified.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGStringList__initialize" class="operation">DOMString <b>initialize</b>(DOMString <var>newItem</var>)</dt>
+      <dd class="operation">
+        <div>Clears all existing current items from the list and re-initializes the
+        list to hold the single item specified by the parameter.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>DOMString <var>newItem</var></div>
+                <div>The item which should become the only member of the list.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The item being inserted into the list.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the list
+              cannot be modified.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGStringList__getItem" class="operation">DOMString <b>getItem</b>(unsigned long <var>index</var>)</dt>
+      <dd class="operation">
+        <div>Returns the specified item from the list.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>unsigned long <var>index</var></div>
+                <div>The index of the item from the list which is to be
+                returned.  The first item is number 0.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The selected item.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
+              <dd class="exception">Raised if the index number is
+              greater than or equal to <a>numberOfItems</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGStringList__insertItemBefore" class="operation">DOMString <b>insertItemBefore</b>(DOMString <var>newItem</var>, unsigned long <var>index</var>)</dt>
+      <dd class="operation">
+        <div>Inserts a new item into the list at the specified position. The first
+        item is number 0.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>DOMString <var>newItem</var></div>
+                <div>The item which is to be inserted into the list.</div>
+              </li>
+              <li class="parameter">
+                <div>unsigned long <var>index</var></div>
+                <div>The index of the item before which the new item is to be
+                inserted. The first item is number 0.  If the index is equal to 0,
+                then the new item is inserted at the front of the list. If the index
+                is greater than or equal to <a>numberOfItems</a>, then the new item is
+                appended to the end of the list.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The inserted item.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the list
+              cannot be modified.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGStringList__replaceItem" class="operation">DOMString <b>replaceItem</b>(DOMString <var>newItem</var>, unsigned long <var>index</var>)</dt>
+      <dd class="operation">
+        <div>Replaces an existing item in the list with a new item.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>DOMString <var>newItem</var></div>
+                <div>The item which is to be inserted into the list.</div>
+              </li>
+              <li class="parameter">
+                <div>unsigned long <var>index</var></div>
+                <div>The index of the item which is to be replaced. The first
+                item is number 0.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The inserted item.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the list
+              cannot be modified.</dd>
+              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
+              <dd class="exception">Raised if the index number is
+              greater than or equal to <a>numberOfItems</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGStringList__removeItem" class="operation">DOMString <b>removeItem</b>(unsigned long <var>index</var>)</dt>
+      <dd class="operation">
+        <div>Removes an existing item from the list.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>unsigned long <var>index</var></div>
+                <div>The index of the item which is to be removed. The first
+                item is number 0.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The removed item.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the list
+              cannot be modified.</dd>
+              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
+              <dd class="exception">Raised if the index number is
+              greater than or equal to <a>numberOfItems</a>.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGStringList__appendItem" class="operation">DOMString <b>appendItem</b>(DOMString <var>newItem</var>)</dt>
+      <dd class="operation">
+        <div>Inserts a new item at the end of the list.</div>
+        <dl class="operation">
+          <dt class="parameters-header">Parameters</dt>
+          <dd>
+            <ol class="parameters">
+              <li class="parameter first-child">
+                <div>DOMString <var>newItem</var></div>
+                <div>The item which is to be inserted. The first item is
+                number 0.</div>
+              </li>
+            </ol>
+          </dd>
+          <dt class="returns-header">Returns</dt>
+          <dd>
+            <div>The inserted item.</div>
+          </dd>
+          <dt class="exceptions-header">Exceptions</dt>
+          <dd>
+            <dl class="exceptions">
+              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
+              <dd class="exception">Raised when the list
+              cannot be modified.</dd>
+            </dl>
+          </dd>
+        </dl>
+      </dd>
+      <dt id="__svg__SVGStringList__setter" class="operation"><b>setter</b> void (unsigned long <var>index</var>, DOMString <var>newItem</var>)</dt>
+      <dd class="operation">
+        <div>Replaces the item at index <var>index</var> with <var>newItem</var>.</div>
+      </dd>
+    </dl>
+  </dd>
+</dl>
+
+
+<h2 id="OtherDOMInterfaces">Other DOM interfaces</h2>
+
 
 <h3 id="InterfaceSVGUnitTypes">Interface SVGUnitTypes</h3>
 
@@ -1972,228 +2227,6 @@ interface <b>SVGUnitTypes</b> {
   </dd>
 </dl>
 
-<h3 id="InterfaceSVGGraphicsElement">Interface SVGGraphicsElement</h3>
-
-<div class="annotation svg2-requirement">
-  <table>
-    <tr><th>SVG 2 Requirement:</th>
-    <td>Detect if a mouse event is on the fill or stroke of a shape.</td></tr>
-    <tr><th>Resolution:</th>
-    <td><a href="http://www.w3.org/2012/03/22-svg-irc#T20-20-03">SVG 2 will make it easier to detect if an mouse event is on the stroke or fill of an element.</a></td></tr>
-    <tr><th>Purpose:</th>
-    <td>To allow authors to discriminate between pointer events on the fill and stroke of an element without having to duplicate the element</td></tr>
-    <tr><th>Owner:</th>
-    <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3279">ACTION-3279</a>)</td></tr>
-  </table>
-</div>
-
-<p>Interface <a>SVGGraphicsElement</a> represents SVG elements whose primary purpose
-is to directly render graphics into a group. The
-<a>'transform'</a> property applies to all <a>SVGGraphicsElement</a>. All <a>SVGGraphicsElement</a>
-have a bounding box in current local coordinate system.</p>
-
-<pre class="idl">dictionary <b id="SVGBoundingBoxOptions">SVGBoundingBoxOptions</b> {
-  boolean fill = true;
-  boolean stroke = false;
-  boolean markers = false;
-  boolean clipped = false;
-};
-
-interface <b>SVGGraphicsElement</b> : <a>SVGElement</a> {
-  readonly attribute <a>SVGAnimatedTransformList</a> <a href="types.html#__svg__SVGGraphicsElement__transform">transform</a>;
-
-  <a>DOMRect</a> <a href="types.html#__svg__SVGGraphicsElement__getBBox">getBBox</a>(optional <a>SVGBoundingBoxOptions</a> options);
-  <a>DOMMatrix</a>? <a href="types.html#__svg__SVGGraphicsElement__getCTM">getCTM</a>();
-  <a>DOMMatrix</a>? <a href="types.html#__svg__SVGGraphicsElement__getScreenCTM">getScreenCTM</a>();
-  <a>DOMMatrix</a> <a href="types.html#__svg__SVGGraphicsElement__getTransformToElement">getTransformToElement</a>(<a>SVGGraphicsElement</a> element);
-};
-
-<a>SVGGraphicsElement</a> implements <a>SVGTests</a>;</pre>
-
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGGraphicsElement__transform" class="attribute first-child"><b>transform</b><span class="idl-type-parenthetical"> (readonly <a>SVGAnimatedTransformList</a>)</span></dt>
-      <dd class="attribute">
-        <div>Corresponds to attribute <a>'transform'</a> on the given element.</div>
-        <p class="issue" data-issue="12">This needs to be updated to reflect the value of the <a>'transform'</a>
-        property.</p>
-      </dd>
-    </dl>
-  </dd>
-  <dt class="operations-header">Operations:</dt>
-  <dd>
-    <div class="ready-for-wider-review">
-    <dl class="attributes">
-      <dt id="__svg__SVGGraphicsElement__getBBox" class="operation first-child"><a>DOMRect</a> <b>getBBox</b>(optional <a>SVGBoundingBoxOptions</a> <var>options</var>)</dt>
-      <dd class="operation">
-        <div>
-          <p>Returns the result of invoking the <a href="coords.html#BoundingBoxes">bounding box algorithm</a>
-          for the element, with <var>fill</var>, <var>stroke</var>, <var>markers</var>
-          and <var>clipped</var> members of the <var>options</var> dictionary argument
-          used to control which parts of the element are included in the bounding box,
-          using the element's local coordinate system as the coordinate system to return the
-          bounding box in.</p>
-        </div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>DOMRect</a> object that defines the bounding box.</div>
-          </dd>
-        </dl>
-      </dd>
-    </dl>
-  </div>
-    <dl class="attributes">
-      <dt id="__svg__SVGGraphicsElement__getCTM" class="operation"><a>DOMMatrix</a>? <b>getCTM</b>()</dt>
-      <dd class="operation">
-        <div>Returns the transformation matrix from current user units (i.e., after
-        application of the <a>'transform'</a> property) to the viewport
-        coordinate system for the nearest viewport element (<a>CTM</a>). Note that null
-        is returned if this element is not hooked into the document tree.
-          <p class="issue" data-issue="13">What is the expected result if you call getCTM on an <a>'svg'</a> element?
-          See <a href="https://lists.w3.org/Archives/Public/www-svg/2013May/0047.html">thread</a>. Also see <a href="http://jsfiddle.net/05tz2zur/">example</a>.
-          (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3724">ACTION-3724</a> on Dirk.)</p>
-        </div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>DOMMatrix</a> object that defines the <a>CTM</a>.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGGraphicsElement__getScreenCTM" class="operation"><a>DOMMatrix</a>? <b>getScreenCTM</b>()</dt>
-      <dd class="operation">
-        <div>Returns the transformation matrix from current user units (i.e., after
-        application of the <a>'transform'</a> property) to the parent
-        user agent's notion of a "pixel". For display devices, ideally this
-        represents a physical screen pixel. For other devices or environments
-        where physical pixel sizes are not known, then an algorithm similar to
-        the CSS 2.1 definition of a "pixel" can be used instead.  Note that null
-        is returned if this element is not hooked into the document tree. This
-        method would have been more aptly named as <code>getClientCTM</code>,
-        but the name <code>getScreenCTM</code> is kept for historical reasons.
-
-          <p class="issue" data-issue="14">Should this take into account the 'transform' on the <a>'svg'</a> element itself?
-          See <a href="http://jsfiddle.net/05tz2zur/">example</a>. Chrome/Opera/IE: returns the identity matrix for this example,
-          Firefox: difference between transform style and attribute, and is not an identity matrix.</p>
-        </div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>DOMMatrix</a> object that defines the given
-            transformation matrix.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGGraphicsElement__getTransformToElement" class="operation"><a>DOMMatrix</a> <b>getTransformToElement</b>(<a>SVGGraphicsElement</a> <var>element</var>)</dt>
-      <dd class="operation">
-        <div>Returns the transformation matrix from the user coordinate system on the
-        current element (after application of the <a>'transform'</a> property)
-        to the user coordinate system on parameter <var>element</var>
-        (after application of its <a>'transform'</a> property).
-          <p class="issue" data-issue="15">If the passed in element is in another document, what should happen?
-          <a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3725">Measurements.</a>
-          <a href="http://www.w3.org/2015/02/11-svg-minutes.html#item12">Proposal to limit this to the same fragment
-          if not removeable.</a>
-          </p>
-        </div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGElement</a> <var>element</var></div>
-                <div>The target element.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>DOMMatrix</a> object that defines the transformation.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>InvalidStateError</a></dt>
-              <dd class="exception">Raised if the currently
-              defined transformation matrices make it impossible to compute the
-              given matrix (e.g., because one of the transformations is singular).</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-    </dl>
-  </dd>
-</dl>
-
-<div class="ready-for-wider-review">
-
-<h3 id="InterfaceSVGGeometryElement">Interface SVGGeometryElement</h3>
-
-<p>Interface <a>SVGGeometryElement</a> represents SVG elements whose rendering
-is defined by geometry and which can be filled and stroked.  This includes
-paths, text and the basic shapes.</p>
-
-<pre class="idl">interface <b>SVGGeometryElement</b> : <a>SVGGraphicsElement</a> {
-  boolean isPointInFill(<a>DOMPoint</a> point);
-  boolean isPointInStroke(<a>DOMPoint</a> point);
-};</pre>
-
-<dl class="interface">
-  <dt class="operations-header">Operations:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGGeometryElement__isPointInFill" class="operation first-child">boolean <b>isPointInFill</b>(<a>DOMPoint</a> point)</dt>
-      <dd class="operation">Returns whether the specified point is within the fill of the element.
-      Normal hit testing rules apply; the value of the <a>'pointer-events'</a>
-      property on the element determines whether a point is considered to be
-      within the fill.
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>DOMPoint</a> <var>point</var></div>
-                <div>The point to check for intersection with the fill
-                of this element.  The <a>DOMPoint</a> is interpreted as a
-                as a point in the local coordinate system of this element.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>true if the point is within the fill of this shape,
-          or false otherwise.</dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGGeometryElement__isPointInStroke" class="operation">boolean <b>isPointInStroke</b>(<a>DOMPoint</a> point)</dt>
-      <dd class="operation">Returns whether the specified point is within the stroke of the element.
-      Normal hit testing rules apply; the value of the <a>'pointer-events'</a>
-      property on the element determines whether a point is considered to be
-      within the stroke.
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>DOMPoint</a> <var>point</var></div>
-                <div>The point to check for intersection with the stroke
-                of this element.  The <a>DOMPoint</a> is interpreted as a
-                as a point in the local coordinate system of this element.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>true if the point is within the stroke of this shape,
-          or false otherwise.</dd>
-        </dl>
-      </dd>
-    </dl>
-  </dd>
-</dl>
-
-</div>
 
 <h3 id="InterfaceSVGTests">Interface SVGTests</h3>
 
