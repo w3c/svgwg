@@ -1581,6 +1581,126 @@ or a property.  The way this reflection is done depends on the type of the IDL a
 promoted to properties, such as <a>'transform'</a>.
 <a href="http://www.w3.org/2015/02/11-svg-minutes.html#item12">(Some discussion.)</a></p>
 
+<p>When a <a>reflected</a> content attribute is to be
+<dfn id="TermReserialize">reserialized</dfn>, optionally using a
+specific value, the following steps must be performed:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the specific value given, or
+  the value of the content attribute's reflecting IDL attribute
+  if a specific value was not provided.</li>
+
+  <li>Depending on <var>value</var>'s type:
+    <dl class="switch">
+      <dt><a>SVGAnimatedBoolean</a></dt>
+      <dt><a>SVGAnimatedNumber</a></dt>
+      <dt><a>SVGAnimatedLength</a></dt>
+      <dt><a>SVGAnimatedAngle</a></dt>
+      <dt><a>SVGAnimatedRect</a></dt>
+      <dt><a>SVGAnimatedString</a></dt>
+      <dt><a>SVGAnimatedNumberList</a></dt>
+      <dt><a>SVGAnimatedLengthList</a></dt>
+      <dd><a href="#TermReserialize">Reserialize</a> the content attribute using
+      <var>value</var>'s baseVal member.</dd>
+
+      <dt><a>SVGAnimatedEnumeration</a></dt>
+      <dd>
+        <ol>
+          <li>Let <var>number</var> be the value of <var>value</var>'s
+          baseVal member.</li>
+          <li>Let <var>keyword</var> be the content attribute's keyword
+          value corresponding to <var>number</var>, or the empty string
+          if <var>number</var> is 0.
+          <p class="note">This means that if the enumeration value is
+          set to the "unknown" value, the content attribute will be
+          set to the empty string.</p></li>
+          <li>Set the content attribute to <var>keyword</var>.</li>
+        </ol>
+      </dd>
+
+      <dt>boolean</dt>
+      <dd>Set the content attribute to "true" if <var>value</var> is true,
+      and "false" otherwise.</dd>
+
+      <dt>double</dt>
+      <dd>Set the content attribute to an implementation specific string
+      that, if parsed as a <a>&lt;number&gt;</a> using CSS syntax,
+      would return the number value closest to <var>value</var>, given
+      the implementation's supported <a href="#Precision">real number precision</a>.</dd>
+
+      <dt><a>SVGLength</a></dt>
+      <dd>Set the content attribute to the value that would be returned
+      from getting <var>value</var>'s <a href="#__svg__SVGLength__valueAsString">valueAsString</a>
+      member.</dd>
+
+      <dt><a>SVGAngle</a></dt>
+      <dd>Set the content attribute to the value that would be returned
+      from getting <var>value</var>'s <a href="#__svg__SVGLength__valueAsString">valueAsString</a>
+      member.</dd>
+
+      <dt><a>DOMRectReadOnly</a></dt>
+      <dd>
+        <ol>
+          <li>Let <var>components</var> be a list of four values, being the values of the
+          <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-domrectreadonly-domrect-x">x</a>,
+          <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-domrectreadonly-domrect-y">y</a>,
+          <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-domrectreadonly-domrect-width">width</a> and
+          <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-domrectreadonly-domrect-height">height</a>
+          members of <var>value</var>.</li>
+
+          <li>Let <var>serialized components</var> be a list of four strings,
+          where each is an implementation specific string that, if parsed
+          as a <a>&lt;number&gt;</a> using CSS syntax, would return the number
+          value closest to the corresponding value in <var>components</var>, given
+          the implementation's supported <a href="#Precision">real number precision</a>.</li>
+
+          <li>Set the content attribute to a string consisting of the strings in
+          <var>serialized components</var> joined and separated by single
+          U+0020 SPACE characters.</li>
+        </ol>
+      </dd>
+
+      <dt>DOMString</dt>
+      <dd>Set the content attribute to <var>value</var>.</dd>
+
+      <dt><a>SVGNumberList</a></dt>
+      <dt><a>SVGLengthList</a></dt>
+      <dt><a>SVGStringList</a></dt>
+      <dd>
+        <ol>
+          <li>Let <var>elements</var> be the list of values in <var>value</var>.
+          <p class="note">For <a>SVGNumberList</a>, this will be a list of <a>SVGNumber</a>
+          objects;
+          for <a>SVGLengthList</a>, this will be a list of <a>SVGLength</a> objects;
+          and for <a>SVGStringList</a>, this will be a list of <b>DOMString</b>s.</p></li>
+
+          <li>Let <var>serialized elements</var> be a list of strings, where each
+          string is formed based on the corresponding value in <var>elements</var>
+          and its type:
+            <dl class="switch">
+              <dt>an <a>SVGNumber</a> object</dt>
+              <dd>The string is an implementation specific string that, if parsed
+              as a <a>&lt;number&gt;</a> using CSS syntax, would return the number
+              value closest to the <a>SVGNumber</a> object's
+              <a href="#__svg__SVGNumber__value">value</a> member, given
+              the implementation's supported <a href="#Precision">real number precision</a>.</dd>
+              <dt>an <a>SVGLength</a> object</dt>
+              <dd>The string is the value that would be returned
+              from getting the value's <a href="#__svg__SVGLength__valueAsString">valueAsString</a>
+              member.</dd>
+              <dt>a <b>DOMString</b></dt>
+              <dd>The string is the <b>DOMString</b>'s value itself.</dd>
+            </dl>
+          </li>
+
+          <li>Set the content attribute to a string consisting of the strings in
+          <var>serialized elements</var> joined and separated by single
+          U+0020 SPACE characters.</li>
+        </ol>
+      </dd>
+    </dl>
+  </li>
+</ol>
 
 <div class="ready-for-wg-review">
 <h3 id="InterfaceSVGAnimatedBoolean">Interface SVGAnimatedBoolean</h3>
