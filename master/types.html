@@ -976,6 +976,8 @@ operate with these types of angles.</p>
 </dl>
 
 
+<div class="ready-for-wg-review">
+
 <h3 id="ListInterfaces">List interfaces</h3>
 
 <div class="annotation svg2-requirement">
@@ -999,560 +1001,220 @@ operate with these types of angles.</p>
   </table>
 </div>
 
-<p class="issue" data-issue="18">Consider combining the definitions of all the list interfaces;
-there is a lot of duplicated text currently.</p>
+<p>Some SVG attributes contain lists of values, and to represent these values
+there are three SVG DOM <dfn id="TermListInterface">list interfaces</dfn>, one
+for each required element type – <a>SVGNumberList</a>, <a>SVGLengthList</a>
+and <a>SVGStringList</a>.  The first two are used to represent the base and
+animated components of <a>SVGAnimatedNumberList</a> and <a>SVGAnimatedLengthList</a>
+objects, while the third, <a>SVGStringList</a>, is used to <a>reflect</a> a
+few unanimated attributes that take a list of strings.</p>
 
+<p>All <a>list interfaces</a> take the following form:</p>
+
+<pre class="idl" edit:excludefromidl="true">interface <b>SVG<var>Name</var>List</b> {
+
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__length">length</a>;
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__numberOfItems">numberOfItems</a>;
+
+  void <a href="types.html#__svg__SVGNameList__clear">clear</a>();
+  <var>Type</var> <a href="types.html#__svg__SVGNameList__initialize">initialize</a>(<var>Type</var> newItem);
+  getter <var>Type</var> <a href="types.html#__svg__SVGNameList__getItem">getItem</a>(unsigned long index);
+  <var>Type</var> <a href="types.html#__svg__SVGNameList__insertItemBefore">insertItemBefore</a>(<var>Type</var> newItem, unsigned long index);
+  <var>Type</var> <a href="types.html#__svg__SVGNameList__replaceItem">replaceItem</a>(<var>Type</var> newItem, unsigned long index);
+  <var>Type</var> <a href="types.html#__svg__SVGNameList__removeItem">removeItem</a>(unsigned long index);
+  <var>Type</var> <a href="types.html#__svg__SVGNameList__appendItem">appendItem</a>(<var>Type</var> newItem);
+  <a href="#__svg__SVGNameList__setter">setter</a> void (unsigned long index, <var>Type</var> newItem);
+};</pre>
+
+<p>where <var>Name</var> is a descriptive name for the list element's
+("Number", "Length" or "String") and <var>Type</var> is the IDL type of the
+list's elements (<a>SVGNumber</a>, <a>SVGLength</a> or <b>DOMString</b>).</p>
+
+<p>The <a href="http://heycam.github.io/webidl/#dfn-supported-property-indices">supported property indices</a>
+of a <a>list interface</a> object is all non-negative integers less than
+the length of the list.</p>
+
+<p id="ReadOnlyList">A <a>list interface</a> object can be designated as
+<em>read only</em>, which means that attempts to modify the object will result
+in an exception being thrown, as described below.</p>
+
+<p>The <b id="__svg__SVGNameList__length">length</b> and
+<b id="__svg__SVGNameList__numberOfItems">numberOfItems</b> IDL attributes
+represents the length of the list, and on getting, return the current length.</p>
+
+<p>The <b id="__svg__SVGNameList__clear">clear</b> method is used to
+remove all items in the list.  When clear() is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the list is <a href="#ReadOnlyList">read only</a>, then throw a
+  <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
+  <li>Remove all elements from the list.</li>
+  <li>If the list <a>reflects</a> an attribute, or represents the
+  base value of an object that <a>reflects</a> an attribute, then
+  <a>reserialize</a> the reflected attribute.</li>
+</ol>
+
+<p>The <b id="__svg__SVGNameList__initialize">initialize</b> method
+is used to clear the list and add a single, specified value to it.
+When initialize(<var>newItem</var>) is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the list is <a href="#ReadOnlyList">read only</a>, then throw a
+  <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
+  <li>Remove all elements from the list.</li>
+  <li>If <var>newItem</var> is an object type, and <var>newItem</var>
+  already exists in a list, then set <var>newItem</var> to be
+  a clone of <var>newItem</var> with the same values.</li>
+  <li>Append <var>newItem</var> to this list.</li>
+  <li>If the list <a>reflects</a> an attribute, or represents the
+  base value of an object that <a>reflects</a> an attribute, then
+  <a>reserialize</a> the reflected attribute.</li>
+  <li>Return <var>newItem</var>.</li>
+</ol>
+
+<p>The <b id="__svg__SVGNameList__getItem">getItem</b> method is used
+to get an item from the list at the specified position.  When
+getItem(<var>index</var>) is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If <var>index</var> is greater than or equal to the length
+  of the list, then throw a <a>DOMException</a> with code
+  INDEX_SIZE_ERR.</li>
+
+  <li>Return the element in the list at position <var>index</var>.
+    <p class="note">Note that if the list's element type is an object type,
+    such as <a>SVGLength</a>, then a reference to that object and not
+    a copy of it is returned.</p></li>
+</ol>
+
+<p>The <b id="__svg__SVGNameList__insertItemBefore">insertItemBefore</b>
+method is used to insert an element into the list at a specific position.
+When insertItemBefore(<var>newItem</var>, <var>index</var>) is called,
+the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the list is <a href="#ReadOnlyList">read only</a>, then throw a
+  <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
+  <li>If <var>newItem</var> is an object type, and <var>newItem</var>
+  already exists in a list, then set <var>newItem</var> to be
+  a clone of <var>newItem</var> with the same values.</li>
+  <li>Set <var>index</var> is greater than the length of the list, then
+  set <var>index</var> to be the list length.</li>
+  <li>Insert <var>newItem</var> into the list at index <var>index</var>.</li>
+  <li>If the list <a>reflects</a> an attribute, or represents the
+  base value of an object that <a>reflects</a> an attribute, then
+  <a>reserialize</a> the reflected attribute.</li>
+  <li>Return <var>newItem</var>.</li>
+</ol>
+
+<p>The <b id="__svg__SVGNameList__replaceItem">replaceItem</b> method
+is used to replace an existing item in the list with a new item.
+When replaceItem(<var>newItem</var>, <var>index</var>) is called, the
+following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the list is <a href="#ReadOnlyList">read only</a>, then throw a
+  <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
+  <li>If <var>index</var> is greater than or equal to the length of
+  the list, then throw a <a>DOMException</a> with code
+  INDEX_SIZE_ERR.</li>
+  <li>If <var>newItem</var> is an object type, and <var>newItem</var>
+  already exists in a list, then set <var>newItem</var> to be
+  a clone of <var>newItem</var> with the same values.</li>
+  <li>Replace the element in the list at index <var>index</var>
+  with <var>newItem</var>.</li>
+  <li>If the list <a>reflects</a> an attribute, or represents the
+  base value of an object that <a>reflects</a> an attribute, then
+  <a>reserialize</a> the reflected attribute.</li>
+  <li>Return <var>newItem</var>.</li>
+</ol>
+
+<p>The <b id="__svg__SVGNameList__removeItem">removeItem</b> method
+is used to remove an item from the list.  When removeItem(<var>index</var>)
+is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the list is <a href="#ReadOnlyList">read only</a>, then throw a
+  <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
+  <li>If <var>index</var> is greater than or equal to the length of
+  the list, then throw a <a>DOMException</a> with code
+  INDEX_SIZE_ERR.</li>
+  <li>Let <var>item</var> be the list element at index <var>index</var>.</li>
+  <li>Remove the list element at index <var>index</var>.</li>
+  <li>Return <var>item</var>.</li>
+</ol>
+
+<p>The <b id="__svg__SVGNameList__appendItem">appendItem</b> method
+is used to append an item to the end of the list.  When appendItem(<var>newItem</var>)
+is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the list is <a href="#ReadOnlyList">read only</a>, then throw a
+  <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
+  <li>If <var>newItem</var> is an object type, and <var>newItem</var>
+  already exists in a list, then set <var>newItem</var> to be
+  a clone of <var>newItem</var> with the same values.</li>
+  <li>Append <var>newItem</var> to the end of the list.</li>
+  <li>If the list <a>reflects</a> an attribute, or represents the
+  base value of an object that <a>reflects</a> an attribute, then
+  <a>reserialize</a> the reflected attribute.</li>
+  <li>Return <var>newItem</var>.</li>
+</ol>
+
+<p>The behavior of the <b id="__svg__SVGNameList__setter">indexed property setter</b>
+is the same as that for the <a href="#__svg__SVGNameList__replaceItem">replaceItem</a>
+method.</p>
 
 <h3 id="InterfaceSVGNumberList">Interface SVGNumberList</h3>
 
-<p>This interface defines a list of SVGNumber objects.</p>
-<p><a>SVGNumberList</a> has the same attributes and methods as other
-SVGxxxList interfaces.</p>
-
-<p>The <a href="http://heycam.github.io/webidl/#dfn-supported-property-indices">supported property indices</a>
-of an <a>SVGNumberList</a> object is all non-negative integers less than
-the length of the list.</p>
-
-<p id="ReadOnlyNumberList">An <a>SVGNumberList</a> object can be designated as <em>read only</em>,
-which means that attempts to modify the object will result in an exception
-being thrown, as described below.</p>
+<p>The <a>SVGNumberList</a> interface is a <a>list interface</a> whose
+elements are <a>SVGNumber</a> objects.  An <a>SVGNumberList</a> object
+represents a list of numbers.</p>
 
 <pre class="idl">interface <b>SVGNumberList</b> {
 
-  readonly attribute unsigned long <a href="types.html#__svg__SVGNumberList__length">length</a>;
-  readonly attribute unsigned long <a href="types.html#__svg__SVGNumberList__numberOfItems">numberOfItems</a>;
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__length">length</a>;
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__numberOfItems">numberOfItems</a>;
 
-  void <a href="types.html#__svg__SVGNumberList__clear">clear</a>();
-  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__initialize">initialize</a>(<a>SVGNumber</a> newItem);
-  getter <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__getItem">getItem</a>(unsigned long index);
-  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__insertItemBefore">insertItemBefore</a>(<a>SVGNumber</a> newItem, unsigned long index);
-  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__replaceItem">replaceItem</a>(<a>SVGNumber</a> newItem, unsigned long index);
-  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__removeItem">removeItem</a>(unsigned long index);
-  <a>SVGNumber</a> <a href="types.html#__svg__SVGNumberList__appendItem">appendItem</a>(<a>SVGNumber</a> newItem);
-  <a href="#__svg__SVGNumberList__setter">setter</a> void (unsigned long index, <a>SVGNumber</a> newItem);
+  void <a href="types.html#__svg__SVGNameList__clear">clear</a>();
+  <a>SVGNumber</a> <a href="types.html#__svg__SVGNameList__initialize">initialize</a>(<a>SVGNumber</a> newItem);
+  getter <a>SVGNumber</a> <a href="types.html#__svg__SVGNameList__getItem">getItem</a>(unsigned long index);
+  <a>SVGNumber</a> <a href="types.html#__svg__SVGNameList__insertItemBefore">insertItemBefore</a>(<a>SVGNumber</a> newItem, unsigned long index);
+  <a>SVGNumber</a> <a href="types.html#__svg__SVGNameList__replaceItem">replaceItem</a>(<a>SVGNumber</a> newItem, unsigned long index);
+  <a>SVGNumber</a> <a href="types.html#__svg__SVGNameList__removeItem">removeItem</a>(unsigned long index);
+  <a>SVGNumber</a> <a href="types.html#__svg__SVGNameList__appendItem">appendItem</a>(<a>SVGNumber</a> newItem);
+  <a href="#__svg__SVGNameList__setter">setter</a> void (unsigned long index, <a>SVGNumber</a> newItem);
 };</pre>
 
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGNumberList__length" class="attribute first-child"><b>length</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
-      <dd class="attribute">
-        <div>The number of items in the list.</div>
-      </dd>
-      <dt id="__svg__SVGNumberList__numberOfItems" class="attribute first-child"><b>numberOfItems</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
-      <dd class="attribute">
-        <div>The number of items in the list.</div>
-      </dd>
-    </dl>
-  </dd>
-  <dt class="operations-header">Operations:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGNumberList__clear" class="operation first-child">void <b>clear</b>()</dt>
-      <dd class="operation">
-        <div>Clears all existing current items from the list, with the result being
-        an empty list.</div>
-        <dl class="operation">
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyNumberList">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__initialize" class="operation"><a>SVGNumber</a> <b>initialize</b>(<a>SVGNumber</a> <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Clears all existing current items from the list and re-initializes the
-        list to hold a single item specified by the parameter.  If <var>newItem</var>
-        is in a list, then a new <a>SVGNumber</a> object is created with the same
-        values as <var>newItem</var> and this item is inserted into the list.
-        Otherwise, <var>newItem</var> itself is inserted into the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGNumber</a> <var>newItem</var></div>
-                <div>The item which should become the only member of the list.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The item being inserted into the list.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyNumberList">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__getItem" class="operation"><a>SVGNumber</a> <b>getItem</b>(unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Returns the specified item from the list.  The returned item is the
-        item itself and not a copy.  Any changes made to the item are
-        immediately reflected in the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item from the list which is to be
-                returned.  The first item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The selected item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__insertItemBefore" class="operation"><a>SVGNumber</a> <b>insertItemBefore</b>(<a>SVGNumber</a> <var>newItem</var>, unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Inserts a new item into the list at the specified position. The first
-        item is number 0. If <var>newItem</var> is already in a list, then
-        a new <a>SVGNumber</a> object is created with the same values as
-        <var>newItem</var> and this item is inserted into the list.  Otherwise,
-        <var>newItem</var> itself is inserted into the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGNumber</a> <var>newItem</var></div>
-                <div>The item which is to be inserted into the list.</div>
-              </li>
-              <li class="parameter">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item before which the new item is to be
-                inserted. The first item is number 0.  If the index is equal to 0,
-                then the new item is inserted at the front of the list. If the index
-                is greater than or equal to <a>numberOfItems</a>, then the new item is
-                appended to the end of the list.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyNumberList">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__replaceItem" class="operation"><a>SVGNumber</a> <b>replaceItem</b>(<a>SVGNumber</a> <var>newItem</var>, unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Replaces an existing item in the list with a new item. If
-        <var>newItem</var> is already in a list, then a new <a>SVGNumber</a>
-        object is created with the same values as <var>newItem</var> and
-        this item is inserted into the list.  Otherwise, <var>newItem</var>
-        itself is inserted into the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGNumber</a> <var>newItem</var></div>
-                <div>The item which is to be inserted into the list.</div>
-              </li>
-              <li class="parameter">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item which is to be replaced. The first
-                item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyNumberList">read only</a>.</dd>
-              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__removeItem" class="operation"><a>SVGNumber</a> <b>removeItem</b>(unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Removes an existing item from the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item which is to be removed. The first
-                item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The removed item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__appendItem" class="operation"><a>SVGNumber</a> <b>appendItem</b>(<a>SVGNumber</a> <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Inserts a new item at the end of the list. If <var>newItem</var> is
-        already in a list, then a new <a>SVGNumber</a> object is created
-        with the same values as <var>newItem</var> and this item is inserted
-        into the list.  Otherwise, <var>newItem</var> itself is inserted into
-        the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGNumber</a> <var>newItem</var></div>
-                <div>The item which is to be inserted. The first item is
-                number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGNumberList__setter" class="operation"><b>setter</b> void (unsigned long <var>index</var>, <a>SVGNumber</a> <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Replaces the item at index <var>index</var> with <var>newItem</var>.
-        If the list is <a href="#ReadOnlyNumberList">read only</a>, then a
-        <a href="http://heycam.github.io/webidl/#nomodificationallowederror">NoModificationAllowedError</a>
-        is thrown.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<p>The behavior of all of the interface members of <a>SVGNumberList</a> are
+defined in the <a href="#ListInterfaces">List interfaces</a> section above.</p>
 
 
 <h3 id="InterfaceSVGLengthList">Interface SVGLengthList</h3>
 
-<p>This interface defines a list of SVGLength objects.</p>
-<p><a>SVGLengthList</a> has the same attributes and methods as other
-SVGxxxList interfaces.</p>
-
-<p>The <a href="http://heycam.github.io/webidl/#dfn-supported-property-indices">supported property indices</a>
-of an <a>SVGLengthList</a> object is all non-negative integers less than
-the length of the list.</p>
-
-<p id="ReadOnlyLengthList">An <a>SVGLengthList</a> object can be designated as <em>read only</em>,
-which means that attempts to modify the object will result in an exception
-being thrown, as described below.</p>
+<p>The <a>SVGLengthList</a> interface is a <a>list interface</a> whose
+elements are <a>SVGLength</a> objects.  An <a>SVGLengthList</a> object
+represents a list of lengths.</p>
 
 <pre class="idl">interface <b>SVGLengthList</b> {
 
-  readonly attribute unsigned long <a href="types.html#__svg__SVGLengthList__length">length</a>;
-  readonly attribute unsigned long <a href="types.html#__svg__SVGLengthList__numberOfItems">numberOfItems</a>;
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__length">length</a>;
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__numberOfItems">numberOfItems</a>;
 
-  void <a href="types.html#__svg__SVGLengthList__clear">clear</a>();
-  <a>SVGLength</a> <a href="types.html#__svg__SVGLengthList__initialize">initialize</a>(<a>SVGLength</a> newItem);
-  getter <a>SVGLength</a> <a href="types.html#__svg__SVGLengthList__getItem">getItem</a>(unsigned long index);
-  <a>SVGLength</a> <a href="types.html#__svg__SVGLengthList__insertItemBefore">insertItemBefore</a>(<a>SVGLength</a> newItem, unsigned long index);
-  <a>SVGLength</a> <a href="types.html#__svg__SVGLengthList__replaceItem">replaceItem</a>(<a>SVGLength</a> newItem, unsigned long index);
-  <a>SVGLength</a> <a href="types.html#__svg__SVGLengthList__removeItem">removeItem</a>(unsigned long index);
-  <a>SVGLength</a> <a href="types.html#__svg__SVGLengthList__appendItem">appendItem</a>(<a>SVGLength</a> newItem);
-  <a href="#__svg__SVGLengthList__setter">setter</a> void (unsigned long index, <a>SVGLength</a> newItem);
+  void <a href="types.html#__svg__SVGNameList__clear">clear</a>();
+  <a>SVGLength</a> <a href="types.html#__svg__SVGNameList__initialize">initialize</a>(<a>SVGLength</a> newItem);
+  getter <a>SVGLength</a> <a href="types.html#__svg__SVGNameList__getItem">getItem</a>(unsigned long index);
+  <a>SVGLength</a> <a href="types.html#__svg__SVGNameList__insertItemBefore">insertItemBefore</a>(<a>SVGLength</a> newItem, unsigned long index);
+  <a>SVGLength</a> <a href="types.html#__svg__SVGNameList__replaceItem">replaceItem</a>(<a>SVGLength</a> newItem, unsigned long index);
+  <a>SVGLength</a> <a href="types.html#__svg__SVGNameList__removeItem">removeItem</a>(unsigned long index);
+  <a>SVGLength</a> <a href="types.html#__svg__SVGNameList__appendItem">appendItem</a>(<a>SVGLength</a> newItem);
+  <a href="#__svg__SVGNameList__setter">setter</a> void (unsigned long index, <a>SVGLength</a> newItem);
 };</pre>
 
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGLengthList__length" class="attribute first-child"><b>length</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
-      <dd class="attribute">
-        <div>The number of items in the list.</div>
-      </dd>
-      <dt id="__svg__SVGLengthList__numberOfItems" class="attribute first-child"><b>numberOfItems</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
-      <dd class="attribute">
-        <div>The number of items in the list.</div>
-      </dd>
-    </dl>
-  </dd>
-  <dt class="operations-header">Operations:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGLengthList__clear" class="operation first-child">void <b>clear</b>()</dt>
-      <dd class="operation">
-        <div>Clears all existing current items from the list, with the result being
-        an empty list.</div>
-        <dl class="operation">
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyLengthList">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGLengthList__initialize" class="operation"><a>SVGLength</a> <b>initialize</b>(<a>SVGLength</a> <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Clears all existing current items from the list and re-initializes the
-        list to hold a single item specified by the parameter.  If <var>newItem</var>
-        is in a list, then a new <a>SVGLength</a> object is created with the same
-        values as <var>newItem</var> and this item is inserted into the list.
-        Otherwise, <var>newItem</var> itself is inserted into the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGLength</a> <var>newItem</var></div>
-                <div>The item which should become the only member of the list.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The item being inserted into the list.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyLengthList">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGLengthList__getItem" class="operation"><a>SVGLength</a> <b>getItem</b>(unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Returns the specified item from the list.  The returned item is the
-        item itself and not a copy.  Any changes made to the item are
-        immediately reflected in the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item from the list which is to be
-                returned.  The first item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The selected item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyLengthList">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGLengthList__insertItemBefore" class="operation"><a>SVGLength</a> <b>insertItemBefore</b>(<a>SVGLength</a> <var>newItem</var>, unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Inserts a new item into the list at the specified position. The first
-        item is number 0. If <var>newItem</var> is already in a list, then
-        a new <a>SVGLength</a> object is created with the same values as
-        <var>newItem</var> and this item is inserted into the list.  Otherwise,
-        <var>newItem</var> itself is inserted into the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGLength</a> <var>newItem</var></div>
-                <div>The item which is to be inserted into the list.</div>
-              </li>
-              <li class="parameter">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item before which the new item is to be
-                inserted. The first item is number 0.  If the index is equal to 0,
-                then the new item is inserted at the front of the list. If the index
-                is greater than or equal to <a>numberOfItems</a>, then the new item is
-                appended to the end of the list.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyLengthList">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGLengthList__replaceItem" class="operation"><a>SVGLength</a> <b>replaceItem</b>(<a>SVGLength</a> <var>newItem</var>, unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Replaces an existing item in the list with a new item. If
-        <var>newItem</var> is already in a list, then a new <a>SVGLength</a>
-        object is created with the same values as <var>newItem</var> and
-        this item is inserted into the list.  Otherwise, <var>newItem</var>
-        itself is inserted into the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGLength</a> <var>newItem</var></div>
-                <div>The item which is to be inserted into the list.</div>
-              </li>
-              <li class="parameter">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item which is to be replaced. The first
-                item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyLengthList">read only</a>.</dd>
-              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGLengthList__removeItem" class="operation"><a>SVGLength</a> <b>removeItem</b>(unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Removes an existing item from the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item which is to be removed. The first
-                item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The removed item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyLengthList">read only</a>.</dd>
-              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGLengthList__appendItem" class="operation"><a>SVGLength</a> <b>appendItem</b>(<a>SVGLength</a> <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Inserts a new item at the end of the list. If <var>newItem</var> is
-        already in a list, then a new <a>SVGLength</a> object is created
-        with the same values as <var>newItem</var> and this item is inserted
-        into the list.  Otherwise, <var>newItem</var> itself is inserted into
-        the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGLength</a> <var>newItem</var></div>
-                <div>The item which is to be inserted. The first item is
-                number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list is
-              <a href="#ReadOnlyLengthList">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGLengthList__setter" class="operation"><b>setter</b> void (unsigned long <var>index</var>, <a>SVGLength</a> <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Replaces the item at index <var>index</var> with <var>newItem</var>.
-        If the list is <a href="#ReadOnlyLengthList">read only</a>, then a
-        <a href="http://heycam.github.io/webidl/#nomodificationallowederror">NoModificationAllowedError</a>
-        is thrown.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<p>The behavior of all of the interface members of <a>SVGLengthList</a> are
+defined in the <a href="#ListInterfaces">List interfaces</a> section above.</p>
 
-
+</div>
 
 <h2 id="DOMInterfacesForReflectingSVGAttributes">DOM interfaces for reflecting SVG attributes</h2>
 
@@ -2010,7 +1672,7 @@ the following steps are run:</p>
       </dd>
       <dt id="__svg__SVGAnimatedNumberList__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGNumberList</a>)</span></dt>
       <dd class="attribute">
-        <div>A <a href="#ReadOnlyNumberList">read only</a> <a>SVGNumberList</a> representing the current animated value of
+        <div>A <a href="#ReadOnlyList">read only</a> <a>SVGNumberList</a> representing the current animated value of
         the given attribute.  If the given attribute is not currently being
         animated, then the <a>SVGNumberList</a> will have the same contents
         as <a>baseVal</a>.  The object referenced by <a>animVal</a> will always
@@ -2042,7 +1704,7 @@ the following steps are run:</p>
       </dd>
       <dt id="__svg__SVGAnimatedLengthList__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGLengthList</a>)</span></dt>
       <dd class="attribute">
-        <div>A <a href="#ReadOnlyLengthList">read only</a> <a>SVGLengthList</a> representing the current animated value of
+        <div>A <a href="#ReadOnlyList">read only</a> <a>SVGLengthList</a> representing the current animated value of
         the given attribute.  If the given attribute is not currently being
         animated, then the <a>SVGLengthList</a> will have the same contents
         as <a>baseVal</a>.  The object referenced by <a>animVal</a> will always
@@ -2054,257 +1716,31 @@ the following steps are run:</p>
 </dl>
 
 
+<div class="ready-for-wg-review">
 <h3 id="InterfaceSVGStringList">Interface SVGStringList</h3>
 
-<p>This interface defines a list of DOMString values.</p>
-
-<p><a>SVGStringList</a> has the same attributes and methods as other
-SVGxxxList interfaces.</p>
-
-<p>The <a href="http://heycam.github.io/webidl/#dfn-supported-property-indices">supported property indices</a>
-of an <a>SVGStringList</a> object is all non-negative integers less than
-the length of the list.</p>
+<p>The <a>SVGStringList</a> interface is a <a>list interface</a> whose
+elements are <b>DOMString</b> values.  An <a>SVGStringList</a> object
+represents a list of strings.</p>
 
 <pre class="idl">interface <b>SVGStringList</b> {
 
-  readonly attribute unsigned long <a href="types.html#__svg__SVGStringList__length">length</a>;
-  readonly attribute unsigned long <a href="types.html#__svg__SVGStringList__numberOfItems">numberOfItems</a>;
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__length">length</a>;
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__numberOfItems">numberOfItems</a>;
 
-  void <a href="types.html#__svg__SVGStringList__clear">clear</a>();
-  DOMString <a href="types.html#__svg__SVGStringList__initialize">initialize</a>(DOMString newItem);
-  getter DOMString <a href="types.html#__svg__SVGStringList__getItem">getItem</a>(unsigned long index);
-  DOMString <a href="types.html#__svg__SVGStringList__insertItemBefore">insertItemBefore</a>(DOMString newItem, unsigned long index);
-  DOMString <a href="types.html#__svg__SVGStringList__replaceItem">replaceItem</a>(DOMString newItem, unsigned long index);
-  DOMString <a href="types.html#__svg__SVGStringList__removeItem">removeItem</a>(unsigned long index);
-  DOMString <a href="types.html#__svg__SVGStringList__appendItem">appendItem</a>(DOMString newItem);
-  <a href="#__svg__SVGStringList__setter">setter</a> void (unsigned long index, DOMString newItem);
+  void <a href="types.html#__svg__SVGNameList__clear">clear</a>();
+  DOMString <a href="types.html#__svg__SVGNameList__initialize">initialize</a>(DOMString newItem);
+  getter DOMString <a href="types.html#__svg__SVGNameList__getItem">getItem</a>(unsigned long index);
+  DOMString <a href="types.html#__svg__SVGNameList__insertItemBefore">insertItemBefore</a>(DOMString newItem, unsigned long index);
+  DOMString <a href="types.html#__svg__SVGNameList__replaceItem">replaceItem</a>(DOMString newItem, unsigned long index);
+  DOMString <a href="types.html#__svg__SVGNameList__removeItem">removeItem</a>(unsigned long index);
+  DOMString <a href="types.html#__svg__SVGNameList__appendItem">appendItem</a>(DOMString newItem);
+  <a href="#__svg__SVGNameList__setter">setter</a> void (unsigned long index, DOMString newItem);
 };</pre>
 
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGStringList__length" class="attribute first-child"><b>length</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
-      <dd class="attribute">
-        <div>The number of items in the list.</div>
-      </dd>
-      <dt id="__svg__SVGStringList__numberOfItems" class="attribute first-child"><b>numberOfItems</b><span class="idl-type-parenthetical"> (readonly unsigned long)</span></dt>
-      <dd class="attribute">
-        <div>The number of items in the list.</div>
-      </dd>
-    </dl>
-  </dd>
-  <dt class="operations-header">Operations:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGStringList__clear" class="operation first-child">void <b>clear</b>()</dt>
-      <dd class="operation">
-        <div>Clears all existing current items from the list, with the result being
-        an empty list.</div>
-        <dl class="operation">
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGStringList__initialize" class="operation">DOMString <b>initialize</b>(DOMString <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Clears all existing current items from the list and re-initializes the
-        list to hold the single item specified by the parameter.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>DOMString <var>newItem</var></div>
-                <div>The item which should become the only member of the list.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The item being inserted into the list.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGStringList__getItem" class="operation">DOMString <b>getItem</b>(unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Returns the specified item from the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item from the list which is to be
-                returned.  The first item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The selected item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGStringList__insertItemBefore" class="operation">DOMString <b>insertItemBefore</b>(DOMString <var>newItem</var>, unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Inserts a new item into the list at the specified position. The first
-        item is number 0.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>DOMString <var>newItem</var></div>
-                <div>The item which is to be inserted into the list.</div>
-              </li>
-              <li class="parameter">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item before which the new item is to be
-                inserted. The first item is number 0.  If the index is equal to 0,
-                then the new item is inserted at the front of the list. If the index
-                is greater than or equal to <a>numberOfItems</a>, then the new item is
-                appended to the end of the list.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGStringList__replaceItem" class="operation">DOMString <b>replaceItem</b>(DOMString <var>newItem</var>, unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Replaces an existing item in the list with a new item.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>DOMString <var>newItem</var></div>
-                <div>The item which is to be inserted into the list.</div>
-              </li>
-              <li class="parameter">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item which is to be replaced. The first
-                item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGStringList__removeItem" class="operation">DOMString <b>removeItem</b>(unsigned long <var>index</var>)</dt>
-      <dd class="operation">
-        <div>Removes an existing item from the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned long <var>index</var></div>
-                <div>The index of the item which is to be removed. The first
-                item is number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The removed item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-              <dt class="exception"><a>DOMException</a>, code INDEX_SIZE_ERR</dt>
-              <dd class="exception">Raised if the index number is
-              greater than or equal to <a>numberOfItems</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGStringList__appendItem" class="operation">DOMString <b>appendItem</b>(DOMString <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Inserts a new item at the end of the list.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>DOMString <var>newItem</var></div>
-                <div>The item which is to be inserted. The first item is
-                number 0.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The inserted item.</div>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the list
-              cannot be modified.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGStringList__setter" class="operation"><b>setter</b> void (unsigned long <var>index</var>, DOMString <var>newItem</var>)</dt>
-      <dd class="operation">
-        <div>Replaces the item at index <var>index</var> with <var>newItem</var>.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<p>The behavior of all of the interface members of <a>SVGStringList</a> are
+defined in the <a href="#ListInterfaces">List interfaces</a> section above.</p>
+</div>
 
 
 <h2 id="OtherDOMInterfaces">Other DOM interfaces</h2>
