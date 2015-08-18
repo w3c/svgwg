@@ -504,6 +504,28 @@ length are used to resolve percentage values to user units.  Unless otherwise
 described, an <a>SVGLength</a> object is not associated with any element and
 has unspecified directionality.</p>
 
+<p id='LengthMode'>Every <a>SVGLength</a> object operates in one of
+five modes.  It can:</p>
+
+<ol>
+  <li><em>reflect the base value</em> of a <a>reflected</a> animatable attribute
+  (being exposed through the <a href="types.html#__svg__SVGAnimatedLength__baseVal">baseVal</a>
+  member of an <a>SVGAnimatedLength</a>),</li>
+  <li><em>reflect the animated value</em> of a <a>reflected</a> animatable attribute
+  (being exposed through the <a href="types.html#__svg__SVGAnimatedLength__animVal">animVal</a>
+  member of an <a>SVGAnimatedLength</a>),</li>
+  <li><em>reflect an element of the base value</em> of a <a>reflected</a> animatable
+  attribute (being exposed through the methods on the
+  <a href="types.html#__svg__SVGAnimatedLengthList__baseVal">baseVal</a> member of
+  an <a>SVGAnimatedLengthList</a>),</li>
+  <li><em>reflect an element of the animated value</em> of a <a>reflected</a> animatable
+  attribute (being exposed through the methods on the
+  <a href="types.html#__svg__SVGAnimatedLengthList__animVal">animVal</a> member of
+  an <a>SVGAnimatedLengthList</a>), or</li>
+  <li><em>be detached</em>, which is the case for <a>SVGLength</a> objects created
+  with <a href='struct.html#__svg__SVGSVGElement__createSVGLength'>createSVGLength</a>.</li>
+</ol>
+
 <p class="issue" data-issue="6">We need to define the behavior of converting values from/to percentages
 when the viewport width/height/size is zero.
 (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3722">ACTION-3722</a> on Cameron.)</p>
@@ -1711,7 +1733,7 @@ following steps are run:</p>
   <li>Otherwise, the reflected attribute is defined to take a single
   number value.  Return <var>value</var>.</li>
 </ol>
-</div>
+
 
 <h3 id="InterfaceSVGAnimatedLength">Interface SVGAnimatedLength</h3>
 
@@ -1730,35 +1752,44 @@ following steps are run:</p>
 </div>
 -->
 
-<p>Used for attributes of basic type
-<a>&lt;length></a> which can be
-animated.</p>
+<p>An <a>SVGAnimatedLength</a> object is used to <a>reflect</a> an
+animatable attribute that takes a <a>&lt;length&gt;</a> value.</p>
 
 <pre class="idl">interface <b>SVGAnimatedLength</b> {
   [SameObject] readonly attribute <a>SVGLength</a> <a href="types.html#__svg__SVGAnimatedLength__baseVal">baseVal</a>;
   [SameObject] readonly attribute <a>SVGLength</a> <a href="types.html#__svg__SVGAnimatedLength__animVal">animVal</a>;
 };</pre>
 
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGAnimatedLength__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGLength</a>)</span></dt>
-      <dd class="attribute">
-        <div>The base value of the given attribute before applying any animations.</div>
-      </dd>
-      <dt id="__svg__SVGAnimatedLength__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGLength</a>)</span></dt>
-      <dd class="attribute">
-        <div>A <a href="#ReadOnlyLength">read only</a> <a>SVGLength</a> representing the current animated value of
-        the given attribute.  If the given attribute is not currently being
-        animated, then the <a>SVGLength</a> will have the same contents
-        as <a>baseVal</a>.  The object referenced by <a>animVal</a> will always
-        be distinct from the one referenced by <a>baseVal</a>, even when
-        the attribute is not animated.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<p>The <b id="__svg__SVGAnimatedLength__baseVal">baseVal</b> IDL attribute
+represents the current non-animated value of the reflected attribute.
+On getting <b id="__svg__SVGAnimatedLength__baseVal">baseVal</b>,
+an <a>SVGLength</a> object is returned that:</p>
+
+<ul>
+  <li><a href='#LengthMode'>reflects the base value</a> of the
+  reflected attribute,</li>
+  <li>is <a href='#AssociatedElement'>associated with</a> the SVG element that
+  the object with the reflecting IDL attribute of type <a>SVGAnimatedLength</a>
+  was obtained from, and</li>
+  <li>has a <a href='#AssociatedElement'>directionality</a> as defined by the
+  specific reflected attribute.</li>
+</ul>
+
+<p>The <b id="__svg__SVGAnimatedLength__animVal">animVal</b> IDL attribute
+represents the current animated value of the reflected attribute.
+On getting <b id="__svg__SVGAnimatedLength__animVal">animVal</b>,
+an <a>SVGLength</a> object is returned that:</p>
+
+<ul>
+  <li><a href='#LengthMode'>reflects the animated value</a> of the
+  reflected attribute,</li>
+  <li>is <a href='#AssociatedElement'>associated with</a> the SVG element that
+  the object with the reflecting IDL attribute of type <a>SVGAnimatedLength</a>
+  was obtained from, and</li>
+  <li>has a <a href='#AssociatedElement'>directionality</a> as defined by the
+  specific reflected attribute.</li>
+</ul>
+</div>
 
 
 <h3 id="InterfaceSVGAnimatedAngle">Interface SVGAnimatedAngle</h3>
