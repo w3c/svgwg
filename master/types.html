@@ -1030,6 +1030,12 @@ few unanimated attributes that take a list of strings.</p>
 ("Number", "Length" or "String") and <var>Type</var> is the IDL type of the
 list's elements (<a>SVGNumber</a>, <a>SVGLength</a> or <b>DOMString</b>).</p>
 
+<p>A <a>list interface</a> object maintains an internal list of elements,
+and the IDL attributes and methods are used to inspect and manipulate those
+elements.  The list of elements can also be changed in response to
+changes to the reflected content attribute and to animation of
+the content attribute.</p>
+
 <p>The <a href="http://heycam.github.io/webidl/#dfn-supported-property-indices">supported property indices</a>
 of a <a>list interface</a> object is all non-negative integers less than
 the length of the list.</p>
@@ -1404,37 +1410,80 @@ the following steps are run:</p>
   <li>Return true if the reflected attribute's current animated value
   is "true", and false otherwise.</li>
 </ol>
-</div>
 
 
 <h3 id="InterfaceSVGAnimatedEnumeration">Interface SVGAnimatedEnumeration</h3>
 
-<p>Used for attributes whose value must be a constant from a particular
-enumeration and which can be animated.</p>
+<p>An <a>SVGAnimatedEnumeration</a> object is used to <a>reflect</a>
+an animatable attribute that takes a keyword value (such as
+the <a>'textPath/method'</a> attribute on <a>'textPath'</a>) or to reflect
+the type of value that an animatable attribute has (done
+only by the <a href='painting.html#__svg__SVGMarkerElement__orientType'>orientType</a>
+IDL attribute for the <a>'marker element'</a> element's
+<a>'marker/orient'</a> attribute).</p>
 
 <pre class="idl">interface <b>SVGAnimatedEnumeration</b> {
            attribute unsigned short <a href="types.html#__svg__SVGAnimatedEnumeration__baseVal">baseVal</a>;
   readonly attribute unsigned short <a href="types.html#__svg__SVGAnimatedEnumeration__animVal">animVal</a>;
 };</pre>
 
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGAnimatedEnumeration__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="attribute">
-        <div>The base value of the given attribute before applying any animations.</div>
-      </dd>
-      <dt id="__svg__SVGAnimatedEnumeration__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly unsigned short)</span></dt>
-      <dd class="attribute">
-        <div>If the given attribute or property is being animated, contains the
-        current animated value of the attribute or property. If the given
-        attribute or property is not currently being animated, contains the
-        same value as <a>baseVal</a>.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<p>For <a>SVGAnimatedEnumeration</a> objects that <a>reflect</a> an
+animatable attribute that takes only a keyword value, the
+<b id="__svg__SVGAnimatedEnumeration__baseVal">baseVal</b> IDL attribute
+represents the current non-animated value of the reflected attribute.
+For <a href='painting.html#__svg__SVGMarkerElement__orientType'>orientType</a>,
+it represents the type of the current non-animated value of the
+reflected <a>'marker/orient'</a> attribute.  On getting
+<a href='#__svg__SVGAnimatedEnumeration__baseVal'>baseVal</a>, the
+following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>Let <var>value</var> be the value of the reflected attribute
+  (using the attribute's <a>initial value</a> if it is not present
+  or invalid).</li>
+  <li>Return the <dfn id="TermNumericTypeValue">numeric type value</dfn>
+  for <var>value</var>, according to the reflecting IDL attribute's
+  definition.</li>
+</ol>
+
+<p>On setting <a href="types.html#__svg__SVGAnimatedEnumeration__baseVal">baseVal</a>,
+the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>Let <var>value</var> be the value being assigned to
+  <a href="types.html#__svg__SVGAnimatedEnumeration__baseVal">baseVal</a>.</li>
+  <li>If <var>value</var> is 0 or is not the <a>numeric type value</a>
+  for any value of the reflected attribute, then set the reflected
+  attribute to the empty string.</li>
+  <li>Otherwise, if the reflecting IDL attribute is
+  <a href='painting.html#__svg__SVGMarkerElement__orientType'>orientType</a>
+  and <var>value</var> is <a href='painting.html#__svg__SVGMarkerElement__SVG_MARKER_ORIENT_ANGLE'>SVG_MARKER_ORIENT_ANGLE</a>,
+  then set the reflected attribute to the string "0".</li>
+  <li>Otherwise, <var>value</var> is the <a>numeric type value</a>
+  for a specific, single keyword value for the reflected attribute.
+  Set the reflected attribute to that value.</li>
+</ol>
+
+<p>For <a>SVGAnimatedEnumeration</a> objects that <a>reflect</a> an
+animatable attribute that takes only a keyword value, the
+<b id="__svg__SVGAnimatedEnumeration__animVal">animVal</b> IDL attribute
+represents the current animated value of the reflected attribute.
+For <a href='painting.html#__svg__SVGMarkerElement__orientType'>orientType</a>,
+it represents the type of the current animated value of the
+reflected <a>'marker/orient'</a> attribute.  On getting
+<a href='#__svg__SVGAnimatedEnumeration__animVal'>animVal</a>, the
+following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the reflected attribute is not currently being animated, then
+  return the same value that would be returned by
+  <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>.</li>
+  <li>Let <var>value</var> be the current animated value of the reflected
+  attribute.</li>
+  <li>Return the <a>numeric type value</a> for <var>value</var>, according to
+  the reflecting IDL attribute's definition.</li>
+</ol>
+</div>
 
 
 <h3 id="InterfaceSVGAnimatedInteger">Interface SVGAnimatedInteger</h3>
