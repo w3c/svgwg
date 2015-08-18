@@ -1477,44 +1477,128 @@ following steps are run:</p>
 <ol class="algorithm">
   <li>If the reflected attribute is not currently being animated, then
   return the same value that would be returned by
-  <a href="types.html#__svg__SVGAnimatedBoolean__baseVal">baseVal</a>.</li>
+  <a href="types.html#__svg__SVGAnimatedEnumeration__baseVal">baseVal</a>.</li>
   <li>Let <var>value</var> be the current animated value of the reflected
   attribute.</li>
   <li>Return the <a>numeric type value</a> for <var>value</var>, according to
   the reflecting IDL attribute's definition.</li>
 </ol>
-</div>
 
 
 <h3 id="InterfaceSVGAnimatedInteger">Interface SVGAnimatedInteger</h3>
 
-<p>Used for attributes of basic type
-<a>&lt;integer></a> which can be
-animated.</p>
+<p>An <a>SVGAnimatedInteger</a> object is used to <a>reflect</a> an
+animatable attribute that takes an integer value (such as
+<a>'feTurbulence/numOctaves'</a> on <a>'feTurbulence'</a>).  It is also
+used to reflect one part of an animatable attribute that takes
+an integer followed by an optional second integer (such as
+<a>'feConvolveMatrix/order'</a> on <a>'feConvolveMatrix'</a>).</p>
+
+<p class="note">This <a>SVGAnimatedInteger</a> interface
+is not used in this specification, however the
+<a href="http://www.w3.org/TR/filter-effects/">Filter Effects</a>
+specification has a number of uses of it.</p>
 
 <pre class="idl">interface <b>SVGAnimatedInteger</b> {
            attribute long <a href="types.html#__svg__SVGAnimatedInteger__baseVal">baseVal</a>;
   readonly attribute long <a href="types.html#__svg__SVGAnimatedInteger__animVal">animVal</a>;
 };</pre>
 
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGAnimatedInteger__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (long)</span></dt>
-      <dd class="attribute">
-        <div>The base value of the given attribute before applying any animations.</div>
-      </dd>
-      <dt id="__svg__SVGAnimatedInteger__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly long)</span></dt>
-      <dd class="attribute">
-        <div>If the given attribute or property is being animated, contains the
-        current animated value of the attribute or property. If the given
-        attribute or property is not currently being animated, contains the
-        same value as <a>baseVal</a>.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<p>For <a>SVGAnimatedInteger</a> objects that <a>reflect</a>
+an animatable attribute that takes a single integer value, the
+<b id="__svg__SVGAnimatedInteger__baseVal">baseVal</b> IDL attribute
+represents the current non-animated value of the reflected attribute.
+For those that reflect one integer of an attribute that takes an
+integer followed by an optional second integer, it represents the
+current non-animated value of one of the two integers.  On getting
+<a href="#__svg__SVGAnimatedInteger__baseVal">baseVal</a>, the
+following steps are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the value of the reflected attribute
+  (using the attribute's <a>initial value</a> if it is not present
+  or invalid).</li>
+  <li>If the reflected attribute is defined to take an integer
+  followed by an optional second integer, then:
+    <ol>
+      <li>If this <a>SVGAnimatedInteger</a> object reflects the
+      first integer, then return the first value in <var>value</var>.</li>
+      <li>Otherwise, this <a>SVGAnimatedInteger</a> object reflects the
+      second integer.  Return the second value in <var>value</var> if it has been
+      explicitly specified, and if not, return the implicit value
+      as described in the definition of the attribute.
+      <p class='note'>For example, the definition of <a>'feConvolveMatrix/order'</a>
+      says that the implicit second integer is the same as the explicit
+      first integer.</p></li>
+    </ol>
+  </li>
+  <li>Otherwise, the reflected attribute is defined to take a single
+  integer value.  Return <var>value</var>.</li>
+</ol>
+
+<p>On setting <a href="#__svg__SVGAnimatedInteger__baseVal">baseVal</a>,
+the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>Let <var>value</var> be the value being assigned to
+  <a href="types.html#__svg__SVGAnimatedInteger__baseVal">baseVal</a>.</li>
+  <li>Let <var>new</var> be a list of integers.</li>
+  <li>If the reflected attribute is defined to take an integer
+  followed by an optional second integer, then:
+    <ol>
+      <li>Let <var>current</var> be the value of the reflected attribute
+      (using the attribute's <a>initial value</a> if it is not present
+      or invalid).</li>
+      <li>Let <var>first</var> be the first integer in <var>current</var>.</li>
+      <li>Let <var>second</var> be the second integer in <var>current</var>
+      if it has been explicitly specified, and if not, the implicit value
+      as described in the definition of the attribute.</li>
+      <li>If this <a>SVGAnimatedInteger</a> object reflects the
+      first integer, then set <var>first</var> to <var>value</var>.
+      Otherwise, set <var>second</var> to <var>value</var>.</li>
+      <li>Append <var>first</var> to <var>new</var>.</li>
+      <li>Append <var>second</var> to <var>new</var>.</li>
+    </ol>
+  </li>
+  <li>Otherwise, the reflected attribute is defined to take a single
+  integer value.  Append <var>value</var> to <var>new</var>.</li>
+  <li>Set the content attribute to a string consisting of each integer
+  in <var>new</var> serialized to an implementation specific string that,
+  if parsed as an <a>&lt;number&gt;</a> using CSS syntax, would return that
+  integer, joined and separated by a single U+0020 SPACE character.</li>
+</ol>
+
+<p>For <a>SVGAnimatedInteger</a> objects that <a>reflect</a> an
+animatable attribute that takes a single integer value, the
+<b id="__svg__SVGAnimatedInteger__animVal">animVal</b> IDL attribute
+represents the current animated value of the reflected attribute.
+For those that reflect one integer of an attribute that takes an
+integer followed by an optional second integer, it represents the
+current animated value of one of the two integers.  On getting
+<a href='#__svg__SVGAnimatedInteger__animVal'>animVal</a>, the
+following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the reflected attribute is not currently being animated, then
+  return the same value that would be returned by
+  <a href="types.html#__svg__SVGAnimatedInteger__baseVal">baseVal</a>.</li>
+  <li>Let <var>value</var> be the current animated value of the
+  reflected attribute.</li>
+  <li>If the reflected attribute is defined to take an integer
+  followed by an optional second integer, then:
+    <ol>
+      <li>If this <a>SVGAnimatedInteger</a> object reflects the
+      first integer, then return the first value in <var>value</var>.</li>
+      <li>Otherwise, this <a>SVGAnimatedInteger</a> object reflects the
+      second integer.  Return the second value in <var>value</var> if it has been
+      explicitly specified, and if not, return the implicit value
+      as described in the definition of the attribute.</li>
+    </ol>
+  </li>
+  <li>Otherwise, the reflected attribute is defined to take a single
+  integer value.  Return <var>value</var>.</li>
+</ol>
+</div>
 
 
 <h3 id="InterfaceSVGAnimatedNumber">Interface SVGAnimatedNumber</h3>
