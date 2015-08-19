@@ -461,17 +461,19 @@ paths, text and the basic shapes.</p>
 
 <h2 id="DOMInterfacesForBasicDataTypes">DOM interfaces for basic data types</h2>
 
+<div class='ready-for-wg-review'>
 <h3 id="InterfaceSVGNumber">Interface SVGNumber</h3>
 
-<p>Used for attributes of basic type
-<a>&lt;number></a>.</p>
+<p>The <a>SVGNumber</a> interface is used primarily to represent a <a>&lt;number&gt;</a>
+value that is a part of an <a>SVGNumberList</a>.  Individual <a>SVGNumber</a>
+objects can also be created by script.</p>
 
 <p id="ReadOnlyNumber">An <a>SVGNumber</a> object can be designated as <em>read only</em>,
 which means that attempts to modify the object will result in an exception
 being thrown, as described below.</p>
 
 <p id="NumberAssociatedElement">An <a>SVGNumber</a> object can be <em>associated</em>
-with a particular element.  The associated element is also used to
+with a particular element.  The associated element is used to
 determine which element's content attribute to update if the object <a>reflects</a>
 an attribute.  Unless otherwise described, an <a>SVGNumber</a> object is not
 associated with any element.</p>
@@ -492,23 +494,35 @@ modes.  It can:</p>
   with <a href='struct.html#__svg__SVGSVGElement__createSVGNumber'>createSVGNumber</a>.</li>
 </ol>
 
-<p class='issue' data-issue="23">Define what it means to <dfn id='NumberDetach'>detach an SVGNumber</dfn>.</p>
+<p>An <a>SVGNumber</a> object maintains an internal number value,
+which is called its <dfn id="NumberValue">value</dfn>.</p>
 
 <pre class="idl">interface <b>SVGNumber</b> {
   attribute float <a href="types.html#__svg__SVGNumber__value">value</a>;
 };</pre>
 
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGNumber__value" class="attribute first-child"><b>value</b><span class="idl-type-parenthetical"> (float)</span></dt>
-      <dd class="attribute">
-        <div>The value of the given attribute.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<p>The <b id="__svg__SVGNumber__value">value</b> IDL attribute
+represents the number.  On getting <a href="#__svg__SVGNumber__value">value</a>,
+the <a>SVGNumber</a>'s <a href='#NumberValue'>value</a> is returned.</p>
+
+<p>On setting <a href="#__svg__SVGNumber__value">value</a>, the following
+steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>SVGNumber</a> is <a href="#ReadOnlyNumber">read only</a>, then throw a
+  <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
+  <li>Set the <a>SVGNumber</a>'s <a href='#NumberValue'>value</a> to the
+  value being assigned to the <a href="#__svg__SVGNumber__value">value</a>
+  member.</li>
+  <li>If the <a>SVGNumber</a> <a href='#NumberMode'>reflects an element of the
+  base value</a> of a <a>reflected</a> attribute, then <a>reserialize</a>
+  the reflected attribute.
+    <p class='note'>The <a>SVGNumber</a> can't reflect an element of the
+    animated value, since it would be read only and we would have thrown
+    an exception in step 1.</p>
+  </li>
+</ol>
+</div>
 
 
 <h3 id="InterfaceSVGLength">Interface SVGLength</h3>
