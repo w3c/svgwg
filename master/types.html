@@ -480,11 +480,11 @@ associated with any element.</p>
 modes.  It can:</p>
 
 <ol>
-  <li><em>reflect an element of the base value at a specific index</em> of a <a>reflected</a> animatable
+  <li><em>reflect an element of the base value</em> of a <a>reflected</a> animatable
   attribute (being exposed through the methods on the
   <a href="types.html#__svg__SVGAnimatedNumberList__baseVal">baseVal</a> member of
   an <a>SVGAnimatedNumberList</a>),</li>
-  <li><em>reflect an element of the animated value at a specific index</em> of a <a>reflected</a> animatable
+  <li><em>reflect an element of the animated value</em> of a <a>reflected</a> animatable
   attribute (being exposed through the methods on the
   <a href="types.html#__svg__SVGAnimatedNumberList__animVal">animVal</a> member of
   an <a>SVGAnimatedNumberList</a>), or</li>
@@ -544,11 +544,11 @@ five modes.  It can:</p>
   <li><em>reflect the animated value</em> of a <a>reflected</a> animatable attribute
   (being exposed through the <a href="types.html#__svg__SVGAnimatedLength__animVal">animVal</a>
   member of an <a>SVGAnimatedLength</a>),</li>
-  <li><em>reflect an element of the base value at a specific index</em> of a <a>reflected</a> animatable
+  <li><em>reflect an element of the base value at a</em> of a <a>reflected</a> animatable
   attribute (being exposed through the methods on the
   <a href="types.html#__svg__SVGAnimatedLengthList__baseVal">baseVal</a> member of
   an <a>SVGAnimatedLengthList</a>),</li>
-  <li><em>reflect an element of the animated value at a specific index</em> of a <a>reflected</a> animatable
+  <li><em>reflect an element of the animated value at a</em> of a <a>reflected</a> animatable
   attribute (being exposed through the methods on the
   <a href="types.html#__svg__SVGAnimatedLengthList__animVal">animVal</a> member of
   an <a>SVGAnimatedLengthList</a>), or</li>
@@ -1114,11 +1114,16 @@ which is referred to in the text below simply as "the list".
 The IDL attributes and methods are used to inspect and manipulate elements
 of the list.  The list can also be changed in response to
 changes to the reflected content attribute and to animation of
-the content attribute, but this is done lazily whenever any of the
-list methods are called or IDL attributes accessed.</p>
+the content attribute.</p>
 
-<p>Whenever a <a>list interface</a> object is to be <dfn id="TermSynchronize">synchronized</dfn>,
-the following steps are run:</p>
+<p id="ReadOnlyList">A <a>list interface</a> object can be designated as
+<em>read only</em>, which means that attempts to modify the object will result
+in an exception being thrown, as described below.</p>
+
+<p>Whenever the content attribute that a <a>list interface</a> object
+reflects changes (whether the it is reflecting the attribute's base or
+animated value) the <a>list interface</a> object must be synchronized by
+running the following steps right after the change:</p>
 
 <ol class='algorithm'>
   <li>Let <var>value</var> be a value determined as follows:
@@ -1137,6 +1142,7 @@ the following steps are run:</p>
           <li><a>Detach</a> each object in the list at an index
           greater than or equal to <var>new length</var>.</li>
           <li>Truncate the list to length <var>new length</var>.</li>
+          <li>Set <var>length</var> to <var>new length</var>.</li>
         </ol>
       </li>
       <li>Otherwise, <var>length</var> ≤ <var>new length</var>:
@@ -1145,12 +1151,22 @@ the following steps are run:</p>
             <ol>
               <li>Let <var>item</var> be a newly created
               object of the list element type.</li>
-              <li><a>Attach</a> <var>item</var> to this
-              <a>list interface</a> object for index <var>length</var>.</li>
+              <li><a>Attach</a> <var>item</var> to this <a>list interface</a>
+              object.</li>
               <li>Append <var>item</var> to the list.</li>
               <li>Set <var>length</var> to <var>length</var> + 1.</li>
             </ol>
           </li>
+        </ol>
+      </li>
+      <li>Let <var>index</var> be 0.</li>
+      <li>While <var>index</var> &lt; <var>length</var>:
+        <ol>
+          <li>Let <var>item</var> be the object in the list at index
+          <var>index</var>.</li>
+          <li>Let <var>v</var> be the value in <var>value</var> at index
+          <var>index</var>.</li>
+          <li>Set <var>item</var>'s value to <var>v</var>.</li>
         </ol>
       </li>
     </ol>
@@ -1163,16 +1179,31 @@ the following steps are run:</p>
   </li>
 </ol>
 
-<p>Whenever an <a>SVGNumber</a> or <a>SVGLength</a> object is to be
-<dfn id="TermDetach">detached</dfn>, the steps for
-<a href="#NumberDetach">detaching SVGNumber objects</a> or
-<a href="#LengthDetach">detaching SVGLength objects</a> are run,
-as appropriate.  Nothing is done when detaching a <b>DOMString</b>.</p>
+<p>Whenever a list element object is to be <dfn id="TermDetach">detached</dfn>,
+the following steps are run, depending on the list element type:</p>
 
-<p>Whenever an <a>SVGNumber</a> or <a>SVGLength</a> object is to be
-<dfn id="TermAttach">attached</dfn> to a <a>list interface</a> object
-for a specific index, the following steps are run, depending on
-the object type:</p>
+<dl class='switch'>
+  <dt><a>SVGNumber</a></dt>
+  <dd>
+    Set the <a>SVGNumber</a> to no longer be 
+    <a href="#NumberAssociatedElement">associated</a> with any element.
+    If the <a>SVGNumber</a> is <a href='#ReadOnlyNumber'>read only</a>,
+    set it to be no longer read only.
+  </dd>
+  <dt><a>SVGLength</a></dt>
+  <dd>
+    Set the <a>SVGLength</a> to no longer be 
+    <a href="#LengthAssociatedElement">associated</a> with any element.
+    If the <a>SVGLength</a> is <a href='#ReadOnlyLength'>read only</a>,
+    set it to be no longer read only.  Set the <a>SVGLength</a> to have
+    unspecified <a href="#LengthAssociatedElement">directionality</a>.
+  </dd>
+  <dt><b>DOMString</b></dt>
+  <dd>Nothing is done.</dd>
+</dl>
+
+<p>Whenever a list element object is to be <dfn id="TermAttach">attached</dfn>,
+the following steps are run, depending on the list element type:</p>
 
 <dl class='switch'>
   <dt><a>SVGNumber</a></dt>
@@ -1185,11 +1216,10 @@ the object type:</p>
       <dl class='switch'>
         <dt>base value</dt>
         <dd>Set the <a>SVGNumber</a> to <a href="#NumberMode">reflect an
-        element of the base value</a> at the given index.</dd>
+        element of the base value</a>.</dd>
         <dt>animated value</dt>
         <dd>Set the <a>SVGNumber</a> to <a href="#NumberMode">reflect an
-        element of the animated value</a> at the given index
-        and make it <a href="#ReadOnlyNumber">read only</a>.</dd>
+        element of the animated value</a>.</dd>
       </dl>
   </dd>
   <dt><a>SVGLength</a></dt>
@@ -1204,37 +1234,25 @@ the object type:</p>
       <dl class='switch'>
         <dt>base value</dt>
         <dd>Set the <a>SVGLength</a> to <a href="#LengthMode">reflect an
-        element of the base value</a> at the given index.</dd>
+        element of the base value</a>.</dd>
         <dt>animated value</dt>
         <dd>Set the <a>SVGLength</a> to <a href="#LengthMode">reflect an
-        element of the animated value</a> at the given index
+        element of the animated value</a>
         and make it <a href="#ReadOnlyLength">read only</a>.</dd>
       </dl>
   </dd>
+  <dt><b>DOMString</b></dt>
+  <dd>Nothing is done.</dd>
 </dl>
 
-<p id="ReadOnlyList">A <a>list interface</a> object can be designated as
-<em>read only</em>, which means that attempts to modify the object will result
-in an exception being thrown, as described below.</p>
-
-<p>To determine the
-<a href="http://heycam.github.io/webidl/#dfn-supported-property-indices">supported property indices</a>
-of a <a>list interface</a> object at any given time, the following steps are run:</p>
-
-<ol>
-  <li><a>Synchronize</a> the <a>list interface</a> object.</li>
-  <li>Return the set of all non-negative integers less than the length of
-  the list.</li>
-</ol>
+<p>The <a href="http://heycam.github.io/webidl/#dfn-supported-property-indices">supported property indices</a>
+of a <a>list interface</a> object is the set of all non-negative integers
+less than the length of the list.</p>
 
 <p>The <b id="__svg__SVGNameList__length">length</b> and
 <b id="__svg__SVGNameList__numberOfItems">numberOfItems</b> IDL attributes
-represents the length of the list.  On getting, the following steps are run:</p>
-
-<ol class='algorithm'>
-  <li><a>Synchronize</a> the <a>list interface</a> object.</li>
-  <li>Return the length of the list.</li>
-</ol>
+represents the length of the list, and on getting simply return
+the length of the list.</p>
 
 <p>The <b id="__svg__SVGNameList__clear">clear</b> method is used to
 remove all items in the list.  When clear() is called, the following steps are run:</p>
@@ -1242,7 +1260,6 @@ remove all items in the list.  When clear() is called, the following steps are r
 <ol class="algorithm">
   <li>If the list is <a href="#ReadOnlyList">read only</a>, then throw a
   <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
-  <li><a>Synchronize</a> the <a>list interface</a> object.</li>
   <li><a>Detach</a> and then remove all elements in the list.</li>
   <li>If the list <a>reflects</a> an attribute, or represents the
   base value of an object that <a>reflects</a> an attribute, then
@@ -1256,14 +1273,12 @@ When initialize(<var>newItem</var>) is called, the following steps are run:</p>
 <ol class="algorithm">
   <li>If the list is <a href="#ReadOnlyList">read only</a>, then throw a
   <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
-  <li><a>Synchronize</a> the <a>list interface</a> object.</li>
   <li><a>Detach</a> and then remove all elements in the list.</li>
   <li>If <var>newItem</var> is an object type, and <var>newItem</var>
   already exists in a list, then set <var>newItem</var> to be
   a newly created object of the same type as <var>newItem</var>
   and which has the same (number or length) value.</li>
-  <li><a>Attach</a> <var>newItem</var> to the <a>list interface</a> object
-  for index 0.</li>
+  <li><a>Attach</a> <var>newItem</var> to the <a>list interface</a> object.</li>
   <li>Append <var>newItem</var> to this list.</li>
   <li>If the list <a>reflects</a> an attribute, or represents the
   base value of an object that <a>reflects</a> an attribute, then
@@ -1276,7 +1291,6 @@ to get an item from the list at the specified position.  When
 getItem(<var>index</var>) is called, the following steps are run:</p>
 
 <ol class="algorithm">
-  <li><a>Synchronize</a> the <a>list interface</a> object.</li>
   <li>If <var>index</var> is greater than or equal to the length
   of the list, then throw a <a>DOMException</a> with code
   INDEX_SIZE_ERR.</li>
@@ -1294,7 +1308,6 @@ the following steps are run:</p>
 <ol class="algorithm">
   <li>If the list is <a href="#ReadOnlyList">read only</a>, then throw a
   <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
-  <li><a>Synchronize</a> the <a>list interface</a> object.</li>
   <li>If <var>newItem</var> is an object type, and <var>newItem</var>
   already exists in a list, then set <var>newItem</var> to be
   a newly created object of the same type as <var>newItem</var>
@@ -1302,18 +1315,7 @@ the following steps are run:</p>
   <li>If <var>index</var> is greater than the length of the list, then
   set <var>index</var> to be the list length.</li>
   <li>Insert <var>newItem</var> into the list at index <var>index</var>.</li>
-  <li>While <var>index</var> is less than the list length:
-    <ol>
-      <li>Let <var>item</var> be the object at index <var>index</var>.</li>
-      <li><a>Attach</a> <var>item</var> to the <a>list interface</a> object
-      for index <var>index</var>.</li>
-      <li>Set <var>index</var> to <var>index</var> + 1.
-        <p class='note'>If we are inserting an item into the middle of
-        the list, this will update the index each object is reflecting
-        from the insertion point until the end of the list.</p>
-      </li>
-    </ol>
-  </li>
+  <li>Attach <var>newItem</var> to the <a>list interface</a> object.</li>
   <li>If the list <a>reflects</a> an attribute, or represents the
   base value of an object that <a>reflects</a> an attribute, then
   <a>reserialize</a> the reflected attribute.</li>
@@ -1328,7 +1330,6 @@ following steps are run:</p>
 <ol class="algorithm">
   <li>If the list is <a href="#ReadOnlyList">read only</a>, then throw a
   <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
-  <li><a>Synchronize</a> the <a>list interface</a> object.</li>
   <li>If <var>index</var> is greater than or equal to the length of
   the list, then throw a <a>DOMException</a> with code
   INDEX_SIZE_ERR.</li>
@@ -1339,8 +1340,7 @@ following steps are run:</p>
   <li><a>Detach</a> the element in the list at index <var>index</var>.</li>
   <li>Replace the element in the list at index <var>index</var>
   with <var>newItem</var>.</li>
-  <li><a>Attach</a> <var>newItem</var> to the <a>list interface</a> object
-  for index <var>index</var>.</li>
+  <li><a>Attach</a> <var>newItem</var> to the <a>list interface</a> object.</li>
   <li>If the list <a>reflects</a> an attribute, or represents the
   base value of an object that <a>reflects</a> an attribute, then
   <a>reserialize</a> the reflected attribute.</li>
@@ -1354,25 +1354,12 @@ is called, the following steps are run:</p>
 <ol class="algorithm">
   <li>If the list is <a href="#ReadOnlyList">read only</a>, then throw a
   <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
-  <li><a>Synchronize</a> the <a>list interface</a> object.</li>
   <li>If <var>index</var> is greater than or equal to the length of
   the list, then throw a <a>DOMException</a> with code
   INDEX_SIZE_ERR.</li>
   <li>Let <var>item</var> be the list element at index <var>index</var>.</li>
   <li><a>Detach</a> <var>item</var>.</li>
   <li>Remove the list element at index <var>index</var>.</li>
-  <li>While <var>index</var> is less than the list length:
-    <ol>
-      <li>Let <var>item</var> be the object at index <var>index</var>.</li>
-      <li><a>Attach</a> <var>item</var> to the <a>list interface</a> object
-      for index <var>index</var>.</li>
-      <li>Set <var>index</var> to <var>index</var> + 1.
-        <p class='note'>If removed an item from the middle of
-        the list, this will update the index each object is reflecting
-        from the removal point until the end of the list.</p>
-      </li>
-    </ol>
-  </li>
   <li>Return <var>item</var>.</li>
 </ol>
 
@@ -1383,15 +1370,13 @@ is called, the following steps are run:</p>
 <ol class="algorithm">
   <li>If the list is <a href="#ReadOnlyList">read only</a>, then throw a
   <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
-  <li><a>Synchronize</a> the <a>list interface</a> object.</li>
   <li>If <var>newItem</var> is an object type, and <var>newItem</var>
   already exists in a list, then set <var>newItem</var> to be
   a newly created object of the same type as <var>newItem</var>
   and which has the same (number or length) value.</li>
   <li>Let <var>index</var> be the length of the list.</li>
   <li>Append <var>newItem</var> to the end of the list.</li>
-  <li><a>Attach</a> <var>newItem</var> to the <a>list interface</a> object
-  for index <var>index</var>.</li>
+  <li><a>Attach</a> <var>newItem</var> to the <a>list interface</a> object.</li>
   <li>If the list <a>reflects</a> an attribute, or represents the
   base value of an object that <a>reflects</a> an attribute, then
   <a>reserialize</a> the reflected attribute.</li>
