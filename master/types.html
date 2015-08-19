@@ -1351,7 +1351,7 @@ specific value, the following steps must be performed:</p>
       from getting <var>value</var>'s <a href="#__svg__SVGLength__valueAsString">valueAsString</a>
       member.</dd>
 
-      <dt><a>DOMRectReadOnly</a></dt>
+      <dt><a>DOMRect</a></dt>
       <dd>
         <ol>
           <li>Let <var>components</var> be a list of four values, being the values of the
@@ -1901,42 +1901,88 @@ the following steps are run:</p>
   <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>.</li>
   <li>Otherwise, return the value of the reflected attribute.</li>
 </ol>
-</div>
 
 
 <h3 id="InterfaceSVGAnimatedRect">Interface SVGAnimatedRect</h3>
 
-<p>Used for attributes of type <a>DOMRect</a> which can be animated.</p>
+<p>An <a>SVGAnimatedRect</a> object is used to <a>reflect</a> an
+animatable attribute that takes a rectangle value as specified
+by an <var>x</var>, <var>y</var>, <var>width</var> and <var>height</var>.</p>
+
+<p class="note">In this specification the only attribute to be
+reflected as an <a>SVGAnimatedRect</a> is <a>'viewBox'</a>.</p>
 
 <pre class="idl">interface <b>SVGAnimatedRect</b> {
   [SameObject] readonly attribute <a>DOMRect</a> <a href="types.html#__svg__SVGAnimatedRect__baseVal">baseVal</a>;
   [SameObject] readonly attribute <a>DOMRectReadOnly</a> <a href="types.html#__svg__SVGAnimatedRect__animVal">animVal</a>;
 };</pre>
 
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGAnimatedRect__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (readonly <a>DOMRect</a>)</span></dt>
-      <dd class="attribute">
-        <div>The base value of the given attribute before applying any animations.</div>
-      </dd>
-      <dt id="__svg__SVGAnimatedRect__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly <a>DOMRectReadOnly</a>)</span></dt>
-      <dd class="attribute">
-        <div>A <a>DOMRectReadOnly</a> representing the current animated value of
-        the given attribute.  If the given attribute is not currently being
-        animated, then the <a>DOMRectReadOnly</a> will have the same contents
-        as <a>baseVal</a>.  The object referenced by <a>animVal</a> will always
-        be distinct from the one referenced by <a>baseVal</a>, even when
-        the attribute is not animated.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<p>The <b id="__svg__SVGAnimatedRect__baseVal">baseVal</b> IDL
+attribute represents the current non-animated rectangle value of
+the reflected attribute.  On getting <a href="#__svg__SVGAnimatedRect__baseVal">baseVal</a>,
+a <a>DOMRect</a> object is returned.</p>
+
+<p>Upon creation of the <a href="#__svg__SVGAnimatedRect__baseVal">baseVal</a>
+<a>DOMRect</a> object, and afterwards whenever the reflected content attribute
+is added, removed, or changed, the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>Let <var>value</var> be the value of the reflected attribute
+  (using the attribute's <a>initial value</a> if it is not present
+  or invalid).</li>
+  <li>Let <var>x</var>, <var>y</var>, <var>width</var> and <var>height</var>
+  be those corresponding components of <var>value</var>.</li>
+  <li>Set the <a>DOMRect</a> object's
+  <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#x-coordinate">x coordinate</a>,
+  <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#y-coordinate">y coordinate</a>,
+  <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#width">width</a> and
+  <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#height">height</a>
+  to <var>x</var>, <var>y</var>, <var>width</var> and <var>height</var>,
+  respectively.</li>
+</ol>
+
+<p>Whenever the
+<a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#x-coordinate">x coordinate</a>,
+<a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#y-coordinate">y coordinate</a>,
+<a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#width">width</a> or
+<a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#height">height</a> property
+of the <a href="#__svg__SVGAnimatedRect__baseVal">baseVal</a>
+<a>DOMRect</a> object changes, except as part of the previous algorithm that
+reflects the value of the content attribute into the <a>DOMRect</a>, the reflected
+content attribute must be <a>reserialized</a>.</p>
+
+<p>The <b id="__svg__SVGAnimatedRect__animVal">animVal</b> IDL
+attribute represents the current animated rectangle value of
+the reflected attribute.  On getting <a href="#__svg__SVGAnimatedRect__animVal">animVal</a>,
+a <a>DOMRectReadOnly</a> object is returned.</p>
+
+<p>Upon creation of the <a href="#__svg__SVGAnimatedRect__animVal">animVal</a>
+<a>DOMRect</a> object, and afterwards whenever the reflected content attribute
+is added, removed, or changed, or an animation starts or stops applying to
+the attribute, or when a new animated value is given to the attribute due
+to an animation tick, the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>Let <var>value</var> be a rectangle value.
+  If the reflected attribute is currently being animated, then <var>value</var>
+  is its current animated value.  If not, then <var>value</var> is the
+  value of the reflected attribute (using the attribute's <a>initial value</a>
+  if it is not present or invalid).</li>
+  <li>Let <var>x</var>, <var>y</var>, <var>width</var> and <var>height</var>
+  be those corresponding components of <var>value</var>.</li>
+  <li>Set the <a>DOMRect</a> object's
+  <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#x-coordinate">x coordinate</a>,
+  <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#y-coordinate">y coordinate</a>,
+  <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#width">width</a> and
+  <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#height">height</a>
+  to <var>x</var>, <var>y</var>, <var>width</var> and <var>height</var>,
+  respectively.</li>
+</ol>
 
 <p>The objects returned from <a href="#__svg__SVGAnimatedRect__baseVal">baseVal</a>
 and <a href="#__svg__SVGAnimatedRect__animVal">animVal</a> must be distinct, even
 if there is no animation currently affecting the attribute.</p>
+</div>
 
 
 <h3 id="InterfaceSVGAnimatedNumberList">Interface SVGAnimatedNumberList</h3>
