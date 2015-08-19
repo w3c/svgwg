@@ -522,18 +522,13 @@ steps are run:</p>
     an exception in step 1.</p>
   </li>
 </ol>
-</div>
 
 
 <h3 id="InterfaceSVGLength">Interface SVGLength</h3>
 
-<p>The <a>SVGLength</a> interface corresponds to the
-<a>&lt;length></a> and
-<a>&lt;percentage></a> basic data types,
-and represents a length or percentage that consists of a numerical factor and a unit,
-where the unit is one of the set of units described in
-<a href="coords.html#Units">Units</a> (em, ex, px, pt, pc, cm, mm and in),
-a percentage, a unitless number (user units), or "unknown".</p>
+<p>The <a>SVGLength</a> interface is used to represent a value that
+can be a <a>&lt;length&gt;</a>, <a>&lt;percentage&gt;</a> or
+<a>&lt;number&gt;</a> value.</p>
 
 <p id="ReadOnlyLength">An <a>SVGLength</a> object can be designated as <em>read only</em>,
 which means that attempts to modify the object will result in an exception
@@ -558,11 +553,11 @@ five modes.  It can:</p>
   <li><em>reflect the animated value</em> of a <a>reflected</a> animatable attribute
   (being exposed through the <a href="types.html#__svg__SVGAnimatedLength__animVal">animVal</a>
   member of an <a>SVGAnimatedLength</a>),</li>
-  <li><em>reflect an element of the base value at a</em> of a <a>reflected</a> animatable
+  <li><em>reflect an element of the base value</em> of a <a>reflected</a> animatable
   attribute (being exposed through the methods on the
   <a href="types.html#__svg__SVGAnimatedLengthList__baseVal">baseVal</a> member of
   an <a>SVGAnimatedLengthList</a>),</li>
-  <li><em>reflect an element of the animated value at a</em> of a <a>reflected</a> animatable
+  <li><em>reflect an element of the animated value</em> of a <a>reflected</a> animatable
   attribute (being exposed through the methods on the
   <a href="types.html#__svg__SVGAnimatedLengthList__animVal">animVal</a> member of
   an <a>SVGAnimatedLengthList</a>), or</li>
@@ -570,18 +565,9 @@ five modes.  It can:</p>
   with <a href='struct.html#__svg__SVGSVGElement__createSVGLength'>createSVGLength</a>.</li>
 </ol>
 
-<p class='issue' data-issue="24">Define what it means to <dfn id='LengthDetach'>detach an SVGLength</dfn>.</p>
-
-<p class="issue" data-issue="6">We need to define the behavior of converting values from/to percentages
-when the viewport width/height/size is zero.
-(<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3722">ACTION-3722</a> on Cameron.)</p>
-
-<p class="note">The use of numeric length unit type constants is an anti-pattern and
-new constant values will not be introduced for any other units or length types supported by
-<a>SVGLength</a>.  If other types of lengths are supported and used, the <a>SVGLength</a>
-uses the <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a>
-unit type.  See below for details on how the other properties of an <a>SVGLength</a>
-operate with these types of lengths.</p>
+<p>An <a>SVGLength</a> object maintains an internal <a>&lt;length&gt;</a> or
+<a>&lt;percentage&gt;</a> or <a>&lt;number&gt;</a> value, which is called its
+<dfn id="LengthValue">value</dfn>.</p>
 
 <pre class="idl">interface <b>SVGLength</b> {
 
@@ -607,232 +593,327 @@ operate with these types of lengths.</p>
   void <a href="types.html#__svg__SVGLength__convertToSpecifiedUnits">convertToSpecifiedUnits</a>(unsigned short unitType);
 };</pre>
 
-<dl class="interface">
-  <dt class="constants-header">Constants in group “Length Unit Types”:</dt>
-  <dd>
-    <dl class="constants">
-      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN" class="constant first-child"><b>SVG_LENGTHTYPE_UNKNOWN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>The unit type is not one of predefined unit types. It is invalid to
-        attempt to define a new value of this type or to attempt to switch an
-        existing value to this type.</div>
-      </dd>
-      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_NUMBER" class="constant"><b>SVG_LENGTHTYPE_NUMBER</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>No unit type was provided (i.e., a unitless value was specified), which
-        indicates a value in user units.</div>
-      </dd>
-      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_PERCENTAGE" class="constant"><b>SVG_LENGTHTYPE_PERCENTAGE</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>A percentage value was specified.</div>
-      </dd>
-      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_EMS" class="constant"><b>SVG_LENGTHTYPE_EMS</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>A value was specified using the em units defined in CSS 2.1.</div>
-      </dd>
-      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_EXS" class="constant"><b>SVG_LENGTHTYPE_EXS</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>A value was specified using the ex units defined in CSS 2.1.</div>
-      </dd>
-      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_PX" class="constant"><b>SVG_LENGTHTYPE_PX</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>A value was specified using the px units defined in CSS 2.1.</div>
-      </dd>
-      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_CM" class="constant"><b>SVG_LENGTHTYPE_CM</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>A value was specified using the cm units defined in CSS 2.1.</div>
-      </dd>
-      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_MM" class="constant"><b>SVG_LENGTHTYPE_MM</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>A value was specified using the mm units defined in CSS 2.1.</div>
-      </dd>
-      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_IN" class="constant"><b>SVG_LENGTHTYPE_IN</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>A value was specified using the in units defined in CSS 2.1.</div>
-      </dd>
-      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_PT" class="constant"><b>SVG_LENGTHTYPE_PT</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>A value was specified using the pt units defined in CSS 2.1.</div>
-      </dd>
-      <dt id="__svg__SVGLength__SVG_LENGTHTYPE_PC" class="constant"><b>SVG_LENGTHTYPE_PC</b><span class="idl-type-parenthetical"> (unsigned short)</span></dt>
-      <dd class="constant">
-        <div>A value was specified using the pc units defined in CSS 2.1.</div>
-      </dd>
+<p>The numeric length unit type constants defined on <a>SVGLength</a> are used
+to represent the type of an <a>SVGLength</a>'s <a href='#LengthValue'>value</a>.
+Their meanings are as follows:</p>
+
+<table class='vert'>
+  <tr><th>Constant</th><th>Meaning</th></tr>
+  <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</b></td><td>A unitless <a>&lt;number&gt;</a>.</td></tr>
+  <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_PERCENTAGE">SVG_LENGTHTYPE_PERCENTAGE</b></td><td>A <a>&lt;percentage&gt;</a>.</td></tr>
+  <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_EMS">SVG_LENGTHTYPE_EMS</b></td><td>A <a>&lt;length&gt;</a> with an <span class='prop-value'>em</span> unit.</td></tr>
+  <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_EXS">SVG_LENGTHTYPE_EXS</b></td><td>A <a>&lt;length&gt;</a> with an <span class='prop-value'>ex</span> unit.</td></tr>
+  <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_PX">SVG_LENGTHTYPE_PX</b></td><td>A <a>&lt;length&gt;</a> with a <span class='prop-value'>px</span> unit.</td></tr>
+  <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_CM">SVG_LENGTHTYPE_CM</b></td><td>A <a>&lt;length&gt;</a> with a <span class='prop-value'>cm</span> unit.</td></tr>
+  <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_MM">SVG_LENGTHTYPE_MM</b></td><td>A <a>&lt;length&gt;</a> with a <span class='prop-value'>mm</span> unit.</td></tr>
+  <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_IN">SVG_LENGTHTYPE_IN</b></td><td>A <a>&lt;length&gt;</a> with an <span class='prop-value'>in</span> unit.</td></tr>
+  <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_PT">SVG_LENGTHTYPE_PT</b></td><td>A <a>&lt;length&gt;</a> with a <span class='prop-value'>pt</span> unit.</td></tr>
+  <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_PC">SVG_LENGTHTYPE_PC</b></td><td>A <a>&lt;length&gt;</a> with a <span class='prop-value'>pc</span> unit.</td></tr>
+  <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</b></td><td>Some other type of value.</td></tr>
+</table>
+
+<p class="note">The use of numeric length unit type constants is an anti-pattern and
+new constant values will not be introduced for any other units or length types supported by
+<a>SVGLength</a>.  If other types of lengths are supported and used, the <a>SVGLength</a>
+uses the <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a>
+unit type.  See below for details on how the other properties of an <a>SVGLength</a>
+operate with these types of lengths.</p>
+
+<p>The <b id="__svg__SVGLength__unitType">unitType</b> IDL attribute represents
+the type of value that the <a>SVGLength</a>'s <a href='#LengthValue'>value</a> is.
+On getting <a href='#__svg__SVGLength__unitType'>unitType</a>, the following steps
+are run:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>SVGLength</a>'s <a href='#LengthValue'>value</a> is a unitless
+  <a>&lt;number&gt;</a>, a <a>&lt;percentage&gt;</a>, or a <a>&lt;length&gt;</a>
+  with an
+  <span class='prop-value'>em</span>,
+  <span class='prop-value'>ex</span>,
+  <span class='prop-value'>px</span>,
+  <span class='prop-value'>cm</span>,
+  <span class='prop-value'>mm</span>,
+  <span class='prop-value'>in</span>,
+  <span class='prop-value'>pt</span> or
+  <span class='prop-value'>pc</span> unit, then return the corresponding constant
+  value from the lenghth unit type table above.</li>
+  <li>Otherwise, return <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a>.
+    <p class='note'>For example, for a <a>&lt;length&gt;</a> with a <span class='prop-value'>ch</span>
+    unit or one that has a non-scalar value such as <span class='attr-value'>calc()</span>,
+    <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a>
+    would be returned.</p>
+  </li>
+</ol>
+
+<p>The <b id="__svg__SVGLength__value">value</b> IDL attribute represents
+the <a>SVGLength</a>'s <a href='#LengthValue'>value</a> in user units.
+On getting <a href='#__svg__SVGLength__value'>value</a>, the following steps
+are run:</p>
+
+<ol class='algorithm'>
+  <li>Let <var>value</var> be the <a>SVGLength</a>'s <a href='#LengthValue'>value</a>.</li>
+  <li>If <var>value</var> is a <a>&lt;number&gt;</a>, return that number.</li>
+  <li>Let <var>viewport size</var> be a basis to resolve percentages against, based on the <a>SVGLength</a>'s
+  <a href='#LengthAssociatedElement'>associated element</a> and
+  <a href='#LengthAssociatedElement'>directionality</a>:
+    <dl class='switch'>
+      <dt>has no <a href='#LengthAssociatedElement'>associated element</a></dt>
+      <dd><var>size</var> is 100</dd>
+      <dt>has an <a href='#LengthAssociatedElement'>associated element</a> and horizontal <a href='#LengthAssociatedElement'>directionality</a></dt>
+      <dd><var>size</var> is the width of the <a href='#LengthAssociatedElement'>associated element</a>'s viewport</dd>
+      <dt>has an <a href='#LengthAssociatedElement'>associated element</a> and vertical <a href='#LengthAssociatedElement'>directionality</a></dt>
+      <dd><var>size</var> is the height of the <a href='#LengthAssociatedElement'>associated element</a>'s viewport</dd>
+      <dt>has an <a href='#LengthAssociatedElement'>associated element</a> and unspecified <a href='#LengthAssociatedElement'>directionality</a></dt>
+      <dd><var>size</var> is the length of the <a href='#LengthAssociatedElement'>associated element</a>'s viewport
+      diagonal (see <a href='coords.html#Units'>Units</a>)</dd>
     </dl>
-  </dd>
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGLength__unitType" class="attribute first-child"><b>unitType</b><span class="idl-type-parenthetical"> (readonly unsigned short)</span></dt>
-      <dd class="attribute">
-        <div>The type of the value as specified by one of the SVG_LENGTHTYPE_*
-        constants defined on this interface.
-        The SVG_LENGTHTYPE_UNKNOWN unit type is returned when the
-        length value uses a unit that does not correspond to one of the
-        integer constants, such as <span class='attr-value'>ch</span>, or is a
-        non-scalar value, such as a <span class='attr-value'>calc()</span>
-        value.</div>
-      </dd>
-      <dt id="__svg__SVGLength__value" class="attribute"><b>value</b><span class="idl-type-parenthetical"> (float)</span></dt>
-      <dd class="attribute">
-        <div><p>The value of the length in user units.</p>
-        <p>On getting, returns the value converted to user units.
-        If the length cannot be converted to user units,
-        for example because it is a percentage with no
-        basis against which to resolve the percentage,
-        then the value of <a href="#__svg__SVGLength__valueInSpecifiedUnits">valueInSpecifiedUnits</a>
-        is returned.</p>
-        <p class="note">For example, <code>(new SVGLength("10%")).value</code>
-        evalutes to 10, since the <a>SVGLength</a> is not associated with
-        an element and thus has no percentage basis to resolve against.</p>
-        <p>On setting, sets the numerical factor to the assigned value and
-        the unit type to user units.</p></div>
-        <dl class="attribute">
-          <dt class="exceptions-header">Exceptions on setting</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the length is <a href="#ReadOnlyLength">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGLength__valueInSpecifiedUnits" class="attribute"><b>valueInSpecifiedUnits</b><span class="idl-type-parenthetical"> (float)</span></dt>
-      <dd class="attribute">
-        <div>
-          <p>The numerical factor of the length value.</p>
-          <p>On getting, returns the numerical factor
-          if the length is a scalar value (such as <span class='attr-value'>'20px'</span>
-          or <span class='attr-value'>'50%'</span>), or
-          returns 0 if the length is not a scalar value (such as a
-          <span class='attr-value'>calc()</span> value).</p>
-          <p>On setting, modifies the numerical factor of
-          the length value using the same unit.  If the length
-          not a scalar value, then assigning to
-          <a href="#__svg__SVGLength__valueInSpecifiedUnits">valueInSpecifiedUnits</a>
-          sets the length to be the specified number of
-          user units.</p>
-        </div>
-        <dl class="attribute">
-          <dt class="exceptions-header">Exceptions on setting</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the length is <a href="#ReadOnlyLength">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGLength__valueAsString" class="attribute"><b>valueAsString</b><span class="idl-type-parenthetical"> (DOMString)</span></dt>
-      <dd class="attribute">
-        <div>
-          <p>The length value as a string.  On getting, returns a
-          string as follows:</p>
-          <ul>
-            <li>If the unit type of the length is unknown or user units,
-            the string is simply the numeric factor converted to a string.</li>
-            <li>If the unit type of the length is a percentage, the string
-            is the result of concatenating the numeric factor converted to a string
-            with the string "%".</li>
-            <li>Otherwise, the string is the result of concatenating the numeric
-            factor converted to a string with the CSS length unit in lowercase.</li>
-          </ul>
-          <p class="issue" data-issue="21">What about serializing non-scalar values, such
-          as <span class='attr-value'>calc()</span> values?</p>
-          <p>On setting, updates the numeric factor and units type of the
-          <a>SVGLength</a> object according to the result of parsing the
-          assigned string as a <a>&lt;length></a> or <a>&lt;percentage></a>.</p>
-        </div>
-        <dl class="attribute">
-          <dt class="exceptions-header">Exceptions on setting</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception"><a>DOMException</a>, code SYNTAX_ERR</dt>
-              <dd class="exception">Raised if the assigned string cannot be parsed as a valid <a>&lt;length></a> or <a>&lt;percentage></a>.</dd>
-              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the length is <a href="#ReadOnlyLength">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
+  </li>
+  <li>Let <var>font size</var> be a basis to resolve font size values against,
+  based on the <a>SVGLength</a>'s <a href='#LengthAssociatedElement'>associated element</a>:
+    <dl class='switch'>
+      <dt>has no <a href='#LengthAssociatedElement'>associated element</a></dt>
+      <dd><var>font size</var> is the absolute length of the initial value of the <a>'font-size'</a> property</dd>
+      <dt>has an <a href='#LengthAssociatedElement'>associated element</a></dt>
+      <dd><var>size</var> is the computed value of the <a href='#LengthAssociatedElement'>associated element</a>'s <a>'font-size'</a> property</dd>
     </dl>
-  </dd>
-  <dt class="operations-header">Operations:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGLength__newValueSpecifiedUnits" class="operation first-child">void <b>newValueSpecifiedUnits</b>(unsigned short <var>unitType</var>, float <var>valueInSpecifiedUnits</var>)</dt>
-      <dd class="operation">
-        <div>Sets the numeric factor of the length value to <var>valueInSpecifiedUnits</var>
-        and the unit type to <var>unitType</var>.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned short <var>unitType</var></div>
-                <div>The unit type for the value (e.g., <a>SVG_LENGTHTYPE_MM</a>).</div>
-              </li>
-              <li class="parameter">
-                <div>float <var>valueInSpecifiedUnits</var></div>
-                <div>The new value.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NOT_SUPPORTED_ERR</dt>
-              <dd class="exception">Raised if unitType is SVG_LENGTHTYPE_UNKNOWN
-              or not a valid unit type constant (one of the other SVG_LENGTHTYPE_* constants
-              defined on this interface).</dd>
-              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the length is <a href="#ReadOnlyLength">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGLength__convertToSpecifiedUnits" class="operation">void <b>convertToSpecifiedUnits</b>(unsigned short <var>unitType</var>)</dt>
-      <dd class="operation">
-        <div>
-          <p>Sets the unit type of the length value to the type specified by
-          <var>unitType</var> and sets the numeric factor value such that it
-          represents the same absolute length.
-          For example, if the original value were "0.5cm" and the method was
-          invoked to convert to millimeters, then <a>unitType</a> would return
-          <a>SVG_LENGTHTYPE_MM</a> and <a>valueInSpecifiedUnits</a> would return the
-          numeric value 5.</p>
-          <p>If the old or new unit type
-          is percentage and the <a>SVGLength</a> object has no associated
-          element, then the percentages are considered to resolve against
-          a length of 100 user units.  For example, converting an <a>SVGLength</a>
-          whose value is 20px to a percentage will result in the value being 20%.</p>
-        </div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned short <var>unitType</var></div>
-                <div>The unit type to switch to (e.g., <a>SVG_LENGTHTYPE_MM</a>).</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="exceptions-header">Exceptions</dt>
-          <dd>
-            <dl class="exceptions">
-              <dt class="exception first-child"><a>DOMException</a>, code NOT_SUPPORTED_ERR</dt>
-              <dd class="exception">Raised if unitType is SVG_LENGTHTYPE_UNKNOWN
-              or not a valid unit type constant (one of the other SVG_LENGTHTYPE_* constants
-              defined on this interface).</dd>
-              <dt class="exception"><a>DOMException</a>, code NO_MODIFICATION_ALLOWED_ERR</dt>
-              <dd class="exception">Raised when the length is <a href="#ReadOnlyLength">read only</a>.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </dd>
+  </li>
+  <li>Return the result of converting <var>value</var> to an absolute length,
+  using <var>viewport size</var> and <var>font size</var> as percentage and font size
+  bases.  If the conversion is not possible due to the lack of an
+  <a href='#LengthAssociatedElement'>associated element</a>, return 0.</li>
+</ol>
+
+<p>On setting <a href='#__svg__SVGLength__value'>value</a>, the following steps
+are run:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>SVGLength</a> object is <a href='#ReadOnlyLength'>read only</a>, then
+  throw a <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
+  <li>Let <var>value</var> be the value being assigned to
+  <a href='#__svg__SVGLength__value'>value</a>.</li>
+  <li>Set the <a>SVGLength</a>'s <a href='#LengthValue'>value</a> to a
+  <a>&lt;number&gt;</a> whose value is <var>value</var>.</li>
+  <li>If the <a>SVGLength</a>
+  <a href='#LengthMode'>reflects the base value</a> of a <a>reflected</a> attribute or
+  <a href='#LengthMode'>reflects an element of the base value</a> of a <a>reflected</a> attribute,
+  then <a>reserialize</a> the reflected attribute.
+    <p class='note'>The <a>SVGLength</a> can't reflect (an element of) the
+    animated value, since it would be read only and we would have thrown
+    an exception in step 1.</p>
+  </li>
+</ol>
+
+<p>The <b id="__svg__SVGLength__valueInSpecifiedUnits">valueInSpecifiedUnits</b> IDL attribute represents
+the numeric factor of the <a>SVGLength</a>'s <a href='#LengthValue'>value</a>.
+On getting <a href='#__svg__SVGLength__valueInSpecifiedUnits'>valueInSpecifiedUnits</a>, the following steps
+are run:</p>
+
+<ol class='algorithm'>
+  <li>Let <var>value</var> be the <a>SVGLength</a>'s <a href='#LengthValue'>value</a>.</li>
+  <li>If <var>value</var> is a <a>&lt;number&gt;</a>, return that number.</li>
+  <li>Otherwise, if <var>value</var> is a <a>&lt;percentage&gt;</a> or any scalar <a>&lt;length&gt;</a>
+  value, return the numeric factor before its unit.</li>
+  <li>Otherwise, return 0.
+    <p class='note'>Thus <a href='#__svg__SVGLength__valueInSpecifiedUnits'>valueInSpecifiedUnits</a>
+    would return 12 for both <span class='attr-value'>'12%'</span> and
+    <span class='attr-value'>12em</span>, but
+    0 would be returned for non-scalar values like
+    <span class='attr-value'>calc(12px + 5%)</span>.</p>
+  </li>
+</ol>
+
+<p>On setting <a href='#__svg__SVGLength__valueInSpecifiedUnits'>valueInSpecifiedUnits</a>, the following steps
+are run:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>SVGLength</a> object is <a href='#ReadOnlyLength'>read only</a>, then
+  throw a <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
+  <li>Let <var>value</var> be the value being assigned to
+  <a href='#__svg__SVGLength__valueInSpecifiedUnits'>valueInSpecifiedUnits</a>.</li>
+  <li>If the <a>SVGLength</a>'s <a href='#LengthValue'>value</a> is a
+  <a>&lt;number&gt;</a>, then update its value to <var>value</var>.</li>
+  <li>Otherwise, if the <a>SVGLength</a>'s <a href='#LengthValue'>value</a>
+  is a <a>&lt;percentage&gt;</a> or a scalar-valued <a>&lt;length&gt;</a>,
+  then update its numeric factor to <var>value</var>.</li>
+  <li>Otherwise, the <a>SVGLength</a>'s <a href='#LengthValue'>value</a>
+  is of some other type.  Set it to a <a>&lt;number&gt;</a>
+  whose value is <var>value</var>.</li>
+  <li>If the <a>SVGLength</a>
+  <a href='#LengthMode'>reflects the base value</a> of a <a>reflected</a> attribute or
+  <a href='#LengthMode'>reflects an element of the base value</a> of a <a>reflected</a> attribute,
+  then <a>reserialize</a> the reflected attribute.
+    <p class='note'>The <a>SVGLength</a> can't reflect (an element of) the
+    animated value, since it would be read only and we would have thrown
+    an exception in step 1.</p>
+  </li>
+</ol>
+
+<p>The <b id="__svg__SVGLength__valueAsString">valueAsString</b> IDL attribute represents
+the <a>SVGLength</a>'s <a href='#LengthValue'>value</a> as a string.
+On getting <a href='#__svg__SVGLength__valueAsString'>valueAsString</a>, the following steps
+are run:</p>
+
+<ol class='algorithm'>
+  <li>Let <var>value</var> be the <a>SVGLength</a>'s <a href='#LengthValue'>value</a>.</li>
+  <li>Let <var>string</var> be an empty string.</li>
+  <li>If <var>value</var> is a <a>&lt;number&gt;</a>, <a>&lt;percentage&gt;</a>
+  or scalar <a>&lt;length&gt;</a> value, then:
+    <ol>
+      <li>Let <var>factor</var> be <var>value</var>'s numeric factor,
+      if it is a <a>&lt;percentage&gt;</a> or <a>&lt;length&gt;</a>,
+      or <var>value</var> itself it is a <a>&lt;number&gt;</a>.</li>
+      <li>Append to <var>string</var> an implementation
+      specific string that, if parsed as a <a>&lt;number&gt;</a> using CSS syntax,
+      would return the number value closest to <var>factor</var>, given the
+      implementation's supported <a href="#Precision">real number precision</a>.</li>
+      <li>If <var>value</var> is a <a>&lt;percentage&gt;</a> then append to
+      <var>string</var> a single U+0025 PERCENT SIGN character.</li>
+      <li>Otherwise, if <var>value</var> is a <a>&lt;length&gt;</a>,
+      then append to <var>string</var> the canonical spelling of
+      <var>value</var>'s unit.</li>
+      <li>Return <var>string</var>.</li>
+    </ol>
+  </li>
+  <li>Otherwise, return an implementation specific string that,
+  if parsed as a <a>&lt;length&gt;</a>, would return the closest
+  length value to <var>value</var>, given the
+  implementation's supported <a href="#Precision">real number precision</a>.</li>
+</ol>
+
+<p>On setting <a href='#__svg__SVGLength__valueInSpecifiedUnits'>valueInSpecifiedUnits</a>, the following steps
+are run:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>SVGLength</a> object is <a href='#ReadOnlyLength'>read only</a>, then
+  throw a <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
+  <li>Let <var>value</var> be the value being assigned to
+  <a href='#__svg__SVGLength__valueInSpecifiedUnits'>valueInSpecifiedUnits</a>.</li>
+  <li>Parse <var>value</var> using the CSS syntax
+  [ <a>&lt;number&gt;</a> | <a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a> ].</li>
+  <li>If parsing failed, then throw a <a>DOMException</a> with code
+  SYNTAX_ERR.</li>
+  <li>Otherwise, parsing succeeded.  Set <a>SVGLength</a>'s <a href='#LengthValue'>value</a>
+  to the parsed value.</li>
+  <li>If the <a>SVGLength</a>
+  <a href='#LengthMode'>reflects the base value</a> of a <a>reflected</a> attribute or
+  <a href='#LengthMode'>reflects an element of the base value</a> of a <a>reflected</a> attribute,
+  then <a>reserialize</a> the reflected attribute.
+    <p class='note'>The <a>SVGLength</a> can't reflect (an element of) the
+    animated value, since it would be read only and we would have thrown
+    an exception in step 1.</p>
+  </li>
+</ol>
+
+<p>The <b id="__svg__SVGLength__newValueSpecifiedUnits">newValueSpecifiedUnits</b>
+method is used to set the <a>SVGLength</a>'s value in a typed manner.  When
+newValueSpecifiedUnits(unitType, valueInSpecifiedUnits) is called, the following
+steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>SVGLength</a> object is <a href='#ReadOnlyLength'>read only</a>, then
+  throw a <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
+  <li>If <var>unitType</var> is
+  <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a>
+  or is a value that does not appear in the length unit type table above,
+  then throw a <a>DOMException</a> with code NOT_SUPPORTED_ERR.</li>
+  <li>Set <a>SVGLength</a>'s <a href='#LengthValue'>value</a> depending
+  on the value of <var>unitType</var>:
+    <dl class='switch'>
+      <dt><a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</a></dt>
+      <dd>a <a>&lt;number&gt;</a> whose value is <var>valueInSpecifiedUnits</var></dd>
+      <dt><a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_PERCENTAGE">SVG_LENGTHTYPE_PERCENTAGE</a></dt>
+      <dd>a <a>&lt;percentage&gt;</a> whose numeric factor is <var>valueInSpecifiedUnits</var></dd>
+      <dt>anything else</dt>
+      <dd>a <a>&lt;length&gt;</a> whose numeric factor is <var>valueInSpecifiedUnits</var>
+      and whose unit is the as indicated by the length unit type table above</dd>
     </dl>
-  </dd>
-</dl>
+  </li>
+  <li>If the <a>SVGLength</a>
+  <a href='#LengthMode'>reflects the base value</a> of a <a>reflected</a> attribute or
+  <a href='#LengthMode'>reflects an element of the base value</a> of a <a>reflected</a> attribute,
+  then <a>reserialize</a> the reflected attribute.
+    <p class='note'>The <a>SVGLength</a> can't reflect (an element of) the
+    animated value, since it would be read only and we would have thrown
+    an exception in step 1.</p>
+  </li>
+</ol>
+
+<p>The <b id="__svg__SVGLength__convertToSpecifiedUnits">convertToSpecifiedUnits</b>
+method is used to convert the <a>SVGLength</a>'s value to a specific type.
+When convertToSpecifiedUnits(unitType) is called, the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>SVGLength</a> object is <a href='#ReadOnlyLength'>read only</a>, then
+  throw a <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
+  <li>If <var>unitType</var> is
+  <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a>
+  or is a value that does not appear in the length unit type table above,
+  then throw a <a>DOMException</a> with code NOT_SUPPORTED_ERR.</li>
+  <li>Let <var>absolute</var> be the value that would be returned from the
+  <a href='#__svg__SVGLength__value'>value</a> member.</li>
+  <li>If <var>unitType</var> is <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</a>, then:
+    <ol>
+      <li>Set the <a>SVGLength</a>'s <a href='#LengthValue'>value</a> to a <a>&lt;number&gt;</a>
+      whose value is <var>absolute</var>.</li>
+    </ol>
+  </li>
+  <li>Otherwise, if <var>unitType</var> is <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_PERCENTAGE">SVG_LENGTHTYPE_PERCENTAGE</a>, then:
+    <ol>
+      <li>Let <var>viewport size</var> be a basis to resolve percentages against, based on the <a>SVGLength</a>'s
+      <a href='#LengthAssociatedElement'>associated element</a> and
+      <a href='#LengthAssociatedElement'>directionality</a>:
+        <dl class='switch'>
+          <dt>has no <a href='#LengthAssociatedElement'>associated element</a></dt>
+          <dd><var>size</var> is 100</dd>
+          <dt>has an <a href='#LengthAssociatedElement'>associated element</a> and horizontal <a href='#LengthAssociatedElement'>directionality</a></dt>
+          <dd><var>size</var> is the width of the <a href='#LengthAssociatedElement'>associated element</a>'s viewport</dd>
+          <dt>has an <a href='#LengthAssociatedElement'>associated element</a> and vertical <a href='#LengthAssociatedElement'>directionality</a></dt>
+          <dd><var>size</var> is the height of the <a href='#LengthAssociatedElement'>associated element</a>'s viewport</dd>
+          <dt>has an <a href='#LengthAssociatedElement'>associated element</a> and unspecified <a href='#LengthAssociatedElement'>directionality</a></dt>
+          <dd><var>size</var> is the length of the <a href='#LengthAssociatedElement'>associated element</a>'s viewport
+          diagonal (see <a href='coords.html#Units'>Units</a>)</dd>
+        </dl>
+      </li>
+      <li>Set the <a>SVGLength</a>'s <a href='#LengthValue'>value</a> to the result of
+      converting <var>absolute</var> to a <a>&lt;percentage&gt;</a>, using <var>viewport size</var>
+      as the percentage basis.</li>
+    </ol>
+  </li>
+  <li>Otherwise, if <var>unitType</var> is <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_EMS">SVG_LENGTHTYPE_EMS</a>
+  or <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_EXS">SVG_LENGTHTYPE_EXS</a>, then:
+    <ol>
+      <li>Let <var>font size</var> be a basis to resolve font size values against,
+      based on the <a>SVGLength</a>'s <a href='#LengthAssociatedElement'>associated element</a>:
+        <dl class='switch'>
+          <dt>has no <a href='#LengthAssociatedElement'>associated element</a></dt>
+          <dd><var>font size</var> is the absolute length of the initial value of the <a>'font-size'</a> property</dd>
+          <dt>has an <a href='#LengthAssociatedElement'>associated element</a></dt>
+          <dd><var>size</var> is the computed value of the <a href='#LengthAssociatedElement'>associated element</a>'s <a>'font-size'</a> property</dd>
+        </dl>
+      </li>
+      <li>Set the <a>SVGLength</a>'s <a href='#LengthValue'>value</a> to the result of
+      converting <var>absolute</var> to a <a>&lt;length&gt;</a> with an <span class='prop-value'>em</span>
+      or <span class='prop-value'>ex</span> unit (depending on <var>unitType</var>),
+      using <var>font size</var> as the <a>'font-size'</a> basis.</li>
+    </ol>
+  </li>
+  <li>Otherwise:
+    <ol>
+      <li>Set the <a>SVGLength</a>'s <a href='#LengthValue'>value</a> to the result of
+      converting <var>absolute</var> to a <a>&lt;length&gt;</a> with the unit
+      found by looking up <var>unitType</var> in the length unit type table above.</li>
+    </ol>
+  </li>
+  <li>If the <a>SVGLength</a>
+  <a href='#LengthMode'>reflects the base value</a> of a <a>reflected</a> attribute or
+  <a href='#LengthMode'>reflects an element of the base value</a> of a <a>reflected</a> attribute,
+  then <a>reserialize</a> the reflected attribute.
+    <p class='note'>The <a>SVGLength</a> can't reflect (an element of) the
+    animated value, since it would be read only and we would have thrown
+    an exception in step 1.</p>
+  </li>
+</ol>
+</div>
 
 
 <h3 id="InterfaceSVGAngle">Interface SVGAngle</h3>
