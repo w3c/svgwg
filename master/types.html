@@ -497,10 +497,12 @@ a percentage, a unitless number (user units), or "unknown".</p>
 which means that attempts to modify the object will result in an exception
 being thrown, as described below.</p>
 
-<p id="AssociatedElement">An <a>SVGLength</a> object can be <em>associated</em>
+<p id="LengthAssociatedElement">An <a>SVGLength</a> object can be <em>associated</em>
 with a particular element, as well as being designated with a <em>directionality</em>:
 horizontal, vertical or unspecified.  The associated element and the directionality of the
-length are used to resolve percentage values to user units.  Unless otherwise
+length are used to resolve percentage values to user units and is also used to
+determine which element's content attribute to update if the object <a>reflects</a>
+an attribute.  Unless otherwise
 described, an <a>SVGLength</a> object is not associated with any element and
 has unspecified directionality.</p>
 
@@ -799,6 +801,26 @@ where the unit is degrees, radians, grads, unitless numbers or "unknown".</p>
 <p id="ReadOnlyAngle">An <a>SVGAngle</a> object can be designated as <em>read only</em>,
 which means that attempts to modify the object will result in an exception
 being thrown, as described below.</p>
+
+<p id="AngleAssociatedElement">An <a>SVGAngle</a> object can be <em>associated</em>
+with a particular element.  The associated element is used to
+determine which element's content attribute to update if the object <a>reflects</a>
+an attribute.  Unless otherwise described, an <a>SVGAngle</a> object is not
+associated with any element.</p>
+
+<p id='AngleMode'>Every <a>SVGAngle</a> object operates in one of
+three modes.  It can:</p>
+
+<ol>
+  <li><em>reflect the base value</em> of a <a>reflected</a> animatable attribute
+  (being exposed through the <a href="types.html#__svg__SVGAnimatedAngle__baseVal">baseVal</a>
+  member of an <a>SVGAnimatedAngle</a>),</li>
+  <li><em>reflect the animated value</em> of a <a>reflected</a> animatable attribute
+  (being exposed through the <a href="types.html#__svg__SVGAnimatedAngle__animVal">animVal</a>
+  member of an <a>SVGAnimatedAngle</a>),</li>
+  <li><em>be detached</em>, which is the case for <a>SVGAngle</a> objects created
+  with <a href='struct.html#__svg__SVGSVGElement__createSVGAngle'>createSVGAngle</a>.</li>
+</ol>
 
 <p class="note">The use of numeric angle unit type constants is an anti-pattern and
 new constant values will not be introduced for any other units or angle types supported by
@@ -1626,7 +1648,7 @@ following steps are run:</p>
 <h3 id="InterfaceSVGAnimatedNumber">Interface SVGAnimatedNumber</h3>
 
 <p>An <a>SVGAnimatedNumber</a> object is used to <a>reflect</a> an
-animatable attribute that takes an number value (such as
+animatable attribute that takes a number value (such as
 <a>'path/pathLength'</a> on <a>'path'</a>).  It is also
 used to reflect one part of an animatable attribute that takes
 an number followed by an optional second number (such as
@@ -1768,10 +1790,10 @@ an <a>SVGLength</a> object is returned that:</p>
 <ul>
   <li><a href='#LengthMode'>reflects the base value</a> of the
   reflected attribute,</li>
-  <li>is <a href='#AssociatedElement'>associated with</a> the SVG element that
+  <li>is <a href='#LengthAssociatedElement'>associated with</a> the SVG element that
   the object with the reflecting IDL attribute of type <a>SVGAnimatedLength</a>
   was obtained from, and</li>
-  <li>has a <a href='#AssociatedElement'>directionality</a> as defined by the
+  <li>has a <a href='#LengthAssociatedElement'>directionality</a> as defined by the
   specific reflected attribute.</li>
 </ul>
 
@@ -1783,10 +1805,10 @@ an <a>SVGLength</a> object is returned that:</p>
 <ul>
   <li><a href='#LengthMode'>reflects the animated value</a> of the
   reflected attribute,</li>
-  <li>is <a href='#AssociatedElement'>associated with</a> the SVG element that
+  <li>is <a href='#LengthAssociatedElement'>associated with</a> the SVG element that
   the object with the reflecting IDL attribute of type <a>SVGAnimatedLength</a>
   was obtained from, and</li>
-  <li>has a <a href='#AssociatedElement'>directionality</a> as defined by the
+  <li>has a <a href='#LengthAssociatedElement'>directionality</a> as defined by the
   specific reflected attribute.</li>
 </ul>
 </div>
@@ -1794,34 +1816,43 @@ an <a>SVGLength</a> object is returned that:</p>
 
 <h3 id="InterfaceSVGAnimatedAngle">Interface SVGAnimatedAngle</h3>
 
-<p>Used for attributes of basic data type <a>&lt;angle></a>
-that can be animated.</p>
+<p>An <a>SVGAnimatedAngle</a> object is used to <a>reflect</a>
+the <a>&lt;angle&gt;</a> value of the animated <a>'marker/orient'</a>
+attribute on <a>'marker element'</a>, through the
+<a href='painting.html#__svg__SVGMarkerElement__orientAngle'>orientAngle</a>
+IDL attribute.</p>
 
 <pre class="idl">interface <b>SVGAnimatedAngle</b> {
   [SameObject] readonly attribute <a>SVGAngle</a> <a href="types.html#__svg__SVGAnimatedAngle__baseVal">baseVal</a>;
   [SameObject] readonly attribute <a>SVGAngle</a> <a href="types.html#__svg__SVGAnimatedAngle__animVal">animVal</a>;
 };</pre>
 
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGAnimatedAngle__baseVal" class="attribute first-child"><b>baseVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGAngle</a>)</span></dt>
-      <dd class="attribute">
-        <div>The base value of the given attribute before applying any animations.</div>
-      </dd>
-      <dt id="__svg__SVGAnimatedAngle__animVal" class="attribute"><b>animVal</b><span class="idl-type-parenthetical"> (readonly <a>SVGAngle</a>)</span></dt>
-      <dd class="attribute">
-        <div>A <a href="#ReadOnlyAngle">read only</a> <a>SVGAngle</a> representing the current animated value of
-        the given attribute.  If the given attribute is not currently being
-        animated, then the <a>SVGAngle</a> will have the same contents
-        as <a>baseVal</a>.  The object referenced by <a>animVal</a> will always
-        be distinct from the one referenced by <a>baseVal</a>, even when
-        the attribute is not animated.</div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<p>The <b id="__svg__SVGAnimatedAngle__baseVal">baseVal</b> IDL
+attribute represents the current non-animated <a>&lt;angle&gt;</a> value of the
+reflected <a>'marker/orient'</a> attribute.  On getting
+<a href="#__svg__SVGAnimatedAngle__baseVal">baseVal</a>, an
+<a>SVGAngle</a> object is returned that:</p>
+
+<ul>
+  <li><a href='#AngleMode'>reflects the base value</a> of the
+  reflected <a>'marker/orient'</a> attribute, and</li>
+  <li>is <a href='#AngleAssociatedElement'>associated with</a> the SVG <a>'marker element'</a>
+  element that the object with the reflecting IDL attribute of type
+  <a>SVGAnimatedAngle</a> was obtained from.</li>
+</ul>
+
+<p>The <b id="__svg__SVGAnimatedAngle__animVal">animVal</b> IDL attribute
+represents the current animated <a>&lt;angle&gt;</a> value of the reflected <a>'marker/orient'</a> attribute.
+On getting <a href="#__svg__SVGAnimatedAngle__animVal">animVal</a>,
+an <a>SVGAngle</a> object is returned that:</p>
+
+<ul>
+  <li><a href='#AngleMode'>reflects the animated value</a> of the
+  reflected <a>'marker/orient'</a> attribute, and</li>
+  <li>is <a href='#AngleAssociatedElement'>associated with</a> the SVG <a>'marker element'</a>
+  element that the object with the reflecting IDL attribute of type
+  <a>SVGAnimatedAngle</a> was obtained from.</li>
+</ul>
 
 
 <div class="ready-for-wg-review">
