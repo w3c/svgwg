@@ -1232,8 +1232,8 @@ few unanimated attributes that take a list of strings.</p>
 };</pre>
 
 <p>where <var>Name</var> is a descriptive name for the list element's
-("Number", "Length" or "String") and <var>Type</var> is the IDL type of the
-list's elements (<a>SVGNumber</a>, <a>SVGLength</a> or <b>DOMString</b>).</p>
+("Number", "Length", "Point" or "String") and <var>Type</var> is the IDL type of the
+list's elements (<a>SVGNumber</a>, <a>SVGLength</a>, <a>DOMPoint</a> or <b>DOMString</b>).</p>
 
 <p>Every <a>list interface</a> object reflects either the base value
 or the animated value of a reflected content attribute, and is associated
@@ -1266,7 +1266,7 @@ running the following steps right after the change:</p>
   <li>Let <var>length</var> be the number of items in the list.</li>
   <li>Let <var>new length</var> be the number of values in <var>value</var>.</li>
 
-  <li>If the list element type is <a>SVGNumber</a> or <a>SVGLength</a>, then:
+  <li>If the list element type is <a>SVGNumber</a>, <a>SVGLength</a> or <a>DOMPoint</a>, then:
     <ol>
       <li>If <var>length</var> &gt; <var>new length</var>, then:
         <ol>
@@ -1326,6 +1326,13 @@ the following steps are run, depending on the list element type:</p>
     set it to be no longer read only.  Set the <a>SVGLength</a> to have
     unspecified <a href="#LengthAssociatedElement">directionality</a>.
   </dd>
+  <dt><a>DOMPoint</a></dt>
+  <dd>
+    Set the <a>DOMPoint</a> to no longer be 
+    <a href="shapes.html#PointAssociatedElement">associated</a> with any element.
+    If the <a>DOMPoint</a> is <a href='shapes.html#ReadOnlyPoint'>read only</a>,
+    set it to be no longer read only.
+  </dd>
   <dt><b>DOMString</b></dt>
   <dd>Nothing is done.</dd>
 </dl>
@@ -1367,6 +1374,22 @@ the following steps are run, depending on the list element type:</p>
         <dd>Set the <a>SVGLength</a> to <a href="#LengthMode">reflect an
         element of the animated value</a>
         and make it <a href="#ReadOnlyLength">read only</a>.</dd>
+      </dl>
+  </dd>
+  <dt><a>DOMPoint</a></dt>
+  <dd>
+    <a href="shapes.html#PointAssociatedElement">Associate</a> the
+    <a>DOMPoint</a> with the element that the <a>list interface</a>
+    object is associated with.  Additionally, depending on whether
+    the <a>list interface</a> object reflects a base or animated
+    value:
+      <dl class='switch'>
+        <dt>base value</dt>
+        <dd>Set the <a>DOMPoint</a> to <a href="shapes.html#PointMode">reflect an
+        element of the base value</a>.</dd>
+        <dt>animated value</dt>
+        <dd>Set the <a>DOMPoint</a> to <a href="shapes.html#PointMode">reflect an
+        element of the animated value</a>.</dd>
       </dl>
   </dd>
   <dt><b>DOMString</b></dt>
@@ -1679,6 +1702,7 @@ specific value, the following steps must be performed:</p>
 
       <dt><a>SVGNumberList</a></dt>
       <dt><a>SVGLengthList</a></dt>
+      <dt><a>SVGPointList</a></dt>
       <dt><a>SVGStringList</a></dt>
       <dd>
         <ol>
@@ -1686,6 +1710,7 @@ specific value, the following steps must be performed:</p>
           <p class="note">For <a>SVGNumberList</a>, this will be a list of <a>SVGNumber</a>
           objects;
           for <a>SVGLengthList</a>, this will be a list of <a>SVGLength</a> objects;
+          for <a>SVGPointList</a>, this will be a list of <a>DOMPoint</a> objects;
           and for <a>SVGStringList</a>, this will be a list of <b>DOMString</b>s.</p></li>
 
           <li>Let <var>serialized elements</var> be a list of strings, where each
@@ -1702,6 +1727,24 @@ specific value, the following steps must be performed:</p>
               <dd>The string is the value that would be returned
               from getting the value's <a href="#__svg__SVGLength__valueAsString">valueAsString</a>
               member.</dd>
+              <dt>a <a>DOMPoint</a> object</dt>
+              <dd>The string value is computed as follows:
+                <ol>
+                  <li>Let <var>string</var> be an empty string.</li>
+                  <li>Let <var>x</var> and <var>y</var> be the values of the
+                  <a>DOMPoint</a> object's x and y coordinates, respectively.</li>
+                  <li>Append to <var>string</var> an implementation specific string
+                  that, if parsed as <a>&lt;number&gt;</a> using CSS syntax, would return the number
+                  value closest to <var>x</var>, given
+                  the implementation's supported <a href="#Precision">real number precision</a>.</li>
+                  <li>Append a single U+002C COMMA character to <var>string</var>.</li>
+                  <li>Append to <var>string</var> an implementation specific string
+                  that, if parsed as <a>&lt;number&gt;</a> using CSS syntax, would return the number
+                  value closest to <var>y</var>, given
+                  the implementation's supported <a href="#Precision">real number precision</a>.</li>
+                  <li>The string is <var>string</var>.</li>
+                </ol>
+              </dd>
               <dt>a <b>DOMString</b></dt>
               <dd>The string is the <b>DOMString</b>'s value itself.</dd>
             </dl>
