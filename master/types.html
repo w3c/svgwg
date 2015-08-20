@@ -2167,7 +2167,8 @@ if there is no animation currently affecting the attribute.</p>
 <h3 id="InterfaceSVGAnimatedString">Interface SVGAnimatedString</h3>
 
 <p>An <a>SVGAnimatedString</a> object is used to <a>reflect</a> an
-animatable attribute that takes a string value.</p>
+animatable attribute that takes a string value.  It can optionally
+be defined to additionally reflect a second, deprecated attribute.</p>
 
 <pre class="idl">interface <b>SVGAnimatedString</b> {
            attribute DOMString <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>;
@@ -2182,15 +2183,41 @@ the following steps are run:</p>
 <ol class="algorithm">
   <li>If the reflected attribute is not present, then:
     <ol>
-      <li>If the reflected attribute has an <a>initial value</a>, return it.</li>
+      <li>If the <a>SVGAnimatedString</a> object is defined to additionally
+      reflect a second, deprecated attribute, and that attribute is present,
+      then return its value.</li>
+      <li>Otherwise, if the reflected attribute has an <a>initial value</a>,
+      then return it.</li>
       <li>Otherwise, return the empty string.</li>
     </ol>
   </li>
-  <li>Return the value of the reflected attribute.</li>
+  <li>Otherwise, the reflected attribute is present.  Return its value.</li>
 </ol>
 
+<p class='note'>For the <a href='#__svg__SVGURIReference__href'>href</a>
+member on the <a>SVGURIReference</a> interface, this will result in
+the deprecated <a>'xlink:href'</a> attribute being returned if it is
+present and the <span class='attr-name'>'href'</span> attribute is not,
+and in the <span class='attr-name'>'href'</span> attribute being
+returned in all other cases.</p>
+
 <p>On setting <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>,
-the reflected attribute is set to specified value.</p>
+the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the reflected attribute is not present,
+  the <a>SVGAnimatedString</a> object is defined to additionally reflect
+  a second, deprecated attribute, and that deprecated attribute is present,
+  then set that deprecated attribute to the specified value.</li>
+  <li>Otherwise, set the reflected attribute to the specified value.</li>
+</ol>
+
+<p class='note'>For the <a href='#__svg__SVGURIReference__href'>href</a>
+member on the <a>SVGURIReference</a> interface, this will result in
+the deprecated <a>'xlink:href'</a> attribute being set if it is
+present and the <span class='attr-name'>'href'</span> attribute is not,
+and in the <span class='attr-name'>'href'</span> attribute being
+set in all other cases.</p>
 
 <p>The <b id="__svg__SVGAnimatedString__animVal">animVal</b> IDL attribute
 represents the current animated value of the reflected attribute.
@@ -2203,6 +2230,11 @@ the following steps are run:</p>
   <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>.</li>
   <li>Otherwise, return the value of the reflected attribute.</li>
 </ol>
+
+<p class='note'>Animation elements treat targetting the <a>'xlink:href'</a>
+attribute as an animation targetting <span href='attr-name'>'href'</span>,
+so there is no animated <a>'xlink:href'</a> value to return from
+<a href="types.html#__svg__SVGAnimatedString__animVal">animVal</a>.</p>
 
 
 <h3 id="InterfaceSVGAnimatedRect">Interface SVGAnimatedRect</h3>
@@ -2490,59 +2522,42 @@ the following steps are run:</p>
   keyword value in the zoom and pan type constant table above
   that corresponds to <var>value</var>.</li>
 </ol>
-</div>
 
 
 <h3 id="InterfaceSVGURIReference">Interface SVGURIReference</h3>
 
-<p>Interface <a>SVGURIReference</a> defines an interface which applies to all
-elements which have an <span class="attr-name">'href'</span> attribute.</p>
+<p>The <a>SVGURIReference</a> interface is used to reflect
+the <span class='attr-name'>'href'</span> attribute and the deprecated
+<a>'xlink:href'</a> attribute.</p>
 
 <pre class="idl">[NoInterfaceObject]
 interface <b>SVGURIReference</b> {
   [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="types.html#__svg__SVGURIReference__href">href</a>;
 };</pre>
 
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGURIReference__href" class="attribute first-child"><b>href</b><span class="idl-type-parenthetical"> (readonly <a>SVGAnimatedString</a>)</span></dt>
-      <dd class="attribute">
-        <div>
-          <p>Corresponds to the <span class="attr-name">'href'</span>
-          attribute.
-          If the element also supports the deprecated <a>'xlink:href'</a>
-          attribute, the resulting <a>SVGAnimatedString</a> object will
-          correspond to the <a>'xlink:href'</a> attribute in the XLink namespace
-          if, and only if, <em>all</em> of the following conditions are true at
-          the time when the <a href="#__svg__SVGURIReference__href"
-          class="attribute">href</a> IDL attribute is accessed:</p>
-          <ul>
-            <li>There is no <span class="attr-name">'href'</span> attribute
-                without a namespace specified on the element, <em>and</em></li>
-            <li>There is no <a>animation element</a> whose <a
-                href="animate.html#TargetElement">target element</a> is this
-                element and whose <a>'attributeName'</a> is the string <span
-                class="attr-name">'href'</span> (that is, without an XMLNS
-                prefix), <em>and</em></li>
-            <li>There is an <span class="attr-name">'href'</span> attribute in
-                the XLink namespace on the element, or there is an <a>animation
-                element</a> whose <a href="animate.html#TargetElement">target
-                element</a> is this element and whose <a>'attributeName'</a>
-                references the <span class="attr-name">'href'</span> attribute
-                in the XLink namespace.</li>
-          </ul>
-          <p>If <em>any</em> of the above conditions does not hold at the time
-          when the the <a href="#__svg__SVGURIReference__href"
-          class="attribute">href</a> IDL attribute is accessed, the returned
-          attribute will correspond to the <span class="attr-name">'href'</span>
-          attribute without a namespace.</p>
-        </div>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<p>The <b id="__svg__SVGURIReference__href">href</b> IDL attribute
+represents the value of the <span class='attr-name'>'href'</span>
+attribute, and, on elements that are defined to support it,
+the deprecated <a>'xlink:href'</a> attribute.  On getting
+<a href='#__svg__SVGURIReference__href'>href</a>, an
+<a>SVGAnimatedString</a> object is returned that:</p>
+
+<ul>
+  <li>reflects the <span class='attr-name'>'href'</span> attribute, and</li>
+  <li>if the element is defined to support the deprecated
+  <a>'xlink:href'</a> attribute, additionally reflects that deprecated attribute.</li>
+</ul>
+
+<p class='note'>The <a>SVGAnimatedString</a> interface is defined
+to reflect through its <a href='#__svg__SVGAnimatedString__baseVal'>baseVal</a>
+member the deprecated <a>'xlink:href'</a> attribute, if that attribute is
+present and the <span class='attr-name'>'href'</span> is not, and to
+reflect the <span class='attr-name'>'href'</span> attribute in all
+other circumstances.  The <a href='#__svg__SVGAnimatedString__animVal'>animVal</a>
+attribute reflects the animated value of the <span class='attr-name'>'href'</span>
+attribute.  Animation elements treat <span class='attr-value'>attributeName='xlink:href'</span>
+as being an alias for targetting the <span class='attr-name'>'href'</span> attribute.</p>
+</div>
 
 </body>
 </html>
