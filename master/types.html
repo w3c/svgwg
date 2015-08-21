@@ -1207,14 +1207,16 @@ When convertToSpecifiedUnits(unitType) is called, the following steps are run:</
 </div>
 
 <p>Some SVG attributes contain lists of values, and to represent these values
-there are three SVG DOM <dfn id="TermListInterface">list interfaces</dfn>, one
-for each required element type – <a>SVGNumberList</a>, <a>SVGLengthList</a>
-and <a>SVGStringList</a>.  The first two are used to represent the base and
-animated components of <a>SVGAnimatedNumberList</a> and <a>SVGAnimatedLengthList</a>
-objects, while the third, <a>SVGStringList</a>, is used to <a>reflect</a> a
+there are a number of SVG DOM <dfn id="TermListInterface">list interfaces</dfn>, one
+for each required element type – <a>SVGNumberList</a>, <a>SVGLengthList</a>,
+<a>SVGPointList</a>, <a>SVGTransformList</a> and <a>SVGStringList</a>.
+The first four are used to represent the base and
+animated components of <a>SVGAnimatedNumberList</a>, <a>SVGAnimatedLengthList</a>,
+<a>SVGAnimatedPoints</a> and <a>SVGTransformList</a> objects,
+while the fifth, <a>SVGStringList</a>, is used to <a>reflect</a> a
 few unanimated attributes that take a list of strings.</p>
 
-<p>All <a>list interfaces</a> take the following form:</p>
+<p>Most <a>list interfaces</a> take the following form:</p>
 
 <pre class="idl" edit:excludefromidl="true">interface <b>SVG<var>Name</var>List</b> {
 
@@ -1232,41 +1234,72 @@ few unanimated attributes that take a list of strings.</p>
 };</pre>
 
 <p>where <var>Name</var> is a descriptive name for the list element's
-("Number", "Length", "Point" or "String") and <var>Type</var> is the IDL type of the
-list's elements (<a>SVGNumber</a>, <a>SVGLength</a>, <a>DOMPoint</a> or <b>DOMString</b>).</p>
+("Number", "Length", "Point", "Transform" or "String") and <var>Type</var> is the IDL type of the
+list's elements (<a>SVGNumber</a>, <a>SVGLength</a>, <a>DOMPoint</a>, <a>SVGTransform</a> or <b>DOMString</b>).</p>
 
-<p>Every <a>list interface</a> object reflects either the base value
-or the animated value of a reflected content attribute, and is associated
-with a particular element.  Unlike <a>SVGLength</a>
-and similar objects, there are no "detached" <a>list interface</a> objects.</p>
+<p>The <a>SVGTransformList</a> interface takes the above form but has
+two additional methods on it.</p>
+
+<p>All <a>list interface</a> objects apart from <a>SVGTransformList</a>
+reflect either the base value or the animated value of a reflected content
+attribute.  <a>SVGTransformList</a> objects reflect either a presentation
+attribute (<span class='attr-name'>'transform'</span>,
+<a>'linearGradient/gradientTransform'</a> or <a>'pattern/patternTransform'</a>)
+or reflect the computed value of the <a>'transform'</a> property.
+All <a>list interface</a> objects are associated with a particular element.
+Unlike <a>SVGLength</a> and similar objects, there are no "detached"
+<a>list interface</a> objects.</p>
 
 <p>A <a>list interface</a> object maintains an internal list of elements,
 which is referred to in the text below simply as "the list".
 The IDL attributes and methods are used to inspect and manipulate elements
 of the list.  The list can also be changed in response to
 changes to the reflected content attribute and to animation of
-the content attribute.</p>
+the content attribute (or, for <a>SVGTransformList</a> objects,
+in response to changes to the computed value of the <a>'transform'</a>
+property).</p>
 
 <p id="ReadOnlyList">A <a>list interface</a> object can be designated as
 <em>read only</em>, which means that attempts to modify the object will result
 in an exception being thrown, as described below.</p>
 
-<p>Whenever the content attribute that a <a>list interface</a> object
-reflects changes (whether the it is reflecting the attribute's base or
-animated value) the <a>list interface</a> object must be synchronized by
+<p>Whenever:</p>
+
+<ul>
+  <li>for <a>SVGTransformList</a> objects that reflect the computed
+  value of the <a>'transform'</a> property, the computed value of
+  that property changes, or</li>
+  <li>for all other <a>list interface</a> objects, the reflected
+  content attribute or its animated value changes,</li>
+</ul>
+
+<p>the <a>list interface</a> object must be synchronized by
 running the following steps right after the change:</p>
 
 <ol class='algorithm'>
   <li>Let <var>value</var> be a value determined as follows:
-  If the reflected attribute is currently being animated, then <var>value</var>
-  is its current animated value.  If not, then <var>value</var> is the
-  value of the reflected attribute (using the attribute's <a>initial value</a>
-  if it is not present or invalid).</li>
+    <ul>
+      <li>If the <a>list interface</a> object reflects the
+      computed value of the <a>'transform'</a> property,
+      then <var>value</var> is the current computed value
+      of that property.</li>
+      <li>Otherwise, if the <a>list interface</a> object reflects the
+      animated value of an attribute, and that attribute is
+      currently being animated, then <var>value</var> is its
+      current animated value.</li>
+      <li>Otherwise, <var>value</var> is the base value of the
+      reflected content attribute (using the attribute's <a>initial value</a>
+      if it is not present or invalid).</li>
+    </ul>
+  </li>
 
   <li>Let <var>length</var> be the number of items in the list.</li>
-  <li>Let <var>new length</var> be the number of values in <var>value</var>.</li>
+  <li>Let <var>new length</var> be the number of values in <var>value</var>.
+  If <var>value</var> is the keyword <span class='prop-value'>none</span>
+  (as supported by the <a>'transform'</a> property), <var>new length</var>
+  is 0.</li>
 
-  <li>If the list element type is <a>SVGNumber</a>, <a>SVGLength</a> or <a>DOMPoint</a>, then:
+  <li>If the list element type is <a>SVGNumber</a>, <a>SVGLength</a>, <a>DOMPoint</a> or <a>SVGTransform</a>, then:
     <ol>
       <li>If <var>length</var> &gt; <var>new length</var>, then:
         <ol>
@@ -1294,6 +1327,9 @@ running the following steps right after the change:</p>
           <li>Let <var>v</var> be the value in <var>value</var> at index
           <var>index</var>.</li>
           <li>Set <var>item</var>'s value to <var>v</var>.</li>
+          <li>If <var>item</var> is an <a>SVGTransform</a> object, then
+          set the components of its <a href="coords.html#TransformMatrixObject">matrix object</a>
+          to match the new transform function value.</li>
           <li>Set <var>index</var> to <var>index</var> + 1.</li>
         </ol>
       </li>
@@ -1331,6 +1367,13 @@ the following steps are run, depending on the list element type:</p>
     Set the <a>DOMPoint</a> to no longer be 
     <a href="shapes.html#PointAssociatedElement">associated</a> with any element.
     If the <a>DOMPoint</a> is <a href='shapes.html#ReadOnlyPoint'>read only</a>,
+    set it to be no longer read only.
+  </dd>
+  <dt><a>SVGTransform</a></dt>
+  <dd>
+    Set the <a>SVGTransform</a> to no longer be 
+    <a href="coords.html#TransformAssociatedElement">associated</a> with any element.
+    If the <a>SVGTransform</a> is <a href='coords.html#ReadOnlyTransform'>read only</a>,
     set it to be no longer read only.
   </dd>
   <dt><b>DOMString</b></dt>
@@ -1392,6 +1435,22 @@ the following steps are run, depending on the list element type:</p>
         element of the animated value</a>.</dd>
       </dl>
   </dd>
+  <dt><a>SVGTransform</a></dt>
+  <dd>
+    <a href="coords.html#TransformAssociatedElement">Associate</a> the
+    <a>SVGTransform</a> with the element that the <a>list interface</a>
+    object is associated with.  Additionally, depending on whether
+    the <a>list interface</a> object reflects a presentation
+    attribute or the computed <a>'transform'</a> property value:
+      <dl class='switch'>
+        <dt>base attribute value</dt>
+        <dd>Set the <a>SVGTransform</a> to <a href="coords.html#TransformMode">reflect an
+        element of a presentation attribute value</a>.</dd>
+        <dt>computed <a>'transform'</a> property value</dt>
+        <dd>Set the <a>SVGTransform</a> to <a href="coords.html#TransformMode">reflect an
+        element of the computed <span class='prop-name'>'transform'</span> property value</a>.</dd>
+      </dl>
+  </dd>
   <dt><b>DOMString</b></dt>
   <dd>Nothing is done.</dd>
 </dl>
@@ -1407,7 +1466,6 @@ the length of the list.</p>
 
 <p>The <b id="__svg__SVGNameList__clear">clear</b> method is used to
 remove all items in the list.  When clear() is called, the following steps are run:</p>
-
 <ol class="algorithm">
   <li>If the list is <a href="#ReadOnlyList">read only</a>, then throw a
   <a>DOMException</a> with code NO_MODIFICATION_ALLOWED_ERR.</li>
@@ -1614,10 +1672,6 @@ or a property.  The way this reflection is done depends on the type of the IDL a
 </ul>
 </div>
 
-<p class="issue" data-issue="17">This should also describe how reflection works for attributes that were
-promoted to properties, such as <a>'transform'</a>.
-<a href="http://www.w3.org/2015/02/11-svg-minutes.html#item12">(Some discussion.)</a></p>
-
 <p>When a <a>reflected</a> content attribute is to be
 <dfn id="TermReserialize">reserialized</dfn>, optionally using a
 specific value, the following steps must be performed:</p>
@@ -1637,6 +1691,7 @@ specific value, the following steps must be performed:</p>
       <dt><a>SVGAnimatedString</a></dt>
       <dt><a>SVGAnimatedNumberList</a></dt>
       <dt><a>SVGAnimatedLengthList</a></dt>
+      <dt><a>SVGAnimatedTransformList</a></dt>
       <dd><a href="#TermReserialize">Reserialize</a> the content attribute using
       <var>value</var>'s baseVal member.</dd>
 
@@ -1704,15 +1759,15 @@ specific value, the following steps must be performed:</p>
       <dt><a>SVGNumberList</a></dt>
       <dt><a>SVGLengthList</a></dt>
       <dt><a>SVGPointList</a></dt>
+      <dt><a>SVGTransformList</a></dt>
       <dt><a>SVGStringList</a></dt>
       <dd>
         <ol>
           <li>Let <var>elements</var> be the list of values in <var>value</var>.
-          <p class="note">For <a>SVGNumberList</a>, this will be a list of <a>SVGNumber</a>
-          objects;
-          for <a>SVGLengthList</a>, this will be a list of <a>SVGLength</a> objects;
-          for <a>SVGPointList</a>, this will be a list of <a>DOMPoint</a> objects;
-          and for <a>SVGStringList</a>, this will be a list of <b>DOMString</b>s.</p></li>
+            <p class="note">The values will be <a>SVGNumber</a>, <a>SVGLength</a>,
+            <a>DOMPoint</a> or <a>SVGTransform</a> objects, or <b>DOMString</b> values,
+            depending on <var>value</var>'s type.</p>
+          </li>
 
           <li>Let <var>serialized elements</var> be a list of strings, where each
           string is formed based on the corresponding value in <var>elements</var>
@@ -1746,6 +1801,9 @@ specific value, the following steps must be performed:</p>
                   <li>The string is <var>string</var>.</li>
                 </ol>
               </dd>
+              <dt>a <a>SVGTransform</a> object</dt>
+              <dd>The string is the <a href="https://drafts.csswg.org/css-transforms-1/#serialization-of-transform-functions">serialization</a>
+              of the <a>SVGTransform</a> object's <a href="coords.html#TransformMatrixObject">matrix object</a>.</dd>
               <dt>a <b>DOMString</b></dt>
               <dd>The string is the <b>DOMString</b>'s value itself.</dd>
             </dl>
