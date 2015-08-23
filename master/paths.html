@@ -1117,12 +1117,13 @@ commands contribute to path length calculations.</p>
 
 </edit:with>
 
+<div class='ready-for-wg-review'>
 <h2 id="DOMInterfaces">DOM interfaces</h2>
 
 <h3 id="InterfaceSVGPathElement">Interface SVGPathElement</h3>
 
-The <a>SVGPathElement</a> interface corresponds to the <a>'path'</a>
-element.
+<edit:with element="path">
+<p>An <a>SVGPathElement</a> object represents a <a>'path'</a> in the DOM.</p>
 
 <pre class="idl">interface <b>SVGPathElement</b> : <a>SVGGeometryElement</a> {
 
@@ -1132,60 +1133,37 @@ element.
   <a>DOMPoint</a> <a href="paths.html#__svg__SVGPathElement__getPointAtLength">getPointAtLength</a>(float distance);
 };</pre>
 
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGPathElement__pathLength" class="attribute first-child"><b>pathLength</b><span class="idl-type-parenthetical"> (readonly <a>SVGAnimatedNumber</a>)</span></dt>
-      <dd class="attribute">
-        <div>Corresponds to attribute <a>pathLength</a> on the given <a>'path'</a>
-        element.</div>
-      </dd>
-    </dl>
-  </dd>
-  <dt class="operations-header">Operations:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGPathElement__getTotalLength" class="operation first-child">float <b>getTotalLength</b>()</dt>
-      <dd class="operation">
-        <div>Returns the user agent's computed value for the total length of the path
-        using the user agent's distance-along-a-path algorithm, as a distance
-        in the current user coordinate system.</div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The total length of the path.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGPathElement__getPointAtLength" class="operation"><a>DOMPoint</a> <b>getPointAtLength</b>(float <var>distance</var>)</dt>
-      <dd class="operation">
-        <div>Returns the (x,y) coordinate in local coordinate system which is <var>distance</var>
-        units along the path, utilizing the user agent's distance-along-a-path
-        algorithm. The <var>distance</var> shall be clamped to the range
-        [0, <em>total-length-of-path</em>] before passing it to the distance-along-a-path algorithm.
-          <p>If no valid path data exists, returns (0,0).</p>
-        </div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>float <var>distance</var></div>
-                <div>The distance along the path, relative to the start of
-                the path, as a distance in the current user coordinate system.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The returned point in local coordinate system.</div>
-          </dd>
-        </dl>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<p>The <b id="__svg__SVGPathElement__pathLength">pathLength</b> IDL attribute
+<a>reflects</a> the <a>'pathLength'</a> content attribute.</p>
+
+<p>The <b id="__svg__SVGPathElement__getTotalLength">getTotalLength</b> method
+is used to compute the length of the path.  When getTotalLength()
+is called, the user agent's computed value for the total length of the path,
+in user units, is returned.</p>
+
+<p class="note">The user agent's computed path length does not take the
+<a>'pathLength'</a> attribute into account.</p>
+
+<p>The <b id="__svg__SVGPathElement__getPointAtLength">getPointAtLength</b> method
+is used to return the point at a given distance along the path.  When
+getPointAtLength(<var>distance</var>) is called, the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>Let <var>length</var> be the user agent's computed value for the total
+  length of the path, in user units.
+    <p class="note">As with <a href="#__svg__SVGPathElement__getTotalLength">getTotalLength</a>,
+    this does not take into account the <a>'pathLength'</a> attribute.</p>
+  </li>
+  <li>Clamp <var>distance</var> to [0, <var>length</var>].</li>
+  <li>Let (<var>x</var>, <var>y</var>) be the point on the path at distance
+  <var>distance</var>.</li>
+  <li>Return a newly created, <a href="shapes.html#PointMode">detached</a>
+  <a>DOMPoint</a> object representing the point
+  (<var>x</var>, <var>y</var>).</li>
+</ol>
+
+</edit:with>
+</div>
 
 </body>
 </html>
