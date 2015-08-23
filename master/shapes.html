@@ -698,7 +698,7 @@ objects beyond those described in the
 the <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/">Geometry Interfaces</a>
 specification, so that they can be used to reflect <a>'polygon/points'</a> attributes.</p>
 
-<p id="PointMode">Every <a>DOMPoint</a> object operates in one of three modes.  It
+<p id="PointMode">Every <a>DOMPoint</a> object operates in one of four modes.  It
 can:</p>
 
 <ol>
@@ -709,7 +709,11 @@ can:</p>
   <li><em>reflect an element of the animated value</em> of a <a>reflected</a> animatable
   attribute (being exposed through the methods on the
   <a href="#__svg__SVGAnimatedPoints__animatedPoints">animatedPoints</a> member of
-  an <a>SVGAnimatedPoints</a>), or</li>
+  an <a>SVGAnimatedPoints</a>),</li>
+  <li><em>represent the current translation</em> of a given <a>'svg'</a> element
+  (being exposed through the
+  <a href="struct.html#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>
+  member on <a>SVGSVGElement</a>), or</li>
   <li><em>be detached</em>, which is the case for <a>DOMPoint</a> objects created
   using their constructor or with
   <a href='struct.html#__svg__SVGSVGElement__createSVGPoint'>createSVGPoint</a>.</li>
@@ -736,7 +740,7 @@ interface; the <a>DOMPointReadOnly</a> interface, which is not used for reflecti
 the <a>'polygon/points'</a> attribute, will already throw an exception if
 an attempt is made to modify it.</p>
 
-<p>When assigning to a writable <a>DOMPoint</a>'s
+<p id="AssignToDOMPoint">When assigning to a writable <a>DOMPoint</a>'s
 <a href='http://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dompointreadonly-dompoint-x'>x</a>,
 <a href='http://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dompointreadonly-dompoint-y'>y</a>,
 <a href='http://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dompointreadonly-dompoint-w'>w</a> or
@@ -752,6 +756,19 @@ the internal coordinate value:</p>
     <p class='note'>The <a>DOMPoint</a> can't reflect an element of the
     animated value, since it would be read only and we would have thrown
     an exception per the requirements above.</p>
+  </li>
+  <li>Otherwise, if the <a>DOMPoint</a> <a href='#PointMode'>represents
+  the current translation</a> of an <a>'svg'</a> element and that
+  element is the <a>outermost svg element</a>, then:
+    <ol>
+      <li>Let [<var>a</var> <var>b</var> <var>c</var> <var>d</var> <var>e</var> <var>f</var>]
+      be the 2x3 matrix that represents the document's magnification and panning
+      transform.</li>
+      <li>Let <var>x</var> and <var>y</var> be the x and y coordinates of the
+      <a>DOMPoint</a> object, respectively.</li>
+      <li>Set the document's magnification and panning transform to
+      [<var>a</var> 0 0 <var>d</var> <var>x</var> <var>y</var>].</li>
+    </ol>
   </li>
 </ol>
 </div>

@@ -2435,17 +2435,22 @@ and in implementations that support SVG and HTML they cannot be duplicated.</p>
 
 <p>The title, referrer, domain and <span id="__svg__SVGDocument__activeElement">activeElement</span> IDL attributes must behave the same as
 <a href="http://www.w3.org/TR/html51/dom.html#document">the corresponding IDL attributes defined in HTML</a>.</p>
-</div>
+
 
 <h3 id="InterfaceSVGSVGElement">Interface SVGSVGElement</h3>
 
 <edit:with element="svg">
 
-<p>A key interface definition is the <a>SVGSVGElement</a> interface,
-which is the interface that corresponds to the <a>'svg'</a> element. This
-interface contains various miscellaneous commonly-used utility
-methods, such as matrix operations and the ability to control the
-time of redraw on visual rendering devices.</p>
+<p>An <a>SVGSVGElement</a> object represents an <a>'svg'</a> element
+in the DOM.  The <a>SVGSVGElement</a> interface also contains
+miscellaneous utility methods, such as data type object factory methods
+and animation timeline contronl methods.</p>
+
+<p>An <a>SVGSVGElement</a> object maintains an internal
+<a>DOMPoint</a> object, called its
+<dfn id="CurrentTranslatePointObject">current translate point object</dfn>,
+which is the object returned from the <a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>
+IDL attribute.</p>
 
 <pre class="idl">interface <b>SVGSVGElement</b> : <a>SVGGraphicsElement</a> {
 
@@ -2453,24 +2458,24 @@ time of redraw on visual rendering devices.</p>
   [SameObject] readonly attribute <a>SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__y">y</a>;
   [SameObject] readonly attribute <a>SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__width">width</a>;
   [SameObject] readonly attribute <a>SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__height">height</a>;
+
   [SameObject] readonly attribute <a>DOMRectReadOnly</a> <a href="struct.html#__svg__SVGSVGElement__viewport">viewport</a>;
   attribute float <a href="struct.html#__svg__SVGSVGElement__currentScale">currentScale</a>;
   [SameObject] readonly attribute <a>DOMPointReadOnly</a> <a href="struct.html#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>;
 
-  unsigned long <a href="struct.html#__svg__SVGSVGElement__suspendRedraw">suspendRedraw</a>(unsigned long maxWaitMilliseconds);
-  void <a href="struct.html#__svg__SVGSVGElement__unsuspendRedraw">unsuspendRedraw</a>(unsigned long suspendHandleID);
-  void <a href="struct.html#__svg__SVGSVGElement__unsuspendRedrawAll">unsuspendRedrawAll</a>();
-  void <a href="struct.html#__svg__SVGSVGElement__forceRedraw">forceRedraw</a>();
   void <a href="struct.html#__svg__SVGSVGElement__pauseAnimations">pauseAnimations</a>();
   void <a href="struct.html#__svg__SVGSVGElement__unpauseAnimations">unpauseAnimations</a>();
   boolean <a href="struct.html#__svg__SVGSVGElement__animationsPaused">animationsPaused</a>();
   float <a href="struct.html#__svg__SVGSVGElement__getCurrentTime">getCurrentTime</a>();
   void <a href="struct.html#__svg__SVGSVGElement__setCurrentTime">setCurrentTime</a>(float seconds);
+
   <a>NodeList</a> <a href="struct.html#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a>(<a>DOMRectReadOnly</a> rect, <a>SVGElement</a>? referenceElement);
   <a>NodeList</a> <a href="struct.html#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a>(<a>DOMRectReadOnly</a> rect, <a>SVGElement</a>? referenceElement);
   boolean <a href="struct.html#__svg__SVGSVGElement__checkIntersection">checkIntersection</a>(<a>SVGElement</a> element, <a>DOMRectReadOnly</a> rect);
   boolean <a href="struct.html#__svg__SVGSVGElement__checkEnclosure">checkEnclosure</a>(<a>SVGElement</a> element, <a>DOMRectReadOnly</a> rect);
+
   void <a href="struct.html#__svg__SVGSVGElement__deselectAll">deselectAll</a>();
+
   <a>SVGNumber</a> <a href="struct.html#__svg__SVGSVGElement__createSVGNumber">createSVGNumber</a>();
   <a>SVGLength</a> <a href="struct.html#__svg__SVGSVGElement__createSVGLength">createSVGLength</a>();
   <a>SVGAngle</a> <a href="struct.html#__svg__SVGSVGElement__createSVGAngle">createSVGAngle</a>();
@@ -2479,508 +2484,403 @@ time of redraw on visual rendering devices.</p>
   <a>DOMRect</a> <a href="struct.html#__svg__SVGSVGElement__createSVGRect">createSVGRect</a>();
   <a>SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransform">createSVGTransform</a>();
   <a>SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>(<a>DOMMatrixReadOnly</a> matrix);
+
+  <span class="comment">// Deprecated methods that have no effect when called,</span>
+  <span class="comment">// but which are kept for compatibility reasons.</span>
+  unsigned long <a href="struct.html#__svg__SVGSVGElement__suspendRedraw">suspendRedraw</a>(unsigned long maxWaitMilliseconds);
+  void <a href="struct.html#__svg__SVGSVGElement__unsuspendRedraw">unsuspendRedraw</a>(unsigned long suspendHandleID);
+  void <a href="struct.html#__svg__SVGSVGElement__unsuspendRedrawAll">unsuspendRedrawAll</a>();
+  void <a href="struct.html#__svg__SVGSVGElement__forceRedraw">forceRedraw</a>();
 };
 
 <a>SVGSVGElement</a> implements <a>SVGFitToViewBox</a>;
 <a>SVGSVGElement</a> implements <a>SVGZoomAndPan</a>;
 <a>SVGSVGElement</a> implements <a>WindowEventHandlers</a>;</pre>
 
-<dl class="interface">
-  <dt class="attributes-header">Attributes:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGSVGElement__x" class="attribute first-child"><b>x</b><span class="idl-type-parenthetical"> (readonly <a>SVGAnimatedLength</a>)</span></dt>
-      <dd class="attribute">
-        <div>Corresponds to attribute <a>'x'</a> on the given <a>'svg'</a> element.</div>
-      </dd>
-      <dt id="__svg__SVGSVGElement__y" class="attribute"><b>y</b><span class="idl-type-parenthetical"> (readonly <a>SVGAnimatedLength</a>)</span></dt>
-      <dd class="attribute">
-        <div>Corresponds to attribute <a>'y'</a> on the given <a>'svg'</a> element.</div>
-      </dd>
-      <dt id="__svg__SVGSVGElement__width" class="attribute"><b>width</b><span class="idl-type-parenthetical"> (readonly <a>SVGAnimatedLength</a>)</span></dt>
-      <dd class="attribute">
-        <div>Corresponds to attribute <a>'width'</a> on the given <a>'svg'</a>
-        element.</div>
-      </dd>
-      <dt id="__svg__SVGSVGElement__height" class="attribute"><b>height</b><span class="idl-type-parenthetical"> (readonly <a>SVGAnimatedLength</a>)</span></dt>
-      <dd class="attribute">
-        <div>Corresponds to attribute <a>'height'</a> on the given <a>'svg'</a>
-        element.</div>
-      </dd>
-      <dt id="__svg__SVGSVGElement__viewport" class="attribute"><b>viewport</b><span class="idl-type-parenthetical"> (readonly <a>DOMRectReadOnly</a>)</span></dt>
-      <dd class="attribute">
-        <div>
-          <p>The position and size of the viewport (implicit or explicit) that
-          corresponds to this <a>'svg'</a> element. When the user agent is actually
-          rendering the content, then the position and size values represent the
-          actual values when rendering. The position and size values are unitless
-          values in the coordinate system of the parent element. If no parent element
-          exists (i.e., <a>'svg'</a> element represents the root of the document
-          tree), if this SVG document is embedded as part of another document (e.g.,
-          via the HTML <span class="element-name">'object'</span> element), then the
-          position and size are unitless values in the coordinate system of the parent
-          document. (If the parent uses CSS or XSL layout, then unitless values
-          represent pixel units for the current CSS or XSL viewport, as described in
-          the CSS2 specification.) If the parent element does not have a coordinate
-          system, then the user agent should provide reasonable default values for
-          this attribute.</p>
-          <p>The <a>DOMRectReadOnly</a> object, as its name suggests, is read only.</p>
-        </div>
-      </dd>
-      <dt id="__svg__SVGSVGElement__currentScale" class="attribute"><b>currentScale</b><span class="idl-type-parenthetical"> (float)</span></dt>
-      <dd class="attribute">
-        <div>On an <a>outermost svg element</a>, this attribute indicates the
-        current scale factor
-        relative to the initial view to take into account user
-        magnification and panning operations, as described under
-        <a href="interact.html#ZoomAndPanAttribute">Magnification
-        and panning</a>. DOM attributes <a>currentScale</a> and
-        <a>currentTranslate</a>
-        are equivalent to the 2x3 matrix [a b c d e f] =
-        [currentScale 0 0 currentScale currentTranslate.x currentTranslate.y].
-        If "magnification" is enabled (i.e., <span class="attr-value">zoomAndPan="magnify"</span>),
-        then the effect is as if an extra transformation were placed at the
-        outermost level on the SVG document fragment (i.e., outside the
-        <a>outermost svg element</a>).
+<p>The
+<b id="__svg__SVGSVGElement__x">x</b>,
+<b id="__svg__SVGSVGElement__y">y</b>,
+<b id="__svg__SVGSVGElement__width">width</b> and
+<b id="__svg__SVGSVGElement__height">height</b> IDL attributes
+<a>reflect</a> the computed values of the <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and
+<a>'height'</a> properties and their corresponding
+presentation attributes, respectively.</p>
 
-          <p>The value of a transform property on the <a>outermost svg element</a> does not affect the value of this attribute.</p>
-          <p>When accessed on an <a>'svg'</a> element that is not an
-          <a>outermost svg element</a>, this attribute must return 1 as scaling factor.</p>
-        </div>
-      </dd>
-      <dt id="__svg__SVGSVGElement__currentTranslate" class="attribute"><b>currentTranslate</b><span class="idl-type-parenthetical"> (readonly <a>DOMPoint</a>)</span></dt>
-      <dd class="attribute">
-        <div>On an <a>outermost svg element</a>, the corresponding translation factor
-        that takes into account user "magnification".
+<p>The <b id="__svg__SVGSVGElement__viewport">viewport</b> IDL
+method represents the position and size of the viewport established
+by this <a>'svg'</a> element.  When the user agent is actually
+rendering the content, then the position and size values represent the
+actual values when rendering. The position and size values are unitless
+values in the coordinate system of the parent element. If no parent element
+exists (i.e., <a>'svg'</a> element represents the root of the document
+tree), if this SVG document is embedded as part of another document (e.g.,
+via the HTML <span class="element-name">'object'</span> element), then the
+position and size are unitless values in the coordinate system of the parent
+document. (If the parent uses CSS or XSL layout, then unitless values
+represent pixel units for the current CSS or XSL viewport, as described in
+the CSS2 specification.) If the parent element does not have a coordinate
+system, then the user agent should provide reasonable default values for
+this attribute.</p>
 
-          <p>The value of a transform property on the <a>outermost svg element</a> does not affect the value of this attribute.</p>
-          <p>When accessed on an <a>'svg'</a> element that is not an
-          <a>outermost svg element</a>, this attribute must return a DOMPoint at the coordinates (0, 0).</p>
-        </div>
-      </dd>
-    </dl>
-  </dd>
-  <dt class="operations-header">Operations:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGSVGElement__suspendRedraw" class="operation first-child">unsigned long <b>suspendRedraw</b>(unsigned long <var>maxWaitMilliseconds</var>)</dt>
-      <dd class="operation">
-        <div>This method is deprecated, and is only kept for
-        compatibility with legacy content. Calling this method has no
-        effect on redrawing.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned long <var>maxWaitMilliseconds</var></div>
-                <div>This parameter is ignored.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The returned value is always <span class="attr-value">1</span>.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__unsuspendRedraw" class="operation">void <b>unsuspendRedraw</b>(unsigned long <var>suspendHandleID</var>)</dt>
-      <dd class="operation">
-        <div>This method is deprecated, and is only kept for
-        compatibility with legacy content. Calling this method has no
-        effect on redrawing.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>unsigned long <var>suspendHandleID</var></div>
-                <div>This parameter is ignored.</div>
-              </li>
-            </ol>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__unsuspendRedrawAll" class="operation">void <b>unsuspendRedrawAll</b>()</dt>
-      <dd class="operation">
-        <div>This method is deprecated, and is only kept for
-        compatibility with legacy content. Calling this method has no
-        effect on redrawing.</div>
-      </dd>
-    </dl>
-    <div class="ready-for-wider-review">
-    <dl class="attributes">
-      <dt id="__svg__SVGSVGElement__forceRedraw" class="operation">void <b>forceRedraw</b>()</dt>
-      <dd class="operation">
-        <div>This method is deprecated, and is only kept for
-        compatibility with legacy content. Calling this method
-        has no effect on redrawing.</div>
-      </dd>
-    </dl>
-    </div>
-    <dl class="attributes">
-      <dt id="__svg__SVGSVGElement__pauseAnimations" class="operation">void <b>pauseAnimations</b>()</dt>
-      <dd class="operation">
-        <div>
-          <p>Suspends (i.e., pauses) all currently running SVG animations that are defined
-          within the <a>SVG document fragment</a> corresponding to this <a>'svg'</a>
-          element, causing the current time of the timeline for this document
-          fragment to stand still until it is unpaused.
-          If this <a>'svg'</a> element is not the <a>outermost svg element</a> this method
-          has no effect.</p>
-          <p>This method only affects animations defined using SVG's <a>animation
-          elements</a>.
-          It does not affect CSS Animations [<a href="refs.html#ref-CSS3ANIMATIONS">CSSANIMATIONS</a>], CSS Transitions [<a href="refs.html#ref-CSS3TRANSITIONS">CSS3TRANSITIONS</a>] or animations created
-          using script.</p>
-        </div>
-      </dd>
-      <dt id="__svg__SVGSVGElement__unpauseAnimations" class="operation">void <b>unpauseAnimations</b>()</dt>
-      <dd class="operation">
-        <div>
-          <p>Unsuspends (i.e., unpauses) currently running animations that are defined
-          within the <a>SVG document fragment</a> corresponding to this <a>'svg'</a>
-          element, causing the timeline for the document fragment to continue from its
-          current time.
-          If this <a>'svg'</a> element is not the <a>outermost svg element</a> this method
-          has no effect.</p>
-          <p>This method only affects animations defined using SVG's <a>animation
-          elements</a>.
-          It does not affect CSS Animations [<a href="refs.html#ref-CSS3ANIMATIONS">CSSANIMATIONS</a>], CSS Transitions [<a href="refs.html#ref-CSS3TRANSITIONS">CSS3TRANSITIONS</a>] or animations created
-          using script.</p>
-        </div>
-      </dd>
-      <dt id="__svg__SVGSVGElement__animationsPaused" class="operation">boolean <b>animationsPaused</b>()</dt>
-      <dd class="operation">
-        <div>Returns true if the timeline for the <a>current SVG document fragment</a> is in
-        a paused state.</div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>Boolean indicating whether the timeline for the <a>current SVG document
-            fragment</a> is in a paused state.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__getCurrentTime" class="operation">float <b>getCurrentTime</b>()</dt>
-      <dd class="operation">
-        <div>
-          <p>Returns the current time in seconds relative to the start time for the
-          timeline of the <a>current SVG document fragment</a>.
-          If <span class="dom-method-name">getCurrentTime</span> is called before
-          the <a>current SVG document fragment</a>'s timeline has begun, then 0 is
-          returned.</p>
-          <p>For example, if the <a>outermost SVG element</a> of an
-          <a>SVG document fragment</a> has a <a>'timelinebegin'</a> value of
-          <span class="attr-value">loadend</span>, any script running in a
-          <a>'script'</a> element that does not wait for the document fragment's
-          <a href="interact.html#LoadEvent">load</a> event to fire, will run
-          before the timeline begins and any calls to this method will return 0.</p>
-        </div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>The current time in seconds, or 0 if the <a>current SVG document
-            fragment</a> timeline has not yet started.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__setCurrentTime" class="operation">void <b>setCurrentTime</b>(float <var>seconds</var>)</dt>
-      <dd class="operation">
-        <div>
-          <p>Adjusts the clock for this <a>SVG document fragment</a>, establishing a new
-          current time.
+<p class="issue">This definition is inadequate and should be rewritten.
+Also, since the <a>DOMRectReadOnly</a> object is presumably live, there should
+be some wording that says whenever the viewport changes, the <a>DOMRectReadOnly</a>'s
+values are updated.</p>
 
-          If <span class="dom-method-name">setCurrentTime</span> is called
-          before the document timeline has begun,
-          the value of <var>seconds</var> in the last invocation of the method
-          gives the time that the document will seek to once the document timeline has
-          begun.</p>
-          <p>If this <a>'svg'</a> element is not the <a>outermost svg element</a> this method
-          has no effect.</p>
-        </div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div>float <var>seconds</var></div>
-                <div>The new current time in seconds relative to the start
-                time for this <a>SVG document fragment</a>.</div>
-              </li>
-            </ol>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__getIntersectionList" class="operation"><a>NodeList</a> <b>getIntersectionList</b>(<a>DOMRectReadOnly</a> <var>rect</var>, <a>SVGElement</a>? <var>referenceElement</var>)</dt>
-      <dd class="operation">
-        <div>Returns the list of graphics elements whose rendered content intersects
-        the supplied rectangle. Each candidate graphics element is to
-        be considered a match only if the same graphics element can be a
-        <a href="interact.html#PointerEventsProperty">target of pointer events</a>
-        as defined in <a>'pointer-events'</a> processing.
-          <p class="added-since-last-wd">Shadow tree elements must not be returned in the list, if such an element is matched then the corresponding <a>'use'</a> element is to be returned.</p>
-        </div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>DOMRectReadOnly</a> <var>rect</var></div>
-                <div>The test rectangle. The values are in the <a>initial coordinate
-                system</a> for the current <a>'svg'</a> element.</div>
-              </li>
-              <li class="parameter">
-                <div><a>SVGElement</a> <var>referenceElement</var></div>
-                <div>If not null, then any intersected element that
-                doesn't have the referenceElement as ancestor must not be included
-                in the returned NodeList.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>A list of Elements whose content intersects the supplied rectangle.
-            The <a>NodeList</a> that is returned is <a href="http://www.w3.org/TR/dom/#concept-collection-static">static</a> ([<a href="refs.html#ref-DOM4">DOM4</a>], section 5.2.7).</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__getEnclosureList" class="operation"><a>NodeList</a> <b>getEnclosureList</b>(<a>DOMRectReadOnly</a> <var>rect</var>, <a>SVGElement</a>? <var>referenceElement</var>)</dt>
-      <dd class="operation">
-        <div>Returns the list of graphics elements whose rendered content is entirely
-        contained within the supplied rectangle. Each candidate graphics element is to
-        be considered a match only if the same graphics element can be a
-        <a href="interact.html#PointerEventsProperty">target of pointer events</a>
-        as defined in <a>'pointer-events'</a> processing.
-          <p class="added-since-last-wd">Shadow tree elements must not be returned in the list, if such an element is matched then the corresponding <a>'use'</a> element is to be returned.</p>
-        </div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>DOMRectReadOnly</a> <var>rect</var></div>
-                <div>The test rectangle. The values are in the <a>initial coordinate
-                system</a> for the current <a>'svg'</a> element.</div>
-              </li>
-              <li class="parameter">
-                <div><a>SVGElement</a> <var>referenceElement</var></div>
-                <div>If not null, then any intersected element that
-                doesn't have the referenceElement as ancestor must not be included
-                in the returned NodeList.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>A list of Elements whose content is enclosed by the supplied rectangle.
-            The <a>NodeList</a> that is returned is <a href="http://www.w3.org/TR/dom/#concept-collection-static">static</a> ([<a href="refs.html#ref-DOM4">DOM4</a>], section 5.2.7).</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__checkIntersection" class="operation">boolean <b>checkIntersection</b>(<a>SVGElement</a> <var>element</var>, <a>DOMRectReadOnly</a> <var>rect</var>)</dt>
-      <dd class="operation">
-        <div>Returns true if the rendered content of the given element intersects the
-        supplied rectangle. Each candidate graphics element is to
-        be considered a match only if the same graphics element can be a
-        <a href="interact.html#PointerEventsProperty">target of pointer events</a>
-        as defined in <a>'pointer-events'</a> processing.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGElement</a> <var>element</var></div>
-                <div>The element on which to perform the given test.</div>
-              </li>
-              <li class="parameter">
-                <div><a>DOMRectReadOnly</a> <var>rect</var></div>
-                <div>The test rectangle. The values are in the <a>initial coordinate
-                system</a> for the current <a>'svg'</a> element.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>True or false, depending on whether the given element intersects
-            the supplied rectangle.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__checkEnclosure" class="operation">boolean <b>checkEnclosure</b>(<a>SVGElement</a> <var>element</var>, <a>DOMRectReadOnly</a> <var>rect</var>)</dt>
-      <dd class="operation">
-        <div>Returns true if the rendered content of the given element is entirely
-        contained within the supplied rectangle. Each candidate graphics element is to
-        be considered a match only if the same graphics element can be a
-        <a href="interact.html#PointerEventsProperty">target of pointer events</a>
-        as defined in <a>'pointer-events'</a> processing.</div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>SVGElement</a> <var>element</var></div>
-                <div>The element on which to perform the given test.</div>
-              </li>
-              <li class="parameter">
-                <div><a>DOMRectReadOnly</a> <var>rect</var></div>
-                <div>The test rectangle. The values are in the <a>initial coordinate
-                system</a> for the current <a>'svg'</a> element.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>True or false, depending on whether the given element is enclosed
-            by the supplied rectangle.</div>
-          </dd>
-        </dl>
-      </dd>
-    </dl>
-    <div class="ready-for-wider-review">
-    <dl class="attributes">
-      <dt id="__svg__SVGSVGElement__deselectAll" class="operation">void <b>deselectAll</b>()</dt>
-      <dd class="operation">
-        <div>
-          <p>Removes any selections from the document.  The effect of this method is
-          to remove all <a href="http://www.w3.org/TR/2014/WD-dom-20140204/#concept-range">ranges</a>
-          from the document's <a href="http://w3c.github.io/selection-api/#dfn-selection">selection</a>
-          and then to set the <a href="http://w3c.github.io/selection-api/#dfn-selection">selection</a>'s
-          <a href="http://w3c.github.io/selection-api/#dfn-direction">direction</a> to
-          forwards. [<a href="refs.html#ref-DOM4">DOM4</a>][<a href="refs.html#ref-EDITING">EDITING</a>]</p>
-          <p class="note">This is equivalent to calling <code>document.getSelection().removeAllRanges()</code>
-          on the document that this <a>'svg'</a> element is in.</p>
-          <p>This method is deprecated, as it duplicates functionality from the Selection API.</p>
-        </div>
-      </dd>
-    </dl>
-    </div>
-    <dl class="attributes">
-      <dt id="__svg__SVGSVGElement__createSVGNumber" class="operation"><a>SVGNumber</a> <b>createSVGNumber</b>()</dt>
-      <dd class="operation">
-        <div>Creates an <a>SVGNumber</a> object outside of any document trees. The
-        object is initialized to a value of zero.</div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>SVGNumber</a> object.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__createSVGLength" class="operation"><a>SVGLength</a> <b>createSVGLength</b>()</dt>
-      <dd class="operation">
-        <div>Creates an <a>SVGLength</a> object outside of any document trees. The
-        object is initialized to the value of 0 user units.</div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>SVGLength</a> object.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__createSVGAngle" class="operation"><a>SVGAngle</a> <b>createSVGAngle</b>()</dt>
-      <dd class="operation">
-        <div>Creates an <a>SVGAngle</a> object outside of any document trees. The
-        object is initialized to the value 0 degrees (unitless).</div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>SVGAngle</a> object.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__createSVGPoint" class="operation"><a>DOMPoint</a> <b>createSVGPoint</b>()</dt>
-      <dd class="operation">
-        <div>Creates an <a>DOMPoint</a> object outside of any document trees. The
-        object is initialized to the point (0,0) in the user coordinate system.
-        
-        <p>
-        This method is deprecated, and is only kept for compatibility with legacy content.
-        Authors are encouraged to use the <a>DOMPoint</a> constructors instead.
-        </p>
-        </div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>DOMPoint</a> object.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__createSVGMatrix" class="operation"><a>DOMMatrix</a> <b>createSVGMatrix</b>()</dt>
-      <dd class="operation">
-        <div>Creates an <a>DOMMatrix</a> object outside of any document trees. The
-        object is initialized to the identity matrix.
+<p>The <b id="__svg__SVGSVGElement__currentScale">currentScale</b> and
+<b id="__svg__SVGSVGElement__currentTranslate">currentTranslate</b> IDL
+attributes represent the transform applied to the document in
+response to user magnification and panning operations, as described under
+<a href="interact.html#ZoomAndPanAttribute">Magnification and panning</a>.</p>
 
-        <p>
-        This method is deprecated, and is only kept for compatibility with legacy content.
-        Authors are encouraged to use the <a>DOMMatrix</a> constructors instead.
-        </p>
-        </div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>DOMMatrix</a> object.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__createSVGRect" class="operation"><a>DOMRect</a> <b>createSVGRect</b>()</dt>
-      <dd class="operation">
-        <div>Creates an <a>DOMRect</a> object outside of any document trees. The
-        object is initialized such that all values are set to 0 user units.
-        
-        <p>
-        This method is deprecated, and is only kept for compatibility with legacy content.
-        Authors are encouraged to use the <a>DOMRect</a> constructors instead.
-        </p>
-        </div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>DOMRect</a> object.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__createSVGTransform" class="operation"><a>SVGTransform</a> <b>createSVGTransform</b>()</dt>
-      <dd class="operation">
-        <div>Creates an <a>SVGTransform</a> object outside of any document trees. The
-        object is initialized to an identity matrix transform
-        (SVG_TRANSFORM_MATRIX).</div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>SVGTransform</a> object.</div>
-          </dd>
-        </dl>
-      </dd>
-      <dt id="__svg__SVGSVGElement__createSVGTransformFromMatrix" class="operation"><a>SVGTransform</a> <b>createSVGTransformFromMatrix</b>(<a>DOMMatrixReadOnly</a> <var>matrix</var>)</dt>
-      <dd class="operation">
-        <div>
-          <p xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">Creates an <a>SVGTransform</a> object outside of any document trees. The
-          object is initialized to the given matrix transform (i.e.,
-          SVG_TRANSFORM_MATRIX).  The values from the parameter <var>matrix</var>
-          are copied, the <var>matrix</var> parameter is not adopted as
-          <a edit:format="expanded">SVGTransform::matrix</a>.</p>
-        </div>
-        <dl class="operation">
-          <dt class="parameters-header">Parameters</dt>
-          <dd>
-            <ol class="parameters">
-              <li class="parameter first-child">
-                <div><a>DOMMatrixReadOnly</a> <var>matrix</var></div>
-                <div>The transform matrix.</div>
-              </li>
-            </ol>
-          </dd>
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>SVGTransform</a> object.</div>
-          </dd>
-        </dl>
-      </dd>
+<p class="note">The document's magnification and panning
+transform is a 2x3 matrix of the form
+[currentScale 0 0 currentScale currentTranslate.x currentTranslate.y].
+The value of the <a>'transform'</a> property does not affect
+<a href="#__svg__SVGSVGElement__currentScale">currentScale</a> or
+<a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>.</p>
+
+<p>On getting <a href="#__svg__SVGSVGElement__currentScale">currentScale</a>,
+the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the current <a>'svg'</a> element is not the <a>outermost svg element</a>,
+  then return 1.</li>
+  <li>Let [<var>a</var> <var>b</var> <var>c</var> <var>d</var> <var>e</var> <var>f</var>]
+  be the 2x3 matrix that represents the document's magnification and panning
+  transform.</li>
+  <li>Return <var>a</var>.</li>
+</ol>
+
+<p>On setting <a href="#__svg__SVGSVGElement__currentScale">currentScale</a>,
+the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the current <a>'svg'</a> element is not the <a>outermost svg element</a>,
+  then return.</li>
+  <li>Let <var>scale</var> be the value being assigned to
+  <a href="#__svg__SVGSVGElement__currentScale">currentScale</a>.</li>
+  <li>Let [<var>a</var> <var>b</var> <var>c</var> <var>d</var> <var>e</var> <var>f</var>]
+  be the 2x3 matrix that represents the document's magnification and panning
+  transform.</li>
+  <li>Set the document's magnification and panning transform to
+  [<var>scale</var> 0 0 <var>scale</var> <var>e</var> <var>f</var>].</li>
+</ol>
+
+<p>On getting <a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>,
+the <a>SVGSVGElement</a> object's <a href="#CurrentTranslatePointObject">current
+translate point object</a> is returned.  This object
+<a href="shapes.html#PointMode">represents the current translation</a>
+for the <a>'svg'</a> element.  A <a href="#CurrentTranslatePointObject">current
+translate point object</a> must be <a href="shapes.html#ReadOnlyPoint">read only</a>
+when its <a>'svg'</a> element is not the <a>outermost svg element</a>,
+and writable otherwise.</p>
+
+<p class="note">See the rules for <a href="shapes.html#AssignToDOMPoint">assigning to a DOMPoint</a>
+for how modifying the <a href="#CurrentTranslatePointObject">current
+translate point object</a> affects the document's magnification and panning transform.</p>
+
+<p>Whenever the document's magnification and panning transform changes
+in response to user interaction or whenever the <a>outermost svg element</a>
+changes, the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>Let [<var>a</var> <var>b</var> <var>c</var> <var>d</var> <var>e</var> <var>f</var>]
+  be the 2x3 matrix that represents the document's magnification and panning
+  transform.</li>
+  <li>Let <var>element</var> be the <a>outermost svg element</a>.</li>
+  <li>Update the x and y components of <var>element</var>'s 
+  <a href="CurrentTranslatePointObject">current translate point object</a>
+  to <var>e</var> and <var>f</var>, respectively.</li>
+</ol>
+
+<p class="note">Running these steps when the <a>outermost svg element</a>
+changes will ensure that if the document element is replaced with a different
+<a>'svg'</a> element, that its <a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>
+will be immediately updated to reflect the translation component of
+the document's magnification and panning transform.</p>
+
+<p>Whenver an <a>'svg'</a> element is no longer <a>outermost svg element</a>,
+the x and y components of its <a href="CurrentTranslatePointObject">current
+translate point object</a> must be set to 0.</p>
+
+<p class="note">Note that the value of the <a>'zoomAndPan'</a> attribute
+on the <a>outermost svg element</a> only controls whether the document's
+magnification and panning transform can be updated through user interaction.
+Regardless of the value of that attribute, the current scale and translation
+can be changed by modifying <a href="#__svg__SVGSVGElement__currentScale">currentScale</a>
+and <a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>.</p>
+
+<p>The <b id="__svg__SVGSVGElement__suspendRedraw">suspendRedraw</b>,
+<b id="__svg__SVGSVGElement__unsuspendRedraw">unsuspendRedraw</b>,
+<b id="__svg__SVGSVGElement__unsuspendRedrawAll">unsuspendRedrawAll</b>
+and <b id="__svg__SVGSVGElement__forceRedraw">forceRedraw</b>
+methods are all deprecated and defined to have no effect.  When
+the suspendRedraw method is called, it must return 1.</p>
+
+<p>The <b id="__svg__SVGSVGElement__pauseAnimations">pauseAnimations</b>
+and <b id="__svg__SVGSVGElement__unpauseAnimations">unpauseAnimations</b>
+methods are used to pause and unpause all of the animations within
+the <a>SVG document fragment</a>.</p>
+
+<p>When pauseAnimations() is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the current <a>'svg'</a> element is not the <a>outermost svg element</a>,
+  then return.</li>
+  <li>Pause the timeline that controls SVG animations for the <a>SVG document fragment</a> that
+  the <a>'svg'</a> element is in.</li>
+</ol>
+
+<p>When unpauseAnimations() is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the current <a>'svg'</a> element is not the <a>outermost svg element</a>,
+  then return.</li>
+  <li>Unpause the timeline that controls SVG animations for the <a>SVG document fragment</a> that
+  the <a>'svg'</a> element is in.</li>
+</ol>
+
+<p class="note">The <a href="#__svg__SVGSVGElement__pauseAnimations">pauseAnimations</a>
+and <a href="#__svg__SVGSVGElement__unpauseAnimations">unpauseAnimations</a>
+methods only affect animations defined using SVG's <a>animation elements</a>.
+They have no effect on CSS Transitions or Animations
+[<a href="refs.html#ref-CSS3ANIMATIONS">CSS3ANIMATIONS</a>][<a href="refs.html#ref-CSS3TRANSITIONS">CSS3TRANSITIONS</a>]
+or animations created using script.</p>
+
+<p>The <b id="__svg__SVGSVGElement__animationsPaused">animationsPaused</b>
+method returns whether SVG animation timeline has been paused.
+When animationsPaused() is called, true is returned if the timeline that
+controls SVG animations for the <a>SVG document fragment</a> that the
+<a>'svg'</a> element in has been paused by
+<a href="#__svg__SVGSVGElement__pauseAnimations">pauseAnimations</a>;
+otherwise, false is returned.</p>
+
+<p>The <b id="__svg__SVGSVGElement__getCurrentTime">getCurrentTime</b> and
+<b id="__svg__SVGSVGElement__setCurrentTime">setCurrentTime</b> methods
+are used to get and set the current time of the timeline that controls
+SVG animations.  When getCurrentTime() is called, the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the timeline for the <a>current SVG document fragment</a> has not yet begun,
+  then return 0.
+    <p class='note'>This is the case, for example, if the <a>outermost svg element</a>
+    has its <a>'timelinebegin'</a> attribute set to <span class='attr-value'>'loadend'</span>
+    and the load event has not yet fired.</p>
+  </li>
+  <li>Otherwise, the timeline for the <a>current SVG document fragment</a> has begun.
+  Return the current time in seconds relative to the start time of the timeline.</li>
+</ol>
+
+<p>When setCurrentTime(<var>seconds</var>) is called, the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the current <a>'svg'</a> element is not the <a>outermost svg element</a>,
+  then return.</li>
+  <li>If the timeline for the <a>current SVG document fragment</a> has begun, then
+  the timeline's current time (in seconds, relative to the start time of the
+  timeline) is set to <var>seconds</var>.</li>
+  <li>Otherwise, the timeline has not begun.  <var>seconds</var> is recorded on
+  the <a>current SVG document fragment</a> as the time to be seeked to
+  once the timeline has begun.  If multiple calls to
+  <a href="#__svg__SVGSVGElement__setCurrentTime">setCurrentTime</a> are made
+  before the timeline has begun, the most recent call's time will be used to
+  seek the timeline once it begins.</li>
+</ol>
+
+<p>The <b id="__svg__SVGSVGElement__getIntersectionList">getIntersectionList</b>,
+<b id="__svg__SVGSVGElement__getEnclosureList">getEnclosureList</b>,
+<b id="__svg__SVGSVGElement__checkIntersection">checkIntersection</b> and
+<b id="__svg__SVGSVGElement__checkEnclosure">checkEnclosure</b> methods are
+used to perform geometry operations on <a>graphics elements</a> to find
+those whose (or check whether their) graphical content lies partially or
+completely within a given rectangle.</p>
+
+<p>To <dfn id="TermFindIntersectingOrEnclosedDescendants">find the intersecting
+or enclosed descendants</dfn> of a given element <var>element</var>
+with a given rectangle <var>rectangle</var> using <var>ancestor</var>
+as the element in whose coordinate space <var>rectangle</var> is
+to be interpreted, the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>Let <var>result</var> be an initially empty list.</li>
+  <li>If <var>element</var> is not displayed, due to having a <a>'display'</a> value
+  of <span class='prop-value'>none</span> or being in a subtree that has
+  failing <a>conditional processing attributes</a> or a failing branch
+  of a <a>'switch'</a>, then return <var>result</var>.</li>
+  <li>For each child element <var>child</var> of <var>element</var>, in document order:
+    <ol>
+      <li>If <var>child</var> is an <a>'svg'</a> or <a>'g'</a> element, then:
+        <ol>
+          <li>Let <var>descendants</var> be the result of
+          <a href="#TermFindIntersectingOrEnclosedDescendants">finding the
+          intersecting (or enclosed) descendants</a> of <var>child</var> with
+          <var>rectangle</var> in <var>ancestor</var>'s coordinate space.</li>
+          <li>Append to <var>result</var> all the elements of <var>descendants</var>.</li>
+        </ol>
+      </li>
+      <li>Otherwise, if <var>child</var> is a <a>'use'</a> element, then:
+        <ol>
+          <li>Let <var>root</var> be the root of the <var>child</var>'s shadow tree.</li>
+          <li>Let <var>descendants</var> be the result of
+          <a href="#TermFindIntersectingOrEnclosedDescendants">finding the
+          intersecting (or enclosed) descendants</a> of <var>child</var> with
+          <var>rectangle</var> in <var>ancestor</var>'s coordinate space.</li>
+          <li>If <var>descendants</var> is not empty, then append <var>child</var>
+          to <var>result</var>.
+            <p class="note">This means that although we look at the specific
+            content referenced by the <a>'use'</a> element, we don't place the
+            referencing content in the <var>result</var> list; only the <a>'use'</a>
+            element itself is returned.</p>
+          </li>
+        </ol>
+      </li>
+      <li>Otherwise, if <var>child</var> is a <a>graphics element</a>, then:
+        <ol>
+          <li>Let <var>region</var> be the shape in <var>child</var>'s coordinate
+          system that is sensitive to hit detection, taking into account the
+          rules for interpreting <var>child</var>'s <a>'pointer-events'</a> value.</li>
+          <li>Transform <var>region</var> into <var>ancestor</var>'s coordinate system.</li>
+          <li>If we are finding intersecting descendants and <var>region</var> lies partially
+          or fully within <var>rectangle</var>, then append <var>child</var> to <var>result</var>.</li>
+          <li>Otherwise, we are finding enclosed descendants.  If <var>region</var> lies
+          fully within <var>rectangle</var>, then append <var>child</var> to <var>result</var>.</li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+  <li>Return <var>result</var>.</li>
+</ol>
+
+<p>To <dfn id="TermFindNonContainerGraphicsElements">find the non-container
+graphics elements</dfn> within a given element <var>element</var>, the following
+steps are run:</p>
+
+<ol class='algorithm'>
+  <li>Let <var>result</var> be an initially empty list.</li>
+  <li>If <var>element</var> is an <a>'svg'</a> or <a>'g'</a> element,
+  then for each child element <var>child</var> of <var>element</var>,
+  in document order:
+    <ol>
+      <li>Let <var>descendants</var> be the result of
+      <a href="#TermFindNonContainerGraphicsElements">finding the non-container
+      graphics elements</a> within <var>child</var>.</li>
+      <li>Append to <var>result</var> all the elements of <var>descendants</var>.</li>
+    </ol>
+  </li>
+  <li>Otherwise, if <var>element</var> is a <a>graphics element</a> then
+  append <var>element</var> to <var>result</var>.</li>
+  <li>Return <var>result</var>.</li>
+</ol>
+
+<p>When getIntersectionList(<var>rect</var>, <var>referenceElement</var>) or
+getEnclosureList(<var>rect</var>, <var>referenceElement</var>) is called,
+the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>Let <var>descendants</var> be a list, depending on what method we are in:
+    <dl class='switch'>
+      <dt><a href="#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a></dt>
+      <dd><var>descendants</var> is the result of 
+      <a href="#TermFindIntersectingOrEnclosedDescendants">finding the intersecting descendants</a>
+      of the current <a>'svg'</a> element with rectangle <var>rect</var>
+      in the current <a>'svg'</a> element's coordinate system.</dd>
+      <dt><a href="#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a></dt>
+      <dd><var>descendants</var> is the result of 
+      <a href="#TermFindIntersectingOrEnclosedDescendants">finding the enclosed descendants</a>
+      of the current <a>'svg'</a> element with rectangle <var>rect</var>
+      in the current <a>'svg'</a> element's coordinate system.</dd>
     </dl>
-  </dd>
-</dl>
+  </li>
+  <li>If <var>referenceElement</var> is not null, then remove from
+  <var>descendants</var> any element that does not have <var>referenceElement</var>
+  as an ancestor.</li>
+  <li>Return a <a href="http://www.w3.org/TR/dom/#concept-collection-static">static</a>
+  <a>NodeList</a> that contains all of the elements in <var>descendants</var>.
+  ([<a href="refs.html#ref-DOM4">DOM4</a>], section 5.2.7)</li>
+</ol>
+
+<p>When checkIntersection(<var>element</var>, <var>rect</var>) or
+checkEnclosure(<var>element</var>, <var>rect</var>) is called,
+the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>Let <var>descendants</var> be a list, depending on what method we are in:
+    <dl class='switch'>
+      <dt><a href="#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a></dt>
+      <dd><var>descendants</var> is the result of 
+      <a href="#TermFindIntersectingOrEnclosedDescendants">finding the intersecting descendants</a>
+      of the current <a>'svg'</a> element with rectangle <var>rect</var>
+      in the current <a>'svg'</a> element's coordinate system.</dd>
+      <dt><a href="#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a></dt>
+      <dd><var>descendants</var> is the result of 
+      <a href="#TermFindIntersectingOrEnclosedDescendants">finding the enclosed descendants</a>
+      of the current <a>'svg'</a> element with rectangle <var>rect</var>
+      in the current <a>'svg'</a> element's coordinate system.</dd>
+    </dl>
+  </li>
+  <li>Let <var>elements</var> be the result of
+  <a href="#TermFindNonContainerGraphicsElements">finding the non-container
+  graphics elements</a> within <var>element</var>.</li>
+  <li>If <var>elements</var> is empty, then return false.</li>
+  <li>If any element in <var>elements</var> is not also in <var>descendants</var>,
+  then return false.</li>
+  <li>Return true.</li>
+</ol>
+
+<div class='ready-for-wider-review'>
+<p>The <b id="__svg__SVGSVGElement__deselectAll">deselectAll</b> method is
+used to remove any selections from the document.  When deselectAll() is called,
+all <a href="http://www.w3.org/TR/2014/WD-dom-20140204/#concept-range">ranges</a>
+from the document's <a href="http://w3c.github.io/selection-api/#dfn-selection">selection</a>
+are removed and the <a href="http://w3c.github.io/selection-api/#dfn-selection">selection</a>'s
+<a href="http://w3c.github.io/selection-api/#dfn-direction">direction</a> is set to
+forwards. [<a href="refs.html#ref-DOM4">DOM4</a>][<a href="refs.html#ref-EDITING">EDITING</a>]
+This method is deprecated, as it duplicates functionality from the Selection API.</p>
+
+<p class="note">This is equivalent to calling <code>document.getSelection().removeAllRanges()</code>
+on the document that this <a>'svg'</a> element is in.</p>
+</div>
+
+<p>The
+<b id="__svg__SVGSVGElement__createSVGNumber">createSVGNumber</b>,
+<b id="__svg__SVGSVGElement__createSVGLength">createSVGLength</b>,
+<b id="__svg__SVGSVGElement__createSVGAngle">createSVGAngle</b>,
+<b id="__svg__SVGSVGElement__createSVGPoint">createSVGPoint</b>,
+<b id="__svg__SVGSVGElement__createSVGMatrix">createSVGMatrix</b>,
+<b id="__svg__SVGSVGElement__createSVGRect">createSVGRect</b> and
+<b id="__svg__SVGSVGElement__createSVGTransform">createSVGTransform</b>
+methods are all factory functions used to create a new datatype object
+of a particular type.  When one of these methods is called, a new
+object is returned according to the following table:</p>
+
+<table class='vert'>
+  <tr><th>Method</th><th>Object and details</th></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGNumber">createSVGNumber</a></td><td>A new, <a href="types.html#NumberMode">detached</a> <a>SVGNumber</a> object whose value is 0.</td></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGLength">createSVGLength</a></td><td>A new, <a href="types.html#LengthMode">detached</a> <a>SVGLength</a> object whose value is the unitless <a>&lt;number&gt;</a> 0.</td></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGAngle">createSVGAngle</a></td><td>A new, <a href="types.html#AngleMode">detached</a> <a>SVGAngle</a> object whose value is the unitless <a>&lt;number&gt;</a> 0.</td></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGPoint">createSVGPoint</a></td><td>A new, <a href="shapes.html#PointMode">detached</a> <a>DOMPoint</a> object whose coordinates are all 0.</td></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGMatrix">createSVGMatrix</a></td><td>A new, <a href="coords.html#MatrixMode">detached</a> <a>DOMMatrix</a> object representing the identity matrix.</td></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGRect">createSVGRect</a></td><td>A new, <a>DOMRect</a> object whose x, y, width and height are all 0.</td></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGTransform">createSVGTransform</a></td><td>A new, <a href="coords.html#TransformMode">detached</a> <a>SVGTransform</a> object whose value is <span class='prop-value'>matrix(1, 0, 0, 1, 0, 0)</span>.</td></tr>
+</table>
+
+<p>The <a href="#__svg__SVGSVGElement__createSVGPoint">createSVGPoint</a>,
+<a href="#__svg__SVGSVGElement__createSVGMatrix">createSVGMatrix</a> and
+<a href="#__svg__SVGSVGElement__createSVGRect">createSVGRect</a> methods
+are all deprecated and kept only for compatibility with legacy content.
+Authors are encouraged to use the <a>DOMPoint</a>, <a>DOMMatrix</a> and
+<a>DOMRect</a> constructors instead.</p>
+
+<p>The <b id="__svg__SVGSVGElement__createSVGTransformFromMatrix">createSVGTransformFromMatrix</b>
+method is used to create a new <a>SVGTransform</a> object from a matrix object.
+Its behavior is the same as the
+<a href="coords.html#__svg__SVGTransformList__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>
+method on <a>SVGTransformList</a>.</p>
 
 </edit:with>
+</div>
+
 
 <h3 id="InterfaceSVGGElement">Interface SVGGElement</h3>
 
