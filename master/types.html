@@ -300,27 +300,41 @@ using the element's local coordinate system as the coordinate system to return t
 bounding box in.  A newly created <a>DOMRect</a> object that defines the
 computed bounding box is returned.</p>
 
+<p>The <b id="__svg__SVGGraphicsElement__getCTM">getCTM</b> method is used to
+get the matrix that transforms the current element's coordinate system to
+its viewport's coordinate system.  When getCTM() is called, the following
+steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the current element is not in the document, then return null.</li>
+  <li>Let <var>ctm</var> be a matrix determined based on what the
+  current element is:
+    <dl class='switch'>
+      <dt>the current element is the <a>outermost svg element</a></dt>
+      <dd><var>ctm</var> is a matrix that transforms the coordinate
+      space of the <a>'svg'</a> (including its <a>'transform'</a> property)
+      to the coordinate space of the viewport.  The matrix includes the
+      transforms produced by the <a>'viewBox'</a> and <a>'preserveAspectRatio'</a>
+      attributes, the <a>'transform'</a> property, and any transform
+      due to <a href="struct.html#__svg__SVGSVGElement__currentScale">currentScale</a>
+      and <a href="struct.html#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>
+      properties on the <a>SVGSVGElement</a>.</dd>
+      <dt>any other element</dt>
+      <dd><var>ctm</var> is a matrix that transforms the coordinate
+      space of the current element (including its <a>'transform'</a>
+      property) to the coordinate space of it closest ancestor
+      viewport-establishing element (also including its <a>'transform'</a>
+      property).</dd>
+    </dl>
+  </li>
+  <li>Return a newly created, <a href="coords.html#MatrixMode">detached</a>
+  <a>DOMMatrix</a> object that represents the same matrix as <var>ctm</var>.</li>
+</ol>
+
 <dl class="interface">
   <dt class="operations-header">Operations:</dt>
   <dd>
     <dl class="attributes">
-      <dt id="__svg__SVGGraphicsElement__getCTM" class="operation"><a>DOMMatrix</a>? <b>getCTM</b>()</dt>
-      <dd class="operation">
-        <div>Returns the transformation matrix from current user units (i.e., after
-        application of the <a>'transform'</a> property) to the viewport
-        coordinate system for the nearest viewport element (<a>CTM</a>). Note that null
-        is returned if this element is not hooked into the document tree.
-          <p class="issue" data-issue="13">What is the expected result if you call getCTM on an <a>'svg'</a> element?
-          See <a href="https://lists.w3.org/Archives/Public/www-svg/2013May/0047.html">thread</a>. Also see <a href="http://jsfiddle.net/05tz2zur/">example</a>.
-          (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3724">ACTION-3724</a> on Dirk.)</p>
-        </div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>DOMMatrix</a> object that defines the <a>CTM</a>.</div>
-          </dd>
-        </dl>
-      </dd>
       <dt id="__svg__SVGGraphicsElement__getScreenCTM" class="operation"><a>DOMMatrix</a>? <b>getScreenCTM</b>()</dt>
       <dd class="operation">
         <div>Returns the transformation matrix from current user units (i.e., after
