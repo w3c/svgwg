@@ -520,7 +520,7 @@ described, an <a>SVGLength</a> object is not associated with any element and
 has unspecified directionality.</p>
 
 <p id='LengthMode'>Every <a>SVGLength</a> object operates in one of
-five modes.  It can:</p>
+seven modes.  It can:</p>
 
 <ol>
   <li><em>reflect the base value</em> of a <a>reflected</a> animatable attribute
@@ -529,6 +529,10 @@ five modes.  It can:</p>
   <li><em>reflect the animated value</em> of a <a>reflected</a> animatable attribute
   (being exposed through the <a href="types.html#__svg__SVGAnimatedLength__animVal">animVal</a>
   member of an <a>SVGAnimatedLength</a>),</li>
+  <li><em>reflect a presentation attribute value</em>
+  (such as by <a href="shapes.html#__svg__SVGRectElement__width">SVGRectElement.width.baseVal</a>),</li>
+  <li><em>reflect the computed value of a CSS property</em>
+  (such as by <a href="shapes.html#__svg__SVGRectElement__width">SVGRectElement.width.animVal</a>),</li>
   <li><em>reflect an element of the base value</em> of a <a>reflected</a> animatable
   attribute (being exposed through the methods on the
   <a href="types.html#__svg__SVGAnimatedLengthList__baseVal">baseVal</a> member of
@@ -670,7 +674,8 @@ are run:</p>
   <li>Set the <a>SVGLength</a>'s <a href='#LengthValue'>value</a> to a
   <a>&lt;number&gt;</a> whose value is <var>value</var>.</li>
   <li>If the <a>SVGLength</a>
-  <a href='#LengthMode'>reflects the base value</a> of a <a>reflected</a> attribute or
+  <a href='#LengthMode'>reflects the base value</a> of a <a>reflected</a> attribute,
+  <a href='#LengthMode'>reflects a presentation attribute</a>, or
   <a href='#LengthMode'>reflects an element of the base value</a> of a <a>reflected</a> attribute,
   then <a>reserialize</a> the reflected attribute.
     <p class='note'>The <a>SVGLength</a> can't reflect (an element of) the
@@ -1239,18 +1244,9 @@ property).</p>
 <em>read only</em>, which means that attempts to modify the object will result
 in an exception being thrown, as described below.</p>
 
-<p>Whenever:</p>
-
-<ul>
-  <li>for <a>SVGTransformList</a> objects that reflect the computed
-  value of the <a>'transform'</a> property, the computed value of
-  that property changes, or</li>
-  <li>for all other <a>list interface</a> objects, the reflected
-  content attribute or its animated value changes,</li>
-</ul>
-
-<p>the <a>list interface</a> object must be synchronized by
-running the following steps right after the change:</p>
+<p id="ListSynchronize">A <a>list interface</a> object
+is <dfn id="TermSynchronizeList">synchronized</dfn> by running
+the following steps:</p>
 
 <ol class='algorithm'>
   <li>Let <var>value</var> be a value determined as follows:
@@ -1621,11 +1617,9 @@ represents a list of lengths.</p>
 <p>The behavior of all of the interface members of <a>SVGLengthList</a> are
 defined in the <a href="#ListInterfaces">List interfaces</a> section above.</p>
 
-</div>
 
 <h2 id="DOMInterfacesForReflectingSVGAttributes">DOM interfaces for reflecting SVG attributes</h2>
 
-<div class="ready-for-wg-review">
 <p>Some IDL attributes <dfn id="TermReflect">reflect</dfn> the value of a content attribute
 or a property.  The way this reflection is done depends on the type of the IDL attribute:</p>
 
@@ -1644,11 +1638,54 @@ or a property.  The way this reflection is done depends on the type of the IDL a
   <a>SVGAnimatedNumberList</a>, <a>SVGAnimatedLength</a>, <a>SVGAnimatedLengthList</a>,
   <a>SVGAnimatedAngle</a>, <a>SVGAnimatedRect</a> or <a>SVGAnimatedPreserveAspectRatio</a>,
   then the rules in the corresponding
-  section defining the reflecting interface are used.  At a high level, the object's
+  section defining the reflecting interface are used.
+  <p class='note'>At a high level, the object's
   baseVal is used to reflect the value of the content attribute, while its animVal is used
-  to reflect the current animated value of the attribute.</li>
+  to reflect the current animated value of the attribute.
+  For objects that reflect a CSS property, the baseVal is used
+  to reflect the presentation attribute, and its animVal
+  is used to reflect the computed value of the property.</p>
+  </li>
 </ul>
-</div>
+
+<p>Whenever:</p>
+
+<ul>
+  <li>a reflected content attribute's base value changes,</li>
+  <li>a reflected content attribute's animated value changes, or</li>
+  <li>a reflected CSS property computed value changes,</li>
+</ul>
+
+<p>then the reflecting object must be <dfn id="TermSynchronize">synchronized</dfn>,
+immediately after the value changed, by running the following steps:</p>
+
+<ol class='algorithm'>
+  <li>If the reflecting object is a <a>list interface</a> object,
+  then run the steps for <a href='#TermSynchronizeList'>synchronizing
+  a list interface object</a>.</li>
+  <li>Otherwise:
+    <ol>
+      <li>Let <var>value</var> be a value determined as follows:
+        <ul>
+          <li>If the object reflects the computed value of a CSS
+          property, then <var>value</var> is the current computed
+          value of that property.</li>
+          <li>Otherwise, if the object reflects the
+          animated value of an attribute, and that attribute is
+          currently being animated, then <var>value</var> is its
+          current animated value.</li>
+          <li>Otherwise, <var>value</var> is the base value of the
+          reflected content attribute (using the attribute's <a>initial value</a>
+          if it is not present or invalid).</li>
+        </ul>
+      </li>
+      <li>Update the object's value to <var>value</var>.
+        <p class='note'>This will, for example, update the <a href="#LengthValue">value</a>
+        of an <a>SVGLength</a> object.</p>
+      </li>
+    </ol>
+  </li>
+</ol>
 
 <p>When a <a>reflected</a> content attribute is to be
 <dfn id="TermReserialize">reserialized</dfn>, optionally using a
@@ -1796,7 +1833,7 @@ specific value, the following steps must be performed:</p>
   </li>
 </ol>
 
-<div class="ready-for-wg-review">
+
 <h3 id="InterfaceSVGAnimatedBoolean">Interface SVGAnimatedBoolean</h3>
 
 <p>An <a>SVGAnimatedBoolean</a> object is used to <a>reflect</a> an
@@ -2155,15 +2192,11 @@ following steps are run:</p>
 </div>
 -->
 
-<p>An <a>SVGAnimatedLength</a> object is used to <a>reflect</a> an
-animatable attribute that takes a <a>&lt;length&gt;</a> or
-<a>&lt;percentage&gt;</a> value.</p>
-
-<p class="issue" data-issue="25">An <a>SVGAnimatedLength</a> also needs to be able
-to reflect a presentation attribute and computed property value
-(like <a>SVGAnimatedTransformList</a>),
-which is needed for, for example, <a>'x'</a>, <a>'y'</a>,
-<a>'width'</a> and <a>'height'</a> on <a>'svg'</a>.</p>
+<p>An <a>SVGAnimatedLength</a> object is used to <a>reflect</a> either
+(a) an animatable attribute that takes a <a>&lt;length&gt;</a>,
+<a>&lt;percentage&gt;</a> or <a>&lt;number&gt;</a> value, or (b) the computed value of a
+CSS property that takes one of these values and its corresponding
+presentation attribute.</p>
 
 <pre class="idl">interface <b>SVGAnimatedLength</b> {
   [SameObject] readonly attribute <a>SVGLength</a> <a href="types.html#__svg__SVGAnimatedLength__baseVal">baseVal</a>;
@@ -2171,13 +2204,14 @@ which is needed for, for example, <a>'x'</a>, <a>'y'</a>,
 };</pre>
 
 <p>The <b id="__svg__SVGAnimatedLength__baseVal">baseVal</b> IDL attribute
-represents the current non-animated value of the reflected attribute.
+represents the current value of the reflected content attribute.
 On getting <a href="#__svg__SVGAnimatedLength__baseVal">baseVal</a>,
 an <a>SVGLength</a> object is returned that:</p>
 
 <ul>
-  <li><a href='#LengthMode'>reflects the base value</a> of the
-  reflected attribute,</li>
+  <li>either <a href='#LengthMode'>reflects the base value</a> of the
+  reflected attribute or <a href='#LengthMode'>reflects the
+  given presentation attribute</a>,</li>
   <li>is <a href='#LengthAssociatedElement'>associated with</a> the SVG element that
   the object with the reflecting IDL attribute of type <a>SVGAnimatedLength</a>
   was obtained from, and</li>
@@ -2186,13 +2220,15 @@ an <a>SVGLength</a> object is returned that:</p>
 </ul>
 
 <p>The <b id="__svg__SVGAnimatedLength__animVal">animVal</b> IDL attribute
-represents the current animated value of the reflected attribute.
+represents the current animated value of the reflected attribute or
+the computed value of the reflected property.
 On getting <a href="#__svg__SVGAnimatedLength__animVal">animVal</a>,
 an <a>SVGLength</a> object is returned that:</p>
 
 <ul>
   <li><a href='#LengthMode'>reflects the animated value</a> of the
-  reflected attribute,</li>
+  reflected attribute or <a href='#LengthMode'>reflects the computed value
+  of the given CSS property</a></li>
   <li>is <a href='#LengthAssociatedElement'>associated with</a> the SVG element that
   the object with the reflecting IDL attribute of type <a>SVGAnimatedLength</a>
   was obtained from, and</li>
@@ -2436,8 +2472,8 @@ if there is no animation currently affecting the attribute.</p>
 <h3 id="InterfaceSVGAnimatedLengthList">Interface SVGAnimatedLengthList</h3>
 
 <p>An <a>SVGAnimatedLengthList</a> object is used to <a>reflect</a> an animatable
-attribute that takes a list of <a>&lt;length&gt;</a> or <a>&lt;percentage&gt;</a>
-values.</p>
+attribute that takes a list of <a>&lt;length&gt;</a>, <a>&lt;percentage&gt;</a>
+or <a>&lt;number&gt;</a> values.</p>
 
 <pre class="idl">interface <b>SVGAnimatedLengthList</b> {
   [SameObject] readonly attribute <a>SVGLengthList</a> <a href="types.html#__svg__SVGAnimatedLengthList__baseVal">baseVal</a>;
@@ -2484,13 +2520,11 @@ represents a list of strings.</p>
 
 <p>The behavior of all of the interface members of <a>SVGStringList</a> are
 defined in the <a href="#ListInterfaces">List interfaces</a> section above.</p>
-</div>
 
 
 <h2 id="OtherDOMInterfaces">Other DOM interfaces</h2>
 
 
-<div class='ready-for-wg-review'>
 <h3 id="InterfaceSVGUnitTypes">Interface SVGUnitTypes</h3>
 
 <p>The <a>SVGUnitTypes</a> interface defines a commonly used set of constants
