@@ -247,7 +247,6 @@ other technique to hide the focus ring from keyboard users, such as
 using a CSS rule to override the <a>'outline'</a> property.
 Removal of the focus ring leads to serious accessibility issues for users who
 navigate and interact with interactive content using the keyboard.</p>
-</div>
 
 
 <h3 id="InterfaceSVGGraphicsElement">Interface SVGGraphicsElement</h3>
@@ -313,7 +312,7 @@ steps are run:</p>
       <dt>the current element is the <a>outermost svg element</a></dt>
       <dd><var>ctm</var> is a matrix that transforms the coordinate
       space of the <a>'svg'</a> (including its <a>'transform'</a> property)
-      to the coordinate space of the viewport.  The matrix includes the
+      to the coordinate space of the document's viewport.  The matrix includes the
       transforms produced by the <a>'viewBox'</a> and <a>'preserveAspectRatio'</a>
       attributes, the <a>'transform'</a> property, and any transform
       due to <a href="struct.html#__svg__SVGSVGElement__currentScale">currentScale</a>
@@ -322,7 +321,7 @@ steps are run:</p>
       <dt>any other element</dt>
       <dd><var>ctm</var> is a matrix that transforms the coordinate
       space of the current element (including its <a>'transform'</a>
-      property) to the coordinate space of it closest ancestor
+      property) to the coordinate space of its closest ancestor
       viewport-establishing element (also including its <a>'transform'</a>
       property).</dd>
     </dl>
@@ -331,37 +330,41 @@ steps are run:</p>
   <a>DOMMatrix</a> object that represents the same matrix as <var>ctm</var>.</li>
 </ol>
 
-<dl class="interface">
-  <dt class="operations-header">Operations:</dt>
-  <dd>
-    <dl class="attributes">
-      <dt id="__svg__SVGGraphicsElement__getScreenCTM" class="operation"><a>DOMMatrix</a>? <b>getScreenCTM</b>()</dt>
-      <dd class="operation">
-        <div>Returns the transformation matrix from current user units (i.e., after
-        application of the <a>'transform'</a> property) to the parent
-        user agent's notion of a "pixel". For display devices, ideally this
-        represents a physical screen pixel. For other devices or environments
-        where physical pixel sizes are not known, then an algorithm similar to
-        the CSS 2.1 definition of a "pixel" can be used instead.  Note that null
-        is returned if this element is not hooked into the document tree. This
-        method would have been more aptly named as <code>getClientCTM</code>,
-        but the name <code>getScreenCTM</code> is kept for historical reasons.
+<p>The <b id="__svg__SVGGraphicsElement__getScreenCTM">getScreenCTM</b> method
+is used to get the matrix that transforms the current element's coordinate
+system to the coordinate system of the viewport for the SVG document fragment.
+When getScreenCTM() is called, the following steps are run:</p>
 
-          <p class="issue" data-issue="14">Should this take into account the 'transform' on the <a>'svg'</a> element itself?
-          See <a href="http://jsfiddle.net/05tz2zur/">example</a>. Chrome/Opera/IE: returns the identity matrix for this example,
-          Firefox: difference between transform style and attribute, and is not an identity matrix.</p>
-        </div>
-        <dl class="operation">
-          <dt class="returns-header">Returns</dt>
-          <dd>
-            <div>An <a>DOMMatrix</a> object that defines the given
-            transformation matrix.</div>
-          </dd>
-        </dl>
-      </dd>
-    </dl>
-  </dd>
-</dl>
+<ol class='algorithm'>
+  <li>If the current element is not in the document, then return null.</li>
+  <li>Let <var>ctm</var> be a matrix that transforms the coordinate
+  space of the current element (including its <a>'transform'</a> property)
+  to the coordinate space of the document's viewport.
+    <div class='note'>
+      <p>This will include:</p>
+      <ul>
+        <li>all of the transforms from the current element up to the
+        <a>outermost svg element</a></li>
+        <li>any transforms due to <a>'viewBox'</a>, <a>'preserveAspectRatio'</a>,
+        the <a>'transform'</a> property and any any transform
+        due to <a href="struct.html#__svg__SVGSVGElement__currentScale">currentScale</a>
+        and <a href="struct.html#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>
+        properties on the <a>SVGSVGElement</a> for the <a>outermost svg element</a></li>
+        <li>any transforms from the SVG viewport's coordinate space
+        to the document's viewport, i.e. taking into account the positions of
+        all of the CSS boxes from the <a>outermost svg element</a>'s box
+        to the initial containing block when the SVG document fragment
+	is inline in an HTML document</li>
+      </ul>
+    </div>
+  </li>
+  <li>Return a newly created, <a href="coords.html#MatrixMode">detached</a>
+  <a>DOMMatrix</a> object that represents the same matrix as <var>ctm</var>.</li>
+</ol>
+
+<p class='note'>This method would have been more aptly named as <code>getClientCTM</code>,
+but the name <code>getScreenCTM</code> is kept for historical reasons.</p>
+</div>
 
 
 <div class="ready-for-wider-review">
