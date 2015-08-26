@@ -497,21 +497,47 @@ within it, to an arbitrary depth.</p>
 
 <edit:elementsummary name='unknown'/>
 
-<p>
-Within an <a>SVG document fragment</a>, any subtree that is rooted by an unknown element in the SVG namespace
-must be treated as an <a>SVGUnknownElement</a>. Whatever known svg child content the element has must be rendered.
-</p>
+<p>The <a>SVGUnknownElement</a> interface must be used for elements in the SVG namespace that are not defined by this specification.</p>
+<p>Known elements in the SVG namespace that occur in places where SVG's content model doesn't explicitly allow it must not render.</p>
+<p>Unknown elements in the SVG namespace render as if the unknown element was a <a>'g'</a> element.</p>
+<p>Known and unknown elements in other namespaces that occur as a child of any SVG element except <a>'foreignObject'</a>, must not render unless
+explicitly stated otherwise in this specification.</p>
 
-<p>In the following example, the <a>'path'</a> element inside the unknown <em>mysteryelement</em> must render.</p>
+<p>Consequently, in the following example:</p>
+<ul>
+<li>the <a>'path'</a> element inside the unknown <span class="element-name">'mysteryElement'</span> must render</li>
+<li><span class="element-name">'hideElement'</span> and its contents must not render</li>
+<li>the <a>'text'</a> element must not render the string contained
+in the inner <a>'text'</a> element</li>
+<li>the <a>'path'</a> element inside of <span class="element-name">'gradientExtension'</span>
+must not render since the <a>'linearGradient'</a> element isn't directly rendered</li>
+<li>regardless of whether the user agent supports XHTML or not,
+the <span class="element-name">'div'</span> element and its contents must not render</li>
+</ul>
 
 <pre><![CDATA[
 <?xml version="1.0" standalone="no"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 200">
-  <mysteryelement width="600" height="200" style="transform:translateX(100px)">
+  <mysteryElement>
     <path d="M0 0h600v200h-600z"/>
-  </mysteryelement>
+  </mysteryElement>
+  <hideElement xmlns="http://www.example.com/invisibleML">
+    nothing to see here
+    <path d="M0 0h600v200h-600z"/>
+  </hideElement>
+  <text y="1em"><text>this text must not be visible</text></text>
+  <linearGradient>
+    <gradientExtension>
+      <path d="M0 0h600v200h-600z"/>
+    </gradientExtension>
+  </linearGradient>
+  <div xmlns="http://www.w3.org/1999/xhtml">this must not be visible</div>
 </svg>
 ]]></pre>
+
+<p class="issue">Should it be possible to somehow force rendering of unknown elements in other namespaces?</p>
+<p class="issue">Do we need to mention anything about attributes, properties and such on SVGUnknownElements?</p>
+<p class="issue">Should SVGUnknownElement be a <a>container element</a>?</p>
 
 <h2 id="Head">Defining content for reuse, and the <span class='element-name'>'defs'</span> element</h2>
 
