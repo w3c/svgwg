@@ -6,6 +6,7 @@ SVG Working Group specifications.
 Editor's drafts:
 * [SVG2](https://svgwg.org/svg2-draft/)
 * [Animation Elements](https://svgwg.org/specs/animation-elements/)
+* [SVG Animation](https://svgwg.org/specs/animations/)
 * [SVG Integration](https://svgwg.org/specs/integration/)
 * [SVG Streaming](https://svgwg.org/specs/streaming/)
 * [svg:transform for Mapping](https://svgwg.org/specs/transform/)
