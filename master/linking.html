@@ -517,8 +517,8 @@ section of the document.</p>
   </table>
 </div>
 
-<p>To link into a particular view of an SVG document, the URL fragment
-identifier needs to be a correctly formed <dfn id='svg-fragment-identifier'>SVG
+<p>To link into a particular view of an SVG document, the <a href="#TermURLReferenceWithFragmentIdentifier">URL reference with fragment
+identifier</a> needs to be a correctly formed <dfn id='svg-fragment-identifier'>SVG
 fragment identifier</dfn>. An SVG fragment identifier defines the
 meaning of the "selector" or "fragment identifier" portion of URLs that
 locate resources of MIME media type "image/svg+xml".</p>
@@ -536,20 +536,8 @@ locate resources of MIME media type "image/svg+xml".</p>
   This form of addressing specifies the desired view of the
   document (e.g., the region of the document to view, the
   initial zoom level) completely within the SVG fragment
-  specification. The contents of the SVG view specification are
-  the five parameter specifications, <span class='attr-value'>viewBox(...)</span>,
-  <span class='attr-value'>preserveAspectRatio(...)</span>,
-  <span class='attr-value'>transform(...)</span>,
-  <span class='attr-value'>zoomAndPan(...)</span> and
-  <span class='attr-value'>viewTarget(...)</span>, whose parameters have the
-  same meaning as the corresponding attributes on a <a>'view'</a> element, or,
-  in the case of <span class='attr-value'>transform(...)</span>, the same
-  meaning as the corresponding attribute has on a
-  <a>'g'</a> element).
-    <div class="issue" data-issue="6">
-    Clearly define how a transform on a view should be implemented, in a manner
-    consistent with the CSS Transforms spec.
-    </div>
+  specification. The contents of the SVG view specification are defined in
+  <a href="#SVGFragmentIdentifiersDefinitions">SVG fragment identifiers definitions</a> section.
   </li>
 
   <li><em>Basic media fragments identifiers</em> of type spatial or temporal
@@ -557,6 +545,8 @@ locate resources of MIME media type "image/svg+xml".</p>
   as defined in [<a href="refs.html#ref-MEDIAFRAGMENTSURI">Media Fragments URI 1.0 (basic)</a>] and possibly combined using the &amp; sign (e.g. <span class="attr-value">MyDrawing.svg#xywh=0,200,1000,1000&amp;t=10</span>).
   </li>
 </ul>
+
+<h3 id="SVGFragmentIdentifiersDefinitions">SVG fragment identifiers definitions</h3>
 
 <p>An SVG fragment identifier is defined as follows:</p>
 
@@ -599,11 +589,8 @@ viewTargetSpec ::= 'viewTarget(' ViewTargetParams ')'
   <li><span class="code-fragment">TransformParams</span> corresponds to the
   parameter values for the <a>'transform'</a> property that is available on
   many elements. For example, <span class="attr-value">transform(scale(5))</span>.
-    <div class="issue" data-issue="7">
-        Should there be new options for other transformation style properties,
-        such as 'transform-origin'?
-    </div>
-    </li>
+  Currently additional tranform styles and parameters (e.g. transform-origin, perspective) are not supported.
+  </li>
 
   <li><span class="code-fragment">ZoomAndPanParams</span> corresponds to the
   parameter values for the <a>'zoomAndPan'</a> attribute on the <a>'view'</a>
@@ -614,20 +601,22 @@ viewTargetSpec ::= 'viewTarget(' ViewTargetParams ')'
   element. For example, <span class="attr-value">viewTarget(MyElementID)</span>.</li>
 </ul>
 
-<p>Spaces are not allowed in fragment specifications; thus, commas
+<p>SVG view box parameters are applied in order, as defined in
+<a href="http://www.w3.org/TR/css3-transforms/">CSS Transforms</a> specification (e.g. SVG view is transformed as defined in ViewBoxParams,
+then as defined in TransformParams).</p>
+
+<p>Spaces are allowed in fragment specifications. Commas
 are used to separate numeric values within an SVG view specification
 (e.g., <span class="attr-value">#svgView(viewBox(0,0,200,200))</span>)
 and semicolons are used to separate attributes (e.g.,
 <span class="attr-value">#svgView(viewBox(0,0,200,200);preserveAspectRatio(none))</span>).</p>
 
-<p>Semicolons used to separate 'SVGViewAttribute' in SVG fragments may be url-escaped (as %3B);
-this is useful when animating a (semi-colon separated) list of URLs because
-otherwise the semicolon would be interpreted as a list separator.</p>
-
-<p class="issue" data-issue="8">
-    The previous two paragraphs do not reflect actual browser support (spaces <i>are</i>
-    usually supported, commas and URL escaping not always).
-</p>
+<div class="note">
+  <p>Fragment identifiers may be url-escaped according to the rules defined in
+    <a href="http://www.w3.org/TR/cssom/#common-serializing-idioms">CSS Object Model (CSSOM)</a> specification.
+    For example semicolons can be escaped as %3B to allow animating a (semi-colon separated) list of URLs because otherwise the semicolon would
+    be interpreted as a list separator.</p>
+</div>
 
 <p>The five types of <span class="code-fragment">SVGViewAttribute</span> may occur
 in any order, but each type may only occur at most one time in a correctly
