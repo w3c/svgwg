@@ -149,8 +149,7 @@ be animated in the following ways:</p>
 
 <h3 id="placement">Module interactions</h3>
 
-<p>This module replaces and extends the definition of animation in
-SVG 2 (the "Animation" chapter). <a href='#ref-SVG2'>[SVG2]</a></p>
+<p>This module extends definitions in SVG 2.<a href='#ref-SVG2'>[SVG2]</a></p>
 
 
 <h2 id="AnimationElements">Animation elements</h2>
@@ -2023,11 +2022,11 @@ attributes and properties that can be animated</a>.</p>
   starts, the <a>SVG user agent</a>
   discards the element identified by the
   <a href="#DiscardElementHrefAttribute"><span class="attr-name">'href'</span></a>
-  attribute ([<a href="[SVG2]/refs.html#ref-SMIL">SMIL</a>], section 5.4.5).
+  attribute ([<a href="#ref-SMIL">SMIL</a>], section 5.4.5).
   The removal operation acts as if
   <a href="http://www.w3.org/TR/2012/WD-dom-20120405/#dom-node-removechild"><code>removeChild</code></a>
   were called on the parent of the target element with the target element as
-  parameter. [<a href="[SVG2]/refs.html#ref-DOM4">DOM4</a>] The <a>SVG user agent</a>
+  parameter. [<a href="#ref-DOM4">DOM4</a>] The <a>SVG user agent</a>
   must remove the target node as well as all of its attributes and descendants.
 </p>
 <p>
@@ -2043,10 +2042,10 @@ attributes and properties that can be animated</a>.</p>
 </p>
 <p>
   <a href="http://www.w3.org/TR/2008/REC-SMIL3-20081201/smil-timing.html#Timing-HyperlinksAndTiming">Seeking backwards</a>
-  in the timeline ([<a href="[SVG2]/refs.html#ref-SMIL">SMIL</a>], section 5.4.5)
+  in the timeline ([<a href="#ref-SMIL">SMIL</a>], section 5.4.5)
   must not re-insert the discarded elements. Discarded elements are intended to
   be completely removed from memory. So, authors are encouraged to set the
-  <a href="[SVG2]/struct.html#SVGElementPlaybackorderAttribute"><span class="attr-name">'playbackorder'</span></a>
+  <a href="#SVGElementPlaybackorderAttribute"><span class="attr-name">'playbackorder'</span></a>
   attribute to <span class="attr-value">"forwardonly"</span> when using the
   <a href="#DiscardElement"><span class="element-name">'discard'</span></a> element.
 </p>
@@ -3046,6 +3045,168 @@ animating that property, the result is
 implementation-dependent; thus, it is recommended that this be
 avoided.</p>
 
+<h2 id="extensions">Extensions to SVG 2</h2>
+
+This specification extends the definitions in SVG 2 [[SVG2]] in the following ways.
+
+<h3 id="SVGElement">Extensions to the <span class='element-name'>'svg'</span> element</h3>
+
+<edit:with element='svg'>
+
+<div class="annotation svg2-requirement">
+ <table>
+  <tr>
+   <th>SVG 2 Requirement:</th>
+   <td>Should support the playbackorder attribute to inform UA to not display controls to seek backwards.</td>
+ </tr>
+ <tr>
+   <th>Resolution:</th>
+   <td><a href="http://www.w3.org/2012/03/29-svg-irc#T20-39-02">Support the playbackorder attribute.</a></td>
+ </tr>
+ <tr>
+   <th>Purpose:</th>
+   <td>To inform UA to not display controls to seek backwards.</td>
+ </tr>
+ <tr>
+   <th>Owner:</th>
+   <td>Cyril</td>
+ </tr>
+</table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+   <tr>
+    <th>SVG 2 Requirement:</th>
+    <td>Support a means for having SMIL animations start before their time container has fully loaded.</td>
+  </tr>
+  <tr>
+    <th>Resolution:</th>
+    <td><a href="http://www.w3.org/2012/03/29-svg-irc#T20-23-57">Timeline control.</a></td>
+  </tr>
+  <tr>
+    <th>Purpose:</th>
+    <td>To start animations before the SVG document is fully loaded (useful for large SVG documents).</td>
+  </tr>
+  <tr>
+    <th>Owner:</th>
+    <td>Cyril</td>
+  </tr>
+ </table>
+</div>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="SVGElementPlaybackorderAttribute">playbackorder</dfn></td>
+        <td>forwardonly | all</td>
+        <td>all</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>
+      Indicates whether it is possible to seek backwards in the document. In
+      earlier versions of SVG there was no need to put restrictions on the
+      direction of seeking but with the newly introduced facilities for
+      long-running documents (e.g. the <a>'discard'</a> element) there is
+      sometimes a need to restrict this.
+    </p>
+    <p>
+      If <span class="attr-name">'playbackorder'</span> is set to
+      <span class="attr-value">'forwardonly'</span>, the content will likely
+      contain <a>'discard'</a>
+      elements or scripts that destroy resources, thus seeking back in the
+      document fragment's timeline may result in missing content.
+      If <span class="attr-name">'playbackorder'</span> is
+      <span class="attr-value">'forwardonly'</span>, the content should not
+      provide a way, through hyperlinking or script, of seeking backwards in
+      the timeline.  Similarly the UA should disable any controls it may
+      provide in the user interface for seeking backwards. Content with
+      <span class="attr-value">playbackorder="forwardonly"</span>
+      that provides a mechanism for seeking backwards in time may result in
+      undefined behavior or a document that is in error.
+    </p>
+    <p class="issue">Can't we define this so that there is no undefined
+      behavior?
+    </p>
+    <p>Attribute values have the following meanings:</p>
+    <dl>
+      <dt><span class="attr-value">'forwardonly'</span></dt>
+      <dd>This file is intended to be played only in the forward direction, sequentially, therefore
+        seeking backwards should not be allowed.</dd>
+      <dt><span class="attr-value">'all'</span></dt>
+      <dd>Indicates that the document is authored appropriately for seeking in both directions.</dd>
+    </dl>
+  </dd>
+  <dt>
+    <table class="propdef attrdef">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="SVGElementTimelinebeginAttribute">timelinebegin</dfn></td>
+        <td>loadend | loadbegin</td>
+        <td>loadend</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>
+      Controls the initialization of the timeline for the <a>SVG document
+      fragment</a>.
+    </p>
+    <p>
+      The <a>outermost svg element</a> of an <a>SVG document fragment</a>
+      defines a <em>timeline</em>.
+      Absolute times used by <a>animation elements</a> in an <a>SVG document
+      fragment</a> are relative to the document fragment's <em>timeline</em>.
+    </p>
+    <p>
+      By default, the <em>timeline</em> is initialized when the document
+      fragment's <a href="[SVG2]/interact.html#LoadEvent"><code>load</code></a>
+      event is fired but for progressively loaded animations, the author may set
+      this attribute to <span class="attr-value">'loadend'</span>, thus allowing
+      the timeline to begin as the document loads, rather than waiting until the
+      complete document is loaded.
+    </p>
+    <p>Attribute values have the following meanings:</p>
+    <dl>
+      <dt><span class="attr-value">'loadend'</span></dt>
+      <dd>
+        The document fragment's timeline starts the moment the
+        <a href="[SVG2]/interact.html#LoadEvent"><code>load</code></a> event for
+        the <a>outermost svg element</a> is triggered.
+      </dd>
+      <dt><span class="attr-value">'loadbegin'</span></dt>
+      <dd>
+        The document's timeline starts at the moment the
+        <a>outermost svg element</a>'s <em>start-tag</em> (as defined in
+        <a href="http://www.w3.org/TR/2006/REC-xml-20060816/#sec-starttags">XML
+        1.0</a> [<a href="#ref-XML10">XML10</a>] or <a
+        href="http://www.w3.org/TR/html5/syntax.html#syntax-start-tag">HTML</a>
+        [<a href="#ref-HTML">HTML</a>] when using the HTML parser) is
+        fully parsed.
+      </dd>
+    </dl>
+  </dd>
+</dl>
+
+</edit:with>
 
 <h2 id="IDL">IDL</h2>
 
@@ -3467,6 +3628,91 @@ via the SVG DOM is not available.</p>
 
 </edit:with>
 
+<h3 id="InterfaceSVGSVGElement">Extensionts to interface SVGSVGElement</h3>
+
+<edit:with element="svg">
+
+<pre class="idl">partial interface <b>SVGSVGElement</b> {
+  void <a href="#__svg__SVGSVGElement__pauseAnimations">pauseAnimations</a>();
+  void <a href="#__svg__SVGSVGElement__unpauseAnimations">unpauseAnimations</a>();
+  boolean <a href="#__svg__SVGSVGElement__animationsPaused">animationsPaused</a>();
+  float <a href="#__svg__SVGSVGElement__getCurrentTime">getCurrentTime</a>();
+  void <a href="#__svg__SVGSVGElement__setCurrentTime">setCurrentTime</a>(float seconds);
+};</pre>
+
+<p>The <b id="__svg__SVGSVGElement__pauseAnimations">pauseAnimations</b>
+and <b id="__svg__SVGSVGElement__unpauseAnimations">unpauseAnimations</b>
+methods are used to pause and unpause all of the animations within
+the <a>SVG document fragment</a>.</p>
+
+<p>When pauseAnimations() is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the current <a>'svg'</a> element is not the <a>outermost svg element</a>,
+  then return.</li>
+  <li>Pause the timeline that controls SVG animations for the <a>SVG document fragment</a> that
+  the <a>'svg'</a> element is in.</li>
+</ol>
+
+<p>When unpauseAnimations() is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the current <a>'svg'</a> element is not the <a>outermost svg element</a>,
+  then return.</li>
+  <li>Unpause the timeline that controls SVG animations for the <a>SVG document fragment</a> that
+  the <a>'svg'</a> element is in.</li>
+</ol>
+
+<p class="note">The <a href="#__svg__SVGSVGElement__pauseAnimations">pauseAnimations</a>
+and <a href="#__svg__SVGSVGElement__unpauseAnimations">unpauseAnimations</a>
+methods only affect animations defined using SVG's <a>animation elements</a>.
+They have no effect on CSS Transitions or Animations
+[<a href="#ref-CSS3ANIMATIONS">CSS3ANIMATIONS</a>][<a href="#ref-CSS3TRANSITIONS">CSS3TRANSITIONS</a>]
+or animations created using script.</p>
+
+<p>The <b id="__svg__SVGSVGElement__animationsPaused">animationsPaused</b>
+method returns whether SVG animation timeline has been paused.
+When animationsPaused() is called, true is returned if the timeline that
+controls SVG animations for the <a>SVG document fragment</a> that the
+<a>'svg'</a> element in has been paused by
+<a href="#__svg__SVGSVGElement__pauseAnimations">pauseAnimations</a>;
+otherwise, false is returned.</p>
+
+<p>The <b id="__svg__SVGSVGElement__getCurrentTime">getCurrentTime</b> and
+<b id="__svg__SVGSVGElement__setCurrentTime">setCurrentTime</b> methods
+are used to get and set the current time of the timeline that controls
+SVG animations.  When getCurrentTime() is called, the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the timeline for the <a>current SVG document fragment</a> has not yet begun,
+  then return 0.
+    <p class='note'>This is the case, for example, if the <a>outermost svg element</a>
+    has its <a>'timelinebegin'</a> attribute set to <span class='attr-value'>'loadend'</span>
+    and the load event has not yet fired.</p>
+  </li>
+  <li>Otherwise, the timeline for the <a>current SVG document fragment</a> has begun.
+  Return the current time in seconds relative to the start time of the timeline.</li>
+</ol>
+
+<p>When setCurrentTime(<var>seconds</var>) is called, the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the current <a>'svg'</a> element is not the <a>outermost svg element</a>,
+  then return.</li>
+  <li>If the timeline for the <a>current SVG document fragment</a> has begun, then
+  the timeline's current time (in seconds, relative to the start time of the
+  timeline) is set to <var>seconds</var>.</li>
+  <li>Otherwise, the timeline has not begun.  <var>seconds</var> is recorded on
+  the <a>current SVG document fragment</a> as the time to be seeked to
+  once the timeline has begun.  If multiple calls to
+  <a href="#__svg__SVGSVGElement__setCurrentTime">setCurrentTime</a> are made
+  before the timeline has begun, the most recent call's time will be used to
+  seek the timeline once it begins.</li>
+</ol>
+
+
+</edit:with>
+
 <h2 id="refs">References</h2>
 
 <h3 id="normrefs">Normative references</h3>
@@ -3490,6 +3736,17 @@ via the SVG DOM is not available.</p>
     <br/>This edition of DOM4 is http://www.w3.org/TR/2014/WD-dom-20140204/.
     <br/>The <a href="http://www.w3.org/TR/dom/">latest edition of DOM4</a> is available at
     http://www.w3.org/TR/dom/.
+  </dd>
+
+  <dt id="ref-HTML" class="normref">[HTML]</dt>
+  <dd>
+    <cite class="w3crec"><a href="http://www.w3.org/TR/html5/">HTML5
+    A vocabulary and associated APIs for HTML and XHTML</a></cite>,
+    I. Hickson, R. Berjon, S. Faulkner, T. Leithead, E.D. Navara, E. O'Connor, S. Pfeiffer, eds.
+    World Wide Web Consortium, 28 October 2014. W3C Recommendation.
+    <br />This edition of HTML5 is <a href="http://www.w3.org/TR/2014/REC-html5-20141028/">http://www.w3.org/TR/2014/REC-html5-20141028/</a>.
+    <br/>The <a href="http://www.w3.org/TR/html/">latest version of html</a> is available at
+    <a href="http://www.w3.org/TR/html/">http://www.w3.org/TR/html/</a>.
   </dd>
 
   <dt id="ref-ISO8601" class="normref">[ISO8601]</dt>
@@ -3548,6 +3805,17 @@ via the SVG DOM is not available.</p>
   World Wide Web Consortium, 09 April 2015.
   <br />This edition of SVG 2 is http://www.w3.org/TR/2015/WD-SVG2-20150409/.
   <br />The <a href="http://www.w3.org/TR/SVG2/">latest edition of SVG 2</a> is available at http://www.w3.org/TR/SVG2/.</dd>
+
+  <dt id="ref-XML10" class="normref">[XML10]</dt>
+  <dd>
+    <cite class="w3crec"><a href="http://www.w3.org/TR/2008/REC-xml-20081126/">Extensible Markup Language (XML) 1.0 (Fifth Edition)</a></cite>,
+    T. Bray, J. Paoli, C. M. Sperberg-McQueen, E. Maler, F. Yergeau, eds.
+    World Wide Web Consortium, 26 November 2008.
+    <br/>This edition of XML 1.0 is http://www.w3.org/TR/2008/REC-xml-20081126/.
+    <br/>The <a href="http://www.w3.org/TR/xml/">latest edition of XML 1.0</a> is available at
+    http://www.w3.org/TR/xml/.
+  </dd>
+
 </dl>
 
 <h3 id="nonnormrefs">Non-normative references</h3>
@@ -3596,6 +3864,9 @@ via the SVG DOM is not available.</p>
       a value.</li>
   <li class='added-since-last-wd'>Allowed the <a>'mpath'</a> element to refer to
       a <a>shape</a> element.</li>
+  <li>Added the <a>'discard'</a> element</li>
+  <li>Added the <a>'timelinebegin'</a> and <a>'playbackorder'</a> attributes on
+      the <a>'svg'</a> element.</li>
 </ul>
 
 </body>
