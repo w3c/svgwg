@@ -641,7 +641,7 @@ function doLocalLink(conf, page, n) {
 }
 
 function doAttributeTable(conf, page, n) {
-  var table = utils.parse('<table class="proptable attrtable"><thead><tr><th>Attribute</th><th>Elements on which the attribute may be specified</th><th title="Animatable"><a href="animate.html#Animatable">Anim.</a></th></tr></thead><tbody></tbody></table>');
+  var table = utils.parse('<table class="proptable attrtable"><thead><tr><th>Attribute</th><th>Elements on which the attribute may be specified</th><th title="Animatable"><a>Anim.</a></th></tr></thead><tbody></tbody></table>');
   var attributes = [];
   utils.values(conf.definitions.elements).forEach(function(e) {
     e.specificAttributes.forEach(function(a) {
