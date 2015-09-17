@@ -5076,83 +5076,46 @@ SVG user agent about how to optimize its image rendering.  Possible values are:<
 device is indexed color.  High quality SVG viewers should perform
 image resampling using a linear color space.</p>
 
-<h3 id="BufferedRendering">The <span class="property">'buffered-rendering'</span>
-property</h3>
 
-<div class="annotation svg2-requirement">
-  <table>
-    <tr>
-      <th>SVG 2 Requirement:</th>
-      <td>Support a hint to indicate that an element's rendering should be cached.</td>
-    </tr>
-    <tr>
-      <th>Resolution:</th>
-      <td><a href="http://www.w3.org/2012/01/26-svg-irc#T21-28-56">SVG 2 will add <span class="property">'buffered-rendering'</span>, as implementor feedback indicates that it is needed.</a></td>
-    </tr>
-    <tr>
-      <th>Purpose:</th>
-      <td>For caching rendered results for faster display.</td>
-    </tr>
-    <tr>
-      <th>Owner:</th>
-      <td>Erik (no action)</td>
-    </tr>
-  </table>
+<h2 id="WillChange">The effect of the
+<span class='prop-name'>'will-change'</span> property</h2>
+
+<p class="note">See the CSS Will Change Module Level 1 specification for the
+definition of <a>'will-change'</a>.</p>
+
+<p>The <a>'will-change'</a> property is used to provide a hint to the user
+agent as to the types of changes that will be made to content, giving
+the user agent a better chance at performing rendering optimizations
+for a given element.</p>
+
+<p>The <a>'will-change'</a> property applies to all SVG <a>graphics elements</a>,
+however since SVG elements do not support scrolling, the
+<span class='prop-value'>scroll-position</span> value will have no effect
+on them.</p>
+
+<div class='example'>
+  <p>The following example demonstrates how <a>'will-change'</a> can be used
+  to forewarn the user agent that an element will have its <a>'transform'</a>
+  property changed, with the potential result of the user agent rendering the
+  element into its own GPU layer so that the scripted <a>'transform'</a>
+  changes appear smooth.</p>
+
+  <edit:includefile href="images/painting/will-change.svg"/>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/will-change-image.svg"
+         width="200" height="150"
+         alt='A blue star with the text "Drag the star!" above.'/>
+    <p class="caption">In a user agent that supports <a>'will-change'</a>
+    on SVG elements, the star might be rendered into a layer so that
+    it can be composited quickly when it is dragged around the canvas.
+    <a href="images/painting/will-change.svg">View interactive SVG document.</a></p>
+  </div>
 </div>
 
-<p>The creator of SVG content might want to provide a hint to the implementation about how often an element is modified to make speed vs. memory tradeoffs as it performs rendering. The <a>'buffered-rendering'</a> property provides a hint to the SVG user agent about how to buffer the rendering of elements:</p>
-
-<table class="propdef">
-  <tr>
-    <th>Name:</th>
-    <td><dfn id="BufferedRenderingProperty">buffered-rendering</dfn></td>
-  </tr>
-  <tr>
-    <th>Value:</th>
-    <td>auto | dynamic | static</td>
-  </tr>
-  <tr>
-    <th>Initial:</th>
-    <td>auto</td>
-  </tr>
-  <tr>
-    <th>Applies to:</th>
-    <td><a>container elements</a> and <a>graphics elements</a></td>
-  </tr>
-  <tr>
-    <th>Inherited:</th>
-    <td>no</td>
-  </tr>
-  <tr>
-    <th>Percentages:</th>
-    <td>N/A</td>
-  </tr>
-  <tr>
-    <th>Media:</th>
-    <td>visual</td>
-  </tr>
-  <tr>
-    <th>Computed&#160;value:</th>
-    <td>as specified</td>
-  </tr>
-  <tr>
-    <th><a>Animatable</a>:</th>
-    <td>yes</td>
-  </tr>
-</table>
-
-<dl>
-  <dt><span class='prop-value'>auto</span></dt>
-  <dd>Indicates that the user agent is expected to use a reasonable compromise between speed of update and resource allocation.</dd>
-
-  <dt><span class='prop-value'>dynamic</span></dt>
-  <dd>Indicates that the element is expected to be modified often.</dd>
-
-  <dt><span class='prop-value'>static</span></dt>
-  <dd>Indicates that the element is not expected to be modified often. This suggests that user agent may be able to allocate resources, such as an offscreen buffer, that would allow increased performance in redraw. It does not mean that the element will never change. If an element is modified when the value is <span class='prop-value'>'static'</span>, then redraw might have reduced performance.</dd>
-</dl>
-
-<p class='issue' data-issue="27">Remove this in favor of will-change.</p>
+<p class="note">The <a>'will-change'</a> property subsumes the
+<span class='prop-name'>'buffered-rendering'</span> property defined in
+SVG Tiny 1.2.</p>
 
 
 <h2 id="InheritanceOfPaintingProperties">Inheritance of painting properties</h2>
