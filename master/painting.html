@@ -1166,6 +1166,10 @@ a path's stroke.</p>
   The red line shows the actual path that is stroked.</p>
 </div>
 
+<p>The <a>'path/pathLength'</a> attribute on a <a>'path'</a> element affects
+<a>'stroke-dasharray'</a>: each dash and gap length is interpreted relative
+to the author's path length as specified by <a>'path/pathLength'</a>.</p>
+
 <table class="propdef">
   <tr>
     <th>Name:</th>
@@ -1237,6 +1241,29 @@ value is negative, then the effect is the same as dash offset <var>d</var>:</p>
   is stroked.</p>
 </div>
 
+<p>Like <a>'stroke-dasharray'</a>, <a>'stroke-dashoffset'</a> is interpreted
+relative to the author's path length as specified by the <a>'path/pathLength'</a>
+attribute on a <a>'path'</a> element.</p>
+
+<div class="example">
+  <p>The example below shows how a <a>'path/pathLength'</a> that is greatly
+  different from the actual path length can be used to control stroke
+  dashing more easily.</p>
+
+  <edit:includefile href='images/painting/dash-pathlength.svg' link="yes" image="yes"/>
+
+  <div class="figure">
+    <img src="images/painting/dash-pathlength.svg"
+         alt="Image of three casino chips, each of which has a patterned border
+              produced using stroke dashing."/>
+    <p class="caption">The broad white dashes and the small circular dashes around
+    each chip are placed relative to an author specified <a>'path/pathLength'</a>
+    of <span class='attr-value'>'80'</span>, which makes the desired
+    <a>'stroke-dasharray'</a> and <a>'stroke-dashoffset'</a> values
+    easy to compute.</p>
+  </div>
+</div>
+
 <p>See the definition of <a>dash positions</a> below for a more precise
 description of positions along a path that dashes will be placed.</p>
 </div>
@@ -1265,10 +1292,6 @@ description of positions along a path that dashes will be placed.</p>
   </table>
 </div>
 
-<p class="issue" data-issue="16">Something in this section needs to reference
-<a>'path/pathLength'</a> so that dash lengths are in the author's
-path length space.</p>
-
 <p>The <dfn id="TermStrokeShape">stroke shape</dfn> of an element is the
 shape that is filled by the <a>'stroke'</a> property.  Since <a>'text'</a>
 elements can be rendered in multiple chunks, each chunk has its own
@@ -1278,6 +1301,17 @@ taking into account the stroking properties above:</p>
 
 <ol class="algorithm">
   <li>Let <var>shape</var> be an empty shape.</li>
+  <li>Let <var>scale</var> be a scale factor for the dash pattern.  If we are
+  computing the stroke shape of a <a>basic shape</a> or an individual <a>'text'</a>
+  chunk, then <var>scale</var> is 1.  Otherwise, it is determined as follows:
+    <ol>
+      <li>Let <var>length</var> be the user agent's computed length of the
+      <a>'path'</a>.</li>
+      <li>Let <var>authorlength</var> be the value of the <a>'path/pathLength'</a>
+      attribute on the <a>'path'</a> element.</li>
+      <li><var>scale</var> is <var>authorlength</var> / <var>length</var>.</li>
+    </ol>
+  </li>
   <li>Let <var>path</var> be the <a>equivalent path</a> of the element (or the individual
   chunk of a <a>'text'</a> element).</li>
   <li>For each subpath of <var>path</var>:
@@ -1285,6 +1319,8 @@ taking into account the stroking properties above:</p>
       <li>Let <var>positions</var> be the <a>dash positions</a> for the subpath.</li>
       <li>For each pair &lt;<var>start</var>, <var>end</var>&gt; in <var>positions</var>:
         <ol>
+          <li>Scale <var>start</var> and <var>end</var> by <var>scale</var>.</li>
+
           <li>Let <var>dash</var> be the shape that includes, for all distances
           between <var>start</var> and <var>end</var> along the subpath, all
           points that lie on the line perpendicular to the subpath at that
