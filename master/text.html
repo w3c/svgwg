@@ -3299,100 +3299,43 @@ text anchoring chunks.</p>
   </p>
 
   <p>
-    The following CSS properties must be supported on SVG text
-    elements:
+    The list of CSS properties that must be supported on SVG text
+    elements can be found in the
+    the <a href="styling.html#RequiredProperties">Styling</a> chapter.
   </p>
 
   <ul>
     <li>
-      Font Properties
+      Properties that apply only to pre-formatted text:
       <p>
-	<!-- SVG 1.1 -->
-	<a>'font'</a>,
-	<a>'font-family'</a>,
-	<a>'font-style'</a>,
-	<a>'font-variant'</a>,
-	<a>'font-weight'</a>,
-	<a>'font-stretch'</a>,
-	font-kerning (renamed from 'kerning', user agents should alias 'kerning'),
-	<a>'font-size'</a>,
-	<a>'font-size-adjust'</a>,
-
-	<!-- CSS Fonts 3 -->
-	font-feature-settings,
-	font-language-override (at risk),
-	font-synthesis,
-	font-variant-alternates,
-	font-variant-caps,
-	font-variant-east-asian,
-	font-variant-ligatures,
-	font-variant-numeric,
-	font-variant-position.
+	<a>'text-anchor'</a>.
       </p>
     </li>
     <li>
-      Paragraph Level Properties
-      <ul>
-	<li>Properties that apply to all text:
-	  <!-- SVG 1.1 -->
-	  <p>
-	    <a>'writing-mode'</a>,
-	    <a>'direction'</a>,
-	    <a>'unicode-bidi'</a>,
-	    <a>'glyph-orientation-vertical'</a> (deprecated?),
-	    <a>'glyph-orientation-horizontal'</a> (deprecated?),
-
-	    <a>'dominant-baseline'</a>,
-	    <a>'alignment-baseline'</a>,
-	    <a>'baseline-shift'</a>,
-
-	    <a>'letter-spacing'</a>,
-	    <a>'word-spacing'</a>,
-	    <a>'text-decoration'</a>,
-
-	    <!-- CSS -->
-	    <a>'line-height'</a>,
-	    <a>'text-indent'</a>,
-	    <a>'text-transform'</a>
-	    <a>'white-space'</a>.
-	    <a>'tab-size'</a>.
-	  </p>
-	</li>
-	<li>
-	  Properties that apply only to pre-formatted text:
-	  <p>
-	    <a>'text-anchor'</a>.
-	  </p>
-	</li>
-	<li>
-	  Properties that apply only to auto-wrapped text:
-	  <p>
-	    <a>'text-align'</a>,
-	    <a>'text-align-all'</a>,
-	    <a>'text-align-last'</a>,
-	    <a>'text-indent'</a>,
-	    <a>'text-justify'</a>,
-	    <a>'line-break'</a>,
-	    <a>'word-break'</a>,
-	    <a>'hyphens'</a>,
-	    <a>'word-wrap'</a>,
-	    <a>'overflow-wrap'</a>.
-	  </p>
-	</li>
-      </ul>
+      Properties that apply only to auto-wrapped text:
+      <p>
+	<a>'text-align'</a>,
+	<a>'text-align-all'</a>,
+	<a>'text-align-last'</a>,
+	<a>'text-indent'</a>,
+	<a>'text-justify'</a>,
+	<a>'line-break'</a>,
+	<a>'word-break'</a>,
+	<a>'hyphens'</a>,
+	<a>'word-wrap'</a>,
+	<a>'overflow-wrap'</a>.
+      </p>
     </li>
   </ul>
 
-  <p class="issue" data-issue="43">
-    Need to decide and fill in that list of the minimum set of
-    properties that must be supported on text.
-  </p>
   <p class="issue" data-issue="48">
     Is the @font-face rule required?
   </p>
 
   <p>
-    Additionally, the ::first-line and ::first-letter pseudo-elements must be
+    Additionally, the @font-face rule must be supported for
+    font selection as well as
+    the ::first-line and ::first-letter pseudo-elements must be
     supported on <a>'text'</a> elements.
   </p>
 
@@ -3475,6 +3418,25 @@ text anchoring chunks.</p>
     </p>
 
     <ul>
+      <li id="TextKerning">
+	'kerning':
+	<p>
+	  SVG 1.1 uses the 'kerning' property to determine if the font
+	  kerning tables should be used to adjust inter-glyph
+	  spacing. It also allows a
+	  <span class="prop-value">&lt;length&gt;</span> value which
+	  if given is added to the spacing between glyphs (suplemental
+	  to any from the <a>'letter-spacing'</a> property). This
+	  property is replaced in SVG 2 by the
+	  CSS <a>'font-kerning'</a> property which solely controls
+	  turning on/off the use of the font kerning tables. The main
+	  use for 'kerning' was to turn off auto-kerning thus for
+	  minimal backwards compatability, a 'kerning' value of '0'
+	  should be mapped to a <a>'font-kerning'</a> value of 'none'.
+	</p>
+	<p class="issues" data-issue="29">Is this a reasonable way to
+	  handle the removed 'kerning' property?</p>
+      </li>
       <li id="TextLineHeight">
 	<a>'line-height'</a>:
 	<p>
@@ -3489,7 +3451,7 @@ text anchoring chunks.</p>
 	</p>
 	<p class="issue" data-issue="50">Do we refer to
 	  <a href="http://www.w3.org/TR/CSS21/visudet.html#line-height">CSS 2.1</a> or
-	  <a href="http://dev.w3.org/csswg/css-inline/">CSS Inline Modue Level 3</a>?
+	  <a href="http://dev.w3.org/csswg/css-inline/">CSS Inline Module Level 3</a>?
 	</p>
       </li>
     </ul>
@@ -4720,18 +4682,6 @@ text anchoring chunks.</p>
       <a>'word-spacing'</a> indicates the spacing behavior between words.
     </li>
   </ul>
-
-  <p class='issue' data-issue="29">
-    Note that the <span class='property'>'kerning'</span> property
-    from SVG 1.1 has been removed in favor of using
-    <a>'letter-spacing'</a> to add or remove spacing between glyphs
-    and the <span class='property'>'font-kerning'</span> property to
-    disable kerning based on information from the font.
-  </p>
-
-  <p class='issue' data-issue="30">
-    We need to require <span class='property'>'font-kerning'</span>.
-  </p>
 
 <h4 id='TextLetterSpacing'>The <span class="property">'letter-spacing'</span> property</h4>
 
