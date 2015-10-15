@@ -28,20 +28,6 @@
   <a>shape</a> or the interior of the
   character glyphs in a text string.</dd>
 
-  <dt id="TermPaint">paint</dt>
-  <dd>A paint represents a way of putting color values onto the
-  canvas. A paint might consist of both color values and
-  associated alpha values which control the blending of colors
-  against already existing color values on the canvas. SVG
-  supports three types of built-in paint:
-  <a href="http://www.w3.org/TR/css3-values/#colors">color</a>,
-  <a href="pservers.html#Gradients">gradients</a> and
-  <a href="pservers.html#Patterns">patterns</a>.</dd>
-
-  <dt id="TermPaintServerElement"><dfn>paint server element</dfn></dt>
-  <dd>An element that defines a <a href="pservers.html">paint server</a>.
-  Specifically: <edit:elementcategory name='paint server'/>.</dd>
-
   <dt id="TermStroke">stroke</dt>
   <dd>The operation of <a>painting</a> the outline
   of a <a>shape</a> or the outline of
@@ -134,10 +120,56 @@ paint servers.</p>
   </table>
 </div>
 
-<p>Properties <a>'fill'</a> and <a>'stroke'</a> take on a comma separated list of values of type <a>&lt;paint&gt;</a>. Each paint is applied to an element in reverse order. Note, only a <a href="pservers.html">paint server</a> in the last position may take an optional fallback color.</p>
+<p>The <a>'fill'</a> and <a>'stroke'</a> properties, defined below, are used to
+specify the <dfn id="TermPaint">paint</dfn> used to render the interior of and the
+stroke around shapes and text.  A paint specification describes a way of putting
+color values on to the canvas and is composed of one or more paint layers.
+Four types of paints within these paint layers are supported:
+<a href="http://www.w3.org/TR/css3-values/#colors">solid colors</a>,
+<a href="pservers.html#Gradients">gradients</a>,
+<a href="pservers.html#Patterns">patterns</a>,
+and <a href="pservers.html#Hatches">hatches</a>.</p>
 
-<p class="note">The ability to apply more than one paint to an element is new in SVG 2.</p>
-<p class="annotation">The paint order follows that of CSS backgrounds.</p>
+<p>A <a>&lt;paint&gt;</a> value is defined as follows:</p>
+
+<p class="definition"><dfn id="DataTypePaint">&lt;paint&gt;</dfn> = [ [ <a>&lt;paint-layer&gt;</a> , ]* <a>&lt;final-paint-layer&gt;</a> ] | context-fill | context-stroke</p>
+<p class="definition"><dfn id="DataTypePaintLayer">&lt;paint-layer&gt;</dfn> = <a>&lt;paint-source&gt;</a></p>
+<p class="definition"><dfn id="DataTypeFinalPaintLayer">&lt;final-paint-layer&gt;</dfn> = <a>&lt;paint-source&gt;</a> || <a>&lt;color&gt;</a></p>
+<p class="definition"><dfn id="DataTypePaintSource">&lt;paint-source&gt;</dfn> = none | child | child(<a>&lt;integer&gt;</a>) | <a>&lt;url&gt;</a></p>
+
+<p class="note">The ability to apply more than one paint layer to an element is new in SVG 2.</p>
+
+<p>A <a>&lt;paint&gt;</a> value can either be a comma-separated list of paint layers,
+or a special keyword that references the value of <a>'fill'</a> or <a>'stroke'</a> in
+a referencing context.  Each paint layer can take one of the following values:</p>
+
+<dl>
+  <dt><a>&lt;url&gt;</a></dt>
+  <dd>A URL reference to a <dfn id="TermPaintServerElement">paint server element</dfn>,
+  which is an element that defines a <a href="pservers.html">paint server</a>:
+  <edit:elementcategory name='paint server'/>.</dd>
+
+  <dt>child</dt>
+  <dd>A reference to the last child <a>paint server element</a> of the element being
+  painted.</dd>
+
+  <dt>child(<var>n</var>)</dt>
+  <dd>A reference to the <var>n</var>th child <a>paint server element</a> of the
+  element being painted.</dd>
+
+  <dt>none</dt>
+  <dd>No paint is applied in this layer.</dd>
+</dl>
+
+<p>The list of paint layers describes the sequence of paint servers and an optional
+color to render within the fill or stroke shape.  These paint layers are rendered, one after
+another, in reverse order – that is, the right-most paint layer (the <a>&lt;final-paint-layer&gt;</a>
+value) is rendered first, then the next paint layer to the left is rendered, and so on
+proceeding left.  Multiple paint layers can be used to build up a composite paint made
+up of more than one semi-transparent paint.</p>
+
+<p class="note">The reverse rendering order used here follows the rendering order of
+the CSS background properties.</p>
 
 <div class="example">
   <pre><![CDATA[
@@ -151,116 +183,107 @@ paint servers.</p>
   </div>
 </div>
 
+<p>The <span class='prop-value'>child</span> keyword value references the last
+child <a>paint server element</a> and the <span class='prop-value'>child(<var>n</var>)</span>
+function references the <var>n</var>th child <a>paint server element</a> (where the first
+has index 1).  A value for <var>n</var> less than 1 is invalid and causes the entire
+property value to be invalid.</p>
 
-<p>The type <a>&lt;paint&gt;</a> is defined as:</p>
-
-<div class="definition">
-<pre class="prod"><dfn class="css-code" data-dfn-type="type" data-export="" id="typedef-paint">&lt;paint&gt;</dfn> = [ <a>&lt;paint-layer&gt;</a> , ]* <a>&lt;final-paint-layer&gt;</a></pre>
-
-<pre class="prod"><dfn class="css-code" data-dfn-type="type" data-export="" id="typedef-paint-layer">&lt;paint-layer&gt;</dfn> = <a>&lt;paint-source&gt;</a>|| <a>&lt;position&gt;</a> [ / <a>&lt;paint-size&gt;</a> ]? || <a>&lt;repeat-style&gt;</a> ||
-[ <a>&lt;shape-box&gt;</a> | fill | stroke | view-box ] || [ <a>&lt;shape-box&gt;</a> | fill | stroke | view-box ]</pre>
-
-<pre class="prod"><dfn class="css-code" data-dfn-type="type" data-export="" id="typedef-final-paint-layer">&lt;final-paint-layer&gt;</dfn> = <a>&lt;paint-source&gt;</a> || <a>&lt;position&gt;</a> [ / <a>&lt;paint-size&gt;</a> ]? || <a>&lt;repeat-style&gt;</a> ||
-[ <a>&lt;shape-box&gt;</a> | fill | stroke | view-box ] || <a>&lt;color&gt;</a></pre>
-
-<pre class="prod"><dfn class="css-code" data-dfn-type="type" data-export="" id="typedef-paint-source">&lt;paint-source&gt;</dfn> = none | <a>&lt;image&gt;</a> | <a>&lt;url&gt;</a> | context-fill | context-stroke</pre>
-</div>
-
-<p>Values have the following meaning:</p>
-
-<dl>
-  <dt>none</dt>
-  <dd>Indicates that no paint is applied.</dd>
-
-  <dt>&lt;color&gt;</dt>
-  <dd>A solid color as <a href="http://www.w3.org/TR/css3-color/#colorunits">defined in <cite>CSS Color Module Level 3</cite></a>.
-  [<a href="refs.html#ref-CSS3COLOR">CSS3COLOR</a>]  All forms of &lt;color&gt;
-  defined by that specification are valid for use as a <a>&lt;paint&gt;</a>
-  value.  This includes the basic color keywords,
-  RGB &amp; RGBA color values, the <span class="prop-value">transparent</span>
-  value, HSL &amp; HSLA color values, the extended color keywords,
-  the <span class="prop-value">currentColor</span> value,
-  and the CSS2 UI colors.  Note that when <span class='prop-value'>currentColor</span>
-  is used, it refers to the current animated value of the <a>'color'</a> property.</dd>
-
-  <dt><a>&lt;url&gt;</a> <!--| child</a>--></dt>
-  <dd>A reference to a <a href="pservers.html">paint server</a> element with, if
-  the paint server is the last paint specified, an
-  optional fallback color or <span class="prop-value">none</span>.
-  The <a>&lt;url&gt;</a> or <span class="prop-value">child</span> keyword
-  is used to identify a <a>'solidcolor'</a>
-  element, <a>gradient element</a>, <a>'pattern'</a> element, or <a>'hatch'</a> element,
-  which defines the paint to use.
-  The <span class="prop-value">child</span> keyword in this instance matches the
-  last child <a>paint server element</a> of the element where the paint value
-  is specified.
-  If the reference is not valid (e.g., it points to an element that
-  does not exist, no element was matched, or the element is not a valid paint
-  server), then the fallback value is used (if the paint server reference is the last
-  paint specified and if the fallback color is provided); otherwise,
-  it must be treated as if <span class='prop-value'>none</span> was specified.
-  <p class="annotation">Changed from SVG 1.1 behavior where document is in error
-    if paint server missing or invalid.</p>
-
-  <div class="example">
-    <pre><![CDATA[
-<rect width="100" height="100" fill="url(#MyHatch1), url(#MyHatch2) powderblue">
-    ]]></pre>
-    <div class="figure">
-      <img
-         alt="An example with a fallback solid paint fill."
-         src="images/painting/multiple_paints2.svg"/>
-      <p class="caption">The left rectangle shows the expected fill if both MyHatch1  and MyHatch2 are defined. The right rectangle shows the expected fill if MyHatch1 is defined but MyHatch2 is missing.</p>
-    </div>
+<div class="example">
+  <edit:includefile href="images/painting/child-paint.svg2.svg"/>
+  <div class="figure">
+    <img
+       alt="An example of the child keyword for paint"
+       src="images/painting/child-paint.svg11.svg" height="200"/>
+    <p class="caption">The paint server used to fill the <a>'rect'</a>
+    element is a child element of the shape being filled.
+    Note that there are two child paint servers and the last paint server
+    is the one matched to the child keyword.
+   </p>
   </div>
-
-  <p class="issue" data-issue="1">
-    How should 'child' behave with allowing multiple paints?
-    Include an example.
-  </p>
-    <div class="example">
-      <edit:includefile href="images/painting/child-paint.svg2.svg"/>
-      <div class="figure">
-        <img
-           alt="An example of the child keyword for paint"
-           src="images/painting/child-paint.svg11.svg" height="200"/>
-        <p class="caption">The paint server used to fill the <a>'rect'</a>
-        element is a child element of the shape being filled.
-        Note that there are two child paint servers and the last paint server
-        is the one matched to the child keyword.
-       </p>
-      </div>
-    </div>
-  </dd>
-
-  <dt>context-fill</dt>
-  <dt>context-stroke</dt>
-  <dd>The same paint as the computed value of the <a>'fill'</a> or <a>'stroke'</a>
-  property, respectively, of the <a>context element</a>.  If there
-  is no context element, then no paint is applied.  If the referenced paint
-  is a gradient or a pattern, then the coordinate space to use and the
-  object used for any <span class='attr-value'>'objectBoundingBox'</span>-relative
-  values are the same as those of the <a>context element</a>.</dd>
-</dl>
 </div>
 
-<dl class="definitions">
-  <dt id="TermContextElement"><dfn id="context-element">context element</dfn></dt>
-  <dd>The context element of an element is defined as follows:
-  <ul>
-    <li>If the element is within a <a>'marker element'</a>, and
-    is being rendered as part of that marker due to being referenced
-    via a <a>marker property</a>, then the context element
-    is the element referencing that <a>'marker element'</a>.</li>
-    <li>If the element is within a sub-tree that is instantiated
-    with a <a>'use'</a> element, then the context element is
-    that <a>'use'</a> element.</li>
-    <li>Otherwise, there is no context element.</li>
-  </ul>
-  </dd>
-</dl>
+<p>A <a>&lt;final-paint-layer&gt;</a> allows a paint server reference, a <a>&lt;color&gt;</a>
+value, or both to be given.  When both are given, the <a>&lt;color&gt;</a> value is a
+fallback color to use if the paint server reference in the layer is invalid
+(due to pointing to an element that does not exist or which is not a valid paint server).
+When only a paint server reference is given, it is used as the paint just as in any other
+<a>&lt;paint-layer&gt;</a>.  When only a <a>&lt;color&gt;</a> is given, the color is
+used as the paint unconditionally.</p>
 
-<div class="ready-for-wider-review">
+<p class="note">Note that this is slightly different from CSS background syntax, where
+a background image and color specified in the final layer of a <a>'background'</a>
+value will result in both the image and color being rendered.  The fallback nature
+of the color in SVG <a>&lt;paint&gt;</a> values is needed for compatibility with
+SVG 1.1, which supported only a single paint server reference plus a fallback color.</p>
+
+<p>If a paint server reference in a <a>&lt;paint-layer&gt;</a> is invalid, then
+no paint is rendered for that layer.</p>
+
+<p class="annotation">This is changed from SVG 1.1 behavior where the document
+is in error if a paint server reference is invalid and there is no fallback
+color specified.</p>
+
+<div class="example">
+  <pre><![CDATA[
+<rect width="100" height="100" fill="url(#MyHatch1), url(#MyHatch2) powderblue">
+  ]]></pre>
+  <div class="figure">
+    <img
+       alt="An example with a fallback solid paint fill."
+       src="images/painting/multiple_paints2.svg"/>
+    <p class="caption">The left rectangle shows the expected fill if both MyHatch1  and MyHatch2 are defined. The right rectangle shows the expected fill if MyHatch1 is defined but MyHatch2 is missing.</p>
+  </div>
+</div>
+
+<p>For a <a>&lt;color&gt;</a> value in the final paint layer, all color syntaxes
+defined in <a href="http://www.w3.org/TR/css3-color/#colorunits">CSS Color Module Level 3</a>
+must be supported, including <span class='prop-value'>rgb()</span>,
+<span class='prop-value'>rgba()</span>,
+<span class='prop-value'>hsl()</span>,
+<span class='prop-value'>hsla()</span>,
+the <a href="http://www.w3.org/TR/css3-color/#svg-color">extended color keywords</a> and
+the <span class='prop-value'>currentColor</span> value.</p>
+
+<p>The <span class='prop-value'>context-fill</span> and <span class='prop-value'>context-stroke</span>
+values are a reference to the computed value of the <a>'fill'</a> or <a>'stroke'</a>
+property, respectively, of the <dfn id="TermContextElement">context element</dfn>
+of the element being painted.  The context element of an element is defined as follows:</p>
+
+<ul>
+  <li>If the element is within a <a>'marker element'</a>, and
+  is being rendered as part of that marker due to being referenced
+  via a <a>marker property</a>, then the context element
+  is the element referencing that <a>'marker element'</a>.</li>
+  <li>If the element is within a sub-tree that is instantiated
+  with a <a>'use'</a> element, then the context element is
+  that <a>'use'</a> element.</li>
+  <li>Otherwise, there is no context element.</li>
+</ul>
+
+<p>If there is no context element and these keywords are used, then no paint is
+applied.  If the referenced paint is a gradient or a pattern, then the
+coordinate space to use and the object used for any
+<span class='attr-value'>'objectBoundingBox'</span>-relative values are the
+same as those of the <a>context element</a>.</p>
+
+<p>If the referenced value of <a>'fill'</a> or <a>'stroke'</a> is a
+<span class='prop-value'>context-fill</span> and <span class='prop-value'>context-stroke</span>
+value, then those context references are followed too.</p>
+
+<div class="example">
+  <edit:includefile href="images/painting/marker-context.svg2.svg"/>
+  <div class="figure">
+    <img
+       alt="An example of the content-stroke keyword used in a marker"
+       src="images/painting/marker-context.svg11.svg" height="200"/>
+    <p class="caption">The marker is defined using a shape whose
+    <a>'stroke'</a> is set to <span class='prop-value'>context-stroke</span>.
+    This causes the marker to take on the color of each <a>'path'</a>
+    element that uses the marker.</p>
+  </div>
+</div>
+
 
 <h2 id="ColorProperty">The effect of the <span class="property">'color'</span> property</h2>
 
