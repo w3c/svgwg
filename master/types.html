@@ -1641,12 +1641,16 @@ defined in the <a href="#ListInterfaces">List interfaces</a> section above.</p>
 
 <h2 id="DOMInterfacesForReflectingSVGAttributes">DOM interfaces for reflecting SVG attributes</h2>
 
+<div class="ready-for-wg-review">
+
 <p class="note">
 In SVG 1.1 SE, the animVal attribute of the SVG DOM interfaces represented the
 current animated value of the reflected attribute. In this version of SVG,
 animVal no longer representes the current animated value and is instead an
 alias of baseVal.
 </p>
+
+</div>
 
 <p>Some IDL attributes <dfn id="TermReflect">reflect</dfn> the value of a content attribute
 or a property.  The way this reflection is done depends on the type of the IDL attribute:</p>
@@ -1667,15 +1671,26 @@ or a property.  The way this reflection is done depends on the type of the IDL a
   <a>SVGAnimatedAngle</a>, <a>SVGAnimatedRect</a> or <a>SVGAnimatedPreserveAspectRatio</a>,
   then the rules in the corresponding
   section defining the reflecting interface are used.
-  <p class='note'>At a high level, the object's
+  <p class='remove note'>At a high level, the object's
   baseVal is used to reflect the value of the content attribute, while its animVal is used
   to reflect the current animated value of the attribute.
   For objects that reflect a CSS property, the baseVal is used
   to reflect the presentation attribute, and its animVal
   is used to reflect the computed value of the property.</p>
+
+  <p class='note'>At a high level, the object's
+  baseVal is used to reflect the value of the content attribute.
+  For objects that reflect a CSS property, the baseVal is used
+  to reflect the presentation attribute.  </p>
   </li>
 </ul>
 
+<style>
+.remove { color: red; text-decoration: line-through;}
+</style>
+
+<div class="ready-for-wg-review">
+<div class='remove'>
 <p>Whenever:</p>
 
 <ul>
@@ -1683,22 +1698,25 @@ or a property.  The way this reflection is done depends on the type of the IDL a
   <li>a reflected content attribute's animated value changes, or</li>
   <li>a reflected CSS property computed value changes,</li>
 </ul>
+</div> 
 
-<p>then the reflecting object must be <dfn id="TermSynchronize">synchronized</dfn>,
+<p>Whenever a reflected content attribute's base value changes,
+then the reflecting object must be <dfn id="TermSynchronize">synchronized</dfn>,
 immediately after the value changed, by running the following steps:</p>
+</div>
 
 <ol class='algorithm'>
   <li>If the reflecting object is a <a>list interface</a> object,
   then run the steps for <a href='#TermSynchronizeList'>synchronizing
   a list interface object</a>.</li>
-  <li>Otherwise:
+  <li class='remove'>Otherwise:
     <ol>
       <li>Let <var>value</var> be a value determined as follows:
         <ul>
           <li>If the object reflects the computed value of a CSS
           property, then <var>value</var> is the current computed
           value of that property.</li>
-          <li>Otherwise, if the object reflects the
+          <li class='remove'>Otherwise, if the object reflects the
           animated value of an attribute, and that attribute is
           currently being animated, then <var>value</var> is its
           current animated value.</li>
@@ -1713,6 +1731,11 @@ immediately after the value changed, by running the following steps:</p>
       </li>
     </ol>
   </li>
+  <li>Otherwise, update the object's value to be the base value of the reflected
+  content attribute (using the attribute's <a>initial value</a> if it is not 
+  present or invalid).
+  <p class='note'>This will, for example, update the <a href="#LengthValue">value</a>
+  of an <a>SVGLength</a> object.</p></li>
 </ol>
 
 <p>When a <a>reflected</a> content attribute is to be
