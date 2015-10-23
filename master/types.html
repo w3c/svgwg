@@ -1253,6 +1253,16 @@ list's elements (<a>SVGNumber</a>, <a>SVGLength</a>, <a>DOMPoint</a>, <a>SVGTran
 <p>The <a>SVGTransformList</a> interface takes the above form but has
 two additional methods on it.</p>
 
+<p class='ready-for-wg-review'>All <a>list interface</a> objects apart from <a>SVGTransformList</a>
+reflect the base value of a reflected content
+attribute.  <a>SVGTransformList</a> objects reflect a presentation
+attribute (<span class='attr-name'>'transform'</span>,
+<a>'linearGradient/gradientTransform'</a> or <a>'pattern/patternTransform'</a>).
+All <a>list interface</a> objects are associated with a particular element.
+Unlike <a>SVGLength</a> and similar objects, there are no "detached"
+<a>list interface</a> objects.</p>
+
+<div class='remove'>
 <p>All <a>list interface</a> objects apart from <a>SVGTransformList</a>
 reflect either the base value or the animated value of a reflected content
 attribute.  <a>SVGTransformList</a> objects reflect either a presentation
@@ -1262,6 +1272,7 @@ or reflect the computed value of the <a>'transform'</a> property.
 All <a>list interface</a> objects are associated with a particular element.
 Unlike <a>SVGLength</a> and similar objects, there are no "detached"
 <a>list interface</a> objects.</p>
+</div>
 
 <p>A <a>list interface</a> object maintains an internal list of elements,
 which is referred to in the text below simply as "the list".
@@ -1272,17 +1283,21 @@ the content attribute (or, for <a>SVGTransformList</a> objects,
 in response to changes to the computed value of the <a>'transform'</a>
 property).</p>
 
-<p id="ReadOnlyList">A <a>list interface</a> object can be designated as
+<p id="ReadOnlyList" class='ready-for-wg-review'>A <a>list interface</a> object can be designated as
 <em>read only</em>, which means that attempts to modify the object will result
-in an exception being thrown, as described below.</p>
+in an exception being thrown, as described below. <a>List interface</a> objects
+reflected through the animVal attribute are always <em>read only</em>.</p>
 
 <p id="ListSynchronize">A <a>list interface</a> object
 is <dfn id="TermSynchronizeList">synchronized</dfn> by running
 the following steps:</p>
 
 <ol class='algorithm'>
-  <li>Let <var>value</var> be a value determined as follows:
-    <ul>
+  <li class='ready-for-wg-review'>Let <var>value</var> be the base value of the
+    reflected content attribute (using the attribute's <a>initial value</a>
+    if it is not present or invalid).</li>
+  <li>
+    <ul class='remove'>
       <li>If the <a>list interface</a> object reflects the
       computed value of the <a>'transform'</a> property,
       then <var>value</var> is the current computed value
@@ -1386,22 +1401,21 @@ the following steps are run, depending on the list element type:</p>
 
 <p>Whenever a list element object is to be <dfn id="TermAttach">attached</dfn>,
 the following steps are run, depending on the list element type:</p>
-
+<div class='ready-for-wg-review'>
 <dl class='switch'>
   <dt><a>SVGNumber</a></dt>
   <dd>
     <a href="#NumberAssociatedElement">Associate</a> the
     <a>SVGNumber</a> with the element that the <a>list interface</a>
-    object is associated with.  Additionally, depending on whether
-    the <a>list interface</a> object reflects a base or animated
-    value:
+    object is associated with.  Additionally, depending on which attribute
+    the <a>list interface</a> object is reflected through:
       <dl class='switch'>
-        <dt>base value</dt>
+        <dt>baseVal</dt>
         <dd>Set the <a>SVGNumber</a> to <a href="#NumberMode">reflect an
         element of the base value</a>.</dd>
-        <dt>animated value</dt>
+        <dt>animVal</dt>
         <dd>Set the <a>SVGNumber</a> to <a href="#NumberMode">reflect an
-        element of the animated value</a>.</dd>
+        element of the base value</a>.</dd>
       </dl>
   </dd>
   <dt><a>SVGLength</a></dt>
@@ -1411,53 +1425,46 @@ the following steps are run, depending on the list element type:</p>
     object is associated with and set its
     <a href="#LengthAssociatedElement">directionality</a> to that
     specified by the attribute being reflected.
-    Additionally, depending on whether the <a>list interface</a> object
-    reflects a base or animated value:
+    Additionally, depending on which attribute the <a>list interface</a> 
+    object is reflected through:
       <dl class='switch'>
-        <dt>base value</dt>
+        <dt>baseVal</dt>
         <dd>Set the <a>SVGLength</a> to <a href="#LengthMode">reflect an
         element of the base value</a>.</dd>
-        <dt>animated value</dt>
+        <dt>animVal</dt>
         <dd>Set the <a>SVGLength</a> to <a href="#LengthMode">reflect an
-        element of the animated value</a>
-        and make it <a href="#ReadOnlyLength">read only</a>.</dd>
+        element of the base value</a>. Set the <a>SVGLength</a> to be 
+        <em>read only</em>.</dd>
       </dl>
   </dd>
   <dt><a>DOMPoint</a></dt>
   <dd>
     <a href="shapes.html#PointAssociatedElement">Associate</a> the
     <a>DOMPoint</a> with the element that the <a>list interface</a>
-    object is associated with.  Additionally, depending on whether
-    the <a>list interface</a> object reflects a base or animated
-    value:
+    object is associated with.
+    Additionally, depending on which attribute the <a>list interface</a> 
+    object is reflected through:
       <dl class='switch'>
-        <dt>base value</dt>
+        <dt>baseVal</dt>
         <dd>Set the <a>DOMPoint</a> to <a href="shapes.html#PointMode">reflect an
         element of the base value</a>.</dd>
-        <dt>animated value</dt>
+        <dt>animVal</dt>
         <dd>Set the <a>DOMPoint</a> to <a href="shapes.html#PointMode">reflect an
-        element of the animated value</a>.</dd>
+        element of the base value</a>.</dd>
       </dl>
   </dd>
   <dt><a>SVGTransform</a></dt>
   <dd>
     <a href="coords.html#TransformAssociatedElement">Associate</a> the
     <a>SVGTransform</a> with the element that the <a>list interface</a>
-    object is associated with.  Additionally, depending on whether
-    the <a>list interface</a> object reflects a presentation
-    attribute or the computed <a>'transform'</a> property value:
-      <dl class='switch'>
-        <dt>base attribute value</dt>
-        <dd>Set the <a>SVGTransform</a> to <a href="coords.html#TransformMode">reflect an
-        element of a presentation attribute value</a>.</dd>
-        <dt>computed <a>'transform'</a> property value</dt>
-        <dd>Set the <a>SVGTransform</a> to <a href="coords.html#TransformMode">reflect an
-        element of the computed <span class='prop-name'>'transform'</span> property value</a>.</dd>
-      </dl>
+    object is associated with. 
+    Set the <a>SVGTransform</a> to <a href="coords.html#TransformMode">reflect an
+    element of a presentation attribute value</a>.
   </dd>
   <dt><b>DOMString</b></dt>
   <dd>Nothing is done.</dd>
 </dl>
+</div>
 
 <p>The <a href="http://heycam.github.io/webidl/#dfn-supported-property-indices">supported property indices</a>
 of a <a>list interface</a> object is the set of all non-negative integers
