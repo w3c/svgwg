@@ -231,13 +231,33 @@
 	CSS wrapping area</a>.
     </dd>
 
-  <dt id="TermWhiteSpaceCharacter">white space characters</dt>
-  <dd>The following characters are considered white space characters:
-  U+0009 CHARACTER TABULATION,
-  U+000C FORM FEED (FF),
-  U+000D CARRIAGE RETURN (CR),
-  U+000A LINE FEED (LF) and
-  U+0020 SPACE.</dd>
+    <!-- The following two terms are taken from CSS Writing Modes 3, simplified for SVG.-->
+    <dt id="TermInlineBaseDirection">inline-base direction</dt>
+    <dd>
+      The primary direction in which content is ordered within a line
+      or part of a line of text. It defines the <q>start</q> and
+      <q>end</q> sides of a line or part of a line of text (relevant,
+      for example to how the <a>'text-anchor'</a> property is
+      applied). It is determined by the <a>'direction'</a> property.
+      (Note: the ordering of glyphs in a line of text is primary
+      controlled by the Unicode bidi algorithm and not the inline-base
+      direction.)
+    </dd>
+
+    <dt id="TermBlockFlowDirection">block-flow direction</dt>
+    <dd>
+      The direction in which lines are stacked. It is determined by
+      the <a>'writing-mode'</a> property.
+    </dd>
+
+    <dt id="TermWhiteSpaceCharacter">white space characters</dt>
+    <dd>The following characters are considered white space characters:
+      U+0009 CHARACTER TABULATION,
+      U+000C FORM FEED (FF),
+      U+000D CARRIAGE RETURN (CR),
+      U+000A LINE FEED (LF) and
+      U+0020 SPACE.
+    </dd>
 
   </dl>
 
@@ -514,9 +534,7 @@
     as the writing direction, font specification, and painting
     attributes which describe how exactly to render the
     characters. Subsequent sections of this chapter describe the
-    relevant text-specific attributes and properties,
-    particular <a href="text.html#TextLayout">text layout</a> and
-    <a href="text.html#RelationshipWithBiDirectionality">bidirectionality</a>.
+    relevant text-specific attributes and properties.
   </p>
 
   <p>
@@ -548,7 +566,7 @@
 
   <p>
     The <a>'text'</a> element renders its first glyph (after
-    <a href="text.html#RelationshipWithBiDirectionality">bidirectionality</a>
+    bidirectionality
     reordering) at the initial <a>current text position</a> (with
     possible adjustments due to the value of the
     <a>'text-anchor'</a> property or the <a>'text-align'</a> property).
@@ -888,12 +906,12 @@
       <p>
         The purpose of this attribute is to allow the author to
         achieve exact alignment, in visual rendering order after
-        any <a href="text.html#RelationshipWithBiDirectionality">bidirectional
-        reordering</a>, for the first and last rendered glyphs that
+        any bidirectional
+        reordering, for the first and last rendered glyphs that
         correspond to this element; thus, for the last rendered
         character (in visual rendering order after
-        any <a href="text.html#RelationshipWithBiDirectionality">bidirectional
-        reordering</a>), any supplemental inter-character spacing
+        any bidirectional
+        reordering), any supplemental inter-character spacing
         beyond normal glyph advances are ignored (in most cases) when
         the user agent determines the appropriate amount to
         expand/compress the text string to fit within a length of
@@ -1110,11 +1128,9 @@
     </li>
 
     <li>
-      Relationship to
-      <a href="text.html#RelationshipWithBiDirectionality">bidirectionality</a>
-      &#x2013; As described below in the discussion on
-      <a href="text.html#RelationshipWithBiDirectionality">bidirectionality</a>,
-      text is laid out in a two-step process, where any bidirectional
+      Relationship to bidirectionality
+      &#x2013;
+      Text is laid out in a two-step process, where any bidirectional
       text is first re-ordered into a left-to-right string, and then
       text layout occurs with the re-ordered text string. Whenever the
       character data within a <a>'tspan'</a> element is re-ordered,
@@ -2175,6 +2191,121 @@
 
   <p class='issue' data-issue="45">Finish this algorithm.</p>
 
+  <hr/>
+  <p>Below: junk that should be covered in this section.</p>
+  <div class="annotation svg2-requirement">
+    <table>
+      <tr>
+	<th>SVG 2 Requirement:</th>
+	<td>Align with CSS for text layout functionality.</td>
+      </tr>
+      <tr>
+	<th>Resolution:</th>
+	<td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item08">SVG 2 Will use CSS3 definitions for text layout (white space, bidi, etc.) that is not specific to SVG.</a></td>
+      </tr>
+      <tr>
+	<th>Purpose:</th>
+	<td>To facilitate shared specification and implementation of text layout in HTML and SVG.</td>
+      </tr>
+      <tr>
+	<th>Owner:</th>
+	<td>Cameron and Chris (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3004">ACTION-3004</a>,
+          <a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3005">ACTION-3005</a>)</td>
+      </tr>
+    </table>
+  </div>
+
+  <p>
+    This section describes the text layout rules that govern direction
+    of text flow inside a <a>content area</a> in order to support
+    various international writing directions, such as left-to-right
+    (e.g., Latin scripts) and bidirectional (e.g., Hebrew or Arabic),
+    and vertical (e.g., Asian scripts).
+  </p>
+
+  <p>
+    The processing model for bidirectional text is as follows. The
+    user agent processes the characters which are provided in
+    <em>logical order</em> (i.e., the order the characters appear in
+    the original document). The user agent determines
+    the set of independent blocks within each of which it should apply
+    the Unicode bidirectional algorithm. Each
+    <a href="text.html#TextChunk">text chunk</a> represents an
+    independent block of text. Additionally, any change in glyph
+    orientation due to processing of properties
+    <a>'glyph-orientation-horizontal'</a> or
+    <a>'glyph-orientation-vertical'</a> will subdivide the independent
+    blocks of text further. After processing the Unicode bidirectional
+    algorithm and properties <a>'direction'</a> and
+    <a>'unicode-bidi'</a> on each of the independent text blocks, the
+    user agent will have a potentially re-ordered list of characters
+    which are now in left-to-right rendering order. Simultaneous with
+    re-ordering of the characters, the <a>'tspan/dx'</a>,
+    <a>'tspan/dy'</a>, and <a>'tspan/rotate'</a> attributes on the
+    <a>'tspan'</a> elements are also re-ordered to
+    maintain the original correspondence between characters and
+    attribute values. While kerning or ligature processing might be
+    font-specific, the preferred model is that kerning and ligature
+    processing occurs between combinations of characters or glyphs
+    after the characters have been re-ordered.
+  </p>
+
+<h3 id="BasicLayoutMetrics">Layout Orientations</h3>
+
+  <p id="ReferenceOrientation">
+    For each <a>'text'</a> element, the SVG user agent determines the
+    current <dfn>reference orientation</dfn>. For standard horizontal
+    or vertical text (i.e., not text-on-a-path), the reference
+    orientation is the vector pointing towards negative infinity in Y
+    within the current user coordinate system. (Note: in
+    the <a>initial coordinate system</a>, the reference orientation is
+    up.)  For <a href="text.html#TextLayoutPath">text on a path</a>,
+    the reference orientation is determined at each character's
+    position along the path. It is 90 degrees counter-clockwise
+    relative to the path direction for horizontal text and 180 degrees
+    relative to the path direction for vertical text.
+  </p>
+  <p class="issue" data-issue="18">In the model that text-on-a-path is text that is
+    first layed out according to CSS and then warped along a path, we
+    can get rid of the distinction made above.</p>
+
+  <p id="InlineProgressionDirection">
+    Based on the reference orientation and the value for
+    property <a>'writing-mode'</a>, the SVG user agent determines the
+    current <dfn>inline-progression-direction</dfn>. For left-to-right
+    text, the inline-progression-direction points 90 degrees clockwise
+    from the reference orientation vector. For right-to-left text, the
+    inline progression points 90 degrees counter-clockwise from the
+    reference orientation vector. For top-to-bottom text, the
+    inline-progression-direction points 180 degrees from the reference
+    orientation vector.
+  </p>
+
+  <p id="BlockProgressionDirection">
+    Based on the reference orientation and the value for
+    property <a>'writing-mode'</a>, the SVG user agent determines the
+    current <dfn>block-progression-direction</dfn>. For left-to-right
+    and right-to-left text, the block-progression-direction points 180
+    degrees from the reference orientation vector because the only
+    available horizontal <a>'writing-mode'</a>s
+    are <span class="prop-value">lr-tb</span>
+    and <span class="prop-value">rl-tb</span>. For top-to-bottom text,
+    the block-progression-direction always points 90 degrees
+    counter-clockwise from the reference orientation vector because
+    the only available top-to-bottom <a>'writing-mode'</a>
+    is <span class="prop-value">tb-rl</span>.
+  </p>
+
+  <p class="issue" data-issue="19">Insert figure.</p>
+
+  <p id="ShiftDirection">The <dfn>shift direction</dfn> is the
+    direction towards which the
+    <a href="#FontsTablesBaselines">baseline table</a> moves due
+    to positive values for property <a>'baseline-shift'</a>. The shift
+    direction is such that a positive value shifts the baseline table
+    towards the topmost entry in the parent's
+    <a href="#FontsTablesBaselines">baseline table</a>.
+  </p>
 
 <h2 id="TextLayoutPre">Pre-formatted text</h2>
 
@@ -2250,14 +2381,9 @@
     <li>
       For vertical text: <span class="val">y</span> is reset to the
       initial value while <span class="val">x</span> is decremented
-      (for right-to-left block-progression-direction) or incremented
-      (for left-to-right block-progression-direction) by the computed
+      (for right-to-left block-flow direction) or incremented
+      (for left-to-right block-flow direction) by the computed
       value of <a>'line-height'</a>.
-      <p class="issue" data-issue="33">
-        SVG 1.1 only has right-to-left vertical text but CSS Writing
-        Modes Module Level 3 also has left-to-right. This is required
-        for Mongolian.
-      </p>
     </li>
   </ul>
 
@@ -2897,8 +3023,7 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> d="..." fill="
   <p>
     For left-to-right horizontal text layout along a path (i.e.,
     when the glyph orientation is perpendicular to the
-    <a href="text.html#SettingInlineProgressionDirection">inline-progression-direction</a>),
-    the layout rules are as follows:
+    <a>inline-base direction</a> the layout rules are as follows:
   </p>
 
   <ul>
@@ -3016,8 +3141,7 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> d="..." fill="
   <p>
     Comparable rules are used for top-to-bottom vertical text
     layout along a path (i.e., when the glyph orientation is
-    parallel with the
-    <a href="text.html#SettingInlineProgressionDirection">inline-progression-direction</a>),
+    parallel with the <a>inline-base direction</a>,
     the layout rules are as follows:
   </p>
 
@@ -3107,16 +3231,16 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> d="..." fill="
   </p>
 
   <p>
-    When the
-    <a href="text.html#SettingInlineProgressionDirection">inline-progression-direction</a>
+    When the <a>inline-base direction</a>
     is horizontal, then any <span class="attr-name">'x'</span>
     attributes on <a>'text'</a> or <a>'tspan'</a>
     elements represent new absolute offsets along
     the path, thus providing explicit new values for
     startpoint-on-the-path. Any <span class="attr-name">'y'</span>
     attributes on <a>'text'</a> or <a>'tspan'</a>
-    elements are ignored. When the
-    <a href="text.html#SettingInlineProgressionDirection">inline-progression-direction</a>
+    elements are ignored.
+
+    When the <a>inline-base direction</a>
     is vertical, then any <span class="attr-name">'y'</span>
     attributes on <a>'text'</a> or <a>'tspan'</a>
     elements represent new absolute offsets along
@@ -3408,349 +3532,191 @@ text anchoring chunks.</p>
 
 <h3 id="TextPropertiesAdaptions">SVG Adaptions</h3>
 
-    <p>
-      This section covers SVG specific rules for properties that are not
-      discussed elsewhere in this chapter.
-    </p>
-
-    <div class="annotation svg2-requirement">
-      <table>
-	<tr>
-	  <th>SVG 2 Requirement:</th>
-	  <td>Reference CSS3 Fonts.</td>
-	</tr>
-	<tr>
-	  <th>Resolution:</th>
-	  <td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item08">SVG 2 will depend on CSS3 Fonts.</a></td>
-	</tr>
-	<tr>
-	  <th>Purpose:</th>
-	  <td>Alignment with CSS 2.1 and CSS3 for Web font functionality, and to provide
-	    access to advanced typographic features of fonts.</td>
-	</tr>
-	<tr>
-	  <th>Owner:</th>
-	  <td>Chris (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3123">ACTION-3123</a>)</td>
-	</tr>
-      </table>
-    </div>
-
-    <ul>
-      <li id="FontSize">
-	<a>'font-size'</a>:
-	<p>
-	  This property refers to the size of the font from baseline to
-	  baseline when multiple lines of text are set solid in a multi-line
-	  layout environment. For SVG, if a
-	  <span class="prop-value">&lt;length&gt;</span> is provided without
-	  a unit identifier (e.g., an unqualified number such as
-	  <span class="attr-value">128</span>), the SVG user agent processes
-	  the <span class="prop-value">&lt;length&gt;</span> as a height
-	  value in the current user coordinate system.
-	</p>
-	<p>
-	  If a <span class="prop-value">&lt;length&gt;</span> is provided
-	  with one of the <a href="coords.html#Units">unit identifiers</a>
-	  (e.g., <span class="attr-value">12pt</span>
-	  or <span class="attr-value">10%</span>), then the SVG user agent
-	  converts the <span class="prop-value">&lt;length&gt;</span> into a
-	  corresponding value in the current user coordinate system by
-	  applying the rules described in
-	  <a href="coords.html#Units">Units</a>.
-	</p>
-      </li>
-
-      <li id="FontVariant">
-	<a>'font-variant'</a>:
-	<p>
-	  CSS Font Module Level 3 changes the meaning of the
-	  <a href="http://www.w3.org/TR/css3-fonts/#propdef-font-variant">'font-variant'</a>
-	  property from that defined by CSS 2.1. It has been repurposed (and
-	  function greatly expanded) as a shorthand for selecting font
-	  variants from within a single font.
-	</p>
-	<p class="note">
-	  SVG 2 requires all <a>'font-variant'</a> subproperties to be
-	  implemented (e.g. 'font-varaint-ligatures').
-	</p>
-      </li>
-
-      <li id="TextKerning">
-	'kerning':
-	<p>
-	  SVG 1.1 uses the 'kerning' property to determine if the font
-	  kerning tables should be used to adjust inter-glyph
-	  spacing. It also allows a
-	  <span class="prop-value">&lt;length&gt;</span> value which
-	  if given is added to the spacing between glyphs (suplemental
-	  to any from the <a>'letter-spacing'</a> property). This
-	  property is replaced in SVG 2 by the
-	  CSS <a>'font-kerning'</a> property which solely controls
-	  turning on/off the use of the font kerning tables. The main
-	  use for 'kerning' is to turn off auto-kerning thus for
-	  minimal backwards compatability, a 'kerning' value of '0'
-	  should be mapped to a <a>'font-kerning'</a> value of 'none'.
-	</p>
-	<p class="issue" data-issue="29">Is this a reasonable way to
-	  handle the removed 'kerning' property?</p>
-      </li>
-
-      <li id="TextLineHeight">
-	<a>'line-height'</a>:
-	<p>
-	  SVG uses the <a>'line-height'</a> property to determine the amount
-	  of leading space which is added between lines in multi-line text
-	  (both for horizontal and vertical text). It is not applicable to
-	  text on a path.
-	</p>
-	<p class="issue" data-issue="49">'line-height' is refered to
-	  several places in this chapter with noting that 'line-height' is
-	  assumed to be equal to the 'font-size'. These must be fixed.
-	</p>
-	<p class="issue" data-issue="50">Do we refer to
-	  <a href="http://www.w3.org/TR/CSS21/visudet.html#line-height">CSS 2.1</a> or
-	  <a href="http://dev.w3.org/csswg/css-inline/">CSS Inline Module Level 3</a>?
-	</p>
-      </li>
-    </ul>
-
-<h2 id="TextLayoutDirections">Text layout &#x2013; Directions</h2>
+  <p>
+    This section covers properties that are not covered elsewhere in this
+    specification and either have SVG specific rules or are significanlty
+    altered from SVG 1.1.
+  </p>
 
   <div class="annotation svg2-requirement">
     <table>
       <tr>
 	<th>SVG 2 Requirement:</th>
-	<td>Align with CSS for text layout functionality.</td>
+	<td>Reference CSS3 Fonts.</td>
       </tr>
       <tr>
 	<th>Resolution:</th>
-	<td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item08">SVG 2 Will use CSS3 definitions for text layout (white space, bidi, etc.) that is not specific to SVG.</a></td>
+	<td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item08">SVG 2 will depend on CSS3 Fonts.</a></td>
       </tr>
       <tr>
 	<th>Purpose:</th>
-	<td>To facilitate shared specification and implementation of text layout in HTML and SVG.</td>
+	<td>Alignment with CSS 2.1 and CSS3 for Web font functionality, and to provide
+	  access to advanced typographic features of fonts.</td>
       </tr>
       <tr>
 	<th>Owner:</th>
-	<td>Cameron and Chris (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3004">ACTION-3004</a>,
-          <a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3005">ACTION-3005</a>)</td>
+	<td>Chris (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3123">ACTION-3123</a>)</td>
       </tr>
     </table>
   </div>
 
+  <h4 id='FontSizeProperty'>The <span class="property">'font-size'</span> property</h4>
+  <p class="issue" data-issue="52">Is the following text really necessary?</p>
   <p>
-    This section describes the text layout rules that govern direction
-    of text flow inside a <a>content area</a> in order to support
-    various international writing directions, such as left-to-right
-    (e.g., Latin scripts) and bidirectional (e.g., Hebrew or Arabic),
-    and vertical (e.g., Asian scripts).
+    This property refers to the size of the font from baseline to
+    baseline when multiple lines of text are set solid in a multi-line
+    layout environment. For SVG, if a
+    <span class="prop-value">&lt;length&gt;</span> is provided without
+    a unit identifier (e.g., an unqualified number such as
+    <span class="attr-value">128</span>), the SVG user agent processes
+    the <span class="prop-value">&lt;length&gt;</span> as a height
+    value in the current user coordinate system.
+  </p>
+  <p>
+    If a <span class="prop-value">&lt;length&gt;</span> is provided
+    with one of the <a href="coords.html#Units">unit identifiers</a>
+    (e.g., <span class="attr-value">12pt</span>
+    or <span class="attr-value">10%</span>), then the SVG user agent
+    converts the <span class="prop-value">&lt;length&gt;</span> into a
+    corresponding value in the current user coordinate system by
+    applying the rules described in
+    <a href="coords.html#Units">Units</a>.
   </p>
 
-  <p class="issue" data-issue="17">
-    We cannot simply reference CSS 2 as it doesn't include the
-    <a>'writing-mode'</a> property. The
-    <a href="http://www.w3.org/TR/css3-writing-modes/">CSS Writing
-    Modes Module Level 3</a> spec does include <a>'writing-mode'</a>
-    but its definition is a bit different from SVG 1.1. The spec also
-    has a different structure, putting 'direction' and 'unicode-bidi'
-    before 'writing-mode'.
+  <h4 id='FontVariantProperty'>The <span class="property">'font-variant'</span> property</h4>
+  <p>
+    CSS Font Module Level 3 changes the meaning of the
+    <a href="http://www.w3.org/TR/css3-fonts/#propdef-font-variant">'font-variant'</a>
+    property from that defined by CSS 2.1. It has been repurposed (and
+    function greatly expanded) as a shorthand for selecting font
+    variants from within a single font.
+  </p>
+  <p class="note">
+    SVG 2 requires all <a>'font-variant'</a> subproperties to be
+    implemented (e.g. 'font-varaint-ligatures').
   </p>
 
-
-<h3 id="BasicLayoutMetrics">Layout Orientations</h3>
-
-  <p id="ReferenceOrientation">
-    For each <a>'text'</a> element, the SVG user agent determines the
-    current <dfn>reference orientation</dfn>. For standard horizontal
-    or vertical text (i.e., not text-on-a-path), the reference
-    orientation is the vector pointing towards negative infinity in Y
-    within the current user coordinate system. (Note: in
-    the <a>initial coordinate system</a>, the reference orientation is
-    up.)  For <a href="text.html#TextLayoutPath">text on a path</a>,
-    the reference orientation is determined at each character's
-    position along the path. It is 90 degrees counter-clockwise
-    relative to the path direction for horizontal text and 180 degrees
-    relative to the path direction for vertical text.
+  <h4 id='KerningProperty'>The <span class="property">'kerning'</span> property</h4>
+  <p>
+    SVG 1.1 uses the 'kerning' property to determine if the font
+    kerning tables should be used to adjust inter-glyph
+    spacing. It also allows a
+    <span class="prop-value">&lt;length&gt;</span> value which
+    if given is added to the spacing between glyphs (suplemental
+    to any from the <a>'letter-spacing'</a> property). This
+    property is replaced in SVG 2 by the
+    CSS <a>'font-kerning'</a> property which solely controls
+    turning on/off the use of the font kerning tables. The main
+    use for 'kerning' is to turn off auto-kerning thus for
+    minimal backwards compatability, a 'kerning' value of '0'
+    should be mapped to a <a>'font-kerning'</a> value of 'none'.
   </p>
-  <p class="issue" data-issue="18">In the model that text-on-a-path is text that is
-    first layed out according to CSS and then warped along a path, we
-    can get rid of the distinction made above.</p>
+  <p class="issue" data-issue="29">Is this a reasonable way to
+    handle the removed 'kerning' property?</p>
 
-  <p id="InlineProgressionDirection">
-    Based on the reference orientation and the value for
-    property <a>'writing-mode'</a>, the SVG user agent determines the
-    current <dfn>inline-progression-direction</dfn>. For left-to-right
-    text, the inline-progression-direction points 90 degrees clockwise
-    from the reference orientation vector. For right-to-left text, the
-    inline progression points 90 degrees counter-clockwise from the
-    reference orientation vector. For top-to-bottom text, the
-    inline-progression-direction points 180 degrees from the reference
-    orientation vector.
-  </p>
-
-  <p id="BlockProgressionDirection">
-    Based on the reference orientation and the value for
-    property <a>'writing-mode'</a>, the SVG user agent determines the
-    current <dfn>block-progression-direction</dfn>. For left-to-right
-    and right-to-left text, the block-progression-direction points 180
-    degrees from the reference orientation vector because the only
-    available horizontal <a>'writing-mode'</a>s
-    are <span class="prop-value">lr-tb</span>
-    and <span class="prop-value">rl-tb</span>. For top-to-bottom text,
-    the block-progression-direction always points 90 degrees
-    counter-clockwise from the reference orientation vector because
-    the only available top-to-bottom <a>'writing-mode'</a>
-    is <span class="prop-value">tb-rl</span>.
-  </p>
-
-  <p class="issue" data-issue="19">Insert figure.</p>
-
-  <p id="ShiftDirection">The <dfn>shift direction</dfn> is the
-    direction towards which the
-    <a href="#FontsTablesBaselines">baseline table</a> moves due
-    to positive values for property <a>'baseline-shift'</a>. The shift
-    direction is such that a positive value shifts the baseline table
-    towards the topmost entry in the parent's
-    <a href="#FontsTablesBaselines">baseline table</a>.
-  </p>
-
-<h4 id="SettingInlineProgressionDirection">The inline-progression-direction: the <span class="property">'writing-mode'</span> property</h4>
-
-  <div class="issue" data-issue="20">
-    <p>
-      Do we align with CSS Writing Modes Module Level 3? In CSS3,
-      inline progression direction is separated from block progression
-      direction. The CSS Writing Modes Module redefines
-      'writing-mode'. Note: SVG does not have tb-lr required
-      for Mongolian.
-    </p>
-    <ul>
-      <li>SVG 1.1:  	lr-tb | rl-tb | tb-rl | lr | rl | tb</li>
-      <li>CSS Writing Modes: horizontal-tb | vertical-rl | vertical-lr</li>
-    </ul>
-    <p>
-      See: <a href="http://www.w3.org/Style/CSS/Tracker/issues/183">CSS Issue-183</a>
-    </p>
-  </div>
+  <h4 id='LineHeightProperty'>The <span class="property">'line-height'</span> property</h4>
 
   <p>
-    The <a>'writing-mode'</a> property specifies whether the initial
-    inline-progression-direction for a <a>'text'</a> element shall be
-    left-to-right, right-to-left, or top-to-bottom. The
-    <a>'writing-mode'</a> property applies only to <a>'text'</a>
-    elements; the property is ignored for <a>'tspan'</a>,
-    and <a>'textPath'</a> sub-elements. (Note that
-    the inline-progression-direction can change within a <a>'text'</a>
-    element due to the Unicode bidirectional algorithm and
-    properties <a>'direction'</a> and <a>'unicode-bidi'</a>. For more on
-    bidirectional text, see
-    <a href="text.html#RelationshipWithBiDirectionality">Relationship
-    with bidirectionality</a>.)
+    SVG uses the <a>'line-height'</a> property to determine the amount
+    of leading space which is added between lines in multi-line text
+    (both for horizontal and vertical text). It is not applicable to
+    text on a path.
+  </p>
+  <p class="issue" data-issue="49">'line-height' is refered to
+    several places in this chapter with noting that 'line-height' is
+    assumed to be equal to the 'font-size'. These must be fixed.
+  </p>
+  <p class="issue" data-issue="50">Do we refer to
+    <a href="http://www.w3.org/TR/CSS21/visudet.html#line-height">CSS 2.1</a> or
+    <a href="http://dev.w3.org/csswg/css-inline/">CSS Inline Module Level 3</a>?
   </p>
 
-  <table  class="propdef">
-    <tr>
-      <th>Name:</th>
-      <td><dfn id="WritingModeProperty">writing-mode</dfn></td>
-    </tr>
-    <tr>
-      <td>Value:</td>
-      <td>lr-tb | rl-tb | tb-rl | lr | rl | tb</td>
-    </tr>
-    <tr>
-      <td>Initial:</td>
-      <td>lr-tb</td>
-    </tr>
-    <tr>
-      <td>Applies to:</td>
-      <td><a>'text'</a> elements</td>
-    </tr>
-    <tr>
-      <td>Inherited:</td>
-      <td>yes</td>
-    </tr>
-    <tr>
-      <td>Percentages:</td>
-      <td>N/A</td>
-    </tr>
-    <tr>
-      <td>Media:</td>
-      <td>visual</td>
-    </tr>
-    <tr>
-      <th>Computed&#160;value:</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th><a>Animatable</a>:</th>
-      <td>no</td>
-    </tr>
-  </table>
-
-  <dl>
-    <dt><span class="attr-value">lr-tb | lr</span></dt>
-    <dd>
-      Sets the initial inline-progression-direction to left-to-right,
-      as is common in most Latin-based documents.  For most
-      characters, the <em>current text position</em> is advanced from
-      left to right after each glyph is rendered.  (When the character
-      data includes characters which are subject to the Unicode
-      bidirectional algorithm, the text advance rules are more
-      complex. See <a href="text.html#RelationshipWithBiDirectionality">Relationship
-      with bidirectionality</a>).
-    </dd>
-
-    <dt><span class="attr-value">rl-tb | rl</span></dt>
-    <dd>
-      Sets the initial inline-progression-direction to
-      right-to-left, as is common in Arabic or Hebrew scripts. (See
-      <a href="text.html#RelationshipWithBiDirectionality">Relationship
-	with bidirectionality</a>.)
-    </dd>
-
-    <dt><span class="attr-value">tb-rl | tb</span></dt>
-    <dd>
-      Sets the initial inline-progression-direction to top-to-bottom,
-      as is common in some Asian scripts, such as Chinese and
-      Japanese. Though hardly as frequent as horizontal, this type of
-      vertical layout also occurs in Latin based documents,
-      particularly in table column or row labels.  In most cases, the
-      vertical baselines running through the middle of each glyph are
-      aligned.
-    </dd>
-  </dl>
-
-<h3 id="RelationshipWithBiDirectionality">Relationship with bidirectionality</h3>
+  <h4 id='WritingModeProperty'>The <span class="property">'writing-mode'</span> property</h4>
 
   <p>
-    The characters in certain scripts are written from right to
-    left. In some documents, in particular those written with the
-    Arabic or Hebrew script, and in some mixed-language contexts, text
-    in a single line may appear with mixed directionality. This
-    phenomenon is called bidirectionality, or "bidi" for short.
+    This property sets the <a>block-flow direction</a>; or in-other-words,
+    the direction in which lines of text are stacked. As a consequence it
+    also determines if the text has a horizontal or vertical orientation.
   </p>
+  <p class="issue" data-issue="53">
+    SVG 1.1 states that this property only has an effect on a text element. Is this still the case?
+  </p>
+  <p>
+    SVG 2 references
+    <a href="http://dev.w3.org/csswg/css3-writing-modes/">CSS Writing
+      Modes Level 3</a> for the definition of the
+    <a href="http://dev.w3.org/css-writing-modes-3/#block-flow">'writing-mode'</a>
+    property. That specification introduces new values for the property.
+    The SVG 1.1 values are obsolete but must still be supported by
+    converting the specified values to computed values as follows:
+  </p>
+  <ul>
+    <li>
+      <span class="prop-value">'lr'</span>,
+      <span class="prop-value">'lr-tb'</span>,
+      <span class="prop-value">'rl'</span>, and
+      <span class="prop-value">'rl-tb'</span> to
+      <span class="prop-value">'horizontal-tb'</span>;
+    </li>
+    <li>
+      <span class="prop-value">'tb'</span>, and
+      <span class="prop-value">'tb-rl'</span>, to
+      <span class="prop-value">'vertical-rl'</span>.
+    </li>
+  </ul>
+  <p class="note"><!-- This could be an annotation. -->
+    In SVG 1.0, this property could be interpreted as to also setting the
+    <a>inline-base direction</a> leading to confusion about its role
+    relative to the <a>'direction'</a> property. SVG 1.1 was a bit
+    more specific about the role of <a>'direction'</a>
+    (e.g. that <a>'direction'</a> set the reference point for
+    the <a>'text-anchor'</a> property) but still was open to
+    interpretation. The fact that neither SVG 1.0 nor SVG 1.1 allowed
+    multi-line text added to the confusion.
+  </p>
+  <p class="note">
+    Except for the additional information provided here, the
+    <a href="http://www.w3.org/TR/css-writing-modes-3/#block-flow">normative
+      definition</a> of the <a>'writing-mode'</a> property is in CSS
+      Writing Modes Level 3
+      ([<a href="refs.html#ref-CSSWRITINGMODES3">CSSWRITINGMODES3</a>]).
+  </p>
+
+  <h4 id='DirectionProperty'>The <span class="property">'direction'</span> property</h4>
 
   <p>
-    The Unicode standard
-    ([<a href="refs.html#ref-UNICODE">UNICODE</a>], specifically
-    [<a href="refs.html#ref-UAX9">UAX9</a>]) defines a complex
-    algorithm for determining the proper directionality of text. The
-    algorithm consists of an implicit part based on character
-    properties, as well as explicit controls for embeddings and
-    overrides. The <a>SVG user agent</a> applies this bidirectional
-    algorithm when determining the layout of characters within a
-    <a>text content block element</a>.
+    The property specifies the <a>inline-base direction</a> of a
+    <a>'text'</a> or <a>'tspan'</a> element. It defines the
+    <q>start</q> and <q>end</q> points of a line of text as used by
+    the <a>'text-anchor'</a> and <a>'inline-size'</a> properties. It
+    also may effect the direction in which characters are positioned
+    if the <a>'unicode-bidi'</a> property's value is either
+    <span class='prop-value'>embed</span> or
+    <span class='prop-value'>bidi-override</span>.
   </p>
-
   <p>
-    The <a>'direction'</a> and <a>'unicode-bidi'</a> properties allow
-    authors to override the inherent directionality of the content
-    characters and thus explicitly control how the elements and
-    attributes of a document language map to this algorithm. These two
-    properties are applicable to all characters whose glyphs are
-    perpendicular to the inline-progression-direction.
+    The <a>'direction'</a> property applies only to glyphs oriented
+    perpendicular to the <a>inline-base direction</a>,
+    which includes the usual case of horizontally-oriented Latin or
+    Arabic text and the case of narrow-cell Latin or Arabic characters
+    rotated 90 degrees clockwise relative to a top-to-bottom
+    inline-progression-direction.
+  </p>
+  <p class="issue" data-issue="54">
+    Check this agrees with CSS3 Writing modes.
   </p>
 
+  <p class="note">
+    Except for the additional information provided here, the
+    <a href="http://www.w3.org/TR/css-writing-modes-3/#direction">normative
+      definition</a> of the <a>'direction'</a> property is in CSS
+      Writing Modes Level 3
+      ([<a href="refs.html#ref-CSSWRITINGMODES3">CSSWRITINGMODES3</a>]).
+  </p>
+
+  <p class="issue" data-issue="55">
+    Move the following examples to the (yet to exist) examples section?
+  </p>
   <p>
     In many cases, the bidirectional algorithm from Unicode
     [<a href="refs.html#ref-UNICODE">UNICODE</a>] produces the desired
@@ -3775,483 +3741,40 @@ text anchoring chunks.</p>
 
   <edit:example href="images/text/rtl-complex.svg" link="yes" image="yes"/>
 
-  <p>
-    Within <a>text content elements</a>, the alignment of text with
-    regards to the <a>'text-anchor'</a> property is determined by the
-    value of the <a>'direction'</a> property. For example, given
-    a <a>'text'</a> element with a <a>'text-anchor'</a> value
-    of <span class="prop-value">"end"</span>, for a <a>'direction'</a>
-    value of <span class="prop-value">"ltr"</span>, the text will
-    extend to the left of the position of the <a>'text'</a>
-    element's <a>'text/x'</a> attribute value, while for
-    <a>'direction'</a> value of <span class="prop-value">"rtl"</span>,
-    the text will extend to the right of the position of the
-    <a>'text'</a> element's <a>'text/x'</a> attribute value.
-  </p>
+
+  <h4 id='GlyphOrientationHorizontalProperty'>The <span class="property">'glyph-orientation-horizontal'</span> property</h4>
 
   <p>
-    A more complete discussion of bidirectionality can be found in the
-    <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#direction">Text
-      direction</a> section of CSS 2.1
-    ([<a href="refs.html#ref-CSS21">CSS21</a>], section 9.10).
+    This property has been removed in SVG 2.
   </p>
+
+  <h4 id='GlyphOrientationVerticalProperty'>The <span class="property">'glyph-orientation-vertical'</span> property</h4>
 
   <p>
-    The processing model for bidirectional text is as follows. The
-    user agent processes the characters which are provided in
-    <em>logical order</em> (i.e., the order the characters appear in
-    the original document). The user agent determines
-    the set of independent blocks within each of which it should apply
-    the Unicode bidirectional algorithm. Each
-    <a href="text.html#TextChunk">text chunk</a> represents an
-    independent block of text. Additionally, any change in glyph
-    orientation due to processing of properties
-    <a>'glyph-orientation-horizontal'</a> or
-    <a>'glyph-orientation-vertical'</a> will subdivide the independent
-    blocks of text further. After processing the Unicode bidirectional
-    algorithm and properties <a>'direction'</a> and
-    <a>'unicode-bidi'</a> on each of the independent text blocks, the
-    user agent will have a potentially re-ordered list of characters
-    which are now in left-to-right rendering order. Simultaneous with
-    re-ordering of the characters, the <a>'tspan/dx'</a>,
-    <a>'tspan/dy'</a>, and <a>'tspan/rotate'</a> attributes on the
-    <a>'tspan'</a> elements are also re-ordered to
-    maintain the original correspondence between characters and
-    attribute values. While kerning or ligature processing might be
-    font-specific, the preferred model is that kerning and ligature
-    processing occurs between combinations of characters or glyphs
-    after the characters have been re-ordered.
+    This property applies only to vertical text. It has been obsoleted
+    in SVG 2 and partially replaced by the <a>'text-orientation'</a>
+    property of CSS Writing Modes Level 3. The following SVG 1.1
+    values must still be supported by aliasing the property
+    as a shorthand to <a>'text-orientation'</a> as follows:
   </p>
-
-<h4 id="BaseDirection">The <span class="property">'direction'</span> property</h4>
-
-  <table class="propdef">
-    <tr>
-      <th>Name:</th>
-      <td><dfn id="DirectionProperty">direction</dfn></td>
-    </tr>
-    <tr>
-      <td>Value:</td>
-      <td>ltr | rtl</td>
-    </tr>
-    <tr>
-      <td>Initial:</td>
-      <td>ltr</td>
-    </tr>
-    <tr>
-      <td>Applies to:</td>
-      <td><a>text content elements</a></td>
-    </tr>
-    <tr>
-      <td>Inherited:</td>
-      <td>yes</td>
-    </tr>
-    <tr>
-      <td>Percentages:</td>
-      <td>N/A</td>
-    </tr>
-    <tr>
-      <td>Media:</td>
-      <td>visual</td>
-    </tr>
-    <tr>
-      <th>Computed&#160;value:</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th><a>Animatable</a>:</th>
-      <td>no</td>
-    </tr>
-  </table>
-
+  <ul>
+    <li>
+      <span class="prop-value">'auto'</span> to
+      <span class="prop-value">'mixed'</span>;
+    </li>
+    <li>
+      <span class="prop-value">'0deg'</span>, and
+      <span class="prop-value">'0'</span>, to
+      <span class="prop-value">'upright'</span>.
+    </li>
+    <li>
+      <span class="prop-value">'90deg'</span>, and
+      <span class="prop-value">'90'</span>, to
+      <span class="prop-value">'sideways'</span>.
+    </li>
+  </ul>
   <p>
-    This property specifies the base writing direction of text and the
-    direction of embeddings and overrides (see <a>'unicode-bidi'</a>)
-    for the Unicode bidirectional algorithm. For
-    the <a>'direction'</a> property to have any effect on an element
-    that does not by itself establish a
-    new <a href="text.html#TextChunks">text chunk</a> (such as
-    a <a>'tspan'</a> element without absolute position adjustments due
-    to <a>'tspan/x'</a> or <a>'tspan/y'</a> attributes),
-    the <a>'unicode-bidi'</a> property's value must
-    be <span class='prop-value'>embed</span>
-    or <span class='prop-value'>bidi-override</span>.
-  </p>
-
-  <p class="note">
-    Except for any additional information provided in this
-    specification, the
-    <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#propdef-direction">normative
-    definition</a> of the <a>'direction'</a> property is in CSS 2.1
-    ([<a href="refs.html#ref-CSS21">CSS21</a>], section 9.10).
-  </p>
-
-  <p>
-    The <a>'direction'</a> property applies only to glyphs oriented
-    perpendicular to the
-    <a href="text.html#SettingInlineProgressionDirection">inline-progression-direction</a>,
-    which includes the usual case of horizontally-oriented Latin or
-    Arabic text and the case of narrow-cell Latin or Arabic characters
-    rotated 90 degrees clockwise relative to a top-to-bottom
-    inline-progression-direction.
-  </p>
-
-<h4 id="SettingDirection">The <span class="property">'unicode-bidi'</span> property</h4>
-
-  <table  class="propdef">
-    <tr>
-      <th>Name:</th>
-      <td><dfn id="UnicodeBidiProperty">unicode-bidi</dfn></td>
-    </tr>
-    <tr>
-      <th>Value:</th>
-      <td>normal | embed | bidi-override</td>
-    </tr>
-    <tr>
-      <th>Initial:</th>
-      <td>normal</td>
-    </tr>
-    <tr>
-      <th>Applies to:</th>
-      <td><a>text content elements</a></td>
-    </tr>
-    <tr>
-      <th>Inherited:</th>
-      <td>no</td>
-    </tr>
-    <tr>
-      <th>Percentages:</th>
-      <td>N/A</td>
-    </tr>
-    <tr>
-      <th>Media:</th>
-      <td>visual</td>
-    </tr>
-    <tr>
-      <th>Computed&#160;value:</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th><a>Animatable</a>:</th>
-      <td>no</td>
-    </tr>
-  </table>
-
-  <p class="note">
-    Except for any additional information provided in this
-    specification, the
-    <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#propdef-unicode-bidi">normative
-      definition</a> of the <a>'unicode-bidi'</a> property is in CSS 2.1
-    ([<a href="refs.html#ref-CSS21">CSS21</a>], section 9.10).
-  </p>
-
-<h3 id="GlyphOrientation">Glyph orientation within a text run</h3>
-
-  <p class="issue" data-issue="22">
-    CSS Writing Modes Module Level 3 replaces
-    'glyph-orientation-vertical' with
-    <a href="http://www.w3.org/TR/css3-writing-modes/#text-orientation">'text-orientation'</a>
-    but does not provide a replacement for 'glyph-orientation
-    horizontal'. There is, however, a value 'use-glyph-orientation',
-    only valid for SVG, which directs an implementation to use the
-    values of 'glyph-orientation-veritical' and
-    'glyph-orientation-horizontal'. Note that this value is marked
-    as <em>at risk</em>.
-  </p>
-
-  <p>
-    In some cases, it is required to alter the orientation of a
-    sequence of characters relative to the
-    inline-progression-direction. The requirement is particularly
-    applicable to vertical layouts of East Asian documents, where
-    sometimes narrow-cell Latin text is to be displayed horizontally
-    and other times vertically.
-  </p>
-
-  <p>
-    Two properties control the glyph orientation relative to the
-    reference orientation for each of the two possible
-    inline-progression-directions. <a>'glyph-orientation-vertical'</a>
-    controls glyph orientation when the inline-progression-direction
-    is vertical. <a>'glyph-orientation-horizontal'</a> controls glyph
-    orientation when the inline-progression-direction is horizontal.
-  </p>
-
-<h4 id="GlyphOrientationVertical">The <span class="property">'glyph-orientation-vertical'</span> property</h4>
-
-  <p class="issue" data-issue="23">
-    Reference CSS3 text? CSS3 has additional values: upright, inline.
-  </p>
-
-  <table class="propdef">
-    <tr>
-      <th>Name:</th>
-      <td><dfn id="GlyphOrientationVerticalProperty">glyph-orientation-vertical</dfn></td>
-    </tr>
-    <tr>
-      <th>Value:</th>
-      <td>auto | <a>&lt;angle&gt;</a> | <a>&lt;number&gt;</a></td>
-    </tr>
-    <tr>
-      <th>Initial:</th>
-      <td>auto</td>
-    </tr>
-    <tr>
-      <th>Applies to:</th>
-      <td><a>text content elements</a></td>
-    </tr>
-    <tr>
-      <th>Inherited:</th>
-      <td>yes</td>
-    </tr>
-    <tr>
-      <th>Percentages:</th>
-      <td>N/A</td>
-    </tr>
-    <tr>
-      <th>Media:</th>
-      <td>visual</td>
-    </tr>
-    <tr>
-      <th>Computed&#160;value:</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th><a>Animatable</a>:</th>
-      <td>no</td>
-    </tr>
-  </table>
-
-  <dl>
-    <dt><span class="prop-value">auto</span></dt>
-    <dd>
-      <ul>
-	<li>
-          <p>
-	    Fullwidth ideographic and fullwidth Latin text will be set
-            with a glyph-orientation of 0-degrees.
-	  </p>
-          <p>
-	    Ideographic punctuation and other ideographic characters
-            having alternate horizontal and vertical forms will use
-            the vertical form of the glyph.
-	  </p>
-	</li>
-	<li>
-          <p>
-	    Text which is not fullwidth will be set with a
-            glyph-orientation of 90-degrees.
-	  </p>
-          <p>
-	    This reorientation rule applies only to the first-level
-            non-ideographic text. All further embedding of
-            writing-modes or bidi processing will be based on the
-            first-level rotation.
-	  </p>
-
-	  <div class="note">
-            <ul>
-	      <li>
-		<p>This is equivalent to having set the
-		  non-ideographic text string horizontally honoring
-		  the bidi-rule, then rotating the resultant
-		  sequence of inline-areas (one area for each
-		  change of glyph direction) 90-degrees
-		  clockwise.
-		</p>
-		<p>It should be noted that text set in this
-		  "rotated" manner may contain ligatures or other
-		  glyph combining and reordering common to the
-		  language and script. (This "rotated" presentation
-		  form does not disable auto-ligature formation or
-		  similar context-driven variations.)
-		</p>
-	      </li>
-	      <li>
-		The determination of which characters should be
-		auto-rotated may vary across user agents. The
-		determination is based on a complex interaction
-		between country, language, script, character
-		properties, font, and character context. It is
-		suggested that one consult the Unicode TR 11 and the
-		various JIS or other national standards.
-	      </li>
-            </ul>
-	  </div>
-	</li>
-      </ul>
-    </dd>
-
-    <dt><span class="prop-value"><a>&lt;angle&gt;</a></span></dt>
-    <dt><span class="prop-value"><a>&lt;number&gt;</a></span></dt>
-    <dd>
-      <p>
-	The glyph orientation angle. A value specified as a
-	<a>&lt;number&gt;</a> is interpreted as an angle in degrees.
-	The value of the angle is restricted to 0, 90, 180, and 270
-	degrees. The user agent shall round the value of the angle to
-	the closest of the permitted values.
-      </p>
-      <p>
-	A value of <span class="prop-value">0deg</span> indicates that
-	all glyphs are set with the top of the glyphs oriented towards
-	the <a href="text.html#ReferenceOrientation">reference
-	orientation</a>. A value
-	of <span class="prop-value">90deg</span> indicates an
-	orientation of 90 degrees clockwise from
-	the <a href="text.html#ReferenceOrientation">reference
-	orientation</a>.
-      </p>
-    </dd>
-  </dl>
-
-  <p>
-    This property is applied only to text written in a vertical
-    <a>'writing-mode'</a>.
-  </p>
-
-  <p>
-    The glyph orientation affects the amount that the current text
-    position advances as each glyph is rendered. When the
-    inline-progression-direction is vertical and the
-    <a>'glyph-orientation-vertical'</a> results in an orientation
-    angle that is a multiple of 180 degrees, then the current text
-    position is incremented according to the vertical metrics of the
-    glyph. Otherwise, if the <a>'glyph-orientation-vertical'</a>
-    results in an orientation angle that is not a multiple of 180
-    degrees, then the current text position is incremented according
-    to the horizontal metrics of the glyph.
-  </p>
-
-  <p>
-    The text layout diagrams in this section use the following symbols:
-  </p>
-
-  <table>
-    <tr><th><img alt="Symbolic wide-cell glyph representation" class="example" width="39" height="39" src="images/text/fullwidth.png" /></th>
-      <td>wide-cell glyph (e.g. Han) which is the <em>n</em>-th glyph in the text run</td></tr>
-    <tr><th><img alt="Symbolic narrow-cell glyph representation" class="example" width="19" height="39" src="images/text/halfwidth.png" /></th>
-      <td>narrow-cell glyph (e.g. Latin) which is the <em>n</em>-th glyph in the text run</td></tr>
-  </table>
-
-  <p>
-    The orientation which the above symbols assume in the diagrams
-    corresponds to the orientation that the Unicode characters they
-    represent are intended to assume when rendered in the user
-    agent. Spacing between the glyphs in the diagrams is usually
-    symbolic, unless intentionally changed to make a point.
-  </p>
-
-  <p>
-    The diagrams below illustrate different uses of
-    <a>'glyph-orientation-vertical'</a>. The diagram on the left shows
-    the result of the mixing of full-width ideographic glyphs with
-    narrow-cell Latin glyphs when <a>'glyph-orientation-vertical'</a>
-    for the Latin characters is either
-    <span class="prop-value">auto</span> or
-    <span class="prop-value">90</span>. The diagram on the right show
-    the result of mixing full-width ideographic glyphs with
-    narrow-cell Latin glyphs when Latin glyphs are specified to have
-    a <a>'glyph-orientation-vertical'</a> of
-    <span class="prop-value">0</span>.
-  </p>
-
-  <!-- Redo these images as one? -->
-  <p>
-    <img alt="Layout of mixed glyphs in vertical-ideographic mode. Wide-cell glyphs are upright, Non-wide-cell glyphs are rotated by 90 degrees."
-	 class="example" width="45" height="262"
-	 src="images/text/lf-vi.png" />
-    <img alt="Example of mixed Japanese and English in vertical-ideographic layout. Japanese glyphs are upright, English rotated."
-	 class="example" width="40" height="260"
-	 src="images/text/GlyphOrientAuto.png" />
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img
-       alt="Layout of mixed glyphs in vertical mode. All glyphs are upright."
-       class="example" width="42" height="342"
-       src="images/text/lf-v.png" />
-    <img alt="Example of mixed Japanese and English in vertical layout. All glyphs are upright."
-	 class="example" width="38" height="340"
-	 src="images/text/GlyphOrientZero.png" />
-  </p>
-
-<h4 id="GlyphOrientationHorizontal">The <span class="property">'glyph-orientation-horizontal'</span> property</h4>
-
-  <p class="issue" data-issue="24">Reference CSS3 text? CSS3 has additional values: auto, inline.</p>
-
-  <table class="propdef">
-    <tr>
-      <th>Name:</th>
-      <td><dfn id="GlyphOrientationHorizontalProperty">glyph-orientation-horizontal</dfn></td>
-    </tr>
-    <tr>
-      <th>Value:</th>
-      <td><a>&lt;angle&gt;</a> | <a>&lt;number&gt;</a></td>
-    </tr>
-    <tr>
-      <th>Initial:</th>
-      <td>0deg</td>
-    </tr>
-    <tr>
-      <th>Applies to:</th>
-      <td><a>text content elements</a></td>
-    </tr>
-    <tr>
-      <th>Inherited:</th>
-      <td>yes</td>
-    </tr>
-    <tr>
-      <th>Percentages:</th>
-      <td>N/A</td>
-    </tr>
-    <tr>
-      <th>Media:</th>
-      <td>visual</td>
-    </tr>
-    <tr>
-      <th>Computed&#160;value:</th>
-      <td></td>
-    </tr>
-    <tr>
-      <th><a>Animatable</a>:</th>
-      <td>no</td>
-    </tr>
-  </table>
-
-  <dl>
-    <dt><span class="prop-value"><a>&lt;angle&gt;</a></span></dt>
-    <dt><span class="prop-value"><a>&lt;number&gt;</a></span></dt>
-    <dd>The glyph orientation angle.  A value specified as a
-      <a>&lt;number&gt;</a> is interpreted as an angle in degrees.
-      The value of the angle is restricted to 0, 90, 180, and
-      270 degrees. The user agent shall round the value of the
-      angle to the closest of the permitted values.<br />
-      A value of <span class="prop-value">0deg</span> indicates
-      that all glyphs are set with the top of the glyphs oriented
-      towards the <a
-		     href="text.html#ReferenceOrientation">reference
-	orientation</a>. A value of <span
-				       class="prop-value">90deg</span> indicates an orientation of
-      90 degrees clockwise from the <a
-				       href="text.html#ReferenceOrientation">reference
-	orientation</a>.</dd>
-  </dl>
-
-  <p>
-    This property is applied only to text written in a
-    horizontal <a>'writing-mode'</a>.
-  </p>
-
-  <p>
-    The glyph orientation affects the amount that the current text
-    position advances as each glyph is rendered. When the reference
-    orientation direction is horizontal and the
-    <a>'glyph-orientation-horizontal'</a> results in an orientation
-    angle that is a multiple of 180 degrees, then the current text
-    position is incremented according to the horizontal metrics of the
-    glyph. Otherwise, if the <a>'glyph-orientation-horizontal'</a>
-    results in an orientation angle that is not a multiple of 180
-    degrees, then the current text position is incremented according
-    to the vertical metrics of the glyph.
+    Any other values must be treated as invalid.
   </p>
 
 <h2 id="TextLayoutPositioning">Text layout &#x2013; Positioning</h2>
@@ -4295,10 +3818,9 @@ text anchoring chunks.</p>
     based on:
   </p>
   <ul>
-    <li>The current
-    <a href="text.html#SettingInlineProgressionDirection">inline-progression-direction</a>.</li>
+    <li>The current <a>inline-base direction</a>.</li>
     <li>Glyph-specific advance values corresponding to
-    the <a href="text.html#GlyphOrientation">glyph orientation</a> of
+    the glyph orientation of
     the glyph just rendered.</li>
     <li>Kerning tables in the font.</li>
     <li>The current values of various attributes and properties, such as
@@ -4308,8 +3830,8 @@ text anchoring chunks.</p>
   </ul>
   <p>
     If a glyph does not provide explicit advance values corresponding
-    to the current <a href="text.html#GlyphOrientation">glyph
-    orientation</a>, then an appropriate approximation should be
+    to the current glyph
+    orientation, then an appropriate approximation should be
     used. For vertical text, a suggested approximation is the sum of
     the ascent and descent values for the glyph. Another suggested
     approximation for an advance value for both horizontal and
@@ -4322,8 +3844,8 @@ text anchoring chunks.</p>
     appropriate <dfn>alignment point</dfn> on the glyph which will be
     placed exactly at the current text position. The alignment point is
     determined based on glyph cell metrics in the glyph itself, the
-    current <a href="text.html#SettingInlineProgressionDirection">inline-progression-direction</a>
-    and the <a href="text.html#GlyphOrientation">glyph orientation</a>
+    current <a>inline-base direction</a>
+    and the glyph orientation
     relative to the inline-progression-direction.  For example, in most
     uses of pre-formatted Latin text (i.e.,
 
@@ -4345,8 +3867,8 @@ text anchoring chunks.</p>
       Baselines</a> in [<a href="refs.html#ref-CSSWRITINGMODES3">CSSWRITINGMODES3</a>]).
 
     If a glyph does not provide explicit origin points corresponding
-    to the current <a href="text.html#GlyphOrientation">glyph
-    orientation</a>, then an appropriate approximation should be used,
+    to the current glyph orientation (vertical or horizontal),
+    then an appropriate approximation should be used,
     such as the intersection of the left edge of the glyph with the
     appropriate horizontal baseline for the glyph or intersection of
     the top edge of the glyph with the appropriate vertical
@@ -4406,8 +3928,7 @@ text anchoring chunks.</p>
       alignment due to <a>'text-anchor'</a> property values.
     </li>
     <li>
-      Reordering of characters due to
-      <a href="text.html#RelationshipWithBiDirectionality">bidirectionality</a>
+      Reordering of characters due to bidirectionality
       only occurs within a text chunk. Reordering does <em>not</em>
       happen across text chunks.
     </li>
@@ -5927,8 +5448,7 @@ text anchoring chunks.</p>
     in logical order, which will result in discontinuous highlighting
     of glyphs due to the bidirectional reordering of characters. User
     agents can provide an alternative ability to select bidirectional
-    text in visual rendering order (i.e., after
-    <a href="text.html#RelationshipWithBiDirectionality">bidirectional</a>
+    text in visual rendering order (i.e., after bidirectional
     text layout algorithms have been applied), with the result that
     selected character data might be discontinuous logically. In this
     case, if the user requests that bidirectional text be copied to
