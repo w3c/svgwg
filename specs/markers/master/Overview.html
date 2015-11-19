@@ -118,8 +118,8 @@ element.</p>
 
 <p>A <dfn id='TermMarker'>marker</dfn> is a graphical object that is painted at particular positions along
 a <a>'path'</a>, <a>'line'</a>, <a>'polyline'</a> or <a>'polygon'</a>
-element, together known as the <a>markable elements</a>.  There are four ways
-markers can be placed on these elements:</p>
+element.  These elements are known as the
+<dfn id="TermMarkableElement">markable elements</dfn>.</p>
 
 <ul>
   <li>The <a>'marker-start'</a> and <a>'marker-end'</a> properties
@@ -216,18 +216,16 @@ following meanings:</p>
 <dl>
   <dt><span class="attr-value">strokeWidth</span></dt>
   <dd><a>'markerWidth'</a>, <a>'markerHeight'</a> and the contents
-  of the <a>'marker element'</a> represent values in a coordinate system
-  which has a single unit equal the size in user units of the
-  current stroke width (see the <a>'stroke-width'</a> property) in
-  place for the graphic object referencing the marker.</dd>
+  of the <a>'marker element'</a> have values in a coordinate system
+  which has a single unit equal to the size in user units of the
+  current stroke width (see the <a>'stroke-width'</a> property) of
+  the element referencing the marker.</dd>
 
   <dt><span class="attr-value">userSpaceOnUse</span></dt>
   <dd><a>'markerWidth'</a>, <a>'markerHeight'</a> and the contents
-  of the <a>'marker element'</a> represent values in the current
-  user coordinate system in place for the graphic object
-  referencing the marker (i.e., the user coordinate system for
-  the element referencing the <a>'marker element'</a> element via a
-  <a>marker property</a>).</dd>
+  of the <a>'marker element'</a> have values in the current
+  user coordinate system in place for the element
+  referencing the marker.</dd>
 </dl>
 
 </dd>
@@ -296,7 +294,7 @@ for either attribute is an error (see
     </p>
 
 <p>The <a>'refX'</a> and <a>'refY'</a> attributes define the reference
-point of the marker which is to be placed exactly at the marker's
+point of the marker, which is to be placed exactly at the marker's
 position on the <a>markable element</a>.  They are interpreted as being in the
 coordinate system of the marker contents, after application of the
 <a>'viewBox'</a> and <a>'preserveAspectRatio'</a> attributes.</p>
@@ -329,34 +327,13 @@ Values have the following meaning:</p>
 <dl>
   <dt><span class="attr-value">'auto'</span></dt>
   <dd>
-    <p>A value of <span class="attr-value">'auto'</span>
-    indicates that the marker is oriented such that its positive
-    x-axis is pointing in the direction of the path at the point
-    it is placed.</p>
-
-    <p class="issue" data-issue="2">This needs to reference a definition for how
-    directionality of a given start/mid/end vertex is calculated.
-    Part of that (which should be moved somewhere more appropriate) is in
-    the <a href="[SVG2]/paths.html#PathElementImplementationNotes">path element implementation notes</a>.
-    Some wording from SVG 1.1 appears to have been lost, compare with <a href="http://www.w3.org/TR/SVG11/painting.html#OrientAttribute">this</a>.
-	<br/><br/>
-    Here's an example that is a bit unclear currently:
-    <code style="white-space:pre">
-&lt;svg>
-  &lt;marker id="m" orient="auto" overflow="visible">
-    &lt;rect x="-1" y="-0.5" width="1" height="1" fill="green"/>
-  &lt;/marker>
-  &lt;path d="M50,0C50,50 50,100 50,100" marker-end="url(#m)" stroke-width="100" stroke="red"/>
-&lt;/svg>
-	</code>
-	<br/>
-	The second control point and the endpoint coincide, should this mean that the direction of the endpoint is a) <em>unknown [aka default to 0 degrees]</em> or
-	b) <em>that you have to look at the previous segment(s)/command(s) until a direction can be established</em>?
-    </p>
+    <p>The marker is oriented such that its positive x-axis
+    is pointing in the direction of the path at the point it
+    is placed.</p>
 
     <p>If the marker is a <a>segment marker</a>, then
-    the direction the marker is oriented is, if considering the
-    incoming and outgoing directions as unit vectors, in the
+    the direction the marker is oriented in is, if considering the
+    incoming and outgoing directions as unit vectors, the
     direction of the sum of these two vectors.  If this sum
     is zero, then the marker is oriented in the incoming direction.</p>
 
@@ -379,14 +356,15 @@ Values have the following meaning:</p>
 <dl class="ready-for-wider-review">
   <dt><span class="attr-value">'auto-start-reverse'</span></dt>
   <dd>
-    <p>A value of <span class="attr-value">'auto-start-reverse'</span>
-    means the same as <span class="attr-value">'auto'</span> except that
-    for a marker placed by <a>'marker-start'</a>, the orientation is 180°
-    different from the orientation as determined by <span class="attr-value">'auto'</span>.</p>
+    <p>If placed by <a>'marker-start'</a>, the marker is oriented
+    180° different from the orientation that would be used if
+    <span class="attr-value">'auto'</span> where specified.  For
+    all other markers, <span class="attr-value">'auto-start-reverse'</span>
+    means the same as <span class="attr-value">'auto'</span>.</p>
 
     <p class="note">This allows a single arrowhead marker to be defined
-    that can be used for both the start and end of a path, point in the right
-    directions.</p>
+    that can be used for both the start and end of a path, i.e. which points
+    outwards from both ends.</p>
   </dd>
 </dl>
 
@@ -394,22 +372,15 @@ Values have the following meaning:</p>
   <dt><span class="attr-value"><a>&lt;angle&gt;</a></span></dt>
   <dt><span class="attr-value"><a>&lt;number&gt;</a></span></dt>
   <dd>
-    <p>An <a>&lt;angle&gt;</a> value represents the angle the marker's
-    positive x-axis makes with the positive x-axis in the local coordinate system
-    of the <a>markable element</a>, and a <a>&lt;number&gt;</a> value
-    with no unit represents an angle in degrees.  For example, if a value of
-    <span class="attr-value">'0'</span> is given, then the marker will be drawn
-    such that its x-axis will align with the x-axis of the user
-    space of the graphic object referencing the marker.
-    A value of <span class="attr-value">'90deg'</span> will result in the
-    marker being drawn with its positive x-axis in the direction
-    of the positive y-axis of the <a>markable element</a>'s local coordinate system.</p>
+    <p>The marker is oriented such that the specified angle is
+    that measured between the <a>markable element</a>'s positive x-axis
+    and the marker's positive x-axis.  A <a>&lt;number&gt;</a> value
+    specifies an angle in degrees.</p>
+    <p class="note">For example, if a value of <span class="attr-value">'45'</span>
+    is given, then the marker's positive x-axis would be pointing down and right
+    in the <a>markable element</a>'s coordinate system.</p>
   </dd>
 </dl>
-
-<p>The orientation occurs after the marker has been fitted into its
-viewport.  See the <a href="#MarkerAlgorithm">Details on how markers are rendered</a>
-section below for an illustrative example.</p>
 
 </dd>
 
@@ -497,7 +468,7 @@ transformations might occur if there is a <a>'viewBox'</a> attribute, in
 which case the coordinate system for the contents of the <a>'marker element'</a>
 will be transformed due to the processing of attributes <a>'viewBox'</a>
 and <a>'preserveAspectRatio'</a>. If there is no <a>'viewBox'</a>
-attribute, then the assumed default value for the the <a>'viewBox'</a>
+attribute, then the assumed default value for the <a>'viewBox'</a>
 attribute has the origin of the viewBox coincident with the origin
 of the viewport and the width/height of the viewBox the same as the
 width/height of the viewport.</p>
@@ -1310,6 +1281,26 @@ be allowed.</p>
 </div>
 
 <h2 id="MarkerAlgorithm">Details on how markers are rendered</h2>
+
+    <p class="issue" data-issue="2">This needs to reference a definition for how
+    directionality of a given start/mid/end vertex is calculated.
+    Part of that (which should be moved somewhere more appropriate) is in
+    the <a href="[SVG2]/paths.html#PathElementImplementationNotes">path element implementation notes</a>.
+    Some wording from SVG 1.1 appears to have been lost, compare with <a href="http://www.w3.org/TR/SVG11/painting.html#OrientAttribute">this</a>.
+	<br/><br/>
+    Here's an example that is a bit unclear currently:
+    <code style="white-space:pre">
+&lt;svg>
+  &lt;marker id="m" orient="auto" overflow="visible">
+    &lt;rect x="-1" y="-0.5" width="1" height="1" fill="green"/>
+  &lt;/marker>
+  &lt;path d="M50,0C50,50 50,100 50,100" marker-end="url(#m)" stroke-width="100" stroke="red"/>
+&lt;/svg>
+	</code>
+	<br/>
+	The second control point and the endpoint coincide, should this mean that the direction of the endpoint is a) <em>unknown [aka default to 0 degrees]</em> or
+	b) <em>that you have to look at the previous segment(s)/command(s) until a direction can be established</em>?
+    </p>
 
 <p>For each marker that is drawn, a temporary new user coordinate
 system is established so that the marker will be positioned and sized
