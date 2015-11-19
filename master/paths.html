@@ -989,6 +989,96 @@ If path data not matching the grammar is encountered, then the path data is in e
 (see <a href="paths.html#PathDataErrorHandling">Error Handling</a>).
 </p>
 
+<div class="ready-for-wg-review">
+<h2 id="PathDirectionality">Path directionality</h2>
+
+<p>Some features, such as the <a href="painting.html#OrientAttribute">orientation</a>
+of <a>markers</a> and the <a href="painting.html#TermCapShape">shapes</a> of
+<a href="painting.html#LineCaps">line caps</a>, are defined in terms of
+the direction of the path at a given distance along the path or at the 
+start or end of an individual segment.</p>
+
+<p>The <dfn id="TermPathDirection">direction of a path</dfn> at a specified
+distance along the path is defined as follows:</p>
+
+<ul>
+  <li>If the given distance is zero, then the direction of the path is
+  the <a href="#TermPathSegmentStartDirection">direction at the start of
+  the path's first segment</a>.</li>
+
+  <li>Otherwise, if the given distance is the length of the path, then
+  the direction of the path is the
+  <a href="#TermPathSegmentEndDirection">direction at the end of the path's
+  last segment</a>.</li>
+
+  <li>Otherwise, if the given distance along the path occurs at a path
+  segment boundary, then the diection of the path is the
+  <a href="TermPathSegmentStartDirection">direction at the start of
+  the segment at the given distance</a>, considering each segment to
+  be endpoint exclusive.
+  
+  <div class="note">This will "move past"
+  zero length segments, and choose the later segment if the distance
+  is at the boundary between two non-zero length segments.</div></li>
+
+  <li>Otherwise, the given distance along the path occurs in the middle
+  of a non-zero length path segment.  The direction is simply the direction
+  of the curve at that point.  If the point lies at a discontinuity, such as
+  a cusp in a Bézier segment, then the direction is undefined; in this case,
+  a direction between the incoming and outgoing direction around the discontinuity
+  should be used.</li>
+</ul>
+
+<p>The <dfn id="TermPathSegmentStartDirection">direction at the start
+of a path segment</dfn> is defined as follows:</p>
+
+<ul>
+  <li>If length of the entire path the segment belongs to is zero, then the
+  direction at the start of the segment points in the same direction as the
+  positive x-axis.</li>
+
+  <li>Otherwise, if the path segment is zero length and the segment does not
+  have any preceding non-zero length segments, then the direction at the
+  start of the segment is the same as the
+  <a href="#TermPathSegmentEndDirection">direction at the end of the segment</a>.</li>
+
+  <li>Otherwise, if the path segment is zero length and there is some non-zero
+  length segment preceding this segment, then the direction at the start of
+  this segment is the same as the
+  <a href="#TermPathSegmentEndDirection">direction at the end of the closest
+  preceding non-zero length segment</a>.</li>
+
+  <li>Otherwise, the path segment is non-zero length.  The direction at the
+  start of the segment is simply the direction coming out of the segment's start
+  point.</li>
+</ul>
+
+<p>The <dfn id="TermPathSegmentEndDirection">direction at the end of a path
+segment</dfn> is defined as follows:</p>
+
+<ul>
+  <li>If length of the entire path the segment belongs to is zero, then the
+  direction at the start of the segment points in the same direction as the
+  positive x-axis.</li>
+
+  <li>Otherwise, if the path segment is zero length and the segment does not
+  have any following non-zero length segments, then the direction at the
+  wned of the segment is the same as the
+  <a href="#TermPathSegmentStartDirection">direction at the start of the segment</a>.</li>
+
+  <li>Otherwise, if the path segment is zero length and there is some non-zero
+  length segment following this segment, then the direction at the start of
+  this segment is the same as the
+  <a href="#TermPathSegmentStartDirection">direction at the start of the closest
+  following non-zero length segment</a>.</li>
+
+  <li>Otherwise, the path segment is non-zero length.  The direction at the
+  end of the segment is simply the direction coming in to the segment's end
+  point.</li>
+</ul>
+</div>
+
+
 <h2 id="PathElementImplementationNotes">Implementation notes</h2>
 
 <h3 id="PathDataErrorHandling">Error handling in path data</h3>
@@ -1026,39 +1116,12 @@ If path data not matching the grammar is encountered, then the path data is in e
     </ul>
   </li>
   <li>
-    Markers, directionality and zero-length path segments:
+    Markers and zero-length path segments:
     <ul>
       <li>If markers are specified, then a marker is drawn on
       every applicable vertex, even if the given vertex is the
       end point of a zero-length path segment and even if
       "moveto" commands follow each other.</li>
-
-      <li>Certain line-capping and line-joining situations and
-      markers require that a path segment have directionality
-      at its start and end points. Zero-length path segments
-      have no directionality. In these cases, the following
-      algorithm is used to establish directionality: to
-      determine the directionality of the start point of a
-      zero-length path segment, go backwards in the path data
-      specification within the current subpath until you find a
-      segment which has directionality at its end point (e.g.,
-      a path segment with non-zero length) and use its ending
-      direction; otherwise, temporarily consider the start
-      point to lack directionality. Similarly, to determine the
-      directionality of the end point of a zero-length path
-      segment, go forwards in the path data specification
-      within the current subpath until you find a segment which
-      has directionality at its start point (e.g., a path
-      segment with non-zero length) and use its starting
-      direction; otherwise, temporarily consider the end point
-      to lack directionality. If the start point has
-      directionality but the end point doesn't, then the end
-      point uses the start point's directionality. If the end
-      point has directionality but the start point doesn't,
-      then the start point uses the end point's directionality.
-      Otherwise, set the directionality for the path segment's
-      start and end points to align with the positive x-axis in
-      local coordinate system.</li>
 
       <li>As mentioned in <a href="painting.html#StrokeProperties">Stroke Properties</a>,
       linecaps must be painted for zero length subpaths when
