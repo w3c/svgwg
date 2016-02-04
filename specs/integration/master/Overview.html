@@ -178,14 +178,14 @@ the word <code>subscribe</code> in the subject line.</p>
 the <a href="http://www.w3.org/Graphics/Activity">Graphics Activity</a> within
 the <a href="http://www.w3.org/Interaction/">W3C Interaction Domain</a>. The
 goals of the W3C SVG Working Group are discussed in the
-<a href="http://www.w3.org/2007/11/SVG_rechartering/SVG-WG-charter.html">W3C SVG Charter</a>. 
+<a href="http://www.w3.org/2007/11/SVG_rechartering/SVG-WG-charter.html">W3C SVG Charter</a>.
 The W3C SVG Working Group maintains a public Web page,
 <a href="http://www.w3.org/Graphics/SVG/" class='url'>http://www.w3.org/Graphics/SVG/</a>,
 that contains further background information. The authors of
 this document are the SVG Working Group participants.</p>
 
 <p>This document was produced by a group operating under the
-<a href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 W3C Patent Policy</a>. 
+<a href="http://www.w3.org/Consortium/Patent-Policy-20040205/">5 February 2004 W3C Patent Policy</a>.
 W3C maintains a <a rel="disclosure" href="http://www.w3.org/2004/01/pp-impl/19480/status">public list of any patent disclosures</a>
 made in connection with the deliverables of the group; that page also includes
 instructions for disclosing a patent. An individual who has actual knowledge of
@@ -405,7 +405,7 @@ running in a particular referencing mode.</p>
     as resource documents in order to use their <a>'mask element'</a>,
     <a>'pattern element'</a>, gradient, or other resource elements.
     SVG documents loaded due to a reference to an external document from any
-    of the following features must use the 
+    of the following features must use the
     <a href="#resource-document-mode">resource document</a>
     <a href="#referencing-mode">referencing mode</a>:</p>
 
@@ -441,7 +441,7 @@ running in a particular referencing mode.</p>
     <a href="#secure-animated-mode">secure animated</a>
     <a href="#processing-mode">processing mode</a>.</p>
 
-    <p>Additionally, SVG documents processed with the 
+    <p>Additionally, SVG documents processed with the
     <a href="#font-document-mode">font document</a>
     <a href="#referencing-mode">referencing mode</a> must apply the
     following user agent style sheet:</p>
@@ -481,7 +481,7 @@ SVG document.</p>
 <a href='#animated-image-document-mode'>animated image document mode</a>
 due to being referenced by an HTML <a>'image'</a> element, then any
 inline SVG fragment that is a child of a <a>'foreignObject'</a> element
-within that document is also processed using 
+within that document is also processed using
 <a href='#animated-image-document-mode'>animated image document mode</a>.</p>
 
 
@@ -509,9 +509,9 @@ on the processing mode are as follows:</p>
     it still will not be applied.</p>
   </dd>
 
-  <dt>external references</dt>
+  <dt>references to external resources</dt>
   <dd>
-    <p>External references are URLs specified when using any of the following
+    <p>References to external resources are URLs that can be used in any of the following
     SVG features, where any of the URL's components, ignoring the fragment,
     do not match the document's URL:</p>
     <ul>
@@ -530,6 +530,15 @@ on the processing mode are as follows:</p>
       <li>any other network requests made by script, HTML, CSS or other
       Web platform features used in the document</li>
     </ul>
+    <p>User agents must apply <a href="#ref-CORS">CORS</a> policies when fetching external resources
+      used in any of the SVG features listed above.</p>
+    <p>To protect against unlimited resource fetching and cycles in external
+      resources, user agents must limit external resources to a single level of
+      depth, so that referenced external resources
+      cannot reference external resources.</p>
+    <p>As noted in <a href="#processing-modes">Referencing modes</a> section, external resources must use
+      <a href="#resource-document-mode">resource document</a>
+      <a href="#referencing-mode">referencing mode</a>.</p>
     <p>When external references are disabled in an SVG document, any attempt to
     fetch a document through an external reference must instead be treated as
     if a network error occurred and no data was received.</p>
@@ -541,7 +550,7 @@ on the processing mode are as follows:</p>
   <dt>script execution</dt>
   <dd>
     <p>Script execution is the execution of any SVG <a>'script'</a> elements,
-    script found in event listener attributes (such as <a>'onclick'</a> on 
+    script found in event listener attributes (such as <a>'onclick'</a> on
     SVG elements), or any other script defined by other Web platform features
     used in the document such as any HTML <a>'script'</a> elements.
     When script execution is disabled in an SVG document, no script in the
@@ -929,8 +938,8 @@ this case) upon reading it back in:</p>
 
 <h3 id="XMLEncoding">XML encoding conformance requirements</h3>
 
-<p>An <a>SVG Document Fragment</a>, <a>SVG Stand-Alone Document</a>, 
-or <a>SVG Included Document Fragment</a> encoded using XML conforms to the SVG 
+<p>An <a>SVG Document Fragment</a>, <a>SVG Stand-Alone Document</a>,
+or <a>SVG Included Document Fragment</a> encoded using XML conforms to the SVG
 specifications if it is valid, well-formed, and uses namespaces according
 to the Namespaces in XML specification.  Non-conforming documents
 may be rendered according to the behavior specified for error-correction
@@ -943,16 +952,16 @@ in the SVG or XML specifications.</p>
 <p>An <a>SVG Document Fragment</a>, <a>SVG Stand-Alone Document</a>, or
 <a>SVG Included Document Fragment</a> encoded using a non-XML encoding (e.g.
 efficient XML compression, or HTML5 parser)
-conforms to the SVG specifications if and only if the non-XML encoding in question 
+conforms to the SVG specifications if and only if the non-XML encoding in question
 guarantees roundtripping from XML to the encoding and back in such a way that the
 resulting document when processed by an <a>SVG user agent</a>
 must always render, animate, and interact in the exact same way as the
 original. Note that this requires a high-level of fidelity from the encoding
 including, but not limited to, the ability to encode non-conforming content
-and content from foreign namespaces without loss, maintaining ID typing, 
+and content from foreign namespaces without loss, maintaining ID typing,
 and not removing non-rendered elements such as
 <a>'title'</a>, <a>'desc'</a>, <a>'metadata'</a>,
-or elements not included in the <a>rendering tree</a> through use of 
+or elements not included in the <a>rendering tree</a> through use of
 <a>conditional processing attributes</a>.</p>
 
 
@@ -1233,6 +1242,14 @@ schema. The individual RNG files are available <a href="rng">here</a>.</p>
   World Wide Web Consortium, 11 February 2014.
   <br />This edition of SVG 2 is http://www.w3.org/TR/2014/WD-SVG2-20140211/.
   <br />The <a href="http://www.w3.org/TR/SVG2/">latest edition of SVG 2</a> is available at http://www.w3.org/TR/SVG2/.</dd>
+
+  <dt id="ref-CORS"><strong class="normref">[CORS]</strong></dt>
+  <dd><cite class="w3crec"><a href="https://www.w3.org/TR/cors/">Cross-Origin Resource Sharing</a></cite>,
+  Anne van Kesteren.
+  World Wide Web Consortium, 16 January 2014.
+  <br />This edition of CORS is http://www.w3.org/TR/2014/REC-cors-20140116/.
+  <br />The <a href="http://www.w3.org/TR/cors/">latest edition of CORS</a> is available at http://www.w3.org/TR/cors/.</dd>
+
 </dl>
 
 <h3 id="nonnormrefs">Non-normative references</h3>
