@@ -900,6 +900,78 @@ href="implnote.html#ArcImplementationNotes">Elliptical arc
 implementation notes</a> for detailed implementation notes for
 the path data elliptical arc commands.</p>
 
+<div class="ready-for-wider-review">
+
+<h3 id="PathDataBearingCommands">The bearing commands</h3>
+
+<p>The bearing commands (<strong>B</strong> or <strong>b</strong>)
+set the current bearing, which influences the orientation of
+subsequent relative path commands:</p>
+
+<table class="PathDataTable">
+  <tr>
+    <th>Command</th>
+    <th>Name</th>
+    <th>Parameters</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>B</strong> (absolute)<br/>
+      <strong>b</strong> (relative)</td>
+    <td>bearing</td>
+    <td>angle+</td>
+    <td>Sets the current bearing.  The parameter is an angle
+    in degrees, where 0 indicates the direction of the positive
+    x-axis.  <strong>B</strong> (uppercase) sets
+    the current bearing to the specified angle; <strong>b</strong>
+    (lowercase) sets the current bearing to be the angle of the
+    tangent at the end of the preceding path command plus the
+    specified angle.  The current point is unaffected.
+    Although multiple parameters may be specified, this usually
+    will not be useful, as they could be combined into a single
+    angle value.</td>
+  </tr>
+</table>
+
+<p>At the beginning of a path, the current bearing is 0, which
+points in the direction of the positive x-axis.  The current
+bearing remains unchanged until a <strong>B</strong> or
+<strong>b</strong> command is encountered.  Since the relative
+<strong>b</strong> command sets the current bearing relative
+to the tangent at the end of the preceding path command,
+it is possible to set the bearing to that tangent by using
+"b 0".</p>
+
+<div class="example">
+  <p>The example below shows how bearing commands can be used
+  to draw a regular pentagon.</p>
+
+  <pre class="xml"><![CDATA[<svg xmlns="http://www.w3.org/2000/svg"
+     width="300" height="100" viewBox="0 0 300 100">
+
+  <path fill="#eee"
+        stroke="deeppink" stroke-width="8px" stroke-linejoin="round"
+        d="M 150,10
+           B 36 h 47
+           b 72 h 47
+           b 72 h 47
+           b 72 h 47 z"/>
+
+</svg>]]></pre>
+
+  <div class="figure">
+    <img class="bordered" src="images/paths/bearing01.svg"
+         alt="Image showing the use of the bearing command."/>
+    <p class="caption">Bearing commands can be used to position
+    the end points of the sides of a regular polygon without
+    having to use trigonometry to calculate them based on the
+    polygon's interior angles.</p>
+  </div>
+</div>
+
+</div>
+
+
 <h3 id="PathDataBNF">The grammar for path data</h3>
 
 <p class="issue" data-issue="13">Update for new 'Z'/'z' behavior.</p>
