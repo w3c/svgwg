@@ -14,3 +14,7 @@ Editor's drafts:
 * [SVG Strokes](https://svgwg.org/specs/strokes/)
 
 All of the above spec drafts are automatically rebuilt on pushes to this repository.
+
+The SVG working group welcomes contributions to their specifications.
+These can be made by filing a pull request.
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) and [LICENSE.md](LICENSE.md).
