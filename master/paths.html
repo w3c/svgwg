@@ -68,41 +68,10 @@ what their shape is as a path.  (The equivalent path of a
 
 <edit:elementsummary name='path'/>
 
+<p>The outline of a shape for a <a>'path'</a> element is specified using the <a>'d'</a>
+property.  See <a href="#PathData">Path data</a> below.</p>
+
 <dl class="attrdef-list">
-  <dt>
-    <table class="propdef attrdef">
-      <tr>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Initial value</th>
-        <th>Animatable</th>
-      </tr>
-      <tr>
-        <td><dfn id="DAttribute">d</dfn></td>
-        <td><a href="#PathDataBNF">svg-path</a> <a href="types.html#syntax" class="syntax">[EBNF]</a></td>
-        <td>(none)</td>
-        <td>yes</td>
-      </tr>
-    </table>
-  </dt>
-  <dd>
-    <p>The definition of the outline of a shape. See <a href="#PathData">Path data</a>.
-    Error processing for <a href="#PathDataBNF">svg-path</a> is done according to
-    <a href="paths.html#PathDataErrorHandling">Path Data Error Handling</a>.</p>
-    <p>Path data animation is only possible when each path data
-    specification within an animation specification has exactly
-    the same list of path data commands as the <a>'d'</a> attribute. If an animation is
-    specified and the list of path data commands is not the
-    same, then the animation specification is in error (see
-    <a href="paths.html#PathDataErrorHandling">Error Handling</a>).
-    The animation engine interpolates each parameter to each
-    path data command separately based on the attributes to the
-    given animation element. Flags and booleans are
-    interpolated as fractions between zero and one, with any
-    non-zero value considered to be a value of one/true.</p>
-    <p class="ready-for-wider-review">The initial value, (none) indicates
-    that the path element is valid but does not render.</p>
-  </dd>
   <dt>
     <table class="propdef attrdef">
       <tr>
@@ -183,8 +152,8 @@ what their shape is as a path.  (The equivalent path of a
 <h3 id="PathDataGeneralInformation">General information about path data</h3>
 
 <p>A path is defined by including a <a>'path'</a>
-element which contains a <span class='attr-value'>d="(path data)"</span>
-attribute, where the <a>'d'</a> attribute contains the
+element on which the <a>'d'</a> property specifies the
+path data.  The path data contains the
 <em>moveto</em>, <em>bearing</em>, <em>lineto</em>, <em>curveto</em> (both cubic and
 quadratic Béziers), <em>arc</em> and <em>closepath</em>
 instructions.</p>
@@ -277,7 +246,95 @@ and <var>cb</var> represents the current bearing.</p>
 
 </div>
 
-<p>The following sections list the commands.  Those that
+<div class='ready-for-wg-review'>
+
+<h3 id="TheDProperty">Specifying path data: the <span class='property'>'d'</span> property</h3>
+
+<table class="propdef">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="DProperty">d</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>none | path(<a>&lt;string&gt;</a>)</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>'path'</a> and <a>'textPath'</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed&#160;value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a>Animatable</a>:</th>
+    <td>yes</td>
+  </tr>
+</table>
+
+<p>The <a>'d'</a> property is used to specify the shape of a <a>'path'</a> element
+and the path along which text flows for a <a>'textPath'</a> element.</p>
+
+<p>The value <span class='prop-value'>none</span> indicates that there is no
+path data for the element.  For <a>'path'</a> elements, this means that the
+element does not render or contribute to the <a>bounding box</a> of ancestor
+<a>container elements</a>.  For <a>'textPath'</a> elements, this means that
+the text within the <a>'textPath'</a> does not render or contribute to
+the <a>bounding box</a> of the <a>'text'</a> element.</p>
+
+<p>The <span class='prop-value'>path(<a>&lt;string&gt;</a>)</span> value
+specifies a shape using a path data string.  The contents of the
+<a>&lt;string&gt;</a> value must match the <a href="#PathDataBNF">svg-path</a>
+<a href="types.html#syntax">EBNF grammar</a> defined below, and errors within the string are handled according to
+the rules in the <a href="paths.html#PathDataErrorHandling">Path Data Error Handling</a> section.
+If the path data string contains no valid commands, then the behavior
+is the same as the <span class='prop-value'>none</span> value.</p>
+
+<p>While the <a>'d'</a> property takes the above values, the <span class='attr-name'>'d'</span>
+presentation attribute for the <a>'path'</a> and <a>'textPath'</a> elements instead
+accept path data string contents without the surrounding <span class='prop-value'>path("...")</span>
+function and string quotes.</p>
+
+<div class='note'>
+  <p>For example, the following two path definitions are equivalent:</p>
+  <pre>&lt;path style="d: path('M 100,100 L 200,200');"/&gt;
+&lt;path d="M 100,100 L 200,200"/&gt;</pre>
+</div>
+
+<p>For animation, two <a>'d'</a> property values can only be interpolated
+smoothly when they both are <span class='prop-value'>path(...)</span> values
+and the path data strings contain exactly the number and types of path data commands.
+If an animation is specified and the lists of path data commands are not the
+same, then the values are <a href="https://w3c.github.io/web-animations/#animation-interpolation">interpolated</a>
+as if the property were <a href="https://w3c.github.io/web-animations/#animatable-as-string">animatable as a string</a>.</p>
+
+<p>If the list of path data commands are the same, then each parameter
+to each path data command is <a href="https://w3c.github.io/web-animations/#animation-interpolation">interpolated</a>
+separately <a href="https://w3c.github.io/web-animations/#animatable-as-real-number">as real numbers</a>.
+Flags and booleans are interpolated as fractions between zero and one, with any non-zero value
+considered to be a value of one/true.</p>
+
+</div>
+
+<p>The following sections list the commands that canbe used
+in path data strings.  Those that
 draw straight line segments include the <a href="paths.html#PathDataLinetoCommands">lineto commands</a>
 (<strong>L</strong>, <strong>l</strong>,
 <strong>H</strong>, <strong>h</strong>, <strong>V</strong> and <strong>v</strong>)
@@ -981,8 +1038,11 @@ a "coordinate" only allows one decimal point. The result is
 that the first coordinate will be "0.6" and the second
 coordinate will be ".5".</p>
 
-<p>Note that the BNF allows the path <a>'d'</a> attribute to be empty. This is not
-an error, instead it disables rendering of the path.</p>
+<p>Note that the BNF allows the path data string in the
+<a>'d'</a> property to be empty. This is not
+an error, instead it disables rendering of the path.
+Rendering is also disabled when the <a>'d'</a> property
+has the value <span class='prop-value'>none</span>.</p>
 
 <p class="ready-for-wider-review">
 If path data not matching the grammar is encountered, then the path data is in error
