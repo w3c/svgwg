@@ -2362,59 +2362,6 @@ Values have the following meaning:</p>
 
 </dl>
 
-</div>
-
-<!--
-<style>
-hr.break { border: none; margin: 2em 0 }
-hr.break:before { display: block; text-align: center; content: "*\a0\a0\a0\a0*\a0\a0\a0\a0*"; }
-</style>
-<hr class="break"/>
--->
-
-<p>The contents of the <a>'marker element'</a> are relative to a new
-coordinate system. The <a>'markerUnits'</a> attribute determines an initial
-scale factor for transforming the graphics in the marker into the user
-coordinate system for the referencing element. An additional set of
-transformations might occur if there is a <a>'viewBox'</a> attribute, in
-which case the coordinate system for the contents of the <a>'marker element'</a>
-will be transformed due to the processing of attributes <a>'viewBox'</a>
-and <a>'preserveAspectRatio'</a>. If there is no <a>'viewBox'</a>
-attribute, then the assumed default value for the <a>'viewBox'</a>
-attribute has the origin of the viewBox coincident with the origin
-of the viewport and the width/height of the viewBox the same as the
-width/height of the viewport.</p>
-
-<p>The <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
-the <a>'overflow'</a> property for <a>'marker element'</a> elements to
-<span class="prop-value">hidden</span>, which causes a rectangular clipping
-path to be created at the bounds of marker's viewport.  Unless the
-<a>'overflow'</a> property is overridden, any graphics within the marker which
-goes outside of the marker's viewport will be clipped.</p>
-
-<p><a>Properties</a> inherit into the
-<a>'marker element'</a> element from its ancestors; properties do <em>not</em>
-inherit from the element referencing the <a>'marker element'</a> element.
-<span class="ready-for-wider-review">Note however that by using the <span class="prop-value">context-stroke</span>
-value for the <a>'fill'</a> or <a>'stroke'</a> on elements in its definition,
-a single marker can be designed to match the style of the element referencing
-the marker.</span></p>
-
-<p><a>'marker element'</a> elements are not rendered directly
-and must be referenced by one of the <a>marker properties</a>
-to be rendered.  The <a>'display'</a> property does not apply to the
-<a>'marker element'</a> element; thus, <a>'marker element'</a> elements are not
-directly rendered even if the <a>'display'</a> property is
-set to a value other than <span class="prop-value">none</span>, and
-<a>'marker element'</a> elements are available for referencing even when the
-<a>'display'</a> property on the <a>'marker element'</a> element or any of its
-ancestors is set to <span class="prop-value">none</span>.</p>
-
-<p><a href="interact.html#EventAttributes">Event attributes</a> and
-<a href="svgdom.html#EventListeners">event listeners</a> attached
-to the contents of a <a>'marker element'</a> element are not processed;
-only the rendering aspects of <a>'marker element'</a> elements are
-processed.</p>
 
 
 <h3 id="VertexMarkerProperties">Vertex markers: the <span class="property">'marker-start'</span>,
@@ -2563,41 +2510,21 @@ property</h3>
 properties.  The value of the <a>'marker property'</a> is used
 directly for all three of the corresponding longhand properties.</p>
 
-<h3 id="MarkerAlgorithm">Details on how markers are rendered</h3>
 
-    <p class="issue" data-issue="21">This needs to reference a definition for how
-    directionality of a given start/mid/end vertex is calculated.
-    Part of that (which should be moved somewhere more appropriate) is in
-    the <a href="paths.html#PathElementImplementationNotes">path element implementation notes</a>.
-    Some wording from SVG 1.1 appears to have been lost, compare with <a href="http://www.w3.org/TR/SVG11/painting.html#OrientAttribute">this</a>.
-	<br/><br/>
-    Here's an example that is a bit unclear currently:
-    <code style="white-space:pre">
-&lt;svg>
-  &lt;marker id="m" orient="auto" overflow="visible">
-    &lt;rect x="-1" y="-0.5" width="1" height="1" fill="green"/>
-  &lt;/marker>
-  &lt;path d="M50,0C50,50 50,100 50,100" marker-end="url(#m)" stroke-width="100" stroke="red"/>
-&lt;/svg>
-	</code>
-	<br/>
-	The second control point and the endpoint coincide, should this mean that the direction of the endpoint is a) <em>unknown [aka default to 0 degrees]</em> or
-	b) <em>that you have to look at the previous segment(s)/command(s) until a direction can be established</em>?
-    </p>
+<h3 id="RenderingMarkers">Rendering markers</h3>
 
-    <p>If the marker is on the first or last vertex of a closed subpath, then the
-    incoming direction taken from the final path segment and the outgoing
-    direction is taken from:</p>
+<p>When orienting a marker automatically, due to specifying <a>'orient'</a>
+as <span class='attr-value'>'auto'</span>, the following rules are used:</p>
 
-    <ul>
-      <li>the first path segment of the <em>following</em> subpath,
-      if the following subpath does not begin with a
-      <a href="paths.html#PathDataMovetoCommands">'moveto'</a> command, and</li>
-      <li>the first path segment of the <em>current</em> subpath,
-      if the following subpath does begin with a
-      <a href="paths.html#PathDataMovetoCommands">'moveto'</a> command
-      or if there is no following subpath.</li>
-    </ul>
+<ul>
+  <li>If the vertex is the start or end of an open subpath, then the marker is
+  oriented in the <a href='paths.html#TermPathDirection'>path direction</a>.</li>
+
+  <li>Otherwise, the marker is oriented in a direction half way between the
+  <a href='paths.html#TermPathSegmentEndDirection'>direction at the end of the
+  preceding segment</a> and the <a href='paths.html#TermPathSegmentStartDirection'>direction
+  at the start of the following segment</a>.</li>
+</ul>
 
 <p>For each marker that is drawn, a temporary new user coordinate
 system is established so that the marker will be positioned and sized
@@ -2606,11 +2533,7 @@ correctly, as follows:</p>
 <ul>
   <li>The axes of the temporary new user coordinate system are aligned
   according to the <a>'orient'</a> attribute on the
-  <a>'marker element'</a> element and the slope of the curve at the given vertex.
-  (Note: if there is a discontinuity at a vertex, the slope is the
-  average of the slopes of the two segments of the curve that join
-  at the given vertex. If a slope cannot be determined, the slope is
-  assumed to be zero.)</li>
+  <a>'marker element'</a> element.</li>
 
   <li>A temporary new coordinate system is established by attribute
   <a>'markerUnits'</a>. If <a>'markerUnits'</a> equals
@@ -2631,6 +2554,31 @@ correctly, as follows:</p>
   implicit clipping path is established at the bounds of the viewport.</li>
 </ul>
 
+<p class='note'>Note that the <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
+the <a>'overflow'</a> property for <a>'marker element'</a> elements to
+<span class="prop-value">hidden</span>, which causes a rectangular clipping
+path to be created at the bounds of marker's viewport by default.</p>
+
+<p>Properties do not inherit from the element referencing the <a>'marker element'</a>
+into the contents of the marker.  However, by using the
+<span class="prop-value">context-stroke</span> value for the <a>'fill'</a> or
+<a>'stroke'</a> on elements in its definition, a single marker can be designed
+to match the style of the element referencing the marker.</p>
+
+<p>Markers cannot be interacted with.  Events such as click or mouseover,
+for example, are not dispatched to a <a>'marker element'</a> or its children when
+the mouse is clicked or moved over a rendered marker.</p>
+
+<p>Markers are not rendered directly
+and must be referenced by one of the <a>marker properties</a>
+to be rendered.  The <a>'display'</a> property does not apply to the
+<a>'marker element'</a> element; thus, <a>'marker element'</a> elements are not
+directly rendered even if the <a>'display'</a> property is
+set to a value other than <span class="prop-value">none</span>, and
+<a>'marker element'</a> elements are available for referencing even when the
+<a>'display'</a> property on the <a>'marker element'</a> element or any of its
+ancestors is set to <span class="prop-value">none</span>.</p>
+
 <p>The rendering effect of a marker is as if the contents of the
 referenced <a>'marker element'</a> element were deeply cloned
 into a separate non-exposed DOM tree for each instance of the
@@ -2648,6 +2596,7 @@ because they are part of the formal document structure. CSS 2.1 selectors
 cannot be applied to the (conceptually) cloned DOM tree because its
 contents are not part of the formal document structure.</p>
 
+<div class='example'>
 <p>For illustrative purposes, we'll repeat the marker example shown earlier:</p>
 
 <pre>
@@ -2749,6 +2698,9 @@ the following:</p>
 &lt;/svg&gt;
 </pre>
 <p class="view-as-svg"><a href="images/painting/marker-simulated.svg">View this example as SVG (SVG-enabled browsers only)</a></p>
+</div>
+
+</div>
 
 </edit:with>
 
