@@ -1537,9 +1537,9 @@
     <a>wrapping area</a> is normally the same as the <a>content
     area</a>. When the <a>content area</a> is defined using
     the <a>'shape-inside'</a> property, the <a>wrapping area</a>
-    may be smaller due to the presence of a <a>'shape-outside'</a>
+    may be smaller due to the presence of a <a>'shape-subtract'</a>
     property and/or a <a>'shape-padding'</a> property. The
-    <a>'shape-outside'</a> property (along with the
+    <a>'shape-subtract'</a> property (along with the
     <a>'shape-margin'</a> property) defines a <dfn>wrapping
     context</dfn>. The <a>wrapping area</a> then is found by
     subtracting the <a>wrapping context</a> from the <a>content
@@ -1756,7 +1756,7 @@
     </tr>
     <tr>
       <th>Percentages:</th>
-      <td>N/A</td>
+      <td>Relative to the <a>'viewBox'</a></td>
     </tr>
     <tr>
       <th>Media:</th>
@@ -1893,38 +1893,33 @@
     reappear in CSS Shapes Module Level 2.
   </p>
 
-<h3 id='TextShapeOutside'>The <span class="property">'shape-outside'</span> property</h3>
+<h3 id='TextShapeSubtract'>The <span class="property">'shape-subtract'</span> property</h3>
 
   <p>
-    The <a>'shape-outside'</a> property allows one to exclude part of
+    The <a>'shape-subtract'</a> property allows one to exclude part of
     the <a>content area</a> from the <a>wrapping area</a>. The
-    exclusion can be a <a>CSS basic shape</a> or to an
-    SVG <a>shape</a>.
+    excluded area is the addition of all the areas defined in a list
+    of <a>CSS basic shape</a>s and/or SVG <a>shapes</a>.
   </p>
+  <p class="annotation">
+    It was resolved at the 2016 Sydney F2F that 'shape-subtract' should
+    be uses instead of 'shape-outside' due to the different behavior
+    required. ('shape-outside' reduces the area of an exclusion.)
+  </p>
+
   <p class="note">
-    In CSS/HTML <a>'shape-outside'</a> applies to floats and
-    absolute and percentage values are defined relative to the
-    float.
-
-    In SVG absolute and percentage values are defined relative to the
+    Absolute and percentage values are defined relative to the
     current <a>local coordinate system</a> and the <a>'viewBox'</a>.
-
-    <span class="issue">We could use the content area.</span>
-  </p>
-  <p class="issue" data-issue="14">
-    The value 'auto' is probably not useful in SVG.
-    A new value of 'none' is probably needed in which case
-    the property is ignored.
   </p>
 
   <table class="propdef">
     <tr>
       <th>Name:</th>
-      <td><dfn id="ShapeOutsideProperty">shape-outside</dfn></td>
+      <td><dfn id="ShapesubtractProperty">shape-subtract</dfn></td>
     </tr>
     <tr>
       <th>Value:</th>
-      <td>none | &lt;basic-shape&gt; | &lt;uri&gt;</td>
+      <td>none | [&lt;basic-shape&gt;| &lt;uri&gt;]+</td>
     </tr>
     <tr>
       <th>Initial:</th>
@@ -1940,7 +1935,7 @@
     </tr>
     <tr>
       <th>Percentages:</th>
-      <td>N/A</td>
+      <td>Relative to the <a>'viewBox'</a></td>
     </tr>
     <tr>
       <th>Media:</th>
@@ -1948,7 +1943,7 @@
     </tr>
     <tr>
       <th>Computed&#160;value:</th>
-      <td>computed lengths for &lt;basic-shape&gt;, the absolute URI for &lt;uri&gt;, otherwise as specified </td>
+      <td>computed lengths for any &lt;basic-shape&gt;, the absolute URI for &lt;uri&gt;, otherwise as specified </td>
     </tr>
     <tr>
       <th><a>Animatable</a>:</th>
@@ -1960,26 +1955,24 @@
     <dt><span class="attr-value">&lt;basic-shape&gt;</span></dt>
     <dd>
       The shape is computed based on the values of one of 'circle()',
-      'ellipse()' or 'polygon()'. The CSS value of 'inset()' is
-      invalid for SVG.
+      'ellipse()' or 'polygon()'.
     </dd>
 
     <dt><span class="attr-value">&lt;uri&gt;</span></dt>
     <dd>
-      If the &lt;uri&gt; references an SVG <a>shape</a> element,
-      that element defines the shape. Otherwise, if the &lt;uri&gt;
-      references an image, the shape is extracted and computed based
-      on the alpha channel of the specified image. If the
-      &lt;uri&gt; does not reference an SVG shape element or an
-      image, the effect is as if the value ‘auto’ had been
-      specified.
+      For any &lt;uri&gt; that references an SVG <a>shape</a> element,
+      that element defines the contributing shape. For any &lt;uri&gt;
+      that references an image, the contributing shape is extracted
+      and computed based on the alpha channel of the specified
+      image. If an &lt;uri&gt; does not reference an SVG shape element
+      or an image, that &lt;uri&gt; is ignored.
     </dd>
 
   </dl>
 
   <div class="example">
     <p>
-      An example of using <a>'shape-outside'</a>.
+      An example of using <a>'shape-subtract'</a>.
     </p>.
 
     <pre><![CDATA[
@@ -1989,20 +1982,20 @@
   <rect id="rect1" x="25"  y="25"  width="225" height="175" fill="white" stroke="black"/>
   <rect id="rect2" x="200" y="125" width="225" height="150" fill="white" stroke="black"/>
 
-  <text shape-inside="url(#rect1)"
-	shape-outside="url(#rect2)"
-	shape-padding="25"
-	shape-margin="25"
-        font-family="DejaVu Sans"
-	font-size="12px"
-	text-align="justified"
-	line-height="110%">Lorem ipsum ...</text>
-  <text shape-inside="url(#rect2)"
-	shape-padding="25"
-        font-family="DejaVu Sans"
-	font-size="12px"
-	text-align="justified"
-	line-height="110%">Lorem ipsum ...</text>
+  <text style="shape-inside:url(#rect1);
+	       shape-subtract:url(#rect2);
+	       shape-padding:25px;
+	       shape-margin:25px;
+               font-family:DejaVu Sans;
+	       font-size:12px;
+	       text-align:justified;
+	       line-height:110%">Lorem ipsum ...</text>
+  <text style="shape-inside:url(#rect2);
+	       shape-padding:25px;
+               font-family:DejaVu Sans;
+	       font-size:12px;
+	       text-align:justified;
+	       line-height:110%">Lorem ipsum ...</text>
 </svg>
 ]]></pre>
 
@@ -2011,7 +2004,7 @@
            alt="Image showing horizontal text wrapped inside two overlapping rectangles."/>
       <p class="caption">
 	Horizontal text wrapping inside two overlapping rectangles
-	using <a>'shape-outside'</a> as well as
+	using <a>'shape-subtract'</a> as well as
 	<a>'shape-inside'</a>, <a>'shape-padding'</a> and
         <a>'shape-margin'</a>. The black rectangles show
 	the <a>content area</a>s. The inner blue lines show
@@ -2019,16 +2012,6 @@
       </p>
     </div>
   </div>
-
-  <p>
-    The CSS value of 'shape-box' are invalid for SVG.
-  </p>
-
-  <p class="note">
-    Except as noted, see the CSS Shapes Module Level 1 for the definition of
-    <a href="http://dev.w3.org/csswg/css-shapes/#shape-outside-property">'shape-outside'</a>.
-    [<a href="refs.html#ref-CSSSHAPES1">CSSSHAPES1</a>]
-  </p>
 
 <h3 id='TextShapeImageValue'>The <span class='property'>shape-image-threshold</span> property</h3>
 
@@ -2052,9 +2035,9 @@
 
   <p>
     The <a>'shape-margin'</a> property adds a margin to a
-    <a>'shape-outside'</a>. This defines a new shape where every
-    point is the specified distance from the shape-outside. This
-    property takes on positive values only.
+    <a>'shape-subtract'</a>. For each shape in the list, this defines
+    a new shape where every point is the specified distance from
+    the original shape. This property takes on positive values only.
   </p>
 
   <table class="propdef">
