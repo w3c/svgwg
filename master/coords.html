@@ -19,94 +19,85 @@
 
 <h2 id="Introduction">Introduction</h2>
 
-<dl class='definitions'  data-dfn-type="dfn" data-export="">
+<p>All SVG content is drawn inside <dfn data-dfn-type="dfn">SVG viewports</dfn>.
+Every SVG viewport defines a drawing region characterized by a size 
+(width, height), and an origin, measured in abstract 
+<dfn data-dfn-type="dfn">user units</dfn>.</p>
 
-  <dt id="TermCanvas">canvas</dt>
-  <dd>The infinite surface onto which viewports are mapped and graphics
-  elements are drawn.</dd>
+<p>The <dfn data-dfn-type="dfn">initial viewport</dfn> is a top-level
+viewport that establishes a mapping between the coordinate system used
+by the containing environment (for example, CSS pixels in web browsers)
+and <a>user units</a>. Establishing an initial viewport is described in more
+detail in <a href="#ViewportSpace">The initial viewport</a>.</p>
 
-  <dt id="TermSVGViewport">SVG viewport</dt>
-  <dd class='ready-for-wider-review'>Various elements establish an SVG viewport, See
-  <a href="#EstablishingANewSVGViewport">Establishing a new SVG viewport</a>).
-  An SVG viewport defines a region on the canvas, bounded by a rectangle that
-  provides a reference that further transformations can be applied to (e.g.
-  through the <a>'viewBox'</a> attribute) and that percentages can be
-  resolved against.
-  </dd>
+<p>Viewports are only established by elements. See
+<a href="#EstablishingANewSVGViewport">Establishing a new SVG viewport</a> for information
+on which elements generate viewports.</p>
 
-  <dt id="TermCurrentViewport">current viewport</dt>
-  <dd class='ready-for-wider-review'>The viewport established by the closest
-  ancestor element that establishes a viewport. See
-  (<a href="#EstablishingANewSVGViewport">Establishing a new SVG viewport</a>).
-  </dd>
+<p>Each viewport generates a <dfn data-dfn-type="dfn">viewport coordinate system</dfn>
+and a <dfn data-dfn-type="dfn">local coordinate system</dfn>, initially identical.
+Providing a <a>viewBox</a> on a viewport's element transforms the local coordinate system 
+relative to the viewport coordinate system as described in
+<a href="#viewBox">The viewBox attribute</a>. Child elements of a viewport can
+further modify the <a>local coordinate system</a>, for example by specifying
+<a>transform</a> attributes.</p>
 
-  <dt id="TermUserUnits">user units</dt>
-  <dd>A coordinate value or length expressed in user units
-  represents a coordinate value or length in the current
-  <a>local coordinate system</a>.
-  Thus, 10 user units represents a length of 10 units in the
-  current user coordinate system. Unless specified otherwise, one user unit
-  is also equal to one CSS pixel in the current
-  <a>local coordinate system</a>.</dd>
+<p>Viewports can be nested. Percentage units are resolved with reference
+to the width and height of the nearest ancestral viewport. Hence, nesting
+viewports provides an opportunity to redefine the meaning of percentage
+units and provide a new reference rectangle for "fitting" a graphic relative
+to a particular rectangular area.</p>
 
-  <dt id="TermViewportCoordinateSystem">viewport coordinate system</dt>
-  <dd>In general, a coordinate system defines locations and
-  distances on the current <a>canvas</a>.
-  The viewport coordinate system is the coordinate system that is active at the
-  start of processing of an <a>'svg'</a> element, before
-  processing the optional <a>'viewBox'</a> attribute. In the
-  case of an SVG document fragment that is embedded within a
-  parent document which uses CSS to manage its layout, then the
-  viewport coordinate system will have the same orientation and
-  lengths as in CSS, with the origin at the top-left on the
-  <a>SVG viewport</a>. See <a href="coords.html#ViewportSpace">The initial viewport</a> and
-  <a href="coords.html#EstablishingANewSVGViewport">Establishing a
-  new viewport</a>.</dd>
-</dl>
+<p>The width, height and origin of viewports are established by a negotiation
+process between the SVG document fragment generating the viewport, and the
+parent of that fragment (whether real or implicit). See 
+<a href="#EstablishingANewSVGViewport">Establishing a new SVG viewport</a> for a 
+description of this negotiation process.</p>
 
-<p><s>For all media, the canvas
-describes "the space where the SVG content is rendered." The
-canvas is infinite for each dimension of the space, but
-rendering occurs relative to a finite rectangular region of the
-canvas. This finite rectangular region is called the <dfn>SVG viewport</dfn>.
-For <a href='http://www.w3.org/TR/2011/REC-CSS2-20110607/media.html#visual-media-group'>visual media</a>
-([<a href='refs.html#ref-CSS21'>CSS21</a>], section 7.3.1)
-the SVG viewport is the viewing area where the user sees the SVG content.</s></p>
+<p>By default, a nested viewport's <a>viewport coordinate system</a> is equivalent to the local
+coordinate system of the parent element, translated by the origin of the viewport's
+element. However, a <a>transform</a> attribute on a viewport's element will modify
+the <a>viewport coordinate system</a> relative to the parent element's local coordinate system.</p>
 
-<p class="issue" data-issue="1">The above paragraph and definitions need to be merged.</p>
+<p>Abstractly, all viewports are embedded in the <dfn data-dfn-type="dfn">canvas</dfn>,
+a drawing region that is infinitely large in all relevant dimensions.</p>
 
-<p>The size of the SVG viewport (i.e., its width and height) is
-determined by a negotiation process (see <a
-href="#ViewportSpace">Establishing the size of the initial
-viewport</a>) between the SVG document fragment and its parent
-(real or implicit). Once that negotiation process is completed,
-the SVG user agent is provided the following information:</p>
+<h2 id="ComputingAViewportsTransform">Computing the equivalent transform of a viewport</h2>
 
-<ul>
-  <li>a number (usually an integer) that represents the width
-  in CSS pixels of the viewport</li>
+<p>This process converts the min-x, min-y, width and height values of a viewBox attribute, 
+the position and size of the element on which the viewBox attribute is defined, 
+and the value of the preserveAspectRatio attribute on that element into a translation and
+a scale that is applied to content contained by the element.</p>
 
-  <li>a number (usually an integer) that represents the height
-  in CSS pixels of the viewport</li>
+<ol class='algorithm'>
+  <li>Let <var>vb-x</var>, <var>vb-y</var>, <var>vb-width</var>, <var>vb-height</var> be
+  the min-x, min-y, width and height values of the viewBox attribute respectively.</li>
+  <li>Let <var>e-x</var>, <var>e-y</var>, <var>e-width</var>, <var>e-height</var> be
+  the position and size of the element respectively.</li>
+  <li>Let <var>align</var> be the align value of preserveAspectRatio, or 'xMidyMid' if
+  preserveAspectRatio is not defined.</li>
+  <li>Let <var>meetOrSlice</var> be the meetOrSlice value of preserveAspectRatio, or 'meet'
+  if preserveAspectRatio is not defined or if meetOrSlice is missing from this value.</li>
+  <li>Initialize <var>scale-x</var> to <var>e-width</var>/<var>vb-width</var>.</li>
+  <li>Initialize <var>scale-y</var> to <var>e-height</var>/<var>vb-height</var>.</li>
+  <li>If <var>align</var> is not 'none' and <var>meetOrSlice</var> is 'meet', set
+  the larger of <var>scale-x</var> and <var>scale-y</var> to the smaller.</li>
+  <li>Otherwise, if <var>align</var> is not 'none' and <var>meetOrSlice</var> is 'slice',
+  set the smaller of <var>scale-x</var> and <var>scale-y</var> to the larger.</li>
+  <li>Initialize <var>translate-x</var> to <var>vb-x</var> - <var>e-x</var>.</li>
+  <li>Initialize <var>translate-y</var> to <var>vb-y</var> - <var>e-y</var>.</li>
+  <li>If <var>align</var> contains 'xMid', add
+  (<var>e-width</var> - <var>vb-width</var> * <var>scale-x</var>) / 2 to <var>transform-x</var>.</li>
+  <li>If <var>align</var> contains 'xMax', add
+  (<var>e-width</var> - <var>vb-width</var> * <var>scale-x</var>) to <var>transform-x</var>.</li>
+  <li>If <var>align</var> contains 'yMid', add
+  (<var>e-height</var> - <var>vb-height</var> * <var>scale-y</var>) / 2 to <var>transform-y</var>.</li>
+  <li>If <var>align</var> contains 'yMax', add
+  (<var>e-height</var> - <var>vb-height</var> * <var>scale-y</var>) to <var>transform-y.</var></li>
+</ol>
 
-</ul>
-
-<p id="SVGInitialUserCoordinateSystem">Using the above information, the SVG user agent determines
-the <a>SVG viewport</a>, an initial <a>viewport coordinate system</a> and an
-initial <a>local coordinate system</a>
-such that the two coordinates systems are identical. Both
-coordinates systems are established such that the origin
-matches the origin of the viewport (for the root viewport, the
-viewport origin is at the top/left corner), and one unit in the
-initial coordinate system equals one CSS pixel in the <a>SVG viewport</a>.
-(See <a href="coords.html#InitialCoordinateSystem">Initial
-coordinate system</a>.)</p>
-
-<p>New SVG viewports can be established. By <a
-href="#EstablishingANewSVGViewport">establishing a new
-viewport</a>, you can redefine the meaning of percentages units
-and provide a new reference rectangle for "fitting" a graphic
-relative to a particular rectangular area.</p>
+<p>The transform applied to content contained by the element is given by
+translate(<var>translate-x</var>, <var>translate-y</var>) scale(<var>scale-x</var>, <var>scale-y</var>).</p>
 
 <h2 id="ViewportSpace">The initial viewport</h2>
 
