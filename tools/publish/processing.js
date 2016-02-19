@@ -47,13 +47,13 @@ exports.insertStyleSheets = function(conf, page, doc) {
   var isSVG2 = conf.shortTitle == 'SVG 2';
   // Add a link to the default style sheet.
   doc.head.appendChild(utils.parse('<link rel="stylesheet" title="Default" href="{{href}}" type="text/css" media="screen"/>',
-                                   { href: conf.maturity == 'ED' && isSVG2 ? 'style/default_svg.css' : 'style/default_no_maturity.css' }));
+                                   { href: conf.maturity == 'ED' && isSVG2 ? 'style/svg.css' : 'style/default_no_maturity.css' }));
 
   if (isSVG2) {
     // Add a link to alternate style sheet to hide background colors
     // if this is an Editor's Draft, or to show them otherwise.
     doc.head.appendChild(utils.parse('<link rel="alternate stylesheet" title="{{title}}" href="{{href}}" type="text/css" media="screen"/>',
-                                     { href: conf.maturity == 'ED' ? 'style/default_no_maturity.css' : 'style/default_svg.css',
+                                     { href: conf.maturity == 'ED' ? 'style/default_no_maturity.css' : 'style/svg.css',
                                        title: conf.maturity == 'ED' ? 'Only annotations for publication' : 'All annotations' }));
   }
 
@@ -65,7 +65,7 @@ exports.insertStyleSheets = function(conf, page, doc) {
   if (conf.localStyleSheets) {
     href = 'style/' + href + '.css';
   } else {
-    href = '//www.w3.org/StyleSheets/TR/' + href;
+    href = '//www.w3.org/StyleSheets/TR/2016/' + href;
     if (conf.maturity != 'ED') {
       href = 'https:' + href;
     }
@@ -104,6 +104,14 @@ exports.insertMathJaxScript = function(conf, page, doc) {
   }
 }
 
+exports.insertW3CScript = function(conf, page, doc) {
+  // Load the W3C TR script.
+  if (conf.localStyleSheets) {
+    doc.body.appendChild(utils.parse('<script src="style/fixup.js"></script>'));
+  } else {
+    doc.body.appendChild(utils.parse('<script src="//www.w3.org/scripts/TR/2016/fixup.js"></script>'));
+  }
+}
 
 // -- Set class="" on <body> to indicate which chapter this is ----------------
 
@@ -190,11 +198,11 @@ exports.addExpanderScript = function(conf, page, doc) {
 // -- Add chapter number to <h1> and Table of Contents below it ---------------
 
 function generateTOC(conf, page, className) {
-  function newTOCUL() {
-    return utils.parse('<ul class="{{class}}"></ul>', { class: className });
+  function newTOCOL() {
+    return utils.parse('<ol class="{{class}}"></ol>', { class: className });
   }
 
-  function generate(ul, children) {
+  function generate(ol, children) {
     for (var i = 0; i < children.length; i++) {
       var item = children[i];
       var li = utils.parse('<li><a href="{{url}}#{{id}}"></a></li>',
@@ -210,22 +218,22 @@ function generateTOC(conf, page, className) {
       }
       a.appendChild(item.section.title.cloneNode(true));
       if (item.children) {
-        var childUL = newTOCUL();
+        var childUL = newTOCOL();
         generate(childUL, item.children);
         if (childUL.firstChild) {
           li.appendChild(childUL);
         }
       }
-      ul.appendChild(li);
+      ol.appendChild(li);
     }
   }
 
-  var ul = newTOCUL();
+  var ol = newTOCOL();
   var sectionHierarchy = conf.getSectionHierarchy(page);
   if (sectionHierarchy && sectionHierarchy.children) {
-    generate(ul, sectionHierarchy && sectionHierarchy.children);
+    generate(ol, sectionHierarchy && sectionHierarchy.children);
   }
-  return ul;
+  return ol;
 }
 
 exports.addTableOfContents = function(conf, page, doc) {
@@ -251,9 +259,11 @@ exports.addTableOfContents = function(conf, page, doc) {
 
   var tocClass = pageType == 'appendix' ? 'toc appendix-toc' : 'toc';
 
-  var toc = doc.createDocumentFragment();
-  toc.appendChild(utils.parse('<h2 id="toc" class="contents">Contents</h2>'));
-  toc.appendChild(utils.parse('<ul class="{{class}}"><li>{{toc}}</li></ul>', { class: tocClass, toc: generateTOC(conf, page, tocClass) }));
+  var toc = utils.parse(
+    '<nav id="toc">' +
+      '<h2 id="Contents" class="contents">Contents</h2>' +
+      '<ol class="{{class}}"><li>{{toc}}</li></ol>' +
+    '</nav>', { class: tocClass, toc: generateTOC(conf, page, tocClass) });
 
   h1.parentNode.insertBefore(toc, h1.nextSibling);
 }
@@ -303,7 +313,7 @@ exports.addIssueIDs = function(config, page, doc) {
 // -- Process edit:* element replacements -------------------------------------
 
 function doMiniTOC(conf, page, n) {
-  var ul = utils.parse('<ul class="toc"></ul>');
+  var ul = utils.parse('<ol class="toc"></ol>');
 
   for (var i = 0; i < conf.pageOrder.length; i++) {
     var pageName = conf.pageOrder[i];
@@ -321,7 +331,7 @@ function doMiniTOC(conf, page, n) {
                            title: h1 && h1.textContent });
         break;
       case 'chapter':
-        li = utils.parse('<li><span class="secno">{{number}}.</span> <a href="{{name}}.html">{{title}}</a></li>',
+        li = utils.parse('<li><a href="{{name}}.html"><span class="secno">{{number}}.</span> {{title}}</a></li>',
                          { name: pageName,
                            number: conf.pages[pageName].formattedNumber,
                            title: h1 && h1.textContent });
@@ -348,7 +358,7 @@ function doFullTOC(conf, page, n) {
   if (conf.isSingleChapter) {
     ul = generateTOC(conf, page, 'toc');
   } else {
-    ul = utils.parse('<ul class="toc"></ul>');
+    ul = utils.parse('<ol class="toc"></ol>');
     for (var i = 0; i < conf.pageOrder.length; i++) {
       var pageName = conf.pageOrder[i];
       var pageType = conf.pages[pageName].type;

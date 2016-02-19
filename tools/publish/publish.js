@@ -228,6 +228,7 @@ function buildPage(page) {
    processing.insertSpecNameInTitle,
    processing.insertStyleSheets,
    processing.insertMathJaxScript,
+   processing.insertW3CScript,
    processing.addBodyClass,
    processing.addHeaderFooter,
    processing.addExpanderScript,

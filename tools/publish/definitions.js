@@ -39,11 +39,11 @@ function Property(properties) {
 }
 
 Property.prototype.formatLink = function(omitQuotes) {
-  return utils.parse('{{lquote}}<a href="{{href}}"><code class="property">{{name}}</code></a>{{rquote}}',
+  return utils.parse('{{lquote}}<a class="property" href="{{href}}">{{name}}</a>{{rquote}}',
                      { href: this.href,
                        name: this.name,
-                       lquote: omitQuotes ? '' : '‘',
-                       rquote: omitQuotes ? '' : '’' });
+                       lquote: '',
+                       rquote: '' });
 };
 
 function Symbol(properties) {
