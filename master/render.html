@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
 <head>
@@ -63,6 +63,213 @@ in implementing a precise mathematical model (e.g. for
 realistic performance curves are approximated by straight
 lines, the approximation need only be sufficiently precise to
 match the conformance requirements).</p>
+    
+<h2 id="RenderingTree">The rendering tree</h2>
+    
+<p> The components of the final rendered representation of an SVG document
+    do not have a one-to-one relationship with the underlying 
+    elements in the document model.
+    The appearance of the graphic instead reflects a parallel structure,
+    the rendering tree,
+    in which some elements are excluded and others are repeated.
+</p>
+    
+<p> Many elements in the SVG namespace do not directly represent 
+    a component of the graphical document.  
+    Instead, they define graphical effects, metadata,
+    content to be used to represent other elements,
+    or alternatives to be displayed under certain conditions.
+    In dynamic documents, certain components of the graphic
+    may be rendered or not, depending on interaction or animation.
+    These non-rendered elements are not directly included
+    in the rendering tree.
+</p>
+<p>
+    Because SVG supports the reuse of graphical sub-components,
+    some elements are rendered multiple times.
+    The individual renderings may have context-dependent styling
+    and may be rasterized at different scales or transformations.
+    However, they are always reflections of the original element,
+    and are not directly manipulable by script or user interaction.
+</p>
+    
+<h3 id="NonRenderedElements">Non-rendered elements</h3>
+    
+<p> All SVG elements can be grouped into two categories, 
+    based on whether they are or are not ever rendered directly:
+</p>
+<dl class='definitions'  data-dfn-type="dfn" data-export="">
+
+  <dt id="TermNeverRenderedElements">never-rendered element</dt>
+  <dd>
+      <p>
+          An element type that is <em>never directly rendered</em>,
+          regardless of context or <a>'display'</a> style value.
+          It includes the following elements: 
+          <edit:elementcategory name='never-rendered'/>
+      </p>
+  </dd>
+  <dt id="TermRenderableElements">renderable element</dt>
+  <dd>
+    <p>
+        An element that can have a direct representation
+        in the document, 
+        as a graphic, container, text, audio, or animation.  
+        It includes the following elements: 
+        <edit:elementcategory name='renderable'/>
+    </p>
+  </dd>
+
+</dl>
+<p>
+    In addition to never-rendered elements, 
+    non-rendered elements arise in three other situations:
+</p>
+<ul>
+    <li><a>Conditional processing</a> attributes 
+        and <a>switch</a> structures can cause content to not be rendered.
+    </li>
+    <li>Any element with a computed style value of <code>none</code>
+        for the <a>'display'</a> property is not rendered.
+    </li>
+    <li>Any child elements of non-rendered elements
+        are themselves not rendered
+        (regardless of their own <a>'display'</a> property value).
+    </li>
+</ul>
+    
+<p> Non-rendered elements:
+</p>
+<ul>
+  <li>have no visual effect on the graphic,
+      except when they are used in the rendering of another element 
+      that references them.</li>
+
+  <li>do not contribute to the net geometry of a <a>mask</a> or
+      <a>clipping path</a> when they are descendants of a
+      <a>'mask'</a> or <a>'clipPath'</a> element</li>
+
+  <li>are not sensitive to <a href="interact.html#UIEvents">pointer events</a></li>
+    
+  <li>cannot receive <a>keyboard focus</a></li>
+
+  <li>do not contribute to <a href="coords.html#ObjectBoundingBox">bounding box
+  calculations</a></li>
+
+  <li>are not considered when performing <a href="text.html#TextLayout">text layout</a></li>
+</ul>
+    
+<p> Non-rendered elements likewise have no counterpart 
+    in an accessible alternative view of the document.
+    Nonetheless, they remain part of the document model, and
+    participate in <a href="styling.html">style inheritance and cascade</a>.
+</p>
+    
+    
+<h3 id="VisibilityControl">Controlling visibility: the effect of the <span
+class="property">'display'</span> and <span class="property">'visibility'</span>
+properties</h3>
+    
+<p>
+    SVG uses two properties to toggle the visible display of
+    elements that are normally rendered:
+    <a>'display'</a> and <a>'visibility'</a>.
+    Although they have a similar visible effect in static documents,
+    they are conceptually distinct.
+</p>
+
+<p class="note">See the CSS 2.1 specification for the definitions
+of <a>'display'</a> and <a>'visibility'</a>.
+[<a href="refs.html#ref-CSS21">CSS21</a>]</p>
+    
+<p>
+    Setting  <a>'display'</a> to <span class="prop-value">none</span> 
+    results in the element not being rendered.
+    When applied to 
+    <a>graphics elements</a>,
+    <a>text content elements</a>,
+    and <a>container elements</a> that are normally rendered,
+    setting <a>'display'</a> to <span class="prop-value">none</span> 
+    results in the element (and all its descendents) 
+    not becoming part of the rendering tree. 
+    Note that <a>'display'</a> is not an inherited property.
+</p>
+<p>
+    Elements that have any other <a>'display'</a> value than
+<span class="prop-value">none</span> are rendered as normal.
+</p>
+<p>
+    The <a>'display'</a> property only applies to <a>renderable elements</a>.
+    Setting <code>display: none</code> on an element
+    that is <a>never directly rendered</a>
+    or <a>not rendered</a> based on conditional processing
+    has no effect.
+</p>
+
+<p>
+    The <a>'display'</a> property affects the direct processing
+    of a given element, but it does not prevent it from
+    being referenced by other elements. 
+    For example, setting
+    <span class="prop-value">display: none</span> on a <a>'path'</a> element
+    will prevent that element from getting rendered directly onto the
+    canvas, but the <a>'path'</a> element can still be referenced by a
+    <a>'textPath'</a> element and its geometry will be used
+    in text-on-a-path processing.
+</p>
+
+<p>
+    When applied to a <a>graphics element</a> or <a>text content element</a>,
+    setting <a>'visibility'</a> to <span class="prop-value">hidden</span>
+    or <span class="prop-value">collapse</span>
+    results in the element not being painted.  
+    It is, however, still part of the rendering tree. 
+    It may be sensitive to pointer events 
+    (depending on the value of <a>'pointer-events'</a>),
+    may receive focus (depending on the value of <a>'tabindex'</a>),
+    contributes to bounding box calculations and clipping paths,
+    and does affect text layout.
+</p>
+
+<p>
+    The <a>'visibility'</a> property only directly applies to
+    <a>graphics elements</a> and <a>text content elements</a>.
+    Since <a>'visibility'</a> is an inherited property, however,
+    although it has no effect on a <a>container element</a> itself,
+    its inherited value can affect descendant elements.
+</p>
+    
+<h3 id="ReusedGraphics">Re-used graphics</h3>
+    
+<p> Graphical content defined in one part of the document
+    (or in another document)
+    may be used to render other elements.
+    This includes the graphics created by style properties
+    (such as a <a>pattern</a> paint server, or line <a>markers</a>)
+    as well as graphics that are instantiated with a <a>'use'</a> element.
+    In the case of <a>'use'</a> instances,
+    the original graphical elements may or may not be rendered themselves.
+</p>
+<p>
+    Each instance of the re-used graphics creates a fragment of the rendering tree.
+    The component graphics may need their styles resolved based on context,
+    then they are rendered and composited as described in this chapter.
+    The re-used fragment as a whole is treated as a <a>stacking context</a>
+    and a <a>non-isolated group</a>.
+</p>
+<p> 
+    The <a>'display'</a> property on any child content of re-used graphics
+    has its normal effect when set to <code>none</code>,
+    preventing that branch of the document fragment from being used in rendering.
+    Similarly, when a <a>'use'</a> element references a
+    <a>renderable element</a> (as opposed to a <a>'symbol'</a>),
+    a value of <code>display: none</code> on the referenced element
+    will result in an empty rendering-tree fragment for that 'use' element.
+    However, re-used graphics are never affected
+    when the original DOM elements themselves are not rendered
+    because of a value of <code>display: none</code> on an ancestor.
+</p>
+
 
 <div class="ready-for-wider-review">
 
