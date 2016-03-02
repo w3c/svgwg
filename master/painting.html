@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
 <head>
@@ -918,8 +918,9 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
   <dt><span class='prop-value'>miter-clip</span></dt>
   <dd>This value is the same as <span class='prop-value'>miter</span> but if
     the <a>'stroke-miterlimit'</a> is exceeded, the miter is clipped at a
-    miter length equal to the <a>'stroke-miterlimit'</a> value multiplied
-    by the stroke width (see below).</dd>
+    distance equal to half the <a>'stroke-miterlimit'</a> value multiplied
+    by the stroke width from the intersection of the path segments
+    (see below).</dd>
 
   <dt><span class='prop-value'>round</span></dt>
   <dd>This value indicates that a round corner is to be used to join path segments.
@@ -1056,6 +1057,38 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
   <pre id="math-miter-length">miter length = stroke-width / sin(theta / 2)</pre>
 </div>
 
+<div class="note">
+  <p>
+    Historically, the miter length is defined as the distance from the
+    inside stroke edge of the intersecting path segments to the tip of
+    the miter. In practice, this is followed only for straight path
+    segments. The above definition of miter length based on angles
+    depends only on the tangents to the path segments at the join and
+    thus gives consistent results independent of the curvature of the
+    path segments. To be consistent with this definition, the clipping
+    point of the
+    <span class='prop-value'>miter-clip</span> and
+    <span class='prop-value'>arcs</span> line joins is at a distance
+    or arc length equal to half the <a>'stroke-miterlimit'</a> times
+    the stroke width from the point the two path segments join.
+  </p>
+  <div class="figure">
+    <img class="bordered" src="images/painting/miter-limit-def.svg"
+	 alt="Image showing the definition of the stroke miter length
+	      and consistency of clipping between different shaped
+	      path segments."/>
+    <p class="caption">
+      Left: Historical definition of miter length.
+
+      Right: Two different paths with the same tangents to the path at
+      the point where the path segments join. The behavior of the
+      miter join (fallback to bevel or clipping position) is the same
+      for both paths. It does not depend on the position where the
+      inside stroked edges intersect.
+    </p>
+  </div>
+</div>
+
 <p>
   If the miter length divided by the stroke width exceeds the
   <a>'stroke-miterlimit'</a> then for the value:
@@ -1068,7 +1101,7 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
   <dt><span class='prop-value'>miter-clip</span></dt>
   <dd>
     the miter is clipped by a line perpendicular to the line bisecting
-    the angle between the two path segments at a distance of the value
+    the angle between the two path segments at a distance of half the value
     of miter length from the intersection of the two path segments.
   </dd>
 </dl>
@@ -1079,7 +1112,7 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
   <p class="caption">
     Effect on line join when <a>'stroke-miterlimit'</a> is
     exceeded. The olive-green dashed lines shows the position of the
-    miter limit when the <a>'stroke-miterlimit'</a> value is 1.5. The
+    miter limit when the <a>'stroke-miterlimit'</a> value is 3. The
     gray regions shows what the joins would look like without a miter
     limit.
   </p>
@@ -1091,9 +1124,9 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
   tangent to the line bisecting the angle between the two segments at
   the point the two segments intersect and passes through the end
   point of the join. The line join is clipped, if necessary, by a line
-  perpendicular to this arc at a <em>miter length</em> equal to the
-  value of the <a>'stroke-miterlimit'</a> value multiplied by the
-  stroke width.
+  perpendicular to this arc at an arc length from the intersection
+  point equal to half the value of the <a>'stroke-miterlimit'</a> value
+  multiplied by the stroke width.
 </p>
 
 <p class="annotation">
