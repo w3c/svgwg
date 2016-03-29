@@ -260,14 +260,29 @@
       the <a>'writing-mode'</a> property.
     </dd>
 
+    <dt id="TermAlignmentPoint">alignment point</dt>
+    <dd>
+      The point on a glyph that should be aligned with the
+      <a>current text position</a>. It is determined by the
+      glyph cell metrics and may depend on the script and
+      <a>inline-base direction</a>.
+    </dd>
+
+    <dt id="TermCurrentTextPosition">current text position</dt>
+    <dd>
+      The point in the current user space where the <a>alignment
+	point</a> of the next glyph to be rendered should be placed.
+    </dd>
+
     <dt id="TermTextChunk">text chunk</dt>
     <dd>
-      An independent section of text in which all characters belong to
-      the same element and have the same style, direction, etc. In
-      addition, each new absolute positioning adjustment (due to an
-      <a>'text/x'</a> or <a>'text/y'</a> attribute, or forced line
-      break) creates a new <a>text chunk</a>. Ligature substitution
-      and bidi-reordering only occur within a <a>text chunk</a>.
+      An independent block of text in which all characters are
+      positioned together. Each new absolute positioning adjustment
+      (due to an <a>'tspan/x'</a> or <a>'tspan/y'</a> attribute, or
+      forced line break) creates a new <a>text chunk</a>. Ligature
+      substitution and bidi-reordering only occur within a <a>text
+      chunk</a>. <a>text chunks</a> are only relevant to pre-formatted
+      text.
     </dd>
 
     <dt id="TermWhiteSpaceCharacter">white space characters</dt>
@@ -412,18 +427,21 @@
 
   <p>
     Glyphs are positioned relative to a particular point on each glyph
-    known as the <em><dfn><a>alignment point</a></dfn></em>.  For
-    horizontal writing-modes, the glyphs' alignment points are
-    vertically aligned while for vertical writing-modes, they are
-    horizontally aligned. The position of the alignment point depends
-    on the script. For example, Western glyphs are aligned on the
-    bottoms of the capital letters, northern indic glyphs are aligned
-    at the top of a horizontal stroke near the top of the glyphs, and
-    far-eastern glyphs are aligned either at the bottom or center of
-    the glyph. Within a script and within a line of text having a
-    single font-size, the sequence of alignment points defines, in the
-    inline-progression-direction, a geometric line called
-    a <em>baseline</em>. Western and most other alphabetic and
+    known as the <dfn><a>alignment point</a></dfn>. For horizontal
+    writing-modes, the glyphs' <a>alignment points</a> are vertically
+    aligned while for vertical writing-modes, they are horizontally
+    aligned. The position of the <a>alignment point</a> depends on the
+    script. For example, Western glyphs are aligned at the bottom of
+    capital letters, northern indic glyphs are aligned at the top
+    of a horizontal stroke near the top of the glyphs, and far-eastern
+    glyphs are aligned either at the bottom or center of the glyph.
+  </p>
+
+  <p>
+    Within a script and within a line of text having a single
+    font-size, the sequence of alignment points defines, in the
+    inline-progression-direction, a geometric line called a
+    <dfn>baseline</dfn>. Western and most other alphabetic and
     syllabic glyphs are aligned to an "alphabetic" baseline, the
     northern indic glyphs are aligned to a "hanging" baseline and the
     far-eastern glyphs are aligned to an "ideographic" baseline.
@@ -441,15 +459,17 @@
 
   <p>
     As glyphs are sequencially placed along a baseline, the
-    alignment point of a glyph is typically positioned at the
-    <dfn><a>current text position</a></dfn>. After each glyph is
-    placed, the <a>current text position</a> is advanced by the
-    glyph's <em>advance</em> value (typically the width for horizontal
-    text or height for vertical text) with any correction for kerning
-    or other spacing adjustment. The initial and final current text
-    positions are used for alignment (e.g. when the
-    <a>'text-anchor'</a> value is either 'start' or 'end').  The
-    glyph's width is needed when placing text along a path.
+    <a>alignment point</a> of a glyph is typically positioned at the
+    <dfn><a>current text position</a></dfn> (some properties such as
+    <a>'vertical-align'</a> may alter the positioning). After each
+    glyph is placed, the <a>current text position</a> is advanced by
+    the glyph's <em>advance</em> value (typically the width for
+    horizontal text or height for vertical text) with any correction
+    for kerning or other spacing adjustment as well as for new lines
+    in pre-formatted or auto-wrapped text. The initial and final
+    current text positions are used for alignment (e.g. when
+    the <a>'text-anchor'</a> value is either 'middle' or 'end'). The
+    glyph's advance is needed when placing text along a path.
   </p>
 
   <div class="figure">
@@ -467,7 +487,25 @@
   </div>
 
   <p>
-    A <em>baseline-table</em> specifies the position of one or more
+    If a glyph does not provide explicit advance values corresponding
+    to the current glyph orientation, then an appropriate
+    approximation should be used. For vertical text, a suggested
+    approximation is the <em>em</em> size.
+  </p>
+
+  <p>
+    The initial <a>current text position</a> is established by the
+    <a>'text/x'</a> and <a>'text/y'</a> attributes on the
+    <a>'text'</a> element or first rendered <a>'tspan'</a> element for
+    pre-formatted text or auto-wrapped text when the <a>content
+    area</a> is determined by the <a>'inline-size'</a> attribute. For
+    other auto-wrapped text, the inital <a>current text position</a>
+    is determined by the position of the first rendered glyph after
+    applying the CSS line wrapping algorithm.
+  </p>
+
+  <p>
+    A <dfn>baseline-table</dfn> specifies the position of one or more
     baselines in the design space coordinate system. The function of
     the baseline table is to facilitate the alignment of different
     scripts with respect to each other when they are mixed on the same
@@ -600,6 +638,35 @@
       generate the final <a>line box</a> (large light blue box).
     </p>
   </div>
+
+  <p>
+    Ligatures are an important feature of advance text layout. Some
+    ligatures are discretionary while others (e.g. in Arabic) are
+    mandatory. The following explicit rules apply to ligature
+    formation:
+  </p>
+
+  <ul>
+    <li>
+      Ligature formation should not be enabled when characters are
+      in different DOM text nodes;
+      thus, characters separated by markup should not use ligatures.
+    </li>
+    <li>
+      Ligature formation should not be enables when characters are
+      in different <a>text chunks</a>.
+    </li>
+    <li>
+      Discretionary ligatures should not be used when the spacing
+      between two characters is not the same as the
+      default space (e.g. when <a>'letter-spacing'</a> has a
+      non-default value, or due to justification). (See
+      <a href="https://www.w3.org/TR/css-text-3/#letter-spacing-property">CSS
+	Text Module Level 3</a>,
+      ([<a href="refs.html#ref-CSS3TEXT">CSS3TEXT</a>]).
+    </li>
+  </ul>
+
 
 <h2 id="TextElement">The <span class="element-name">'text'</span> and
   <span class="element-name">'tspan'</span> elements</h2>
@@ -2633,7 +2700,7 @@ for RTL or vertical text.</p>
     the original document). The user agent determines
     the set of independent blocks within each of which it should apply
     the Unicode bidirectional algorithm. Each
-    <a href="text.html#TextChunk">text chunk</a> represents an
+    <a>text chunk</a> represents an
     independent block of text. Additionally, any change in glyph
     orientation due to processing of properties
     <a>'glyph-orientation-horizontal'</a> or
@@ -2767,27 +2834,26 @@ for RTL or vertical text.</p>
     Multi-line pre-formatted text may be created by using the
     <a>'white-space'</a> values <span class="prop-value">pre</span>
     or <span class="prop-value">pre-line</span>. In these cases, a
-    line-feed or carriage return is preserved as a <a>forced line
-    break</a> which creates a new <a>line box</a>. The <a>line
+    line-feed or carriage return is preserved as a forced line
+    break which creates a new <a>line box</a>. The <a>line
     boxes</a> are stacked following the rules of CSS.
   </p>
 
-<h3 id="TextLayoutPreAdjustments">Adjusting Text Chunks</h3>
+<h3 id="TextLayoutPreAdjustments">Repositioning Glyphs</h3>
 
   <p>
     After text is laid out according to the basic CSS text layout
-    rules, glyphs can be repositioned using SVG specific rules. Two
-    types of adjustments can be made. The first uses the
-    <a>'tspan/x'</a>, <a>'tspan/y'</a>, <a>'tspan/dx'</a>,
-    <a>'tspan/dy'</a>, <a>'tspan/rotate'</a> attributes to reposition
-    glyphs with in a <a>'tspan'</a> element. The second uses the
-    <a>'text-anchor'</a> property to realign lines of text.
-  </p>
-
-<h4 id="TextLayoutPreXY">Repositioning Glyphs</h4>
-
-  <p class="issue" data-issue="34">
-    Expand on how 'x' and 'y' effect characters.
+    rules, glyphs can be repositioned using SVG specific rules.
+    Absolute repositioning can be prescribed by giving absolute
+    coordinates in the <a>'tspan/x'</a> and <a>'tspan/y'</a>
+    attributes or by forced line breaks. Absolute repositioning
+    may be influenced by the <a>'text-anchor'</a> property. Relative
+    repositioning can be prescribed by giving relative coordinates in
+    the <a>'tspan/dx'</a> and <a>'tspan/dy'</a> attributes. Glyphs may
+    be arbitrarily rotated by giving a list of values in the
+    <a>'tspan/rotate'</a> attribute. Absolute repositioning (including
+    any adjustment due to the <a>'text-anchor'</a> property) is done
+    before relative repositioning and rotation.
   </p>
 
 <h4 id="TextAnchoringProperties">Text alignment, the <span class='property'>'text-anchor'</span> property</h4>
@@ -2801,18 +2867,19 @@ for RTL or vertical text.</p>
   </p>
 
   <p>
-    <span class="issue">This is confusing, perhaps a figure would help:</span>
     The <a>'text-anchor'</a> property is applied to each individual
-    <a href="text.html#TextChunks">text chunk</a> within a
-    given <a>'text'</a> element. Each text chunk has an initial
-    current text position, which represents the point in the user
-    coordinate system resulting from (depending on context)
-    application of the <a>'text/x'</a> and <a>'text/y'</a> attributes
-    on the <a>'text'</a> element, any <a>'tspan/x'</a>
-    or <a>'tspan/y'</a> attribute values on a <a>'tspan'</a>
-    element assigned explicitly to
-    the first rendered character in a text chunk, or determination of
-    the initial current text position for a <a>'textPath'</a> element.
+    <a>text chunk</a> within a given <a>'text'</a> element. Each text
+    chunk has an initial <a>current text position</a>, which
+    represents the point in the user coordinate system resulting from
+    (depending on context) application of the <a>'text/x'</a>
+    and <a>'text/y'</a> attributes on the <a>'text'</a> element,
+    any <a>'tspan/x'</a> or <a>'tspan/y'</a> attribute values on
+    a <a>'tspan'</a> element assigned explicitly to the first rendered
+    character in a text chunk, or determination of the initial current
+    text position for a <a>'textPath'</a> element. Each text chunk
+    also has a final <a>current text position</a> which is the
+    <a>current text position</a> after placing the last glyph
+    in the <a>text chunk</a>.
   </p>
 
   <table class="propdef def">
@@ -2878,14 +2945,16 @@ for RTL or vertical text.</p>
     <dt><span class="attr-value">middle</span></dt>
     <dd>
       The rendered characters are aligned such that the geometric
-      middle of the resulting rendered text is at the initial current
+      middle of the resulting rendered text (using the initial and
+      final <a>current text position</a>) is at the initial current
       text position.
     </dd>
 
     <dt><span class="attr-value">end</span></dt>
     <dd>
       The rendered characters are aligned such that the end of the
-      resulting rendered text is at the initial current text position.
+      resulting rendered text (final <a>current text position</a>)
+      is at the initial current text position.
       For an element with a <a>'direction'</a> property value
       of <span class="prop-value">"ltr"</span> (typical for most
       European languages), the right side of the text is rendered at
@@ -4250,191 +4319,6 @@ text anchoring chunks.</p>
     Any other values must be treated as invalid.
   </p>
 
-<h2 id="TextLayoutPositioning">Text layout &#x2013; Positioning</h2>
-
-  <p class="issue" data-issue="25">
-    Current text position is referred to throughout the document
-    (almost 100 times!).
-    The idea of current text position needs to be reconciled with
-    CSS inline boxes. See:
-    <a href="http://www.w3.org/TR/css-inline-3/">CSS-Inline</a> as
-    well as with the idea that text is laid out first using CSS rules
-    and then tranformed, if necessary, with SVG rules.
-  </p>
-
-  <p>
-    The section covers the general rules for positiong glyphs. In SVG,
-    the first step in positioning a glyph is to find its inline
-    position which is determined by the <a>current text
-    position</a>. Next, the glyph is aligned relative to a particular
-    baseline.
-    Once a glyph is positioned, the <a>current text position</a> is
-    advanced and the next glyph is placed.
-  </p>
-
-
-<h3 id="CurrentTextPosition">Current text position</h3>
-
-  <p>
-    In processing a given <a>'text'</a> element, the SVG user agent
-    keeps track of the <dfn>current text position</dfn>. The initial
-    current text position is established by the <a>'text/x'</a>
-    and <a>'text/y'</a> attributes on the <a>'text'</a> element for
-    pre-formatted and in some cases for auto-wrapped text.
-    <span class="issue">FIX FOR AUTO-WRAPPED TEXT IN SHAPE</span>
-  </p>
-
-  <p>
-    The current text position is adjusted after each glyph to
-    establish a new current text position at which the next glyph
-    shall be rendered. The adjustment to the current text position is
-    based on:
-  </p>
-  <ul>
-    <li>The current <a>inline-base direction</a>.</li>
-    <li>Glyph-specific advance values corresponding to
-    the glyph orientation of
-    the glyph just rendered.</li>
-    <li>Kerning tables in the font.</li>
-    <li>The current values of various attributes and properties, such as
-    <a>'letter-spacing'</a> and <a>'word-spacing'</a>.</li>
-    <!-- Removed in SVG2: <li>For pre-formatted and text on a a path, the ‘x’, ‘y’, ‘dx’, and ‘dy’ attributes on ‘text’, ‘tspan’, ‘tref’, or ‘altGlyph’ elements.</li>-->
-    <li>New lines in pre-formatted or auto-wrapped text.<!-- Added in SVG2--></li>
-  </ul>
-  <p>
-    If a glyph does not provide explicit advance values corresponding
-    to the current glyph
-    orientation, then an appropriate approximation should be
-    used. For vertical text, a suggested approximation is the sum of
-    the ascent and descent values for the glyph. Another suggested
-    approximation for an advance value for both horizontal and
-    vertical text is the size of an <em>em</em><!-- (see
-    <a href="fonts.html#FontFaceElementUnitsPerEmAttribute">units-per-em</a>)-->.
-  </p>
-
-  <p id="AlignmentPoint">
-    For each glyph to be rendered, the SVG user agent determines an
-    appropriate <dfn>alignment point</dfn> on the glyph which will be
-    placed exactly at the current text position. The alignment point is
-    determined based on glyph cell metrics in the glyph itself, the
-    current <a>inline-base direction</a>
-    and the glyph orientation
-    relative to the inline-progression-direction.  For example, in most
-    uses of pre-formatted Latin text (i.e.,
-
-    <span class='attr-value'>writing-mode:lr</span>,
-    <span class='attr-value'>text-anchor:start</span>, and
-    <span class='attr-value'>alignment-baseline:baseline</span>)
-
-    the alignment point in the glyph will be the intersection of left
-    edge of the glyph cell (or some other glyph-specific x-axis
-    coordinate indicating a left-side origin point) with the Latin
-    baseline of the glyph. For many cases with top-to-bottom vertical
-    text layout, the reference point will be either a glyph-specific
-    origin point based on the set of vertical baselines for the font
-    or the intersection of the center of the glyph with its <em>top
-    line</em>
-
-    (see
-    <a href="http://www.w3.org/TR/css-writing-modes-3/#text-baselines">Text
-      Baselines</a> in [<a href="refs.html#ref-CSSWRITINGMODES3">CSSWRITINGMODES3</a>]).
-
-    If a glyph does not provide explicit origin points corresponding
-    to the current glyph orientation (vertical or horizontal),
-    then an appropriate approximation should be used,
-    such as the intersection of the left edge of the glyph with the
-    appropriate horizontal baseline for the glyph or intersection of
-    the top edge of the glyph with the appropriate vertical
-    baseline. If baseline tables are not available, user agents should
-    establish baseline tables that reflect common practice.
-  </p>
-
-  <p class="issue" data-issue="26">
-    The distinction between absolute and relative position adjustments
-    seems mostly made to define text chunks.  'x' and 'y' attributes
-    are ignored for wrapped text and partially ignored for text on a
-    path. Does this impact text chunks?  How are new lines (either
-    manual or auto) handled?
-  </p>
-
-  <p id="TextChunks">
-    Once all the glyphs in a <a>'text'</a> element are laid out
-    according to the above rules, the position of the glyphs maybe
-    adjusted according to SVG specific rules.
-    Adjustments to the current text position are either
-    <dfn id='absolute-position-adjustment'>absolute position adjustments</dfn> or
-    <dfn id='relative-position-adjustment'>relative position
-    adjustments</dfn>. An absolute position adjustment occurs in the
-    following circumstances:
-  </p>
-
-  <ul>
-    <li>At the start of a <a>'text'</a> element</li>
-    <li>At the start of each <a>'textPath'</a> element</li>
-    <li>For each character within a <a>'text'</a> and <a>'tspan'</a>
-    element which for pre-formatted text has an explicit
-    <span class='attr-name'>'x'</span> or
-    <span class='attr-name'>'y'</span> value,
-    or for text on a path has an explicit
-    <span class='attr-name'>'x'</span> value if horizontal or
-    <span class='attr-name'>'y'</span> value if vertical.</li>
-  </ul>
-
-  <p>
-    All other position adjustments to the current text position are
-    relative position adjustments.
-  </p>
-
-  <p id="TextChunk">
-    Each absolute position adjustment defines a new
-    <dfn>text chunk</dfn>. Absolute position adjustments impact text
-    layout in the following ways:
-  </p>
-
-  <ul>
-    <li>
-      Ligatures only occur when a set of characters which might map
-      to a ligature are all in the same text chunk.
-    </li>
-    <li>
-      Each text chunk represents a separate block of text for
-      alignment due to <a>'text-anchor'</a> property values.
-    </li>
-    <li>
-      Reordering of characters due to bidirectionality
-      only occurs within a text chunk. Reordering does <em>not</em>
-      happen across text chunks.
-    </li>
-  </ul>
-
-  <p>
-    The following additional rules apply to ligature formation:
-  </p>
-
-  <ul>
-    <li>
-      As <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/text.html#spacing-props">defined
-      in CSS 2.1</a>, ([<a href="refs.html#ref-CSS21">CSS21</a>],
-      section 16.4), when the resultant space between two characters
-      is not the same as the default space, user agents should not
-      use ligatures; thus, if there is a non-default value for
-      <a>'letter-spacing'</a>, the user agent should not use
-      ligatures.
-    </li>
-
-    <li>
-      Ligature formation should not be enabled for the glyphs
-      corresponding to characters within different DOM text nodes;
-      thus, characters separated by markup should not use ligatures.
-    </li>
-
-    <li>
-      As mentioned above, ligature formation should not be
-      enabled for the glyphs corresponding to characters within
-      different text chunks.
-    </li>
-  </ul>
-
 <h3 id="WhiteSpace">White space</h3>
 
   <p class="note">
@@ -5176,7 +5060,7 @@ called, the following steps are run:</p>
   <li>If <var>cluster</var> is null, then then <a>throw</a> an
   <a>IndexSizeError</a>.</li>
   <li>Let <var>p</var> be the
-  <a href="#AlignmentPoint">alignment point</a> of the grapheme cluster
+  <a>alignment point</a> of the grapheme cluster
   that correspond to the character at index <var>charnum</var>,
   in the coordinate system of the current element.</li>
   <li>Return a newly created, <a href="shapes.html#PointMode">detached</a>
@@ -5196,7 +5080,7 @@ called, the following steps are run:</p>
   <li>If <var>cluster</var> is null, then then <a>throw</a> an
   <a>IndexSizeError</a>.</li>
   <li>Let <var>p</var> be the
-  <a href="#AlignmentPoint">alignment point</a> of <var>cluster</var>
+  <a>alignment point</a> of <var>cluster</var>
   that correspond to the character at index <var>charnum</var>,
   in the coordinate system of the current element.</li>
   <li>Let <var>direction</var> be a unit vector in the direction of
