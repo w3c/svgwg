@@ -613,9 +613,13 @@
   <p>
     A single line of text is laid out inside a <a>line box</a>.
     Multi-line text is produced by stacking these boxes. The height of
-    a <a>line box</a> is determined by finding the maximum
-    accent and the maximum descent of all the glyphs in a line of text
-    and then applying the effect of the <a>'line-height'</a> property.
+    a <a>line box</a> is determined by finding the maximum accent and
+    the maximum descent of all the glyphs in a line of text and then
+    applying the effect of the <a>'line-height'</a> property.  The
+    width of a <a>line box</a> is normally the width of the containing
+    text block. In SVG, when the containing text block does not have a
+    fixed geometry (as with pre-formatted text), the <a>line box</a>
+    tightly wraps the glyph boxes within the box.
   </p>
 
   <div class="figure">
@@ -3089,10 +3093,86 @@ for RTL or vertical text.</p>
     attributes in rendering the text which will usually result in
     readable text even if the rendering doesn't match the shape.
 
-    Most of the text wrapping examples in this section rely on this
+    Many of the text wrapping examples in this section rely on this
     mechanism to render text in browsers that have not implemented
     text wrapping.
   </p>
+
+<h3 id="TextLayoutAutoNotes">Notes on Text Wrapping</h3>
+
+  <p>
+    The following examples illustrate a few issues with laying out
+    text in a shape.
+  </p>
+
+<h4 id="TextLayoutAutoNotesStart">First Line Positioning</h4>
+
+  <p>
+    Given an arbitrary shaped <a>wrapping area</a>, the first
+    <a>line box</a> may not fit flush against the top (or side for
+    vertical text). In this case, the first <a>line box</a> is shifted
+    until it fits.
+  </p>
+  <p class="annotation">
+    In CSS, the edge of a shape is treated as a series of 1 pixel × 1
+    pixel floats.
+  </p>
+  <p class="note">
+    A future CSS specification may define a line grid that could be used
+    to control the position of the first line of text to allow alignment
+    of text between different <a>wrapping areas</a>.
+  </p>
+
+  <div class="figure">
+    <img class="bordered" src="images/text/text-layout-firstline.svg"
+         alt="Image showing two lines of text, the first line is 'The' and
+              the next line is 'first line'."/>
+    <p class="caption">
+      The top <a>line box</a> (small light-blue rectangle), consisting
+      of the smallest possible block of text, is moved down until the
+      <a>line box</a> fits inside the <a>wrapping area</a> (light-blue
+      path). Note, the <a>line box</a> includes the effect of
+      the <a>'line-height'</a> property, here set to 1.25. The red
+      rectangles tightly wrap the glyphs in each <a>line box</a>.
+    </p>
+  </div>
+
+  <p class="annotation">
+    This appears to be different from the SVG 1.2 draft in which the
+    top of the wrapping area served as the origin of a line grid.
+    The first line was moved down by the line height until it fit
+    inside the shape.
+  </p>
+
+<h4 id="TextLayoutAutoNotesBrokenLines">Broken Lines</h4>
+
+  <p>
+    Given an arbitrary shaped <a>wrapping area</a>, a single line of
+    text might be broken into more than one part. In this case,
+    a <a>line box</a> for each part is created. The height of
+    all <a>line boxes</a> in a single line of text must be the same
+    (ensuring all parts have the same baseline). This height is
+    calculated by looking at all glyphs in the line of text.
+  </p>
+  <p class="annotation">
+    This default behavior was agreed to at the CSS/SVG joint working
+    group meeting in Sydney 2016.
+  </p>
+  <p class="note">
+    A future CSS specification may allow one to control which parts of
+    a shape broken into different parts is filled (e.g, fill only the
+    right most parts, fill only the left most parts, etc.).
+  </p>
+
+  <div class="figure">
+    <img class="bordered" src="images/text/text-layout-brokenline.svg"
+         alt="Image showing text laidout inside a 'V' shape."/>
+    <p class="caption">
+      The top line is split into two <a>line boxes</a> (light-blue
+      rectangles), text in each <a>line box</a> is centered inside the
+      box (due to 'text-align:center').
+    </p>
+  </div>
 
 <h2 id="TextLayoutPath">Text on a path</h2>
 
