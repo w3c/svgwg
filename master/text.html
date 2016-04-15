@@ -440,7 +440,7 @@
   <p>
     Within a script and within a line of text having a single
     font-size, the sequence of alignment points defines, in the
-    inline-progression-direction, a geometric line called a
+    <a>inline-base direction</a>, a geometric line called a
     <dfn>baseline</dfn>. Western and most other alphabetic and
     syllabic glyphs are aligned to an "alphabetic" baseline, the
     northern indic glyphs are aligned to a "hanging" baseline and the
@@ -574,8 +574,7 @@
     alignment points, one each for horizontal writing-modes and the
     other for vertical writing-modes. (Even though it is specified as
     a width, for vertical writing-modes the width is used in the
-    vertical direction.) The
-    <a href="text.html#InlineProgressionDirection">inline-progression-direction</a>
+    vertical direction.) The <a>inline-base direction</a>
     position of the alignment point is on the start-edge of the glyph.
   </p>
 
@@ -680,6 +679,19 @@
     font-specific, the preferred model is that kerning and ligature
     processing occurs between combinations of characters or glyphs
     after the characters have been re-ordered.
+  </p>
+
+  <p>
+    The orientation of <a>line boxes</a> as well as the direction in
+    which they are stacked (<a>block-flow direction</a>) is determined
+    by the <a>'writing-mode'</a> property. For horizontal text
+    (<a>'writing-mode'</a> value
+    <span class="prop-value">horizontal-tb</span>) <a>line boxes</a>
+    are stacked from top to bottom. For vertical text, <a>line boxes</a>
+    are stacked from right-to-left (<a>'writing-mode'</a> value
+    <span class="prop-value">vertical-rl</span>) or left-to-right
+    (<a>'writing-mode'</a> value
+    <span class="prop-value">vertical-lr</span>)
   </p>
 
   <p>
@@ -1176,7 +1188,7 @@
 	<dd>
 	  Indicates that the advance values are adjusted and the
           glyphs themselves stretched or compressed in one axis (i.e.,
-          a direction parallel to the inline-progression-direction).
+          a direction parallel to the <a>inline-base direction</a>).
 	</dd>
       </dl>
 
@@ -2733,7 +2745,7 @@ for RTL or vertical text.</p>
   </ol>
 
   <hr/>
-  <p>Below: junk that should be covered in this section.</p>
+
   <div class="annotation svg2-requirement">
     <table>
       <tr>
@@ -2755,63 +2767,6 @@ for RTL or vertical text.</p>
       </tr>
     </table>
   </div>
-
-<h3 id="BasicLayoutMetrics">Layout Orientations</h3>
-
-  <p id="ReferenceOrientation">
-    For each <a>'text'</a> element, the SVG user agent determines the
-    current <dfn>reference orientation</dfn>. For standard horizontal
-    or vertical text (i.e., not text-on-a-path), the reference
-    orientation is the vector pointing towards negative infinity in Y
-    within the current user coordinate system. (Note: in
-    the <a>initial coordinate system</a>, the reference orientation is
-    up.)  For <a href="text.html#TextLayoutPath">text on a path</a>,
-    the reference orientation is determined at each character's
-    position along the path. It is 90 degrees counter-clockwise
-    relative to the path direction for horizontal text and 180 degrees
-    relative to the path direction for vertical text.
-  </p>
-  <p class="issue" data-issue="18">In the model that text-on-a-path is text that is
-    first laid out according to CSS and then warped along a path, we
-    can get rid of the distinction made above.</p>
-
-  <p id="InlineProgressionDirection">
-    Based on the reference orientation and the value for
-    property <a>'writing-mode'</a>, the SVG user agent determines the
-    current <dfn>inline-progression-direction</dfn>. For left-to-right
-    text, the inline-progression-direction points 90 degrees clockwise
-    from the reference orientation vector. For right-to-left text, the
-    inline progression points 90 degrees counter-clockwise from the
-    reference orientation vector. For top-to-bottom text, the
-    inline-progression-direction points 180 degrees from the reference
-    orientation vector.
-  </p>
-
-  <p id="BlockProgressionDirection">
-    Based on the reference orientation and the value for
-    property <a>'writing-mode'</a>, the SVG user agent determines the
-    current <dfn>block-progression-direction</dfn>. For left-to-right
-    and right-to-left text, the block-progression-direction points 180
-    degrees from the reference orientation vector because the only
-    available horizontal <a>'writing-mode'</a>s
-    are <span class="prop-value">lr-tb</span>
-    and <span class="prop-value">rl-tb</span>. For top-to-bottom text,
-    the block-progression-direction always points 90 degrees
-    counter-clockwise from the reference orientation vector because
-    the only available top-to-bottom <a>'writing-mode'</a>
-    is <span class="prop-value">tb-rl</span>.
-  </p>
-
-  <p class="issue" data-issue="19">Insert figure.</p>
-
-  <p id="ShiftDirection">The <dfn>shift direction</dfn> is the
-    direction towards which the
-    <a href="#FontsTablesBaselines">baseline table</a> moves due
-    to positive values for property <a>'baseline-shift'</a>. The shift
-    direction is such that a positive value shifts the baseline table
-    towards the topmost entry in the parent's
-    <a href="#FontsTablesBaselines">baseline table</a>.
-  </p>
 
 <h2 id="TextLayoutPre">Pre-formatted text</h2>
 
@@ -3566,19 +3521,28 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> d="..." fill="
     also apply to text on a path.
   </p>
   <p>
-    The <a href="text.html#ReferenceOrientation">reference
-    orientation</a> is determined individually for each glyph that is
-    rendered along the path. For horizontal text layout flows, the
-    reference orientation for a given glyph is the vector that starts
+    The orientation of each glyph along a path is determined individually.
+    For horizontal text layout flows, the default orientation (the <q>up</q>
+    direction) for a given glyph is along the vector that starts
     at the intersection point on the path to which the glyph is
     attached and which points in the direction 90 degrees
     counter-clockwise from the angle of the curve at the intersection
-    point. For vertical text layout flows, the reference orientation
-    for a given glyph is the vector that starts at the intersection
+    point. For vertical text layout flows, the default orientation
+    for a given glyph is along the vector that starts at the intersection
     point on the path to which the glyph is attached and which points
     in the direction 180 degrees from the angle of the curve at the
     intersection point.
   </p>
+
+  <div class="figure">
+    <img class="bordered" src="images/text/glyph-textpath.svg"
+         alt="Left, horizontal text with the character 'A' on a path.
+	      Right, vertical text with the character '字' on a path."/>
+    <p class="caption">
+      Default glyph orientation along a path.
+      Left, horizontal text. Right: vertical text.
+    </p>
+  </div>
 
   <p id="ExampleToap04">
     <span class="example-ref">Example toap04</span> will be used
@@ -4147,7 +4111,7 @@ the dash pattern at the same positions across different implementations.</p>
     which includes the usual case of horizontally-oriented Latin or
     Arabic text and the case of narrow-cell Latin or Arabic characters
     rotated 90 degrees clockwise relative to a top-to-bottom
-    inline-progression-direction.
+    <a>inline-base direction</a>.
   </p>
   <p class="issue" data-issue="54">
     Check this agrees with CSS3 Writing modes.
