@@ -164,10 +164,10 @@
     <dd>
       A glyph represents a unit of rendered content within a
       <a>font</a>. Often, there is a one-to-one correspondence between
-      characters to be drawn and corresponding glyphs (e.g., often,
+      characters to be drawn and corresponding glyphs (e.g., usually
       the character "A" is rendered using a single glyph), but other
       times multiple glyphs are used to render a single character
-      (e.g., use of accents) or a single glyph can be used to render
+      (e.g., characters with accents) or a single glyph can be used to render
       multiple characters (e.g., ligatures). Typically, a glyph is
       defined by one or more <a>shapes</a> such as
       a <a href="paths.html">path</a>, possibly with additional
@@ -256,8 +256,8 @@
 
     <dt id="TermBlockFlowDirection">block-flow direction</dt>
     <dd>
-      The direction in which lines are stacked. It is determined by
-      the <a>'writing-mode'</a> property.
+      The direction in which <a>line boxes</a> are stacked. It is
+      determined by the <a>'writing-mode'</a> property.
     </dd>
 
     <dt id="TermAlignmentPoint">alignment point</dt>
@@ -281,7 +281,7 @@
       (due to an <a>'tspan/x'</a> or <a>'tspan/y'</a> attribute, or
       forced line break) creates a new <a>text chunk</a>. Ligature
       substitution and bidi-reordering only occur within a <a>text
-      chunk</a>. <a>text chunks</a> are only relevant to pre-formatted
+      chunk</a>. <a>Text chunks</a> are only relevant to pre-formatted
       text.
     </dd>
 
@@ -296,7 +296,7 @@
 
   </dl>
 
-<h2 id="FontsTablesBaselines">Fonts, font tables and baselines</h2>
+<h3 id="FontsTablesBaselines">Fonts and glyphs</h3>
 
   <p>
     A font consists of a collection of glyphs together with other
@@ -307,7 +307,7 @@
   </p>
 
   <p>
-    A font may supply supply substitution and positioning tables that
+    A font may supply substitution and positioning tables that
     can be used by a formatter (shaper) to re-order, combine and
     position a sequence of glyphs to make one or more composite
     glyphs. The combination may be as simple as a ligature, or as
@@ -316,6 +316,38 @@
     be language dependent allowing the use of language appropriate
     letter forms.
   </p>
+
+  <p>
+    Ligatures are an important feature of advance text layout. Some
+    ligatures are discretionary while others (e.g. in Arabic) are
+    required. The following explicit rules apply to ligature
+    formation:
+  </p>
+
+  <ul>
+    <li>
+      Ligature formation should not be enabled when characters are
+      in different DOM text nodes;
+      thus, characters separated by markup should not use ligatures.
+    </li>
+    <li>
+      Ligature formation should not be enabled when characters are
+      in different <a>text chunks</a>.
+    </li>
+    <li>
+      Discretionary ligatures should not be used when the spacing
+      between two characters is not the same as the
+      default space (e.g. when <a>'letter-spacing'</a> has a
+      non-default value, or due to justification). (See
+      <a href="https://www.w3.org/TR/css-text-3/#letter-spacing-property">CSS
+	Text Module Level 3</a>,
+      ([<a href="refs.html#ref-CSS3TEXT">CSS3TEXT</a>]).
+      (For OpenType fonts, discretionary ligatures include those enabled
+      by the liga, clig, dlig, hlig, and cala features; required ligatures
+      are found in the rlig feature.)
+    </li>
+  </ul>
+
 
   <div class="annotation svg2-requirement">
     <table>
@@ -357,6 +389,8 @@
     on. WOFF also allows the fonts to be compressed, subsetted, and
     include licensing information.
   </p>
+
+<h3 id="FontsTablesBaselines">Glyph metrics and layout</h3>
 
   <p>
     Glyph selection and positioning is normally handled according to
@@ -497,7 +531,7 @@
     The initial <a>current text position</a> is established by the
     <a>'text/x'</a> and <a>'text/y'</a> attributes on the
     <a>'text'</a> element or first rendered <a>'tspan'</a> element for
-    pre-formatted text or auto-wrapped text when the <a>content
+    pre-formatted text, or auto-wrapped text when the <a>content
     area</a> is determined by the <a>'inline-size'</a> attribute. For
     other auto-wrapped text, the initial <a>current text position</a>
     is determined by the position of the first rendered glyph after
@@ -661,10 +695,9 @@
     the Unicode bidirectional algorithm. Each
     <a>text chunk</a> represents an
     independent block of text. Additionally, any change in glyph
-    orientation due to processing of properties
-    <a>'glyph-orientation-horizontal'</a>,
-    <a>'glyph-orientation-vertical'</a>, or
-    <a>'text-orientation'</a>
+    orientation due to processing of the
+    <a>'text-orientation'</a> or obsoleted
+    <a>'glyph-orientation-vertical'</a> properties
     will subdivide the independent
     blocks of text further. After processing the Unicode bidirectional
     algorithm and properties <a>'direction'</a> and
@@ -691,40 +724,8 @@
     are stacked from right-to-left (<a>'writing-mode'</a> value
     <span class="prop-value">vertical-rl</span>) or left-to-right
     (<a>'writing-mode'</a> value
-    <span class="prop-value">vertical-lr</span>)
+    <span class="prop-value">vertical-lr</span>).
   </p>
-
-  <p>
-    Ligatures are an important feature of advance text layout. Some
-    ligatures are discretionary while others (e.g. in Arabic) are
-    required. The following explicit rules apply to ligature
-    formation:
-  </p>
-
-  <ul>
-    <li>
-      Ligature formation should not be enabled when characters are
-      in different DOM text nodes;
-      thus, characters separated by markup should not use ligatures.
-    </li>
-    <li>
-      Ligature formation should not be enabled when characters are
-      in different <a>text chunks</a>.
-    </li>
-    <li>
-      Discretionary ligatures should not be used when the spacing
-      between two characters is not the same as the
-      default space (e.g. when <a>'letter-spacing'</a> has a
-      non-default value, or due to justification). (See
-      <a href="https://www.w3.org/TR/css-text-3/#letter-spacing-property">CSS
-	Text Module Level 3</a>,
-      ([<a href="refs.html#ref-CSS3TEXT">CSS3TEXT</a>]).
-      (For OpenType fonts, discretionary ligatures include those enabled
-      by the liga, clig, dlig, hlig, and cala features; required ligatures
-      are found in the rlig feature.)
-    </li>
-  </ul>
-
 
 <h2 id="TextElement">The <span class="element-name">'text'</span> and
   <span class="element-name">'tspan'</span> elements</h2>
