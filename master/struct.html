@@ -788,9 +788,85 @@ ancestors is set to <span class="prop-value">none</span>.</p>
 <edit:elementsummary name='use'/>
 
 <p>The <a>'use'</a> element
-references another element and indicates that the <a>graphical
-contents</a> of that element is included/drawn at that given point
-in the document.</p>
+references another element and indicates that a copy of the <a>graphical
+contents</a> of that element is rendered at that given point
+in the document.  
+These <a>re-used graphics</a> inherit styles from the <a>'use'</a> element
+and in certain cases can be re-sized.
+However, they remain linked to the referenced source and reflect DOM mutations, animations, and style changes in the original.
+</p>
+    
+<h3>Attributes</h3>
+    
+<dl class="attrdef-list">
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementXAttribute">x</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementYAttribute">y</dfn></td>
+        <td><a>&lt;length&gt;</a></td>
+        <td>0</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td><dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementWidthAttribute">width</dfn>, <dfn id="UseElementHeightAttribute">height</dfn></td>
+        <td><a>&lt;length&gt;</a></td>
+        <td>(see below)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>The <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
+    attributes specify the positioning of the referenced element.
+    The <a>'width'</a> and <a>'height'</a> attributes have different
+    <a>initial values</a> depending on the type of the referenced element:</p>
+    <dl class='switch'>
+      <dt><a>'svg'</a></dt>
+      <dd>The <a>initial values</a> are the <a>'width'</a> and <a>'height'</a>
+      presentation attribute values from the referenced <a>'svg'</a> element.</dd>
+      <dt>anything else</dt>
+      <dd>The <a>initial values</a> are <span class='attr-value'>'100%'</span>.</dd>
+    </dl>
+    <p>A negative value for <a>'width'</a> or <a>'height'</a> is an error (see
+    <a href="implnote.html#ErrorProcessing">Error processing</a>).  If
+    <a>'width'</a> or <a>'height'</a> is zero then rendering of the
+    <a>'use'</a> element is disabled.</p>
+  </dd>
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="UseElementHrefAttribute">href</dfn></td>
+        <td>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></td>
+        <td>(none)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>An <a href="linking.html#URLReference">URL reference</a> to the
+    element/fragment within an SVG document to be cloned for
+    rendering.</p>
+    Refer to the common handling defined for <a
+    href="linking.html#linkRefAttrs">URL reference attributes</a> and
+    <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
+  </dd>
+</dl>
+
+</edit:with>
+
+<h3>Re-usable graphics and the shadow tree</h3>
 
 <p>The <dfn id="TermGraphicalContents">graphical contents</dfn>
 are any <a>'svg'</a>, <a>'symbol'</a>, <a>'g'</a>, <a>graphics element</a> or
@@ -806,12 +882,7 @@ of the referenced document.</p>
 <p class="note">New in SVG 2. This allows an entire SVG document to be referenced
 without having to ensure that it has an ID on its root element.</p>
 </div>
-
-<p>The <a>'use'</a> element has
-optional attributes <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a> and <a>'use/height'</a> which are used to map the
-graphical contents of the referenced element onto a rectangular
-region within the current coordinate system.</p>
-
+    
 <p>The effect of a <a>'use'</a>
 element is as if the contents of the referenced element were
 deeply cloned into a separate non-exposed DOM tree which had
@@ -823,101 +894,12 @@ cloned DOM tree is non-exposed, the SVG Document Object Model
 element and its attributes. The SVG DOM does not show the
 referenced element's contents as children of <a>'use'</a> element.</p>
 
-<p class="added-since-last-wd">The non-exposed DOM tree must be created even if
+<p>The non-exposed DOM tree must be created even if
 <span class="prop-value">'display: none'</span> is set on the <a>'use'</a> element.
 Note that <a>'script'</a> elements that get conceptually cloned into the non-exposed DOM tree
 do not execute again, and <a>'audio'</a> and <a>'video'</a> elements that may play audio
 must only do so if the <a>'use'</a> element is rendered.
 </p>
-
-<p class="issue" data-issue="28">We should define the behavior of <a>'use'</a>
-in terms of Web Components. See <a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3729">ACTION-3729</a> (Tab)
-<a href="https://github.com/w3c/svgwg/issues/99">Github Issue #99</a>
-</p>
-
-<p>The conceptual deep cloning of the referenced element into a
-non-exposed DOM tree also copies any property values resulting
-from <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html">the CSS cascade</a>
-([<a href="refs.html#ref-CSS21">CSS21</a>], chapter 6)
-on the referenced element and its contents. CSS2 selectors can
-be applied to the original (i.e., referenced) elements because
-they are part of the formal document structure. CSS2 selectors
-cannot be applied to the (conceptually) cloned DOM tree because
-its contents are not part of the formal document structure.</p>
-
-<p>Property inheritance, however, works as if the referenced
-element had been textually included as a deeply cloned child of
-the <a>'use'</a> element. The
-referenced element inherits properties from the <a>'use'</a> element and the <a>'use'</a> element's ancestors. An
-instance of a referenced element does not inherit properties
-from the referenced element's original parents.</p>
-
-<p class="note">Note that specifying <span
-class="prop-value">'visibility:hidden'</span> on a <a>'use'</a> element does not guarantee
-that the referenced content will not be rendered. If the <a>'use'</a> element specifies <span
-class="prop-value">'visibility:hidden'</span> and the element
-it references specifies <span
-class="prop-value">'visibility:hidden'</span> or <span
-class="prop-value">'visibility:inherit'</span>, then that one
-element will be hidden. However, if the referenced element
-instead specifies <span
-class="prop-value">'visibility:visible'</span>, then that
-element will be visible even if the <a>'use'</a> element specifies <span
-class="prop-value">'visibility:hidden'</span>.</p>
-
-<p>If event attributes are assigned to referenced elements,
-then the actual target for the event will be the
-element within the "instance tree" corresponding to the given
-referenced element.</p>
-
-<p>The event handling for the non-exposed tree works as if the
-referenced element had been textually included as a deeply
-cloned child of the <a>'use'</a>
-element, and events are dispatched according to the shadow tree
-<a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#event-dispatch">event dispatching algorithm</a> [<a href="refs.html#ref-SHADOWDOM">SHADOWDOM</a>].
-The event's target and currentTarget attributes are set to the
-instance tree element that
-corresponds to the target and current target elements in the
-referenced subtree. An event propagates through the exposed and
-non-exposed portions of the tree in the same manner as it would
-in the regular document tree: first going from the root element
-to the <a>'use'</a> element and then
-through non-exposed tree elements in the capture phase,
-followed by the target phase at the target of the event, then
-bubbling back through non-exposed tree to the use element and
-then back through regular tree to the root element in bubbling
-phase. In order to maintain encapsulation events must use the
-<a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#event-retargeting">event retargeting algorithm</a> [<a href="refs.html#ref-SHADOWDOM">SHADOWDOM</a>]
-when crossing from a non-exposed tree to the regular tree.
-</p>
-
-<div class="ready-for-wider-review">
-<p>
-The element referenced by <a>'use'</a> may be in a separate document. However,
-this specification does not define how or if the user agent will process
-stylesheets in that document, or what SVG viewport will be used for
-resolving percentages and media queries in such documents, if animations run
-in the separate document and which document controls the animation timeline. Script elements in the
-resource document must not be executed, and the corresponding conceptually cloned script elements
-must also not execute.
-</p>
-<p class="note">
-When re-using external assets, therefore, authors are advised not to include any scripts in the external
-file and to use inline styles or presentation attributes only. Percentage
-lengths should only be used if the re-used assets define their own SVG viewport
-(i.e., if the re-used element is an <a>'svg'</a> or <a>'symbol'</a>). 
-Declarative animations in external assets should not be used.
-</p>
-<p>
-User agents may restrict restrict external resource documents for security
-reasons. In particular, this specification does not allow cross-origin resource requests in <a>'use'</a>.
-A future version of this or another specification may provide a method of securely enabling cross-origin re-use
-of assets.
-</p>
-</div>
-
-<p>Animations on a referenced element will cause the instances
-to also be animated.</p>
 
 <p>A <a>'use'</a> element has the
 same visual effect as if the <a>'use'</a> element were replaced by the
@@ -981,6 +963,77 @@ how styles are matched.</p>
     </p>
   </li>
 </ul>
+
+
+<div class="ready-for-wider-review">
+<p>
+The element referenced by <a>'use'</a> may be in a separate document. However,
+this specification does not define how or if the user agent will process
+stylesheets in that document, or what SVG viewport will be used for
+resolving percentages and media queries in such documents, if animations run
+in the separate document and which document controls the animation timeline. Script elements in the
+resource document must not be executed, and the corresponding conceptually cloned script elements
+must also not execute.
+</p>
+<p class="note">
+When re-using external assets, therefore, authors are advised not to include any scripts in the external
+file and to use inline styles or presentation attributes only. Percentage
+lengths should only be used if the re-used assets define their own SVG viewport
+(i.e., if the re-used element is an <a>'svg'</a> or <a>'symbol'</a>). 
+Declarative animations in external assets should not be used.
+</p>
+<p>
+User agents may restrict restrict external resource documents for security
+reasons. In particular, this specification does not allow cross-origin resource requests in <a>'use'</a>.
+A future version of this or another specification may provide a method of securely enabling cross-origin re-use
+of assets.
+</p>
+</div>
+
+
+    
+<h3>Layout</h3>
+
+<p>The <a>'use'</a> element has
+optional attributes <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a> and <a>'use/height'</a> which are used to map the
+graphical contents of the referenced element onto a rectangular
+region within the current coordinate system.</p>
+    
+<h3>Style Inheritance</h3>
+    
+<p>The conceptual deep cloning of the referenced element into a
+non-exposed DOM tree also copies any property values resulting
+from <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html">the CSS cascade</a>
+([<a href="refs.html#ref-CSS21">CSS21</a>], chapter 6)
+on the referenced element and its contents. CSS2 selectors can
+be applied to the original (i.e., referenced) elements because
+they are part of the formal document structure. CSS2 selectors
+cannot be applied to the (conceptually) cloned DOM tree because
+its contents are not part of the formal document structure.</p>
+
+<p>Property inheritance, however, works as if the referenced
+element had been textually included as a deeply cloned child of
+the <a>'use'</a> element. The
+referenced element inherits properties from the <a>'use'</a> element and the <a>'use'</a> element's ancestors. An
+instance of a referenced element does not inherit properties
+from the referenced element's original parents.</p>
+
+<p class="note">Note that specifying <span
+class="prop-value">'visibility:hidden'</span> on a <a>'use'</a> element does not guarantee
+that the referenced content will not be rendered. If the <a>'use'</a> element specifies <span
+class="prop-value">'visibility:hidden'</span> and the element
+it references specifies <span
+class="prop-value">'visibility:hidden'</span> or <span
+class="prop-value">'visibility:inherit'</span>, then that one
+element will be hidden. However, if the referenced element
+instead specifies <span
+class="prop-value">'visibility:visible'</span>, then that
+element will be visible even if the <a>'use'</a> element specifies <span
+class="prop-value">'visibility:hidden'</span>.</p>
+
+<p>Animations on a referenced element will cause the instances
+to also be animated.</p>
+    
 
 <p>For user agents that support <a
 href="styling.html">Styling with CSS</a>, the
@@ -1053,6 +1106,42 @@ match have been transferred into inline <a>'style attribute'</a> attributes for
 illustrative purposes.</p>
 
 <edit:example href='images/struct/Use04-GeneratedContent.svg' link='yes'/>
+    
+<h3>Event handling</h3>
+
+<p>If event attributes are assigned to referenced elements,
+then the actual target for the event will be the
+element within the "instance tree" corresponding to the given
+referenced element.</p>
+
+<p>The event handling for the non-exposed tree works as if the
+referenced element had been textually included as a deeply
+cloned child of the <a>'use'</a>
+element, and events are dispatched according to the shadow tree
+<a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#event-dispatch">event dispatching algorithm</a> [<a href="refs.html#ref-SHADOWDOM">SHADOWDOM</a>].
+The event's target and currentTarget attributes are set to the
+instance tree element that
+corresponds to the target and current target elements in the
+referenced subtree. An event propagates through the exposed and
+non-exposed portions of the tree in the same manner as it would
+in the regular document tree: first going from the root element
+to the <a>'use'</a> element and then
+through non-exposed tree elements in the capture phase,
+followed by the target phase at the target of the event, then
+bubbling back through non-exposed tree to the use element and
+then back through regular tree to the root element in bubbling
+phase. In order to maintain encapsulation events must use the
+<a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#event-retargeting">event retargeting algorithm</a> [<a href="refs.html#ref-SHADOWDOM">SHADOWDOM</a>]
+when crossing from a non-exposed tree to the regular tree.
+</p>
+    <!----------------------->
+
+<p class="issue" data-issue="28">We should define the behavior of <a>'use'</a>
+in terms of Web Components. See <a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3729">ACTION-3729</a> (Tab)
+<a href="https://github.com/w3c/svgwg/issues/99">Github Issue #99</a>
+</p>
+
+
 
 <p>When a <a>'use'</a> references
 another element which is another <a>'use'</a> or whose content contains a
@@ -1063,74 +1152,6 @@ to create a circular dependency is an error, as described in <a
 href="#Head">References and the <span class='element-name'>'defs'</span> element</a>.</p>
 
 <p><em>Attribute definitions:</em></p>
-
-<dl class="attrdef-list">
-  <dt>
-    <table class="attrdef def">
-      <tr>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Initial value</th>
-        <th>Animatable</th>
-      </tr>
-      <tr>
-        <td><dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementXAttribute">x</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementYAttribute">y</dfn></td>
-        <td><a>&lt;length&gt;</a></td>
-        <td>0</td>
-        <td>yes</td>
-      </tr>
-      <tr>
-        <td><dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementWidthAttribute">width</dfn>, <dfn id="UseElementHeightAttribute">height</dfn></td>
-        <td><a>&lt;length&gt;</a></td>
-        <td>(see below)</td>
-        <td>yes</td>
-      </tr>
-    </table>
-  </dt>
-  <dd>
-    <p>The <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
-    attributes specify the positioning of the referenced element.
-    The <a>'width'</a> and <a>'height'</a> attributes have different
-    <a>initial values</a> depending on the type of the referenced element:</p>
-    <dl class='switch'>
-      <dt><a>'svg'</a></dt>
-      <dd>The <a>initial values</a> are the <a>'width'</a> and <a>'height'</a>
-      presentation attribute values from the referenced <a>'svg'</a> element.</dd>
-      <dt>anything else</dt>
-      <dd>The <a>initial values</a> are <span class='attr-value'>'100%'</span>.</dd>
-    </dl>
-    <p>A negative value for <a>'width'</a> or <a>'height'</a> is an error (see
-    <a href="implnote.html#ErrorProcessing">Error processing</a>).  If
-    <a>'width'</a> or <a>'height'</a> is zero then rendering of the
-    <a>'use'</a> element is disabled.</p>
-  </dd>
-  <dt>
-    <table class="attrdef def">
-      <tr>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Initial value</th>
-        <th>Animatable</th>
-      </tr>
-      <tr>
-        <td><dfn id="UseElementHrefAttribute">href</dfn></td>
-        <td>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></td>
-        <td>(none)</td>
-        <td>yes</td>
-      </tr>
-    </table>
-  </dt>
-  <dd>
-    <p>An <a href="linking.html#URLReference">URL reference</a> to the
-    element/fragment within an SVG document to be cloned for
-    rendering.</p>
-    Refer to the common handling defined for <a
-    href="linking.html#linkRefAttrs">URL reference attributes</a> and
-    <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
-  </dd>
-</dl>
-
-</edit:with>
 
 <h2 id="ConditionalProcessing">Conditional processing</h2>
 
