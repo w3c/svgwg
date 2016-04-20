@@ -26,16 +26,16 @@ Every SVG viewport defines a drawing region characterized by a size
 <dfn data-dfn-type="dfn" id="TermUserUnits">user units</dfn>.</p>
 
 <p>The <dfn data-dfn-type="dfn">initial viewport</dfn> is a top-level
-viewport that establishes a mapping between the coordinate system used
+SVG viewport that establishes a mapping between the coordinate system used
 by the containing environment (for example, CSS pixels in web browsers)
 and <a>user units</a>. Establishing an initial viewport is described in more
 detail in <a href="#ViewportSpace">The initial viewport</a>.</p>
 
-<p>Viewports are only established by elements. See
+<p>SVG viewports are only established by elements. See
 <a href="#EstablishingANewSVGViewport">Establishing a new SVG viewport</a> for information
 on which elements generate viewports.</p>
 
-<p>Each viewport generates a 
+<p>Each SVG viewport generates a 
 <dfn data-dfn-type="dfn" id="TermViewportCoordinateSystem">viewport coordinate system</dfn>
 and a <dfn data-dfn-type="dfn">local coordinate system</dfn>, initially identical.
 Providing a <a>'viewBox'</a> on a viewport's element transforms the local coordinate system 
@@ -44,28 +44,28 @@ The <a>'viewBox'</a> attribute. Child elements of a viewport can
 further modify the <a>local coordinate system</a>, for example by specifying
 the <a>'transform'</a> property.</p>
 
-<p>Viewports can be nested. Percentage units are resolved with reference
-to the width and height of the nearest ancestral viewport. Hence, nesting
-viewports provides an opportunity to redefine the meaning of percentage
+<p>SVG viewports can be nested. Percentage units are resolved with reference
+to the width and height of the nearest ancestral SVG viewport. Hence, nesting
+SVG viewports provides an opportunity to redefine the meaning of percentage
 units and provide a new reference rectangle for "fitting" a graphic relative
 to a particular rectangular area.</p>
 
-<p>The width, height and origin of viewports are established by a negotiation
-process between the SVG document fragment generating the viewport, and the
+<p>The width, height and origin of SVG viewports is established by a negotiation
+process between the SVG document fragment generating the SVG viewport, and the
 parent of that fragment (whether real or implicit). See 
 <a href="#EstablishingANewSVGViewport">Establishing a new SVG viewport</a> for a 
 description of this negotiation process.</p>
 
-<p>By default, a nested viewport's <a>viewport coordinate system</a> is equivalent to the local
-coordinate system of the parent element, translated by the origin of the viewport's
-element. However, a <a>'transform'</a> property on a viewport's element will modify
+<p>By default, a nested SVG viewport's <a>viewport coordinate system</a> is equivalent to the local
+coordinate system of the parent element, translated by the origin of the SVG viewport's
+element. However, a <a>'transform'</a> property on an SVG viewport's element will modify
 the <a>viewport coordinate system</a> relative to the parent element's local coordinate system.</p>
 
-<p>Abstractly, all viewports are embedded in the
+<p>Abstractly, all SVG viewports are embedded in the
 <dfn data-dfn-type="dfn" id="TermCanvas">canvas</dfn>,
 a drawing region that is infinitely large in all relevant dimensions.</p>
 
-<h2 id="ComputingAViewportsTransform">Computing the equivalent transform of a viewport</h2>
+<h2 id="ComputingAViewportsTransform">Computing the equivalent transform of an SVG viewport</h2>
 
 <p>This process converts the min-x, min-y, width and height values of a viewBox attribute, 
 the position and size of the element on which the viewBox attribute is defined, 
@@ -110,16 +110,16 @@ translate(<var>translate-x</var>, <var>translate-y</var>) scale(<var>scale-x</va
 embedded (by reference or inline) within a containing document. This containing
 document might include attributes, properties and/or other
 parameters (explicit or implicit) which specify or provide
-hints about the dimensions of the viewport for the SVG content.
+hints about the dimensions of the initial viewport for the SVG content.
 SVG content itself optionally can provide information about the
-appropriate viewport region for the content via the <a>'width'</a>
+appropriate initial viewport region for the content via the <a>'width'</a>
 and <a>'height'</a> presentation attributes on the <a>outermost svg element</a>.
 If SVG is embedded within a containing element.</p>
 
-<p>The <a>'width'</a> presentation attribute on the
-<a>outermost svg element</a>
-establishes the viewport's width, unless the following
-conditions are met:</p>
+
+<p>The initial viewport's width, must be the value of the <a>'width'</a>
+presentation attribute on the <a>outermost svg element</a>, unless the 
+following conditions are met:</p>
 
 <ul>
   <li>the SVG content is a separately stored resource that is
@@ -139,18 +139,17 @@ conditions are met:</p>
   to establish the width of the viewport.</li>
 </ul>
 
-<p>Under these conditions, the positioning properties establish
-the viewport's width.</p>
+<p>Under these conditions, the viewport's width must be established via the
+positioning properties.</p>
 
 <p>Similarly, if there are
 <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#positioning-scheme">positioning properties</a>
 specified on the referencing element or on the
 <a>outermost svg element</a> that are
 sufficient to establish the height of the viewport, then these
-positioning properties establish the viewport's height;
-otherwise, the <a>'height'</a> presentation attribute
-on the <a>outermost svg element</a>
-establishes the viewport's height.</p>
+positioning properties must establish the viewport's height;
+otherwise, the initial viewport's height must be the value of the <a>'height'</a>
+presentation attribute on the <a>outermost svg element</a>.</p>
 
 <p>If the <a>'width'</a> or <a>'height'</a>
 presentation attributes on the <a>outermost svg element</a>
@@ -189,7 +188,7 @@ determine the size of the initial viewport:</p>
 agent determines an initial <a>viewport coordinate system</a> and an
 initial <a>local coordinate system</a> such that the
 two coordinates systems are identical. The origin of both
-coordinate systems is at the origin of the viewport, and one
+coordinate systems is at the origin of the SVG viewport, and one
 unit in the initial coordinate system equals one "pixel" (i.e.,
 a <em>px</em> unit <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/syndata.html#length-units">as defined in CSS 2.1</a>
 ([<a href="refs.html#ref-CSS21">CSS21</a>], section 4.3.2)
@@ -268,9 +267,9 @@ graphics stretch to fit a particular container element. The
 <a>'viewBox'</a> attribute provides this
 capability.</p>
 
-<p>All elements that establish a new viewport (see <a
+<p>All elements that establish a new SVG viewport (see <a
 href="coords.html#ElementsThatEstablishViewports">elements that
-establish viewports</a>), plus the
+establish SVG viewports</a>), plus the
 <a>'marker element'</a>,
 <a>'pattern'</a> and
 <a>'view'</a>
@@ -281,7 +280,7 @@ class="attr-value">&lt;min-y&gt;</span>, <span
 class="attr-value">&lt;width&gt;</span> and <span
 class="attr-value">&lt;height&gt;</span>, separated by
 whitespace and/or a comma, which specify a rectangle in user
-space which should be mapped to the bounds of the viewport
+space which should be mapped to the bounds of the SVG viewport
 established by the given element, taking into account attribute
 <a>'preserveAspectRatio'</a>. If specified,
 an additional transformation is applied to all descendants of
@@ -298,7 +297,7 @@ value of zero disables rendering of the element.</p>
 the use of the <a>'viewBox'</a> attribute
 on the <a>outermost svg element</a> to specify that
 the SVG content should stretch to fit bounds of the
-viewport.</p>
+SVG viewport.</p>
 
 <pre>
 &lt;?xml version="1.0" standalone="no"?&gt;
@@ -308,7 +307,7 @@ viewport.</p>
   &lt;desc&gt;Example ViewBox - uses the viewBox
    attribute to automatically create an initial user coordinate
    system which causes the graphic to scale to fit into the
-   viewport no matter what size the viewport is.&lt;/desc&gt;
+   SVG viewport no matter what size the SVG viewport is.&lt;/desc&gt;
   &lt;!-- This rectangle goes from (0,0) to (1500,1000) in local coordinate system.
        Because of the viewBox attribute above,
        the rectangle will end up filling the entire area
@@ -317,7 +316,7 @@ viewport.</p>
         fill="yellow" stroke="blue" stroke-width="12"  /&gt;
   &lt;!-- A large, red triangle --&gt;
   &lt;path fill="red"  d="M 750,100 L 250,900 L 1250,900 z"/&gt;
-  &lt;!-- A text string that spans most of the viewport --&gt;
+  &lt;!-- A text string that spans most of the SVG viewport --&gt;
   &lt;text x="100" y="600" font-size="200" font-family="Verdana" &gt;
     Stretch to fit
   &lt;/text&gt;
@@ -330,12 +329,12 @@ viewport.</p>
   </caption>
   <tr>
     <th>Rendered into<br />
-     viewport with<br />
+     SVG viewport with<br />
      width=300px,<br />
      height=200px</th>
     <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
     <th>Rendered into<br />
-     viewport with<br />
+     SVG viewport with<br />
      width=150px,<br />
      height=200px</th>
   </tr>
@@ -358,11 +357,11 @@ this example as SVG (SVG-enabled browsers only)</a><br />
 attribute is that the user agent automatically supplies the
 appropriate transformation matrix to map the specified
 rectangle in local coordinate system to the bounds of a designated region
-(often, the viewport). To achieve the effect of the example on
-the left, with viewport dimensions of 300 by 200 pixels, the
+(often, the SVG viewport). To achieve the effect of the example on
+the left, with SVG viewport dimensions of 300 by 200 pixels, the
 user agent needs to automatically insert a transformation which
 scales both X and Y by 0.2. The effect is equivalent to having
-a viewport of size 300px by 200px and the following
+an SVG viewport of size 300px by 200px and the following
 supplemental transformation in the document, as follows:</p>
 
 <pre>
@@ -376,9 +375,9 @@ supplemental transformation in the document, as follows:</p>
 </pre>
 
 <p>To achieve the effect of the example on the right, with
-viewport dimensions of 150 by 200 pixels, the user agent needs
+SVG viewport dimensions of 150 by 200 pixels, the user agent needs
 to automatically insert a transformation which scales X by 0.1
-and Y by 0.2. The effect is equivalent to having a viewport of
+and Y by 0.2. The effect is equivalent to having an SVG viewport of
 size 150px by 200px and the following supplemental
 transformation in the document, as follows:</p>
 
@@ -459,9 +458,9 @@ attribute</h2>
     <pre>&lt;align&gt; = none | xMinYMin | xMidYMin | xMaxYMin | xMinYMid | xMidYMid | xMaxYMid | xMinYMax | xMidYMax | xMaxYMax</pre>
     <pre>&lt;meetOrSlice&gt; = meet | slice</pre>
     <p>Indicates whether or not to force uniform scaling. Applies to all
-    elements that establish a new viewport (see <a
+    elements that establish a new SVG viewport (see <a
     href="coords.html#ElementsThatEstablishViewports">elements that
-    establish viewports</a>), plus the
+    establish SVG viewports</a>), plus the
     <a>'image'</a>,
     <a>'marker element'</a>,
     <a>'pattern'</a> and
@@ -472,13 +471,13 @@ attribute</h2>
 <p>In some cases, typically when using the
 <a>'viewBox'</a> attribute, it is desirable that the graphics stretch to
 fit non-uniformly to take up the
-entire viewport. In other cases, it is desirable that uniform
+entire SVG viewport. In other cases, it is desirable that uniform
 scaling be used for the purposes of preserving the aspect ratio
 of the graphics.</p>
 
-<p>For elements that establish a new viewport (see <a
+<p>For elements that establish a new SVG viewport (see <a
 href="coords.html#ElementsThatEstablishViewports">elements that
-establish viewports</a>), plus the
+establish SVG viewports</a>), plus the
 <a>'marker element'</a>,
 <a>'pattern'</a> and
 <a>'view'</a> elements,
@@ -506,7 +505,7 @@ of the following strings:</p>
   <li><span class="attr-value">none</span> - Do not force
   uniform scaling. Scale the graphic content of the given
   element non-uniformly if necessary such that the element's
-  bounding box exactly matches the viewport rectangle.<br />
+  bounding box exactly matches the SVG viewport rectangle.<br />
    (Note: if <span class="attr-value">&lt;align&gt;</span> is
   <span class="attr-value">none</span>, then the optional <span
   class="attr-value">&lt;meetOrSlice&gt;</span> value is
@@ -516,84 +515,84 @@ of the following strings:</p>
   scaling.<br />
    Align the <span class="attr-value">&lt;min-x&gt;</span> of
   the element's <a>'viewBox'</a> with the smallest X
-  value of the viewport.<br />
+  value of the SVG viewport.<br />
    Align the <span class="attr-value">&lt;min-y&gt;</span> of
   the element's <a>'viewBox'</a> with the smallest Y
-  value of the viewport.</li>
+  value of the SVG viewport.</li>
 
   <li><span class="attr-value">xMidYMin</span> - Force uniform
   scaling.<br />
    Align the midpoint X value of the element's
-   <a>'viewBox'</a> with the midpoint X value of the viewport.<br />
+   <a>'viewBox'</a> with the midpoint X value of the SVG viewport.<br />
    Align the <span class="attr-value">&lt;min-y&gt;</span> of
   the element's <a>'viewBox'</a> with the smallest Y
-  value of the viewport.</li>
+  value of the SVG viewport.</li>
 
   <li><span class="attr-value">xMaxYMin</span> - Force uniform
   scaling.<br />
    Align the <span
   class="attr-value">&lt;min-x&gt;+&lt;width&gt;</span> of the
   element's <a>'viewBox'</a> with the maximum X value
-  of the viewport.<br />
+  of the SVG viewport.<br />
    Align the <span class="attr-value">&lt;min-y&gt;</span> of
   the element's <a>'viewBox'</a> with the smallest Y
-  value of the viewport.</li>
+  value of the SVG viewport.</li>
 
   <li><span class="attr-value">xMinYMid</span> - Force uniform
   scaling.<br />
    Align the <span class="attr-value">&lt;min-x&gt;</span> of
   the element's <a>'viewBox'</a> with the smallest X
-  value of the viewport.<br />
+  value of the SVG viewport.<br />
    Align the midpoint Y value of the element's <a>'viewBox'</a>
    with the midpoint Y
-  value of the viewport.</li>
+  value of the SVG viewport.</li>
 
   <li><span class="attr-value">xMidYMid</span> (the <a>initial value</a>) -
   Force uniform scaling.<br />
    Align the midpoint X value of the element's <a>'viewBox'</a>
-   with the midpoint X value of the viewport.<br />
+   with the midpoint X value of the SVG viewport.<br />
    Align the midpoint Y value of the element's <a>'viewBox'</a>
-   with the midpoint Y value of the viewport.</li>
+   with the midpoint Y value of the SVG viewport.</li>
 
   <li><span class="attr-value">xMaxYMid</span> - Force uniform
   scaling.<br />
    Align the <span
   class="attr-value">&lt;min-x&gt;+&lt;width&gt;</span> of the
   element's <a>'viewBox'</a>
-   with the maximum X value of the viewport.<br />
+   with the maximum X value of the SVG viewport.<br />
    Align the midpoint Y value of the element's <a>'viewBox'</a>
    with the midpoint Y
-  value of the viewport.</li>
+  value of the SVG viewport.</li>
 
   <li><span class="attr-value">xMinYMax</span> - Force uniform
   scaling.<br />
    Align the <span class="attr-value">&lt;min-x&gt;</span> of
   the element's <a>'viewBox'</a> with the smallest X
-  value of the viewport.<br />
+  value of the SVG viewport.<br />
    Align the <span
   class="attr-value">&lt;min-y&gt;+&lt;height&gt;</span> of the
   element's <a>'viewBox'</a> with the maximum Y value
-  of the viewport.</li>
+  of the SVG viewport.</li>
 
   <li><span class="attr-value">xMidYMax</span> - Force uniform
   scaling.<br />
    Align the midpoint X value of the element's <a>'viewBox'</a>
-   with the midpoint X value of the viewport.<br />
+   with the midpoint X value of the SVG viewport.<br />
    Align the <span
   class="attr-value">&lt;min-y&gt;+&lt;height&gt;</span> of the
   element's <a>'viewBox'</a> with the maximum Y value
-  of the viewport.</li>
+  of the SVG viewport.</li>
 
   <li><span class="attr-value">xMaxYMax</span> - Force uniform
   scaling.<br />
    Align the <span
   class="attr-value">&lt;min-x&gt;+&lt;width&gt;</span> of the
   element's <a>'viewBox'</a> with the maximum X value
-  of the viewport.<br />
+  of the SVG viewport.<br />
    Align the <span
   class="attr-value">&lt;min-y&gt;+&lt;height&gt;</span> of the
   element's <a>'viewBox'</a> with the maximum Y value
-  of the viewport.</li>
+  of the SVG viewport.</li>
 </ul>
 
 <p>The <span class="attr-value">&lt;meetOrSlice&gt;</span>
@@ -609,16 +608,16 @@ more spaces and then must be one of the following strings:</p>
     <ul>
       <li>aspect ratio is preserved</li>
       <li>the entire <a>'viewBox'</a> is visible within
-      the viewport</li>
+      the SVG viewport</li>
       <li>the <a>'viewBox'</a> is scaled up as much
       as possible, while still meeting the other criteria</li>
     </ul>
 
     <p>In this case, if the aspect ratio of the graphic does not
-    match the viewport, some of the viewport will extend beyond
+    match the SVG viewport, some of the SVG viewport will extend beyond
     the bounds of the <a>'viewBox'</a> (i.e., the area into
     which the <a>'viewBox'</a> will draw will be
-    smaller than the viewport).</p>
+    smaller than the SVG viewport).</p>
   </li>
 
   <li>
@@ -627,27 +626,27 @@ more spaces and then must be one of the following strings:</p>
 
     <ul>
       <li>aspect ratio is preserved</li>
-      <li>the entire viewport is covered by the <a>'viewBox'</a></li>
+      <li>the entire SVG viewport is covered by the <a>'viewBox'</a></li>
       <li>the <a>'viewBox'</a> is scaled down as
       much as possible, while still meeting the other
       criteria</li>
     </ul>
 
     <p>In this case, if the aspect ratio of the <a>'viewBox'</a> does not match the
-    viewport, some of the <a>'viewBox'</a> will extend beyond the
-    bounds of the viewport (i.e., the area into which the <a>'viewBox'</a> will draw is larger
-    than the viewport).</p>
+    SVG viewport, some of the <a>'viewBox'</a> will extend beyond the
+    bounds of the SVG viewport (i.e., the area into which the <a>'viewBox'</a> will draw is larger
+    than the SVG viewport).</p>
   </li>
 </ul>
 
 <div class="example">
 <p id="ExamplePreserveAspectRatio"><span class="example-ref">Example PreserveAspectRatio</span>
 illustrates the various options on <a>'preserveAspectRatio'</a>.
-The example creates several new viewports by
+The example creates several new SVG viewports by
 including <a>'svg'</a> sub-elements embedded
 inside the <a>outermost svg element</a> (see <a
 href="coords.html#EstablishingANewSVGViewport">Establishing a new
-viewport</a>).</p>
+SVG viewport</a>).</p>
 
 <edit:includefile href='images/coords/PreserveAspectRatio.svg' name='PreserveAspectRatio' description="demonstrate available options" image='yes' link='yes'/>
 <div class="figure"><img alt="Example PreserveAspectRatio — demonstrate available options" src="images/coords/PreserveAspectRatio.png"/><p class="caption">Example PreserveAspectRatio</p></div>
@@ -699,7 +698,7 @@ viewport.</p>
     thus establishing a new SVG viewport
   &lt;/desc&gt;
   &lt;!-- The following statement establishing a new SVG viewport
-       and renders SVG drawing B into that viewport --&gt;
+       and renders SVG drawing B into that SVG viewport --&gt;
   &lt;svg x="25%" y="25%" width="50%" height="50%"&gt;
      &lt;!-- drawing B goes here --&gt;
   &lt;/svg&gt;
@@ -717,7 +716,7 @@ PreserveAspectRatio</a>.</p>
   <li>The <a>'svg'</a> element</li>
 
   <li>A <a>'symbol'</a> element define new
-  viewports whenever they are instanced by a <a>'use'</a> element.</li>
+  SVG viewports whenever they are instanced by a <a>'use'</a> element.</li>
 
   <li>An <a>'image'</a> element that
   references an SVG file will result in the establishment of a
@@ -746,23 +745,23 @@ specifications published by the CSS WG or SVG WG may extend basic data
 types or add new data types.</p>
 
 <p>For <a>&lt;percentage&gt;</a> values that are defined to be relative
-to the size of viewport:</p>
+to the size of SVG viewport:</p>
 
 <ul>
   <li>For any x-coordinate value or width value expressed as a
-  percentage of the viewport, the value to use is the specified
+  percentage of the SVG viewport, the value to use is the specified
   percentage of the <em>actual-width</em> in user units for the
-  nearest containing viewport, where <em>actual-width</em> is
-  the width dimension of the viewport element within the user
-  coordinate system for the viewport element.</li>
+  nearest containing SVG viewport, where <em>actual-width</em> is
+  the width dimension of the SVG viewport element within the user
+  coordinate system for the SVG viewport element.</li>
   <li>For any y-coordinate value or height value expressed as a
-  percentage of the viewport, the value to use is the specified
+  percentage of the SVG viewport, the value to use is the specified
   percentage of the <em>actual-height</em> in user units for
-  the nearest containing viewport, where <em>actual-height</em>
-  is the height dimension of the viewport element within the
-  user coordinate system for the viewport element.</li>
+  the nearest containing SVG viewport, where <em>actual-height</em>
+  is the height dimension of the SVG viewport element within the
+  user coordinate system for the SVG viewport element.</li>
   <li id="Units_viewport_percentage">For any other length value expressed as a percentage of
-  the viewport, the percentage is calculated as the specified
+  the SVG viewport, the percentage is calculated as the specified
   percentage of <code>sqrt((<em>actual-width</em>)**2 +
   (<em>actual-height</em>)**2)/sqrt(2)</code>.</li>
 </ul>
@@ -796,8 +795,8 @@ rectangle. The bottom rectangle of the group illustrates what
 happens when values specified in "em" units are scaled.</p>
 
 <p>The three rectangles on the right demonstrate the use of
-percentages. Note that the width and height of the viewport in
-the user coordinate system for the viewport element (in this
+percentages. Note that the width and height of the SVG viewport in
+the user coordinate system for the SVG viewport element (in this
 case, the <a>outermost svg element</a>) are 4000 and
 2000, respectively, because processing the <a>'viewBox'</a> attribute results in a
 transformed user coordinate system. The topmost rectangle,
@@ -1113,7 +1112,7 @@ on the given element:</p>
 	fractions or percentages and that mesh path data represents
 	fractions of the bounding box of the element to which the mesh
 	is applied. If the mesh is rendered as a graphics object
-	(i.e., not as a paint server) the current viewport is used in
+	(i.e., not as a paint server) the current SVG viewport is used in
 	place of a bounding box.</td>
     </edit:with>
   </tr>
@@ -1240,7 +1239,7 @@ ignored.</p>
 
 </div>
 
-<h2 id="IntrinsicSizing">Intrinsic sizing properties of the viewport of SVG content</h2>
+<h2 id="IntrinsicSizing">Intrinsic sizing properties of the SVG viewport of SVG content</h2>
 
 <p>SVG needs to specify how to calculate some intrinsic sizing properties  to
 enable inclusion within other host documents. The intrinsic width and height

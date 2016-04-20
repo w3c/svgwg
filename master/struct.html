@@ -453,59 +453,51 @@ of the <a>'desc'</a> and <a>'title element'</a> elements.</p>
 Removed text that limited number of 'desc' and 'title' elements. Status: Done.</p>
 
 <div class="ready-for-wg-review">
-<p>Each <a>container element</a> or <a>graphics element</a> in an SVG drawing
-can supply one or more <a>'desc'</a> and/or one or more <a>'title'</a> description
-strings where
-the description is text-only. When the current SVG document fragment is
-rendered as SVG on visual media, <a>'desc'</a> and <a>'title'</a> elements are
-not rendered as part of the graphics. The <a>'title'</a> child element represents
-advisory information for the element, such as would be appropriate for a tooltip.
-On a link, this could be the title or a description of the target resource; on an
+<p>Any <a>container element</a> or <a>graphics element</a> in an SVG document
+can have zero or more <a>'desc'</a> and/or <a>'title'</a> elements as children,
+whose content is text. <a>'desc'</a> and <a>'title'</a> elements are
+not visually rendered as part of the graphics.</p>
+
+<p>Multiple sibling <a>'desc'</a> or <a>'title'</a> elements must have
+different <a>'lang'</a> attributes. The element whose <a>'lang'</a> attribute best
+matches the language set by the user agent will be used as the <a>title</a> or
+<a>desc</a>. If no match exists, the first element must be used. If multiple equally
+valid matches exist, the first match is used.</p>
+
+<p class="issue" data-issue="67">The use of more than one <a>title</a> or <a>desc</a> element to
+provide localised information is at risk, with no known implementations.</p>
+
+<p>The <a>'title'</a> child element represents a short text alternative for the
+element.</p>
+
+<p>On a link, this could be the title or a description of the target resource; on an
 image or drawing object, it could be the image credit or short description of the
-image; it could be further information about the source; on interactive content,
-it could be a label for, or instructions for, use of the element; and so forth.
-The value is text. The <a>'desc'</a> element represents more detailed, textual
-information, for the element. This is typically exposed to assistive
+object; on interactive content, it could be a label for, or instructions for, use
+of the element; and so forth.</p>
+
+<p>Interactive User agents commonly render <a>'title'</a> elements as
+a tooltip on hovering the parent element.</p>
+
+<p>User agents should make title and desc elements available to platform accessibility APIs
+as per SVG-AAM.</p>
+
+<p>Authors should not provide both a visible label for a drawing element by using a <a>text</a>
+element, and a <a>title</a> element, as they will be both presented, redundantly, to users.</p>
+
+<p>The <a>'desc'</a> element represents more detailed textual
+information for the element such as a description. This is typically exposed to assistive
 technologies to provide more detailed information, such as help information
-about the element. The value is text.
-</p>
-<p>
-Authors are provided two vehicles for providing a visible label with a drawing
-element. The first way is to embed text within the drawing element. The second
-is to associate visible text with a drawing element through the use of
-<a>'aria-labelledby'</a> on the element being labelled. Authors may provide a
-non-visible label to a drawing element by applying an <a>'aria-label'</a> to it
-but also by providing a descendant <a>'title'</a> element. An author may also
-expose a hidden label on an element to an assistive technology through the
-use of <a>'aria-labelledby'</a> when it points to content that is hidden and
-contains text. It is common for user agents to render the <a>'title'</a>
-element as a tooltip. Tooltips are an important way to convey alternative text
-information for a drawing object where the text label is either not readily
-visible or could be rendered in a clearer way in response to passing over the
-drawing element with a pointing device. One benefit of using a descendant
-'title' element can be seen when using SVG to to produce an image button or
-small drawing that has no visible text but it is important to be able to render
-a short textual equivalent label, or tooltip, when a pointing device passes
-over the button.
-</p>
-<p>
-Authors should provide a <a>'title'</a> child element to the outermost svg
+about the element.</p>
+
+<p>Authors should provide a <a>'title'</a> child element to the outermost svg
 element within a stand-alone SVG document. Since users often consult documents
 out of context, authors should provide context-rich titles. Thus, instead of a
 title such as "Introduction", which doesn't provide much contextual background,
 authors should supply a title such as "Introduction to Medieval Bee-Keeping"
 instead. For reasons of accessibility, user agents should always make the
 content of the ‘title’ child element to the outermost svg element available to
-users. The mechanism for doing so depends on the user agent (e.g., as a
-caption, spoken).
-</p>
-<p>
-If the SVG document is embedded in an HTML document, the outermost svg element
-may only serve to act as a container for SVG drawings and applying a
-<a>'title'</a> child element may not be of value.  Applying a <a>'title'</a>
-element to the outermost SVG element in this may may result in a tooltip being
-generated.
-</p>
+users.</p>
+
 <p>
 Unlike the desc element, authors also have the ability to associate more
 detailed information with content that includes visible text. This can be
@@ -520,24 +512,15 @@ should only use <a>'aria-describedby'</a> when an element is described by
 visible text on the screen, otherwise the use of a child <a>'desc'</a> is
 preferred.
 </p>
-</div> <!--  class="ready-for-wg-review" -->
-<p>
-User agents may, however, for example,
-display the <a>'title'</a> element as a tooltip, as the pointing device moves
-over particular elements. Alternate presentations are possible, both visual and
+
+<p>Alternate presentations are possible, both visual and
 aural, which display the <a>'desc'</a> and <a>'title'</a> elements but do not
 display <a>'path'</a> elements or other <a>graphics elements</a>. For deep
 hierarchies, and for following <a>'use'</a> element references, it is
 sometimes desirable to allow the user to control how deep they drill down into
 descriptive text.</p>
 
-<p>More than one <a>'desc'</a> or <a>'title element'</a> may be
-present with different <a>'lang'</a> attributes. The text displayed
-will be the text from the element where the <a>'lang'</a> attribute
-best matches the language set by the user agent. If no match exists,
-the text from the first element is used (to allow default text to be
-given for legacy renderers). If multiple equally valid matches exist,
-the first match is used.</p>
+</div> <!--  class="ready-for-wg-review" -->
 
 <p>The following is an example. In typical operation, the SVG user agent would
 not render the <a>'desc'</a> and <a>'title'</a> elements but would render the
@@ -546,13 +529,13 @@ remaining contents of the <a>'g'</a> element.</p>
 <pre><![CDATA[
 <?xml version="1.0" standalone="no"?>
 <svg xmlns="http://www.w3.org/2000/svg"
-     width="4in" height="3in">
+     viewBox="0 0 400 300">
   <g>
     <title>Company sales by region</title>
     <title lang="fr">Chiffre d'affaires par région</title>
     <desc>Bar chart which shows company sales by region.</desc>
     <desc lang="fr">Graphique illustrant les ventes par région.</desc>
-    <!-- Bar chart defined as vector data -->
+    <line x1="30" y1="10" x2="380" y2="270"/>
   </g>
 </svg>
 ]]></pre>
