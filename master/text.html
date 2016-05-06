@@ -1698,7 +1698,7 @@
 	  <img class="bordered" src="images/text/text-path.svg"
                alt="Image showing text following a path."/>
 	  <p class="caption">Text on a path. The <a>'textPath'</a>
-	    element references a <a>'path'</a> element (shown in light
+	    element references a <a>'path element'</a> element (shown in light
 	    blue).</p>
 	</div>
       </div>
@@ -2671,7 +2671,7 @@ for RTL or vertical text.</p>
               <li>Let <var>path</var> be the <a>equivalent path</a> of the <a>basic shape</a> element referenced by the <a>'textPath'</a> element, or an empty path if the reference is invalid.</li>
               <li>If the <a>'textPath/side'</a> attribute of the <a>'textPath'</a> element is <span class='attr-value'>'right'</span>, then reverse <var>path</var>.</li>
               <li>Let <var>length</var> be the length of <var>path</var>.</li>
-              <li>Let <var>offset</var> be the value of the <a>'textPath'</a> element's <a>'textPath/startOffset'</a> attribute, adjusted due to any <a>'path/pathLength'</a> attribute on the referenced element (if the referenced element is a <a>'path'</a>).</li>
+              <li>Let <var>offset</var> be the value of the <a>'textPath'</a> element's <a>'textPath/startOffset'</a> attribute, adjusted due to any <a>'path/pathLength'</a> attribute on the referenced element (if the referenced element is a <a>'path element'</a> element).</li>
               <li>Let <var>advance</var> = the advance of the <a>typographic character unit</a> corresponding to character <var>k</var>. [NOTE: This advance will be negative for RTL horizontal text.]</li>
               <li>Let (<var>x</var>, <var>y</var>) and <var>angle</var> be the position and angle in <var>result</var>[<var>index</var>].</li>
               <li>Let <var>mid</var> be a coordinate value depending on the value of <var>horizontal</var>:
@@ -3156,13 +3156,13 @@ for RTL or vertical text.</p>
 <edit:with element='textPath'>
 
   <p>
-    SVG can place text along a path defined either by a <a>'path'</a>
+    SVG can place text along a path defined either by a <a>'path element'</a>
     element or the path equivalent of a <a>basic shape</a>. This is
     specified by including text within a <a>'textPath'</a> element
     that has either an <a>'href'</a> attribute with an <a>URL
-    reference</a> pointing to a <a>'path'</a> element or <a>basic
-    shape</a>, or by specifying a value for the <a>'d'</a> property that provides
-    the path data directly.
+    reference</a> pointing to a <a>'path element'</a> element or <a>basic
+    shape</a>, or by specifying a value for the <a>'path'</a> attribute that
+    specifies the path data directly.
   </p>
 
   <p class="note">
@@ -3208,12 +3208,18 @@ for RTL or vertical text.</p>
     </table>
   </div>
 
-<p>Both the <a>'d'</a> property and the <a>'href'</a> attribute can 
-specify a path along which the glyphs will be rendered.  If the
-<a>'d'</a> property has a value other than <span class='prop-value'>none</span>
-and the <a>'href'</a> attribute is also specified, then it is the
-<a>'d'</a> property that specifies the path.</p>
-
+<p>Both the <a>'path'</a> attribute and the <a>'href'</a> attribute
+specify a path along which the glyphs will be rendered. </p>
+<p>
+If both attributes are specified on a <a>'textPath'</a> element, the path that
+is used must follow the following order of precedence:
+<ol>
+<li><a>'path'</a> attribute</li>
+<li><a>'href'</a> attribute</li>
+</ol>
+</p>
+<p>If the <a>'path'</a> attribute contains an error, the <a>'href'</a> attribute
+must be used.</p>
 <h3 id="TextPathAttributes">Attributes</h3>
 
   <dl class="attrdef-list-svg2">
@@ -3315,10 +3321,9 @@ and the <a>'href'</a> attribute is also specified, then it is the
         and possibly warping the glyphs.  With this approach,
         connected glyphs, such as in cursive scripts, will maintain
         their connections. (Non-vertical straight path segments should
-        be converted to Bézier curves in such away that horizontal
+        be converted to Bézier curves in such a way that horizontal
         straight paths have an (approximately) constant offset from
-        the path defined by the <a>'d'</a> attribute of the
-        referenced <a>'path'</a> element.)
+        the path along which the glyphs are rendered). 
       </p>
 
       <div class="figure">
@@ -3406,14 +3411,25 @@ and the <a>'href'</a> attribute is also specified, then it is the
 
     </dd>
 
+    <dt id="TextPathElementPathAttribute"><span class="adef">path</span></dt>
+    <dd>
+      <p>A <a href="paths.html#PathDataBNF" class="syntax">path data</a>
+        string describing the path onto which the glyphs will be rendered.</p>
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                  <dd><a href="paths.html#PathDataBNF" class="syntax">path data</a></dd>
+	<dt><a>Initial value</a></dt>   <dd>an empty string</dd>
+	<dt><a>Animatable</a></dt>      <dd>yes</dd>
+      </dl>
+
+    </dd>
     <dt id="TextPathElementHrefAttribute"><span class="adef">href</span></dt>
     <dd>
       <p>
         An <a href="linking.html#URLReference">URL reference</a> to
-        the <a>'path'</a> or <a>basic shape</a> element onto which
+        the <a>'path element'</a> element or <a>basic shape</a> element onto which
         the glyphs will be rendered. If &lt;url&gt; is an invalid
         reference (e.g., no such element exists, or the referenced
-        element is not a <a>'path'</a>) or <a>basic shape</a>, then
+        element is not a <a>'path element'</a> element) or <a>basic shape</a>, then
         the <a>'textPath'</a> element is in error and its entire
         contents shall not be rendered by the user agent.
       </p>
@@ -3434,12 +3450,12 @@ and the <a>'href'</a> attribute is also specified, then it is the
   </dl>
 
   <p>
-    The path data coordinates within the referenced <a>'path'</a>
-    or <a>basic shape</a>
+    The path data coordinates within the referenced <a>'path element'</a>
+    element or <a>basic shape</a>
     element are assumed to be in the same coordinate system as the
     current <a>'text'</a> element, not in the coordinate system where
-    the <a>'path'</a> element is defined. The <a>'transform'</a>
-    attribute on the referenced <a>'path'</a> or <a>basic shape</a>
+    the <a>'path element'</a> element is defined. The <a>'transform'</a>
+    attribute on the referenced <a>'path element'</a> element or <a>basic shape</a>
     element represents a
     supplemental transformation relative to the current user
     coordinate system for the current <a>'text'</a> element, including
@@ -3454,7 +3470,7 @@ and the <a>'href'</a> attribute is also specified, then it is the
 style="font-weight:bold; color:red">transform="translate(25,25)"</span>&gt;
     &lt;defs&gt;
       &lt;path id="path1" <span
-style="font-weight:bold; color:green">transform="scale(2)"</span> d="..." fill="none" stroke="red"/&gt;
+style="font-weight:bold; color:green">transform="scale(2)"</span> path="..." fill="none" stroke="red"/&gt;
     &lt;/defs&gt;
   &lt;/g&gt;
   &lt;text <span
@@ -3474,7 +3490,7 @@ style="font-weight:bold; color:blue">transform="rotate(45)"</span>&gt;
 style="font-weight:bold; color:blue">transform="rotate(45)"</span>&gt;
     &lt;defs&gt;
       &lt;path id="path1" <span
-style="font-weight:bold; color:green">transform="scale(2)"</span> d="..." fill="none" stroke="red"/&gt;
+style="font-weight:bold; color:green">transform="scale(2)"</span> path="..." fill="none" stroke="red"/&gt;
     &lt;/defs&gt;
     &lt;text&gt;
       &lt;textPath href="#path1"&gt;Text on a path1&lt;/textPath&gt;
@@ -3489,7 +3505,7 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> d="..." fill="
     the <a>'textPath'</a> element, whereas the
     <code style="font-weight:bold;
     color:blue">transform="rotate(45)"</code> applies to both
-    the <a>'text'</a> and the use of the <a>'path'</a> element as the
+    the <a>'text'</a> and the use of the <a>'path element'</a> element as the
     referenced shape for text on a path.
   </p>
 
