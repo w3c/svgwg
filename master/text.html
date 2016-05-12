@@ -2885,7 +2885,8 @@ for RTL or vertical text.</p>
     text position for a <a>'textPath'</a> element. Each text chunk
     also has a final <a>current text position</a> which is the
     <a>current text position</a> after placing the last glyph
-    in the <a>text chunk</a>.
+    in the <a>text chunk</a>. The positions are determined before
+    applying the <a>'text-anchor'</a> property.
   </p>
 
   <table class="propdef def">
@@ -2950,16 +2951,18 @@ for RTL or vertical text.</p>
 
     <dt><span class="attr-value">middle</span></dt>
     <dd>
-      The rendered characters are aligned such that the geometric
-      middle of the resulting rendered text (using the initial and
-      final <a>current text position</a>) is at the initial current
+      The rendered characters are shifted such that the geometric
+      middle of the resulting rendered text (determined from the
+      initial and final <a>current text position</a> before applying
+      the <a>'text-anchor'</a> property) is at the initial current
       text position.
     </dd>
 
     <dt><span class="attr-value">end</span></dt>
     <dd>
-      The rendered characters are aligned such that the end of the
-      resulting rendered text (final <a>current text position</a>)
+      The rendered characters are shifted such that the end of the
+      resulting rendered text (final <a>current text position</a>
+      before applying the <a>'text-anchor'</a> property)
       is at the initial current text position.
       For an element with a <a>'direction'</a> property value
       of <span class="prop-value">"ltr"</span> (typical for most
@@ -3259,9 +3262,18 @@ for RTL or vertical text.</p>
         the end point of the path.
       </p>
 
+      <p class="note">
+	Negative values and values larger than the path length
+	(e.g. 150%) are allowed.
+      </p>
+      <p class="annotation">
+	Limiting values to the range 0%-100% prevents easily creating
+	effects like text moving along the path.
+      </p>
+
       <p>
-	For an open path, glyphs with mid-points that are not on the
-	path are not rendered.
+	Glyphs with mid-points that are not on the path are not
+	rendered.
       </p>
       <div class="figure">
 	<img alt="Three paths with various values of 'startOffset' showing clipping
@@ -3280,10 +3292,21 @@ for RTL or vertical text.</p>
       </div>
 
       <p>
-	For a closed path (including an equivalent path for a <a>basic
-	shape</a>), the path is considered to wrap around in both
-	directions. All glyphs are rendered.
+	For paths consisting of a single closed path (including an
+	equivalent path for a <a>basic shape</a>), glyphs are rendered
+	along one circuit of the path. The text is aligned as
+	determined by the <a>'text-anchor'</a> property to a position
+	along the path set by the <a>'startOffset'</a> attribute. For
+	the <span class="prop-value">start</span>
+	(<span class="prop-value">end</span>) value, the text it
+	rendered from the start (end) of the line until the initial
+	position along the path is reached again. For the
+	<span class="prop-value">middle</span>, the text is rendered
+	from the middle point in both directions until a point on the
+	path equal distance in both directions from the initial
+	position on the path is reached.
       </p>
+
       <div class="figure">
 	<img alt="Two circular path with different values of
 		  'startOffset' showing that all glyphs are rendered."
@@ -3292,13 +3315,42 @@ for RTL or vertical text.</p>
 	  Rendering for text on a path referencing a <a>'circle'</a>
 	  with different values of the <a>'startOffset'</a>
 	  attribute. Left: 0. Right: 75% or -25%.
+	  The red circle marks the beginning of the path (after
+	  the canonical decomposition of the circle into a path).
+	</p>
+      </div>
+
+      <div class="figure">
+	<img alt="Three circular path with different values of
+		  'text-anchor' showing how glyphs are rendered."
+		  src="images/text/text-path-startoffset3.svg" />
+	<p class="caption">
+	  Rendering for text on a path referencing a <a>'circle'</a>
+	  with different values of the <a>'text-anchor'</a>
+	  attribute.
+	  Left: 'start'.
+	  Middle: 'middle'.
+	  Right: 'end'.
+	  The red circles marks the beginning of the path (after
+	  the canonical decomposition of the circle into a path).
+	  The blue square marks the reference point for the start
+	  of rendering (shifted from the path start by
+	  a <a>'startOffset'</a> value of 75%). The gray arrow(s)
+	  shows the direction of glyph placement and the point at
+	  which glyph placement stops. The arrow(s) would be reversed
+	  if the <a>'direction'</a> property has a value of
+	  <span class="prop-value">rtl</span>.
 	</p>
       </div>
 
       <p class="annotation">
 	Rendering all glyphs was agreed to for basic shapes at the
 	<a href="http://www.w3.org/2015/02/12-svg-minutes.html#item05">Sydney
-	  (2015)</a> meeting (but missing in minutes).
+	  (2015)</a> meeting (but missing in minutes). Limiting the
+	wrapping to a path with a single closed sub-path and to one
+	loop, effected by the 'startOffset' attribute agreed to at the
+	<a href="https://www.w3.org/2016/04/22-svg-minutes.html#item02">London
+	  (2016)</a> Editor's Meeting.
       </p>
 
       <dl class="attrdef-svg2">
@@ -3540,6 +3592,11 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> path="..." fil
     "up" from the baseline.
   </p>
 
+  <p class="note">
+    The <a>'tspan/dx'</a> and <a>'tspan/dy'</a> attributes are allowed
+    only on <a>'text'</a> and <a>'tspan'</a> elements.
+  </p>
+
   <edit:example href='images/text/toap02.svg' name='toap02' description="tspan within textPath" image='yes' link='yes'/>
 
   <p id="ExampleToap03">
@@ -3742,12 +3799,13 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> path="..." fil
     </li>
 
     <li>
-      Glyphs whose midpoint-on-the-path are off either end of an open path
+      Glyphs whose midpoint-on-the-path are off the path
       are not rendered.
     </li>
 
     <li>
-      Continue rendering glyphs until there are no more glyphs.
+      Continue rendering glyphs until there are no more glyphs
+      (or no more space on path).
     </li>
   </ul>
 
@@ -4053,7 +4111,8 @@ the dash pattern at the same positions across different implementations.</p>
   <h4 id='KerningProperty'>The <span class="property">'kerning'</span> property</h4>
 
   <p class="note">
-    The <span class="property">'kerning'</span> has been removed in SVG 2.
+    The <span class="property">'kerning'</span> property has been
+    removed in SVG 2.
   </p>
   <p>
     SVG 1.1 uses the 'kerning' property to determine if the font
