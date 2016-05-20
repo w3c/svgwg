@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
-  <head>
+  <head lang="en">
     <title>SVG Authoring Guide</title>
-    <meta charset='utf-8'>
-    <script src='http://www.w3.org/Tools/respec/respec-w3c-common'
-            async class='remove'></script>
-    <script class='remove'>
+    <meta charset="utf-8">
+    <!-- <script src="http://www.w3.org/Tools/respec/respec-w3c-common" async class='remove'></script> -->
+    <script src="_ignore/respec-w3c-common.js" async class='remove'></script>
+    <script class="remove">
       var respecConfig = {
           specStatus:           "ED",
           shortName:            "svg-authoring",
@@ -67,6 +67,10 @@
         background-color: lime;
         padding: 0.25em;
         border-radius: 5px;
+      }
+
+      figure {
+        display: inline-block;
       }
   /*
       .tip::before, .tip > .marker, details.tip > summary::before, details.tip > summary > .marker {
@@ -141,29 +145,46 @@
           <p>In the following example, <a href="examples/clock-bad-0.svg" target="_blank">clock-bad-0.svg</a>, the author has created a clock icon, which may appear satisfactory:</p>
 
           <pre class="example highlight" data-include="examples/clock-bad-0.svg" data-include-format="text"></pre>
-          <img src="examples/clock-bad-0.svg" width="200" height="200">
+          <object data="examples/clock-bad-0.svg" width="200" height="200"> </object>
 
-          <p>However, both the clock face and the hands are composed of a single <code>path</code> element. This means that if you decide to change any of the styling, such as the color of the stroke or the fill, or width of the stroke, you cannot change  only the clock face or hands, but must change both together.</p>
+          <p>However, rather than simply using the stroke of the shape, the author defined the inner and outer sides of the line shape, meaning that you can't independently style the clock face (the shape's <code>fill</code> or "background") and the outline, as shown in the following example, <a href="examples/clock-bad-0a.svg" target="_blank">clock-bad-0a.svg</a>, where we would expect to be able to make the clock face yellow:</p>
 
-          <p>We can fix that by splitting the clock face and hands into two separate shapes (now a <code>circle</code> and a <code>path</code> element), which allows individual styling, as in the following example, <a href="examples/clock-bad-1.svg" target="_blank">clock-bad-1.svg</a>:</p>
+          <pre class="example highlight" data-include="examples/clock-bad-0a.svg" data-include-format="text"></pre>
+          <object data="examples/clock-bad-0a.svg" width="200" height="200"> </object>
+
+          <p>Changing the fill only changes the color of the shape outline, not the shape background. Also, frequently for  icons, you'd like to be able to increase or decrease the stroke width for different image sizes, and this type of path-outline shape doesn't let you do that; the minimum thickness of the shape outline is fixed unless you change the geometry of the path.</p>
+
+          <p>Besides the styling problems, using shape outlines dramatically increases the file size, usually much more than double the size. Sometimes this shape-outline technique is useful and necessary, especially when you want to simulate variable stroke widths, like a calligraphic stroke, but for uniform stroke widths, this is unnecessary and even a disadvantage.</p>
+
+          <p class="note"><span class="authoring-tool-tip">Authoring Tool Tip:</span> In Adobe Illustrator, this feature is called <i>Outline Stroke</i> (an option under <i>Object > Path</i>). It's easy to convert a stroke to an outline, but there is no easy way to convert an outline to a stroke. Thus, authors are encouraged not to use <i>Outline Stroke</i> unless required.</p>
+
+
+          <p>We can start to fix these problems by defining the shape as a simple stroke, which allows the stroke and fill to be styled seperately, as in the following example, <a href="examples/clock-bad-1.svg" target="_blank">clock-bad-1.svg</a>:</p>
 
           <pre class="example highlight" data-include="examples/clock-bad-1.svg" data-include-format="text"></pre>
-          <img src="examples/clock-bad-1.svg" width="200" height="200">
+          <object data="examples/clock-bad-1.svg" width="200" height="200"> </object>
 
-          <p>However, there is still a problem, because the individual hands are a single element, which doesn't let them be styled differently (among other problems we'll describe next). We split the clock hands into two separate shapes, which allows individual styling, as in the following example, <a href="examples/clock-bad-1.svg" target="_blank">clock-bad-2.svg</a>:</p>
+          <p>Still, both the clock face and the hands are composed of a single <code>path</code> element. This means that if you decide to change any of the styling, such as the color of the stroke or the fill, or width of the stroke, you cannot change  only the clock face or hands, but must change both together. And even more obvious, the fill has an artifact where the hands make a blank space.</p>
+
+          <p>We can fix that by splitting the clock face and hands into two separate shapes (now a <code>circle</code> and a <code>path</code> element), which allows individual styling, as in the following example, <a href="examples/clock-bad-2.svg" target="_blank">clock-bad-2.svg</a>:</p>
 
           <pre class="example highlight" data-include="examples/clock-bad-2.svg" data-include-format="text"></pre>
-          <img src="examples/clock-bad-2.svg" width="200" height="200">
+          <object data="examples/clock-bad-2.svg" width="200" height="200"> </object>
+
+          <p>However, there is still a problem, because the individual hands are a single element, which doesn't let them be styled differently (among other problems we'll describe next). We split the clock hands into two separate shapes, which allows individual styling, as in the following example, <a href="examples/clock-bad-3.svg" target="_blank">clock-bad-3.svg</a>:</p>
+
+          <pre class="example highlight" data-include="examples/clock-bad-3.svg" data-include-format="text"></pre>
+          <object data="examples/clock-bad-3.svg" width="200" height="200"> </object>
 
           <p>This is an improvement, and now allows individual image components not only to be styled differently, but also replaced independently much more easily, such as making a more elaborate hour hand with a simple minute hand. In addition, we've added another functional aspect to the clock hands. An author could (and should) anticipate that someone (whether the developer on their team, a stranger reusing their image with permission, or themselves at some later point) would want to animate the clock hands. The following example, <a href="examples/clock-animate-0.svg" target="_blank">clock-animate-0.svg</a>, shows that adding a simple rotation animation is now easy:</p>
 
           <pre class="example highlight" data-include="examples/clock-animate-0.svg" data-include-format="text"></pre>
-          <iframe src="examples/clock-animate-0.svg" width="200" height="200" style="border: 0"> </iframe>
+          <object data="examples/clock-animate-0.svg" width="200" height="200"> </object>
 
           <p>Another small improvement will make this even more robust. By changing the origin of the individual hands from the end points to the center points, we ensure that additional transforms do not disrupt the hand animation, as in the following example, <a href="examples/clock-animate-1.svg" target="_blank">clock-animate-1.svg</a>:</p>
 
           <pre class="example highlight" data-include="examples/clock-animate-1.svg" data-include-format="text"></pre>
-          <iframe src="examples/clock-animate-1.svg" width="200" height="200" style="border: 0"> </iframe>
+          <object data="examples/clock-animate-1.svg" width="200" height="200"> </object>
 
           <p>In addition to animation, other functional aspects of a shape are various kinds of interactivity, such as clicking or mouseovers.</p>
 
@@ -185,6 +206,8 @@
 
           <p class="note">TODO: add group styling example</p>
 
+          <p class="note">TODO: add group ID example</p>
+
         </article>
 
       </article>
@@ -196,27 +219,27 @@
 
         <p>SVG uses <b>absolute positioning</b> and a <b>painter's model</b> for rendering graphical and textual content.</p>
 
-        <p>SVG's <b>absolute positioning</b> layout means that each element is positioned precisely by its geometric (e.g. <code>x,y</code>) description, and that this position is not affected by any other element; this is unlike the common case in CSS, where adding content “pushes” the content after it in document order to a new position. SVG's absolute positioning is shown in the following example, <a href="examples/absolute-positioning.svg" target="_blank">absolute-positioning.svg</a>, in which the blue circle is before the gold square in document order, but is positioned to the right of it in  rendering order:</p>
+        <p>SVG's <b>absolute positioning</b> layout means that each element is positioned precisely by its geometric (e.g. <code>x,y</code>) description, and that this position is not affected by any other element; this is unlike the common case in CSS, where adding content “pushes” the content after it in document order to a new position. SVG's absolute positioning is shown in the following example, <a href="examples/absolute-positioning.svg" target="_blank">absolute-positioning.svg</a>, in which the group with the blue circle (labeled <i>1</i>) is before the gold square (labeled <i>2</i>) in document order, but is positioned to the right of it in  rendering order:</p>
 
         <pre class="example highlight" data-include="examples/absolute-positioning.svg" data-include-format="text"></pre>
-        <img src="examples/absolute-positioning.svg" width="300" height="300"></p>
+        <object data="examples/absolute-positioning.svg" width="300" height="300"> </object>
 
         <p>The <b>painter's model</b> means that the first element in the document is rendered first, the second element is rendered next, and so on, with each element that overlaps a previous element being drawn “on top” of that previous element, like the following example, <a href="examples/painters-model.svg" target="_blank">painters-model.svg</a>, in which the first element, a yellow square, is overlaid by the second element, a blue circle, which in turn is overlaid by the third element, a green line (hovering over each element will show the element below):</p>
 
         <pre class="example highlight" data-include="examples/painters-model.svg" data-include-format="text"></pre>
-        <iframe src="examples/painters-model.svg" width="300" height="300" style="border: 0"> </iframe>
+        <object data="examples/painters-model.svg" width="300" height="300"> </object>
 
         <p>The combination of absolute positioning and painter's model lead to a circumstance where it is relatively easy for authors to inadvertently misorder the reading flow of a document. This risk is increased when the “invisible metadata” of the <code>title</code> and <code>desc</code> elements is added to the document, since it is easy for authors to overlook how the sequence of “hidden” text will flow with any visible text, or flow between multiple sets of “hidden” text.</p>
 
         <p>A bad document reading order is illustrated in this example, <a href="examples/document-order-bad.svg" target="_blank">document-order-bad.svg</a>:</p>
 
         <pre class="example highlight" data-include="examples/document-order-bad.svg" data-include-format="text"></pre>
-        <img src="examples/document-order-bad.svg" width="300" height="300">
+        <object data="examples/document-order-bad.svg" width="300" height="300"> </object>
 
         <p>Though it is rendered in a logical order, the document reading order is #2, then #4, then #1, then #3, then the names of the fruits. This is corrected in the following example, <a href="examples/document-order-good.svg" target="_blank">document-order-good.svg</a>, in which the reading order and the rendering order are aligned:</p>
 
         <pre class="example highlight" data-include="examples/document-order-good.svg" data-include-format="text"></pre>
-        <img src="examples/document-order-good.svg" width="300" height="300">
+        <object data="examples/document-order-good.svg" width="300" height="300"> </object>
 
         <p>A simple way to check the reading order of the document is to “select all” in your SVG document in the browser, and paste it into a text file. If the resulting text makes sense in this text file, then then reading order of your SVG document is acceptable. Note that not all browsers include titles in a selection, so account for them separately.</p>
 
@@ -231,7 +254,7 @@
         <p>The <code class="element">textPath</code> element even permits text to run along the stroke of an SVG shape, something not possible in HTML alone, as in this example, <a href="examples/textpath.svg" target="_blank">textpath.svg</a>:</p>
 
         <pre class="example highlight" data-include="examples/textpath.svg" data-include-format="text"></pre>
-        <img src="examples/textpath.svg" width="500" height="150"> 
+        <object data="examples/textpath.svg" width="500" height="150"> </object>
 
         <p>Additionally, text is convenient for authoring, because it can be changed quickly and easily. The words themselves can be changed with little effort, and Web fonts afford a wide variety of styles that can substitute for logos or other stylized text.</p>
 
@@ -352,7 +375,6 @@
 &lt;svg viewBox="0 0 150 70"&gt;
         </pre> 
 
-
         <p class="warning">Because SVG is case-sensitive (a legacy of its XML origins), the attribute <code>viewBox</code> must have a capital “B”. It's a common mistake to type <code>viewbox</code> instead, which is easily overlooked and frustrates debugging. SVG uses a mix of attribute-name delimiters, including medial camelCase (“viewBox”), lower-case compound (“viewbox”), and kebab-case (“view-box”), so this is a common error. We're sorry about that.</p>
 
         <p class="note">We explore the <code>viewBox</code> attribute more in the section on <a href="#icons-and-symbols">Icons and Symbols</a>.</p>
@@ -362,16 +384,32 @@
         <p>In this example, we show an auto-sizing SVG in an HTML <code>img</code> element at half-size, full-size, double-size, and triple-size, all referencing the same SVG document, <a href="examples/auto-resizable.svg" target="_blank">auto-resizable.svg</a>:</p>
 
         <pre class="example highlight" data-include="examples/auto-resizable.svg" data-include-format="text"></pre>
-        <img src="examples/auto-resizable.svg" width="75px" height="40px"> 
-        <img src="examples/auto-resizable.svg" width="150px" height="80px"> 
-        <img src="examples/auto-resizable.svg" width="300px" height="160px"> 
-        <img src="examples/auto-resizable.svg" width="450px" height="240px"> 
+        <object data="examples/auto-resizable.svg" width="75px" height="40px"> </object> 
+        <object data="examples/auto-resizable.svg" width="150px" height="80px"> </object> 
+        <object data="examples/auto-resizable.svg" width="300px" height="160px"> </object> 
+        <object data="examples/auto-resizable.svg" width="450px" height="240px"> </object> 
 
         <p class="note">Note that although vector images have crisp borders and lines at all sizes, there are still perceivable differences at different sizes. For example, a curved corner may appear too rounded and text may appear too large if a small icon is displayed at a large size, or a complex image may appear more cluttered and hard to distinguish if displayed at a small size. Some of these <i>vector artifacts</i> may be reduced by changing styling or hiding or showing different elements at different sizes, using Media Queries as described in the section on <a href="#responsive-images">Responsive Images</a>.</p>
 
 
         <p class="note"><span class="accessibility-tip">Accessibility Tip:</span> Making images auto-scaling can help users with low vision or mobility issues, since they can increase the size of the image to suit their needs, making it easier to see details or to click on interactive elements.</p>
 
+        <h4>Fixed Sizes</h4>
+        <p>Using fixed dimensions rather than auto-sizing does have some use cases
+        * print and units
+        * intrinsic size in HTML when no sizing defined (CSS default is 300x150)
+
+        This differences are illustrated in these two examples, where no dimensions are specified in the img, with the first SVG using fixed dimensions (with intrisic width and height of <code>200px</code> by <code>200px</code>) and the second SVG using auto-sizing (with the CSS default width and height in HTML of <code>300px</code> by <code>150px</code>):</p>
+
+        <figure>
+          <object data="examples/fixed-size.svg"> </object> 
+          <figcaption>SVG with fixed dimensions</figcaption>
+        </figure>
+
+        <figure>
+            <object data="examples/auto-size.svg"> </object> 
+          <figcaption>SVG with auto-sizing</figcaption>
+        </figure>
       </article>
 
       <article>
@@ -390,6 +428,86 @@
         <p>.</p>
 
         <p class="note">TODO: talk about distraction, epilepsy, and slow movement</p>
+      </article>
+
+      <article>
+        <h3>ARIA: Markup Attributes for Accessible Rich Internet Applications</h3>
+        <p>.</p>
+
+        <p class="note">TODO: talk about ARIA</p>
+      </article>
+
+      <article>
+        <h3>SVG in HTML</h3>
+          <p>There are 5 main ways to use SVG in HTML content: inclusion in <a href="inline-svg">inline markup</a>; referenced in the <a href="#svg-in-object"><code>object</code></a> element; referenced in the <a href="#svg-in-img"><code>img</code></a> element; referenced in the <a href="#svg-in-iframe"><code>iframe</code></a> element; or referenced as a <a href="svg-in-css-background">CSS background</a>.</p>
+
+          <p>Inline SVG in HTML results in a single hybrid HTML+SVG document. This has the advantages that the image is carried along with the document, so it can't be lost when moving the file around (the same advatage that inline CSS has over an external stylesheet), and that the SVG can share the same scripts and styles that are applied to the HTML content (that is, they share the same DOM).</p>
+            
+          <p>All the other methods (linked by <code>object</code>, <code>img</code>, or <code>iframe</code> elements or in CSS) assume an external SVG file, referenced like any other image format (such as PNG or JPEG). External SVGs have a few advantages, including the ability to easily swap out the image, to use the image in multiple files (taking advantage of caching), to use the image as a standalone SVG (that is, as an image outside any HTML), and to isolate the SVG DOM from HTML for easier scripting and styling or for security or privacy.</p>
+
+        <article>
+          <h4 id="inline-svg">Inline SVG in HTML</h4>
+          <p>Inline SVG in HTML .</p>
+          <p>The example <a href="examples/inline-svg.html" target="_blank">inline-svg.html</a> shows an inline SVG with styles applied from CSS in the HTML head:</p>
+
+          <pre class="example highlight" data-include="examples/inline-svg.html" data-include-format="text"></pre>
+          <iframe src="examples/inline-svg.html" width="510" height="510" style="border: thin black solid; overflow:hidden;"> </iframe>
+        </article>
+
+        <article>
+          <h4 id="svg-in-object">SVG in the <code>object</code> element</h4>
+          <p>This example <a href="examples/svg-in-object.html" target="_blank">svg-in-object.html</a> shows an external SVG referenced with the <code>object</code> element:</p>
+
+          <pre class="example highlight" data-include="examples/svg-in-object.html" data-include-format="text"></pre>
+          <iframe src="examples/svg-in-object.html" width="520" height="600" style="border: thin black solid; overflow:hidden;"> </iframe>
+
+          <p>The <code>object</code> element is the preferred way to reference an external SVG. Using the <code>object</code> or <code>iframe</code> elements allow text search and selection, interactivity on a per-element level, and the execution of script, which aren't currently allowed using the <code>img</code> element. This is illustrated in these two examples, the first using &lt;object&gt; and the second using &lt;img&gt;</p>
+
+          <figure>
+            <object data="examples/orbits.svg" width="300" height="300"> </object> 
+            <figcaption>SVG in &lt;object&gt;</figcaption>
+          </figure>
+
+          <figure>
+            <img src="examples/orbits.svg" width="300" height="300" />
+            <figcaption>SVG in &lt;img&gt;</figcaption>
+          </figure>
+          
+          <p>In comparison to the <code>iframe</code> element, the <code>object</code> element doesn't have a default border, and also scales to matches the intrinsic size and dimensions of the SVG content, while the <code>iframe</code> size is determined by styles in the HTML page. This is illustrated in these two examples, which have no CSS sizing defined:, the first using &lt;object&gt; and the second using &lt;iframe&gt; (which uses the CSS default width and height of <code>300px</code> by <code>150px</code>):</p>
+
+          <figure>
+            <object data="examples/fixed-size.svg"> </object> 
+            <figcaption>SVG in &lt;object&gt;</figcaption>
+          </figure>
+
+          <figure>
+            <iframe src="examples/fixed-size.svg"> </iframe>
+            <figcaption>SVG in &lt;iframe&gt;</figcaption>
+          </figure>
+        </article>
+
+        <article>
+          <h4 id="svg-in-img">SVG in the <code>img</code> element</h4>
+          <p>The <code>img</code> element is another common way to reference an external SVG. The advantage of <code>img</code> is that many graphical authoring tools and environments support the insertion of <code>img</code> element, and may not support inserting the <code>object</code> element.</p>
+
+          <p>The example <a href="examples/svg-in-img.html" target="_blank">svg-in-img.html</a> shows an external SVG referenced with the <code>img</code> element:</p>
+
+
+          <pre class="example highlight" data-include="examples/svg-in-img.html" data-include-format="text"></pre>
+          <iframe src="examples/svg-in-img.html" width="520" height="600" style="border: thin black solid; overflow:hidden;"> </iframe>
+        </article>
+
+        <article>
+          <h4 id="svg-in-iframe">SVG in the <code>iframe</code> element</h4>
+          <p>The <code>iframe</code> element is another way to reference an external SVG.</p>
+
+          <p>As with the <code>object</code> element, the <code>iframe</code> element allows text search and selection, interactivity on a per-element level, and the execution of script, which aren't currently possible with the <code>img</code> element. However, for SVG, there are no advantages to using the <code>iframe</code> element over the <code>object</code> element, and there are some disadvantages. As mentioned before, the <code>iframe</code> element has a border as the default style, which is not normally desirable, and the <code>iframe</code> size is determined by styles in the HTML page, rather than using the intrinsic size and dimensions of the SVG content. So, it's recommended to use <code>object</code> instead of <code>iframe</code>.</p>
+
+          <p>The example <a href="examples/svg-in-iframe.html" target="_blank">svg-in-iframe.html</a> shows an external SVG referenced with the <code>iframe</code> element:</p>
+
+          <pre class="example highlight" data-include="examples/svg-in-iframe.html" data-include-format="text"></pre>
+          <iframe src="examples/svg-in-iframe.html" width="520" height="600" style="border: thin black solid; overflow:hidden;"> </iframe>
+        </article>
       </article>
 
       <article>
@@ -434,17 +552,17 @@
           <p>The <code>use</code> element lets you position icons and symbols, as in this example, <a href="examples/use-element-1.svg" target="_blank">use-element-1.svg</a>:</p>
 
           <pre class="example highlight" data-include="examples/use-element-1.svg" data-include-format="text"></pre>
-          <img src="examples/use-element-1.svg" width="360px" height="360px"> 
+          <object data="examples/use-element-1.svg" width="360px" height="360px"> </object> 
 
           <p>However, you can see that the <code>x,y</code> position in the <code>use</code> element is still based on the top-left coordinates of the symbol being referenced, illustrated in this example, <a href="examples/use-element-2.svg" target="_blank">use-element-2.svg</a>, where the red dot indicates the <code>use</code> element's <code>x,y</code> position:</p>
 
           <pre class="example highlight" data-include="examples/use-element-2.svg" data-include-format="text"></pre>
-          <img src="examples/use-element-2.svg" width="360px" height="360px"> 
+          <object data="examples/use-element-2.svg" width="360px" height="360px"> </object> 
 
           <p>This is often inconvenient for positioning elements, because if you want the symbol centered on a specific <code>x,y</code> position, you have to calculate the position based on the symbol's width and height; this is problematic since the size of a symbol may change, especially if you're trying to position several different symbols using the same preset variables. To counter this, you can position the original referenced symbol at the <code>0,0</code> origin, so when it's referenced, it centers perfectly with the <code>use</code> element's <code>x,y</code> position, shown in this contrasting example, <a href="examples/centered-symbol.svg" target="_blank">centered-symbol.svg</a>, where a red dot indicates each <code>use</code> element's <code>x,y</code> position:</p>
 
           <pre class="example highlight" data-include="examples/centered-symbol.svg" data-include-format="text"></pre>
-          <img src="examples/centered-symbol.svg" width="360px" height="360px"> 
+          <object data="examples/centered-symbol.svg" width="360px" height="360px"> </object> 
 
           <p class="note"><span class="animation-tip">Animation Tip:</span> Using <code>0,0</code> as the shape's local origin makes it much easier to apply transformations for animations, especially rotation transformations.</p>
         </article>
