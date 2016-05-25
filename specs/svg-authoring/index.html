@@ -3,8 +3,8 @@
   <head lang="en">
     <title>SVG Authoring Guide</title>
     <meta charset="utf-8">
-    <script src="http://www.w3.org/Tools/respec/respec-w3c-common" async class='remove'></script>
-    <!-- <script src="_ignore/respec-w3c-common.js" async class='remove'></script> -->
+    <!-- <script src="http://www.w3.org/Tools/respec/respec-w3c-common" async class='remove'></script> -->
+    <script src="_ignore/respec-w3c-common.js" async class='remove'></script>
     <script class="remove">
       var respecConfig = {
           specStatus:           "ED",
@@ -125,8 +125,14 @@
         <dt id="def-screenreader">screenreader:</dt>
           <dd>A screenreader is an assistive technology user agent that identifies, interprets, and transforms the content of the document or webapp into a form that is more easily consumable for its user. Typically, a screenreader converts the content into text-to-speech, Braille output devices, or sound icons for use by people who are blind, visually impaired, illiterate, or learning disabled. Screenreaders are usually controlled through keyboard access, such as serial tab navigation and keyboard shortcuts, and sometimes used in combination with other assistive technology such as screen magnifiers.</dd>
 
-        <dt></dt>
+        <dt id="def-replaced-element">replaced element</dt>
+          <dd>An HTML replaced element is an element which has its content replaced by an external source. Replaced elements include <code>img</code>, <code>object</code>, <code>iframe</code>, and <code>video</code>. Replaced elements have a default predetermined width of <code>300px</code> and height of <code>150px</code>.</dd>
+
+        <dt id="def-"></dt>
           <dd></dd>
+
+
+          “any tag ”. <img> and <video>
       </dl>    
     </section>
     
@@ -279,7 +285,15 @@
 &lt;/path&gt;
         </pre> 
 
-        <p>Screenreaders will treat the content of the <code>title</code> element as the “accessible name” in the accessibility tree.</p>
+        <p>Screenreaders should treat the content of the <code>title</code> element as the “accessible name” in the accessibility tree. Unfortunately, due to inconsistencies in current browsers and screenreaders, the <code>title</code> element is not yet consistently supported, so for now if you want your SVG to be accessible you also need to give the <code>title</code> an <code>id</code> attribute, and point to it with the <code>aria-labelledby</code> attribute, as in this example, <a href="examples/title.svg" target="_blank">title.svg</a>:</p>
+
+        <pre class="example highlight" data-include="examples/title.svg" data-include-format="text"></pre>
+        <object data="examples/title.svg" width="200px" height="200px"> </object> 
+
+        <p>Similar to HTML, you can give the entire document a title by using a <code>title</code> as the first child element of the root <code>svg</code> element, as show in the last example. You should always give your SVG document a title in this way.</p>
+
+        <p class="note">Most of the examples in this document don't include a root <code>title</code> element, for the sake of simplicity and clarity of the specific technique, but this should be an exception.</p>
+
 
         <p>Whenever possible, authors should use a visible <code>text</code> element to provide a label, for affordance for all users. Authors must not duplicate the text of a <code>text</code> element in a related <code>title</code> element, since that will be distracting, confusing, annoying, and counterproductive for screenreader users.</p>
 
@@ -318,7 +332,7 @@
 
         <p>The <code>a</code> and <code>text</code> elements are focusable by default.</p>
 
-        <p>All other elements, if they are to be focusable, must be have a <code>tab-index</code> attribute, with a positive value; generally, the value should be <code>1</code>. SVG also includes a <code>focusable</code> attribute and property, but this is not well supported across browsers, and <code>tab-index</code> should be preferred for now.</p>
+        <p>All other elements, if they are to be focusable, must be have a <code>tabindex</code> attribute, with a positive value; generally, the value should be <code>0</code>. SVG also includes a <code>focusable</code> attribute and property, but this is not well supported across browsers, and <code>tabindex</code> should be preferred for now.</p>
 
         <p>In addition to being focusable, authors should make sure interactive elements are large enough for selection and activation by small-device users and users with unsteady hands.</p>
 
@@ -381,7 +395,7 @@
 
 
         <h4>Resizability Example</h4>
-        <p>In this example, we show an auto-sizing SVG in an HTML <code>img</code> element at half-size, full-size, double-size, and triple-size, all referencing the same SVG document, <a href="examples/auto-resizable.svg" target="_blank">auto-resizable.svg</a>:</p>
+        <p>In this example, we show an auto-sizing SVG in an HTML <code>object</code> element at half-size, full-size, double-size, and triple-size, all referencing the same SVG document, <a href="examples/auto-resizable.svg" target="_blank">auto-resizable.svg</a>:</p>
 
         <pre class="example highlight" data-include="examples/auto-resizable.svg" data-include-format="text"></pre>
         <object data="examples/auto-resizable.svg" width="75px" height="40px"> </object> 
@@ -395,11 +409,7 @@
         <p class="note"><span class="accessibility-tip">Accessibility Tip:</span> Making images auto-scaling can help users with low vision or mobility issues, since they can increase the size of the image to suit their needs, making it easier to see details or to click on interactive elements.</p>
 
         <h4>Fixed Sizes</h4>
-        <p>Using fixed dimensions rather than auto-sizing does have some use cases
-        * print and units
-        * intrinsic size in HTML when no sizing defined (CSS default is 300x150)
-
-        This differences are illustrated in these two examples, where no dimensions are specified in the img, with the first SVG using fixed dimensions (with intrisic width and height of <code>200px</code> by <code>200px</code>) and the second SVG using auto-sizing (with the CSS default width and height in HTML of <code>300px</code> by <code>150px</code>):</p>
+        <p>Using fixed dimensions rather than auto-sizing does have some use cases, including specifying print sizes in real-world units, and seting intrinsic size for use in HTML when no sizing is defined in HTML or CSS (noting the width and height defaults of <code>300px</code> by <code>150px</code> for <a href="#def-replaced-element">replaced elements</a> in HTML). This differences between auto-sized and fixed-size SVGs are illustrated in these two examples, where no dimensions are specified in the <code>object</code>, with the first SVG using fixed dimensions (with intrisic width and height of <code>200px</code> by <code>200px</code>) and the second SVG using auto-sizing (with the default width and height of <code>300px</code> by <code>150px</code>):</p>
 
         <figure>
           <object data="examples/fixed-size.svg"> </object> 
@@ -414,11 +424,28 @@
 
       <article>
         <h3>Responsive Images</h3>
-        <p>.</p>
+        <p>A responsive image is one which adapts to best fit the display device's capabilities, whether different sizes, resolutions, orientation (e.g. portrait or landscape), or color ranges (e.g. color or grayscale). One approach to creating responsive images is to use a <i>media query</i>, which is a CSS mechanism that allows a document to have different style rules based on different media features, such as width, height, color, display orientation, and resolution. SVG's scalable nature makes styling things based on sizing a natural fit in particular, though other factors, such as orientation or color gamut are also useful with SVG.</p>
 
-        <p class="note">TODO: add media query example</p>
+        <p>For instance, some images look good at a large size, but at a small size the <code>stroke-width</code> becomes too thin and there isn't enough visual contrast, as in the following example, <a href="examples/clock-non-responsive.svg" target="_blank">clock-non-responsive.svg</a>, referenced at two different sizes via <code>object</code> elements:</p>
 
-        <p class="note">Note that Media Queries may not work in all authoring tools.</p>
+        <pre class="example highlight" data-include="examples/clock-non-responsive.svg" data-include-format="text"></pre>
+        <object data="examples/clock-non-responsive.svg" width="200px" height="200px"> </object> 
+        <object data="examples/clock-non-responsive.svg" width="40px" height="30px"> </object> 
+
+        <p>While the <code>stroke-width</code> remains constant relative to the the other details of the image, such as the radius of the circle, it now appears too thin. To address this perception issue, you can use media queries to increase the <code>stroke-width</code> of an SVG icon when it's shown at small sizes, to enhance the visual contrast and make certain details more distinct. We illustrate this in the following example, <a href="examples/clock-responsive-0.svg" target="_blank">clock-responsive-0.svg</a>, referenced at two different sizes via <code>object</code> elements:</p>
+
+        <pre class="example highlight" data-include="examples/clock-responsive-0.svg" data-include-format="text"></pre>
+        <object data="examples/clock-responsive-0.svg" width="200px" height="200px"> </object> 
+        <object data="examples/clock-responsive-0.svg" width="40px" height="30px"> </object> 
+
+        <p>Building on this example further, sometimes at large sizes (or "close up" zoomed images) you want more detail, but at small sizes (or "further away"), these extra details simply clutter up the image, detracting from it rather than enhancing it. Adding and removing detail based on size (or "nearness") is known as "level of detail" or <abbr title="level of detail">LOD</abbr>. To achieve <abbr title="level of detail">LOD</abbr> in SVG with media queries, in addition to changing <code>stroke-width</code>, you can change other styling characteristics, such as <code>fill</code> (a more complex gradient versus a simple flat color versus high-contrast colors), markers (such as arrowheads on the end of a line), or simply toggling the visibility of particular parts of the image (such as showing numbers at large sizes, tick marks at smaller sizes, and nothing at all at very small sizes). The the following more complex example, <a href="examples/clock-responsive-1.svg" target="_blank">clock-responsive-1.svg</a>, we illustrate some of these techniques in the same SVG image at three different sizes:</p>
+
+        <pre class="example highlight" data-include="examples/clock-responsive-1.svg" data-include-format="text"></pre>
+        <object data="examples/clock-responsive-1.svg" width="200px" height="200px"> </object> 
+        <object data="examples/clock-responsive-1.svg" width="80px" height="80px"> </object> 
+        <object data="examples/clock-responsive-1.svg" width="40px" height="30px"> </object> 
+
+        <p class="note">Note that Media Queries may not work in all SVG authoring tools. For example, opening a responsive SVG in Adobe Illustrator or Inkscape may not display the expected results.</p>
 
         <p class="note">We explore the <code>viewBox</code> attribute more in the section on <a href="#resizability">Resizability</a>.</p>
       </article>
@@ -439,11 +466,11 @@
 
       <article>
         <h3>SVG in HTML</h3>
-          <p>There are 5 main ways to use SVG in HTML content: inclusion in <a href="inline-svg">inline markup</a>; referenced in the <a href="#svg-in-object"><code>object</code></a> element; referenced in the <a href="#svg-in-img"><code>img</code></a> element; referenced in the <a href="#svg-in-iframe"><code>iframe</code></a> element; or referenced as a <a href="svg-in-css-background">CSS background</a>.</p>
+          <p>There are 5 main ways to use SVG in HTML content: inclusion in <a href="inline-svg">inline markup</a>; referenced in the <a href="#svg-in-object"><code>object</code></a> element; referenced in the <a href="#svg-in-img"><code>img</code></a> element; referenced in the <a href="#svg-in-iframe"><code>iframe</code></a> element; or referenced as a <a href="#svg-in-css-background">CSS background</a>.</p>
 
-          <p>Inline SVG in HTML results in a single hybrid HTML+SVG document. This has the advantages that the image is carried along with the document, so it can't be lost when moving the file around (the same advatage that inline CSS has over an external stylesheet), and that the SVG can share the same scripts and styles that are applied to the HTML content (that is, they share the same DOM).</p>
+          <p>Inline SVG in HTML results in a single hybrid HTML+SVG document. This has the advantages that the image is carried along with the document, so it can't be lost when moving the file around (the same advantage that inline CSS has over an external stylesheet), and that the SVG can share the same scripts and styles that are applied to the HTML content (that is, they share the same DOM).</p>
             
-          <p>All the other methods (linked by <code>object</code>, <code>img</code>, or <code>iframe</code> elements or in CSS) assume an external SVG file, referenced like any other image format (such as PNG or JPEG). External SVGs have a few advantages, including the ability to easily swap out the image, to use the image in multiple files (taking advantage of caching), to use the image as a standalone SVG (that is, as an image outside any HTML), and to isolate the SVG DOM from HTML for easier scripting and styling or for security or privacy.</p>
+          <p>All the other methods (linked by <code>object</code>, <code>img</code>, or <code>iframe</code> <a href="#def-replaced-element">replaced elements</a> or in CSS) assume an external SVG file, referenced like any other image format (such as PNG or JPEG). External SVGs have a few advantages, including the ability to easily swap out the image, to use the image in multiple files (taking advantage of caching), to use the image as a standalone SVG (that is, as an image outside any HTML), and to isolate the SVG DOM from HTML for easier scripting and styling or for security or privacy.</p>
 
         <article>
           <h4 id="inline-svg">Inline SVG in HTML</h4>
@@ -473,7 +500,7 @@
             <figcaption>SVG in &lt;img&gt;</figcaption>
           </figure>
           
-          <p>In comparison to the <code>iframe</code> element, the <code>object</code> element doesn't have a default border, and also scales to matches the intrinsic size and dimensions of the SVG content, while the <code>iframe</code> size is determined by styles in the HTML page. This is illustrated in these two examples, which have no CSS sizing defined:, the first using &lt;object&gt; and the second using &lt;iframe&gt; (which uses the CSS default width and height of <code>300px</code> by <code>150px</code>):</p>
+          <p>In comparison to the <code>iframe</code> element, the <code>object</code> element doesn't have a default border, and also scales to matches the intrinsic size and dimensions of the SVG content, while the <code>iframe</code> size is determined by styles in the HTML page. This is illustrated in these two examples, which have no CSS sizing defined:, the first using &lt;object&gt; and the second using &lt;iframe&gt; (which uses the default width and height of <code>300px</code> by <code>150px</code> for <a href="#def-replaced-element">replaced elements</a> in HTML):</p>
 
           <figure>
             <object data="examples/fixed-size.svg"> </object> 
@@ -507,6 +534,18 @@
 
           <pre class="example highlight" data-include="examples/svg-in-iframe.html" data-include-format="text"></pre>
           <iframe src="examples/svg-in-iframe.html" width="520" height="600" style="border: thin black solid; overflow:hidden;"> </iframe>
+        </article>
+
+        <article>
+          <h4 id="svg-in-css-background">SVG as a CSS background</a></h4>
+          <p>Another method to reference an external SVG in HTML is by specifying SVG as a background image in CSS, which can be applied to any HTML element.</p>
+
+          <p>As with the <code>img</code> element, SVG's used as a background image don't allow text search and selection, interactivity on a per-element level, or the execution of script.</p>
+
+          <p>The example <a href="examples/svg-in-css-background.html" target="_blank">svg-in-css-background.html</a> shows an external SVG referenced as a CSS background image:</p>
+
+          <pre class="example highlight" data-include="examples/svg-in-css-background.html" data-include-format="text"></pre>
+          <iframe src="examples/svg-in-css-background.html" width="520" height="600" style="border: thin black solid; overflow:hidden;"> </iframe>
         </article>
       </article>
 
