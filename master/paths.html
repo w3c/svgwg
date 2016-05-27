@@ -950,127 +950,112 @@ it is possible to set the bearing to that tangent by using
 
 <h3 id="PathDataBNF">The grammar for path data</h3>
 
-<p class="issue" data-issue="13">Update for new 'Z'/'z' behavior.</p>
-
 <p>SVG path data matches the following EBNF grammar.</p>
+<pre class='grammar' class='ready-for-wg-review'>
+svg_path::= wsp* moveto? (moveto drawto_command*)?
 
-<pre class='grammar'>
-svg-path:
-    <a>wsp</a>* moveto-drawto-command-groups? <a>wsp</a>*
-moveto-drawto-command-groups:
-    moveto-drawto-command-group
-    | moveto-drawto-command-group <a>wsp</a>* moveto-drawto-command-groups
-moveto-drawto-command-group:
-    moveto <a>wsp</a>* drawto-commands?
-drawto-commands:
-    drawto-command
-    | drawto-command <a>wsp</a>* drawto-commands
-drawto-command:
-    closepath
+drawto_command::=
+    moveto
+    | closepath
     | lineto
-    | horizontal-lineto
-    | vertical-lineto
+    | horizontal_lineto
+    | vertical_lineto
     | curveto
-    | smooth-curveto
-    | quadratic-bezier-curveto
-    | smooth-quadratic-bezier-curveto
-    | elliptical-arc
+    | smooth_curveto
+    | quadratic_bezier_curveto
+    | smooth_quadratic_bezier_curveto
+    | elliptical_arc
     | bearing
-moveto:
-    ( "M" | "m" ) <a>wsp</a>* moveto-argument-sequence
-moveto-argument-sequence:
-    coordinate-pair
-    | coordinate-pair <a>comma-wsp</a>? lineto-argument-sequence
-closepath:
+
+moveto::=
+    ( "M" | "m" ) wsp* coordinate_pair_sequence wsp* closepath?
+
+closepath::= 
     ("Z" | "z")
-lineto:
-    ( "L" | "l" ) <a>wsp</a>* lineto-argument-sequence
-lineto-argument-sequence:
-    coordinate-pair
-    | coordinate-pair <a>comma-wsp</a>? lineto-argument-sequence
-horizontal-lineto:
-    ( "H" | "h" ) <a>wsp</a>* horizontal-lineto-argument-sequence
-horizontal-lineto-argument-sequence:
-    coordinate
-    | coordinate <a>comma-wsp</a>? horizontal-lineto-argument-sequence
-vertical-lineto:
-    ( "V" | "v" ) <a>wsp</a>* vertical-lineto-argument-sequence
-vertical-lineto-argument-sequence:
-    coordinate
-    | coordinate <a>comma-wsp</a>? vertical-lineto-argument-sequence
-curveto:
-    ( "C" | "c" ) <a>wsp</a>* curveto-argument-sequence
-curveto-argument-sequence:
-    curveto-argument
-    | curveto-argument <a>comma-wsp</a>? curveto-argument-sequence
-curveto-argument:
-    coordinate-pair <a>comma-wsp</a>? coordinate-pair <a>comma-wsp</a>? coordinate-pair
-smooth-curveto:
-    ( "S" | "s" ) <a>wsp</a>* smooth-curveto-argument-sequence
-smooth-curveto-argument-sequence:
-    smooth-curveto-argument
-    | smooth-curveto-argument <a>comma-wsp</a>? smooth-curveto-argument-sequence
-smooth-curveto-argument:
-    coordinate-pair <a>comma-wsp</a>? coordinate-pair
-quadratic-bezier-curveto:
-    ( "Q" | "q" ) <a>wsp</a>* quadratic-bezier-curveto-argument-sequence
-quadratic-bezier-curveto-argument-sequence:
-    quadratic-bezier-curveto-argument
-    | quadratic-bezier-curveto-argument <a>comma-wsp</a>?
-        quadratic-bezier-curveto-argument-sequence
-quadratic-bezier-curveto-argument:
-    coordinate-pair <a>comma-wsp</a>? coordinate-pair
-smooth-quadratic-bezier-curveto:
-    ( "T" | "t" ) <a>wsp</a>* smooth-quadratic-bezier-curveto-argument-sequence
-smooth-quadratic-bezier-curveto-argument-sequence:
-    coordinate-pair
-    | coordinate-pair <a>comma-wsp</a>? smooth-quadratic-bezier-curveto-argument-sequence
-elliptical-arc:
-    ( "A" | "a" ) <a>wsp</a>* elliptical-arc-argument-sequence
-elliptical-arc-argument-sequence:
-    elliptical-arc-argument
-    | elliptical-arc-argument <a>comma-wsp</a>? elliptical-arc-argument-sequence
-elliptical-arc-argument:
-    number <a>comma-wsp</a>? number <a>comma-wsp</a>?
-        number <a>comma-wsp</a> flag <a>comma-wsp</a>? flag <a>comma-wsp</a>? coordinate-pair
-bearing:
-    ( "B" | "b" ) <a>wsp</a>* bearing-argument-sequence
-bearing-argument-sequence:
-    number
-    | number <a>comma-wsp</a>? bearing-argument-sequence
-coordinate-pair:
-    coordinate <a>comma-wsp</a>? coordinate
-coordinate:
-    number
-nonnegative-number:
-    integer-constant
-    | floating-point-constant
-number:
-    sign? integer-constant
-    | sign? floating-point-constant
-flag:
-    "0" | "1"
-integer-constant:
-    digit-sequence
-floating-point-constant:
-    fractional-constant exponent?
-    | digit-sequence exponent
-fractional-constant:
-    digit-sequence? "." digit-sequence
-    | digit-sequence "."
-exponent:
-    ( "e" | "E" ) sign? digit-sequence
-sign:
-    "+" | "-"
-digit-sequence:
-    digit
-    | digit digit-sequence
-digit:
-    "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+
+lineto::=
+    ("L"|"l") wsp* (coordinate_pair_sequence | closepath)
+
+horizontal_lineto::=
+    ("H"|"h") wsp* coordinate_sequence
+
+vertical_lineto::=
+    ("V"|"v") wsp* coordinate_sequence
+
+curveto::=
+    ("C"|"c") wsp* (curveto_coordinate_sequence | (coordinate_pair_sequence? closepath))
+
+curveto_coordinate_sequence::=
+    coordinate_pair_triplet
+    | (coordinate_pair_triplet comma_wsp? curveto_coordinate_sequence)
+
+smooth_curveto::=
+    ("S"|"s") wsp* (smooth_curveto_coordinate_sequence
+    | (coordinate_pair_sequence? closepath))
+
+smooth_curveto_coordinate_sequence::=
+    coordinate_pair_double
+    | (coordinate_pair_double comma_wsp? smooth_curveto_coordinate_sequence)
+
+quadratic_bezier_curveto::=
+    ("Q"|"q") wsp*
+    (quadratic_bezier_curveto_coordinate_sequence | (coordinate_pair_sequence? closepath))
+
+quadratic_bezier_curveto_coordinate_sequence::=
+    coordinate_pair_double
+    | (coordinate_pair_double comma_wsp? quadratic_bezier_curveto_coordinate_sequence)
+
+smooth_quadratic_bezier_curveto::=
+    ("T"|"t") wsp* (coordinate_pair_sequence | closepath)
+
+elliptical_arc::=
+    ( "A" | "a" ) wsp*
+    (elliptical_arc_argument_sequence
+    | (elliptical_arc_argument_sequence? elliptical_arc_closing_argument))
+
+elliptical_arc_argument_sequence::=
+    elliptical_arc_argument
+    | (elliptical_arc_argument comma_wsp? elliptical_arc_argument_sequence)
+
+elliptical_arc_argument::=
+    number comma_wsp? number comma_wsp? number comma_wsp
+    flag comma_wsp? flag comma_wsp? coordinate_pair
+
+elliptical_arc_closing_argument::=
+    number comma_wsp? number comma_wsp? number comma_wsp
+    flag comma_wsp? flag comma_wsp? closepath
+
+bearing::=
+    ( "B" | "b" ) wsp* bearing_argument_sequence
+
+bearing_argument_sequence::=
+    number | (number comma_wsp? bearing_argument_sequence)
+
+coordinate_pair_double::=
+    coordinate_pair comma_wsp? coordinate_pair
+
+coordinate_pair_triplet::=
+    coordinate_pair comma_wsp? coordinate_pair comma_wsp? coordinate_pair
+
+coordinate_pair_sequence::=
+    coordinate_pair | (coordinate_pair comma_wsp? coordinate_pair_sequence)
+
+coordinate_sequence::=
+    coordinate | (coordinate comma_wsp? coordinate_sequence)
+
+coordinate_pair::= coordinate comma_wsp? coordinate
+
+coordinate::= sign? number
+
+sign::= "+"|"-"
+number ::= ([0-9])+
+flag::=("0"|"1")
+comma_wsp::=(wsp+ ","? wsp*) | ("," wsp*)
+wsp ::= (#x9 | #x20 | #xA | #xC | #xD)
 </pre>
 
-<p>The processing of the BNF must consume as much of a given
-BNF production as possible, stopping at the point when a
+<p>The processing of the EBNF must consume as much of a given
+EBNF production as possible, stopping at the point when a
 character is encountered which no longer satisfies the
 production. Thus, in the string "M 100-200", the first
 coordinate for the "moveto" consumes the characters "100" and
@@ -1086,7 +1071,7 @@ a "coordinate" only allows one decimal point. The result is
 that the first coordinate will be "0.6" and the second
 coordinate will be ".5".</p>
 
-<p>Note that the BNF allows the path data string in the
+<p>Note that the EBNF allows the path data string in the
 <a>'d'</a> property to be empty. This is not
 an error, instead it disables rendering of the path.
 Rendering is also disabled when the <a>'d'</a> property
