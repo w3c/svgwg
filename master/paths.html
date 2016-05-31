@@ -391,6 +391,7 @@ position moved to is (<var>cpx</var> + <var>x</var> cos <var>cb</var>
   must end the current subpath by connecting it back to its <a>initial point</a>
   in either of two ways:
 </p>
+
 <ol>
   <li>
     If the previous command is <q>complete</q>, that is that all the
@@ -406,10 +407,66 @@ position moved to is (<var>cpx</var> + <var>x</var> cos <var>cb</var>
     <a href="paths.html#PathDataQuadraticBezierCommands">"quadratic Bézier curveto"</a>,
     <a href="paths.html#PathDataQuadraticBezierCommands">"smooth quadratic Bézier curveto"</a>,
     or <a href="paths.html#PathDataEllipticalArcCommands">"elliptical arc"</a>, that is
-    missing required coordinate data, then the <a>initial point</a> msut be used
+    missing required coordinate data, then the <a>initial point</a> must be used
     in place of each missing (x,y) coordinate. 
   </li>
 </ol>
+
+<table  class="PathDataTable">
+  <tr>
+    <th>Command</th>
+    <th>Name</th>
+    <th>Parameters</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>Z</strong> or<br />
+     <strong>z</strong></td>
+    <td>closepath</td>
+    <td>(none)</td>
+    <td>Close the current subpath by connecting it back to the current
+    subpath's <a>initial point</a> (see prose above). Since the
+    <strong>Z</strong> and <strong>z</strong>
+    commands take no parameters, they have an identical effect.</td>
+  </tr>
+</table>
+
+<p class="note">
+  SVG 2 adds the ability to fill in missing coordinate data with
+  the <strong>Z</strong> or <strong>z</strong> command to avoid the
+  need to add a zero length (or very short in the case of relative
+  paths with rounding errors) <a>path segment</a> to close a subpath. This
+  can effect the number of markers drawn and their orientation at
+  the beginning/end of a closed subpath.
+</p>
+<p class="annotation">
+  The use of <strong>Z</strong> or <strong>z</strong> to replace
+  missing coordinate data with the coordinate of the <a>initial point</a> in
+  a subpath was resolved at the
+  <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item04">Sydney
+    (2015)</a> meeting.
+</p>
+
+<p>A <dfn id="TermClosedSubpath">closed subpath</dfn> must be closed with a
+"closepath" command, this "joins" the first and last <a>path segments</a>.
+Any other path is an <dfn id="TermOpenSubpath">open subpath</dfn>.</p>
+
+<p class="note ready-for-wg-review">A <a>closed subpath</a> differs in behavior
+from an <a>open subpath</a> whose final coordinate is the <a>initial point</a>
+of the subpath.
+The first and last <a>path segments</a> of an <a>open subpath</a> will not be
+joined, even when the final coordinate of the last <a>path segment</a> is the
+<a>initial point</a> of the subpath. This will result in the first and last 
+<a>path segments</a> being capped using the current value of <a>'stroke-linecap'</a>
+rather than joined using the current value of <a>'stroke-linejoin'</a>.</p>
+
+<p>If a "closepath" is followed immediately by a
+"moveto", then the "moveto" identifies the start point of the
+next subpath. If a "closepath" is followed immediately by any
+other command, then the next subpath must start at the same <a>initial point</a>
+as the current subpath.</p>
+
+<p class='ready-for-wider-review'>The current bearing does not affect a <strong>z</strong> command.</p>
 
 <p>Examples:</p>
 <ul>
@@ -443,68 +500,6 @@ position moved to is (<var>cpx</var> + <var>x</var> cos <var>cb</var>
     useful in animating path data.
   </li>
 </ul>
-
-<p class="note">
-  SVG 2 adds the ability to fill in missing coordinate data with
-  the <strong>Z</strong> or <strong>z</strong> command to avoid the
-  need to add a zero length (or very short in the case of relative
-  paths with rounding errors) <a>path segment</a> to close a subpath. This
-  can effect the number of markers drawn and their orientation at
-  the beginning/end of a closed subpath.
-</p>
-<p class="annotation">
-  The use of <strong>Z</strong> or <strong>z</strong> to replace
-  missing coordinate data with the coordinate of the <a>initial point</a> in
-  a subpath was resolved at the
-  <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item04">Sydney
-    (2015)</a> meeting.
-</p>
-
-
-<p>If a "closepath" is followed immediately by a
-"moveto", then the "moveto" identifies the start point of the
-next subpath. If a "closepath" is followed immediately by any
-other command, then the next subpath starts at the same <a>initial point</a>
-as the current subpath.</p>
-
-
-<p>When a subpath ends in a "closepath," it differs in behavior
-from what happens when "manually" closing a subpath via a
-"lineto" command in how <a>'stroke-linejoin'</a>
-and <a>'stroke-linecap'</a> are implemented. With "closepath", the end of the final segment
-of the subpath is "joined" with the start of the initial
-segment of the subpath using the current value of <a>'stroke-linejoin'</a>.
-If you instead "manually" close the subpath via a "lineto"
-command, the start of the first segment and the end of the last
-segment are not joined but instead are each capped using the
-current value of <a>'stroke-linecap'</a>.
-At the end of the command, the new current point is set to the
-<a>initial point</a> of the current subpath.</p>
-
-<div class="ready-for-wider-review">
-
-<p>The current bearing does not affect a <strong>z</strong> command.</p>
-
-</div>
-
-<table  class="PathDataTable">
-  <tr>
-    <th>Command</th>
-    <th>Name</th>
-    <th>Parameters</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td><strong>Z</strong> or<br />
-     <strong>z</strong></td>
-    <td>closepath</td>
-    <td>(none)</td>
-    <td>Close the current subpath by connecting it back to the current
-    subpath's <a>initial point</a> (see prose above). Since the
-    <strong>Z</strong> and <strong>z</strong>
-    commands take no parameters, they have an identical effect.</td>
-  </tr>
-</table>
 
 <h3 id="PathDataLinetoCommands">The <strong>"lineto"</strong> commands</h3>
 
