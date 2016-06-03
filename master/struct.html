@@ -1146,7 +1146,9 @@ its children for which all of these attributes test true. If
 the given attribute is not specified, then a true value is
 assumed.</p>
 
-<p>Similar to the <a>'display'</a> property, conditional processing
+<p>When an element is excluded because of conditional processing,
+it is treated as if it had a used value of <code>none</code> for the <a>'display'</a> property.
+Similar to the <a>'display'</a> property, conditional processing
 attributes only affect the direct rendering of elements and do
 not prevent elements from being successfully referenced by
 other elements (such as via a <a>'use'</a>).</p>
@@ -1154,18 +1156,34 @@ other elements (such as via a <a>'use'</a>).</p>
 <p>In consequence:</p>
 
 <ul>
-  <li><a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes affect
-  <a>'a'</a>, <a>'foreignObject'</a>, <a>'textPath'</a>, and <a>'tspan'</a> elements.</li>
+  <li>conditional processing affects the visual display of <a>graphics elements</a>,
+  <a>'a'</a>, <a>'foreignObject'</a>, and <a>text container</a> elements.</li>
+  
+  <li>conditional processing prevents <a>animation elements</a> from playing.</li>
 
-  <li><a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes will
-  have no effect on the <a>'clipPath'</a>, <a>'filter element'</a>, <a>'marker element'</a>, <a>'mask element'</a>,
-  <a>'pattern'</a> and <a>'symbol'</a> elements or on <a>gradient elements</a>.</li>
+  <li>conditional processing will
+  have no effect on <a>never-rendered elements</a>; 
+  in particular, conditional processing does not affect the processing of <a>'style'</a> or <a>'script'</a> elements.</li>
 
-  <li><a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes do not
-  apply to the <a>'defs'</a>, and
-  <a>'cursor element'</a> elements because
-  they are not part of the <a>rendering tree</a>.</li>
+  <li>conditional processing of child content of a never-rendered container element
+  (e.g., a <a>'pattern'</a> or a <a>'mask'</a>) 
+  will affect whether that child content contributes to the graphical effect.</li>
 </ul>
+  
+<p class="issue">
+  Need to define how conditional processing affects audio/video and other elements borrowed from HTML.
+  See <a href="https://github.com/w3c/svgwg/issues/44">GitHub issue #44</a>.
+</p>
+  
+<div class="note">
+  <p>Previous versions of SVG included a third conditional processing attribute,
+  <code>requiredFeatures</code>.
+  This was intended to allow authors to provide fallback behavior for user agents
+  that only implemented parts of the SVG specification.
+  Unfortunately, poor specification and implementation of this attribute made it unreliable
+  as a test of feature support.
+  </p>
+</div>
 
 <h3 id="ConditionalProcessingDefinitions">Definitions</h3>
 <dl class='definitions'  data-dfn-type="dfn" data-export="">
@@ -1175,7 +1193,7 @@ other elements (such as via a <a>'use'</a>).</p>
   but not all, may have conditional processing attributes specified
   on them.  See <a href="struct.html#ConditionalProcessing">Conditional processing</a>
   for details.  The conditional processing attributes defined in
-  SVG 1.1 are <edit:attributecategory name='conditional processing'/>.</dd>
+  SVG 2 are <edit:attributecategory name='conditional processing'/>.</dd>
 </dl>
 
 <h3 id="SwitchElement">The <span class='element-name'>'switch'</span> element</h3>
