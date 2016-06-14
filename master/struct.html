@@ -322,22 +322,42 @@ within it, to an arbitrary depth.</p>
 
 <h2 id="UnknownElement">Unknown elements</h2>
 
-<div class='ready-for-wg-review'>
-<p>Elements and SVG document fragments rooted by those elements, that are in the SVG 
-namespace and are not defined by this specification must not be rendered, but 
-must be included in the DOM tree.</p>
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Have unknown elements treated as <a>'g'</a> for the purpose of rendering.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2012/01/13-svg-irc#T00-25-54">Accept having unknown elements treated as <span class='element-name'>'g'</span> for the purpose of rendering.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow fallbacks without the use of <a>'switch'</a>, and to align with the behavior of unknown elements in HTML.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Nobody (no action)</td>
+    </tr>
+    <tr>
+      <th>Status:</th>
+      <td></td>
+    </tr>
+  </table>
+</div>
 
-<p>Elements in the SVG namespace that are not defined by this specification must
-implement the <a>SVGElement</a> interface. SVG elements that are children of unknown
-elements must implement the DOM interface appropriate for their type.</p>
+<edit:elementsummary name='unknown'/>
 
-<p>Known and unknown elements in other namespaces that occur as a child of any SVG
-element except ‘foreignObject’, must not render unless explicitly stated
-otherwise in this specification.</p>
+<p>The <a>SVGUnknownElement</a> interface must be used for elements in the SVG namespace that are not defined by this specification.</p>
+<p>Known elements in the SVG namespace that occur in places where SVG's content model doesn't explicitly allow it must not render.</p>
+<p>Unknown elements in the SVG namespace render as if the unknown element was a <a>'g'</a> element.</p>
+<p>Known and unknown elements in other namespaces that occur as a child of any SVG element except <a>'foreignObject'</a>, must not render unless
+explicitly stated otherwise in this specification.</p>
 
 <p>Consequently, in the following example:</p>
 <ul>
-<li>the <a>'path'</a> element inside the unknown <span class="element-name">'mysteryElement'</span> must not render</li>
+<li>the <a>'path'</a> element inside the unknown <span class="element-name">'mysteryElement'</span> must render</li>
 <li><span class="element-name">'hideElement'</span> and its contents must not render</li>
 <li>the <a>'text'</a> element must not render the string contained
 in the inner <a>'text'</a> element</li>
@@ -349,7 +369,8 @@ the <span class="element-name">'div'</span> element and its contents must not re
 
 <edit:example href='images/struct/unknownelms01.svg' image='no' link='yes'/>
 
-</div>
+<p class="issue" data-issue="64">Do we need to mention anything about attributes, properties and such on SVGUnknownElements?</p>
+<p class="issue" data-issue="65">Should SVGUnknownElement be a <a>container element</a>?</p>
 
 <h2 id="Head">Defining content for reuse, and the <span class='element-name'>'defs'</span> element</h2>
 
@@ -2394,6 +2415,18 @@ method on <a>SVGTransformList</a>.</p>
 <p>An <a>SVGGElement</a> object represents a <a>'g'</a> element in the DOM.</p>
 
 <pre class="idl">interface <b>SVGGElement</b> : <a>SVGGraphicsElement</a> {
+};</pre>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGUnknownElement">Interface SVGUnknownElement</h3>
+
+<edit:with element="unknown">
+
+<p>An <a>SVGUnknownElement</a> object represents an unknown element in the SVG namespace.</p>
+
+<pre class="idl">interface <b>SVGUnknownElement</b> : <a>SVGGraphicsElement</a> {
 };</pre>
 
 </edit:with>
