@@ -2888,170 +2888,6 @@ for RTL or vertical text.</p>
     before relative repositioning and rotation.
   </p>
 
-<h4 id="TextAnchoringProperties">Text alignment, the <span class='property'>'text-anchor'</span> property</h4>
-
-  <p>
-    The <a>'text-anchor'</a> property is used to align (start-,
-    middle- or end-alignment) a string of <em>pre-formatted</em> text
-    relative to a given point. It is not applicable to
-    <em>auto-wrapped text</em>, see instead <a>'text-align'</a>. For
-    multi-line text, the alignment takes place for each line.
-  </p>
-
-  <p>
-    The <a>'text-anchor'</a> property is applied to each individual
-    <a>text chunk</a> within a given <a>'text'</a> element. Each text
-    chunk has an initial <a>current text position</a>, which
-    represents the point in the user coordinate system resulting from
-    (depending on context) application of the <a>'text/x'</a>
-    and <a>'text/y'</a> attributes on the <a>'text'</a> element,
-    any <a>'tspan/x'</a> or <a>'tspan/y'</a> attribute values on
-    a <a>'tspan'</a> element assigned explicitly to the first rendered
-    character in a text chunk, or determination of the initial current
-    text position for a <a>'textPath'</a> element. Each text chunk
-    also has a final <a>current text position</a> which is the
-    <a>current text position</a> after placing the last glyph
-    in the <a>text chunk</a>. The positions are determined before
-    applying the <a>'text-anchor'</a> property.
-  </p>
-
-  <table class="propdef def">
-    <tr>
-      <th>Name:</th>
-      <td><dfn id="TextAnchorProperty">text-anchor</dfn></td>
-    </tr>
-    <tr>
-      <th>Value:</th>
-      <td>start | middle | end</td>
-    </tr>
-    <tr>
-      <th>Initial:</th>
-      <td>start</td>
-    </tr>
-    <tr>
-      <th>Applies to:</th>
-      <td><a>text content elements</a></td>
-    </tr>
-    <tr>
-      <th>Inherited:</th>
-      <td>yes</td>
-    </tr>
-    <tr>
-      <th>Percentages:</th>
-      <td>N/A</td>
-    </tr>
-    <tr>
-      <th>Media:</th>
-      <td>visual</td>
-    </tr>
-    <tr>
-      <th>Computed&#160;value:</th>
-      <td>as specified</td>
-    </tr>
-    <tr>
-      <th><a>Animatable</a>:</th>
-      <td>yes</td>
-    </tr>
-  </table>
-
-  <p>
-    Values have the following meanings:
-  </p>
-
-  <dl>
-    <dt><span class="attr-value">start</span></dt>
-    <dd>
-      The rendered characters are aligned such that the start of the
-      resulting rendered text is at the initial current text position.
-      For an element with a <a>'direction'</a> property value
-      of <span class="prop-value">"ltr"</span> (typical for most
-      European languages), the left side of the text is rendered at
-      the initial text position.  For an element with a
-      <a>'direction'</a> property value of
-      <span class="prop-value">"rtl"</span> (typical for Arabic and
-      Hebrew), the right side of the text is rendered at the initial
-      text position.  For an element with a vertical primary text
-      direction (often typical for Asian text), the top side of the
-      text is rendered at the initial text position.
-    </dd>
-
-    <dt><span class="attr-value">middle</span></dt>
-    <dd>
-      The rendered characters are shifted such that the geometric
-      middle of the resulting rendered text (determined from the
-      initial and final <a>current text position</a> before applying
-      the <a>'text-anchor'</a> property) is at the initial current
-      text position.
-    </dd>
-
-    <dt><span class="attr-value">end</span></dt>
-    <dd>
-      The rendered characters are shifted such that the end of the
-      resulting rendered text (final <a>current text position</a>
-      before applying the <a>'text-anchor'</a> property)
-      is at the initial current text position.
-      For an element with a <a>'direction'</a> property value
-      of <span class="prop-value">"ltr"</span> (typical for most
-      European languages), the right side of the text is rendered at
-      the initial text position.  For an element with
-      a <a>'direction'</a> property value
-      of <span class="prop-value">"rtl"</span> (typical for Arabic and
-      Hebrew), the left side of the text is rendered at the initial
-      text position.  For an element with a vertical primary text
-      direction (often typical for Asian text), the bottom of the text
-      is rendered at the initial text position.
-    </dd>
-  </dl>
-
-  <div class="example">
-    <p>An example of using <a>'text-anchor'</a> on multi-line text.</p>
-
-    <pre><![CDATA[
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="300" height="100" viewBox="0 0 300 100">
-
-  <text x="150" y="30" style="font: 20px sans-serif; white-space: pre-line;
-                              text-anchor: middle;">
-    This multi-line text is
-    anchored to the middle.</text>
-
-</svg>
-]]></pre>
-
-    <div class="figure">
-      <img class="bordered" src="images/text/text-anchor-middle.svg"
-           alt="Image showing two lines of text centered via text-anchor."/>
-      <p class="caption">
-	The preserved line-feed creates two <a>text chunks</a>, each
-	anchored independently.
-      </p>
-    </div>
-  </div>
-
-  <div class="example">
-    <p>Another example of using <a>'text-anchor'</a> on multi-line text.</p>
-
-    <pre><![CDATA[
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="200" height="150" viewBox="0 0 200 150">
-  <path d="m 100,0 0,150" style="fill:none;stroke:#add8e6"/>
-  <text x="100 100 100" y="50 95 140"
-	style="font-size: 42px; text-anchor: middle">I❤SVG</text>
-</svg>
-]]></pre>
-
-    <div class="figure">
-      <img class="bordered" src="images/text/text-anchor-chunks.svg"
-	   alt="Image showing three lines of text divided as 'I', '❤', 'SVG'."/>
-      <p class="caption">
-	The text is divided into three <a>text chunks</a> (due to the
-	three coordinates in the <a>'tspan/x'</a> and <a>'tspan/y'</a>
-	attributes). Each <a>text chunk</a> is independently anchored.
-      </p>
-    </div>
-  </div>
-
-
 <h2 id="TextLayoutAuto">Auto-wrapped text</h2>
 
   <p>
@@ -4127,11 +3963,238 @@ the dash pattern at the same positions across different implementations.</p>
     must not apply to SVG text elements.
   </p>
 
+<h3 id="TextPropertiesSVG">SVG properties</h3>
+  
+  <p>
+    This section covers properties that are not covered elsewhere in this
+    specification and that are specific to SVG.
+  </p>
+
+<h4 id="TextAnchoringProperties">Text alignment, the <span class='property'>'text-anchor'</span> property</h4>
+
+  <p>
+    The <a>'text-anchor'</a> property is used to align (start-,
+    middle- or end-alignment) a string of <em>pre-formatted</em> text
+    relative to a given point. It is not applicable to
+    <em>auto-wrapped text</em>, see instead <a>'text-align'</a>. For
+    multi-line text, the alignment takes place for each line.
+  </p>
+
+  <p>
+    The <a>'text-anchor'</a> property is applied to each individual
+    <a>text chunk</a> within a given <a>'text'</a> element. Each text
+    chunk has an initial <a>current text position</a>, which
+    represents the point in the user coordinate system resulting from
+    (depending on context) application of the <a>'text/x'</a>
+    and <a>'text/y'</a> attributes on the <a>'text'</a> element,
+    any <a>'tspan/x'</a> or <a>'tspan/y'</a> attribute values on
+    a <a>'tspan'</a> element assigned explicitly to the first rendered
+    character in a text chunk, or determination of the initial current
+    text position for a <a>'textPath'</a> element. Each text chunk
+    also has a final <a>current text position</a> which is the
+    <a>current text position</a> after placing the last glyph
+    in the <a>text chunk</a>. The positions are determined before
+    applying the <a>'text-anchor'</a> property.
+  </p>
+
+  <table class="propdef def">
+    <tr>
+      <th>Name:</th>
+      <td><dfn id="TextAnchorProperty">text-anchor</dfn></td>
+    </tr>
+    <tr>
+      <th>Value:</th>
+      <td>start | middle | end</td>
+    </tr>
+    <tr>
+      <th>Initial:</th>
+      <td>start</td>
+    </tr>
+    <tr>
+      <th>Applies to:</th>
+      <td><a>text content elements</a></td>
+    </tr>
+    <tr>
+      <th>Inherited:</th>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>Percentages:</th>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <th>Media:</th>
+      <td>visual</td>
+    </tr>
+    <tr>
+      <th>Computed&#160;value:</th>
+      <td>as specified</td>
+    </tr>
+    <tr>
+      <th><a>Animatable</a>:</th>
+      <td>yes</td>
+    </tr>
+  </table>
+
+  <p>
+    Values have the following meanings:
+  </p>
+
+  <dl>
+    <dt><span class="attr-value">start</span></dt>
+    <dd>
+      The rendered characters are aligned such that the start of the
+      resulting rendered text is at the initial current text position.
+      For an element with a <a>'direction'</a> property value
+      of <span class="prop-value">"ltr"</span> (typical for most
+      European languages), the left side of the text is rendered at
+      the initial text position.  For an element with a
+      <a>'direction'</a> property value of
+      <span class="prop-value">"rtl"</span> (typical for Arabic and
+      Hebrew), the right side of the text is rendered at the initial
+      text position.  For an element with a vertical primary text
+      direction (often typical for Asian text), the top side of the
+      text is rendered at the initial text position.
+    </dd>
+
+    <dt><span class="attr-value">middle</span></dt>
+    <dd>
+      The rendered characters are shifted such that the geometric
+      middle of the resulting rendered text (determined from the
+      initial and final <a>current text position</a> before applying
+      the <a>'text-anchor'</a> property) is at the initial current
+      text position.
+    </dd>
+
+    <dt><span class="attr-value">end</span></dt>
+    <dd>
+      The rendered characters are shifted such that the end of the
+      resulting rendered text (final <a>current text position</a>
+      before applying the <a>'text-anchor'</a> property)
+      is at the initial current text position.
+      For an element with a <a>'direction'</a> property value
+      of <span class="prop-value">"ltr"</span> (typical for most
+      European languages), the right side of the text is rendered at
+      the initial text position.  For an element with
+      a <a>'direction'</a> property value
+      of <span class="prop-value">"rtl"</span> (typical for Arabic and
+      Hebrew), the left side of the text is rendered at the initial
+      text position.  For an element with a vertical primary text
+      direction (often typical for Asian text), the bottom of the text
+      is rendered at the initial text position.
+    </dd>
+  </dl>
+
+  <div class="example">
+    <p>An example of using <a>'text-anchor'</a> on multi-line text.</p>
+
+    <pre><![CDATA[
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="300" height="100" viewBox="0 0 300 100">
+
+  <text x="150" y="30" style="font: 20px sans-serif; white-space: pre-line;
+                              text-anchor: middle;">
+    This multi-line text is
+    anchored to the middle.</text>
+
+</svg>
+]]></pre>
+
+    <div class="figure">
+      <img class="bordered" src="images/text/text-anchor-middle.svg"
+           alt="Image showing two lines of text centered via text-anchor."/>
+      <p class="caption">
+	The preserved line-feed creates two <a>text chunks</a>, each
+	anchored independently.
+      </p>
+    </div>
+  </div>
+
+  <div class="example">
+    <p>Another example of using <a>'text-anchor'</a> on multi-line text.</p>
+
+    <pre><![CDATA[
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="200" height="150" viewBox="0 0 200 150">
+  <path d="m 100,0 0,150" style="fill:none;stroke:#add8e6"/>
+  <text x="100 100 100" y="50 95 140"
+	style="font-size: 42px; text-anchor: middle">I❤SVG</text>
+</svg>
+]]></pre>
+
+    <div class="figure">
+      <img class="bordered" src="images/text/text-anchor-chunks.svg"
+	   alt="Image showing three lines of text divided as 'I', '❤', 'SVG'."/>
+      <p class="caption">
+	The text is divided into three <a>text chunks</a> (due to the
+	three coordinates in the <a>'tspan/x'</a> and <a>'tspan/y'</a>
+	attributes). Each <a>text chunk</a> is independently anchored.
+      </p>
+    </div>
+  </div>
+
+
+  <h4 id='GlyphOrientationHorizontalProperty'>The <span class="property">'glyph-orientation-horizontal'</span> property</h4>
+
+  <p>
+    This property has been removed in SVG 2.
+  </p>
+
+  <h4 id='GlyphOrientationVerticalProperty'>The <span class="property">'glyph-orientation-vertical'</span> property</h4>
+
+  <p>
+    This property applies only to vertical text. It has been obsoleted
+    in SVG 2 and partially replaced by the <a>'text-orientation'</a>
+    property of CSS Writing Modes Level 3. The following SVG 1.1
+    values must still be supported by aliasing the property
+    as a shorthand to <a>'text-orientation'</a> as follows:
+  </p>
+  <ul>
+    <li>
+      <span class="prop-value">'auto'</span> to
+      <span class="prop-value">'mixed'</span>;
+    </li>
+    <li>
+      <span class="prop-value">'0deg'</span>, and
+      <span class="prop-value">'0'</span>, to
+      <span class="prop-value">'upright'</span>.
+    </li>
+    <li>
+      <span class="prop-value">'90deg'</span>, and
+      <span class="prop-value">'90'</span>, to
+      <span class="prop-value">'sideways'</span>.
+    </li>
+  </ul>
+  <p>
+    Any other values must be treated as invalid.
+  </p>
+
+  <h4 id='KerningProperty'>The <span class="property">'kerning'</span> property</h4>
+
+  <p class="note">
+    The <span class="property">'kerning'</span> property has been
+    removed in SVG 2.
+  </p>
+  <p>
+    SVG 1.1 uses the 'kerning' property to determine if the font
+    kerning tables should be used to adjust inter-glyph
+    spacing. It also allows a
+    <span class="prop-value">&lt;length&gt;</span> value which
+    if given is added to the spacing between glyphs (supplemental
+    to any from the <a>'letter-spacing'</a> property). This
+    property is replaced in SVG 2 by the
+    CSS <a>'font-kerning'</a> property which solely controls
+    turning on/off the use of the font kerning tables.
+  </p>
+  <p class="annotation">
+    Chrome's UseCounter data showed a use of 0.01% in 2014. See GitHub issue 80.
+  </p>
+
 <h3 id="TextPropertiesAdaptions">SVG adaptions</h3>
 
   <p>
-    This section covers properties that are not covered elsewhere in this
-    specification and either have SVG specific rules or are significantly
+    This section covers CSS properties that are not covered elsewhere in this
+    specification and have either SVG specific adaptions or are significantly
     altered from SVG 1.1.
   </p>
 
@@ -4169,27 +4232,6 @@ the dash pattern at the same positions across different implementations.</p>
   <p class="note">
     SVG 2 requires all <a>'font-variant'</a> subproperties to be
     implemented (e.g. <a>'font-variant-ligatures'</a>).
-  </p>
-
-  <h4 id='KerningProperty'>The <span class="property">'kerning'</span> property</h4>
-
-  <p class="note">
-    The <span class="property">'kerning'</span> property has been
-    removed in SVG 2.
-  </p>
-  <p>
-    SVG 1.1 uses the 'kerning' property to determine if the font
-    kerning tables should be used to adjust inter-glyph
-    spacing. It also allows a
-    <span class="prop-value">&lt;length&gt;</span> value which
-    if given is added to the spacing between glyphs (supplemental
-    to any from the <a>'letter-spacing'</a> property). This
-    property is replaced in SVG 2 by the
-    CSS <a>'font-kerning'</a> property which solely controls
-    turning on/off the use of the font kerning tables.
-  </p>
-  <p class="annotation">
-    Chrome's UseCounter data showed a use of 0.01% in 2014. See GitHub issue 80.
   </p>
 
   <h4 id='LineHeightProperty'>The <span class="property">'line-height'</span> property</h4>
@@ -4444,41 +4486,6 @@ the dash pattern at the same positions across different implementations.</p>
     <a href="http://www.w3.org/TR/css-inline-3/#propdef-vertical-align">'vertical-align'</a>
     is a shorthand for changing multiple properties at once, including
     'baseline-shift'.
-  </p>
-
-  <h4 id='GlyphOrientationHorizontalProperty'>The <span class="property">'glyph-orientation-horizontal'</span> property</h4>
-
-  <p>
-    This property has been removed in SVG 2.
-  </p>
-
-  <h4 id='GlyphOrientationVerticalProperty'>The <span class="property">'glyph-orientation-vertical'</span> property</h4>
-
-  <p>
-    This property applies only to vertical text. It has been obsoleted
-    in SVG 2 and partially replaced by the <a>'text-orientation'</a>
-    property of CSS Writing Modes Level 3. The following SVG 1.1
-    values must still be supported by aliasing the property
-    as a shorthand to <a>'text-orientation'</a> as follows:
-  </p>
-  <ul>
-    <li>
-      <span class="prop-value">'auto'</span> to
-      <span class="prop-value">'mixed'</span>;
-    </li>
-    <li>
-      <span class="prop-value">'0deg'</span>, and
-      <span class="prop-value">'0'</span>, to
-      <span class="prop-value">'upright'</span>.
-    </li>
-    <li>
-      <span class="prop-value">'90deg'</span>, and
-      <span class="prop-value">'90'</span>, to
-      <span class="prop-value">'sideways'</span>.
-    </li>
-  </ul>
-  <p>
-    Any other values must be treated as invalid.
   </p>
 
 <h4 id='TextOverflowProperty'>The <span class="property">'text-overflow'</span> property</h4>
