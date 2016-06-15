@@ -544,7 +544,7 @@
     <a>'text/x'</a> and <a>'text/y'</a> attributes on the
     <a>'text'</a> element or first rendered <a>'tspan'</a> element for
     pre-formatted text, or auto-wrapped text when the <a>content
-    area</a> is determined by the <a>'inline-size'</a> attribute. For
+    area</a> is determined by the <a>'inline-size'</a> property. For
     other auto-wrapped text, the initial <a>current text position</a>
     is determined by the position of the first rendered glyph after
     applying the CSS line wrapping algorithm.
@@ -1613,7 +1613,7 @@
 
   <p>
     Third, the effect of the <a>'text-anchor'</a> property is applied
-    for <em>pre-formatted</em> text.
+    if necessary.
   </p>
 
   <p>
@@ -1847,11 +1847,12 @@
 
   <p>
     The <a>'inline-size'</a> property allows one to set the
-    <a>content area</a> to a rectangular shape. The computed value of
+    <a>wrapping area</a> to a rectangular shape. The computed value of
     the property sets the width of the rectangle for horizontal text
     and the height of the rectangle for vertical text. The other
     dimension (height for horizontal text, width for vertical text) is
-    of infinite length.
+    of infinite length. A value of zero disables the creation of a
+    <a>wrapping area</a>.
   </p>
 
   <p>
@@ -1869,21 +1870,21 @@
   </p>
 
   <p>
-    Text is aligned within the <a>wrapping area</a> according to the
-    <a>'text-justify'</a> property. The rectangle (<a>wrapping area</a>)
-    is then anchored according to the <a>'text-anchor'</a> property
-    using the edges of the <a>wrapping area</a> to determine the start,
-    middle, and end positions.
+    The rectangle (<a>wrapping area</a>) is then anchored according to
+    the <a>'text-anchor'</a> property using the edges of the
+    <a>wrapping area</a> to determine the start, middle, and end
+    positions.
   </p>
 
-  <p class="annotation">
-    The 'inline-size' attribute method to wrap text is viewed as an
-    extension of traditional SVG text where the author gives a simple
-    limit to the width or height of the block of text; thus the use
-    of the 'x' and 'y' attributes along with the 'direction' and
-    'text-anchor' properties to position the first line of text. The
-    'text-justify' property adds the ability to fully justify the
-    text.
+  <p class="note">
+    The <a>'inline-size'</a> property method to wrap text is an
+    extension to pre-formatted SVG text where the author simply gives
+    a limit to the width or height of the block of text; thus the use
+    of the <a>'tspan/x'</a> and <a>'tspan/y'</a> attributes along with
+    the <a>'direction'</a> and <a>'text-anchor'</a> properties to
+    position the first line of text. If full justification is needed,
+    the <a>'shape-inside'</a> property should be used to create
+    the <a>wrapping area</a>.
   </p>
 
   <table class="propdef def">
@@ -1897,7 +1898,7 @@
     </tr>
     <tr>
       <th>Initial:</th>
-      <td>As if not specified.</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>Applies to:</th>
@@ -2015,6 +2016,32 @@
     </p>
   </div>
 
+
+  <div class="example">
+    <p>An example of using <a>'inline-size'</a> for wrapping horizontal text, anchored in the middle.</p>
+
+    <pre><![CDATA[
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="300" height="100" viewBox="0 0 300 100">
+
+  <text x="50" y="30" style="font: 20px sans-serif; inline-size: 200px; text-anchor: middle">
+    This text wraps at 200 pixels.
+  </text>
+
+</svg>
+]]></pre>
+
+    <div class="figure">
+      <img class="bordered" src="images/text/text-wrap-anchored.svg"
+           alt="Image showing English text wrapped into two lines, anchored in the center."/>
+      <p class="caption">
+	Horizontal text wrapping. The light-blue lines indicate the
+	limits of the <a>content area</a>. The text is anchored in
+	the middle. The red dot shows the initial
+	<a>current text position</a>.
+      </p>
+    </div>
+  </div>
 
 <h3 id='TextShapeInside'>The <span class="property">'shape-inside'</span> property</h3>
 
@@ -2766,8 +2793,8 @@ for RTL or vertical text.</p>
 
     <li>
       If the <a>'text'</a> element has an <a>'inline-size'</a>
-      attribute, then lay out <var>root</var> with its <a>block
-      size</a> set to the <a>'inline-size'</a> attribute's value and
+      property, then lay out <var>root</var> with its <a>block
+      size</a> set to the <a>'inline-size'</a> property's value and
       with an unconstrained <a>inline size</a>.
       <p class='note'>
 	This means that <var>root</var> is laid out with its
@@ -2905,7 +2932,7 @@ for RTL or vertical text.</p>
 
   <p>
     In the case where the <a>content area</a> is defined by the by
-    the <a>'inline-size'</a> attribute,
+    the <a>'inline-size'</a> property,
     the <a>'tspan/x'</a> and <a>'tspan/y'</a> attributes
     corresponding to the first rendered glyph define the
     initial <a>current text position</a>.  When the <a>content
@@ -3864,19 +3891,26 @@ the dash pattern at the same positions across different implementations.</p>
     <li>
       Properties that apply only to pre-formatted text and auto-wrapped
       text where the <a>wrapping area</a> is defined by the
-      <a>'inline-size'</a> attribute:
+      <a>'inline-size'</a> property:
       <p>
 	<a>'text-anchor'</a>.
       </p>
     </li>
     <li>
-      Properties that apply only to auto-wrapped text:
+      Properties that apply only to auto-wrapped text except for text
+      where the <a>wrapping area</a> is defined by the
+      <a>'inline-size'</a> property:
       <p>
 	<a>'text-align'</a>,
 	<a>'text-align-all'</a>,
 	<a>'text-align-last'</a>,
-	<a>'text-indent'</a>,
 	<a>'text-justify'</a>,
+      </p>
+    </li>
+    <li>
+      Properties that apply only to auto-wrapped text:
+      <p>
+	<a>'text-indent'</a>,
 	<a>'line-break'</a>,
 	<a>'word-break'</a>,
 	<a>'hyphens'</a>,
@@ -3975,7 +4009,9 @@ the dash pattern at the same positions across different implementations.</p>
   <p>
     The <a>'text-anchor'</a> property is used to align (start-,
     middle- or end-alignment) a string of <em>pre-formatted</em> text
-    relative to a given point. It is not applicable to
+    or <em>auto-wrapped text</em> where the <a>wrapping area</a>
+    is determined from the the <a>'inline-size'</a> property
+    relative to a given point. It is not applicable to other types of
     <em>auto-wrapped text</em>, see instead <a>'text-align'</a>. For
     multi-line text, the alignment takes place for each line.
   </p>
@@ -4136,7 +4172,7 @@ the dash pattern at the same positions across different implementations.</p>
 
   <h4 id='GlyphOrientationHorizontalProperty'>The <span class="property">'glyph-orientation-horizontal'</span> property</h4>
 
-  <p>
+  <p class="note">
     This property has been removed in SVG 2.
   </p>
 
