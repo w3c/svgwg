@@ -1621,11 +1621,17 @@ a subpath is determined as follows:</p>
     <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> with the
     same curvature as the edges at those points (see below). If both
     curvatures are zero fall through to <span class="prop-value">miter-clip</span>.
-    Extend the stroke edges using these circles (or a line, in the case
-    of zero curvature). If the two circles (or circle and line) do not
-    intersect, fall through to <span class="prop-value">miter-clip</span>.
+    If either curvature is greater than 2/(stroke width), fallback to
+    <span class="prop-value">round</span>.
 
-    If the two circles (or circle and line) intersect, the line join
+    Extend the stroke edges using these circles (or a line, in the case
+    of zero curvature).
+
+    If the two circles (or circle and line) do not intersect, adjust
+    the radii of the two circles by an equal amount (or just the circle
+    in case of a circle and line) until they do intersect (see below).
+
+    The line join
     region is defined by the lines that connect <var>P</var>
     with <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> and the
     arcs defined by the circles (or arc and line) between the closest
@@ -1676,7 +1682,7 @@ a subpath is determined as follows:</p>
        alt="Image showing the lines and points computed to construct an arcs line join."/>
   <p class="caption">Construction of an arcs line join shape, shown in
     pink. The white line is the original path, which has two segments
-    that come to a point, and the gray region is the stroke. The
+    that come to a point, and the dark gray region is the stroke. The
     dashed lines show circles that are tangent to and have the
     curvature of the segments at the join.  The olive-green circles
     (concentric with the dashed circles) define the join shape.</p>
@@ -2080,9 +2086,102 @@ a subpath is determined as follows:</p>
   <var>P<sub>2</sub></var> and <var>P<sub>3</sub></var> are degenerate, the
   curvature will be infinite and a line should be used in constructing the join.</p>
 
+<h3 id="ArcsLinejoinFallback">Adjusting the circles for the <span class="prop-value">arcs</span>
+'stroke-linejoin' when the initial circles do not intersect</h3>
+
+  <p class="annotation">
+    The fallback behavior was resolved at
+    the <a href="https://www.w3.org/2016/02/03-svg-minutes.html#item02">Sydney
+    2016 F2F</a>. It gives a smooth transition between the fallback
+    and non-fallback states.
+  </p>
+
+  <p>
+    When the initial circles calculated for the
+    <span class="prop-value">arcs</span> <a>'stroke-linejoin'</a> do
+    not intersect, they need to be adjusted by changing both radii by
+    the same magnitude (moving the circle centers to keep the circles
+    tangent to the offset paths) until the circles just touch. There
+    are two cases to consider. The first is when one circle encloses
+    the other circle. In this case the larger circle is reduced in
+    size while the smaller circle is increased in size:
+  </p>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/linejoin-construction-fallback.svg"
+	 alt="Image showing the lines and points computed to construct an arcs line join
+	      when the original offset circles do not intersect."/>
+    <p class="caption">Construction of an arcs line join shape, shown
+      in pink. The white line is the original path and the dark gray
+      region is the stroke. The dashed lines show circles that are
+      tangent to and have the curvature of the segments at the
+      join. Note the circles do not intersect. Two new circles are
+      constructed by adjusting the radii of the original circles by
+      the same magnitude with the larger circle being made smaller and
+      the smaller circle being made larger until the new circles just
+      touch as shown by the olive-green circles. These new circles
+      then define the join shape.
+    </p>
+  </div>
+
+  <p>
+    The second case is when there is no overlap between the circles.
+    In this case the radii of both circles are increased by the same
+    amount:
+  </p>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/linejoin-construction-fallback2.svg"
+	 alt="Image showing the lines and points computed to construct an arcs line join
+	      when the original offset circles do not intersect."/>
+    <p class="caption">Construction of an arcs line join shape, shown
+      in pink. The white line is the original path and the dark gray
+      region is the stroke. The dashed lines show circles that are
+      tangent to and have the curvature of the segments at the
+      join. Note they do not intersect. Two new circles are
+      constructed by increasing the radii of the original circles by
+      the same amount until the new circles just touch as shown by the
+      olive-green circles. These new circles then define the join
+      shape.
+    </p>
+  </div>
+
+  <p>
+    If in this latter case, the tangents of the offset paths at the
+    line join are parallel, the circles cannot be adjusted so that
+    they touch. The line join should then be constructed as a
+    rectangle whose width is the stroke width and whose length is the
+    stroke width times one half of the value of the
+    <a>'stroke-miterlimit'</a>:
+  </p>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/linejoin-construction-fallback3.svg"
+	 alt="Image showing the lines and points computed to construct an arcs line join
+	      when the original offset circles do not intersect."/>
+    <p class="caption">Construction of an arcs line join shape, shown
+      in pink. The white line is the original path, which has two
+      segments that come to a point, and the dark gray region is the
+      stroke. The dashed lines show circles that are tangent to and
+      have the curvature of the segments at the join. Note they do not
+      intersect. Even if the radii of the circles is increased to infinity,
+      the circles will not intersect. The line join is then a rectangle
+      with the length determined by the miter limit (shown as a vertical
+      dashed line).
+    </p>
+  </div>
+
+  <p class="note">
+    There are a couple of ways to implement the fallback algorithm. The first
+    way is by recursive trial and error on the magnitude of the radius change.
+    The second is by an exact calculation utilizing the <em>touching circle
+      condition</em> and the constraints that the centers of the circles must
+    remain on lines normal to the path segments at the join. This leads to
+    a quadratic equation where one solution is the required radius change.
+  </p>
 
 </div>
-    
+
 <h2 id="PaintingVectorEffects">Vector effects</h2>
 
 <p>This chapter explains <a>'vector-effect'</a> related to Painting. Please refer to <a href="coords.html#VectorEffects">this</a> for the perspective of <a>'vector-effect'</a>. </p>
