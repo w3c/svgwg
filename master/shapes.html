@@ -165,7 +165,7 @@ following the rules specified above and in <a href="coords.html#Units">Units</a>
 
   <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
   perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
-  operation with a segment-completing <a href="paths.html#PathDataClosePathCommand">close path</a>,
+  operation with a <a>segment-completing close path</a> command,
   using the same parameters as previously.</li>
 </ul>
 
@@ -203,9 +203,8 @@ radius.</p>
 </p>
 
 <p>
-  The <a>'r'</a> attribute defines the radius of the circle.  A negative value
-  is an error (see <a href="implnote.html#ErrorProcessing">Error processing</a>).
-  A value of zero disables rendering of the element.
+  The <a>'r'</a> attribute defines the radius of the circle. 
+  A negative value for either property is illegal and <a href="https://www.w3.org/TR/CSS21/syndata.html#parsing-errors">must be ignored as a parsing error</a>.
 </p>
 
 <p>
@@ -215,7 +214,22 @@ radius.</p>
   arc</a> segments, each covering a quarter of the circle. The path
   begins at the "3 o'clock" point on the radius and proceeds in a
   clock-wise direction (before any transformations).
+  The <var>rx</var> and <var>ry</var> parameters to the arc commands
+  are both equal to the used value of the <a>'r'</a> property, after conversion to local user units, 
+  while the <var>x-axis-rotation</var>, 
+  the <var>large-arc-flag</var>, 
+  and the <var>sweep-flag</var> are all set to zero.
+  The coordinates are computed as follows, 
+  where <var>cx</var>, <var>cy</var>, and <var>r</var> are the used values of the equivalent properties, converted to user units:
 </p>
+<ol>
+  <li>A move-to command to the point
+  <var>cx+r</var>,<var>cy</var>;</li>
+  <li>arc to <var>cx</var>,<var>cy+r</var>;</li>
+  <li>arc to <var>cx-r</var>,<var>cy</var>;</li>
+  <li>arc to <var>cx</var>,<var>cy-r</var>;</li>
+  <li>arc with a <a>segment-completing close path command</a>.</li>
+</ol>
 
 <p class="annotation">
   Path decomposition resolved during teleconference on
@@ -244,10 +258,32 @@ with the current <a>local coordinate system</a> based on a center point and two 
 </p>
 
 <p>
-  The <a>'cx'</a> and <a>'cy'</a> attributes define the x- and y-axis radii of the
-  ellipse.  A negative value for either attribute is an error (see
-  <a href="implnote.html#ErrorProcessing">Error processing</a>).
-  A value of zero disables rendering of the element.
+  The <a>'rx'</a> and <a>'ry'</a> properties define the x- and y-axis radii of the
+  ellipse. 
+  A negative value for either property is illegal and <a href="https://www.w3.org/TR/CSS21/syndata.html#parsing-errors">must be ignored as a parsing error</a>.
+  A computed value of zero for either dimension, 
+  or a computed value of <code>auto</code> for <em>both</em> dimensions,
+  disables rendering of the element.
+</p>
+
+<p>
+  An <code>auto</code> value for <em>either</em> <a>'rx'</a> or <a>'ry'</a>
+  is converted to a used value following the rules given above for rectangles,
+  except without any clamping based on <a>'width'</a> and <a>'height'</a>.
+  Effectively, an <code>auto</code> value creates a circular shape
+  whose radius is defined by a value expressed solely in one dimension,
+  allowing you to create circles with radii defined as a percentage of the coordinate system width
+  (a percantage value for <a>'rx'</a> and an auto value for <a>'ry'</a>)
+  or height
+  (an auto value for <a>'rx'</a> and a percantage value for <a>'ry'</a>).
+</p>
+  
+<p class="note">
+  New in SVG 2. 
+  The <code>auto</code> value for <a>'rx'</a> and <a>'ry'</a> was added to allow consistent
+  parsing of these properties for both ellipses and rectangles.
+  Previously, if either <a>'rx'</a> or <a>'ry'</a> was unspecified,
+  the ellipse would not render.
 </p>
 
 <p>
@@ -257,7 +293,23 @@ with the current <a>local coordinate system</a> based on a center point and two 
   arc</a> segments, each covering a quarter of the ellipse. The path
   begins at the "3 o'clock" point on the radius and proceeds in a
   clock-wise direction (before any transformation).
+  The <var>rx</var> and <var>ry</var> parameters to the arc commands
+  are the used values of the equivalent properties after conversion to local user units, 
+  while the <var>x-axis-rotation</var>, 
+  the <var>large-arc-flag</var>, 
+  and the <var>sweep-flag</var> are all set to zero.
+  The coordinates are computed as follows, 
+  where <var>cx</var>, <var>cy</var>, <var>rx</var>, and <var>ry</var> 
+  are the used values of the equivalent properties, converted to user units:
 </p>
+<ol>
+  <li>A move-to command to the point
+  <var>cx+rx</var>,<var>cy</var>;</li>
+  <li>arc to <var>cx</var>,<var>cy+ry</var>;</li>
+  <li>arc to <var>cx-rx</var>,<var>cy</var>;</li>
+  <li>arc to <var>cx</var>,<var>cy-ry</var>;</li>
+  <li>arc with a <a>segment-completing close path command</a>.</li>
+</ol>
 
 <p class="annotation">
   Path decomposition resolved during teleconference on
@@ -328,22 +380,24 @@ and ends at another.</p>
     The x- and y-axis coordinates of the end of the line.
   </dd>
 </dl>
+  
+<p class="note">
+  A future specification may convert the <a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a>, and <a>'y2'</a> attributes to geometric properties.
+  Currently, they can only be specified via element attributes, and not CSS.
+</p>
 
 <p>Mathematically, a <a>'line'</a> element can be mapped to an
-equivalent <a>'path'</a> element as follows: (Note: all coordinate and
-length values are first converted into local coordinate system coordinates according
-to <a href="coords.html#Units">Units</a>.)</p>
+equivalent <a>'path'</a> element as follows, 
+after converting coordinates into local coordinate system user units according
+to <a href="coords.html#Units">Units</a> 
+to generate values <var>x1</var>, <var>y1</var>, <var>x2</var>, and <var>y2</var>:</p>
 
 <ul>
   <li>perform an absolute <a href="paths.html#PathDataMovetoCommands">moveto</a>
-  operation to absolute location (<em>x1</em>,<em>y1</em>), where <em>x1</em>
-  and <em>y1</em> are the values of the <a>'line'</a> element's <a>'x1'</a> and
-  <a>'y1'</a> attributes converted to local coordinate system, respectively</li>
+  operation to absolute location (<var>x1</var>,<var>y1</var>)</li>
 
   <li>perform an absolute <a href="paths.html#PathDataLinetoCommands">lineto</a>
-  operation to absolute location (<em>x2</em>,<em>y2</em>), where <em>x2</em>
-  and <em>y2</em> are the values of the <a>'line'</a> element's <a>'x2'</a> and
-  <a>'y2'</a> attributes converted to local coordinate system, respectively</li>
+  operation to absolute location (<var>x2</var>,<var>y2</var>)</li>
 </ul>
 
 <p>Because <a>'line'</a> elements are single lines and thus are geometrically
@@ -404,6 +458,11 @@ shapes.</p>
     is valid but does not render.</p>
   </dd>
 </dl>
+  
+<p class="note">
+  A future specification may convert the <a>'points'</a> attribute to a geometric property.
+  Currently, it can only be specified via an element attribute, and not CSS.
+</p>
 
 <p>Mathematically, a <a>'polyline'</a> element can be mapped to an
 equivalent <a>'path'</a> element as follows:</p>
@@ -463,6 +522,11 @@ set of connected straight line segments.</p>
     is valid, but does not render.</p>
   </dd>
 </dl>
+  
+<p class="note">
+  A future specification may convert the <a>'points'</a> attribute to a geometric property.
+  Currently, it can only be specified via an element attribute, and not CSS.
+</p>
 
 <p>Mathematically, a <a>'polygon'</a> element can be mapped to an
 equivalent <a>'path'</a> element as follows:</p>
