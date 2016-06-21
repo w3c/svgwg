@@ -55,53 +55,67 @@ shapes.</p>
 
 <p>The <a>'rect'</a> element defines a rectangle which is axis-aligned
 with the current <a>local coordinate system</a>. Rounded rectangles can be achieved by setting
-appropriate values for attributes <a>'rx'</a> and <a>'ry'</a>.</p>
+non-zero values for the <a>'rx'</a> and <a>'ry'</a> geometric properties.</p>
 
 <edit:elementsummary name='rect'/>
 
 <p>The <a>'x'</a> and <a>'y'</a> coordinates refer to the left and top edges of the rectangle,
 in the current user coordinate system.</p>
 
-<p>The <a>'width'</a> and <a>'height'</a> of the rectangle.  A negative value for either
-attribute is an error (see <a href="implnote.html#ErrorProcessing">Error processing</a>).
-A value of zero for either attribute disables rendering of the element.</p>
+<p>The <a>'width'</a> and <a>'height'</a> properties define the overall width and height of the rectangle.  
+A negative value for either property is illegal and <a href="https://www.w3.org/TR/CSS21/syndata.html#parsing-errors">must be ignored as a parsing error</a>.
+A computed value of zero for either dimension disables rendering of the element.</p>
 
-<p>For rounded rectangles, the x- and y-axis radii of the
-ellipse used to round off the corners of the rectangle.
-A negative value for either attribute is an error
-(see <a href="implnote.html#ErrorProcessing">Error processing</a>).</p>
+<p>For rounded rectangles, 
+the computed values of the <a>'rx'</a> and <a>'ry'</a> properties define
+the x- and y-axis radii of elliptical arcs used to round off the corners of the rectangle.
+The arc are always symmetrical along both horizontal and vertical axis; to create a rectangle with uneven corner rounding, define the shape explicitly with a <a>'path'</a>.
+A negative value for either property is illegal and <a href="https://www.w3.org/TR/CSS21/syndata.html#parsing-errors">must be ignored as a parsing error</a>.
+A computed value of zero for either dimension, 
+or a computed value of <code>auto</code> for <em>both</em> dimensions,
+results in a rectangle without corner rounding.
+</p>
 
-<p>The values used for the x- and y-axis rounded corner radii are
-determined implicitly if the <a>'rx'</a> or <a>'ry'</a> attributes (or both)
-are not specified, or are specified but with <a>invalid values</a>.
-The values are also subject to clamping so that the lengths of
-the straight segments of the rectangle are never negative.  The
-effective values for <a>'rx'</a> and <a>'ry'</a> are determined by following
-these steps in order:</p>
+<p>The used values for the x- and y-axis rounded corner radii
+may be determined implicitly from the other dimension (using the <code>auto</code> value),
+and are also subject to clamping so that the lengths of
+the straight segments of the rectangle are never negative.  
+The used values for <a>'rx'</a> and <a>'ry'</a> are determined
+from the computed values by following these steps in order:</p>
 
 <ol>
-  <li>Let <var>rx</var> and <var>ry</var> be length values.</li>
+  <li>If both <a>'rx'</a> and <a>'ry'</a> have a computed value of <code>auto</code> 
+  (since <code>auto</code> is the initial value for both properties, this will also occur if neither are specified by the author or if all author-supplied values are invalid), 
+  then the used value of both <a>'rx'</a> and <a>'ry'</a> is 0.  (This will result in square corners.)</li>
+ <li>Otherwise, convert specified values to absolute values as follows:
+   <ol>
+  <li>If <a>'rx'</a> is set to a length value or a percentage, 
+  but <a>'ry'</a> is <code>auto</code>, 
+  calculate an absolute length equivalent for <a>'rx'</a>, resolving percentages against the used <a>'width'</a> of the rectangle;
+  the absolute value for <a>'ry'</a> is the same.</li>
 
-  <li>If neither <a>'rx'</a> nor <a>'ry'</a> are properly specified, then set both
-  <var>rx</var> and <var>ry</var> to 0.  (This will result in square corners.)</li>
+  <li>If <a>'ry'</a> is set to a length value or a percentage, 
+  but <a>'rx'</a> is <code>auto</code>,  
+  calculate the absolute length equivalent for <a>'ry'</a>, resolving percentages against the used <a>'height'</a> of the rectangle;
+  the absolute value for <a>'rx'</a> is the same.</li>
 
-  <li>Otherwise, if a properly specified value is provided for <a>'rx'</a>, but
-  not for <a>'ry'</a>, then set both <var>rx</var> and <var>ry</var> to the value of <a>'rx'</a>.</li>
+  <li>If both <a>'rx'</a> and <a>'ry'</a> were set to lengths or percentages, 
+  absolute values are generated individually, 
+  resolving <a>'rx'</a> percentages against the used <a>'width'</a>,
+  and resolving <a>'ry'</a> percentages against the used <a>'height'</a>.</li>
+ </ol></li>
+ <li>Finally, apply clamping to generate the used values:
+   <ol>
+  <li>If the absolute <a>'rx'</a> (after the above steps) 
+  is greater than half of the used <a>'width'</a>, 
+  then the used value of <a>'rx'</a> is half of the used <a>'width'</a>.</li>
 
-  <li>Otherwise, if a properly specified value is provided for <a>'ry'</a>, but
-  not for <a>'rx'</a>, then set both <var>rx</var> and <var>ry</var> to the value of <a>'ry'</a>.</li>
+  <li>If the absolute <a>'ry'</a> (after the above steps) 
+  is greater than half of the used <a>'height'</a>, 
+  then the used value of <a>'ry'</a> is half of the used <a>'height'</a>.</li>
 
-  <li>Otherwise, both <a>'rx'</a> and <a>'ry'</a> were specified properly.  Set <var>rx</var> to
-  the value of <a>'rx'</a> and <var>ry</var> to the value of <a>'ry'</a>.</li>
-
-  <li>If <var>rx</var> is greater than half of <a>'width'</a>, then set
-  <var>rx</var> to half of <a>'width'</a>.</li>
-
-  <li>If <var>ry</var> is greater than half of <a>'height'</a>, then set
-  <var>ry</var> to half of <a>'height'</a>.</li>
-
-  <li>The effective values of <a>'rx'</a> and <a>'ry'</a> are <var>rx</var> and
-  <var>ry</var>, respectively.</li>
+  <li>Otherwise, the used values of <a>'rx'</a> and <a>'ry'</a> are the absolute values computed previously.</li>
+ </ol></li>
 </ol>
 
 <p>Mathematically, a <a>'rect'</a> element is mapped to an
