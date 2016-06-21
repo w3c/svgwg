@@ -447,15 +447,7 @@ and <span class='element-name'>'title'</span> elements</h2>
   <edit:elementcategory name='descriptive'/>.</dd>
 </dl>
 
-<div id='DescElement'>
-<edit:elementsummary name='desc'/>
-</div>
-
-<div id='TitleElement'>
-<edit:elementsummary name='title'/>
-</div>
-
-<p class="note">The attribute <a>'lang'</a> added to allow internationalization
+<p class="note">Multilingual descriptive text selection, based on the <a>'lang'</a> attribute, was added to allow internationalization
 of the <a>'desc'</a> and <a>'title element'</a> elements.</p>
 
 <p class="annotation">New in SVG 2. Adding 'lang' resolved at Rigi Kaltbad face-to-face.
@@ -468,69 +460,121 @@ whose content is text. <a>'desc'</a> and <a>'title'</a> elements are
 not visually rendered as part of the graphics.</p>
 
 <p>Multiple sibling <a>'desc'</a> or <a>'title'</a> elements must have
-different <a>'lang'</a> attributes. The element whose <a>'lang'</a> attribute best
-matches the language set by the user agent will be used as the <a>'title'</a> or
-<a>'desc'</a>. If no match exists, the first element must be used. If multiple equally
-valid matches exist, the first match is used.</p>
+different languages, 
+as defined using a <a>'lang'</a> attribute (or <code>xml:lang</code> attribute) on the descriptive element or an ancestor. 
+The user agent must select the element of each type whose language best
+matches language preferences set by the user. 
+A descriptive element with an empty-string language tag 
+(indicating no language, for example a text alternative consisting of emoji symbols) 
+is a lowest-priority match for any user, ranked below all user-specified language preferences.
+If multiple equally valid matches exist, the first match should be used.
+If no match exists for either 'title' or 'desc', the first element of that type must be selected.</p>
+  
+<div class="example">
+  <p>The following example shows alternative language titles on a re-used star icon,
+    inline in an HTML document.  
+    The example assumes that the HTML document as a whole has a correctly-declared language of <code>en</code> (English without a specified country code).
+  </p>
+  <pre>
+&lt;svg&gt;
+  &lt;use href="#star"&gt;
+    &lt;title&gt;Favourite&lt;/title&gt;
+    &lt;title lang="en-us"&gt;Favorite&lt;/title&gt;
+    &lt;title lang="nl"&gt;Favoriet&lt;/title&gt;
+    &lt;title lang=""&gt;★&lt;/title&gt;
+  &lt;/use&gt;
+&lt;/svg&gt;
+  </pre>
+  <p>
+    The first <code>title</code> element inherits the language of the document (<code>en</code>); the others have explicitly-declared languages for each element.
+    If the user's preferred language (out of those provided) is American English, the icon title is the American spelling "Favorite". 
+    If the user's preferred language is Dutch, the icon title is "Favoriet". 
+    If the user's preference list includes generic English ranked higher than Dutch, the title is "Favourite" with British spelling.
+    If the user does not understand either Dutch or English, the title will be the star symbol character—which is not ideal (most screen readers will read it as a localized version of "black star"), but better than no text alternative at all.
+  </p>
+  <p class="note">
+    Authors should be aware that SVG 1.1-supporting user agents 
+    that have not yet implemented multi-lingual descriptive text
+    will normally select the first element of each type, regardless of user preferences.
+    SVG 1.1 user agents may also fail to recognize a <code>title</code> element that is not the first child of its parent,
+    or a <code>desc</code> element that has previous siblings that are not other descriptive elements.
+  </p>
+</div>
 
 <p class="issue" data-issue="67">The use of more than one <a>'title'</a> or <a>'desc'</a> element to
 provide localised information is at risk, with no known implementations.</p>
+
+<p>User agents must make the text content of selected 'title' and 'desc' elements available to platform accessibility APIs as part of the name and description computation for the parent element, as defined in the <a href="http://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings [SVG-AAM]</cite></a> specification.</p>
+  
+<p>Inclusion of any 'title' or 'desc' elements as a direct child of a <a>rendered element</a> indicates that the rendered element is of semantic importance in the graphic.  
+Authors should not, and authoring tools must not, include empty 'title' or 'desc' elements with no text content or whitespace-only text content, 
+as this will result in a nameless object being presented to assistive technology users.
+</p>
+  
+<p>
+If an individual graphic element has no meaning on its own, 
+alternative text should instead be provided for the nearest container element that describes a meaningful object.
+Authors should use grouping (<a>'g'</a>) elements to structure their drawing elements into meaningful objects, and name those groups with <a>'title'</a>.
+Conversely, if a container object is used simply to apply styles or layout, 
+and neither defines an object nor provides meaningful grouping structure,
+it does not need alternative text.</p>
+  
+<p>
+  Descriptive text elements whose parent is <a>not rendered</a> may be used by authors or authoring tools as reference information; authors are warned that this data is not normally available to end users viewing the graphic through assistive technologies.  Nonetheless, a <a>non-rendered element</a> may be referenced as part of the accessible name or description of a rendered element (as defined in <a href="http://www.w3.org/TR/svg-aam-1.0/">SVG-AAM</a>), and the recursive computation will use descriptive child elements of the referenced element.
+</p>
+
+<div id='TitleElement'>
+<edit:elementsummary name='title'/>
+</div>
 
 <p>The <a>'title'</a> child element represents a short text alternative for the
 element.</p>
 
 <p>On a link, this could be the title or a description of the target resource; on an
-image or drawing object, it could be the image credit or short description of the
-object; on interactive content, it could be a label for, or instructions for, use
+image or drawing object, it could be a short description of the
+graphic; on interactive content, it could be a label for, or instructions for, use
 of the element; and so forth.</p>
 
-<p>Interactive User agents commonly render <a>'title'</a> elements as
+<p>Authors should not provide redundant information in a <a>'title'</a> element
+if there is also a visible label for the drawing element (e.g., using a <a>'text'</a> element).
+Instead, the visual label should be associated with the drawing element 
+using an <a>'aria-labelledby'</a> attribute.</p>
+
+<p>Interactive user agents should make the plain text content of <a>'title'</a> elements available in response to user interaction, in a manner consistent with platform conventions; 
+existing user agents commonly render <a>'title'</a> elements as
 a tooltip on hovering the parent element.</p>
-
-<p>User agents should make title and desc elements available to platform accessibility APIs
-as per SVG-AAM.</p>
-
-<p>Authors should not provide both a visible label for a drawing element by using a <a>'text'</a>
-element, and a <a>'title'</a> element, as they will be both presented, redundantly, to users.</p>
-
-<p>The <a>'desc'</a> element represents more detailed textual
-information for the element such as a description. This is typically exposed to assistive
-technologies to provide more detailed information, such as help information
-about the element.</p>
-
-<p>Authors should provide a <a>'title'</a> child element to the outermost svg
+  
+<p>Authors should provide a <a>'title'</a> child element to the root svg
 element within a stand-alone SVG document. Since users often consult documents
 out of context, authors should provide context-rich titles. Thus, instead of a
 title such as "Introduction", which doesn't provide much contextual background,
 authors should supply a title such as "Introduction to Medieval Bee-Keeping"
 instead. For reasons of accessibility, user agents should always make the
-content of the ‘title’ child element to the outermost svg element available to
-users.</p>
+content of the ‘title’ child element to the root svg element available to
+users. 
+However, this is typically done through other means than the tooltips used for nested SVG and graphics elements, e.g., by displaying in a browser tab.</p>
+
+<div id='DescElement'>
+<edit:elementsummary name='desc'/>
+</div>
+
+<p>The <a>'desc'</a> element represents more detailed textual
+information for the element such as a description. This is typically exposed to assistive
+technologies to provide more detailed information, such as a description of the visual appearance of a graphic or help to explain the functionality of a complex widget.  It is not typically available to other users, so should not be used for essential instructions.</p>
+
 
 <p>
-Unlike the desc element, authors also have the ability to associate more
-detailed information with content that includes visible text. This can be
-achieved by applying <a>'aria-describedby'</a> to the element, or container of
-elements being described and passing an ID reference to content that includes
-text that describes the element in question. However, if the text describing
-the object is hidden the text within the description would be exposed to
-assistive technologies as detailed text information, similar to a descendant
-<a>'desc'</a> element. The <a>'aria-describedby'</a> attribute takes precedence
-over the child <a>'desc'</a> when providing a description, consequently authors
-should only use <a>'aria-describedby'</a> when an element is described by
-visible text on the screen, otherwise the use of a child <a>'desc'</a> is
-preferred.
+Authors may associate detailed information, including visible text, with part of the graphic
+using <a>'aria-describedby'</a> attribute 
+(on the described element or a parent container),
+with the value being an ID reference to one or more SVG or HTML elements containing the description. 
+The <a>'aria-describedby'</a> attribute takes precedence
+over the child <a>'desc'</a> when providing a description.
+If an element has both visible description and a child <a>'desc'</a> element providing supplementary information, 
+authors should explicitly include the <a>'id'</a> of the element itself in its own <a>'aria-describedby'</a> list, in order to concatenate the two descriptions together.
 </p>
-
-<p>Alternate presentations are possible, both visual and
-aural, which display the <a>'desc'</a> and <a>'title'</a> elements but do not
-display <a>'path'</a> elements or other <a>graphics elements</a>. For deep
-hierarchies, and for following <a>'use'</a> element references, it is
-sometimes desirable to allow the user to control how deep they drill down into
-descriptive text.</p>
-
-</div> <!--  class="ready-for-wg-review" -->
-
+  
+<!--
 <p>The following is an example. In typical operation, the SVG user agent would
 not render the <a>'desc'</a> and <a>'title'</a> elements but would render the
 remaining contents of the <a>'g'</a> element.</p>
@@ -548,14 +592,14 @@ remaining contents of the <a>'g'</a> element.</p>
   </g>
 </svg>
 ]]></pre>
+-->
+<p>Description and title elements may contain marked-up text
+from other namespaces.
+However, authors should not rely on such markup to provide meaning to alternative text; 
+only the plain text content is currently required to be exposed to assistive technologies.</p>
 
-<p>Description and title elements can contain marked-up text
-from other namespaces.</p>
 
-<p class="issue" data-issue="23">We should say what purpose including other-namespaced
-markup in <a>'title'</a> and <a>'desc'</a> has.  If it is just that
-these are basically metadata extension points for other profiles or
-uses of SVG, then we should say that.</p>
+</div> <!--  class="ready-for-wg-review" -->
 
 <!--
 Do we want/need to keep this part?
