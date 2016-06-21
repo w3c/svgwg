@@ -119,52 +119,54 @@ from the computed values by following these steps in order:</p>
 </ol>
 
 <p>Mathematically, a <a>'rect'</a> element is mapped to an
-equivalent <a>'path'</a> element as follows: (Note: all coordinate and
-length values are first converted into local coordinate system coordinates according
-to <a href="coords.html#Units">Units</a>.)</p>
+equivalent <a>'path'</a> element as follows, 
+after generating absolute used values
+<var>x</var>, <var>y</var>, <var>width</var>, <var>height</var>,
+<var>rx</var>, and <var>rx</var> 
+in user units for the local coordinate system,
+for each of the equivalent geometric properties
+following the rules specified above and in <a href="coords.html#Units">Units</a>: </p>
 
 <ul>
   <li>perform an absolute <a
   href="paths.html#PathDataMovetoCommands">moveto</a> operation to
-  location (<em>x+rx</em>,<em>y</em>), where <em>x</em> is the value of
-  the <a>'rect'</a> element's <a>'x'</a> attribute converted to user
-  space, <em>rx</em> is the effective value of the <a>'rx'</a> attribute
-  converted to local coordinate system and <em>y</em> is the value of the <a>'y'</a>
-  attribute converted to local coordinate system</li>
+  location (<var>x+rx</var>,<var>y</var>);</li>
 
   <li>perform an absolute horizontal <a href="paths.html#PathDataLinetoCommands">lineto</a>
-  operation to location (<em>x+width-rx</em>,<em>y</em>), where <em>width</em>
-  is the <a>'rect'</a> element's <a>'width'</a> attribute converted to user
-  space</li>
+  operation to location (<var>x+width-rx</var>,<var>y</var>);</li>
 
-  <li>perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
-  operation to coordinate (<em>x+width</em>,<em>y+ry</em>), where the effective
-  values for the <a>'rx'</a> and <a>'ry'</a> attributes on the <a>'rect'</a>
-  element converted to local coordinate system are used as the <em>rx</em> and <em>ry</em>
-  attributes on the <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
-  command, respectively, the <em>x-axis-rotation</em> is set to zero, the
-  <em>large-arc-flag</em> is set to zero, and the <em>sweep-flag</em> is set
-  to one</li>
+  <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
+  perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
+  operation to coordinate (<var>x+width</var>,<var>y+ry</var>), 
+  where <var>rx</var> and <var>ry</var> are used as the equivalent parameters to
+  the <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a> command, 
+  and the <var>x-axis-rotation</var>, 
+  the <var>large-arc-flag</var>, 
+  and the <var>sweep-flag</var> are all set to zero;</li>
 
-  <li>perform a absolute vertical <em>lineto</em> to location
-  (<em>x+width</em>,<em>y+height-ry</em>), where <em>height</em> is the
-  <a>'rect'</a> element's <a>'height'</a> attribute converted to user
-  space</li>
+  <li>perform an absolute vertical <var>lineto</var> to location
+  (<var>x+width</var>,<var>y+height-ry</var>);</li>
 
-  <li>perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
-  operation to coordinate (<em>x+width-rx</em>,<em>y+height</em>)</li>
+  <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
+  perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
+  operation to coordinate (<var>x+width-rx</var>,<var>y+height</var>),
+  using the same parameters as previously;</li>
 
-  <li>perform an absolute horizontal <em>lineto</em> to location
-  (<em>x+rx</em>,<em>y+height</em>)</li>
+  <li>perform an absolute horizontal <var>lineto</var> to location
+  (<var>x+rx</var>,<var>y+height</var>);</li>
 
-  <li>perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
-  operation to coordinate (<em>x</em>,<em>y+height-ry</em>)</li>
+  <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
+  perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
+  operation to coordinate (<var>x</var>,<var>y+height-ry</var>),
+  using the same parameters as previously;</li>
 
-  <li>perform an absolute absolute vertical <em>lineto</em> to location
-  (<em>x</em>,<em>y+ry</em>)</li>
+  <li>perform an absolute absolute vertical <var>lineto</var> to location
+  (<var>x</var>,<var>y+ry</var>)</li>
 
-  <li>perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
-  operation to coordinate (<em>x+rx</em>,<em>y</em>)</li>
+  <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
+  perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
+  operation with a segment-completing <a href="paths.html#PathDataClosePathCommand">close path</a>,
+  using the same parameters as previously.</li>
 </ul>
 
 <p class="annotation">
@@ -182,7 +184,7 @@ and stroked with navy.</p>
 <p id="ExampleRect02"><span class="example-ref">Example rect02</span> shows
 two rounded rectangles. The <a>'rx'</a> specifies how to round the corners of
 the rectangles. Note that since no value has been specified for the <a>'ry'</a>
-attribute, it will be assigned the same value as the <a>'rx'</a> attribute.</p>
+attribute, the used value will be derived from the <a>'rx'</a> attribute.</p>
 
 <edit:example href='images/shapes/rect02.svg' name='rect02' description='rounded rectangles expressed in user coordinates' link='yes' image='yes'/>
 
