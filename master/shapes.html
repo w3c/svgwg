@@ -36,8 +36,9 @@
   <li>circles, created with the <a>'circle'</a> element,</li>
   <li>ellipses, created with the <a>'ellipse'</a> element,</li>
   <li>straight lines, created with the <a>'line'</a> element,</li>
-  <li>polylines, created with the <a>'polyline'</a> element, and</li>
-  <li>polygons, created with the <a>'polygon'</a> element.</li>
+  <li>polylines, created with the <a>'polyline'</a> element,</li>
+  <li>polygons, created with the <a>'polygon'</a> element, and</li>
+  <li>meshes, created with the <a>'mesh'</a> element.</li>
 </ul>
 
 <p>Mathematically, these shape elements are equivalent to a
@@ -552,6 +553,118 @@ on the <a>'svg'</a> element.</p>
 
 </edit:with>
 
+<h2 id="MeshElement">The <span class="element-name">'mesh'</span> element</h2>
+
+<p class="note">
+  New in SVG 2.
+</p>
+<p class="annotation">
+  Added by resolution at the
+  <a href="https://www.w3.org/2016/06/21-svg-minutes.html#item07">Amsterdam
+  Editor's Meeting</a> in order to distinguish a mesh as a graphics
+  element from mesh as a paint server. Behavior of overflow resolved
+  on the last day.
+</p>
+
+<edit:with element='mesh'>
+
+  <p>
+    The <a>'mesh'</a> element is a wrapper for a <a>'meshGradient'</a>
+    paint server. Its geometry is determined by the referenced
+    <a>'meshGradient'</a>.
+  </p>
+
+  <edit:elementsummary name='mesh'/>
+
+  <dl class="attrdef-list">
+    <dt>
+      <table class="attrdef def">
+	<tr>
+          <th>Name</th>
+          <th>Value</th>
+          <th>Initial value</th>
+          <th>Animatable</th>
+	</tr>
+	<tr>
+          <td><dfn id="MeshElementHrefAttribute">href</dfn></td>
+          <td>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></td>
+          <td>(none)</td>
+          <td>yes</td>
+	</tr>
+      </table>
+    </dt>
+    <dd>
+      <p>
+	An <a href="linking.html#URLReference">URL reference</a> to
+	a <a>'meshGradient'</a> paint server.
+      </p>
+      Refer to the common handling defined for
+      <a href="linking.html#linkRefAttrs">URL reference attributes</a>.
+    </dd>
+  </dl>
+
+  <p>
+    If the <a>'href'</a> points to a valid <a>'meshGradient'</a> paint
+    server, use that to render the <a>'mesh'</a> element; else if the
+    first <a>'meshGradient'</a> child element is valid use that.
+    Otherwise, the <a>'mesh'</a> will not render. A non-rendered
+    <a>'mesh'</a> behaves the same as a <a>'path'</a> that has
+    a <a>'d'</a> property with value
+    <span class="prop-value">none</span>. Note: The
+    <a>'fill'</a> property is not used to define the paint of a
+    <a>'mesh'</a>, however a <a>'mesh'</a> may have a stroke and
+    markers positioned using the <a>equivalent path</a>.
+  </p>
+  <p>
+    The <a>equivalent path</a> consists of a path constructed to match
+    the outer shape of the referenced <a>'meshGradient'</a>. To
+    construct the path, start at the first corner of the first
+    <a>'meshpatch'</a> and then walk around the ouside of
+    the <a>'meshGradient'</a>, adding each linear or Bézier segment
+    encountered to the path. When the starting point is reached, the
+    path should be closed with a <a>segment-completing close path
+    command</a>.
+  </p>
+
+  <div class="figure">
+    <img alt="A simple 2x2 patch mesh with a thick black stroke along
+       the outside.  A red dot is at the upper left corner and an
+       arrow showing the direction the path is constructed."
+       src="images/shapes/mesh-example.png"/>
+    <p class="caption">
+      A 2x2 patch mesh gradient. The equivalent path is shown by the
+      heavy black path. The path starting point is indicated by the red
+      circle and the path direction by the arrow.
+    </p>
+  </div>
+
+  <p>
+    Meshes can fold over such that there may be painted regions that
+    are outside the equivalent path. Painting of these regions is
+    controlled by the <a>'overflow'</a> property. The initial value
+    for this property is
+    <span class="prop-value">visible</span>.
+  </p>
+
+  <div class="figure">
+    <img alt="Two simple one patch meshes with thick black strokes along
+       the outsides."
+       src="images/shapes/mesh-overflow.png"/>
+    <p class="caption">
+      Single patch mesh gradient with different values of the
+      <a>'overflow'</a> property. Left: <a>'overflow'</a> with value
+      <span class="prop-value">display</span>. Right <a>'overflow'</a>
+      with value <span class="prop-value">hidden</span>.
+    </p>
+  </div>
+
+  <p>
+    A <a>'mesh'</a> is always painted as if the fill rule
+    is <span class="prop-value">nonzero</span> regardless of the
+    value of the <a>'fill-rule'</a> property.
+  </p>
+
+</edit:with>
 
 <div class='ready-for-wider-review'>
 <h2 id="DOMInterfaces">DOM interfaces</h2>
@@ -655,6 +768,19 @@ element.
 <b id="__svg__SVGLineElement__y2">y2</b> IDL attributes
 <a>reflect</a> the <a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a> and <a>'y2'</a>
 content attributes, respectively</p>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGMeshElement">Interface SVGMeshElement</h3>
+
+<edit:with element="mesh">
+
+<p>An <a>SVGMeshElement</a> object represents a <a>'mesh'</a> element in the DOM.</p>
+
+<pre class="idl">interface <b>SVGMeshElement</b> : <a>SVGGeometryElement</a> {};
+
+<a>SVGMeshElement</a> implements <a>SVGURIReference</a>;</pre>
 
 </edit:with>
 
