@@ -347,23 +347,24 @@ XLink attributes. For example:</p>
 
 <p>SVG provides an <a>'a'</a> element, to indicate links (also known
 as <em>hyperlinks</em> or <em>Web links</em>). The <a>'a'</a> element may
-contain any element that its parent may contain, except itself.</p>
+contain any element that its parent may contain; the same element is used for both graphical and textual linked content.</p>
 
-<p>SVG uses XLink ([<a href="http://www.w3.org/TR/2001/REC-xlink-20010627/">XLink</a>])
-for all link definitions. SVG 1.1 only requires
-that user agents support XLink's notion of
-<a href="http://www.w3.org/TR/2001/REC-xlink-20010627/#simple-links">simple links</a>.
-Each simple link associates exactly two resources, one
-local and one remote, with an arc going from the former to the latter.</p>
+<p class="note">SVG 1.1 defined links in terms of the XLink specification ([<a href="http://www.w3.org/TR/2001/REC-xlink-20010627/">XLink</a>]), 
+using attributes defined in the XLink namespace. 
+SVG 2 uses an alternative set of attributes in the default namespace that are consistent with HTML links, and <a href="#XLinkRefAttrs">deprecates the XLink attributes</a>.</p>
 
-<p>A simple link is defined for each separate rendered element contained
-within the <a>'a'</a> element; thus, if the <a>'a'</a> element contains
-three <a>'circle'</a> elements, a link is created for each circle. For
-each rendered element within an <a>'a'</a> element, the given rendered
-element is the local resource (the source anchor for the link).</p>
+<p>For pointer events processing, 
+a linked hit region is defined for each separate rendered element contained
+within the <a>'a'</a> element (according to the value of their <a>'pointer-events'</a> property),
+rather than for the bounding box of the <a>'a'</a> element itself.
+When links are nested one inside the other, the innermost link takes precedence for processing pointer events on its child content; 
+user agents must allow the nested link element to process the activation event before allowing events to bubble to outer elements.  
+User agents must ensure that all links are <a>focusable</a> and can be activated by keyboard commands.</p>
+  
+<p class="issue">The ability to nest links is at risk, pending feedback on the accessibility of the resulting document.</p>
 
 <p>The remote resource (the destination for the link) is defined by
-an <a>URL</a> specified by the <a>'href'</a> attribute on the <a>'a'</a>
+a <a>URL</a> specified by the <a>'href'</a> attribute on the <a>'a'</a>
 element. The remote resource may be any Web resource (e.g., an image, a video
 clip, a sound bite, a program, another SVG document, an HTML document, an
 element within the current document, an element within a different document, etc.).
@@ -486,6 +487,51 @@ or frame to be replaced by the W3C home page.</p>
             legal value for target.  Use <span class="attr-value">'_blank'</span>
             to open a document in a new tab/window.</p>
     </div>
+  </dd>
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="AElementDownloadAttribute">download</dfn></td>
+        <td>any value (meaning is conveyed by presence or absence of attribute)</td>
+        <td>(none)</td>
+        <td>no</td>
+      </tr>
+      <tr>
+        <td><dfn id="AElementRelAttribute">rel</dfn></td>
+        <td>space-separated keyword tokens <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#set-of-space-separated-tokens" class="syntax">[HTML]</a></td>
+        <td>(none)</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td><dfn id="AElementRevAttribute">rev</dfn></td>
+        <td>space-separated keyword tokens <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#set-of-space-separated-tokens" class="syntax">[HTML]</a></td>
+        <td>(none)</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td><dfn id="AElementHreflangAttribute">hreflang</dfn></td>
+        <td>A BCP 47 language tag string <a href="https://html.spec.whatwg.org/multipage/semantics.html#attr-hyperlink-hreflang" class="syntax">[HTML]</a></td>
+        <td>(none)</td>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <td><dfn id="AElementTypeAttribute">type</dfn></td>
+        <td>A MIME type string <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#mime-type" class="syntax">[HTML]</a></td>
+        <td>(none)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    These attributes further describe the targetted resource 
+    and its relationship to the current document.
+    Allowed values and meaning are <a href="https://www.w3.org/TR/html51/textlevel-semantics.html#the-a-element">as defined for the <code>a</code> element in HTML</a>.
   </dd>
 </dl>
 
@@ -717,12 +763,28 @@ as follows:</p>
 
 <pre class="idl">interface <b>SVGAElement</b> : <a>SVGGraphicsElement</a> {
   [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__target">target</a>;
+  [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__download">download</a>;
+  [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__rel">rel</a>;
+  [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__rel">relList</a>;
+  [SameObject] readonly attribute <a>DOMTokenList</a> <a href="linking.html#__svg__SVGAElement__rev">rev</a>;
+  [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__hreflang">hreflang</a>;
+  [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__type">type</a>;
 };
 
-<a>SVGAElement</a> implements <a>SVGURIReference</a>;</pre>
+<a>SVGAElement</a> implements <a>SVGURIReference</a>;
+<a>SVGAElement</a> implements <a>HTMLHyperlinkElementUtils</a>;</pre>
 
-<p>The <b id="__svg__SVGAElement__target">target</b> IDL attribute
-<a>reflects</a> the <a>'target'</a> content attribute.</p>
+<p>The <b id="__svg__SVGAElement__target">target</b>,
+  <b id="__svg__SVGAElement__download">download</b>,
+  <b id="__svg__SVGAElement__rel">rel</b>,
+  <b id="__svg__SVGAElement__rev">rev</b>,
+  <b id="__svg__SVGAElement__hreflang">hreflang</b>,
+  <b id="__svg__SVGAElement__type">type</b>,
+  IDL attributes
+<a>reflect</a> the content attributes of the same name.</p>
+<p>The <b id="__svg__SVGAElement__target">relList</b>
+  IDL attribute
+<a>reflects</a> the <a>'rel'</a> content attribute as a token list.</p>
 
 </edit:with>
 
