@@ -1276,7 +1276,7 @@ bypassed/not rendered.</p>
 
 <p class='ready-for-wg-review'>
 In SVG, when evaluating the <a>'systemLanguage'</a> attribute, the order of
-evaluation of descendent elements of the <a>'switch'</a> element must be as if the
+evaluation of descendant elements of the <a>'switch'</a> element must be as if the
 <a href="https://www.w3.org/TR/REC-smil/smil-content.html#adef-allowReorder">'allowReorder'</a>
 attribute, defined in the SMIL specification [<a href="refs.html#ref-SMIL">SMIL</a>]
 always has a value of 'yes'.</p>
@@ -2237,6 +2237,8 @@ IDL attribute.</p>
   <a>SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransform">createSVGTransform</a>();
   <a>SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>(<a>DOMMatrixReadOnly</a> matrix);
 
+  <a>Element</a> <a href="struct.html#__svg__SVGSVGElement__getElementById">getElementById</a>(DOMString elementId);
+
   <span class="comment">// Deprecated methods that have no effect when called,</span>
   <span class="comment">// but which are kept for compatibility reasons.</span>
   unsigned long <a href="struct.html#__svg__SVGSVGElement__suspendRedraw">suspendRedraw</a>(unsigned long maxWaitMilliseconds);
@@ -2538,6 +2540,31 @@ method is used to create a new <a>SVGTransform</a> object from a matrix object.
 Its behavior is the same as the
 <a href="coords.html#__svg__SVGTransformList__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>
 method on <a>SVGTransformList</a>.</p>
+
+<div class='ready-for-wg-review'>
+<p>The <b id="__svg__SVGSVGElement__getElementById">getElementById</b> method
+searches the descendant elements of the <a>'svg'</a> element that this method is
+called on for an element with an <a>'id'</a> attribute equal to <var>elementId</var>.
+This method is deprecated and kept only for compatibility with legacy content.
+Authors are encouraged to use alternative methods.</p>
+<p>When getElementById(<var>elementId</var>) is called, the following steps
+must be run:</p>
+<ol class='algorithm'>
+  <li>For each descendant <var>element</var> of the <a>SVGSVGElement</a>:
+    <ol>
+      <li>If <var>element</var> has an <a>'id'</a> attribute with the value
+        <var>elementId</var>, then return <var>element</var></li>
+    </ol>
+  </li>
+  <li>Return <b>null</b></li>
+</ol>
+<p class="note">
+<code>SVGSVGElement.getElementById(id)</code> is the equivalent of calling
+<code>Element.querySelector("#"+id)</code> on the <code>SVGSVGElement</code>
+element. In a stand-alone SVG document, when called on the root <a>'svg'</a>
+element, it is the equivalent of calling <code>document.getElementById(id)</code>.
+</p>
+</div>
 
 </edit:with>
 
