@@ -346,30 +346,40 @@ XLink attributes. For example:</p>
 <edit:with element='a'>
 
 <p>SVG provides an <a>'a'</a> element, to indicate links (also known
-as <em>hyperlinks</em> or <em>Web links</em>). The <a>'a'</a> element may
-contain any element that its parent may contain; the same element is used for both graphical and textual linked content.</p>
+as <em>hyperlinks</em> or <em>Web links</em>). 
+An <a>'a'</a> element forms a link if it has a <a>'href'</a> or <a>'xlink:href'</a> attribute; without these attributes the <a>'a'</a> element is an inactive placeholder for a link.</p>
 
 <p class="note">SVG 1.1 defined links in terms of the XLink specification ([<a href="http://www.w3.org/TR/2001/REC-xlink-20010627/">XLink</a>]), 
 using attributes defined in the XLink namespace. 
 SVG 2 uses an alternative set of attributes in the default namespace that are consistent with HTML links, and <a href="#XLinkRefAttrs">deprecates the XLink attributes</a>.</p>
+  
+<p>The <a>'a'</a> element may
+contain any element that its parent may contain, except for another <a>'a'</a> element; 
+the same element is used for both graphical and textual linked content.
+Links may not be nested; 
+if an <a>'a'</a> element is a descendent of another hyperlink element 
+(whether in the SVG namespace or another namespace),
+user agents must ignore its href attribute and treat it as inactive.
+The invalid <a>'a'</a> element must still be rendered as a generic container element.
+</p>
+  
+<p class="issue" data-issue="18">The rendering of invalid nested links is at risk, and will likely be synchronized with any decisions regarding the rendering of <a>'unknown'</a> elements.</p>
+
 
 <p>For pointer events processing, 
 a linked hit region is defined for each separate rendered element contained
 within the <a>'a'</a> element (according to the value of their <a>'pointer-events'</a> property),
 rather than for the bounding box of the <a>'a'</a> element itself.
-When links are nested one inside the other, the innermost link takes precedence for processing pointer events on its child content; 
-user agents must allow the nested link element to process the activation event before allowing events to bubble to outer elements.  
-User agents must ensure that all links are <a>focusable</a> and can be activated by keyboard commands.</p>
-  
-<p class="issue" data-issue="18">The ability to nest links is at risk, pending feedback on the accessibility of the resulting document.</p>
+User agents must also ensure that all links are <a>focusable</a> and can be activated by keyboard commands.</p>
 
 <p>The remote resource (the destination for the link) is defined by
 a <a>URL</a> specified by the <a>'href'</a> attribute on the <a>'a'</a>
 element. The remote resource may be any Web resource (e.g., an image, a video
 clip, a sound bite, a program, another SVG document, an HTML document, an
 element within the current document, an element within a different document, etc.).
-By activating these links (by clicking with the mouse, through keyboard
-input, voice commands, etc.), users may visit these resources.</p>
+In response to user activation of a link 
+(by clicking with the mouse, through keyboard input, voice commands, etc.), 
+user agents should attempt to fetch the specified resource document and either display it or make it available as a downloaded file.</p>
 
 <p id="ExampleLink01"><span class="example-ref">Example link01</span> assigns
 a link to an ellipse.</p>
