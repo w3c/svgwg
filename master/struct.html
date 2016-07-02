@@ -330,7 +330,10 @@ within it, to an arbitrary depth.</p>
     </tr>
     <tr>
       <th>Resolution:</th>
-      <td><a href="http://www.w3.org/2012/01/13-svg-irc#T00-25-54">Accept having unknown elements treated as <span class='element-name'>'g'</span> for the purpose of rendering.</a></td>
+      <td><ul><li>
+        <a href="http://www.w3.org/2012/01/13-svg-irc#T00-25-54">Accept having unknown elements treated as <span class='element-name'>'g'</span> for the purpose of rendering.</a></li>
+        <li><a href="https://www.w3.org/2016/06/30-svg-minutes.html#resolution03">Treat unknown elements as tspan when inside text. Presentation and inherited style apply, but nothing text-specific.</a>
+        </li></ul></td>
     </tr>
     <tr>
       <th>Purpose:</th>
@@ -349,23 +352,31 @@ within it, to an arbitrary depth.</p>
 
 <edit:elementsummary name='unknown'/>
 
-<p class="issue" data-issue="70">Treating unknown elements as a g element resulting in the
+<p class="issue" data-issue="70">Treating unknown elements as a generic container element, resulting in the
 rendering of their child trees, and assigning the SVGUnknownElement interface to
 unknown elements are both at risk, with no known implementations.</p>
 
 <p>Unknown elements are all elements that are in the SVG namespace that are not
 defined by this specification or any SVG module. The <a>SVGUnknownElement</a>
 interface must be used for unknown elements.</p>
-<p>Known elements in the SVG namespace that occur in places where SVG's content
-model doesn't explicitly allow it must not render.</p>
-<p>Unknown elements in the SVG namespace must render as if the unknown element
-were replaced with a <a>'g'</a> element. This means that any attribute or
-property that is valid on the <a>'g'</a> element is also valid on unknown
-elements, and any styles specified on unknown elements must be inherited by
-their child elements.  Unknown elements are <a>container elements</a>.
+  
+<p>Unknown elements in the SVG namespace are <a>renderable elements</a> and <a>container elements</a>.
+They must render as if the unknown element
+were replaced with a <a>'g'</a> element or <a>'tspan'</a>, according to context. 
+Any global attribute or property that is valid on any SVG graphics element 
+is also valid on unknown elements, and must be processed as normal.
+This includes conditional processing attributes, ARIA attributes, data attributes,
+and the <a>'lang'</a>, <a>'id'</a>, <a>'class'</a>, <a>'tabindex'</a> and <a>'style attribute'</a>.
+Styles specified on unknown elements must be inherited by
+their child elements according to the normal rules for inheritance for each style property.  
 </p>
+  
 <p>Known and unknown elements in other namespaces that occur as a child of any
 SVG element except <a>'foreignObject'</a>, must not render unless
+explicitly stated otherwise in this specification.</p>
+  
+<p>Known elements in the SVG namespace that occur in places where SVG's content
+model doesn't explicitly allow it must not render unless
 explicitly stated otherwise in this specification.</p>
 
 <p>Consequently, in the following example:</p>
