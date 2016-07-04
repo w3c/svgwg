@@ -840,7 +840,9 @@ contents</a> of that element is rendered at that given point
 in the document.  
 These <a>re-used graphics</a> inherit styles from the <a>'use'</a> element
 and in certain cases can be re-sized.
-However, they remain linked to the referenced source and reflect DOM mutations, animations, and style changes in the original.
+However, they remain linked to the referenced source and reflect DOM mutations in the original.
+In addition, all style rules that apply in the scope of the referenced element
+also apply in the scope of the <a>re-used graphics</a>.
 </p>
     
 <h3 id="UseAttributes">Attributes</h3>
@@ -905,49 +907,232 @@ However, they remain linked to the referenced source and reflect DOM mutations, 
     <p>An <a href="linking.html#URLReference">URL reference</a> to the
     element/fragment within an SVG document to be cloned for
     rendering.</p>
+    <p>The <a>'use'</a> element can reference an entire SVG document
+    by specifying an <a>'href'</a> value without a fragment.
+    Such references are taken to be referring to the root element
+    of the referenced document.</p>
     Refer to the common handling defined for <a
     href="linking.html#linkRefAttrs">URL reference attributes</a> and
     <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
   </dd>
 </dl>
 
+<p class="note">New in SVG 2. 
+An <a>'href'</a> without a fragment allows an entire SVG document to be referenced
+without having to ensure that it has an ID on its root element.</p>
+  
+<p>
+User agents may restrict external resource documents for security
+reasons. In particular, this specification does not allow cross-origin resource requests in <a>'use'</a>.
+A future version of this or another specification may provide a method of securely enabling cross-origin re-use
+of assets.
+</p>
+  
+<p>
+A <a>'use'</a> element that has just been created (by script or parser) is in an <dfn id="TermUnresolvedUseElement">unresolved</dfn> state.
+If the <a>'use'</a> element has a non-empty <a>'href'</a> attribute
+(or, in the absence of an <a>'href'</a> attribute, an <a>'xlink:href'</a> attribute),
+then the user agent must attempt to parse the value of the attribute as a URI.
+If this results in a valid URI, the user agent must attempt to resolve the URI to identify a specific <a>referenced element</a>, as follows:
+</p>
+<ul>
+  <li>
+    <p>If the URI targets an element in the same document,
+      and that element currently exists in the DOM,
+      then that element becomes the <a>referenced element</a>
+      for the <a>'use'</a> element, which is now in a resolved state.
+    </p>
+  </li>
+  <li>
+    <p>If the URI targets an element in the same document,
+      but no such element currently exists in the DOM,
+      then observe mutations to the DOM 
+      until the URI can be successfully resolved
+      to define the <a>referenced element</a>.
+    </p>
+  </li>
+  <li>
+    <p>If the URI refers to another document, 
+      and the processing mode or security restrictions on this document allow it to be accessed,
+      fetch that document and process it in secure static mode 
+      (meaning, do not fetch any additional external resources and do not run scripts or play animations or video).
+      If the URI does not specify an element <a>'id'</a> in a target fragment,
+      the <a>referenced element</a> is the root element of that document.
+      If the URI does include a target fragment, 
+      and a matching element can be found, 
+      that element is the <a>referenced element</a>.
+      Otherwise, if the target cannot be matched in the referenced document
+      after it has been fully processed in static mode,
+      then the <a>'use'</a> element is no longer <a>unresolved</a>,
+      but is in error.
+    </p>
+  </li>
+  <li>
+    <p>If the URI refers to another document 
+      which cannot be accessed (for whatever reason),
+      then the <a>'use'</a> element is no longer <a>unresolved</a>,
+      but is in error.
+    </p>
+</ul>
+  
+<p class="issue">
+  Is secure static mode the best choice? 
+  Or should we use static mode? That would allow chained references to addtional resources, but still no scripting or animation.
+</p>
+
+<p>If the <a>referenced element</a> that results from resolving the URI is not an SVG element, 
+  the <a>'use'</a> element is in error.
+  If the referenced element is either an ancestor or descendent
+  of the <a>'use'</a> element, 
+  then this is an <a>invalid circular reference</a>
+  and the <a>'use'</a> element is in error.
+  Otherwise, the user agent must generate a <a>shadow tree</a>
+  of <a>re-used graphics</a> to render as the contents of the <a>'use'</a> element,
+  as described in the next section.</p>
+  
+<p>A <a>'use'</a> that is <a>unresolved</a> or in error is not rendered.
+  For the purpose of bounding box calculations, 
+  it is equivalent to an empty container element.</p>
+  
+<p>If the <a>'href'</a> attribute for the <a>'use'</a> is modified or animated, 
+or if <a>'href'</a> is not present and the <a>'xlink:href'</a> attribute is modified or animated,
+or if the <a>'id'</a> attribute on the <a>referenced element</a> is modified,
+or if the <a>referenced element</a> is removed from the DOM,
+then the <a>'use'</a> element returns to the <a>unresolved</a> state.
+The user agent must once again attempt to resolve the URI to identify the referenced element.
+</p>
+
+
 </edit:with>
 
-<h3 id="UseReUse">Re-usable graphics and the shadow tree</h3>
+<h3 id="UseReUse">Re-used graphics and the shadow tree</h3>
+  
+<p>The <a>re-used graphics</a> generated by a <a>'use'</a> element
+are defined in terms of a <a>shadow tree</a>.
+</p>
+  
+<p>
+Elements in the shadow tree are rendered as if 
+the <a>'use'</a> element was a container and they were its children.
+However, the SVG Document Object Model (DOM) only contains 
+the <a>'use'</a> element and its attributes. 
+The SVG DOM does not include the
+element instances as children of the <a>'use'</a> element.
+</p>
+  
+<p>User agents that support scripting and the document object model
+must implement <a>'use' element shadow trees</a> as described in this section.
+In contrast, user agents that do <em>not</em> support 
+the dynamic interactive processing mode 
+may not need to implement all the details of the shadow DOM. 
+However, all user agents must ensure that the <a href="#UseLayout">layout</a> 
+and <a href="#UseStyleInheritance">style inheritance</a> for the re-used graphics,
+and any declarative animations if applicable,
+are rendered in the same way as if the shadow DOM was implemented. 
+</p>
+  
+<p>The following definitions apply when discussing <a>'use'</a> elements 
+  and their shadow trees:</p>
 
+<dl>
+  <dt>referenced element</dt>
+  <dd>The element specified by the <a>'href'</a> (or <a>'xlink:href'</a>) attribute on the <a>'use'</a> element, or the root element of a document referenced by that attribute if the URL provided does not include a target fragment that links to a specific element <a>'id'</a>.</dd>
+  
+  <dt>referenced document fragment</dt>
+  <dt>referenced graphics</dt>
+  <dd>The referenced element, and all of its descendent nodes.</dd>
+  
+  <dt>shadow root</dt>
+  <dd>A type of <a>DocumentFragment</a> node which is associated with a host <a>Element</a>,
+  and which contains the content that will be used to render that host.
+  A shadow root should be implemented in conformance with the <a href="https://www.w3.org/TR/shadow-dom/">Shadow DOM</a> specification, or its future replacement <a href="refs.html#ref-SHADOWDOM">[SHADOWDOM]</a>.
+  </dd>
+  
+  <dt>shadow host</dt>
+  <dt>host</dt>
+  <dd>An element that has an associated shadow root.</dd>
+  
+  <dt>shadow tree</dt>
+  <dd>A node tree whose root is a shadow root.</dd>
+  
+  <dt>'use' element shadow tree</dt>
+  <dd>A shadow tree whose host is a <a>'use'</a> element, 
+  which contains element instances generated by cloning the referenced graphics.
+  The shadow tree's shadow root node has a single element child,
+  which is the element instance for the referenced element.
+  </dd>
+  
+  <dt>element instance</dt>
+  <dt>instance</dt>
+  <dd>An element in the <a>'use' element shadow tree</a>,
+    which is generated by cloning a corresponding element in the referenced document fragment.
+  </dd>
+  
+  <dt>corresponding element</dt>
+  <dd>For each element instance, 
+    the element in the referenced document fragment from which it is cloned.</dd>
+  
+  <dt>corresponding 'use' element</dt>
+  <dd>For each element instance, 
+    the <a>'use'</a> element which causes it to be rendered in the document.
+    This is the instance's shadow root's host <a>'use'</a> element 
+    <em>if</em> that element is not itself an element instance within a <a>'use'</a> element shadow tree, 
+    or is that element's corresponding 'use' element otherwise,
+    recursively exiting shadow trees as many times as necessary 
+    to reach a <a>'use'</a> element that was not itself generated 
+    as part of the shadow tree of another <a>'use'</a> element.
+  </dd>
+</dl>
+
+  <!--
 <p>The <dfn id="TermGraphicalContents">graphical contents</dfn>
 are any <a>'svg'</a>, <a>'symbol'</a>, <a>'g'</a>, <a>graphics element</a> or
 other <a>'use'</a> elements, that a <a>'use'</a> element references.
 </p>
-
-<div class="ready-for-wider-review">
-<p>The <a>'use'</a> element can reference an entire SVG document
-by specifying an <a>'href'</a> value without a fragment.
-Such references are taken to be referring to the root element
-of the referenced document.</p>
-
-<p class="note">New in SVG 2. This allows an entire SVG document to be referenced
-without having to ensure that it has an ID on its root element.</p>
-</div>
+-->
     
-<p>The effect of a <a>'use'</a>
-element is as if the contents of the referenced element were
-deeply cloned into a separate non-exposed DOM tree which had
-the <a>'use'</a> element as its
-parent and all of the <a>'use'</a>
-element's ancestors as its higher-level ancestors. Because the
-cloned DOM tree is non-exposed, the SVG Document Object Model
-(DOM) only contains the <a>'use'</a>
-element and its attributes. The SVG DOM does not show the
-referenced element's contents as children of <a>'use'</a> element.</p>
-
-<p>The non-exposed DOM tree must be created even if
+<p>When the user agent successfully resolves a <a>'use'</a> element 
+to identify a <a>referenced element</a>,
+the user agent must create a 
+<a>'use' element shadow tree</a> whose host is the <a>'use'</a> element itself.
+The shadow tree must be created even if
 <span class="prop-value">'display: none'</span> is set on the <a>'use'</a> element.
-Note that <a>'script'</a> elements that get conceptually cloned into the non-exposed DOM tree
-do not execute again, and <a>'audio'</a> and <a>'video'</a> elements that may play audio
+</p>
+<p>
+The shadow tree is open (inspectable by script), but read-only.
+The nodes of the shadow tree are each <a>instances</a> of corresponding nodes 
+from the <a>referenced document fragment</a>.
+The shadow root has one child element, which is the instance of the <a>referenced element</a>.
+Any attempt to directly modify the elements, attributes, and other nodes in the shadow tree
+must throw a <code>NoModificationAllowedError</code>.
+</p>
+  
+<p class="issue">
+  Is this the best choice for the error type?
+  (Other options include ReadOnlyError and NotAllowedError.)
+  Needs to encompass both DOM modification attempts as well as attribute or property changes.
+</p>
+  
+<p>
+Within a <a>'use' element shadow tree</a>,
+<a>'script'</a> elements are inert (do not execute);
+<a>'audio'</a> and <a>'video'</a> elements that may play audio
 must only do so if the <a>'use'</a> element is rendered.
 </p>
+  
+<p>
+The user agent must ensure that 
+all mutations to the <a>referenced document fragment</a> are reflected in the shadow tree.
+This includes changes to elements, attributes, and text and other nodes.
+In addition, changes to the stylesheets in effect for the referenced graphics
+must be reflected in changes to the stylesheets in the shadow tree's scope,
+as described futher in the section on <a href="#UseStyleInheritance">style inheritance</a>.
+If either the <a>'use'</a> element or the <a>referenced element</a> is altered
+in a way that causes the <a>'use'</a> element to return to an <a>unresolved</a> state,
+then the entire shadow tree for that use element is discarded.
+</p>
 
+  <!--
 <p>A <a>'use'</a> element has the
 same visual effect as if the <a>'use'</a> element were replaced by the
 following generated content:</p>
@@ -1010,8 +1195,8 @@ how styles are matched.</p>
     </p>
   </li>
 </ul>
-
-
+-->
+<!--
 <div class="ready-for-wider-review">
 <p>
 The element referenced by <a>'use'</a> may be in a separate document. However,
@@ -1029,18 +1214,12 @@ lengths should only be used if the re-used assets define their own SVG viewport
 (i.e., if the re-used element is an <a>'svg'</a> or <a>'symbol'</a>). 
 Declarative animations in external assets should not be used.
 </p>
-<p>
-User agents may restrict restrict external resource documents for security
-reasons. In particular, this specification does not allow cross-origin resource requests in <a>'use'</a>.
-A future version of this or another specification may provide a method of securely enabling cross-origin re-use
-of assets.
-</p>
 </div>
-
+-->
 
 <p>When a <a>'use'</a> references
 another element which is another <a>'use'</a> or whose content contains a
-<a>'use'</a> element, then the deep
+<a>'use'</a> element, then the shadow DOM
 cloning approach described above is recursive. However, a set
 of references that directly or indirectly reference a element
 to create a circular dependency is an error, as described in <a
@@ -1052,7 +1231,11 @@ href="#Head">References and the <span class='element-name'>'defs'</span> element
 <p>The <a>'use'</a> element has
 optional attributes <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a> and <a>'use/height'</a> which are used to map the
 graphical contents of the referenced element onto a rectangular
-region within the current coordinate system.</p>
+region within the current coordinate system.
+The effect of these attributes depends on whether the <a>referenced element</a>
+defines a <a>'viewBox'</a>,
+and on whether its computed style for <a>'width'</a> and <a>'height'</a> is <code>auto</code>.
+</p>
     
 <h3 id="UseStyleInheritance">Style Inheritance</h3>
     
@@ -2639,6 +2822,8 @@ method on <a>SVGTransformList</a>.</p>
   [SameObject] readonly attribute <a>SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__y">y</a>;
   [SameObject] readonly attribute <a>SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__width">width</a>;
   [SameObject] readonly attribute <a>SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__height">height</a>;
+  [SameObject] readonly attribute <a>SVGElement</a>? <a href="struct.html#__svg__SVGUseElement__instanceRoot">instanceRoot</a>;
+  [SameObject] readonly attribute <a>SVGElement</a>? <a href="struct.html#__svg__SVGUseElement__animatedInstanceRoot">animatedInstanceRoot</a>;
 };
 
 <a>SVGUseElement</a> implements <a>SVGURIReference</a>;</pre>
@@ -2651,8 +2836,48 @@ method on <a>SVGTransformList</a>.</p>
 <a>reflect</a> the computed values of the <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and
 <a>'height'</a> properties and their corresponding
 presentation attributes, respectively.</p>
+  
+<p>The <b id="__svg__SVGUseElement__instanceRoot">instanceRoot</b> and
+<b id="__svg__SVGUseElement__animatedInstanceRoot">animatedInstanceRoot</b>
+IDL attributes both point to the <a>SVGElementInstance</a> that is a direct child 
+of this element's shadow root
+(so that getting <code>u.instanceRoot</code> is equivalent to getting <code>u.shadowRoot.firstChild</code>). 
+If this element does not have a shadow tree (for example, because its URI is invalid),
+then getting these attributes returns null.</p>
 
 </edit:with>
+
+
+<h3 id="InterfaceSVGElementInstance">Interface SVGElementInstance</h3>
+
+<p>The <a>SVGElementInstance</a> interface defines extensions to the <a>SVGElement</a> interface,
+  which are only used for elements in a <a>'use' element shadow tree</a>.</p>
+  
+<p class="note">
+  In previous versions of SVG, 
+  SVG element instances were defined as non-element objects
+  that were valid event targets but not full DOM nodes.
+  This specification re-defines the <a>'use' element shadow tree</a> 
+  to be consistent with the Shadow DOM specification,
+  which means that instances are actual SVGElement objects.
+  This interface adds the missing functionality for backwards compatibility.
+  However, authors should be aware that compatibility is not perfect,
+  and design their scripts accordingly.
+</p>
+
+<pre class="idl">[NoInterfaceObject]
+interface <b>SVGElementInstance</b> {
+  [SameObject] readonly attribute <a>SVGElement</a>? <a href="types.html#__svg__SVGElementInstance__correspondingElement">correspondingElement</a>;
+  [SameObject] readonly attribute <a>SVGUseElement</a>? <a href="types.html#__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</a>;
+};</pre>
+
+<p>The <b id="__svg__SVGElementInstance__correspondingElement">correspondingElement</b> IDL attribute
+points to the <a>corresponding element</a> if this element is an <a>element instance</a> in a <a>'use' element shadow tree</a>,
+or is null otherwise.</p>
+
+<p>The <b id="__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</b> IDL attribute
+points to the <a>corresponding element</a> if this element is an <a>element instance</a> in a <a>'use' element shadow tree</a>,
+or is null otherwise.</p>
 
 
 <h3 id="InterfaceSVGSwitchElement">Interface SVGSwitchElement</h3>
