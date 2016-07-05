@@ -422,6 +422,11 @@ referenced: <a>'clipPath'</a>, <a>'cursor element'</a>,
 <a>'filter element'</a>, <a>'linearGradient'</a>, <a>'marker element'</a>,
 <a>'mask element'</a>, <a>'pattern'</a>, <a>'radialGradient'</a> and
 <a>'symbol'</a>.</p>
+  
+<p class="issue">
+  Is there any justification for continuing to have this recommendation?
+  I could understand recommending that referenced content by defined earlier in the document than it is used, but putting things inside 'defs' is really only a matter of coding style.
+</p>
 
 <h3 id="DefsElement">The <span class='element-name'>'defs'</span> element</h3>
 
@@ -711,7 +716,29 @@ based on RDF, can be used also.)</p>
 
 <h2 id="SymbolElement">The <span class='element-name'>'symbol'</span> element</h2>
 
+<p>The <a>'symbol'</a> element is used to define graphical template objects
+which can be instantiated by a <a>'use'</a> element but are not rendered
+directly.</p>
+  
+<p>A <a>'symbol'</a> establishes a nested coordinate system 
+  for the graphics it contains.
+  When a symbol is instantiated 
+  as the <a>referenced element</a> of a <a>'use'</a> element,
+  it is therefore rendered very similarly to a nested <a>'svg'</a> element.</p>
+
 <edit:elementsummary name='symbol'/>
+  
+<p>The <a>x</a>, <a>y</a>, <a>width</a>, and <a>height</a> geometry properties 
+  have the same effect as on an <a>'svg'</a> element,
+  when the <a>'symbol'</a> is instantiated by a <a>'use'</a> element.</p>
+  
+<p class="note">
+  New in SVG 2.
+  Allowing geometry properties to be specified on a symbol
+  provides a more consistent rendering model,
+  and allows authors to set a default size for each symbol
+  (which may still be over-ridden by attributes on the <a>'use'</a> element).
+</p>
 
 <edit:with element='symbol'>
 
@@ -775,10 +802,6 @@ based on RDF, can be used also.)</p>
 
 <h3 id="SymbolNotes">Notes on symbols</h3>
 
-<p>The <a>'symbol'</a> element is used to define graphical template objects
-which can be instantiated by a <a>'use'</a> element but are not rendered
-directly.</p>
-
 <p>The use of <a>'symbol'</a> elements for graphics that are used multiple
 times in the same document adds structure and semantics.
 Closely related to the <a>'symbol'</a> element are the
@@ -791,15 +814,50 @@ path to be created at the bounds of symbol's SVG viewport.  Unless the
 <a>'overflow'</a> property is overridden, any graphics within the symbol which
 goes outside of the symbol's SVG viewport will be clipped.</p>
 
-<p><a>'symbol'</a> elements must never be rendered directly; their only usage is
-as something that can be referenced using the
-<a>'use'</a> element. The <a>'display'</a> property does not apply
+<p><a>'symbol'</a> elements must never be rendered directly; 
+their only usage is as something that can be referenced 
+using the <a>'use'</a> element. 
+The <a>'display'</a> property does not apply
 to the <a>'symbol'</a> element; thus, <a>'symbol'</a> elements are
 not directly rendered even if the <a>'display'</a> property is set to a
 value other than <span class="prop-value">none</span>, and <a>'symbol'</a>
 elements are available for referencing even when the
 <a>'display'</a> property on the <a>'symbol'</a> element or any of its
-ancestors is set to <span class="prop-value">none</span>.</p>
+ancestors is set to <span class="prop-value">none</span>.
+</p>
+  
+<p>The generated <a>instance</a> of a <a>'symbol'</a> 
+that is the direct <a>referenced element</a> of a <a>'use'</a> element 
+must always have a used value of <span class="prop-value">inline</span> 
+for the <a>'display'</a> property.
+In other words, it must be rendered whenever the host <a>'use'</a> element is rendered.
+However, any other <a>'symbol'</a> that is cloned
+to create an <a>element instance</a>
+within the <a>use-element shadow tree</a>
+behaves as a symbol definition, and must not be rendered.
+</p>
+  
+<div class="issue">
+  <p>
+  Are implementers okay representing the distinction 
+  between rendered and non-rendered symbols as CSS overrides?
+  A symbol that is a direct child of a shadow root with a use element host is rendered 
+  (used value of display: inline).
+  Any other symbol is not (used value of display: none).
+  The computed value of the display property has no effect on either case.
+  </p>
+  <p>
+  Would it be useful to implementers to have a distinct SVGSymbolElementInstance interface,
+  that represents a symbol which is actually rendered?
+  (Note that we <em>do not</em> want to repeat the confusion that says a symbol 
+  is replaced by an SVG in the shadow tree, 
+  which causes so much selector-matching headache in Firefox.)
+  I have currently upgraded the SVGSymbolElement interface to inherit from SVGGraphicsElement,
+  so that the rendered element in the shadow tree has BBox and related methods,
+  but that could be reversed.
+  </p>
+</div>
+
 
 </edit:with>
 
@@ -978,7 +1036,7 @@ If this results in a valid URI, the user agent must attempt to resolve the URI t
   
 <p class="issue">
   Is secure static mode the best choice? 
-  Or should we use static mode? That would allow chained references to addtional resources, but still no scripting or animation.
+  Or should we use static mode? That would allow chained references to additional resources, but still no scripting or animation.
 </p>
 
 <p>If the <a>referenced element</a> that results from resolving the URI 
@@ -1128,6 +1186,8 @@ must only do so if the <a>'use'</a> element is rendered.
   of the shadow tree to SVG graphics elements.
   This specification allows any valid SVG document fragment
   to be cloned.
+  Cloning non-graphical content, however,
+  will not usually have any visible effect.
 </p>
   
 <p>
@@ -2813,10 +2873,16 @@ method on <a>SVGTransformList</a>.</p>
 
 <p>An <a>SVGSymbolElement</a> object represents a <a>'symbol'</a> element in the DOM.</p>
 
-<pre class="idl">interface <b>SVGSymbolElement</b> : <a>SVGElement</a> {
+<pre class="idl">interface <b>SVGSymbolElement</b> : <a>SVGGraphicsElement</a> {
 };
 
 <a>SVGSymbolElement</a> implements <a>SVGFitToViewBox</a>;</pre>
+  
+<p class="note">
+  New in SVG 2.
+  The <a>SVGSymbolElement</a> interface now inherits from <a>SVGGraphicsElement</a>,
+  so that the instantiated symbol in the shadow DOM can be queried as a graphics element.
+</p>
 
 </edit:with>
 
