@@ -2471,14 +2471,57 @@
     Text layout begins by passing to a CSS based text renderer the
     content of the <a>'text'</a> element which includes text data
     along with styling information and a description of one or more
-    shapes to be filled. The CSS renderer returns a set of CSS boxes
-    laid out as if the text were absolutely positioned.
+    shapes to be filled. The <a>'text'</a> element is treated as a
+    block element and its descendant <a>'tspan'</a> and
+    <a>'textPath'</a> elements are treated as inline elements. The CSS
+    renderer returns a set of CSS boxes laid out as if the text were
+    absolutely positioned.
   </p>
   <p>
-    The SVG text layout algorithm described here may then reposition
-    those boxes according to various SVG attributes and properties. It
-    returns output information about each character in the DOM in the
-    <a>'text'</a> element's subtree. That information includes:
+    Once a <a>content area</a> has been defined, the following
+    algorithm is used to determine the glyphs to render for a
+    given <a>'text'</a> element and their positions:
+  </p>
+
+  <ol class='algorithm'>
+    <li>
+      If the <a>content area</a> is defined by the
+      <a>'shape-inside'</a> property, layout the text in one or more
+      areas per CSS rules for laying out text in a CSS <a>wrapping
+      area</a>.
+
+      <p class="note">
+	SVG allows the <a>'shape-inside'</a> property to reference
+	more than one shape. Each shape should be filled in turn until
+	there is no more text or no more shapes.
+      </p>
+    </li>
+    <li>
+      Else, for text where the <a>content area</a> is defined by the
+      <a>'inline-size'</a> property, layout the text in a CSS content
+      box where the <a>inline size</a> is set to the value of
+      the <a>'inline-size'</a> property and the <a>block size</a> is
+      unconstrained.
+
+      <p class='note'>
+       This means that text is laid out with the box width set to
+       the <a>'inline-size'</a> value if <a>'writing-mode'</a>
+       is <span class='prop-value'>horizontal-tb</span>, or with the
+       box height set to the <a>'inline-size'</a> value otherwise.
+      </p>
+    </li>
+    <li>
+      Else, for all other text (SVG 1.1 compatible text and SVG 1.1
+      like multi-line text), layout the text in a CSS content box that
+      is unconstrained in width and height.
+    </li>
+  </ol>
+
+  <p>
+    The following SVG text layout algorithm may then reposition the
+    CSS boxes according to various SVG attributes and properties. It
+    returns output information about each character in the DOM in
+    the <a>'text'</a> element's subtree. That information includes:
   </p>
 
   <ul>
@@ -2585,9 +2628,11 @@
       For text where the <a>content area</a> is defined by the
       <a>'inline-size'</a> property, each <a>line box</a> is
       shifted according to the <a>'text-anchor'</a> property.
+      No further post-processing is performed.
     </li>
     <li>
-      For all other text, the CSS boxes are adjusted according to the
+      For all other text (SVG 1.1 compatible text and SVG 1.1 like
+      multi-line text), the CSS boxes are adjusted according to the
       algorithm that follows.
     </li>
   </ul>
@@ -2839,43 +2884,6 @@ for RTL or vertical text.</p>
 </ol>
 
 </div>
-
-  <p>
-    Once a <a>content area</a> has been defined,
-    the following algorithm is used to determine the glyphs to render
-    for a given <a>'text'</a> element and their positions:
-  </p>
-
-  <ol class='algorithm'>
-
-    <li>
-      Let <var>root</var> be the result of generating CSS boxes for
-      the <a>'text'</a> element and its subtree, where
-      the <a>'text'</a> element is treated as a block element and its
-      descendant <a>'tspan'</a> and <a>'textPath'</a> elements are
-      treated as inline elements.
-    </li>
-
-    <li>
-      If the <a>'text'</a> element has an <a>'inline-size'</a>
-      property, then lay out <var>root</var> with its <a>block
-      size</a> set to the <a>'inline-size'</a> property's value and
-      with an unconstrained <a>inline size</a>.
-      <p class='note'>
-	This means that <var>root</var> is laid out with its
-	width set to the <a>'inline-size'</a> value, if <a>'writing-mode'</a>
-	is <span class='prop-value'>horizontal-tb</span>, and its height otherwise.
-      </p>
-    </li>
-
-    <li>
-      Otherwise, <a>'inline-size'</a> was not specified.  Lay
-      out <var>root</var> with an unconstrained width and height.
-    </li>
-
-    <li>...</li>
-
-  </ol>
 
   <hr/>
 
