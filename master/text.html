@@ -2657,586 +2657,616 @@
 
   <ol class='algorithm'>
     <li>
-      Let <var>root</var> be the result of generating CSS boxes for
-      the <a>'text'</a> element and its subtree, laid out as if it
-      were an absolutely positioned element.
-      <p class='note'>
-	This will result in a single line of text (unless the
-	<a>'white-space'</a> property causes line breaks).
-      </p>
-    </li>
-    <li>
-      Let <var>count</var> be the number of DOM characters within
-      the <a>'text'</a> element's subtree.
-    </li>
-    <li>
-      Let <var>result</var> be an array of length <var>count</var>
-      whose entries contain the per-character information described
-      above.  Each entry is initialized as follows:
-      <ul>
-	<li>its x and y coordinates and its angle are considered "unspecified"</li>
-	<li>its "hidden" flag is false</li>
-	<li>its "addressable" flag is true</li>
-	<li>its "middle" flag is false</li>
-	<li>its "anchored chunk" flag is false</li>
-      </ul>
-    </li>
-    <li>
-      If <var>result</var> is empty, then return <var>result</var>.
-    </li>
-    <li>
-      Let <var>positions</var> be an array of length <var>count</var> whose entries are the positions of the glyphs corresponding to each character.  Each entry is initialized to (0, 0).
-    </li>
-    <li>For each array element index <var>i</var> in result:
+      Setup.
       <ol>
 	<li>
-	  Let <var>addressable</var> be true iff the character at index <var>i</var> was:
-          <ul>
-            <li>
-	      discarded during layout due to being
-	      a <a href="https://www.w3.org/TR/css-text-3/#white-space-phase-1">collapsed
-	      white space character</a>, a soft hyphen character, or a
-	      bidi control character;
-	    </li>
-            <li>
-	      discarded during layout due to being a <a href="https://www.w3.org/TR/css-text-3/#line-break-transform">collapsed segment break</a>; or
-	    </li>
-            <li>
-	      <a href="https://www.w3.org/TR/css-text-3/#white-space-phase-2">trimmed</a> from the start or end of a line.
-	    </li>
-          </ul>
-          <div class='note'>
-            <p>
-	      Since collapsed white space not addressable by glyph
-              positioning attributes, in the following <a>'text'</a>
-              element (with a standard font) the "B" glyph will be
-              placed at x=300.
-	    </p>
-            <pre>&lt;text x="100 200 300"&gt;
-  A
-  B
-&lt;/text&gt;</pre>
-            <p>
-	      This is because the white space before the "A", and all but one white space
-              character between the "A" and "B", is collapsed away or trimmed.
-	    </p>
-          </div>
-	</li>
-	<li>
-	  Let <var>middle</var> be true iff the character at
-	  index <var>i</var> is the second or later character that
-	  corresponds to a <a>typographic character unit</a>.
-	</li>
-	<li>
-	  Set the "addressable" flag of <var>result</var>[<var>i</var>]
-	  to <var>addressable</var>.
-	</li>
-	<li>
-	  Set the "middle" flag of <var>result</var>[<var>i</var>] to
-	  <var>middle</var>.
-	</li>
-	<li>
-	  If the character at index <var>i</var> corresponds to
-	  a <a>typographic character unit</a> at the beginning of a
-	  line, then set the "anchored chunk" flag of
-	  <var>result</var>[<var>i</var>] to true.
-          <p class='note'>
-	    This ensures chunks shifted by <a>'text-anchor'</a> do not span multiple lines.
+	  Let <var>root</var> be the result of generating CSS boxes for
+	  the <a>'text'</a> element and its subtree, laid out as if it
+	  were an absolutely positioned element.
+	  <p class='note'>
+	    This will result in a single line of text (unless the
+	    <a>'white-space'</a> property causes line breaks).
 	  </p>
 	</li>
 	<li>
-	  If <var>addressable</var> is true and <var>middle</var> is
-	  false, then set <var>positions</var>[<var>i</var>] to the
-	  position of the <a>typographic character unit</a>, relative
-	  to the origin of the box <var>root</var>. Otherwise, if
-	  <var>i</var> &gt; 0, then set
-	  <var>positions</var>[<var>i</var>] to
-	  <var>positions</var>[<var>i</var> &#x2212; 1].
+	  Let <var>count</var> be the number of DOM characters within
+	  the <a>'text'</a> element's subtree.
+	</li>
+	<li>
+	  Let <var>result</var> be an array of length <var>count</var>
+	  whose entries contain the per-character information described
+	  above.  Each entry is initialized as follows:
+	  <ul>
+	    <li>its x and y coordinates and its angle are considered "unspecified"</li>
+	    <li>its "hidden" flag is false</li>
+	    <li>its "addressable" flag is true</li>
+	    <li>its "middle" flag is false</li>
+	    <li>its "anchored chunk" flag is false</li>
+	  </ul>
+	</li>
+	<li>
+	  If <var>result</var> is empty, then return <var>result</var>.
 	</li>
       </ol>
     </li>
     <li>
-      Let <var>deltas</var> be an array of length <var>count</var>
-      whose entries are (x, y) coordinate pairs, all initialized to
-      (0, 0).
-    </li>
-    <li>
-      Let <var>index</var> = 0.
-    </li>
-    <li>
-      Let <var>force_chunk</var> = false.
-    </li>
-    <li>
-      Let <b id="ResolveGlyphPositioning"><i>resolve glyph
-      positioning</i></b> be a recursive procedure that takes as input
-      a <var>node</var> and whose steps are as follows, and
-      then <a href="#ResolveGlyphPositioning">resolve glyph
-      positioning</a> for the <a>'text'</a> element.
+      Assign initial positions.
       <ol>
 	<li>
-	  If <var>node</var> is a text node, then:
-          <ol>
-            <li>
-	      Let <var>length</var> be the number of DOM characters in
-	      the text node.
+	  Let <var>positions</var> be an array of length <var>count</var> whose entries are the positions of the glyphs corresponding to each character.  Each entry is initialized to (0, 0).
+	</li>
+	<li>For each array element index <var>i</var> in result:
+	  <ol>
+	    <li>
+	      Let <var>addressable</var> be true iff the character at index <var>i</var> was not:
+              <ul>
+		<li>
+		  discarded during layout due to being
+		  a <a href="https://www.w3.org/TR/css-text-3/#white-space-phase-1">collapsed
+		    white space character</a>, a soft hyphen character, or a
+		  bidi control character;
+		</li>
+		<li>
+		  discarded during layout due to being a <a href="https://www.w3.org/TR/css-text-3/#line-break-transform">collapsed segment break</a>; or
+		</li>
+		<li>
+		  <a href="https://www.w3.org/TR/css-text-3/#white-space-phase-2">trimmed</a> from the start or end of a line.
+		</li>
+              </ul>
+              <div class='note'>
+		<p>
+		  Since collapsed white space not addressable by glyph
+		  positioning attributes, in the following <a>'text'</a>
+		  element (with a standard font) the "B" glyph will be
+		  placed at x=300.
+		</p>
+		<pre>&lt;text x="100 200 300"&gt;
+		  A
+		  B
+		  &lt;/text&gt;</pre>
+		<p>
+		  This is because the white space before the "A", and all but one white space
+		  character between the "A" and "B", is collapsed away or trimmed.
+		</p>
+              </div>
 	    </li>
-            <li>
-	      If <var>length</var> &gt; 0, then:
+	    <li>
+	      Set the "addressable" flag of <var>result</var>[<var>i</var>]
+	      to <var>addressable</var>.
+	    </li>
+	    <li>
+	      Let <var>middle</var> be true iff the character at
+	      index <var>i</var> is the second or later character that
+	      corresponds to a <a>typographic character unit</a>.
+	    </li>
+	    <li>
+	      Set the "middle" flag of <var>result</var>[<var>i</var>] to
+	      <var>middle</var>.
+	    </li>
+	    <li>
+	      If the character at index <var>i</var> corresponds to
+	      a <a>typographic character unit</a> at the beginning of a
+	      line, then set the "anchored chunk" flag of
+	      <var>result</var>[<var>i</var>] to true.
+              <p class='note'>
+		This ensures chunks shifted by <a>'text-anchor'</a> do not span multiple lines.
+	      </p>
+	    </li>
+	    <li>
+	      If <var>addressable</var> is true and <var>middle</var> is
+	      false, then set <var>positions</var>[<var>i</var>] to the
+	      position of the <a>typographic character unit</a>, relative
+	      to the origin of <var>root</var>. Otherwise, if
+	      <var>i</var> &gt; 0, then set
+	      <var>positions</var>[<var>i</var>] to
+	      <var>positions</var>[<var>i</var> &#x2212; 1].
+	    </li>
+	  </ol>
+	</li>
+      </ol>
+    </li>
+    <li>
+      Find deltas.
+      <ol>
+	<li>
+	  Let <var>deltas</var> be an array of length <var>count</var>
+	  whose entries are (x, y) coordinate pairs, all initialized to
+	  (0, 0).
+	</li>
+	<li>
+	  Let <var>index</var> = 0.
+	</li>
+	<li>
+	  Let <var>force_chunk</var> = false.
+	</li>
+	<li>
+	  Let <b id="ResolveGlyphPositioning"><i>resolve glyph
+	      positioning</i></b> be a recursive procedure that takes as input
+	  a <var>node</var> and whose steps are as follows, and
+	  then <a href="#ResolveGlyphPositioning">resolve glyph
+	    positioning</a> for the <a>'text'</a> element.
+	  <ol>
+	    <li>
+	      If <var>node</var> is a text node, then:
               <ol>
 		<li>
-		  If <var>force_chunk</var> is true, then set the
-		  "anchored chunk" flag of
-		  <var>result</var>[<var>index</var>] to true and
-		  set <var>force_chunk</var> to false.
+		  Let <var>length</var> be the number of DOM characters in
+		  the text node.
 		</li>
 		<li>
-		  Set <var>index</var> = <var>index</var>
-		  + <var>length</var>.
+		  If <var>length</var> &gt; 0, then:
+		  <ol>
+		    <li>
+		      If <var>force_chunk</var> is true, then set the
+		      "anchored chunk" flag of
+		      <var>result</var>[<var>index</var>] to true and
+		      set <var>force_chunk</var> to false.
+		    </li>
+		    <li>
+		      Set <var>index</var> = <var>index</var>
+		      + <var>length</var>.
+		    </li>
+		  </ol>
+		</li>
+		<li>
+		  Return.
 		</li>
               </ol>
-            </li>
-            <li>
-	      Return.
 	    </li>
-          </ol>
-	</li>
-	<li>
-	  Otherwise, if <var>node</var> is a <a>'textPath'</a>
-	  element, then:
-          <ol>
-            <li>
-	      If <var>node</var> has any non-empty descendant text
-	      nodes, then on <var>result</var>[<var>index</var>] set
-	      the (x, y) coordinate to (0, 0) and the "anchored chunk"
-	      flag to true.
-	    </li>
-          </ol>
-	</li>
-	<li>
-	  Otherwise, if <var>node</var> is a <a>'tspan'</a>
-	  or <a>'textPath'</a> element, then:
-          <ol>
-            <li>
-	      Let <var>x</var>, <var>y</var>, <var>dx</var>, <var>dy</var>
-	      and <var>rotate</var> be the lists of values from the
-	      corresponding attributes on <var>node</var>, or empty
-	      lists if the corresponding attribute was not specified
-	      or was invalid.
-	    </li>
-            <li>
-	      Let <var>new_chunk_count</var> = max(length
-	      of <var>x</var>, length of <var>y</var>).
-              <p class='note'>
-		This causes each character with an absolutely
-		positioned <a>'text/x'</a> or <a>'text/y'</a> to begin
-		a new <a>'text-anchor'</a> chunk.
-	      </p>
-            </li>
-            <li>
-	      If <var>new_chunk_count</var> = 0
-              and <var>force_chunk</var> = true, then
-              set <var>new_chunk_count</var> = 1.
-	    </li>
-            <li>
-	      Let <var>length</var> be the number of DOM characters in
-	      the subtree rooted at <var>node</var>.
-	    </li>
-            <li>
-	      Let <var>i</var> = 0 and <var>j</var> = 0.
-	    </li>
-            <li>
-	      While <var>j</var> &lt; <var>length</var>, do:
-              <p class='note'>
-		This loop applies the <a>'text/x'</a>, <a>'text/y'</a>,
-		<a>'text/dx'</a>, <a>'text/dy'</a> and
-		<a>'text/rotate'</a> attributes to the content
-		inside <var>node</var>.
-	      </p>
+	    <li>
+	      Otherwise, if <var>node</var> is a <a>'textPath'</a>
+	      element, then:
               <ol>
 		<li>
-		  If the "addressable" flag of
-		  <var>result</var>[<var>index</var> +
-		  <var>j</var>] is true, then:
-                  <ol>
-                    <li>
-		      If <var>i</var> &lt; <var>new_chunk_count</var>,
-		      then set the "anchored chunk" flag
-		      of <var>result</var>[<var>index</var>
-		      + <var>j</var>] to true.
-		    </li>
-                    <li>
-		      If <var>i</var> &lt; length of <var>x</var>,
-		      then set the x coordinate of the position
-		      in <var>result</var>[<var>index</var>
-		      + <var>j</var>] to <var>x</var>[<var>i</var>].
-		    </li>
-                    <li>
-		      If <var>i</var> &lt; length of <var>y</var>,
-		      then set the y coordinate of the position
-		      in <var>result</var>[<var>index</var>
-		      + <var>j</var>] to <var>y</var>[<var>i</var>].
-		    </li>
-                    <li>
-		      If <var>i</var> &lt; length of <var>dx</var>,
-		      then set the x coordinate
-		      of <var>deltas</var>[<var>index</var>
-		      + <var>j</var>] to <var>dx</var>[<var>i</var>].
-		    </li>
-                    <li>
-		      If <var>i</var> &lt; length of <var>dy</var>,
-		      then set the y coordinate
-		      of <var>deltas</var>[<var>index</var>
-		      + <var>j</var>] to <var>dy</var>[<var>i</var>].
-		    </li>
-                    <li>
-		      If <var>i</var> &lt; length
-		      of <var>rotate</var>, then set the angle value
-		      of <var>result</var>[<var>index</var>
-		      + <var>j</var>]
-		      to <var>rotate</var>[<var>i</var>].  Otherwise,
-		      if <var>rotate</var> is not empty, then
-		      set <var>result</var>[<var>index</var>
-		      + <var>j</var>]
-		      to <var>result</var>[<var>index</var>
-		      + <var>j</var> &#x2212; 1].
-		    </li>
-                    <li>
-		      Set <var>i</var> = <var>i</var> + 1.
-		    </li>
-                  </ol>
-		</li>
-		<li>
-		  Set <var>j</var> = <var>j</var> + 1.
+		  If <var>node</var> has any non-empty descendant text
+		  nodes, then on <var>result</var>[<var>index</var>] set
+		  the (x, y) coordinate to (0, 0) and the "anchored chunk"
+		  flag to true.
 		</li>
               </ol>
-            </li>
-          </ol>
-	</li>
-	<li>
-	  For each child node <var>child</var> of <var>node</var>:
-          <ol>
-            <li>
-	      <a href="#ResolveGlyphPositioning">Resolve glyph
-	      positioning</a> of <var>child</var>.
 	    </li>
-          </ol>
+	    <li>
+	      Otherwise, if <var>node</var> is a <a>'tspan'</a>
+	      or <a>'textPath'</a> element, then:
+              <ol>
+		<li>
+		  Let <var>x</var>, <var>y</var>, <var>dx</var>, <var>dy</var>
+		  and <var>rotate</var> be the lists of values from the
+		  corresponding attributes on <var>node</var>, or empty
+		  lists if the corresponding attribute was not specified
+		  or was invalid.
+		</li>
+		<li>
+		  Let <var>new_chunk_count</var> = max(length
+		  of <var>x</var>, length of <var>y</var>).
+		  <p class='note'>
+		    This causes each character with an absolutely
+		    positioned <a>'text/x'</a> or <a>'text/y'</a> to begin
+		    a new <a>'text-anchor'</a> chunk.
+		  </p>
+		</li>
+		<li>
+		  If <var>new_chunk_count</var> = 0
+		  and <var>force_chunk</var> = true, then
+		  set <var>new_chunk_count</var> = 1.
+		</li>
+		<li>
+		  Let <var>length</var> be the number of DOM characters in
+		  the subtree rooted at <var>node</var>.
+		</li>
+		<li>
+		  Let <var>i</var> = 0 and <var>j</var> = 0.
+		</li>
+		<li>
+		  While <var>j</var> &lt; <var>length</var>, do:
+		  <p class='note'>
+		    This loop applies the <a>'text/x'</a>, <a>'text/y'</a>,
+		    <a>'text/dx'</a>, <a>'text/dy'</a> and
+		    <a>'text/rotate'</a> attributes to the content
+		    inside <var>node</var>.
+		  </p>
+		  <ol>
+		    <li>
+		      If the "addressable" flag of
+		      <var>result</var>[<var>index</var> +
+		      <var>j</var>] is true, then:
+                      <ol>
+			<li>
+			  If <var>i</var> &lt; <var>new_chunk_count</var>,
+			  then set the "anchored chunk" flag
+			  of <var>result</var>[<var>index</var>
+			  + <var>j</var>] to true.
+			</li>
+			<li>
+			  If <var>i</var> &lt; length of <var>x</var>,
+			  then set the x coordinate of the position
+			  in <var>result</var>[<var>index</var>
+			  + <var>j</var>] to <var>x</var>[<var>i</var>].
+			</li>
+			<li>
+			  If <var>i</var> &lt; length of <var>y</var>,
+			  then set the y coordinate of the position
+			  in <var>result</var>[<var>index</var>
+			  + <var>j</var>] to <var>y</var>[<var>i</var>].
+			</li>
+			<li>
+			  If <var>i</var> &lt; length of <var>dx</var>,
+			  then set the x coordinate
+			  of <var>deltas</var>[<var>index</var>
+			  + <var>j</var>] to <var>dx</var>[<var>i</var>].
+			</li>
+			<li>
+			  If <var>i</var> &lt; length of <var>dy</var>,
+			  then set the y coordinate
+			  of <var>deltas</var>[<var>index</var>
+			  + <var>j</var>] to <var>dy</var>[<var>i</var>].
+			</li>
+			<li>
+			  If <var>i</var> &lt; length
+			  of <var>rotate</var>, then set the angle value
+			  of <var>result</var>[<var>index</var>
+			  + <var>j</var>]
+			  to <var>rotate</var>[<var>i</var>].  Otherwise,
+			  if <var>rotate</var> is not empty, then
+			  set <var>result</var>[<var>index</var>
+			  + <var>j</var>]
+			  to <var>result</var>[<var>index</var>
+			  + <var>j</var> &#x2212; 1].
+			</li>
+			<li>
+			  Set <var>i</var> = <var>i</var> + 1.
+			</li>
+                      </ol>
+		    </li>
+		    <li>
+		      Set <var>j</var> = <var>j</var> + 1.
+		    </li>
+		  </ol>
+		</li>
+              </ol>
+	    </li>
+	    <li>
+	      For each child node <var>child</var> of <var>node</var>:
+              <ol>
+		<li>
+		  <a href="#ResolveGlyphPositioning">Resolve glyph
+		    positioning</a> of <var>child</var>.
+		</li>
+              </ol>
+	    </li>
+	    <li>
+	      If <var>node</var> is a <a>'textPath'</a> element, then
+	      set <var>force_chunk</var> to true.
+	    </li>
+	  </ol>
 	</li>
 	<li>
-	  If <var>node</var> is a <a>'textPath'</a> element, then
-	  set <var>force_chunk</var> to true.
+	  If the x or y coordinate of the position or the angle value
+	  in <var>result</var>[0] is unspecified, set it to 0.
+	</li>
+	<li>
+	  Set the position in <var>result</var>[0] to <var>result</var>[0] + <var>deltas</var>[0].
 	</li>
       </ol>
     </li>
     <li>
-      If the x or y coordinate of the position or the angle value
-      in <var>result</var>[0] is unspecified, set it to 0.
-    </li>
-    <li>
-      Set the position in <var>result</var>[0] to <var>result</var>[0] + <var>deltas</var>[0].
-    </li>
-    <li>
-      Set <var>index</var> = 1.
-    </li>
-    <li>
-      While <var>index</var> &lt; <var>count</var>:
-      <p class='note'>
-	This loop fills is any missing glyph positions based on the
-	positions of glyphs in <var>root</var>, applies
-	<a>'text/dx'</a> and <a>'text/dy'</a> values, and ensures
-	that <a>'text-anchor'</a> chunks do not start in the middle of
-	a ligature or grapheme cluster.
-      </p>
+      Fill in missing glyph positions.
       <ol>
 	<li>
-	  Let (<var>px</var>, <var>py</var>) = the position
-	  in <var>result</var>[<var>index</var> &#x2212; 1].
+	  Set <var>index</var> = 1.
 	</li>
 	<li>
-	  Let (<var>ax</var>, <var>ay</var>)
-	  = <var>positions</var>[<var>index</var>]
-	  &#x2212; <var>positions</var>[<var>index</var> &#x2212; 1].
-	</li>
-	<li>
-	  Let (<var>x</var>, <var>y</var>) = the position
-	  in <var>result</var>[<var>index</var>].
-	</li>
-	<li>
-	  If <var>x</var> is unspecified, then set it to <var>px</var>
-	  + <var>ax</var>.
-	</li>
-	<li>
-	  If <var>y</var> is unspecified, then set it to <var>py</var>
-	  + <var>ay</var>.
-	</li>
-	<li>
-	  Set the position in <var>result</var>[<var>index</var>] to
-	  (<var>x</var>, <var>y</var>)
-	  + <var>deltas</var>[<var>index</var>].
-	</li>
-	<li>
-	  If the <var>angle</var>
-	  in <var>result</var>[<var>index</var>] is unspecified, then
-	  set it to 0.
-	</li>
-	<li>
-	  If the "middle" and "anchored chunk" flags
-	  of <var>result</var>[<var>index</var>] are both true, then:
-          <ol>
-            <li>
-	      Set the "anchored chunk" flag
-	      of <var>result</var>[<var>index</var>] to false.
-	    </li>
-            <li>
-	      If <var>index</var> + 1 &lt; <var>count</var>, then set
-	      the "anchored chunk" flag
-	      of <var>result</var>[<var>index</var> + 1] to true.
-	    </li>
-          </ol>
-	</li>
-      </ol>
-    </li>
-    <li>
-      Let <var>horizontal</var> be true if the writing mode of
-      the <a>'text'</a> element is horizontal, and false otherwise.
-    </li>
-    <li>
-      For each slice <var>result</var>[<var>i</var>..<var>j</var>]
-      (inclusive of both <var>i</var> and <var>j</var>), where:
-      <ul>
-	<li>
-	  the "anchored chunk" flag of <var>result</var>[<var>i</var>]
-	  is true,
-	</li>
-	<li>
-	  the "anchored chunk" flags
-	  of <var>result</var>[<var>k</var>] where <var>i</var>
-	  &lt; <var>k</var> ≤ <var>j</var> are false, and
-	</li>
-	<li>
-	  <var>j</var> = <var>count</var> &#x2212; 1 or the "anchored
-	  chunk" flag of <var>result</var>[<var>j</var> + 1] is
-	  true;
-	</li>
-      </ul>
-      do:
-      <p class='note'>
-	This loops over each anchored chunk.
-      </p>
-      <ol>
-	<li>
-	  Let <var>a</var> = -∞ and <var>b</var> = +∞.</li>
-	<li>
-	  For each index <var>k</var> in the range
-	  [<var>i</var>, <var>j</var>] where the "addressable" flag
-	  of <var>result</var>[<var>k</var>] is true:
-          <p class='note'>
-	    This loop finds the left-most and right-most extents of
-	    the glyphs within the anchored chunk.
+	  While <var>index</var> &lt; <var>count</var>:
+	  <p class='note'>
+	    This loop fills is any missing glyph positions based on the
+	    positions of glyphs in <var>root</var>, applies
+	    <a>'text/dx'</a> and <a>'text/dy'</a> values, and ensures
+	    that <a>'text-anchor'</a> chunks do not start in the middle of
+	    a ligature or grapheme cluster.
 	  </p>
-          <ol>
-            <li>
-	      Let <var>pos</var> = the x coordinate of the position
-              in <var>result</var>[<var>k</var>],
-              if <var>horizontal</var> is true, and the y coordinate
-              otherwise.
+	  <ol>
+	    <li>
+	      Let (<var>px</var>, <var>py</var>) = the position
+	      in <var>result</var>[<var>index</var> &#x2212; 1].
 	    </li>
-            <li>
-	      Let <var>advance</var> = the advance of
-	      the <a>typographic character unit</a> corresponding to
-	      character <var>k</var>. [NOTE: This advance will be
-	      negative for RTL horizontal text.]
+	    <li>
+	      Let (<var>ax</var>, <var>ay</var>)
+	      = <var>positions</var>[<var>index</var>]
+	      &#x2212; <var>positions</var>[<var>index</var> &#x2212; 1].
 	    </li>
-            <li>
-	      Set <var>a</var> =
-	      min(<var>start</var>, <var>pos</var>, <var>pos</var>
-	      + <var>advance</var>).
+	    <li>
+	      Let (<var>x</var>, <var>y</var>) = the position
+	      in <var>result</var>[<var>index</var>].
 	    </li>
-            <li>
-	      Set <var>b</var> =
-	      max(<var>end</var>, <var>pos</var>, <var>pos</var>
-	      + <var>advance</var>).
+	    <li>
+	      If <var>x</var> is unspecified, then set it to <var>px</var>
+	      + <var>ax</var>.
 	    </li>
-          </ol>
-	</li>
-	<li>
-	  If <var>a</var> ≠ -∞, then:
-          <p class='note'>
-	    Here we perform the text anchoring.
-	  </p>
-          <ol>
-            <li>
-	      Let <var>shift</var> be the x coordinate
-	      of <var>result</var>[<var>i</var>],
-	      if <var>horizontal</var> is true, and the y coordinate
-	      otherwise.
+	    <li>
+	      If <var>y</var> is unspecified, then set it to <var>py</var>
+	      + <var>ay</var>.
 	    </li>
-            <li>
-	      Adjust shift based on the value of <a>'text-anchor'</a>
-	      and <a>'direction'</a> of the element the character at
-	      index <var>i</var> is in:
-              <dl class='switch'>
-		<dt>(start, ltr) or (end, rtl)</dt>
-		<dd>Set <var>shift</var> = <var>shift</var> &#x2212; <var>a</var>.</dd>
-		<dt>(start, rtl) or (end, ltr)</dt>
-		<dd>Set <var>shift</var> = <var>shift</var> &#x2212; <var>b</var>.</dd>
-		<dt>(middle, ltr) or (middle, rtl)</dt>
-		<dd>Set <var>shift</var> = <var>shift</var> &#x2212; (<var>a</var> + <var>b</var>) / 2.</dd>
-              </dl>
-            </li>
-            <li>
-	      For each index <var>k</var> in the range [<var>i</var>, <var>j</var>]:
+	    <li>
+	      Set the position in <var>result</var>[<var>index</var>] to
+	      (<var>x</var>, <var>y</var>)
+	      + <var>deltas</var>[<var>index</var>].
+	    </li>
+	    <li>
+	      If the <var>angle</var>
+	      in <var>result</var>[<var>index</var>] is unspecified, then
+	      set it to 0.
+	    </li>
+	    <li>
+	      If the "middle" and "anchored chunk" flags
+	      of <var>result</var>[<var>index</var>] are both true, then:
               <ol>
 		<li>
-		  Add <var>shift</var> to the x coordinate of the
-		  position in <var>result</var>[<var>k</var>],
-		  if <var>horizontal</var> is true, and to the y
-		  coordinate otherwise.
+		  Set the "anchored chunk" flag
+		  of <var>result</var>[<var>index</var>] to false.
+		</li>
+		<li>
+		  If <var>index</var> + 1 &lt; <var>count</var>, then set
+		  the "anchored chunk" flag
+		  of <var>result</var>[<var>index</var> + 1] to true.
 		</li>
               </ol>
-            </li>
-          </ol>
+	    </li>
+	  </ol>
 	</li>
       </ol>
     </li>
     <li>
-      Set <var>index</var> = 0.
-    </li>
-    <li>
-      While <var>index</var> &lt; <var>count</var>:
+      Apply anchoring.
       <ol>
 	<li>
-	  If the character at index <var>i</var> is within
-	  a <a>'textPath'</a> element and corresponds to
-	  a <a>typographic character unit</a>, then:
-          <ol>
-            <li>
-	      If the "middle" flag of
-	      <var>result</var>[<var>index</var>] is false, then:
+	  Let <var>horizontal</var> be true if the writing mode of
+	  the <a>'text'</a> element is horizontal, and false otherwise.
+	</li>
+	<li>
+	  For each slice <var>result</var>[<var>i</var>..<var>j</var>]
+	  (inclusive of both <var>i</var> and <var>j</var>), where:
+	  <ul>
+	    <li>
+	      the "anchored chunk" flag of <var>result</var>[<var>i</var>]
+	      is true,
+	    </li>
+	    <li>
+	      the "anchored chunk" flags
+	      of <var>result</var>[<var>k</var>] where <var>i</var>
+	      &lt; <var>k</var> ≤ <var>j</var> are false, and
+	    </li>
+	    <li>
+	      <var>j</var> = <var>count</var> &#x2212; 1 or the "anchored
+	      chunk" flag of <var>result</var>[<var>j</var> + 1] is
+	      true;
+	    </li>
+	  </ul>
+	  do:
+	  <p class='note'>
+	    This loops over each anchored chunk.
+	  </p>
+	  <ol>
+	    <li>
+	      Let <var>a</var> = -∞ and <var>b</var> = +∞.</li>
+	    <li>
+	      For each index <var>k</var> in the range
+	      [<var>i</var>, <var>j</var>] where the "addressable" flag
+	      of <var>result</var>[<var>k</var>] is true:
               <p class='note'>
-		Here we apply <a>'textPath'</a> positioning.
+		This loop finds the left-most and right-most extents of
+		the glyphs within the anchored chunk.
 	      </p>
               <ol>
 		<li>
-		  Let <var>path</var> be the <a>equivalent path</a> of
-		  the <a>basic shape</a> element referenced by
-		  the <a>'textPath'</a> element, or an empty path if
-		  the reference is invalid.
-		</li>
-		<li>
-		  If the <a>'textPath/side'</a> attribute of
-		  the <a>'textPath'</a> element is
-		  <span class='attr-value'>'right'</span>, then
-		  reverse <var>path</var>.
-		</li>
-		<li>
-		  Let <var>length</var> be the length
-		  of <var>path</var>.
-		</li>
-		<li>
-		  Let <var>offset</var> be the value of the
-		  <a>'textPath'</a> element's
-		  <a>'textPath/startOffset'</a> attribute, adjusted
-		  due to any <a>'path/pathLength'</a> attribute on the
-		  referenced element (if the referenced element is
-		  a <a>'path element'</a> element).
+		  Let <var>pos</var> = the x coordinate of the position
+		  in <var>result</var>[<var>k</var>],
+		  if <var>horizontal</var> is true, and the y coordinate
+		  otherwise.
 		</li>
 		<li>
 		  Let <var>advance</var> = the advance of
-		  the <a>typographic character unit</a> corresponding
-		  to character <var>k</var>. [NOTE: This advance will
-		  be negative for RTL horizontal text.]
+		  the <a>typographic character unit</a> corresponding to
+		  character <var>k</var>. [NOTE: This advance will be
+		  negative for RTL horizontal text.]
 		</li>
 		<li>
-		  Let (<var>x</var>, <var>y</var>)
-		  and <var>angle</var> be the position and angle
-		  in <var>result</var>[<var>index</var>].
+		  Set <var>a</var> =
+		  min(<var>start</var>, <var>pos</var>, <var>pos</var>
+		  + <var>advance</var>).
 		</li>
 		<li>
-		  Let <var>mid</var> be a coordinate value depending
-		  on the value of <var>horizontal</var>:
-                  <dl class='switch'>
-                    <dt>true</dt>
-                    <dd><var>mid</var> is <var>x</var> + <var>advance</var> / 2 + <var>offset</var></dd>
-                    <dt>false</dt>
-                    <dd><var>mid</var> is <var>y</var> + <var>advance</var> / 2 + <var>offset</var></dd>
-                  </dl>
-		</li>
-		<li>
-		  If <var>mid</var> &lt; 0 or <var>mid</var>
-		  &gt; <var>length</var>, then:
-                  <ol>
-                    <li>
-		      If <var>path</var> consists of a
-		      single, <a>closed subpath</a>, then
-		      set <var>mid</var> = <var>mid</var>
-		      mod <var>length</var>. Otherwise, set the
-		      "hidden" flag
-		      of <var>result</var>[<var>index</var>] to true.
-                      <p class='note'>
-			This causes glyphs to fall off the ends of the
-			text path, or to wrap around if we have a
-			single, <a>closed subpath</a>.
-		      </p>
-                    </li>
-                  </ol>
-		</li>
-		<li>Otherwise:
-                  <ol>
-                    <li>
-		      Let <var>point</var> and <var>tangent</var> be
-		      the position at and unit vector tangent to the
-		      point <var>mid</var> distance
-		      along <var>path</var>.
-		    </li>
-                    <li>
-		      Let <var>rotation</var> be the angle from the
-		      positive x-axis, if <var>horizontal</var> is
-		      true, and the positive y-axis otherwise,
-		      to <var>tangent</var>.
-		    </li>
-                    <li>
-		      Let <var>direction</var> be a unit vector
-		      pointing in a direction depending on the value
-		      of <var>horizontal</var>:
-                      <dl class='switch'>
-			<dt>true</dt>
-			<dd><var>direction</var> is <var>tangent</var> + 45°</dd>
-			<dt>false</dt>
-			<dd><var>direction</var> is <var>tangent</var> &#x2212; 45°</dd>
-                      </dl>
-                    </li>
-                    <li>
-		      Set the position
-		      in <var>result</var>[<var>index</var>] to
-		      (<var>x</var>, <var>y</var>)
-		      &#x2212; <var>direction</var>
-		      * <var>advance</var> / 2.
-		    </li>
-                    <li>
-		      Set the angle value
-		      in <var>result</var>[<var>index</var>]
-		      to <var>angle</var> + <var>rotation</var>.
-		    </li>
-                  </ol>
+		  Set <var>b</var> =
+		  max(<var>end</var>, <var>pos</var>, <var>pos</var>
+		  + <var>advance</var>).
 		</li>
               </ol>
-            </li>
-            <li>
-	      Otherwise, the "middle" flag
-	      of <var>result</var>[<var>index</var>] is true:
+	    </li>
+	    <li>
+	      If <var>a</var> ≠ -∞, then:
+              <p class='note'>
+		Here we perform the text anchoring.
+	      </p>
               <ol>
 		<li>
-		  Set the position and angle values
-		  of <var>result</var>[<var>index</var>] to those
-		  in <var>result</var>[<var>index</var> &#x2212;
-		  1].
+		  Let <var>shift</var> be the x coordinate
+		  of <var>result</var>[<var>i</var>],
+		  if <var>horizontal</var> is true, and the y coordinate
+		  otherwise.
+		</li>
+		<li>
+		  Adjust shift based on the value of <a>'text-anchor'</a>
+		  and <a>'direction'</a> of the element the character at
+		  index <var>i</var> is in:
+		  <dl class='switch'>
+		    <dt>(start, ltr) or (end, rtl)</dt>
+		    <dd>Set <var>shift</var> = <var>shift</var> &#x2212; <var>a</var>.</dd>
+		    <dt>(start, rtl) or (end, ltr)</dt>
+		    <dd>Set <var>shift</var> = <var>shift</var> &#x2212; <var>b</var>.</dd>
+		    <dt>(middle, ltr) or (middle, rtl)</dt>
+		    <dd>Set <var>shift</var> = <var>shift</var> &#x2212; (<var>a</var> + <var>b</var>) / 2.</dd>
+		  </dl>
+		</li>
+		<li>
+		  For each index <var>k</var> in the range [<var>i</var>, <var>j</var>]:
+		  <ol>
+		    <li>
+		      Add <var>shift</var> to the x coordinate of the
+		      position in <var>result</var>[<var>k</var>],
+		      if <var>horizontal</var> is true, and to the y
+		      coordinate otherwise.
+		    </li>
+		  </ol>
 		</li>
               </ol>
-            </li>
-          </ol>
+	    </li>
+	  </ol>
+	</li>
+      </ol>
+    </li>
+    <li>
+      Position on path.
+      <ol>
+	<li>
+	  Set <var>index</var> = 0.
 	</li>
 	<li>
-	  Set <var>index</var> = <var>index</var> + 1.
+	  While <var>index</var> &lt; <var>count</var>:
+	  <ol>
+	    <li>
+	      If the character at index <var>i</var> is within
+	      a <a>'textPath'</a> element and corresponds to
+	      a <a>typographic character unit</a>, then:
+              <ol>
+		<li>
+		  If the "middle" flag of
+		  <var>result</var>[<var>index</var>] is false, then:
+		  <p class='note'>
+		    Here we apply <a>'textPath'</a> positioning.
+		  </p>
+		  <ol>
+		    <li>
+		      Let <var>path</var> be the <a>equivalent path</a> of
+		      the <a>basic shape</a> element referenced by
+		      the <a>'textPath'</a> element, or an empty path if
+		      the reference is invalid.
+		    </li>
+		    <li>
+		      If the <a>'textPath/side'</a> attribute of
+		      the <a>'textPath'</a> element is
+		      <span class='attr-value'>'right'</span>, then
+		      reverse <var>path</var>.
+		    </li>
+		    <li>
+		      Let <var>length</var> be the length
+		      of <var>path</var>.
+		    </li>
+		    <li>
+		      Let <var>offset</var> be the value of the
+		      <a>'textPath'</a> element's
+		      <a>'textPath/startOffset'</a> attribute, adjusted
+		      due to any <a>'path/pathLength'</a> attribute on the
+		      referenced element (if the referenced element is
+		      a <a>'path element'</a> element).
+		    </li>
+		    <li>
+		      Let <var>advance</var> = the advance of
+		      the <a>typographic character unit</a> corresponding
+		      to character <var>k</var>. [NOTE: This advance will
+		      be negative for RTL horizontal text.]
+		    </li>
+		    <li>
+		      Let (<var>x</var>, <var>y</var>)
+		      and <var>angle</var> be the position and angle
+		      in <var>result</var>[<var>index</var>].
+		    </li>
+		    <li>
+		      Let <var>mid</var> be a coordinate value depending
+		      on the value of <var>horizontal</var>:
+                      <dl class='switch'>
+			<dt>true</dt>
+			<dd><var>mid</var> is <var>x</var> + <var>advance</var> / 2 + <var>offset</var></dd>
+			<dt>false</dt>
+			<dd><var>mid</var> is <var>y</var> + <var>advance</var> / 2 + <var>offset</var></dd>
+                      </dl>
+		    </li>
+		    <li>
+		      If <var>mid</var> &lt; 0 or <var>mid</var>
+		      &gt; <var>length</var>, then:
+                      <ol>
+			<li>
+			  If <var>path</var> consists of a
+			  single, <a>closed subpath</a>, then
+			  set <var>mid</var> = <var>mid</var>
+			  mod <var>length</var>. Otherwise, set the
+			  "hidden" flag
+			  of <var>result</var>[<var>index</var>] to true.
+			  <p class='note'>
+			    This causes glyphs to fall off the ends of the
+			    text path, or to wrap around if we have a
+			    single, <a>closed subpath</a>.
+			  </p>
+			</li>
+                      </ol>
+		    </li>
+		    <li>Otherwise:
+                      <ol>
+			<li>
+			  Let <var>point</var> and <var>tangent</var> be
+			  the position at and unit vector tangent to the
+			  point <var>mid</var> distance
+			  along <var>path</var>.
+			</li>
+			<li>
+			  Let <var>rotation</var> be the angle from the
+			  positive x-axis, if <var>horizontal</var> is
+			  true, and the positive y-axis otherwise,
+			  to <var>tangent</var>.
+			</li>
+			<li>
+			  Let <var>direction</var> be a unit vector
+			  pointing in a direction depending on the value
+			  of <var>horizontal</var>:
+			  <dl class='switch'>
+			    <dt>true</dt>
+			    <dd><var>direction</var> is <var>tangent</var> + 45°</dd>
+			    <dt>false</dt>
+			    <dd><var>direction</var> is <var>tangent</var> &#x2212; 45°</dd>
+			  </dl>
+			</li>
+			<li>
+			  Set the position
+			  in <var>result</var>[<var>index</var>] to
+			  (<var>x</var>, <var>y</var>)
+			  &#x2212; <var>direction</var>
+			  * <var>advance</var> / 2.
+			</li>
+			<li>
+			  Set the angle value
+			  in <var>result</var>[<var>index</var>]
+			  to <var>angle</var> + <var>rotation</var>.
+			</li>
+                      </ol>
+		    </li>
+		  </ol>
+		</li>
+		<li>
+		  Otherwise, the "middle" flag
+		  of <var>result</var>[<var>index</var>] is true:
+		  <ol>
+		    <li>
+		      Set the position and angle values
+		      of <var>result</var>[<var>index</var>] to those
+		      in <var>result</var>[<var>index</var> &#x2212;
+		      1].
+		    </li>
+		  </ol>
+		</li>
+              </ol>
+	    </li>
+	    <li>
+	      Set <var>index</var> = <var>index</var> + 1.
+	    </li>
+	  </ol>
 	</li>
       </ol>
     </li>
