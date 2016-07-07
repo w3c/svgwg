@@ -249,6 +249,8 @@ information, refer to the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060
   For embedded <a>'svg'</a> elements, they specify the size
   of the rectangular region into which the <a>'svg'</a> element
   is placed.
+  In either case, a computed style of <span class="prop-value">auto</span>
+  is treated equivalent to <span class="prop-value">100%</span>.
 </p>
 
 <p><em>Attribute definitions:</em></p>
@@ -728,7 +730,7 @@ directly.</p>
 
 <edit:elementsummary name='symbol'/>
   
-<p>The <a>x</a>, <a>y</a>, <a>width</a>, and <a>height</a> geometry properties 
+<p>The <a>'x'</a>, <a>'y'</a>, <a>'width'</a>, and <a>'height'</a> geometry properties 
   have the same effect as on an <a>'svg'</a> element,
   when the <a>'symbol'</a> is instantiated by a <a>'use'</a> element.</p>
   
@@ -893,9 +895,11 @@ behaves as a symbol definition, and must not be rendered.
 <edit:elementsummary name='use'/>
 
 <p>The <a>'use'</a> element
-references another element and indicates that a copy of 
-the SVG document fragment rooted at the referenced element 
-is rendered in place of the <a>'use'</a> element in the document.  
+references another element, a copy of which
+is rendered in place of the <a>'use'</a> in the document.
+The <a>referenced element</a> may be a <a>container element</a>,
+in which case a copy of 
+the complete SVG document fragment rooted at that element is used.
 These <a>re-used graphics</a> inherit styles from the <a>'use'</a> element
 and in certain cases can be re-sized.
 However, they remain linked to the referenced source and reflect DOM mutations in the original.
@@ -916,14 +920,14 @@ also apply in the scope of the <a>re-used graphics</a>.
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementXAttribute">x</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementYAttribute">y</dfn></td>
-        <td><a>&lt;length&gt;</a></td>
+        <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a></td>
         <td>0</td>
         <td>yes</td>
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementWidthAttribute">width</dfn>, <dfn id="UseElementHeightAttribute">height</dfn></td>
-        <td><a>&lt;length&gt;</a></td>
-        <td>(see below)</td>
+        <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a></td>
+        <td>(none)</td>
         <td>yes</td>
       </tr>
     </table>
@@ -931,19 +935,23 @@ also apply in the scope of the <a>re-used graphics</a>.
   <dd>
     <p>The <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
     attributes specify the positioning of the referenced element.
-    The <a>'width'</a> and <a>'height'</a> attributes have different
-    <a>initial values</a> depending on the type of the referenced element:</p>
-    <dl class='switch'>
-      <dt><a>'svg'</a></dt>
-      <dd>The <a>initial values</a> are the <a>'width'</a> and <a>'height'</a>
-      presentation attribute values from the referenced <a>'svg'</a> element.</dd>
-      <dt>anything else</dt>
-      <dd>The <a>initial values</a> are <span class='attr-value'>'100%'</span>.</dd>
-    </dl>
-    <p>A negative value for <a>'width'</a> or <a>'height'</a> is an error (see
-    <a href="implnote.html#ErrorProcessing">Error processing</a>).  If
-    <a>'width'</a> or <a>'height'</a> is zero then rendering of the
-    <a>'use'</a> element is disabled.</p>
+    The <a>'width'</a> and <a>'height'</a> attributes 
+    only have an effect if the <a>referenced element</a>
+    defines a viewport (i.e., if it is a <a>'svg'</a> or <a>'symbol'</a>);
+    if so, they override the value 
+    of the corresponding geometric property on that element.
+    </p>
+    <p>A negative value for <a>'width'</a> or <a>'height'</a>
+    must be treated as an illegal value.  
+    If <a>'width'</a> or <a>'height'</a> is zero,
+    and the properties have an effect on the <a>referenced element</a> 
+    then rendering of that element will be disabled.</p>
+    <p class="note">
+    Note that <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
+    on a <a>'use'</a> element are simple attributes,
+    not presentation attributes.
+    See the <a href="#UseLayout">Layout</a> section for implementation details.
+    </p>
   </dd>
   <dt>
     <table class="attrdef def">
@@ -985,6 +993,12 @@ reasons. In particular, this specification does not allow cross-origin resource 
 A future version of this or another specification may provide a method of securely enabling cross-origin re-use
 of assets.
 </p>
+
+
+</edit:with>
+
+<h3 id="UseHref">Resolving Cross-references</h3>
+  
   
 <p>
 A <a>'use'</a> element that has just been created (by script or parser) is in an <dfn id="TermUnresolvedUseElement">unresolved</dfn> state.
@@ -1012,18 +1026,21 @@ If this results in a valid URI, the user agent must attempt to resolve the URI t
   <li>
     <p>If the URI refers to another document, 
       and the processing mode or security restrictions on this document allow it to be accessed,
-      fetch that document and process it in secure static mode 
+      fetch that document and process it in <a>secure static mode</a> 
       (meaning, do not fetch any additional external resources and do not run scripts or play animations or video).
-      If the URI does not specify an element <a>'id'</a> in a target fragment,
-      the <a>referenced element</a> is the root element of that document.
-      If the URI does include a target fragment, 
-      and a matching element can be found, 
-      that element is the <a>referenced element</a>.
-      Otherwise, if the target cannot be matched in the referenced document
-      after it has been fully processed in static mode,
-      then the <a>'use'</a> element is no longer <a>unresolved</a>,
-      but is in error.
+      After parsing the document:
     </p>
+    <ul>
+      <li>If the URI does not specify an element <a>'id'</a> in a target fragment,
+      the <a>referenced element</a> is the root element of that document.</li>
+      <li>If the URI does include a target fragment, 
+      and a matching element can be found, 
+      that element is the <a>referenced element</a>.</li>
+      <li>Otherwise, if the target cannot be matched in the referenced document
+      after the document has been fully processed in static mode,
+      then the <a>'use'</a> element is no longer <a>unresolved</a>,
+      but is in error.</li>
+    </ul>
   </li>
   <li>
     <p>If the URI refers to another document 
@@ -1035,14 +1052,15 @@ If this results in a valid URI, the user agent must attempt to resolve the URI t
 </ul>
   
 <p class="issue">
-  Is secure static mode the best choice? 
-  Or should we use static mode? That would allow chained references to additional resources, but still no scripting or animation.
+  Is <a>secure static mode</a> the best choice for processing external use references? 
+  Or should we use <a>static mode</a>? That would allow chained references to additional resources, but still no scripting or animation.
 </p>
 
 <p>If the <a>referenced element</a> that results from resolving the URI 
   is neither an SVG element 
-  nor an HTML-namespaced element that may be included as a child of an SVG container element, 
-  the <a>'use'</a> element is in error.
+  nor an HTML-namespaced element 
+  <a href="embedded.html#HTMLElements">that may be included as a child of an SVG container element</a>, 
+  then the <a>'use'</a> element is in error.
   If the referenced element is either an ancestor or descendent
   of the <a>'use'</a> element, 
   then this is an <a>invalid circular reference</a>
@@ -1062,9 +1080,6 @@ or if the <a>referenced element</a> is removed from the DOM,
 then the <a>'use'</a> element returns to the <a>unresolved</a> state.
 The user agent must once again attempt to resolve the URI to identify the referenced element.
 </p>
-
-
-</edit:with>
 
 <h3 id="UseReUse">Re-used graphics and the shadow tree</h3>
   
@@ -1292,19 +1307,74 @@ another element which is another <a>'use'</a> or whose content contains a
 <a>'use'</a> element, then the shadow DOM
 cloning approach described above is recursive. However, a set
 of references that directly or indirectly reference a element
-to create a circular dependency is an error, as described in <a
-href="#Head">References and the <span class='element-name'>'defs'</span> element</a>.</p>
+to create a circular dependency is an <a>invalid circular reference</a>.
+Any <a>'use'</a> element whose shadow-including descendents
+include such a reference is in error.</p>
 
     
 <h3 id="UseLayout">Layout</h3>
 
 <p>The <a>'use'</a> element has
-optional attributes <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a> and <a>'use/height'</a> which are used to map the
-graphical contents of the referenced element onto a rectangular
-region within the current coordinate system.
-The effect of these attributes depends on whether the <a>referenced element</a>
-defines a <a>'viewBox'</a>,
-and on whether its computed style for <a>'width'</a> and <a>'height'</a> is <code>auto</code>.
+optional attributes <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a> and <a>'use/height'</a> which are used to position the re-used graphics
+and to define a default viewport size 
+if the <a>referenced element</a> defines a viewport.</p>
+  
+<p>
+  The <a>'use/x'</a> and <a>'use/y'</a> attributes define
+  an additional transformation 
+  (<span class="attr-value">translate(x,y)</span>,
+  where <span class="attr-value">x</span>
+  and <span class="attr-value">y</span> represent the values of the corresponding attributes)
+  to be applied to the <a>'use'</a> element,
+  after any transformations specified with other properties
+  (i.e., appended to the right-side of the transformation list).
+</p>
+  
+<p class="note">
+  For historical reasons, 
+  the transformation is applied to the <a>'use'</a> element itself,
+  rather than solely to the re-used content in the shadow tree.
+  This affects the coordinate system used for
+  any masks, clipping paths, or filters
+  applied to the <a>'use'</a> element
+  and calculated in <span class="attr-value">userSpaceOnUse</span> units.
+  To apply these graphical effects in an un-transformed coordinate space,
+  while also using the <a>'use/x'</a> and <a>'use/y'</a> positioning attributes,
+  nest the <a>'use'</a> element inside a <a>'g'</a>,
+  and apply the graphical effects to the <a>'g'</a> element.
+</p>
+  
+<p>
+  The <a>'use/width'</a> and <a>'use/height'</a> attributes 
+  on the <a>'use'</a> element
+  override the values
+  for the <a>'width'</a> and <a>'height'</a> properties
+  on a referenced <a>'svg'</a> or <a>'symbol'</a> element.
+  They can therefore be used to scale a graphic
+  that defines its own coordinate system,
+  each time it is re-used.
+  If the attributes are not specified on the <a>'use'</a> element,
+  then the property is computed as normal for the re-used element.
+  A value of <span class="prop-value">auto</span>,
+  is treated as <span class="prop-value">100%</span>
+  in the <a>'use'</a> element's coordinate system
+  (the same as for a nested <a>'svg'</a>).
+</p>
+
+<p>
+  The <a>'use/width'</a> and <a>'use/height'</a> attributes 
+  on the <a>'use'</a> element have no effect 
+  if the <a>referenced element</a> does not
+  <a href="coords.html#EstablishingANewSVGViewport">establish a new viewport</a>.
+  In particular, the <a>'use'</a> element does not itself establish a new viewport,
+  and therefore does not affect the interpretation of percentages in the re-used graphics.
+</p>
+  
+<p class="issue">
+  The section on establishing a new viewport also includes foreignObject, iframe, and it mentions image, although they it qualifies that for image and iframe the new viewport actually is created by the root element of the embedded document.
+  Mostly, that whole section needs re-writing.
+  But for this section: should auto width/height on a re-used foreignObject be influenced by width/height on the use element?
+  SVG 1.1 didn't allow foreignObject to be re-used, so it would not be a breaking change either way.
 </p>
     
 <h3 id="UseStyleInheritance">Style Inheritance</h3>
