@@ -2468,15 +2468,15 @@
 <div class='ready-for-wg-review'>
 
   <p>
-    Text layout beings by passing to a CSS based text renderer the
+    Text layout begins by passing to a CSS based text renderer the
     content of the <a>'text'</a> element which includes text data
     along with styling information and a description of one or more
     shapes to be filled. The CSS renderer returns a set of CSS boxes
     laid out as if the text were absolutely positioned.
   </p>
   <p>
-    The SVG text layout algorithm described here may reposition those
-    boxes according to various SVG attributes and properties. It
+    The SVG text layout algorithm described here may then reposition
+    those boxes according to various SVG attributes and properties. It
     returns output information about each character in the DOM in the
     <a>'text'</a> element's subtree. That information includes:
   </p>
@@ -2485,10 +2485,6 @@
     <li>
       an (x, y) coordinate pair, which gives its position in the
       coordinate space of the <a>'text'</a> element;
-      <p class='issue' data-issue="61">
-	It is the coordinate space of the referenced shape,
-	when <a>'shape-inside'</a> is being used.
-      </p>
     </li>
     <li>
       an angle value, which gives its rotation;
@@ -2574,14 +2570,31 @@
   </ul>
 
   <p>
-    The text layout algorithm is as follows:
+    The adjustments made to the CSS boxes depend on how the
+    <a>content area</a> was defined:
   </p>
 
-<p class='issue' data-issue="62">This works for SVG 1.1 text, but not for text with
-a dimension specified or when <a>'shape-inside'</a> is specified.
-But for those cases, we don't want to apply glyph positioning attributes,
-text anchoring and text paths.  So we can probably skip most of the
-algorithm for those types of text layout.</p>
+  <ul>
+    <li>
+      For text where the <a>content area</a> is defined by the
+      <a>'shape-inside'</a> property, no SVG specific post-processing
+      is done. The CSS boxes are positioned as returned from the CSS
+      based text renderer.
+    </li>
+    <li>
+      For text where the <a>content area</a> is defined by the
+      <a>'inline-size'</a> property, each <a>line box</a> is
+      shifted according to the <a>'text-anchor'</a> property.
+    </li>
+    <li>
+      For all other text, the CSS boxes are adjusted according to the
+      algorithm that follows.
+    </li>
+  </ul>
+
+  <p>
+    The SVG specific text layout algorithm is as follows:
+  </p>
 
 <p class='issue' data-issue="63">This doesn't support stretched or spaced glyphs
 due to <a>'text/textLength'</a> and <a>'text/lengthAdjust'</a>,
