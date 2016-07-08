@@ -132,6 +132,55 @@ applications. Future versions of the SVG specification are
 likely to require support of the <em>W3C Character Model</em>
 in Conforming SVG Generators.</p>
 
+<p>On occasions when expression of the information exceeding single precision is desired for some use cases such as maps and technical drawings, it is encouraged that the following generation steps are utilized. 
+Although <a href="types.html#Precision">real number precition</a> of SVG is single-precision, the presentation more than single-precision will be obtained by this generation way of the SVG content using the characteristic of the CTM generation processing mentioned at the <a href="#ConformingSVGServers">Conforming SVG Viewers</a> section. 
+</p>
+<ol>
+  <li>Split content into tiles so that variable of the coordinate value in that split contents is settled in the effective digit number below single precision. A bigger object than a tile should be divided for each tiles like the first example.</li>
+  <li>Generate coordinate transformation matrices by whom origins enters into each tiles. However, each element of those matrices must be generated in the range of single precision.</li>
+  <li>Transform the contents of each tiles by those matrices. Thereby, the contents in each tiles come to be expressed by the effective digit number below single precision. </li>
+  <li>Arrange these tiles as separate user coordinate systems in SVG. Such tiles could be constructed as the grouping by the 'g' elements and embedded contents, etc.</li>
+  <li>Generate inverse transformation matrices of the coordinate transformation matrices generated previously. And set them up as transformation matrices to each user coordinate systems. </li>
+</ol>
+
+<table>
+  <caption>
+    Example Splitting vector graphics bigger than a tile
+  </caption>
+  <tr>
+    <th>Before Splitting</th>
+    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+    <th>After Splitting</th>
+  </tr>
+  <tr>
+    <td><img alt="Example Before splitting"
+    src="images/appendix/betterPrecisionTiling3.png" width="200"/></td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td><img alt="Example After Splitting"
+    src="images/appendix/betterPrecisionTiling4.png" width="200"/></td>
+  </tr>
+</table>
+
+<table >
+  <caption>
+    Example Improving Significant Digits
+  </caption>
+  <tr>
+    <th>Step 1 : Splitting content</th>
+    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+    <th>Step 5 : Arranging tiles with smaller effective digits and appropriate translate</th>
+  </tr>
+  <tr>
+    <td><img alt="Example Split content into tiles"
+    src="images/appendix/betterPrecisionTiling1.png" width="400"/></td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td><img alt="Example Translate and assign split contents"
+    src="images/appendix/betterPrecisionTiling2.png" width="400"/></td>
+  </tr>
+  <tr><td colspan="3">This example provides the significant figure of eight digits using tiles with the user coordinate system of seven digits.</td></tr>
+</table>
+
+
 <h2 id="ConformingSVGServers">Conforming SVG Servers</h2>
 <p>Conforming SVG Servers must meet all the requirements of a Conforming SVG
 Generator. In addition, Conforming SVG Servers using HTTP or other protocols
