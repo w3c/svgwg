@@ -1332,7 +1332,7 @@ if the <a>referenced element</a> defines a viewport.</p>
   
 <p class="note">
   For historical reasons, 
-  the transformation is applied to the <a>'use'</a> element itself,
+  the supplemental transformation is applied to the <a>'use'</a> element itself,
   rather than solely to the re-used content in the shadow tree.
   This affects the coordinate system used for
   any masks, clipping paths, or filters
@@ -1371,14 +1371,114 @@ if the <a>referenced element</a> defines a viewport.</p>
 </p>
   
 <p class="issue">
-  The section on establishing a new viewport also includes foreignObject, iframe, and it mentions image, although they it qualifies that for image and iframe the new viewport actually is created by the root element of the embedded document.
+  The section on establishing a new viewport also includes foreignObject, iframe, and image, although then it qualifies that for image and iframe the new viewport actually is created by the root element of the embedded document.
   Mostly, that whole section needs re-writing.
   But for this section: should auto width/height on a re-used foreignObject be influenced by width/height on the use element?
   SVG 1.1 didn't allow foreignObject to be re-used, so it would not be a breaking change either way.
 </p>
+  
+<p>
+  Rendering and layout of elements within the 
+  <a>use-element shadow tree</a>
+  occurs as if the <a>'use'</a> element was a container for its shadow content.
+  In particular, unless elements within the shadow tree establish a new viewport, 
+  they must be drawn in the coordinate system in which the <a>'use'</a> element is defined
+  (including any cumulative transformations).
+  This affects the interpretation of percentage lengths,
+  and also graphical effects with <span class="prop-value">userSpaceOnUse</span> units.
+</p>
     
-<h3 id="UseStyleInheritance">Style Inheritance</h3>
+<h3 id="UseStyleInheritance">Style Scoping and Inheritance</h3>
+  
+<p>The <a>use-element shadow tree</a>, like other shadow trees,
+  exhibits style encapsulation, 
+  as defined in the <a href="https://www.w3.org/TR/css-scoping-1/">CSS Scoping</a> module <a href="refs.html#ref-css-scoping-1">[css-scoping-1]</a>.
+  This means that elements in the shadow tree inherit styles
+  from its <a>host</a> <a>'use'</a> element,
+  but that style rules defined in the outer document 
+  do not match the elements in the shadow tree.
+  Instead, the shadow tree maintains its own list of stylesheets,
+  whose CSS rules are matched against elements in the shadow tree.
+</p>
+  
+<p class="note">
+  Presentation attributes and the <a>'style attribute'</a>
+  are cloned from the elements in the <a>referenced document fragment</a>
+  into the <a>element instances</a>
+  in the same manner as other attributes.
+  The <a>'id'</a> attribute is also cloned;
+  this does not create a conflict in selector matching 
+  because the clone and the original are in distinct node trees.
+</p>
+  
+<p>
+  When the <a>referenced element</a>
+  is from the same document as the <a>'use'</a> element,
+  the same document stylesheets will apply in
+  both the original document and the shadow tree document fragment.
+  Any changes to the stylesheets in the main document
+  also affect the shadow tree;
+  the <code>StylesheetList</code> object accessed through the
+  document and shadow root document fragment's 
+  <code>stylesheets</code> properties must be identical.
+  If a <a>'style element'</a> is duplicated
+  as part of the <a>referenced document fragment</a>,
+  then the <code>stylesheet</code> property on the <a>element instance</a>
+  points to the same object as for the <a>corresponding element</a>.
+</p>
+  
+<p>
+  When the <a>referenced element</a>
+  is from an external document, 
+  the stylesheet objects generated when processing that document
+  apply to the shadow tree, and are read-only.
+  User agents may re-use the same stylesheet objects for any shadow trees
+  that reference that same external document.
+</p>
+  
+<p class="issue">That's a "may", not a "must", in case there are any
+  security considerations that would make re-using objects a problem.</p>
+  
+<p>
+  Style rules that are scoped to the shadow tree
+  cannot normally affect any elements in the main document.
+  Similarly, style rules in the main document can normally only
+  affect the shadow tree elements by changing inherited values. 
+  However, <a href="https://www.w3.org/TR/css-scoping-1/">CSS Scoping</a> 
+  defines special selectors for styling the <a>host</a> element from within the shadow tree,
+  or for adjusting styles within the shadow tree
+  in response to changes in the host's context
+  <a href="refs.html#ref-css-scoping-1">[css-scoping-1]</a>.
+</p>
+  
+<div class="note">
+  <p>
+    In most cases, 
+    the <a>element instance</a> in the shadow tree will match the same style rules
+    as its <a>corresponding element</a> in the original document.
+    However, if a CSS rule uses a <a href="https://drafts.csswg.org/selectors/#complex">complex selector</a>
+    to match an element based on its ancestors or siblings,
+    and those ancestors or siblings are not cloned as part of the shadow tree,
+    then that rule would no longer match the <a>element instance</a>.
+    Similarly, child-indexed pseudo-classes 
+    such as <code>nth-of-type</code> and <code>nth-child</code>
+    may apply to one element but not the other.
+    This represents a change 
+    from how style cloning was defined in previous versions of SVG.
+  </p>
+  <p>
+    Previous versions of SVG
+    were not clear about how dynamic pseudo-classes 
+    (such as <code>:hover</code>)
+    should apply to element instances.
+    The shadow tree model requires that all such pseudo-classes
+    are matched independently to the 
+    <a>element instance</a> or to its <a>corresponding element</a>,
+    depending on which element the user is interacting with.
+  </p>
+</div>
     
+  <!--
 <p>The conceptual deep cloning of the referenced element into a
 non-exposed DOM tree also copies any property values resulting
 from <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html">the CSS cascade</a>
@@ -1395,37 +1495,24 @@ the <a>'use'</a> element. The
 referenced element inherits properties from the <a>'use'</a> element and the <a>'use'</a> element's ancestors. An
 instance of a referenced element does not inherit properties
 from the referenced element's original parents.</p>
-
-<p class="note">Note that specifying <span
-class="prop-value">'visibility:hidden'</span> on a <a>'use'</a> element does not guarantee
-that the referenced content will not be rendered. If the <a>'use'</a> element specifies <span
-class="prop-value">'visibility:hidden'</span> and the element
-it references specifies <span
-class="prop-value">'visibility:hidden'</span> or <span
-class="prop-value">'visibility:inherit'</span>, then that one
-element will be hidden. However, if the referenced element
-instead specifies <span
-class="prop-value">'visibility:visible'</span>, then that
-element will be visible even if the <a>'use'</a> element specifies <span
-class="prop-value">'visibility:hidden'</span>.</p>
-
-<p>Animations on a referenced element will cause the instances
-to also be animated.</p>
+-->
+<div class="note">
+  <p class="note">Note that specifying <span
+  class="prop-value">'visibility:hidden'</span> on a <a>'use'</a> element does not guarantee
+  that the referenced content will not be rendered. If the <a>'use'</a> element specifies <span
+  class="prop-value">'visibility:hidden'</span> and the element
+  it references specifies <span
+  class="prop-value">'visibility:hidden'</span> or <span
+  class="prop-value">'visibility:inherit'</span>, then that one
+  element will be hidden. However, if the referenced element
+  instead specifies <span
+  class="prop-value">'visibility:visible'</span>, then that
+  element will be visible even if the <a>'use'</a> element specifies <span
+  class="prop-value">'visibility:hidden'</span>.</p>
+  
+</div>
     
-
-<p>For user agents that support <a
-href="styling.html">Styling with CSS</a>, the
-generated <a>'g'</a> element carries along with
-it the "cascaded" property values on the <a>'use'</a> element which result from
-<a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html">the CSS cascade</a>
-([<a href="refs.html#ref-CSS21">CSS21</a>], chapter 6).
-Additionally, the copy (deep clone) of the referenced resource
-carries along with it the "cascaded" property values resulting
-from the CSS cascade on the original (i.e., referenced)
-elements. Thus, the result of various CSS selectors in
-combination with the <a>'class'</a> and <a>'style attribute'</a> attributes are, in effect,
-replaced by the functional equivalent of a <a>'style attribute'</a> attribute in the generated
-content which conveys the "cascaded" property values.</p>
+<!--
 
 <p><span class="example-ref">Example Use01</span> below has a
 simple <a>'use'</a> on a <a>'rect'</a>.</p>
@@ -1484,6 +1571,15 @@ match have been transferred into inline <a>'style attribute'</a> attributes for
 illustrative purposes.</p>
 
 <edit:example href='images/struct/Use04-GeneratedContent.svg' link='yes'/>
+
+-->
+    
+<h3 id="UseAnimations">Animations</h3>
+
+<p>Animations on a referenced element will cause the instances
+to also be animated.</p>
+  
+  
     
 <h3 id="UseEventHandling">Event handling</h3>
 
