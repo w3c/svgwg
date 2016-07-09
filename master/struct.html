@@ -1451,6 +1451,14 @@ if the <a>referenced element</a> defines a viewport.</p>
   <a href="refs.html#ref-css-scoping-1">[css-scoping-1]</a>.
 </p>
   
+<p>
+  CSS media queries within a shadow tree's scope
+  are evaluated using the same device features and dimensions
+  as the corresponding "light" document
+  (that is, the document that contains the <a>corresponding use element</a>
+  for the shadow tree, after recursively exiting all nested shadow trees).
+</p>
+  
 <div class="note">
   <p>
     In most cases, 
@@ -1575,13 +1583,215 @@ illustrative purposes.</p>
 -->
     
 <h3 id="UseAnimations">Animations</h3>
-
+<p class="issue">
+  Should this section be moved to the SVG Animations specification and/or WAAPI?
+  Most of the details are dependent on those specs.
+  However, implementers that currently support SVG animation elements
+  and Web Animations
+  are going to need guidance on how to update those implementations
+  to match the new shadow DOM model.
+</p>
+  
+<!--
 <p>Animations on a referenced element will cause the instances
 to also be animated.</p>
+-->
+  
+<p>
+  The <a href="https://www.w3.org/TR/web-animations-1/">Web Animations API</a>
+  and the <a href="https://svgwg.org/specs/animations/">SVG Animations</a> specification
+  define ways to animate attributes and styles
+  on targetted elements without directly manipulating DOM properties.
+  User agents that implement those features
+  must ensure that all animations 
+  that apply to an element in a <a>referenced document fragment</a>
+  also apply to instances of that element
+  in a <a>use-element shadow tree</a>,
+  as described in this section.
+</p>
+  
+<div class="note">
+  <p>
+    Scripted animations created by directly manipulating
+    attributes on elements in the <a>referenced document fragment</a>
+    (including the <a>'style attribute'</a>)
+    will be propagated to the <a>element instances</a>
+    in the shadow tree in the same manner as any other DOM manipulations.
+  </p>
+  <p>
+    Animation effects applied using CSS
+    will be duplicated along with other stylesheet rules,
+    following the procedure specified in the
+    <a href="#UseStyleInheritance">Style Scoping and Inheritance</a> section.
+  </p>
+</div>
+  
+<p>
+  All animations within a <a>use-element shadow tree</a>
+  operate in the same document timeline as for the
+  <a>corresponding use element</a>,
+  regardless of whether the <a>referenced element</a>
+  is from the same or an external document.
+</p>
+  
+<p>
+  For animation effects applied
+  using a <a href="https://www.w3.org/TR/web-animations-1/">Web Animations API</a> method,
+  the user agent must create a read-only <dfn id="TermAnimationInstance">animation instance</dfn>
+  targetting an <a>element instance</a> in the shadow tree
+  for each <dfn id="TermCorrespondingAnimation">corresponding animation</dfn> object
+  that target's that shadow element's <a>corresponding element</a>
+  <a href="refs.html#ref-WAAPI">[WAAPI]</a>.
+  Specifically,
+  the user agent must generate a new <a href="https://www.w3.org/TR/web-animations-1/#the-animation-interface"><code>Animation</code></a> object,
+  with its <a href="https://www.w3.org/TR/web-animations-1/#dom-animation-timeline"><code>timeline</code></a>
+  set to the document timeline,
+  and with its <a href="https://www.w3.org/TR/web-animations-1/#dom-animation-effect"><code>effect</code></a> created by constructing a new
+  <a href="https://www.w3.org/TR/web-animations-1/#keyframeeffectreadonly"><code>KeyframeEffectReadOnly</code></a> 
+  using the keyframe effect of the <a>corresponding animation</a> as its source,
+  and then modifying its <a href="https://www.w3.org/TR/web-animations-1/#dom-keyframeeffectreadonly-target"><code>target</code></a>
+  to point to the <a>element instance</a> instead of the <a>corresponding element</a>.
+</p>
+<p>
+  The user agent must create such an <a>animation instance</a>
+  for every animation defined using a <a href="https://www.w3.org/TR/web-animations-1/">Web Animations API</a> method
+  whose target is an element in a <a>referenced document fragment</a>
+  for each <a>element instance</a>
+  that is a clone of the targetted element.
+  This includes all animations in effect 
+  (including pending and frozen animations)
+  at the time the shadow tree is generated,
+  and any new animations applied while the shadow tree exists.
+  The user agent must not clone animation objects
+  that were generated based on CSS animations or animation elements
+  (as these are duplicated separately).
+</p>
+  
+<p>
+  Each <a>animation instance</a> created for the shadow tree is read-only.
+  However, the user agent must ensure that
+  any changes to the <a>corresponding animation</a> are reflected 
+  in changes to the relevant <a>animation instance</a>.
+</p>
+
+<p>
+  Any attempts to directly apply new animations
+  to a target that is a read-only <a>element instance</a> (or pseudo-element)
+  within a <a>use-element shadow tree</a>
+  must throw a <code>NoModificationAllowedError</code>.
+</p>
+  
+<p class="issue">
+  This behavior ensures that all WAAPI animations can be polyfilled with
+  simple JS animations manipulating DOM attributes on the original elements.
+  The WAAPI spec will need to be updated to indicate that the no-modification error may be thrown.
+  (Or another error name, if it makes more sense?)
+  There must be other cases where an element or pseudo-element would reject an animation,
+  so probably a good idea to have an error as an option.
+  The only other approach would be to silently ignore any animations set
+  on a read-only element in the shadow tree,
+  and silent errors are generally not a good thing.
+</p>
+  
+<p>
+  For each <a>animation element</a> that targets an element in the
+  <a>referenced document fragment</a>, 
+  the user agent must ensure that an equivalent animation element 
+  is in effect in the <a>use-element shadow tree</a>.
+  If the animation element itself is part of the referenced document fragment,
+  then this happens as a matter of course through the creation
+  of an <a>element instance</a> for the animation element.
+  Otherwise, the user agent must generate an <a>element instance</a>
+  for the animation element
+  that has the same effect as if it was a node in the shadow tree.
+  Each animation element or instance must only affect a target element
+  in the same node tree (shadow or light),
+  regardless of whether the targetting is implicit (the parent element)
+  or explicit (a URL cross-reference to an element <a>'id'</a>).
+  In this way, the one-to-one relationship between animation elements
+  and target elements is preserved.
+</p>
+  
+<p>
+  All animation elements, in the document or in the shadow trees,
+  which are timed to begin or end in response to an event
+  on another element identified by its <a>'id'</a> attribute,
+  must also begin or end when any <a>instance</a> of an element with that <a>'id'</a>
+  receives the same event.
+  This is consistent with how event listeners on a 
+  referenced element also listen to events on instances of that element,
+  as described in the section on 
+  <a href="#UseEventHandling">Event Handling in Use-Element Shadow Trees</a>.
+  This behavior does not apply to animation begin or end times
+  defined only by an event and not by an <a>'id'</a>
+  (and therefore implicitly listening for the event on the target element);
+  in that case, each animation element is only triggered by its own target.
+</p>
+  
+<p>
+  At the time an <a>instance</a> of an animation element
+  is generated within a shadow tree,
+  if there is an active animation associated with the <a>corresponding element</a>
+  (including a frozen animation),
+  and the timing event that initiated that animation would also have initiated the instance if it existed,
+  then the animation for the <a>element instance</a> must be initiated,
+  with its begin time 
+  adjusted backwards in the document timeline
+  to match the timing of the <a>corresponding element</a>.
+</p>
+  
+<p class="issue">
+  Is distinguishing between <code>begin="target.event"</code> 
+  and <code>begin="event"</code> 
+  worth the extra implementation complexity?
+  It creates useful functionality
+  and is consistent with the CSS model, 
+  but it is technically a breaking change from SVG 1.1.
+</p>
+  
+<div class="note">
+  <p>
+    In many cases,
+    the requirements of this section mean that 
+    the <a>element instance</a> and its <a>corresponding element</a>
+    will animate synchronously.
+    This will be the case if the animation is purely time-based,
+    or if it begins and ends in response to user interaction
+    on an element referenced by its <a>'id'</a>.
+    However, if the animation is triggered by a user interaction event
+    on the targetted element (implicitly),
+    then only the element or element instance that receives the interaction event
+    will display the animation.
+  </p>
+  <p>
+    This is a change from previous versions of SVG,
+    which required all animations on the <a>corresponding element</a> to be mirrored,
+    regardless of user interaction,
+    but which did not offer clear guidance for responding to
+    user interactions with the element instances.
+    The change ensures that interactive animations declared with animation elements
+    behave in the same manner as interactive CSS styles and CSS animations.
+  </p>
+  <p>
+    In order to create animations
+    that apply to all instances when any instance or the original element
+    receives an event,
+    specify the element <a>'id'</a> explicitly:
+  </p>
+  <pre><code>
+&lt;set href="#target" begin="mouseover" ... />
+  &lt;!-- only affects the element that is moused over --&gt;
+  
+&lt;set href="#target" begin="target.mouseover" ... />
+  &lt;!-- affects all elements and instances with the id 'target',
+          in all light and shadow node trees,
+          when any of them are moused over --&gt;
+  </code></pre>
+</div>
   
   
     
-<h3 id="UseEventHandling">Event handling</h3>
+<h3 id="UseEventHandling">Event Handling in Use-Element Shadow Trees</h3>
 
 <p>If event attributes are assigned to referenced elements,
 then the actual target for the event will be the
