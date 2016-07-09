@@ -1080,6 +1080,12 @@ or if the <a>referenced element</a> is removed from the DOM,
 then the <a>'use'</a> element returns to the <a>unresolved</a> state.
 The user agent must once again attempt to resolve the URI to identify the referenced element.
 </p>
+  
+<p class="issue">
+  Should there be some sort of load event
+  that is dispatched after the use tree is successfully generated?
+  If so, which event in particular?
+</p>
 
 <h3 id="UseReUse">Re-used graphics and the shadow tree</h3>
   
@@ -1783,7 +1789,7 @@ to also be animated.</p>
   &lt;!-- only affects the element that is moused over --&gt;
   
 &lt;set href="#target" begin="target.mouseover" ... />
-  &lt;!-- affects all elements and instances with the id 'target',
+  &lt;!-- affects all instances of the element with the id 'target',
           in all light and shadow node trees,
           when any of them are moused over --&gt;
   </code></pre>
@@ -1792,37 +1798,91 @@ to also be animated.</p>
   
     
 <h3 id="UseEventHandling">Event Handling in Use-Element Shadow Trees</h3>
-
-<p>If event attributes are assigned to referenced elements,
-then the actual target for the event will be the
-element within the "instance tree" corresponding to the given
-referenced element.</p>
-
-<p>The event handling for the non-exposed tree works as if the
-referenced element had been textually included as a deeply
-cloned child of the <a>'use'</a>
-element, and events are dispatched according to the shadow tree
-<a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#event-dispatch">event dispatching algorithm</a> [<a href="refs.html#ref-SHADOWDOM">SHADOWDOM</a>].
-The event's target and currentTarget attributes are set to the
-instance tree element that
-corresponds to the target and current target elements in the
-referenced subtree. An event propagates through the exposed and
-non-exposed portions of the tree in the same manner as it would
-in the regular document tree: first going from the root element
-to the <a>'use'</a> element and then
-through non-exposed tree elements in the capture phase,
-followed by the target phase at the target of the event, then
-bubbling back through non-exposed tree to the use element and
-then back through regular tree to the root element in bubbling
-phase. In order to maintain encapsulation events must use the
-<a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#event-retargeting">event retargeting algorithm</a> [<a href="refs.html#ref-SHADOWDOM">SHADOWDOM</a>]
-when crossing from a non-exposed tree to the regular tree.
+  
+<p>Element in a <a>use-element shadow tree</a>
+  both dispatch and listen for DOM events.
+  Event retargetting provides encapsulation,
+  so that the details of the shadow DOM structure
+  are masked when an event bubbles out of the shadow tree and into the light.
+</p>
+  
+<p class="note">
+  Event retargeting is new in SVG 2.
+  It provides consistency with the Shadow DOM specification,
+  with existing implementations,
+  and with the expectations of authors who are only concerned with elements in the main DOM.
 </p>
 
-<p class="issue" data-issue="28">We should define the behavior of <a>'use'</a>
-in terms of Web Components. See <a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3729">ACTION-3729</a> (Tab)
-<a href="https://github.com/w3c/svgwg/issues/99">Github Issue #99</a>
+<p>
+  Any event listeners defined on an element
+  in the <a>referenced document fragment</a>
+  must also listen for the same event, at the same capture phase,
+  on each <a>instance</a> of that element in a <a>use-element shadow tree</a>.
+  This includes event listeners assigned using <a>event attributes</a>
+  (which would be duplicated as with any other DOM attribute)
+  and also event listeners assigned using the <a href="http://www.w3.org/TR/dom/#dom-eventtarget-addeventlistener"><code>addEventListener</code></a> method.
+  The user agent must ensure that the list of event listeners
+  for each <a>element instance</a> is synchronized to match
+  its <a>corresponding element</a>.
+  An event listener cannot be directly assigned
+  to a read-only <a>element instance</a> in a <a>use-element shadow tree</a>.
+  Any attempt to add an event listener to such an element
+  must throw a <code>NoModificationAllowedError</code>.
 </p>
+
+<p>Events in the <a>use-element shadow tree</a> 
+  are dispatched and bubble according to the shadow tree
+  <a href="https://www.w3.org/TR/shadow-dom/#events">event path and event retargeting algorithm</a> [<a href="refs.html#ref-SHADOWDOM">SHADOWDOM</a>].
+</p>
+  
+<div class="note">
+  <p>
+    In general, the event path for a <a>use-element shadow tree</a>
+    is constructed from the ancestors of the event target element
+    up to the <a>shadow root</a>,
+    then the <a>host</a> <a>'use'</a> element
+    and its event path through to the document window.
+    This means that, in the capture phase, 
+    an event propagates from the window through the regular document tree
+    to the <a>'use'</a> element 
+    and then to the shadow root object 
+    and down through the shadow tree 
+    (or recursively through multiple shadow trees) 
+    to the event target element.
+    In the bubbling phase, the event passes in the opposite direction, 
+    from the shadow tree elements to the shadow root,
+    then to the <a>'use'</a> element and its ancestors.
+  </p>
+  <p>
+    The event retargeting algorithm ensures that
+    from the perspective of event listeners
+    on the <a>'use'</a> element or its ancestors,
+    all events emitted by <a>element instances</a> in the shadow tree
+    have a target of the <a>'use'</a> element itself.
+    If the event has both a <a href="https://www.w3.org/TR/dom/#dom-event-target"><code>target</code></a>
+    and a <code>relatedTarget</code>,
+    and both of these properties would be retargeted 
+    to point to the same <a>'use'</a> element,
+    then the event is not propagated at all outside of the shadow tree.
+    This would occur, for example,
+    if focus moved from one element inside the shadow tree to another.
+    Certain other event types are constrained to
+    not propagate outside of the shadow tree in which they were created.
+  </p>
+  <p>
+    Event listeners that process the event
+    while it is propagating through the shadow tree
+    (because the event listener has been added to a 
+    <a>corresponding element</a> for an <a>element instance</a>
+    in the shadow tree)
+    will receive the event with its <a href="https://www.w3.org/TR/dom/#dom-event-target"><code>target</code></a>
+    pointing to a read-only <a>element instance</a> in the shadow tree.
+    The <a>SVGElementInstance::correspondingElement</a>
+    and <a>SVGElementInstance::correspondingUseElement</a>
+    properties of that <a>element instance</a>
+    can be used to connect it to the modifiable elements in the main DOM.
+  </p>
+</div>
 
 
 <h2 id="ConditionalProcessing">Conditional processing</h2>
