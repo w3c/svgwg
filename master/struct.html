@@ -716,10 +716,11 @@ based on RDF, can be used also.)</p>
 </svg>
 ]]></pre>
 
+<div class="ready-for-wg-review">
 <h2 id="SymbolElement">The <span class='element-name'>'symbol'</span> element</h2>
 
-<p>The <a>'symbol'</a> element is used to define graphical template objects
-which can be instantiated by a <a>'use'</a> element but are not rendered
+<p>The <a>'symbol'</a> element is used to define graphical templates
+which can be instantiated by a <a>'use'</a> element but which are not rendered
 directly.</p>
   
 <p>A <a>'symbol'</a> establishes a nested coordinate system 
@@ -732,7 +733,12 @@ directly.</p>
   
 <p>The <a>'x'</a>, <a>'y'</a>, <a>'width'</a>, and <a>'height'</a> geometry properties 
   have the same effect as on an <a>'svg'</a> element,
-  when the <a>'symbol'</a> is instantiated by a <a>'use'</a> element.</p>
+  when the <a>'symbol'</a> is instantiated by a <a>'use'</a> element.
+  In particular, if <a>'width'</a> and <a>'height'</a> 
+  compute to <span class="prop-value">auto</span>
+  (and are not over-ridden by values on the instantiating <a>'use'</a> element),
+  then they will be treated as a value of <span class="prop-value">100%</span>. 
+</p>
   
 <p class="note">
   New in SVG 2.
@@ -758,13 +764,13 @@ directly.</p>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="symbol" id="SymbolElementRefXAttribute">refX</dfn></td>
         <td><a>&lt;length&gt;</a> | left | center | right</td>
-        <td>0</td>
+        <td>(none)</td>
         <td>yes</td>
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="symbol" id="SymbolElementRefYAttribute">refY</dfn></td>
         <td><a>&lt;length&gt;</a> | top | center | bottom</td>
-        <td>0</td>
+        <td>(none)</td>
         <td>yes</td>
       </tr>
     </table>
@@ -793,10 +799,29 @@ directly.</p>
     <p>
       The <a>'refX'</a> and <a>'refY'</a> attributes define the
       reference point of the symbol which is to be placed exactly at
-      the symbol's position as defined by the <a>'use'</a> element.
-      They are interpreted as being in the coordinate system of the
+      the symbol's <span class="prop-value">x,y</span> positioning coordinate, 
+      as defined by the cumulative effect of the <a>'x'</a> and <a>'y'</a>
+      properties and any transformations on the <a>'symbol'</a> 
+      and its <a>host</a> <a>'use'</a> element.
+      Unlike other positioning attributes,
+      <a>'refX'</a> and <a>'refY'</a> 
+      are interpreted as being in the coordinate system of the
       symbol contents, after application of the <a>'viewBox'</a>
       and <a>'preserveAspectRatio'</a> attributes.
+      If one or both of the attributes is not specified,
+      no adjustment is made in the corresponding dimension,
+      and the top or left side of the symbol's rectangular viewport region
+      (regardless of the <a>'viewBox'</a> coordinates)
+      is positioned at the <span class="prop-value">x,y</span> point.
+    </p>
+    
+    <p class="note">
+      For backwards compatibility,
+      the behavior when <a>'refX'</a> and <a>'refY'</a>
+      are not specified on a <a>'symbol'</a>
+      is different from when they are specified with a value of <span class="attr-value">0</span>,
+      and therefore different from the behavior 
+      when equivalent attributes are not specified on a <a>'marker element'</a>.
     </p>
 
   </dd>
@@ -1883,7 +1908,8 @@ to also be animated.</p>
     can be used to connect it to the modifiable elements in the main DOM.
   </p>
 </div>
-
+  
+</div><!-- ready-for-wg-review -->
 
 <h2 id="ConditionalProcessing">Conditional processing</h2>
 
