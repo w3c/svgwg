@@ -1024,6 +1024,11 @@ of assets.
 
 <h3 id="UseHref">Resolving Cross-references</h3>
   
+<p class="issue">
+  Should this section, or parts of it, be moved to the Linking chapter,
+  and made to apply for all external resources
+  (e.g., external paint servers, filters, etc.)?
+</p>
   
 <p>
 A <a>'use'</a> element that has just been created (by script or parser) is in an <dfn id="TermUnresolvedUseElement">unresolved</dfn> state.
@@ -1053,6 +1058,15 @@ If this results in a valid URI, the user agent must attempt to resolve the URI t
       and the processing mode or security restrictions on this document allow it to be accessed,
       fetch that document and process it in <a>secure static mode</a> 
       (meaning, do not fetch any additional external resources and do not run scripts or play animations or video).
+      If a document at the same URI has already been fetched and processed,
+      the user agent may re-use the same document object model generated from it.
+      A document model generated from an external reference in a <a>'use'</a> element
+      must be read-only and cannot be modified.
+    </p>
+    <p class="issue">  
+      Do we need to reference specifics re fetching an external document and security modes?
+    </p>
+    <p>  
       After parsing the document:
     </p>
     <ul>
@@ -1075,11 +1089,6 @@ If this results in a valid URI, the user agent must attempt to resolve the URI t
     </p>
   </li>
 </ul>
-  
-<p class="issue">
-  Is <a>secure static mode</a> the best choice for processing external use references? 
-  Or should we use <a>static mode</a>? That would allow chained references to additional resources, but still no scripting or animation.
-</p>
 
 <p>If the <a>referenced element</a> that results from resolving the URI 
   is neither an SVG element 
@@ -1221,6 +1230,13 @@ must throw a <code>NoModificationAllowedError</code>.
 </p>
   
 <p>
+If the <a>referenced element</a> is in an external file,
+then all <a>URL references</a> in attributes and style properties
+must be made absolute (relative to the base URL of the source file)
+before copying the value to the <a>element instances</a>.
+</p>
+  
+<p>
 Within a <a>use-element shadow tree</a>,
 <a>'script'</a> elements are inert (do not execute);
 <a>'audio'</a> and <a>'video'</a> elements that may play audio
@@ -1339,8 +1355,9 @@ another element which is another <a>'use'</a> or whose content contains a
 cloning approach described above is recursive. However, a set
 of references that directly or indirectly reference a element
 to create a circular dependency is an <a>invalid circular reference</a>.
-Any <a>'use'</a> element whose shadow-including descendents
-include such a reference is in error.</p>
+The <a>'use'</a> element or element instance
+whose shadow tree would create the circular reference
+is in error and must not be rendered by the user agent.</p>
 
     
 <h3 id="UseLayout">Layout</h3>
@@ -1463,6 +1480,10 @@ if the <a>referenced element</a> defines a viewport.</p>
   is from an external document, 
   the stylesheet objects generated when processing that document
   apply to the shadow tree, and are read-only.
+  All <a>URL references</a> in the stylesheet,
+  including fragment-only references,
+  must be made absolute, relative to the URL of the document
+  that contains the <a>referenced element</a>. 
   User agents may re-use the same stylesheet objects for any shadow trees
   that reference that same external document.
 </p>
@@ -1536,7 +1557,7 @@ instance of a referenced element does not inherit properties
 from the referenced element's original parents.</p>
 -->
 <div class="note">
-  <p class="note">Note that specifying <span
+  <p>Note that specifying <span
   class="prop-value">'visibility:hidden'</span> on a <a>'use'</a> element does not guarantee
   that the referenced content will not be rendered. If the <a>'use'</a> element specifies <span
   class="prop-value">'visibility:hidden'</span> and the element
@@ -1715,7 +1736,7 @@ to also be animated.</p>
 <p class="issue">
   This behavior ensures that all WAAPI animations can be polyfilled with
   simple JS animations manipulating DOM attributes on the original elements.
-  The WAAPI spec will need to be updated to indicate that the no-modification error may be thrown.
+  The WAAPI spec may need to be updated to indicate that the no-modification error may be thrown.
   (Or another error name, if it makes more sense?)
   There must be other cases where an element or pseudo-element would reject an animation,
   so probably a good idea to have an error as an option.
@@ -3389,6 +3410,22 @@ then getting these attributes returns null.</p>
 </edit:with>
 
 
+<h3 id="InterfaceSVGUseElementShadowRoot">Interface SVGUseElementShadowRoot</h3>
+  
+<p>The root object of each <a>use-element shadow tree</a> 
+  implements the <a>SVGUseElementShadowRoot</a> interface.
+  This interface does not currently define any extensions
+  to the properties and methods defined for the
+  <a href="https://www.w3.org/TR/shadow-dom/#the-shadowroot-interface">ShadowRoot</a> interface
+  and <a href="https://www.w3.org/TR/shadow-dom/#extensions-to-the-documentorshadowroot-mixin">DocumentOrShadowRoot</a> mixin.
+  However, the tree rooted at this node 
+  is entirely read-only from the perspective of author scripts.</p>
+
+<pre class="idl">
+interface <b>SVGElementInstance</b> : <a href="https://www.w3.org/TR/shadow-dom/#the-shadowroot-interface">ShadowRoot</a> {
+
+};</pre>
+
 <h3 id="InterfaceSVGElementInstance">Interface SVGElementInstance</h3>
 
 <p>The <a>SVGElementInstance</a> interface defines extensions to the <a>SVGElement</a> interface,
@@ -3424,9 +3461,20 @@ interface <b>SVGElementInstance</b> {
 <p>The <b id="__svg__SVGElementInstance__correspondingElement">correspondingElement</b> IDL attribute
 points to the <a>corresponding element</a> if this element is an <a>element instance</a> in a <a>use-element shadow tree</a>,
 or is null otherwise.</p>
+  
+<p class="issue">
+  Should this still point to a valid element object
+  even if it is in a different document?
+  That implies that the entire DOM of the external file 
+  must be maintained in memory
+  (since the element linked from this property 
+  would be linked to all other nodes in its DOM tree).
+  I've already said that that external DOM is read-only,
+  so there's no real function to having it available.
+</p>
 
 <p>The <b id="__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</b> IDL attribute
-points to the <a>corresponding element</a> if this element is an <a>element instance</a> in a <a>use-element shadow tree</a>,
+points to the <a>corresponding use element</a> if this element is an <a>element instance</a> in a <a>use-element shadow tree</a>,
 or is null otherwise.</p>
 
 
