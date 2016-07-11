@@ -133,14 +133,35 @@ likely to require support of the <em>W3C Character Model</em>
 in Conforming SVG Generators.</p>
 
 <p>On occasions when expression of the information exceeding single precision is desired for some use cases such as maps and technical drawings, it is encouraged that the following generation steps are utilized. 
-Although <a href="types.html#Precision">real number precition</a> of SVG is single-precision, the presentation more than single-precision will be obtained by this generation way of the SVG content using the characteristic of the CTM generation processing mentioned at the <a href="#ConformingSVGServers">Conforming SVG Viewers</a> section. 
+Although <a href="types.html#Precision">real number precision</a> of SVG is single-precision, the presentation more than single-precision will be obtained by this generation way of the SVG content using the characteristic of the CTM generation processing mentioned at the <a href="#ConformingSVGViewers">Conforming SVG Viewers</a> section. 
+</p>
+
+<div class='ready-for-wg-review'>
+<p>Although the <a href="types.html#Precision">real number precision</a> of SVG is
+single-precision, presentation with an effective precision higher than
+single-precision may be obtained by generating SVG content that takes advantage
+of the fact that at least double-precision floating point must be used 
+when generating a CTM (See CTM generation processing in the
+<a href="#ConformingSVGViewers">Conforming SVG Viewers</a> section). 
+The steps for generating content that takes advantage of this are:
 </p>
 <ol>
-  <li>Split content into tiles so that variable of the coordinate value in that split contents is settled in the effective digit number below single precision. A bigger object than a tile should be divided for each tiles like the first example.</li>
-  <li>Generate coordinate transformation matrices by whom origins enters into each tiles. However, each element of those matrices must be generated in the range of single precision.</li>
-  <li>Transform the contents of each tiles by those matrices. Thereby, the contents in each tiles come to be expressed by the effective digit number below single precision. </li>
-  <li>Arrange these tiles as separate user coordinate systems in SVG. Such tiles could be constructed as the grouping by the 'g' elements and embedded contents, etc.</li>
-  <li>Generate inverse transformation matrices of the coordinate transformation matrices generated previously. And set them up as transformation matrices to each user coordinate systems. </li>
+  <li>Split content into tiles such that the number of significant digits
+  required to position and size each object within a tile is within the 
+  range of single precision floats.</li>
+  <li>Generate a coordinate transformation matrix (CTM) per tile to transform from
+  user space to tile space, where tile space is a coordinate system with origin
+  <var>(0,0)</var> at the top left of the the tile. Each element of the
+  transformation matrix must be within the range of single precision.</li>
+  <li>Transform the contents of each tile from user space to tile space using
+  the generated CTM. The result is that the parameters of each object can now be
+  expressed with significant digits within the range of single precision floats.</li>
+  <li>Arrange each tile as a separate user coordinate system in SVG. For example,
+  the tiles may be expressed a <a>'g'</a> elements with an appropriate <a>'transform'</a>
+  attribute.</li>
+  <li>For each tile, generate an inverse transformation matrix for the
+  conversion of user space to tile space and apply this CTM to tile. For example,
+  as the <a>'transform'</a> attribute of the <a>'g'</a> element.</li>
 </ol>
 
 <table>
@@ -179,7 +200,7 @@ Although <a href="types.html#Precision">real number precition</a> of SVG is sing
   </tr>
   <tr><td colspan="3">This example provides the significant figure of eight digits using tiles with the user coordinate system of seven digits.</td></tr>
 </table>
-
+</div>
 
 <h2 id="ConformingSVGServers">Conforming SVG Servers</h2>
 <p>Conforming SVG Servers must meet all the requirements of a Conforming SVG
