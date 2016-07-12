@@ -925,11 +925,12 @@ is rendered in place of the <a>'use'</a> in the document.
 The <a>referenced element</a> may be a <a>container element</a>,
 in which case a copy of 
 the complete SVG document fragment rooted at that element is used.
-These <a>re-used graphics</a> inherit styles from the <a>'use'</a> element
-and in certain cases can be re-sized.
+Unlike other <a>re-used graphics</a>,
+the cloned content inherits styles from the <a>'use'</a> element
+and can be the target of user events.
 However, they remain linked to the referenced source and reflect DOM mutations in the original.
 In addition, all style rules that apply in the scope of the referenced element
-also apply in the scope of the <a>re-used graphics</a>.
+also apply in the scope of the cloned <a>shadow tree</a>.
 </p>
     
 <h3 id="UseAttributes">Attributes</h3>
@@ -1466,12 +1467,12 @@ if the <a>referenced element</a> defines a viewport.</p>
   both the original document and the shadow tree document fragment.
   Any changes to the stylesheets in the main document
   also affect the shadow tree;
-  the <code>StylesheetList</code> object accessed through the
+  the <code>StyleSheetList</code> object accessed through the
   document and shadow root document fragment's 
-  <code>stylesheets</code> properties must be identical.
+  <code>styleSheets</code> properties must be identical.
   If a <a>'style element'</a> is duplicated
   as part of the <a>referenced document fragment</a>,
-  then the <code>stylesheet</code> property on the <a>element instance</a>
+  then the <code>styleSheet</code> property on the <a>element instance</a>
   points to the same object as for the <a>corresponding element</a>.
 </p>
   
@@ -1634,7 +1635,24 @@ illustrative purposes.</p>
 
 -->
     
-<h3 id="UseAnimations">Animations</h3>
+<h3 id="UseMultimedia">Multimedia in use-element shadow trees</h3>
+  
+<p>
+  When a <a>use-element shadow tree</a> includes
+  <a>'audio'</a> or <a>'video'</a> elements,
+  the user agent must synchronize playback of the media
+  with the <a>corresponding element</a> 
+  (if it is rendered as part of the same document)
+  and any other <a>instances</a> of the same <a>corresponding element</a>
+  in the document.
+  If user-agent provided playback controls are included
+  for the <a>corresponding element</a>  
+  (or would be included, if the element was rendered),
+  then they must be included for all instances,
+  and a user input event on any instance must control playback on them all.
+</p> 
+    
+<h3 id="UseAnimations">Animations in use-element shadow trees</h3>
 <p class="issue">
   Should this section be moved to the SVG Animations specification and/or WAAPI?
   Most of the details are dependent on those specs.
@@ -1642,6 +1660,7 @@ illustrative purposes.</p>
   and Web Animations
   are going to need guidance on how to update those implementations
   to match the new shadow DOM model.
+  Also, it would be nice to have a TR version of SVG Animations to link to!
 </p>
   
 <!--
