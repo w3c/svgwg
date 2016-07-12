@@ -1235,54 +1235,61 @@ ignored.</p>
 </div>
 
 <h2 id="IntrinsicSizing">Intrinsic sizing properties of the SVG viewport of SVG content</h2>
+<div class='ready-for-wg-review'>
+<p>To enable inclusion of SVG in host documents formatted with CSS, a <a>concrete
+object size</a> must be calculated.
+The <a>concrete object size</a> must be calculated using the
+<a href='https://www.w3.org/TR/css3-images/#default-sizing'>Default Sizing Algorithm'</a>
+defined in CSS Images 3 [<a href="refs.html#ref-CSS3IMAGES">CSS3IMAGES</a>],
+with the following inputs:</p>
 
-<p>SVG needs to specify how to calculate some intrinsic sizing properties  to
-enable inclusion within other host documents. The intrinsic width and height
-of the <a>SVG viewport</a> of SVG content must be determined from the <a>'width property'</a>
-and <a>'height property'</a> properties. If either of these are not specified,
-the used value is the initial value <span class="attr-value">'auto'</span>.
-Specifically, percentage values <em>do not provide an intrinsic width or height</em>.
-</p>
+<p>The <a>specified size</a> must be determined from the used values for the
+<a>'width'</a> and <a>'height'</a> presentation attributes of the <a>'svg'</a>
+element.</p>
 
+<p>The <a>intrinsic dimensions</a> must also be determined from the <a>'width'</a>
+and <a>'height'</a> presentation attributes. If either <a>'width'</a> or <a>'height'</a> are
+not specified, the used value is the initial value <span class="attr-value">'auto'</span>.
+Relative lengths must not be used to determine an <a>intrinsic width</a> or
+<a>intrinsic height</a>.</p>
 
-<div class="issue" data-issue="30">
-<p>We have the problem that either <a>'width'</a> and <a>'height'</a> are</p>
-<ul>
-  <li><span class="attr-value">'auto'</span></li>
-  <li>percentage values</li>
-</ul>
-<p>Furthermore we can have a intrinsic ratio with <a>'svg/viewBox'</a>. We need
-to describe all combinations and what happens in these cases in detail. The
-current text does not seem sufficient enough to describe all cases.</p>
-<p>The outcome of this should be a intrinsic ratio for all cases.</p>
+<p class='note'>
+With bitmap image formats, the <a>intrinsic dimensions</a> are fixed in 
+the image file, and the specified size is defined in the host document as needed
+to scale the image.
+SVG, being inherently scalable, adapts the <a>intrinsic width</a> and 
+<a>intrinsic height</a> to be the width and height of the <a>specified size</a>.
+Therefore, unless specified as relative units, the <a>'width'</a> and
+<a>'height'</a> presentation attributes of the <a>'svg'</a> element control the
+<a>intrinsic dimensions</a> of the SVG image and the <a>specified size</a> that
+is used when placing the SVG image in a host document.</p>
+
+<p> The <a>intrinsic aspect ratio</a> must be calculated using the following
+algorithm. If the algorithm returns null, then there is no intrinsic aspect ratio.</p>
+
+<ol class='algorithm'>
+<li>If the <a>'width'</a> and <a>'height'</a> presentation attributes on the
+    <a>'svg'</a> element are both absolute values:
+    <ol>
+        <li>return width / height</li>
+    </ol>
+</li>
+<li>If an <a href="linking.html#LinksIntoSVG">SVG View</a> is active:
+    <ol>
+        <li>let <var>viewbox</var> = the viewbox defined by the active SVG View</li>
+        <li>return <var>viewbox</var>.width / <var>viewbox</var>.height</li>
+    </ol>
+</li>
+<li>If the <a>'viewBox'</a> on the <a>'svg'</a> element is correctly specified:
+    <ol>
+        <li>let <var>viewbox</var> = the viewbox defined by the <a>'viewBox'</a>
+            attribute on the <a>'svg'</a> element</li>
+        <li>return <var>viewbox</var>.width / <var>viewbox</var>.height</li>
+    </ol>
+</li>
+<li>return null</li>
+</ol>
 </div>
-
-<p>The intrinsic aspect ratio of the <a>SVG viewport</a> of SVG content is necessary
-for example, when including SVG from an <span class="element-name">'object'</span> element in HTML styled with
-CSS.  It is possible (indeed, common) for an SVG graphic to have an intrinsic aspect ratio but not to have an intrinsic width or height.
-The intrinsic aspect ratio must be calculated based upon the
-following rules:</p>
-
-<ul>
-  <li>The aspect ratio is calculated by dividing a width by a height.</li>
-
-  <li>If the <a>'width'</a> and <a>'height'</a> properties
-  of the <a>outermost svg element</a> are both specified with
-  unit identifiers (in, mm, cm, pt, pc, px, em, ex) or in <a>user units</a>, then the aspect ratio is
-  calculated from the <a>'width'</a> and <a>'height'</a> properties after resolving both values to user units.
-  <span class="issue">We should use the terms relative and absolute length here.</span></li>
-
-  <li>If either/both of the <a>'width'</a> and <a>'height'</a> of the <a>outermost svg element</a> are in
-  percentage units (or omitted) <span class="issue">(used value is auto)</span>, the aspect ratio is calculated from the width and
-  height values of the <a>'svg/viewBox'</a> specified for the <a>current SVG document fragment</a>.
-  If the <a>'svg/viewBox'</a> is not correctly specified,
-  the intrinsic aspect ratio cannot be calculated and is considered unspecified.</li>
-
-  <li>If the dimension and ratio of the SVG document are resolved to unspecified values, then the host document should follow the CSS rules
-  for <a href="http://www.w3.org/TR/CSS21/visudet.html#inline-replaced-width">calculating width and ratio for inline replaced elements</a>.
-  In this case, the used width value would be 300px (or the rectanlge width fitting the device) and used ratio would be 2:1.</li>
-
-</ul>
 
 <p>Examples:</p>
 
