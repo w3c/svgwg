@@ -141,8 +141,8 @@ and <a href="pservers.html#Hatches">hatches</a>.</p>
 <p class="note">The ability to apply more than one paint layer to an element is new in SVG 2.</p>
 
 <p>A <a>&lt;paint&gt;</a> value can either be a comma-separated list of paint layers,
-or a special keyword that references the value of <a>'fill'</a> or <a>'stroke'</a> in
-a referencing context.  Each paint layer can take one of the following values:</p>
+or <a href="#context-paint">one of the context keywords</a>, which reference the paint value of <a>'fill'</a> or <a>'stroke'</a> from a <a>context element</a>.
+Each paint layer can take one of the following values:</p>
 
 <dl>
   <dt><a>&lt;url&gt;</a></dt>
@@ -246,8 +246,8 @@ must be supported, including <span class='prop-value'>rgb()</span>,
 the <a href="http://www.w3.org/TR/css3-color/#svg-color">extended color keywords</a> and
 the <span class='prop-value'>currentColor</span> value.</p>
 
-<p>The <span class='prop-value'>context-fill</span> and <span class='prop-value'>context-stroke</span>
-values are a reference to the computed value of the <a>'fill'</a> or <a>'stroke'</a>
+<p id="context-paint">The <span class='prop-value'>context-fill</span> and <span class='prop-value'>context-stroke</span>
+values are a reference to the paint layers generated for the <a>'fill'</a> or <a>'stroke'</a>
 property, respectively, of the <dfn id="TermContextElement">context element</dfn>
 of the element being painted.  The context element of an element is defined as follows:</p>
 
@@ -263,14 +263,21 @@ of the element being painted.  The context element of an element is defined as f
 </ul>
 
 <p>If there is no context element and these keywords are used, then no paint is
-applied.  If the referenced paint is a gradient or a pattern, then the
-coordinate space to use and the object used for any
-<span class='attr-value'>'objectBoundingBox'</span>-relative values are the
-same as those of the <a>context element</a>.</p>
+applied.  
+</p>
+<p>
+When the context paint layers include paint server references, then the
+coordinate space and the bounding box used 
+to scale the paint server elements and content are
+those of the <a>context element</a>.
+In other words, any gradients and patterns referenced with these keywords
+should be continuous from the main shape to the markers,
+or from one element within a <a>use-element shadow tree</a> to another.
+</p>
 
 <p>If the referenced value of <a>'fill'</a> or <a>'stroke'</a> is a
 <span class='prop-value'>context-fill</span> and <span class='prop-value'>context-stroke</span>
-value, then those context references are followed too.</p>
+value, then those contextual referencing is recursive.</p>
 
 <div class="example">
   <edit:includefile href="images/painting/marker-context.svg2.svg"/>
