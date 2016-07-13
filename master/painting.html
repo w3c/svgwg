@@ -1393,58 +1393,62 @@ The ideal stroke shape is determined as follows:
 
 <ol class="algorithm">
   <li>Let <var>shape</var> be an empty shape.</li>
-  <li>Let <var>scale</var> be a scale factor for the dash pattern.  If we are
-  computing the stroke shape of a <a>basic shape</a> or an individual <a>'text'</a>
-  chunk, then <var>scale</var> is 1.  Otherwise, it is determined as follows:
+  <li class="ready-for-wg-review">If <a>'stroke-width'</a> > 0, then:
     <ol>
-      <li>Let <var>length</var> be the user agent's computed length of the
-      <a>'path'</a>.</li>
-      <li>Let <var>authorlength</var> be the value of the <a>'path/pathLength'</a>
-      attribute on the <a>'path'</a> element.</li>
-      <li><var>scale</var> is <var>authorlength</var> / <var>length</var>.</li>
-    </ol>
-  </li>
-  <li>Let <var>path</var> be the <a>equivalent path</a> of the element (or the individual
-  chunk of a <a>'text'</a> element).</li>
-  <li>For each subpath of <var>path</var>:
-    <ol>
-      <li>Let <var>positions</var> be the <a>dash positions</a> for the subpath.</li>
-      <li>For each pair &lt;<var>start</var>, <var>end</var>&gt; in <var>positions</var>:
+      <li>Let <var>scale</var> be a scale factor for the dash pattern.  If we are
+      computing the stroke shape of a <a>basic shape</a> or an individual <a>'text'</a>
+      chunk, then <var>scale</var> is 1.  Otherwise, it is determined as follows:
         <ol>
-          <li>Scale <var>start</var> and <var>end</var> by <var>scale</var>.</li>
-
-          <li>Let <var>dash</var> be the shape that includes, for all distances
-          between <var>start</var> and <var>end</var> along the subpath, all
-          points that lie on the line perpendicular to the subpath at that
-          distance and which are within distance <a>'stroke-width'</a> of
-          the point on the subpath at that position.</li>
-
-          <li>Set <var>dash</var> to be the union of <var>dash</var> and the
-          starting <a>cap shape</a> for the subpath at position <var>start</var>.</li>
-
-          <li>Set <var>dash</var> to be the union of <var>dash</var> and the
-          ending <a>cap shape</a> for the subpath at position <var>end</var>.</li>
-
-          <li>
-            Let <var>index</var> and <var>last</var> be the indexes of the
-            path segments in the subpath at distance <var>start</var> and
-            <var>end</var> along the subpath.
-
-            <p class="note">It does not matter whether any zero length segments are
-            included when choosing <var>index</var> and <var>last</var>.</p>
-          </li>
-
-          <li>While <var>index</var> &lt; <var>last</var>:
+          <li>Let <var>length</var> be the user agent's computed length of the
+          <a>'path'</a>.</li>
+          <li>Let <var>authorlength</var> be the value of the <a>'path/pathLength'</a>
+          attribute on the <a>'path'</a> element.</li>
+          <li><var>scale</var> is <var>authorlength</var> / <var>length</var>.</li>
+        </ol>
+      </li>
+      <li>Let <var>path</var> be the <a>equivalent path</a> of the element (or the individual
+      chunk of a <a>'text'</a> element).</li>
+      <li>For each subpath of <var>path</var>:
+        <ol>
+          <li>Let <var>positions</var> be the <a>dash positions</a> for the subpath.</li>
+          <li>For each pair &lt;<var>start</var>, <var>end</var>&gt; in <var>positions</var>:
             <ol>
-              <li>Set <var>dash</var> to be the union of <var>dash</var> and the
-              <a>line join shape</a> for the subpath at segment index <var>index</var>.</li>
+              <li>Scale <var>start</var> and <var>end</var> by <var>scale</var>.</li>
 
-              <li>Set <var>index</var> to <var>index</var> + 1.</li>
+              <li>Let <var>dash</var> be the shape that includes, for all distances
+              between <var>start</var> and <var>end</var> along the subpath, all
+              points that lie on the line perpendicular to the subpath at that
+              distance and which are within distance <a>'stroke-width'</a> of
+              the point on the subpath at that position.</li>
+
+              <li>Set <var>dash</var> to be the union of <var>dash</var> and the
+              starting <a>cap shape</a> for the subpath at position <var>start</var>.</li>
+
+              <li>Set <var>dash</var> to be the union of <var>dash</var> and the
+              ending <a>cap shape</a> for the subpath at position <var>end</var>.</li>
+
+              <li>
+                Let <var>index</var> and <var>last</var> be the indexes of the
+                path segments in the subpath at distance <var>start</var> and
+                <var>end</var> along the subpath.
+
+                <p class="note">It does not matter whether any zero length segments are
+                included when choosing <var>index</var> and <var>last</var>.</p>
+              </li>
+
+              <li>While <var>index</var> &lt; <var>last</var>:
+                <ol>
+                  <li>Set <var>dash</var> to be the union of <var>dash</var> and the
+                  <a>line join shape</a> for the subpath at segment index <var>index</var>.</li>
+
+                  <li>Set <var>index</var> to <var>index</var> + 1.</li>
+                </ol>
+              </li>
+
+              <li>Set <var>shape</var> to be the union of <var>shape</var> and
+              <var>stroke</var>.</li>
             </ol>
           </li>
-
-          <li>Set <var>shape</var> to be the union of <var>shape</var> and
-          <var>stroke</var>.</li>
         </ol>
       </li>
     </ol>
