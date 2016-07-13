@@ -118,14 +118,14 @@
     <li>
       Text data in SVG content is readily accessible to the visually
       impaired (see <a href="access.html">Accessibility
-      Support</a>),
+      Support</a>).
     </li>
 
     <li>
       In many viewing scenarios, the user will be able to search for
       and select text strings and copy selected text strings to the
       system clipboard (see <a href="text.html#TextSelection">Text
-      selection and clipboard operations</a>),
+      selection and clipboard operations</a>).
     </li>
 
     <li>
@@ -147,17 +147,43 @@
 
   <dl class='definitions'  data-dfn-type="dfn" data-export="">
 
+    <dt id="TermCharacter">character</dt>
+    <dd>
+      A character is an atomic unit of text as defined in XML
+      [<a href="http://www.w3.org/TR/2008/REC-xml-20081126/">XML10</a>].
+      <p class="note">
+	Essentially, a tab, carriage return, line feed, or a Unicode
+	character.
+      </p>
+    </dd>
+
+    <dt id="TermAddressableCharacter">addressable character</dt>
+    <dd>
+      A <a>character</a> that is addressable by text positioning
+      attributes and SVG DOM text methods. Characters discarded during
+      layout such as
+      <a href="https://www.w3.org/TR/css-text-3/#white-space-phase-1">collapsed
+      white space characters</a> are not addressable.
+    </dd>
+
+    <dt id="TermTypographicCharacterUnit">typographic character</dt>
+    <dd>
+      A unit of a writing system— such as a Latin alphabetic letter
+      (including its diacritics), Hangul syllable, Chinese ideographic
+      character, Myanmar syllable cluster— that is indivisible with
+      respect to a particular typographic operation (line-breaking,
+      first-letter effects, tracking, justification, vertical
+      arrangement, etc.). See
+      <a href="https://drafts.csswg.org/css-text-3/#typographic-character-unit">CSS
+	Text Module Level 3</a>,
+      ([<a href="refs.html#ref-CSS3TEXT">CSS3TEXT</a>]).
+    </dd>
+
     <dt id="TermFont">font</dt>
     <dd>
       A font represents an organized collection of <a>glyphs</a> in
       which the various glyph representations will share a particular
       appearance or styling.
-    </dd>
-
-    <dt id="TermCharacter">character</dt>
-    <dd>
-      A character is an atomic unit of text as defined in XML
-      [<a href="http://www.w3.org/TR/2008/REC-xml-20081126/">XML10</a>].
     </dd>
 
     <dt id="TermGlyph">glyph</dt>
@@ -249,7 +275,7 @@
       <q>end</q> sides of a line or part of a line of text (relevant,
       for example to how the <a>'text-anchor'</a> property is
       applied). It is determined by the <a>'direction'</a> property.
-      (Note: the ordering of glyphs in a line of text is primary
+      (Note: the ordering of characters in a line of text is primary
       controlled by the Unicode bidi algorithm and not the inline-base
       direction.)
     </dd>
@@ -262,16 +288,17 @@
 
     <dt id="TermAlignmentPoint">alignment point</dt>
     <dd>
-      The point on a glyph that should be aligned with the
-      <a>current text position</a>. It is determined by the
-      glyph cell metrics and may depend on the script and
+      The point on a typographic character that should be aligned with
+      the <a>current text position</a>. It is determined by the glyph
+      cell metrics and may depend on the script and
       <a>inline-base direction</a>.
     </dd>
 
     <dt id="TermCurrentTextPosition">current text position</dt>
     <dd>
       The point in the current user space where the <a>alignment
-	point</a> of the next glyph to be rendered should be placed.
+	point</a> of the next typographic character to be rendered
+	should be placed.
     </dd>
 
     <dt id="TermTextChunk">text chunk</dt>
@@ -309,12 +336,18 @@
   <p>
     A font may supply substitution and positioning tables that
     can be used by a formatter (shaper) to re-order, combine and
-    position a sequence of glyphs to make one or more composite
-    glyphs. The combination may be as simple as a ligature, or as
+    position a sequence of glyphs to form one or more composite
+    glyphs. The combining may be as simple as a ligature, or as
     complex as an indic syllable which combines, usually with some
     re-ordering, multiple consonants and vowel glyphs. The tables may
     be language dependent allowing the use of language appropriate
     letter forms.
+  </p>
+
+  <p>
+    When a glyph, simple or composite, represents an indivisible unit
+    for typesetting purposes, it is know as a <a>typographic
+    character</a>.
   </p>
 
   <p>
@@ -346,9 +379,9 @@
 
       SVG attributes such as <a>'tspan/dx'</a>, <a>'textLength'</a>,
       and <a>'textPath/spacing'</a> (in <a>'textPath'</a>) that may
-      reposition glyphs do not break discretionary ligatures. If
-      discretionary ligatures are not desired they can be turned off
-      by using the <a>'font-variant-ligatures'</a> property.
+      reposition <a>typographic characters</a> do not break discretionary
+      ligatures. If discretionary ligatures are not desired they can be turned
+      off by using the <a>'font-variant-ligatures'</a> property.
 
       (For OpenType fonts, discretionary ligatures include those enabled
       by the liga, clig, dlig, hlig, and cala features; required ligatures
@@ -369,7 +402,7 @@
       </tr>
       <tr>
 	<th>Purpose:</th>
-	<td>To allow access to full OpenType features for internationalisation and advanced typography.</td>
+	<td>To allow access to full OpenType features for internationalization and advanced typography.</td>
       </tr>
       <tr>
 	<th>Owner:</th>
@@ -1171,6 +1204,15 @@
 	A negative value is an error
         (see <a href="implnote.html#ErrorProcessing">Error
         processing</a>).
+      </p>
+      <p>
+	The <a>'textLength'</a> attribute is only applied when the <a>wrapping
+	area</a> is not defined by the <a>'shape-inside'</a> or
+	the <a>'inline-size'</a> properties. It is also not applied for
+	any <a>'text'</a> or <a>'tspan'</a> element that has forced line breaks
+	(due to a <a>'white-space'</a> value of
+	<span class="prop-value">pre</span> or
+	<span class="prop-value">pre-line</span>).
       </p>
       <p>
 	If the attribute is not specified anywhere within a
@@ -2474,18 +2516,26 @@
     shapes to be filled. The <a>'text'</a> element is treated as a
     block element and its descendant <a>'tspan'</a> and
     <a>'textPath'</a> elements are treated as inline elements. The CSS
-    renderer returns a set of CSS boxes laid out as if the text were
-    absolutely positioned.
+    renderer returns a set of <a>typographic characters</a> with
+    their positions resulting from laying out the text as if the text
+    were absolutely positioned.
+  </p>
+  <p class="note">
+    A <a>typographic character</a> may correspond to more than
+    one <a>glyph</a>. It is assumed here the relative positioning of
+    the <a>glyphs</a> inside a <a>typographic character</a> is
+    encapsulated by the <a>typographic character</a> and it is
+    not user controllable.
   </p>
   <p>
     Once a <a>content area</a> has been defined, the following
-    algorithm is used to determine the glyphs to render for a
-    given <a>'text'</a> element and their positions:
+    algorithm is used to determine the <a>typographic characters</a>
+    and their positions for a given <a>'text'</a> element:
   </p>
 
-  <ol class='algorithm'>
+  <ul class='algorithm'>
     <li>
-      If the <a>content area</a> is defined by the
+      For text where the <a>content area</a> is defined by the
       <a>'shape-inside'</a> property, layout the text in one or more
       areas per CSS rules for laying out text in a CSS <a>wrapping
       area</a>.
@@ -2497,7 +2547,7 @@
       </p>
     </li>
     <li>
-      Else, for text where the <a>content area</a> is defined by the
+      For text where the <a>content area</a> is defined by the
       <a>'inline-size'</a> property, layout the text in a CSS content
       box where the <a>inline size</a> is set to the value of
       the <a>'inline-size'</a> property and the <a>block size</a> is
@@ -2511,11 +2561,11 @@
       </p>
     </li>
     <li>
-      Else, for all other text (SVG 1.1 compatible text and SVG 1.1
+      For all other text (SVG 1.1 compatible text and SVG 1.1
       like multi-line text), layout the text in a CSS content box that
       is unconstrained in width and height.
     </li>
-  </ol>
+  </ul>
 
   <p>
     A number of CSS properties have no or limited effect on SVG text
@@ -2535,6 +2585,7 @@
       <span class='property'>'position'</span> and
       <span class='property'>'text-align'</span>.
     </li>
+
     <li>
       If the computed value of the <a>'display'</a> property on a
       correctly parented <a>text content block element</a> is anything
@@ -2578,16 +2629,17 @@
   </ul>
 
   <p>
-    CSS boxes may be repositioned according to various SVG attributes
-    and properties depending on how the <a>content area</a>
-    was defined:
+    Various SVG attributes and properties may reposition the
+    <a>typographic characters</a> depending on how the <a>content
+    area</a> is defined:
   </p>
 
   <ul>
     <li>
       For text where the <a>content area</a> is defined by the
-      <a>'shape-inside'</a> property, the CSS boxes are rendered as
-      returned from the CSS based text renderer.
+      <a>'shape-inside'</a> property, the <a>typographic
+      characters</a> are rendered with positions as returned from the
+      CSS based text renderer.
     </li>
     <li>
       For text where the <a>content area</a> is defined by the
@@ -2597,8 +2649,9 @@
     </li>
     <li>
       For all other text (SVG 1.1 compatible text and SVG 1.1 like
-      multi-line text), the CSS boxes are adjusted according to the
-      algorithm that follows.
+      multi-line text), the positions of the <a>typographic
+      characters</a> are adjusted according to the algorithm that
+      follows.
     </li>
   </ul>
 
@@ -2609,6 +2662,10 @@
   </p>
 
   <ul>
+    <li>
+      a global index number, which indicates the index of the
+      character relative to the start of the <a>'text'</a> element;
+    </li>
     <li>
       an (x, y) coordinate pair, which gives its position in the
       coordinate space of the <a>'text'</a> element;
@@ -2622,12 +2679,12 @@
     </li>
     <li>
       an "addressable" flag, which represents whether it is
-      addressable by text positioning attributes and SVG DOM text
-      methods;
+      an <a>addressable character</a>, that is, addressable by text
+      positioning attributes and SVG DOM text methods;
     </li>
     <li>
       a "middle" flag, which represents whether it is the second or
-      later character of a <a>typographic character unit</a>
+      later character of a <a>typographic character</a>
     </li>
     <li>
       an "anchored chunk" flag, which represents whether it starts a
@@ -2636,199 +2693,191 @@
     </li>
   </ul>
 
+  <p class="note">
+    The arrays given in the SVG attributes <a>'tspan/x'</a>,
+    <a>'tspan/y'</a>, <a>'tspan/dx'</a>, <a>'tspan/dy'</a>,
+    and <a>'tspan/rotate'</a> are indexed by <a>addressable
+    characters</a>. However, repositioning is applied
+    <a>typographic characters</a>. If a <a>typographic character</a>
+    corresponds to more than one character (e.g. a ligature), only
+    the array values corresponding to the first character are used
+    in positioning the <a>typographic character</a>. Array values
+    corresponding to other characters in the <a>typographic character</a>
+    are skipped (for <a>'tspan/x'</a> and <a>'tspan/y'</a>), are
+    accumulated and applied to the next <a>typographic character</a>
+    (for <a>'tspan/dx'</a> and <a>'tspan/dy'</a>), or if it is the last
+    value in the array, applied to the following <a>typographic
+    characters</a> (for <a>'tspan/rotate'</a>). This ensures, for example,
+    that attribute values are applied to the same characters regardless of
+    whether or not a font has a particular ligature or not.
+  </p>
+
   <p>
     The SVG specific text layout algorithm is as follows:
   </p>
 
-  <p class='issue' data-issue="63">
-    This doesn't support stretched or spaced glyphs due to
-    <a>'text/textLength'</a> and <a>'text/lengthAdjust'</a>, spaced
-    glyphs due to <a>'textPath/spacing'</a> being
-    <span class='attr-value'>'auto'</span>, or warped text due to
-    <a>'textPath/method'</a> being
-    <span class='attr-value'>'stretch'</span>.  It might be tricky to
-    specify how <a>'text/lengthAdjust'</a> should work when specified
-    on <a>'tspan'</a> elements.
-  </p>
-  <p class='issue' data-issue="64">
-    Needs review to ensure that it does the right thing for RTL or
-    vertical text.
-  </p>
-
   <ol class='algorithm'>
     <li>
-      Setup.
+      <b>Setup</b>
       <ol>
 	<li>
-	  Let <var>root</var> be the result of generating CSS boxes for
-	  the <a>'text'</a> element and its subtree, laid out as if it
+	  Let <var>root</var> be the result of generating
+	  <a>typographic character</a> positions for the
+	  <a>'text'</a> element and its subtree, laid out as if it
 	  were an absolutely positioned element.
 	  <p class='note'>
-	    This will result in a single line of text (unless the
-	    <a>'white-space'</a> property causes line breaks).
+	    This will be a single line of text unless the
+	    <a>'white-space'</a> property causes line breaks.
 	  </p>
 	</li>
 	<li>
-	  Let <var>count</var> be the number of DOM characters within
-	  the <a>'text'</a> element's subtree.
+	  Let <var>count</var> be the number of DOM <em>characters</em>
+	  within the <a>'text'</a> element's subtree.
 	</li>
 	<li>
 	  Let <var>result</var> be an array of length <var>count</var>
 	  whose entries contain the per-character information described
 	  above.  Each entry is initialized as follows:
 	  <ul>
-	    <li>its x and y coordinates and its angle are considered "unspecified"</li>
-	    <li>its "hidden" flag is false</li>
-	    <li>its "addressable" flag is true</li>
-	    <li>its "middle" flag is false</li>
-	    <li>its "anchored chunk" flag is false</li>
+	    <li>its global index number equal to its position in the array,</li>
+	    <li>its "x" coordinate set to "unspecified",</li>
+	    <li>its "y" coordinate set to "unspecified",</li>
+	    <li>its "rotate" coordinate set to "unspecified",</li>
+	    <li>its "hidden" flag is false,</li>
+	    <li>its "addressable" flag is true,</li>
+	    <li>its "middle" flag is false,</li>
+	    <li>its "anchored chunk" flag is false.</li>
 	  </ul>
+	  If <var>result</var> is empty, then return <var>result</var>.
+	</li>
+        <li>
+	  Let <var>CSS_positions</var> be an array of length
+	  <var>count</var> whose entries will be filled with the
+	  <var>x</var> and <var>y</var> positions of the corresponding
+	  <a>typographic character</a> in<var>root</var>. The array
+	  entries are initialized to (0, 0).
 	</li>
 	<li>
-	  If <var>result</var> is empty, then return <var>result</var>.
+	  Let "horizontal" be a flag, true if the writing mode of <a>'text'</a>
+	  is horizontal, false otherwise.
 	</li>
       </ol>
     </li>
     <li>
-      Assign initial positions.
+      <b>Set flags and assign initial positions</b>
+      <p>
+	For each array element with index <var>i</var> in 
+	<var>result</var>:
+      </p>
       <ol>
 	<li>
-	  Let <var>positions</var> be an array of length <var>count</var> whose entries are the positions of the glyphs corresponding to each character.  Each entry is initialized to (0, 0).
+	  Set <var>addressable</var> to false if the character at index <var>i</var> was:
+          <ul>
+	    <li>
+	      discarded during layout due to being a
+	      <a href="https://www.w3.org/TR/css-text-3/#white-space-phase-1">collapsed
+		white space character</a>, a soft hyphen character, or a
+	      bidi control character; <i>or</i>
+	    </li>
+	    <li>
+	      discarded during layout due to being a
+	      <a href="https://www.w3.org/TR/css-text-3/#line-break-transform">collapsed
+		segment break</a>; <i>or</i>
+	    </li>
+	    <li>
+	      <a href="https://www.w3.org/TR/css-text-3/#white-space-phase-2">trimmed</a>
+	      from the start or end of a line.
+	    </li>
+          </ul>
+          <div class='note'>
+	    <p>
+	      Since there is collapsible white space not addressable by glyph
+	      positioning attributes in the following <a>'text'</a> element
+	      (with a standard font), the "B" glyph will be placed at x=300.
+	    </p>
+	    <pre>&lt;text x="100 200 300"&gt;
+	      A
+	      B
+	      &lt;/text&gt;</pre>
+	    <p>
+	      This is because the white space before the "A", and all but one white space
+	      character between the "A" and "B", is collapsed away or trimmed.
+	    </p>
+          </div>
 	</li>
-	<li>For each array element index <var>i</var> in result:
+	<li>
+	  Set <var>middle</var> to true if the character at index <var>i</var>
+	  is the second or later character that corresponds to a <a>typographic
+	  character</a>.
+	</li>
+	<li>
+	  If the character at index <var>i</var> corresponds to a <a>typographic
+	  character</a> at the beginning of a line, then set the "anchored
+	  chunk" flag of <var>result</var>[<var>i</var>] to true.
+          <p class='note'>
+	    This ensures chunks shifted by <a>'text-anchor'</a> do not
+	    span multiple lines.
+	  </p>
+	</li>
+	<li>
+	  If <var>addressable</var> is true and <var>middle</var> is false then
+	  set <var>CSS_positions</var>[<var>i</var>] to the position of the
+	  corresponding <a>typographic character</a> as determined by the CSS
+	  renderer. Otherwise, if <var>i</var> &gt; 0, then set
+	  <var>CSS_positions</var>[<var>i</var>] =
+	  <var>CSS_positions</var>[<var>i</var> − 1]
+	</li>
+      </ol>
+    </li>
+    <li>
+      <b>Resolve character positioning</b>
+      <p class="note">
+	Position adjustments (e.g values in a <a>'tspan/x'</a> attribute)
+	specified by a node apply to all characters in that node including
+	characters in the node's descendants. Adjustments specified in
+	descendant nodes, however, override adjustments from ancestor
+	nodes. This section resolves which adjustments are to be applied to
+	which characters. It also directly sets the <var>rotate</var> coordinate
+	of <var>result</var>.
+      </p>
+      <ol>
+	<li>
+	  Set up:
 	  <ol>
 	    <li>
-	      Let <var>addressable</var> be true iff the character at index <var>i</var> was not:
-              <ul>
-		<li>
-		  discarded during layout due to being
-		  a <a href="https://www.w3.org/TR/css-text-3/#white-space-phase-1">collapsed
-		    white space character</a>, a soft hyphen character, or a
-		  bidi control character;
-		</li>
-		<li>
-		  discarded during layout due to being a <a href="https://www.w3.org/TR/css-text-3/#line-break-transform">collapsed segment break</a>; or
-		</li>
-		<li>
-		  <a href="https://www.w3.org/TR/css-text-3/#white-space-phase-2">trimmed</a> from the start or end of a line.
-		</li>
-              </ul>
-              <div class='note'>
-		<p>
-		  Since collapsed white space not addressable by glyph
-		  positioning attributes, in the following <a>'text'</a>
-		  element (with a standard font) the "B" glyph will be
-		  placed at x=300.
-		</p>
-		<pre>&lt;text x="100 200 300"&gt;
-		  A
-		  B
-		  &lt;/text&gt;</pre>
-		<p>
-		  This is because the white space before the "A", and all but one white space
-		  character between the "A" and "B", is collapsed away or trimmed.
-		</p>
-              </div>
+	      Let <var>resolve_x</var>, <var>resolve_y</var>,
+	      <var>resolve_dx</var>, and <var>resolve_dy</var> be arrays of
+	      length <var>count</var> whose entries are all initialized
+	      to "unspecified".
 	    </li>
 	    <li>
-	      Set the "addressable" flag of <var>result</var>[<var>i</var>]
-	      to <var>addressable</var>.
-	    </li>
-	    <li>
-	      Let <var>middle</var> be true iff the character at
-	      index <var>i</var> is the second or later character that
-	      corresponds to a <a>typographic character unit</a>.
-	    </li>
-	    <li>
-	      Set the "middle" flag of <var>result</var>[<var>i</var>] to
-	      <var>middle</var>.
-	    </li>
-	    <li>
-	      If the character at index <var>i</var> corresponds to
-	      a <a>typographic character unit</a> at the beginning of a
-	      line, then set the "anchored chunk" flag of
-	      <var>result</var>[<var>i</var>] to true.
-              <p class='note'>
-		This ensures chunks shifted by <a>'text-anchor'</a> do not span multiple lines.
+	      Set "in_text_path" flag false.
+	      <p class="note">
+		This flag will allow <a>'tspan/y'</a> (<a>'tspan/x'</a>)
+		attribute values to be ignored for horizontal (vertical)
+		text inside <a>'textPath'</a> elements.
 	      </p>
 	    </li>
 	    <li>
-	      If <var>addressable</var> is true and <var>middle</var> is
-	      false, then set <var>positions</var>[<var>i</var>] to the
-	      position of the <a>typographic character unit</a>, relative
-	      to the origin of <var>root</var>. Otherwise, if
-	      <var>i</var> &gt; 0, then set
-	      <var>positions</var>[<var>i</var>] to
-	      <var>positions</var>[<var>i</var> &#x2212; 1].
+	      Call the following procedure with the <a>'text'</a> element node.
 	    </li>
 	  </ol>
 	</li>
-      </ol>
-    </li>
-    <li>
-      Find deltas.
-      <ol>
 	<li>
-	  Let <var>deltas</var> be an array of length <var>count</var>
-	  whose entries are (x, y) coordinate pairs, all initialized to
-	  (0, 0).
-	</li>
-	<li>
-	  Let <var>index</var> = 0.
-	</li>
-	<li>
-	  Let <var>force_chunk</var> = false.
-	</li>
-	<li>
-	  Let <b id="ResolveGlyphPositioning"><i>resolve glyph
-	      positioning</i></b> be a recursive procedure that takes as input
-	  a <var>node</var> and whose steps are as follows, and
-	  then <a href="#ResolveGlyphPositioning">resolve glyph
-	    positioning</a> for the <a>'text'</a> element.
-	  <ol>
+	  Procedure: <b id="ResolveGlyphPositioning"><i>resolve character
+	      positioning</i></b>:
+	  <p>
+	    A recursive procedure that takes as input a <var>node</var> and
+	    whose steps are as follows:
+	  </p>
+          <ol>
 	    <li>
-	      If <var>node</var> is a text node, then:
-              <ol>
+	      If <var>node</var> is a <a>'text'</a> or <a>'tspan'</a> node:
+	      <ol>
 		<li>
-		  Let <var>length</var> be the number of DOM characters in
-		  the text node.
+		  Let <var>index</var> equal the "global index number" of the
+		  first character in the node.
 		</li>
-		<li>
-		  If <var>length</var> &gt; 0, then:
-		  <ol>
-		    <li>
-		      If <var>force_chunk</var> is true, then set the
-		      "anchored chunk" flag of
-		      <var>result</var>[<var>index</var>] to true and
-		      set <var>force_chunk</var> to false.
-		    </li>
-		    <li>
-		      Set <var>index</var> = <var>index</var>
-		      + <var>length</var>.
-		    </li>
-		  </ol>
-		</li>
-		<li>
-		  Return.
-		</li>
-              </ol>
-	    </li>
-	    <li>
-	      Otherwise, if <var>node</var> is a <a>'textPath'</a>
-	      element, then:
-              <ol>
-		<li>
-		  If <var>node</var> has any non-empty descendant text
-		  nodes, then on <var>result</var>[<var>index</var>] set
-		  the (x, y) coordinate to (0, 0) and the "anchored chunk"
-		  flag to true.
-		</li>
-              </ol>
-	    </li>
-	    <li>
-	      Otherwise, if <var>node</var> is a <a>'tspan'</a>
-	      or <a>'textPath'</a> element, then:
-              <ol>
 		<li>
 		  Let <var>x</var>, <var>y</var>, <var>dx</var>, <var>dy</var>
 		  and <var>rotate</var> be the lists of values from the
@@ -2837,81 +2886,113 @@
 		  or was invalid.
 		</li>
 		<li>
-		  Let <var>new_chunk_count</var> = max(length
-		  of <var>x</var>, length of <var>y</var>).
-		  <p class='note'>
-		    This causes each character with an absolutely
-		    positioned <a>'text/x'</a> or <a>'text/y'</a> to begin
-		    a new <a>'text-anchor'</a> chunk.
-		  </p>
+		  If "in_text_path" flag is false:
+		  <ul>
+		    <li>
+		      Let <var>new_chunk_count</var>
+		      = max(length of <var>x</var>, length of <var>y</var>).
+		    </li>
+		  </ul>
+		  Else:
+		  <ul>
+		    <li>
+		      If the "horizontal" flag is true:
+		      <ul>
+			<li>
+			  Let <var>new_chunk_count</var> = length of <var>x</var>.
+			</li>
+		      </ul>
+		    </li>
+		    <li>
+		      Else:
+		      <ul>
+			<li>
+			  Let <var>new_chunk_count</var> = length of <var>y</var>.
+			</li>
+		      </ul>
+		    </li>
+		  </ul>
 		</li>
 		<li>
-		  If <var>new_chunk_count</var> = 0
-		  and <var>force_chunk</var> = true, then
-		  set <var>new_chunk_count</var> = 1.
-		</li>
-		<li>
-		  Let <var>length</var> be the number of DOM characters in
-		  the subtree rooted at <var>node</var>.
+		  Let <var>length</var> be the number of DOM characters in the
+		  subtree rooted at <var>node</var>.
 		</li>
 		<li>
 		  Let <var>i</var> = 0 and <var>j</var> = 0.
+		  <p class="note">
+		    <var>i</var> is an index of <a>addressable characters</a> in the node;
+		    <var>j</var> is an index of all <a>characters</a> in the node.
+		  </p>
 		</li>
 		<li>
 		  While <var>j</var> &lt; <var>length</var>, do:
 		  <p class='note'>
 		    This loop applies the <a>'text/x'</a>, <a>'text/y'</a>,
-		    <a>'text/dx'</a>, <a>'text/dy'</a> and
-		    <a>'text/rotate'</a> attributes to the content
-		    inside <var>node</var>.
+		    <a>'text/dx'</a>, <a>'text/dy'</a> and <a>'text/rotate'</a>
+		    attributes to the content inside <var>node</var>.
 		  </p>
 		  <ol>
 		    <li>
-		      If the "addressable" flag of
-		      <var>result</var>[<var>index</var> +
+		      If the "addressable" flag of <var>result</var>[<var>index</var> +
 		      <var>j</var>] is true, then:
                       <ol>
 			<li>
-			  If <var>i</var> &lt; <var>new_chunk_count</var>,
-			  then set the "anchored chunk" flag
-			  of <var>result</var>[<var>index</var>
-			  + <var>j</var>] to true.
+			  If <var>i</var> &lt; <var>new_check_count</var>, then
+			  set the "anchored chunk" flag of
+			  <var>result</var>[<var>index</var> + <var>j</var>] to
+			  true. Else set the flag to false.
+			  <p class="note">
+			    Setting the flag to false ensures that <a>'tspan/x'</a>
+			    and <a>'tspan/y'</a> attributes set in a <a>'text'</a>
+			    element don't create anchored chunk in a <a>'textPath'</a>
+			    element when they should not.
+			  </p>
 			</li>
 			<li>
 			  If <var>i</var> &lt; length of <var>x</var>,
-			  then set the x coordinate of the position
-			  in <var>result</var>[<var>index</var>
+			  then set <var>resolve_x</var>[<var>index</var>
 			  + <var>j</var>] to <var>x</var>[<var>i</var>].
 			</li>
 			<li>
+			  If "in_text_path" flag is true and the "horizontal"
+			  flag is false, unset
+			  <var>resolve_x</var>[<var>index</var>].
+			  <p class="note">
+			    The <a>'tspan/x'</a> attribute is ignored for
+			    vertical text on a path.
+			  </p>
+			</li>
+			<li>
 			  If <var>i</var> &lt; length of <var>y</var>,
-			  then set the y coordinate of the position
-			  in <var>result</var>[<var>index</var>
+			  then set <var>resolve_y</var>[<var>index</var>
 			  + <var>j</var>] to <var>y</var>[<var>i</var>].
 			</li>
 			<li>
-			  If <var>i</var> &lt; length of <var>dx</var>,
-			  then set the x coordinate
-			  of <var>deltas</var>[<var>index</var>
-			  + <var>j</var>] to <var>dx</var>[<var>i</var>].
+			  If "in_text_path" flag is true and the "horizontal"
+			  flag is true, unset
+			  <var>resolve_y</var>[<var>index</var>].
+			  <p class="note">
+			    The <a>'tspan/y'</a> attribute is ignored for
+			    horizontal text on a path.
+			  </p>
 			</li>
 			<li>
-			  If <var>i</var> &lt; length of <var>dy</var>,
-			  then set the y coordinate
-			  of <var>deltas</var>[<var>index</var>
+			  If <var>i</var> &lt; length of <var>dx</var>,
+			  then set <var>resolve_dx</var>[<var>index</var>
 			  + <var>j</var>] to <var>dy</var>[<var>i</var>].
 			</li>
 			<li>
-			  If <var>i</var> &lt; length
-			  of <var>rotate</var>, then set the angle value
-			  of <var>result</var>[<var>index</var>
-			  + <var>j</var>]
-			  to <var>rotate</var>[<var>i</var>].  Otherwise,
-			  if <var>rotate</var> is not empty, then
-			  set <var>result</var>[<var>index</var>
-			  + <var>j</var>]
-			  to <var>result</var>[<var>index</var>
-			  + <var>j</var> &#x2212; 1].
+			  If <var>i</var> &lt; length of <var>dy</var>,
+			  then set <var>resolve_dy</var>[<var>index</var>
+			  + <var>j</var>] to <var>dy</var>[<var>i</var>].
+			</li>
+			<li>
+			  If <var>i</var> &lt; length of <var>rotate</var>,
+			  then set the angle value of <var>result</var>[<var>index</var>
+			  + <var>j</var>] to <var>rotate</var>[<var>i</var>].
+			  Otherwise, if <var>rotate</var> is not empty, then
+			  set <var>result</var>[<var>index</var> + <var>j</var>]
+			  to <var>result</var>[<var>index</var> + <var>j</var> − 1].
 			</li>
 			<li>
 			  Set <var>i</var> = <var>i</var> + 1.
@@ -2923,78 +3004,281 @@
 		    </li>
 		  </ol>
 		</li>
-              </ol>
+	      </ol>
+	    </li>
+	    <li>
+	      If <var>node</var> is a <a>'textPath'</a> node:
+	      <ol>
+		<li>
+		  Let <var>index</var> equal the global index number of the
+		  first character in the node (including descendant nodes).
+		</li>
+		<li>
+		  Set the "anchored chunk" flag of <var>result</var>[<var>index</var>]
+		  to true.
+		  <p class="note">
+		    A <a>'textPath'</a> element always creates an anchored chunk.
+		  </p>
+		</li>
+		<li>
+		  Set <var>in_text_path</var> flag true.
+		</li>
+	      </ol>
 	    </li>
 	    <li>
 	      For each child node <var>child</var> of <var>node</var>:
-              <ol>
+	      <ol>
 		<li>
 		  <a href="#ResolveGlyphPositioning">Resolve glyph
 		    positioning</a> of <var>child</var>.
 		</li>
-              </ol>
+	      </ol>
 	    </li>
 	    <li>
-	      If <var>node</var> is a <a>'textPath'</a> element, then
-	      set <var>force_chunk</var> to true.
+	      If <var>node</var> is a <a>'textPath'</a> node:
+	      <ol>
+		<li>
+		  Set "in_text_path" flag false.
+		</li>
+	      </ol>
 	    </li>
-	  </ol>
-	</li>
-	<li>
-	  If the x or y coordinate of the position or the angle value
-	  in <var>result</var>[0] is unspecified, set it to 0.
-	</li>
-	<li>
-	  Set the position in <var>result</var>[0] to <var>result</var>[0] + <var>deltas</var>[0].
+          </ol>
 	</li>
       </ol>
     </li>
     <li>
-      Fill in missing glyph positions.
+      <b>Adjust positions: dx, dy</b>
+      <p class="note">
+	The <a>'tspan/dx'</a> and <a>'tspan/dy'</a> adjustments are applied
+	before adjustments due to the <a>'textLength'</a> attribute while
+	the <a>'tspan/x'</a>, <a>'tspan/y'</a> and <a>'tspan/rotate'</a>
+	adjustments are applied after.
+      </p>
       <ol>
+	<li>
+	  Let <var>shift</var> be the cumulative <var>x</var> and
+	  <var>y</var> shifts due to <a>'tspan/x'</a> and <a>'tspan/y'</a>
+	  attributes, initialized to (0,0).
+	</li>
+	<li>
+	  For each array element with index <var>i</var> in result:
+	  <ol>
+	    <li>
+	      If <var>resolve_x</var>[<var>i</var>] is unspecified, set it to 0.
+	      If <var>resolve_y</var>[<var>i</var>] is unspecified, set it to 0.
+	    </li>
+	    <li>
+	      Let <var>shift.x</var> = <var>shift.x</var> + <var>resolve_x</var>[<var>i</var>]
+	      and <var>shift.y</var> = <var>shift.y</var> + <var>resolve_y</var>[<var>i</var>].
+	    </li>
+	    <li>
+	      Let <var>result</var>[<var>i</var>].x = CSS_positions[<var>i</var>].x + shift.x
+	      and <var>result</var>[<var>i</var>].y = CSS_positions[<var>i</var>].y + shift.y.
+	    </li>
+	  </ol>
+	</li>
+      </ol>
+    </li>
+    <li>
+      <b>Apply <a>'textLength'</a> attribute</b>
+      <ol>
+	<li>
+	  Set up:
+	  <ol>
+	    <li>
+	      Define <dfn>resolved descendant node</dfn> as a
+	      descendant of node with a valid <a>'textLength'</a>
+	      attribute that is not itself a descendant node of a
+	      descendant node that has a valid <a>'textLength'</a>
+	      attribute.
+	    </li>
+	    <li>
+	      Call the following procedure with the <a>'text'</a> element
+	      node.
+	    </li>
+	  </ol>
+	</li>
+	<li>
+	  Procedure: <b id="ResolveTextLength"><i>resolve text length</i></b>:
+	  <p>
+	    A recursive procedure that takes as input
+	    a <var>node</var> and whose steps are as follows:
+	  </p>
+          <ol>
+	    <li>
+	      For each child node <var>child</var> of node:
+	      <ol>
+		<li>
+		  <a href="ResolveTextLength">Resolve text length</a> of child.
+		  <p class="note">
+		    Child nodes are adjusted before parent nodes.
+		  </p>
+		</li>
+	      </ol>
+	    </li>
+	    <li>
+	      If <var>node</var> is a <a>'text'</a> or <a>'tspan'</a> node
+	      and if the node has a valid <a>'textLength'</a> attribute value:
+	      <ol>
+		<li>
+		  Let <var>a</var> = +∞ and <var>b</var> = −∞.
+		</li>
+		<li>
+		  Let <var>i</var> and <var>j</var> be the global
+		  index of the first character and last characters
+		  in <var>node</var>, respectively.
+		</li>
+		<li>
+		  For each index <var>k</var> in the range
+		  [<var>i</var>, <var>j</var>] where the "addressable" flag
+		  of <var>result</var>[<var>k</var>] is true:
+		  <p class='note'>
+		    This loop finds the left-(top-) most and
+		    right-(bottom-) most extents of the <a>typographic
+		      characters</a> within the node and checks for
+		    forced line breaks.
+		  </p>
+		  <ol>
+		    <li>
+		      If the character at <var>k</var> is a linefeed
+		      or carriage return, return. No adjustments due to
+		      <a>'textLength'</a> are made to a node with
+		      a forced line break.
+		    </li>
+		    <li>
+		      Let <var>pos</var> = the x coordinate of the position
+		      in <var>result</var>[<var>k</var>], if the "horizontal"
+		      flag is true, and the y coordinate otherwise.
+		    </li>
+		    <li>
+		      Let <var>advance</var> = the advance of
+		      the <a>typographic character</a> corresponding to
+		      character <var>k</var>. [NOTE: This advance will be
+		      negative for RTL horizontal text.]
+		    </li>
+		    <li>
+		      Set <var>a</var> =
+		      min(<var>a</var>, <var>pos</var>, <var>pos</var>
+		      + <var>advance</var>).
+		    </li>
+		    <li>
+		      Set <var>b</var> =
+		      max(<var>b</var>, <var>pos</var>, <var>pos</var>
+		      + <var>advance</var>).
+		    </li>
+		  </ol>
+		</li>
+		<li>
+		  If <var>a</var> ≠ +∞ then:
+		  <ol>
+		    <li>
+		      Find the distance <var>delta</var> = <a>'textLength'</a>
+		      computed value − (b − a).
+		      <p class="note">
+			User agents are required to shift the last
+			<a>typographic character</a> in the node by
+			<var>delta</var>, in the positive <var>x</var> direction
+			if the "horizontal" flag is true and if
+			<a>'direction'</a> is
+			<span class="prop-value">lrt</span>, in the
+			negative <var>x</var> direction if the "horizontal" flag
+			is true and <a>'direction'</a> is
+			<span class="prop-value">rtl</span>, or in the
+			positive <var>y</var> direction otherwise.  User agents
+			are free to adjust intermediate
+			<a>typographic characters</a> for optimal
+			typography. The next steps indicate one way to
+			adjust <a>typographic characters</a> when
+			the value of <a>'lengthAdjust'</a> is
+			<span class="prop-value">spacing</span>.
+		      </p>
+		    </li>
+		    <li>
+		      Find <var>n</var>, the total number of
+		      <a>typographic characters</a> in this node
+		      including any descendant nodes that are not resolved
+		      descendant nodes or within a resolved descendant
+		      node.
+		    </li>
+		    <li>
+		      Let <var>n</var> = <var>n</var> + number of
+		      resolved descendant nodes − 1.
+		      <p class="note">
+			Each resolved descendant node is treated as if it
+			were a single
+			<a>typographic character</a> in this
+			context.
+		      </p>
+		    </li>
+		    <li>
+		      Find the per-character adjustment <var>δ</var>
+		      = <var>delta</var>/<var>n</var>.
+		    </li>
+		    <li>
+		      Let <var>shift</var> = 0.
+		    </li>
+		    <li>
+		      For each index <var>k</var> in the range [<var>i</var>,<var>j</var>]:
+		      <ol>
+			<li>
+			  Add shift to the <var>x</var> coordinate of the
+			  position in result[<var>k</var>], if the "horizontal"
+			  flag is true, and to the <var>y</var> coordinate
+			  otherwise.
+			</li>
+			<li>
+			  If the "middle" flag for result[<var>k</var>]
+			  is not true and <var>k</var> is not a character in
+			  a resolved descendant node other than the first
+			  character then <var>shift</var> = <var>shift</var>
+			  + <var>δ</var>.
+			</li>
+		      </ol>
+		    </li>
+		  </ol>
+		</li>
+	      </ol>
+	    </li>
+	  </ol>
+	</li>
+      </ol>
+    </li>
+    <li>
+      <b>Adjust positions: x, y</b>
+      <p class='note'>
+	This loop applies <a>'text/x'</a> and <a>'text/y'</a> values,
+	and ensures that <a>'text-anchor'</a> chunks do not start in
+	the middle of a <a>typographic character</a>.
+      </p>
+      <ol>
+	<li>
+	  Let <var>shift</var> be the current adjustment due to
+	  the <a>'tspan/x'</a> and <a>'tspan/y'</a> attributes,
+	  initialized to (0,0).
+	</li>
 	<li>
 	  Set <var>index</var> = 1.
 	</li>
 	<li>
 	  While <var>index</var> &lt; <var>count</var>:
-	  <p class='note'>
-	    This loop fills is any missing glyph positions based on the
-	    positions of glyphs in <var>root</var>, applies
-	    <a>'text/dx'</a> and <a>'text/dy'</a> values, and ensures
-	    that <a>'text-anchor'</a> chunks do not start in the middle of
-	    a ligature or grapheme cluster.
-	  </p>
 	  <ol>
 	    <li>
-	      Let (<var>px</var>, <var>py</var>) = the position
-	      in <var>result</var>[<var>index</var> &#x2212; 1].
+	      If <var>resolved_x</var>[<var>index</var>] is set, then let
+	      <var>shift.x</var> =
+	      <var>resolved_x</var>[<var>index</var>] −
+	      <var>result.x</var>[<var>index</var>].
 	    </li>
 	    <li>
-	      Let (<var>ax</var>, <var>ay</var>)
-	      = <var>positions</var>[<var>index</var>]
-	      &#x2212; <var>positions</var>[<var>index</var> &#x2212; 1].
+	      If <var>resolved_y</var>[<var>index</var>] is set, then let
+	      <var>shift.y</var> =
+	      <var>resolved_y</var>[<var>index</var>] −
+	      <var>result.y</var>[<var>index</var>].
 	    </li>
 	    <li>
-	      Let (<var>x</var>, <var>y</var>) = the position
-	      in <var>result</var>[<var>index</var>].
-	    </li>
-	    <li>
-	      If <var>x</var> is unspecified, then set it to <var>px</var>
-	      + <var>ax</var>.
-	    </li>
-	    <li>
-	      If <var>y</var> is unspecified, then set it to <var>py</var>
-	      + <var>ay</var>.
-	    </li>
-	    <li>
-	      Set the position in <var>result</var>[<var>index</var>] to
-	      (<var>x</var>, <var>y</var>)
-	      + <var>deltas</var>[<var>index</var>].
-	    </li>
-	    <li>
-	      If the <var>angle</var>
-	      in <var>result</var>[<var>index</var>] is unspecified, then
-	      set it to 0.
+	      Let <var>result.x</var>[<var>index</var>] =
+	        <var>result.x</var>[<var>index</var>] + shift.x
+	      and <var>result.y</var>[<var>index</var>] =
+		<var>result.y</var>[<var>index</var>] + shift.y.
 	    </li>
 	    <li>
 	      If the "middle" and "anchored chunk" flags
@@ -3011,17 +3295,16 @@
 		</li>
               </ol>
 	    </li>
+	    <li>
+	      Set <var>index</var> to <var>index</var> + 1.
+	    </li>
 	  </ol>
 	</li>
       </ol>
     </li>
     <li>
-      Apply anchoring.
+      <b>Apply anchoring</b>
       <ol>
-	<li>
-	  Let <var>horizontal</var> be true if the writing mode of
-	  the <a>'text'</a> element is horizontal, and false otherwise.
-	</li>
 	<li>
 	  For each slice <var>result</var>[<var>i</var>..<var>j</var>]
 	  (inclusive of both <var>i</var> and <var>j</var>), where:
@@ -3047,51 +3330,51 @@
 	  </p>
 	  <ol>
 	    <li>
-	      Let <var>a</var> = -∞ and <var>b</var> = +∞.</li>
+	      Let <var>a</var> = +∞ and <var>b</var> = −∞.
+	    </li>
 	    <li>
 	      For each index <var>k</var> in the range
 	      [<var>i</var>, <var>j</var>] where the "addressable" flag
 	      of <var>result</var>[<var>k</var>] is true:
               <p class='note'>
-		This loop finds the left-most and right-most extents of
-		the glyphs within the anchored chunk.
+		This loop finds the left-(top-) most and
+		right-(bottom-) most extents of the <a>typographic
+		character</a> within the anchored chunk.
 	      </p>
               <ol>
 		<li>
 		  Let <var>pos</var> = the x coordinate of the position
-		  in <var>result</var>[<var>k</var>],
-		  if <var>horizontal</var> is true, and the y coordinate
-		  otherwise.
+		  in <var>result</var>[<var>k</var>], if the "horizontal" flag
+		  is true, and the y coordinate otherwise.
 		</li>
 		<li>
 		  Let <var>advance</var> = the advance of
-		  the <a>typographic character unit</a> corresponding to
+		  the <a>typographic character</a> corresponding to
 		  character <var>k</var>. [NOTE: This advance will be
 		  negative for RTL horizontal text.]
 		</li>
 		<li>
 		  Set <var>a</var> =
-		  min(<var>start</var>, <var>pos</var>, <var>pos</var>
+		  min(<var>a</var>, <var>pos</var>, <var>pos</var>
 		  + <var>advance</var>).
 		</li>
 		<li>
 		  Set <var>b</var> =
-		  max(<var>end</var>, <var>pos</var>, <var>pos</var>
+		  max(<var>b</var>, <var>pos</var>, <var>pos</var>
 		  + <var>advance</var>).
 		</li>
               </ol>
 	    </li>
 	    <li>
-	      If <var>a</var> ≠ -∞, then:
+	      If <var>a</var> ≠ +∞, then:
               <p class='note'>
 		Here we perform the text anchoring.
 	      </p>
               <ol>
 		<li>
-		  Let <var>shift</var> be the x coordinate
-		  of <var>result</var>[<var>i</var>],
-		  if <var>horizontal</var> is true, and the y coordinate
-		  otherwise.
+		  Let <var>shift</var> be the x coordinate of
+		  <var>result</var>[<var>i</var>], if the "horizontal" flag
+		  is true, and the y coordinate otherwise.
 		</li>
 		<li>
 		  Adjust shift based on the value of <a>'text-anchor'</a>
@@ -3110,10 +3393,9 @@
 		  For each index <var>k</var> in the range [<var>i</var>, <var>j</var>]:
 		  <ol>
 		    <li>
-		      Add <var>shift</var> to the x coordinate of the
-		      position in <var>result</var>[<var>k</var>],
-		      if <var>horizontal</var> is true, and to the y
-		      coordinate otherwise.
+		      Add <var>shift</var> to the x coordinate of the position
+		      in <var>result</var>[<var>k</var>], if the "horizontal"
+		      flag is true, and to the y coordinate otherwise.
 		    </li>
 		  </ol>
 		</li>
@@ -3124,19 +3406,32 @@
       </ol>
     </li>
     <li>
-      Position on path.
+      <b>Position on path</b>
       <ol>
 	<li>
 	  Set <var>index</var> = 0.
 	</li>
 	<li>
+	  Set the "in path" flag to false.
+	</li>
+	<li>
+	  Set the "after path" flag to false.
+	</li>
+	<li>
+	  Let <var>path_end</var> be an offset for characters that follow
+	  a <a>'textPath'</a> element. Set <var>path_end</var> to (0,0).
+	</li>
+	<li>
 	  While <var>index</var> &lt; <var>count</var>:
 	  <ol>
 	    <li>
-	      If the character at index <var>i</var> is within
-	      a <a>'textPath'</a> element and corresponds to
-	      a <a>typographic character unit</a>, then:
+	      If the character at index <var>i</var> is within a
+	      <a>'textPath'</a> element and corresponds to a <a>typographic
+	      character</a>, then:
               <ol>
+		<li>
+		  Set "in path" flag to true.
+		</li>
 		<li>
 		  If the "middle" flag of
 		  <var>result</var>[<var>index</var>] is false, then:
@@ -3170,7 +3465,7 @@
 		    </li>
 		    <li>
 		      Let <var>advance</var> = the advance of
-		      the <a>typographic character unit</a> corresponding
+		      the <a>typographic character</a> corresponding
 		      to character <var>k</var>. [NOTE: This advance will
 		      be negative for RTL horizontal text.]
 		    </li>
@@ -3181,51 +3476,79 @@
 		    </li>
 		    <li>
 		      Let <var>mid</var> be a coordinate value depending
-		      on the value of <var>horizontal</var>:
+		      on the value of the "horizontal" flag:
                       <dl class='switch'>
 			<dt>true</dt>
-			<dd><var>mid</var> is <var>x</var> + <var>advance</var> / 2 + <var>offset</var></dd>
+			<dd><var>mid</var> is <var>x</var> + <var>advance</var> / 2
+			  + <var>offset</var></dd>
 			<dt>false</dt>
-			<dd><var>mid</var> is <var>y</var> + <var>advance</var> / 2 + <var>offset</var></dd>
+			<dd><var>mid</var> is <var>y</var> + <var>advance</var> / 2
+			  + <var>offset</var></dd>
                       </dl>
+		      <p class='note'>
+			The user agent is free to make any additional adjustments to
+			<var>mid</var> necessary to ensure high quality typesetting
+			due to a <a>'textPath/spacing'</a> value of
+			<span class='attr-value'>'auto'</span> or a
+			<a>'textPath/method'</a> value of
+			<span class='attr-value'>'stretch'</span>.
+		      </p>
 		    </li>
 		    <li>
-		      If <var>mid</var> &lt; 0 or <var>mid</var>
-		      &gt; <var>length</var>, then:
-                      <ol>
-			<li>
-			  If <var>path</var> consists of a
-			  single, <a>closed subpath</a>, then
-			  set <var>mid</var> = <var>mid</var>
-			  mod <var>length</var>. Otherwise, set the
-			  "hidden" flag
-			  of <var>result</var>[<var>index</var>] to true.
-			  <p class='note'>
-			    This causes glyphs to fall off the ends of the
-			    text path, or to wrap around if we have a
-			    single, <a>closed subpath</a>.
-			  </p>
-			</li>
-                      </ol>
+		      If <var>path</var> is not a <a>closed subpath</a> and
+		      <var>mid</var> &lt; 0 or <var>mid</var> &gt; <var>length</var>,
+		      set the "hidden" flag of <var>result</var>[<var>index</var>] to true.
 		    </li>
-		    <li>Otherwise:
+		    <li>
+		      If <var>path</var> is a <a>closed subpath</a> depending on
+		      the values of <a>'text-anchor'</a> and <a>'direction'</a> of
+		      the element the character at <var>index</var> is in:
+		      <p class="note">
+			This implements the special wrapping criteria for single
+			<a>closed subpaths</a>.
+		      </p>
+		      <dl class='switch'>
+			<dt>(start, ltr) or (end, rtl)</dt>
+			<dd>
+			  If <var>mid</var>−<var>offset</var> &lt; 0
+			  or <var>mid</var>−<var>offset</var> &gt; <var>length</var>,
+			  set the "hidden" flag of <var>result</var>[<var>index</var>] to true.
+			</dd>
+			<dt>(middle, ltr) or (middle, rtl)</dt>
+			<dd>
+			  If
+			  If <var>mid</var>−<var>offset</var> &lt; −<var>length</var>/2
+			  or <var>mid</var>−<var>offset</var> &gt;  <var>length</var>/2,
+			  set the "hidden" flag of <var>result</var>[<var>index</var>] to true.
+			</dd>
+			<dt>(start, rtl) or (end, ltr)</dt>
+			<dd>
+			  If <var>mid</var>−<var>offset</var> &lt; −<var>length</var>
+			  or <var>mid</var>−<var>offset</var> &gt; 0,
+			  set the "hidden" flag of <var>result</var>[<var>index</var>] to true.
+			</dd>
+		      </dl>
+		      <p>
+			Set <var>mid</var> = <var>mid</var> mod <var>length</var>.
+		      </p>
+		    </li>
+		    <li>If the <var>hidden</var> flag is false:
                       <ol>
 			<li>
-			  Let <var>point</var> and <var>tangent</var> be
-			  the position at and unit vector tangent to the
-			  point <var>mid</var> distance
+			  Let <var>point</var> be the position and
+			  <var>tangent</var> be the unit vector
+			  tangent to the point <var>mid</var> distance
 			  along <var>path</var>.
 			</li>
 			<li>
-			  Let <var>rotation</var> be the angle from the
-			  positive x-axis, if <var>horizontal</var> is
-			  true, and the positive y-axis otherwise,
-			  to <var>tangent</var>.
+			  Let <var>rotation</var> be the angle from the positive
+			  x-axis if the "horizontal" flag is true, and the
+			  positive y-axis otherwise, to <var>tangent</var>.
 			</li>
 			<li>
 			  Let <var>direction</var> be a unit vector
 			  pointing in a direction depending on the value
-			  of <var>horizontal</var>:
+			  of the "horizontal" flag:
 			  <dl class='switch'>
 			    <dt>true</dt>
 			    <dd><var>direction</var> is <var>tangent</var> + 45°</dd>
@@ -3264,6 +3587,49 @@
               </ol>
 	    </li>
 	    <li>
+	      If the character at index <var>i</var> is not within a
+	      <a>'textPath'</a> element and corresponds to a <a>typographic
+	      character</a>, then:
+	      <p class="note">
+		This sets the starting point for rendering any characters that
+		occur after a <a>'textPath'</a> element to the end of the path.
+	      </p>
+	      <ol>
+		<li>If the "in path" flag is true:
+		  <ol>
+		    <li>
+		      Set the "in path" flag to false.
+		    </li>
+		    <li>
+		      Set the "after path" flag to true.
+		    </li>
+		    <li>
+		      Set <var>path_end</var> equal to the end point of the path
+		      referenced by <a>'textPath'</a> − the position of
+		      <var>result</var>[<var>index</var>].
+		    </li>
+		  </ol>
+		</li>
+		<li>
+		  If the "after path" is true.
+		  <ol>
+		    <li>
+		      If <var>anchored chunk</var> of
+		      <var>result</var>[<var>index</var>] is true, set the
+		      "after path" flag to false.
+		    </li>
+		    <li>
+		      Else,
+		      let <var>result.x</var>[<var>index</var>] =
+		      <var>result.x</var>[<var>index</var>] + <var>path_end.x</var>
+		      and <var>result.y</var>[<var>index</var>] =
+		      <var>result.y</var>[<var>index</var>] + <var>path_end.y</var>.
+		    </li>
+		  </ol>
+		</li>
+	      </ol>
+	    </li>
+	    <li>
 	      Set <var>index</var> = <var>index</var> + 1.
 	    </li>
 	  </ol>
@@ -3271,7 +3637,7 @@
       </ol>
     </li>
     <li>
-      Return <var>result</var>.
+      <b>Return <var>result</var></b>
     </li>
   </ol>
 
@@ -3367,17 +3733,19 @@
 
   <p>
     After text is laid out according to the basic CSS text layout
-    rules, glyphs can be repositioned using SVG specific rules.
-    Absolute repositioning can be prescribed by giving absolute
-    coordinates in the <a>'tspan/x'</a> and <a>'tspan/y'</a>
-    attributes or by forced line breaks. Absolute repositioning
-    may be influenced by the <a>'text-anchor'</a> property. Relative
-    repositioning can be prescribed by giving relative coordinates in
-    the <a>'tspan/dx'</a> and <a>'tspan/dy'</a> attributes. Glyphs may
-    be arbitrarily rotated by giving a list of values in the
-    <a>'tspan/rotate'</a> attribute. Absolute repositioning (including
-    any adjustment due to the <a>'text-anchor'</a> property) is done
-    before relative repositioning and rotation.
+    rules, <a>typographic characters</a> can be repositioned using SVG
+    specific rules.  Absolute repositioning can be prescribed by
+    giving absolute coordinates in the <a>'tspan/x'</a>
+    and <a>'tspan/y'</a> attributes or by forced line breaks. Absolute
+    repositioning may be influenced by the <a>'text-anchor'</a>
+    property. Relative repositioning can be prescribed by giving
+    relative coordinates in the <a>'tspan/dx'</a>
+    and <a>'tspan/dy'</a> attributes. The
+    <a>typographic characters</a> may be arbitrarily rotated by giving
+    a list of values in the <a>'tspan/rotate'</a> attribute. Absolute
+    repositioning (including any adjustment due to
+    the <a>'text-anchor'</a> property) is done before relative
+    repositioning and rotation.
   </p>
 
 <h2 id="TextLayoutAuto">Auto-wrapped text</h2>
@@ -3399,11 +3767,12 @@
     In the case where the <a>content area</a> is defined by the by
     the <a>'inline-size'</a> property,
     the <a>'tspan/x'</a> and <a>'tspan/y'</a> attributes
-    corresponding to the first rendered glyph define the
-    initial <a>current text position</a>.  When the <a>content
-    area</a> is inside a <a>shape</a>, the initial <a>current text
-      position</a> is determined from the position of the first
-    rendered glyph after laying out the first line box inside the
+    corresponding to the first rendered
+    <a>typographic character</a> define the initial <a>current
+    text position</a>. When the <a>content area</a> is inside
+    a <a>shape</a>, the initial <a>current text position</a> is
+    determined from the position of the first rendered <a>typographic
+    character</a> after laying out the first line box inside the
     shape.
   </p>
 
@@ -3575,7 +3944,8 @@
 
   <p>
     Both the <a>'path'</a> attribute and the <a>'href'</a> attribute
-    specify a path along which the glyphs will be rendered.
+    specify a path along which the <a>typographic characters</a>
+    will be rendered.
   </p>
   <p>
     If both attributes are specified on a <a>'textPath'</a> element,
@@ -3626,8 +3996,8 @@
       </p>
 
       <p>
-	Glyphs with mid-points that are not on the path are not
-	rendered.
+	Any <a>typographic characters</a> with mid-points that
+	are not on the path are not rendered.
       </p>
       <div class="figure">
 	<img alt="Three paths with various values of 'startOffset' showing clipping
@@ -3646,11 +4016,12 @@
       </div>
 
       <p>
-	For paths consisting of a single <a>closed subpath</a> (including an
-	equivalent path for a <a>basic shape</a>), glyphs are rendered
-	along one circuit of the path. The text is aligned as
-	determined by the <a>'text-anchor'</a> property to a position
-	along the path set by the <a>'startOffset'</a> attribute. For
+	For paths consisting of a single <a>closed subpath</a>
+	(including an equivalent path for a <a>basic
+	shape</a>), <a>typographic characters</a> are rendered along
+	one circuit of the path. The text is aligned as determined by
+	the <a>'text-anchor'</a> property to a position along the path
+	set by the <a>'startOffset'</a> attribute. For
 	the <span class="prop-value">start</span>
 	(<span class="prop-value">end</span>) value, the text it
 	rendered from the start (end) of the line until the initial
@@ -3690,9 +4061,10 @@
 	  The blue square marks the reference point for the start
 	  of rendering (shifted from the path start by
 	  a <a>'startOffset'</a> value of 75%). The gray arrow(s)
-	  shows the direction of glyph placement and the point at
-	  which glyph placement stops. The arrow(s) would be reversed
-	  if the <a>'direction'</a> property has a value of
+	  shows the direction of <a>typographic character</a>
+	  placement and the point at which <a>typographic character</a>
+	  placement stops. The arrow(s) would be reversed if
+	  the <a>'direction'</a> property has a value of
 	  <span class="prop-value">rtl</span>.
 	</p>
       </div>
@@ -3723,27 +4095,30 @@
       </p>
       <p>
         A value of <span class="attr-value">align</span> indicates
-        that the glyphs should be rendered using simple 2x3
-        transformations such that there is no stretching/warping of
-        the glyphs. Typically, supplemental rotation, scaling and
-        translation transformations are done for each glyph to be
-        rendered. As a result, with
-        <span class="attr-value">align</span>, fonts where the glyphs
-        are designed to be connected (e.g., cursive fonts), the
-        connections may not align properly when text is rendered along
-        a path.
+        that the <a>typographic character</a> should be rendered
+        using simple 2x3 transformations such that there is no
+        stretching/warping of the <a>typographic characters</a>.
+        Typically, supplemental rotation, scaling and
+        translation transformations are done for each <a>typographic
+        characters</a> to be rendered. As a result, with
+        <span class="attr-value">align</span>, fonts where
+        the <a>typographic characters</a> are designed to be
+        connected (e.g., cursive fonts), the connections may not align
+        properly when text is rendered along a path.
       </p>
       <p>
         A value of <span class="attr-value">stretch</span> indicates
-        that the glyph outlines will be converted into paths, and then
-        all end points and control points will be adjusted to be along
-        the perpendicular vectors from the path, thereby stretching
-        and possibly warping the glyphs.  With this approach,
-        connected glyphs, such as in cursive scripts, will maintain
+        that the <a>typographic character</a> outlines will be
+        converted into paths, and then all end points and control
+        points will be adjusted to be along the perpendicular vectors
+        from the path, thereby stretching and possibly warping the
+        glyphs.  With this approach, connected <a>typographic
+        characters</a>, such as in cursive scripts, will maintain
         their connections. (Non-vertical straight path segments should
         be converted to Bézier curves in such a way that horizontal
         straight paths have an (approximately) constant offset from
-        the path along which the glyphs are rendered.) 
+        the path along which the <a>typographic characters</a> are
+        rendered.)
       </p>
 
       <div class="figure">
@@ -3766,22 +4141,22 @@
     <dt id="TextPathElementSpacingAttribute"><span class="adef">spacing</span></dt>
     <dd>
       <p>
-        Indicates how the user agent should determine the
-        spacing between glyphs that are to be rendered along a
-        path.
+        Indicates how the user agent should determine the spacing
+        between <a>typographic characters</a> that are to be
+        rendered along a path.
       </p>
       <p>
         A value of <span class="attr-value">exact</span> indicates
-        that the glyphs should be rendered exactly according to the
-        spacing rules as specified in
+        that the <a>typographic characters</a> should be rendered
+        exactly according to the spacing rules as specified in
         <a href="text.html#TextpathLayoutRules">Text on a path layout
         rules</a>.
       </p>
       <p>
         A value of <span class="attr-value">auto</span> indicates that
         the user agent should use text-on-a-path layout algorithms to
-        adjust the spacing between glyphs in order to achieve visually
-        appealing results.
+        adjust the spacing between <a>typographic characters</a>
+        in order to achieve visually appealing results.
       </p>
 
       <dl class="attrdef-svg2">
@@ -3834,7 +4209,8 @@
     <dt id="TextPathElementPathAttribute"><span class="adef">path</span></dt>
     <dd>
       <p>A <a href="paths.html#PathDataBNF" class="syntax">path data</a>
-        string describing the path onto which the glyphs will be rendered.
+        string describing the path onto which the <a>typographic characters</a>
+	will be rendered.
         An empty string indicates that there is no path data for the element.
         This means that the text within the <a>'textPath'</a> does not render or
         contribute to the <a>bounding box</a> of the <a>'text'</a> element.</p>
@@ -4302,7 +4678,7 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> path="..." fil
 
   <p class="annotation">
     The choice of the end of the path over the position of the
-    last charcter was chosen as it is more author predictable
+    last character was chosen as it is more author predictable
     (not depending on font, etc.) Decided at the
     <a href="https://www.w3.org/2016/04/22-svg-minutes.html#item08">London
       (2016)</a> editor's meeting. See also
@@ -5162,7 +5538,7 @@ the dash pattern at the same positions across different implementations.</p>
     would be of more use if coupled with a mechanism that would expose
     the hidden text (tool-tip on hovering over ellipses?). The text-overflow
     property only deals with text that overflows off the end of a line. It
-    does not deal with text that overflows the off the end of thewrapping area.
+    does not deal with text that overflows the off the end of the wrapping area.
   </p>
 
 <h3 id="WhiteSpace">White space</h3>
@@ -5764,7 +6140,7 @@ the dash pattern at the same positions across different implementations.</p>
 <h3 id="InterfaceSVGTextContentElement">Interface SVGTextContentElement</h3>
 
 <p class='issue' data-issue="65">References to grapheme clusters in this section maybe should
-be changed to <a>typographic character unit</a>.</p>
+be changed to <a>typographic character</a>.</p>
 
 <p>The <a>SVGTextContentElement</a> interface is implemented by elements
 that support rendering child text content.</p>
