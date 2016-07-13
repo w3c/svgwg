@@ -445,13 +445,14 @@ of a <a>'defs'</a>.</p>
 <a>'g'</a> can also be a child of a <a>'defs'</a>, and vice versa.</p>
 
 <p>Elements that are descendants of a <a>'defs'</a> are not rendered directly;
-they are prevented from becoming part of the <a>rendering tree</a>
-just as if the <a>'defs'</a> element were a <a>'g'</a> element and the
-<a>'display'</a> property were set to <span class="prop-value">none</span>.
+the <a>'display'</a> value for the <a>'defs'</a> element
+must always be set to <span class="prop-value">none</span>
+by the <a>user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
 Note, however, that the descendants of a <a>'defs'</a> are
 always present in the source tree and thus can always be
 referenced by other elements; thus, the value of the <a>'display'</a>
-property on the <a>'defs'</a> element or any of its descendants does not
+property on the <a>'defs'</a> element does not
 prevent those elements from being referenced by other elements.</p>
 
 <h2 id="DescriptionAndTitleElements">The <span class='element-name'>'desc'</span>
@@ -475,7 +476,12 @@ Removed text that limited number of 'desc' and 'title' elements. Status: Done.</
 <p>Any <a>container element</a> or <a>graphics element</a> in an SVG document
 can have zero or more <a>'desc'</a> and/or <a>'title'</a> elements as children,
 whose content is text. <a>'desc'</a> and <a>'title'</a> elements are
-not visually rendered as part of the graphics.</p>
+not visually rendered as part of the graphics.
+The <a>'display'</a> value for the <a>'title'</a> and <a>'desc'</a> elements
+must always be set to <span class="prop-value">none</span>
+by the <a>user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
+</p>
 
 <p>Multiple sibling <a>'desc'</a> or <a>'title'</a> elements must have
 different languages, 
@@ -674,6 +680,13 @@ expressed in a manner conforming with the <a href="http://www.w3.org/TR/2006/REC
 elements in any particular way. </p>
 
 <edit:elementsummary name='metadata'/>
+  
+<p>Metadata content is not directly rendered;
+the <a>'display'</a> value for the <a>'metadata'</a> element
+must always be set to <span class="prop-value">none</span>
+by the <a>user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
+</p>
 
 <p>Here is an example of how metadata can be included in an SVG
 document. The example uses the Dublin Core version 1.1 schema.
@@ -853,6 +866,7 @@ goes outside of the symbol's SVG viewport will be clipped.</p>
 <p><a>'symbol'</a> elements must never be rendered directly; 
 their only usage is as something that can be referenced 
 using the <a>'use'</a> element. 
+<!--
 The <a>'display'</a> property does not apply
 to the <a>'symbol'</a> element; thus, <a>'symbol'</a> elements are
 not directly rendered even if the <a>'display'</a> property is set to a
@@ -860,14 +874,22 @@ value other than <span class="prop-value">none</span>, and <a>'symbol'</a>
 elements are available for referencing even when the
 <a>'display'</a> property on the <a>'symbol'</a> element or any of its
 ancestors is set to <span class="prop-value">none</span>.
+-->
+The user agent must set the 
+<a>'display'</a> property on the <a>'symbol'</a> element
+to <span class="prop-value">none</span>,
+as part of the <a>user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
 </p>
   
 <p>The generated <a>instance</a> of a <a>'symbol'</a> 
 that is the direct <a>referenced element</a> of a <a>'use'</a> element 
-must always have a used value of <span class="prop-value">inline</span> 
+must always have a computed value of <span class="prop-value">inline</span> 
 for the <a>'display'</a> property.
 In other words, it must be rendered whenever the host <a>'use'</a> element is rendered.
-However, any other <a>'symbol'</a> that is cloned
+The <a>user agent style sheet</a> again defines this
+declaration to have importance over any other CSS rule or presentation attribute.
+Any other <a>'symbol'</a> that is cloned
 to create an <a>element instance</a>
 within the <a>use-element shadow tree</a>
 behaves as a symbol definition, and must not be rendered.
@@ -875,22 +897,18 @@ behaves as a symbol definition, and must not be rendered.
   
 <div class="issue">
   <p>
-  Are implementers okay representing the distinction 
-  between rendered and non-rendered symbols as CSS overrides?
-  A symbol that is a direct child of a shadow root with a use element host is rendered 
-  (used value of display: inline).
-  Any other symbol is not (used value of display: none).
-  The computed value of the display property has no effect on either case.
+  The use of !important user agent rules
+  is technically a breaking change from SVG 1.1,
+  because it means the computed style value will change.
+  The final rendering behavior, however,
+  is consistent with the prose previously used to describe the rendering of symbols
+  and other never-rendered elements.
   </p>
   <p>
-  Would it be useful to implementers to have a distinct SVGSymbolElementInstance interface,
-  that represents a symbol which is actually rendered?
-  (Note that we <em>do not</em> want to repeat the confusion that says a symbol 
-  is replaced by an SVG in the shadow tree, 
-  which causes so much selector-matching headache in Firefox.)
-  I have currently upgraded the SVGSymbolElement interface to inherit from SVGGraphicsElement,
-  so that the rendered element in the shadow tree has BBox and related methods,
-  but that could be reversed.
+  Note that, since a symbol element can now be rendered 
+  (when it is the instance root of a shadow tree)
+  I have upgraded the SVGSymbolElement interface to inherit from SVGGraphicsElement,
+  so that the rendered element in the shadow tree has BBox and related methods.
   </p>
 </div>
 

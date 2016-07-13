@@ -143,6 +143,13 @@ element in HTML</a>.</p>
 attributes must be the same as is defined for the
 <a href="http://www.w3.org/TR/html51/document-metadata.html#the-style-element">HTML
 <span class='element-name'>'style'</span> element</a>.</p>
+  
+<p>The style sheet's text content is never directly rendered;
+the <a>'display'</a> value for the <a>'style element'</a> element
+must always be set to <span class="prop-value">none</span>
+by the <a>user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
+</p>
 
 
 <h2 id="LinkElement">External style sheets: the effect of the HTML <span class='element-name'>'link'</span> element</h2>
@@ -551,7 +558,33 @@ svg:not(:root), hatch, image, marker, pattern, symbol { overflow: hidden; }
 *[xml|space=preserve] {
   text-space-collapse: preserve-spaces;
 }
+
+defs, 
+clipPath, mask, marker, 
+desc, title, metadata, 
+pattern, hatch,
+linearGradient, radialGradient, meshGradient, 
+script, style,
+symbol {
+  display: none !important;
+}
+:host(use) > symbol {
+  display: inline !important;
+}
 </pre>
+  
+<p class="note">
+An <code>!important</code> rule in a user agent stylesheet
+<a href="https://www.w3.org/TR/css-cascade-4/#importance">over-rides all user and author styles</a>
+[<a href="refs.html#ref-css-cascade-4">css-cascade-4</a>].
+The display value for <a>never-rendered elements</a>
+and for <a>'symbol'</a> elements
+can therefore not be changed.
+A symbol must only be rendered if it is the direct child
+of a shadow root whose host is a <a>'use'</a> element
+(and must always be rendered if the host <a>'use'</a> element is rendered).
+The other elements, and their child content, are never rendered directly.
+</p>
 
 <p class='note'>CSS Transforms defines that the initial value for
 <a>'transform-origin'</a> is <span class='prop-value' style='white-space: nowrap'>50% 50%</span>.
