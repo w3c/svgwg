@@ -785,10 +785,10 @@
     adjust the position of the rendered text inside the <a>'tspan'</a>
     element relative to the parent element.
   </p>
+
   <p>
     The XML character data within the <a>'text'</a> and <a>'tspan'</a>
-    elements,
-    along with relevant attributes and properties, and
+    elements, along with relevant attributes and properties, and
     character-to-glyph mapping tables within the font itself, define
     the glyphs to be rendered. The attributes and properties on
     the <a>'text'</a> and <a>'tspan'</a> elements indicate such things
@@ -802,14 +802,20 @@
     Since <a>'text'</a> and <a>'tspan'</a> elements are rendered using
     the same rendering methods as other graphics elements, all of the
     same
-    <a href="coords.html">coordinate system transformations</a>, and
     <a href="painting.html">painting</a> features that apply to
     <a>shapes</a> such as <a href="paths.html">paths</a> and 
     <a href="shapes.html#RectElement">rectangles</a> also apply to
     <a>'text'</a> and <a>'tspan'</a> elements. In addition,
+    <a href="coords.html">coordinate system transformations</a>,
     <a href="render.html#ClippingAndMasking">clipping</a>, and
     <a href="render.html#ClippingAndMasking">masking</a> can be applied
     to the <a>'text'</a> element as a whole.
+  </p>
+
+  <p class="note">
+    In CSS terms, the <a>'text'</a> element acts as a block
+    element. The <a>'tspan'</a>, <a>'textPath'</a>, and <a>'a'</a>
+    elements act as inline elements.
   </p>
 
   <p id="ObjectBoundingBoxUnitsTextObjects">
@@ -919,6 +925,13 @@
 	<td>Done</td>
       </tr>
     </table>
+    <p>
+      This decission was reversed. See
+      <a href="https://github.com/w3c/svgwg/issues/210">GitHub Issue
+	210</a>. CSS/HTML does not allow transforms on inline elements
+	and no renderer supports transforms on the <a>'a'</a> element
+	when inline (in both SVG and HTML).
+    </p>
   </div>
 
   <edit:elementsummary name='tspan'/>
@@ -1627,11 +1640,12 @@
   <p>
     First, a <a>'text'</a> element and its descendants are laid out
     inside a <a>content area</a> or <a>wrapping area</a> according to
-    CSS, as if the <a>'text'</a> were a block element and
-    any <a>'tspan'</a> and <a>'textPath'</a> descendants were inline
-    elements. This layout takes into account all paragraph level
-    and font related CSS properties described in this chapter.
+    CSS, as if the <a>'text'</a> were a block element and any
+    <a>'tspan'</a>, <a>'textPath'</a>, and <a>'a'</a> descendants were
+    inline elements. This layout takes into account all paragraph
+    level and font related CSS properties described in this chapter.
   </p>
+
   <p>
     The <a>content area</a> may be explicitly declared by setting the
     <a>'inline-size'</a> property, or by setting
@@ -2514,14 +2528,14 @@
     content of the <a>'text'</a> element which includes text data
     along with styling information and a description of one or more
     shapes to be filled. The <a>'text'</a> element is treated as a
-    block element and its descendant <a>'tspan'</a> and
-    <a>'textPath'</a> elements are treated as inline elements. The CSS
+    block element and its descendant <a>'tspan'</a>, <a>'textPath'</a>
+    and <a>'a'</a> elements are treated as inline elements. The CSS
     renderer returns a set of <a>typographic characters</a> with
     their positions resulting from laying out the text as if the text
     were absolutely positioned.
   </p>
   <p class="note">
-    A <a>typographic character</a> may correspond to more than
+    A <a>typographic character</a> may contain more than
     one <a>glyph</a>. It is assumed here the relative positioning of
     the <a>glyphs</a> inside a <a>typographic character</a> is
     encapsulated by the <a>typographic character</a> and it is
@@ -2611,6 +2625,8 @@
       <p class='note'>
 	This ensures that <a>'tspan'</a>, <a>'textPath'</a> and
 	<a>'a'</a> elements are treated as if they were inline elements.
+	Note: the <a>'transform'</a> property has no effect on
+	inline elements.
       </p>
     </li>
 
@@ -2709,7 +2725,7 @@
     value in the array, applied to the following <a>typographic
     characters</a> (for <a>'tspan/rotate'</a>). This ensures, for example,
     that attribute values are applied to the same characters regardless of
-    whether or not a font has a particular ligature or not.
+    whether or not a font has a particular ligature.
   </p>
 
   <p>
@@ -4305,7 +4321,9 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> path="..." fil
     <code style="font-weight:bold;
     color:blue">transform="rotate(45)"</code> applies to both
     the <a>'text'</a> and the use of the <a>'path element'</a> element as the
-    referenced shape for text on a path.
+    referenced shape for text on a path. Further note that
+    the <code style="font-weight:bold; color: green">transform="scale(2)"</code>
+    scales the path but does not scale the text placed along the path.
   </p>
 
   <p id="ExampleToap01">
