@@ -192,7 +192,7 @@ information, refer to the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060
   document fragment.
   </dd>
 
-  <dt id="TermSVGElements"> SVG elements</dt>cl
+  <dt id="TermSVGElements"> SVG elements</dt>
   <dd>Any element in the <a>SVG namespace</a>.</dd>
 
   <dt id="TermGraphicsElement"><dfn id="graphics-element">graphics element</dfn></dt>
@@ -418,16 +418,12 @@ define a <a>'linearGradient'</a> element and give it an ID, as in:</p>
 
 <p>Some types of element, such as gradients, will not by themselves produce a graphical result. They can therefore be placed anywhere convenient. However, sometimes it is desired to define a graphical object and prevent it from being directly rendered. it is only there to be referenced elsewhere. To do this, and to allow convenient grouping defined content, SVG provides the <span class='element-name'>'defs'</span> element.</p>
 
-<p>It is recommended that, wherever possible, referenced elements be defined
-inside of a <a>'defs'</a> element. Among the elements that are always
-referenced: <a>'clipPath'</a>, <a>'cursor element'</a>,
-<a>'filter element'</a>, <a>'linearGradient'</a>, <a>'marker element'</a>,
-<a>'mask element'</a>, <a>'pattern'</a>, <a>'radialGradient'</a> and
-<a>'symbol'</a>.</p>
-  
-<p class="issue">
-  Is there any justification for continuing to have this recommendation?
-  I could understand recommending that referenced content by defined earlier in the document than it is used, but putting things inside 'defs' is really only a matter of coding style.
+<p>It is recommended that, where possible, referenced elements be defined
+prior to the elements that use them, in document order.
+Collecting all referenced elements 
+inside of a single <a>'defs'</a> element
+near the top of the file
+can make the markup easier to read and understand.
 </p>
 
 <h3 id="DefsElement">The <span class='element-name'>'defs'</span> element</h3>
@@ -818,6 +814,11 @@ directly.</p>
       and its <a>host</a> <a>'use'</a> element.
     </p>
     <p>
+      Keyword values have the same meaning as for the 
+      <a>'marker/refX'</a> and <a>'marker/refY'</a> attributes on the <a>'marker element'</a> element,
+      resolving to 0%, 50%, or 100% in the applicable direction.
+    </p>
+    <p>
       Unlike other positioning attributes,
       <a>'refX'</a> and <a>'refY'</a> 
       are interpreted as being in the coordinate system of the
@@ -1144,12 +1145,6 @@ or if the <a>referenced element</a> is removed from the DOM,
 then the <a>'use'</a> element returns to the <a>unresolved</a> state.
 The user agent must once again attempt to resolve the URI to identify the referenced element.
 </p>
-  
-<p class="issue">
-  Should there be some sort of load event
-  that is dispatched after the use tree is successfully generated?
-  If so, which event in particular?
-</p>
 
 <h3 id="UseShadowTree">The use-element shadow tree</h3>
   
@@ -1251,20 +1246,12 @@ the user agent must create a
 <a>use-element shadow tree</a> whose host is the <a>'use'</a> element itself.
 The shadow tree must be created even if
 the <a>'use'</a> element is not rendered
-because it is a descendent of a <a>never-rendered element</a>
+because it is a descendent of a <a>never-rendered element</a>,
+because of conditional processing,
 or because of the <a>'display'</a> property being set to <span class="prop-value">none</span>
 on it or an ancestor element.
-However, a <a>use-element shadow tree</a> must not be generated
-if the <a>'use'</a> element is excluded from the graphic
-because of <a>conditional processing</a>.
 </p>
-  <p class="issue">
-  Does this make sense?
-  Consistent with audio/video not playing with conditional processing,
-  and with the idea that it stops all processing (including fetching external resources), 
-  not only rendering.
-  SVG 1.1 only mentioned <code>display: none</code>. 
-  </p>
+  
 <p>
 Each node in the shadow tree is an <a>instance</a> of a corresponding node 
 from the <a>referenced document subtree</a>.
@@ -1276,12 +1263,6 @@ and which itself is a direct child of the <a>shadow root</a> node.
 The shadow tree is open (inspectable by script), but read-only.
 Any attempt to directly modify the elements, attributes, and other nodes in the shadow tree
 must throw a <code>NoModificationAllowedError</code>.
-</p>
-  
-<p class="issue">
-  Is this the best choice for the error type?
-  (Other options include ReadOnlyError and NotAllowedError.)
-  Needs to encompass both DOM modification attempts as well as attribute or property changes.
 </p>
   
 <p>
@@ -1721,12 +1702,8 @@ illustrative purposes.</p>
     
 <h3 id="UseAnimations">Animations in use-element shadow trees</h3>
 <p class="issue">
-  Should this section be moved to the SVG Animations specification and/or WAAPI?
-  Most of the details are dependent on those specs.
-  However, implementers that currently support SVG animation elements
-  and Web Animations
-  are going to need guidance on how to update those implementations
-  to match the new shadow DOM model.
+  Update per Brian Birtles recommendations: https://github.com/w3c/svgwg/pull/206#issuecomment-234436749
+  
   Also, it would be nice to have a TR version of SVG Animations to link to!
 </p>
   
@@ -3565,27 +3542,21 @@ interface <b>SVGElementInstance</b> {
   [SameObject] readonly attribute <a>SVGElement</a>? <a href="#__svg__SVGElementInstance__correspondingElement">correspondingElement</a>;
   [SameObject] readonly attribute <a>SVGUseElement</a>? <a href="#__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</a>;
 };</pre>
-  
-<p class="issue">
-  Is it appropriate to define this as a [NoInterfaceObject] interface?
-  As defined in this spec, the interface is only used to supplement SVGElement.
-  But SVG 1.1 scripts could be explicitly testing for the presence of Window.SVGElementInstance
-  to determine if the browser supports an inspectable use-element shadow DOM.
-</p>
 
 <p>The <b id="__svg__SVGElementInstance__correspondingElement">correspondingElement</b> IDL attribute
 points to the <a>corresponding element</a> if this element is an <a>element instance</a> in a <a>use-element shadow tree</a>,
 or is null otherwise.</p>
   
 <p class="issue">
-  Should this still point to a valid element object
-  even if it is in a different document?
-  That implies that the entire DOM of the external file 
-  must be maintained in memory
-  (since the element linked from this property 
-  would be linked to all other nodes in its DOM tree).
-  I've already said that that external DOM is read-only,
-  so there's no real function to having it available.
+  When the <a>referenced element</a> is in an external file,
+  the presence of this pointer
+  implies that the entire DOM of the external file 
+  must be maintained in memory.
+  However, as currently specified, the external DOM is read-only.
+  It therefore offers limited functionality and a potentially large performance impact.
+  Pending feedback from implementers,
+  authors should consider the use of <code>correspondingElement</code>
+  with external file references to be at-risk.
 </p>
 
 <p>The <b id="__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</b> IDL attribute
