@@ -785,10 +785,10 @@
     adjust the position of the rendered text inside the <a>'tspan'</a>
     element relative to the parent element.
   </p>
+
   <p>
     The XML character data within the <a>'text'</a> and <a>'tspan'</a>
-    elements,
-    along with relevant attributes and properties, and
+    elements, along with relevant attributes and properties, and
     character-to-glyph mapping tables within the font itself, define
     the glyphs to be rendered. The attributes and properties on
     the <a>'text'</a> and <a>'tspan'</a> elements indicate such things
@@ -802,14 +802,20 @@
     Since <a>'text'</a> and <a>'tspan'</a> elements are rendered using
     the same rendering methods as other graphics elements, all of the
     same
-    <a href="coords.html">coordinate system transformations</a>, and
     <a href="painting.html">painting</a> features that apply to
     <a>shapes</a> such as <a href="paths.html">paths</a> and 
     <a href="shapes.html#RectElement">rectangles</a> also apply to
     <a>'text'</a> and <a>'tspan'</a> elements. In addition,
+    <a href="coords.html">coordinate system transformations</a>,
     <a href="render.html#ClippingAndMasking">clipping</a>, and
     <a href="render.html#ClippingAndMasking">masking</a> can be applied
     to the <a>'text'</a> element as a whole.
+  </p>
+
+  <p class="note">
+    In CSS terms, the <a>'text'</a> element acts as a block
+    element. The <a>'tspan'</a>, <a>'textPath'</a>, and <a>'a'</a>
+    elements act as inline elements.
   </p>
 
   <p id="ObjectBoundingBoxUnitsTextObjects">
@@ -919,6 +925,13 @@
 	<td>Done</td>
       </tr>
     </table>
+    <p>
+      This decission was reversed. See
+      <a href="https://github.com/w3c/svgwg/issues/210">GitHub Issue
+	210</a>. CSS/HTML does not allow transforms on inline elements
+	and no renderer supports transforms on the <a>'a'</a> element
+	when inline (in both SVG and HTML).
+    </p>
   </div>
 
   <edit:elementsummary name='tspan'/>
@@ -1323,7 +1336,7 @@
 
   <ul>
     <li>
-      When a single XML character maps to a single glyph &#x2013; In this
+      When a single XML character maps to a single glyph – In this
       case, the <var>n</var>-th value for the
       <a>'x'</a>, <a>'y'</a>, <a>'dx'</a>, <a>'dy'</a>,
       and <a>'rotate'</a> attributes is applied to the glyph that
@@ -1333,7 +1346,7 @@
 
     <li>
       When a single XML character maps to multiple glyphs (e.g., when
-      an accent glyph is placed on top of a base glyph) &#x2013; In this
+      an accent glyph is placed on top of a base glyph) – In this
       case, the <var>n</var>-th value for
       the <a>'x'</a>, <a>'y'</a>, <a>'dx'</a>, and <a>'dy'</a> values
       are applied (i.e., the <a>current text position</a> is adjusted)
@@ -1349,7 +1362,7 @@
 
     <li>
       When multiple XML characters map to a single glyph (e.g., when a
-      ligature is used) &#x2013; Suppose that the
+      ligature is used) – Suppose that the
       <var>n</var>-th and
       (<var>n</var>+1)-th XML characters
       map to a single glyph. In this case, the
@@ -1374,7 +1387,7 @@
       when the first glyph expresses the first character and half
       of the second character, and the second glyph expresses the
       other half of the second character plus the third character)
-      &#x2013; Suppose that the <var>n</var>-th,
+      – Suppose that the <var>n</var>-th,
       (<var>n</var>+1)-th and
       (<var>n</var>+2)-th XML characters map
       to two glyphs. In this case, the
@@ -1404,8 +1417,7 @@
     </li>
 
     <li>
-      Relationship to bidirectionality
-      &#x2013;
+      Relationship to bidirectionality –
       Text is laid out in a two-step process, where any bidirectional
       text is first re-ordered into a left-to-right string, and then
       text layout occurs with the re-ordered text string. Whenever the
@@ -1567,7 +1579,7 @@
 
   </edit:with>
 
-<h2 id="TextLayout">Text layout &#x2013; Introduction</h2>
+<h2 id="TextLayout">Text layout – Introduction</h2>
 
   <div class="annotation svg2-requirement">
     <table>
@@ -1627,11 +1639,12 @@
   <p>
     First, a <a>'text'</a> element and its descendants are laid out
     inside a <a>content area</a> or <a>wrapping area</a> according to
-    CSS, as if the <a>'text'</a> were a block element and
-    any <a>'tspan'</a> and <a>'textPath'</a> descendants were inline
-    elements. This layout takes into account all paragraph level
-    and font related CSS properties described in this chapter.
+    CSS, as if the <a>'text'</a> were a block element and any
+    <a>'tspan'</a>, <a>'textPath'</a>, and <a>'a'</a> descendants were
+    inline elements. This layout takes into account all paragraph
+    level and font related CSS properties described in this chapter.
   </p>
+
   <p>
     The <a>content area</a> may be explicitly declared by setting the
     <a>'inline-size'</a> property, or by setting
@@ -1787,7 +1800,7 @@
     <a>'foreignObject'</a> element.
   </p>
 
-<h2 id="TextLayoutContentArea">Text layout &#x2013; Content Area</h2>
+<h2 id="TextLayoutContentArea">Text layout – Content Area</h2>
 
   <p>
     A <dfn>content area</dfn> is defined by specifying in
@@ -2505,7 +2518,7 @@
     <a href="http://dev.w3.org/csswg/css-shapes-2/#shape-padding-property">'shape-padding'</a>.
   </p>
 
-<h2 id="TextLayoutAlgorithm">Text layout &#x2013; Algorithm</h2>
+<h2 id="TextLayoutAlgorithm">Text layout – Algorithm</h2>
 
 <div class='ready-for-wg-review'>
 
@@ -2514,14 +2527,14 @@
     content of the <a>'text'</a> element which includes text data
     along with styling information and a description of one or more
     shapes to be filled. The <a>'text'</a> element is treated as a
-    block element and its descendant <a>'tspan'</a> and
-    <a>'textPath'</a> elements are treated as inline elements. The CSS
+    block element and its descendant <a>'tspan'</a>, <a>'textPath'</a>
+    and <a>'a'</a> elements are treated as inline elements. The CSS
     renderer returns a set of <a>typographic characters</a> with
     their positions resulting from laying out the text as if the text
     were absolutely positioned.
   </p>
   <p class="note">
-    A <a>typographic character</a> may correspond to more than
+    A <a>typographic character</a> may contain more than
     one <a>glyph</a>. It is assumed here the relative positioning of
     the <a>glyphs</a> inside a <a>typographic character</a> is
     encapsulated by the <a>typographic character</a> and it is
@@ -2611,6 +2624,8 @@
       <p class='note'>
 	This ensures that <a>'tspan'</a>, <a>'textPath'</a> and
 	<a>'a'</a> elements are treated as if they were inline elements.
+	Note: the <a>'transform'</a> property has no effect on
+	inline elements.
       </p>
     </li>
 
@@ -2709,7 +2724,7 @@
     value in the array, applied to the following <a>typographic
     characters</a> (for <a>'tspan/rotate'</a>). This ensures, for example,
     that attribute values are applied to the same characters regardless of
-    whether or not a font has a particular ligature or not.
+    whether or not a font has a particular ligature.
   </p>
 
   <p>
@@ -3319,7 +3334,7 @@
 	      &lt; <var>k</var> ≤ <var>j</var> are false, and
 	    </li>
 	    <li>
-	      <var>j</var> = <var>count</var> &#x2212; 1 or the "anchored
+	      <var>j</var> = <var>count</var> − 1 or the "anchored
 	      chunk" flag of <var>result</var>[<var>j</var> + 1] is
 	      true;
 	    </li>
@@ -3382,11 +3397,11 @@
 		  index <var>i</var> is in:
 		  <dl class='switch'>
 		    <dt>(start, ltr) or (end, rtl)</dt>
-		    <dd>Set <var>shift</var> = <var>shift</var> &#x2212; <var>a</var>.</dd>
+		    <dd>Set <var>shift</var> = <var>shift</var> − <var>a</var>.</dd>
 		    <dt>(start, rtl) or (end, ltr)</dt>
-		    <dd>Set <var>shift</var> = <var>shift</var> &#x2212; <var>b</var>.</dd>
+		    <dd>Set <var>shift</var> = <var>shift</var> − <var>b</var>.</dd>
 		    <dt>(middle, ltr) or (middle, rtl)</dt>
-		    <dd>Set <var>shift</var> = <var>shift</var> &#x2212; (<var>a</var> + <var>b</var>) / 2.</dd>
+		    <dd>Set <var>shift</var> = <var>shift</var> − (<var>a</var> + <var>b</var>) / 2.</dd>
 		  </dl>
 		</li>
 		<li>
@@ -3536,37 +3551,72 @@
                       <ol>
 			<li>
 			  Let <var>point</var> be the position and
-			  <var>tangent</var> be the unit vector
-			  tangent to the point <var>mid</var> distance
+			  <var>t</var> be the unit vector tangent to
+			  the point <var>mid</var> distance
 			  along <var>path</var>.
 			</li>
 			<li>
-			  Let <var>rotation</var> be the angle from the positive
-			  x-axis if the "horizontal" flag is true, and the
-			  positive y-axis otherwise, to <var>tangent</var>.
-			</li>
-			<li>
-			  Let <var>direction</var> be a unit vector
-			  pointing in a direction depending on the value
-			  of the "horizontal" flag:
+			  If the "horizontal" flag is
 			  <dl class='switch'>
 			    <dt>true</dt>
-			    <dd><var>direction</var> is <var>tangent</var> + 45°</dd>
+			    <dd>
+			      <ol>
+				<li>
+				  Let <var>n</var> be the normal unit vector
+				  pointing in the direction <var>t</var> + 90°.
+				</li>
+				<li>
+				  Let <var>o</var> be the horizontal distance from the
+				  vertical center line of the glyph to the alignment point.
+				</li>
+				<li>
+				  Then set the position in
+				  <var>result</var>[<var>index</var>] to
+				  <var>point</var> -
+				  <var>o</var>×<var>t</var> +
+				  <var>y</var>×<var>n</var>.
+				</li>
+				<li>
+				  Let <var>r</var> be the angle from
+				  the positive x-axis to the tangent.
+				</li>
+				<li>
+				  Set the angle value
+				  in <var>result</var>[<var>index</var>]
+				  to <var>angle</var> + <var>r</var>.
+				</li>
+			      </ol>
+			    </dd>
 			    <dt>false</dt>
-			    <dd><var>direction</var> is <var>tangent</var> &#x2212; 45°</dd>
+			    <dd>
+			      <ol>
+				<li>
+				  Let <var>n</var> be the normal unit vector
+				  pointing in the direction <var>t</var> - 90°.
+				</li>
+				<li>
+				  Let <var>o</var> be the vertical distance from the
+				  horizontal center line of the glyph to the alignment point.
+				</li>
+				<li>
+				  Then set the position in
+				  <var>result</var>[<var>index</var>] to
+				  <var>point</var> -
+				  <var>o</var>×<var>t</var> +
+				  <var>x</var>×<var>n</var>.
+				</li>
+				<li>
+				  Let <var>r</var> be the angle from
+				  the positive y-axis to the tangent.
+				</li>
+				<li>
+				  Set the angle value
+				  in <var>result</var>[<var>index</var>]
+				  to <var>angle</var> + <var>r</var>.
+				</li>
+			      </ol>
+			    </dd>
 			  </dl>
-			</li>
-			<li>
-			  Set the position
-			  in <var>result</var>[<var>index</var>] to
-			  (<var>x</var>, <var>y</var>)
-			  &#x2212; <var>direction</var>
-			  * <var>advance</var> / 2.
-			</li>
-			<li>
-			  Set the angle value
-			  in <var>result</var>[<var>index</var>]
-			  to <var>angle</var> + <var>rotation</var>.
 			</li>
                       </ol>
 		    </li>
@@ -3579,8 +3629,7 @@
 		    <li>
 		      Set the position and angle values
 		      of <var>result</var>[<var>index</var>] to those
-		      in <var>result</var>[<var>index</var> &#x2212;
-		      1].
+		      in <var>result</var>[<var>index</var> − 1].
 		    </li>
 		  </ol>
 		</li>
@@ -4305,7 +4354,9 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> path="..." fil
     <code style="font-weight:bold;
     color:blue">transform="rotate(45)"</code> applies to both
     the <a>'text'</a> and the use of the <a>'path element'</a> element as the
-    referenced shape for text on a path.
+    referenced shape for text on a path. Further note that
+    the <code style="font-weight:bold; color: green">transform="scale(2)"</code>
+    scales the path but does not scale the text placed along the path.
   </p>
 
   <p id="ExampleToap01">
