@@ -1752,18 +1752,6 @@ to also be animated.</p>
   must throw a <code>NoModificationAllowedError</code>.
 </p>
   
-<p class="issue">
-  This behavior ensures that all WAAPI animations can be polyfilled with
-  simple JS animations manipulating DOM attributes on the original elements.
-  The WAAPI spec may need to be updated to indicate that the no-modification error may be thrown.
-  (Or another error name, if it makes more sense?)
-  There must be other cases where an element or pseudo-element would reject an animation,
-  so probably a good idea to have an error as an option.
-  The only other approach would be to silently ignore any animations set
-  on a read-only element in the shadow tree,
-  and silent errors are generally not a good thing.
-</p>
-  
 <p>
   For each <a>animation element</a> that targets an element in the
   <a>referenced document subtree</a>, 
@@ -1777,16 +1765,6 @@ to also be animated.</p>
   that has the same effect as if it was a node in the shadow tree.
   The effective document order for these generated animation elements
   must be the same as the document order for their <a>corresponding elements</a>.
-</p>
-  
-<p class="issue">
-  Is it going to be an implementation hassle to have
-  detached Element objects that must behave as if they are part of the node tree?
-  Another option would be to actually make them additional
-  child nodes of the ShadowRoot node.
-  I don't think that would have any problematic side effects,
-  although I'd need to change the wording a few places
-  where I specify that the use-element shadow root only ever has one child.
 </p>
   
 <p>
@@ -1831,15 +1809,6 @@ to also be animated.</p>
   with its begin time 
   adjusted backwards in the document timeline
   to match the timing of the <a>corresponding element</a>.
-</p>
-  
-<p class="issue">
-  Is distinguishing between <code>begin="target.event"</code> 
-  and <code>begin="event"</code> 
-  worth the extra implementation complexity?
-  It creates useful functionality
-  and is consistent with the CSS model, 
-  but it is technically a breaking change from SVG 1.1.
 </p>
   
 <div class="note">
