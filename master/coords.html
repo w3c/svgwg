@@ -706,20 +706,37 @@ PreserveAspectRatio</a>.</p>
 <ul>
   <li>The <a>'svg'</a> element</li>
 
-  <li>A <a>'symbol'</a> element define new
-  SVG viewports whenever they are instanced by a <a>'use'</a> element.</li>
-
-  <li>An <a>'image'</a> element that
-  references an SVG file will result in the establishment of a
-  temporary new SVG viewport since the referenced resource by
-  definition will have an <a>'svg'</a> element.</li>
-
-  <li>An <a>'iframe'</a> element that references an SVG file establishes new SVG viewport like the situation of <a>'image'</a> element.</li>
-
-  <li>A <a>'foreignObject'</a> element
-  creates a new SVG viewport for rendering the content that is
-  within the element. (It also creates a new initial containing block.)</li>
+  <li>A <a>'symbol'</a> element 
+    that is instanced by a <a>'use'</a> element.</li>
 </ul>
+  
+<p class="note">
+  For historical reasons,
+  the <a>'pattern'</a> and <a>'marker element'</a> elements
+  do not create a new viewport,
+  despite accepting a <a>'viewBox'</a> attribute.
+  Neither do the <a>'clipPath'</a> or <a>'mask element'</a> elements.
+  Percentage lengths within the content of these elements
+  are not proportional to the dimensions of the graphical effect region.
+</p>
+  
+<p>
+  The <a>'foreignObject'</a> element establishes a new 
+  <a href="https://www.w3.org/TR/css-position-3/#def-cb">CSS containing block</a>
+  for its child content.
+  The same is true for a <a>'video'</a>, <a>'audio'</a>, or <a>'canvas'</a> element
+  when its fallback content is being rendered.
+  This has some effects similar to a new viewport, 
+  resetting the scope of layout for child content.
+  However, in order to render SVG elements that are descendents of <a>'foreignObject'</a>,
+  a new <a>'svg'</a> element must establish an SVG document fragment and SVG viewport.
+</p>  
+<p>
+  An <a>'image'</a> or <a>'iframe'</a> element creates a new
+  <a href="https://www.w3.org/TR/css-position-3/#vp">document viewport</a>
+  for the referenced document. 
+  If the referenced document is a SVG file, it will of course establish its own SVG viewport.
+</p>
 
 <p>Whether a new SVG viewport also establishes a new additional
 clipping path is determined by the value of the <a>'overflow'</a> property on the element
