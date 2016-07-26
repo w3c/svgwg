@@ -963,38 +963,14 @@ In addition, all style rules that apply in the scope of the referenced element
 also apply in the scope of the cloned <a>shadow tree</a>.
 </p>
     
-<h3 id="UseAttributes">Attributes</h3>
-    
-<dl class="attrdef-list">
-  <dt>
-    <table class="attrdef def">
-      <tr>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Initial value</th>
-        <th>Animatable</th>
-      </tr>
-      <tr>
-        <td><dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementXAttribute">x</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementYAttribute">y</dfn></td>
-        <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a></td>
-        <td>0</td>
-        <td>yes</td>
-      </tr>
-      <tr>
-        <td><dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementWidthAttribute">width</dfn>, <dfn id="UseElementHeightAttribute">height</dfn></td>
-        <td><a>&lt;length&gt;</a> | <a>&lt;percentage&gt;</a></td>
-        <td>(none)</td>
-        <td>yes</td>
-      </tr>
-    </table>
-  </dt>
-  <dd>
+
     <p>The <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
-    attributes specify the positioning of the referenced element.
+    geometric properties specify the positioning of the referenced element.
     The <a>'width'</a> and <a>'height'</a> attributes 
     only have an effect if the <a>referenced element</a>
     defines a viewport (i.e., if it is a <a>'svg'</a> or <a>'symbol'</a>);
-    if so, they override the value 
+    if so, a value other than <span class="prop-value">auto</span> 
+    for the <a>'use'</a> element overrides the value 
     of the corresponding geometric property on that element.
     </p>
     <p>A negative value for <a>'width'</a> or <a>'height'</a>
@@ -1002,13 +978,14 @@ also apply in the scope of the cloned <a>shadow tree</a>.
     If <a>'width'</a> or <a>'height'</a> is zero,
     and the properties have an effect on the <a>referenced element</a>, 
     then rendering of that element will be disabled.</p>
+  
     <p class="note">
-    Note that <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
-    on a <a>'use'</a> element are simple attributes,
-    not presentation attributes.
+    The <a>'x'</a> and <a>'y'</a> properties 
+    affect the user coordinate system for the element.
     See the <a href="#UseLayout">Layout</a> section for implementation details.
     </p>
-  </dd>
+  
+<dl class="attrdef-list">
   <dt>
     <table class="attrdef def">
       <tr>
@@ -1316,14 +1293,14 @@ how styles are matched.</p>
 <p>
   In the generated content, the <a>'use'</a> will be replaced
   by <a>'g'</a>, where all attributes from the <a>'use'</a> element
-  except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>,
-  <a>'use/height'</a>, <a>'use/href'</a> and the deprecated <a>'xlink:href'</a>
+  except for <a>'x'</a>, <a>'y'</a>, <a>'width'</a>,
+  <a>'height'</a>, <a>'use/href'</a> and the deprecated <a>'xlink:href'</a>
   are transferred to the generated <a>'g'</a> element. An additional transformation
   <span class="attr-value">translate(x,y)</span> is appended to the
   end (i.e., right-side) of the <a>'transform'</a> property on the
   generated <a>'g'</a>, where <span class="attr-value">x</span>
   and <span class="attr-value">y</span> represent the values of
-  the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a>
+  the <a>'x'</a> and <a>'y'</a> attributes on the <a>'use'</a>
   element.
 </p>
 
@@ -1338,10 +1315,10 @@ how styles are matched.</p>
       <a>'symbol'</a> is replaced by an <a>'svg'</a>. This
       generated <a>'svg'</a> will always have explicit values for its
       <a>'width'</a> and <a>'height'</a> presentation attributes. If
-      attributes <a>'use/width'</a> and/or <a>'use/height'</a> are
+      attributes <a>'width'</a> and/or <a>'height'</a> are
       provided on the <a>'use'</a> element, then these attributes will
       be transferred to the generated <a>'svg'</a>. If
-      attributes <a>'use/width'</a> and/or <a>'use/height'</a> are not
+      attributes <a>'width'</a> and/or <a>'height'</a> are not
       specified, the generated <a>'svg'</a> element will use values
       of <span class='attr-value'>'100%'</span> for these attributes.
     </p>
@@ -1352,8 +1329,8 @@ how styles are matched.</p>
     </p>
     <p>
       The referenced <a>'svg'</a> and its contents are deep-cloned
-      into the generated tree. If attributes <a>'use/width'</a>
-      and/or <a>'use/height'</a> are provided on the <a>'use'</a>
+      into the generated tree. If attributes <a>'width'</a>
+      and/or <a>'height'</a> are provided on the <a>'use'</a>
       element, then these values will override the corresponding
       attributes on the <a>'svg'</a> in the generated tree.
     </p>
@@ -1403,17 +1380,22 @@ is in error and must not be rendered by the user agent.</p>
     
 <h3 id="UseLayout">Layout of re-used graphics</h3>
 
-<p>The <a>'use'</a> element has
-optional attributes <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a> and <a>'use/height'</a> which are used to position the re-used graphics
+<p>The value of the <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> properties
+on a <a>'use'</a> element 
+are used to position the re-used graphics
 and to set the viewport size 
-if the <a>referenced element</a> defines a nested viewport.</p>
+if the <a>referenced element</a> defines a nested viewport.
+The effect of these properties on a <a>'use'</a> element
+is notably different from their effect on a <a>graphics element</a>,
+or from their effect in CSS box layout.
+</p>
   
 <p>
-  The <a>'use/x'</a> and <a>'use/y'</a> attributes define
+  The <a>'x'</a> and <a>'y'</a> properties define
   an additional transformation 
   (<span class="attr-value">translate(x,y)</span>,
   where <span class="attr-value">x</span>
-  and <span class="attr-value">y</span> represent the values of the corresponding attributes)
+  and <span class="attr-value">y</span> represent the computed value of the corresponding property)
   to be applied to the <a>'use'</a> element,
   after any transformations specified with other properties
   (i.e., appended to the right-side of the transformation list).
@@ -1431,27 +1413,31 @@ if the <a>referenced element</a> defines a nested viewport.</p>
   </p>
   <p>
   To apply <span class="attr-value">userSpaceOnUse</span> graphical effects in an un-transformed coordinate space,
-  while also using the <a>'use/x'</a> and <a>'use/y'</a> positioning attributes,
+  while also using the <a>'x'</a> and <a>'y'</a> to position the graphics,
   authors can nest the <a>'use'</a> element inside a <a>'g'</a>,
   and apply the graphical effects to the <a>'g'</a> element.
   </p>
 </div>
   
 <p>
-  The <a>'use/width'</a> and <a>'use/height'</a> attributes 
+  The <a>'width'</a> and <a>'height'</a> properties 
   on the <a>'use'</a> element
-  override the values
-  for the <a>'width'</a> and <a>'height'</a> properties
-  on a referenced <a>'svg'</a> or <a>'symbol'</a> element.
-  They can therefore be used to scale a graphic
-  that defines its own coordinate system,
-  each time it is re-used.
-  If the attributes are not specified on the <a>'use'</a> element,
-  then the property is computed as normal for the re-used element.
+  override the values for the corresponding properties
+  on a referenced <a>'svg'</a> or <a>'symbol'</a> element
+  when determining the used value for that property on the <a>instance root</a> element.
+  However, if the computed value for the property on the <a>'use'</a> element is <span class="prop-value">auto</span>,
+  then the property is computed as normal for the element instance.
 </p>
-
 <p>
-  The <a>'use/width'</a> and <a>'use/height'</a> attributes 
+  These properties can therefore be used to scale a graphic
+  that defines its own coordinate system,
+  each time it is re-used. 
+  Because <span class="prop-value">auto</span> is the initial value,
+  if dimensions are not explicitly set on the <a>'use'</a> element,
+  the values set on the <a>'svg'</a> or <a>'symbol'</a> will be used as defaults.
+</p>
+<p>
+  The <a>'width'</a> and <a>'height'</a> properties 
   on the <a>'use'</a> element have no effect 
   if the <a>referenced element</a> does not
   <a href="coords.html#EstablishingANewSVGViewport">establish a new viewport</a>.
@@ -1459,15 +1445,9 @@ if the <a>referenced element</a> defines a nested viewport.</p>
   and therefore does not affect the interpretation of percentages in the re-used graphics.
 </p>
   
-<p class="issue">
-  The section on establishing a new viewport also includes foreignObject, iframe, and image, although then it qualifies that for image and iframe the new viewport actually is created by the root element of the embedded document.
-  Mostly, that whole section needs re-writing.
-  But for this section: should auto width/height on a re-used foreignObject be influenced by width/height on the use element?
-  SVG 1.1 didn't allow foreignObject to be re-used, so it would not be a breaking change either way.
-</p>
-  
 <p>
-  Rendering and layout of elements within the 
+  In all other ways,
+  rendering and layout of elements within the 
   <a>use-element shadow tree</a>
   occurs as if the <a>'use'</a> element was a container for its shadow content.
   In particular, unless elements within the shadow tree establish a new viewport, 
