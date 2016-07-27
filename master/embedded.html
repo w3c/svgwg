@@ -99,7 +99,11 @@ image files such as PNG or JPEG or to files with MIME type of
 "image/svg+xml". <a
 href="conform.html#ConformingSVGViewers">Conforming SVG
 viewers</a> need to support at least PNG, JPEG and SVG format
-files.</p>
+files.
+SVG files must be processed in <a>secure animated mode</a>
+if the current document supports animation,
+or in <a>secure static mode</a> if the current document is static.
+</p>
 
 <p>The result of processing an <a>'image'</a> is always a four-channel
 RGBA result. When an <a>'image'</a>
@@ -266,9 +270,9 @@ elements within an SVG file.</p>
     Refer to the common handling defined for <a
     href="linking.html#linkRefAttrs">URL reference attributes</a> and
     <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.</p>
-    <p>To get the referenced resource, do a potentially CORS-enabled fetch of the absolute URL that resulted from the earlier step, with the <em>mode</em> being the current state of the
-    element's <a>'crossorigin'</a> attribute, the <em>origin</em> being the <a>origin</a> of the <a>'image'</a> element's <a>Document</a>, and the <em>default origin behaviour</em> set to <em>taint</em>.
-    For <a>origin</a>, the rules defined for the html <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#the-img-element">'img'</a> element apply the same way to the svg <a>'image'</a> element.
+    <p>
+        The URL is processed and the resource is fetched
+        <a href="linking.html#processingURL">as described in the Linking chapter</a>.
     </p>
   </dd>
 </dl>
@@ -287,6 +291,17 @@ elements within an SVG file.</p>
 &lt;/svg&gt;
 </pre>
 </div>
+  
+<p>
+  Since image references always refer to a complete document,
+  a target-only URL is treated as a link to the same file,
+  which is rendered again as an independent embedded image.
+  Since the embedded image is processed in a secure mode,
+  its own embedded references are not processed,
+  preventing infinite recursion.
+</p>
+
+  <edit:example href='images/embedded/recursive-image.svg' name='recursive-image' description='an SVG that embeds itself, creating a bulls-eye pattern' image='yes' link='yes'/>
 
 </edit:with>
 
