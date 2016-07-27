@@ -1467,6 +1467,42 @@ or from their effect in CSS box layout.
     This represents a change 
     from how style cloning was defined in previous versions of SVG.
   </p>
+  
+  <p>
+    The following example demonstrates both the consistent and changed style-matching rules.
+    The circle on the left is re-used to draw the circle on the right.
+    The original circle has styles set in various ways:
+  </p>
+  <ul>
+    <li><a>'stroke-width'</a> (20) is set in a presentation attribute on the circle itself.</li>
+    <li><a>'stroke-opacity'</a> (0.7) is set via a CSS rule with a simple selector matching the circle tag name.</li>
+    <li><a>'stroke'</a> color (green) is set using a complex CSS selector, matching the circle as a descendent of an element with class <code>special</code>.</li>
+    <li><a>'fill'</a> color is not set directly on the circle, so is inherited from the style set on the containing <a>'g'</a> element (blue).</li>
+  </ul>
+  <p>
+    In the SVG 1.1 style-cloning model,
+    the <a href="https://www.w3.org/TR/css-cascade-3/#specified">specified style values</a>
+    would be cloned from the original element to the element instance.
+    The re-used circle would have the same styles as the original,
+    except that the <a>'fill'</a> value would be inherited from the <a>'use'</a> (orange)
+    instead of from the <a>'g'</a> (blue).
+  </p>
+  <p>
+    In the shadow DOM model required by SVG 2,
+    the styles for the re-used circle are calculated as follows:
+  </p>
+  <ul>
+    <li>the <a>'stroke-width'</a> (20) presentation attribute is cloned to the element instance.</li>
+    <li>the CSS rule setting <a>'stroke-opacity'</a> (0.7) is part of the CSS stylesheet cloned into the shadow tree; it matches the circle tag name of the <a>element instance</a>, so is applied.</li>
+    <li>the CSS rule with the complex selector is also part of the cloned stylesheet, but it does not match the <a>element instance</a> of the circle, which is not a descendent of an element with class <code>special</code>; instead, <a>'stroke'</a> color on the circle is inherited from the host <a>'use'</a> element (purple).</li>
+    <li><a>'fill'</a> color is still not set directly, so is once again inherited from the host <a>'use'</a> element.</li>
+  </ul>
+  <p>
+    The re-used circle therefore differs from the original in both fill color (because it inherits from a different element) and stroke color (because the complex selector no longer matches).
+  </p>
+  
+  <edit:example href='images/struct/Use-changed-styles.svg' name='Use-changed-styles' description="A 'use' element copying a 'circle', with various style matching rules demonstrated" link='yes' image='yes'/>
+  
   <p>
     Previous versions of SVG
     were not clear about how dynamic pseudo-classes 
@@ -1497,20 +1533,60 @@ referenced element inherits properties from the <a>'use'</a> element and the <a>
 instance of a referenced element does not inherit properties
 from the referenced element's original parents.</p>
 -->
-<div class="note">
-  <p>Note that specifying <span
+<div class="example">
+  <p>
+  Specifying <span
   class="prop-value">'visibility:hidden'</span> on a <a>'use'</a> element does not guarantee
-  that the referenced content will not be rendered. If the <a>'use'</a> element specifies <span
-  class="prop-value">'visibility:hidden'</span> and the element
-  it references specifies <span
-  class="prop-value">'visibility:hidden'</span> or <span
-  class="prop-value">'visibility:inherit'</span>, then that one
-  element will be hidden. However, if the referenced element
-  instead specifies <span
-  class="prop-value">'visibility:visible'</span>, then that
+  that the referenced content will not be rendered. 
+  Unlike the <a>'display'</a> or the <a>'opacity'</a> properties,
+  the <a>'visibility'</a> property does not appy directly to container elements,
+  and therefore does not apply directly to the <a>'use'</a> element.
+  Because <a>'visibility'</a> is normally inherited,
+  hiding the use element will often hide the child content,
+  but not necessarily.
+  If any graphics elements in the shadow tree have 
+  <span class="prop-value">'visibility:visible'</span> specified, then that
   element will be visible even if the <a>'use'</a> element specifies <span
   class="prop-value">'visibility:hidden'</span>.</p>
   
+  <p>
+    In the following example, key style rules are as follows:
+  </p>
+<pre class="css">
+.dark {
+  visibility: hidden;
+}
+.eyes {
+  visibility: visible;
+}
+svg:hover .dark, svg:focus .dark {
+  visibility: visible;
+}
+</pre>
+  <p>
+    The "dark" class is set on the group containing the <a>'use'</a> elements,
+    so all parts of the re-used graphics inherit the hidden visibility setting,
+    except for the subtrees with class "eyes", where it is reset to visible.
+    Upon hovering or focusing the graphic, the hiding effect is removed.
+  </p>
+  <div class="figure">
+    <img alt="Multiple use-copies of a creature-symbol on a black background; the use elements have visibility: hidden, but the creatures' eyes have visibility: visible." src="images/struct/Use-visibility-inheritance.png">
+    <p class="caption">Example Use-visibility-hidden, default styles</p>
+  </div>
+  <div class="figure">
+    <img alt="Multiple use-copies of a rabbit-symbol on a light green background; each rabbit has different=coloured fur, but the same pink noses and white fluffy tails." src="images/struct/Use-visibility-inheritance.2.png">
+    <p class="caption">Example Use-visibility-hidden, interactive styles</p>
+  </div>
+  
+  <p class="view-as-svg"><a href="images/struct/Use-visibility-inheritance.svg">View this example as SVG</a></p>
+  
+  <p>
+    The example also demonstrates inheritance of other style properties
+    (<a>'fill'</a> and <a>'stroke'</a>)
+    specified on the <a>'use'</a> elements,
+    and how these are also not used if any elements within the symbol
+    specify explicit values (e.g., the pink noses and ears).
+  </p>
 </div>
     
 <!--
