@@ -245,16 +245,6 @@ or <a>'stroke'</a> properties to reference the gradient.</p>
   circle intersecting the vector at a right angle. Each gradient
   normal is painted with one color determined by the vector.
 </p>
-<p>
-  When a <a>graphics element</a> references a gradient, conceptually the
-  <a>graphics element</a> should take a copy of the gradient vector
-  with gradient normals and treat it as part of its own geometry. Any
-  transformations applied to the <a>graphics element</a> geometry also
-  apply to the copied gradient vector and gradient normals. Any
-  gradient transforms that are specified on the reference gradient are
-  applied before any <a>graphics element</a> transformations are
-  applied to the gradient.
-</p>
 
 <div class="figure">
   <img
@@ -267,6 +257,67 @@ or <a>'stroke'</a> properties to reference the gradient.</p>
     circles. One gradient normal is shown for each gradient.
   </p>
 </div>
+
+<p class='ready-for-wg-review'>
+  For linear and radial gradients, the color value between two stops along the
+  gradient vector is the linear interpolation, per channel, of the color for
+  each stop, weighted by the distance from each stop.
+</p>
+<div role="math" aria-describedby="math-gradient-linear-interpolation" class='ready-for-wg-review'>
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <mi>V</mi>
+    <mo>=</mo>
+    <msub>
+      <mi>C</mi><mn>0</mn>
+    </msub>
+    <mo>+</mo>
+    <mo>(</mo>
+      <msub>
+        <mi>C</mi><mn>1</mn>
+      </msub>
+      <mo>-</mo>
+      <msub><mi>C</mi><mn>0</mn></msub>
+    <mo>)</mo>
+    <mo>(</mo>
+    <mfrac>
+      <mrow>
+          <mi>D</mi>
+          <mo>-</mo>
+          <msub><mi>O</mi><mn>0</mn></msub>
+      </mrow>
+      <mrow>
+          <msub><mi>O</mi><mn>1</mn></msub>
+          <mo>-</mo>
+          <msub><mi>O</mi><mn>0</mn></msub>
+      </mrow>
+    </mfrac>
+    <mo>)</mo>
+  </math>
+  <pre id="math-gradient-linear-interpolation">
+    $V = C0.rgba + (C1.rgba - C0.rgba) * ((D - C0.offset) / (C1.offset - C0.offset));
+  </pre>
+</div>
+<p class='ready-for-wg-review'>
+Where, for each channel:
+</p>
+<ul class='ready-for-wg-review'>
+<li>V is the interpolated result for that channel</li>
+<li>C<sub>0</sub> is the stop color for the stop with the lowest offset</li> 
+<li>O<sub>0</sub> is the offset of C<sub>0</sub></li> 
+<li>C<sub>1</sub> is the other stop color</li> 
+<li>O<sub>1</sub> is the offset of C<sub>1</sub></li> 
+<li>D is the distance along the gradient vector</li> 
+</ul>
+<p>
+  When a <a>graphics element</a> references a gradient, conceptually the
+  <a>graphics element</a> should take a copy of the gradient vector
+  with gradient normals and treat it as part of its own geometry. Any
+  transformations applied to the <a>graphics element</a> geometry also
+  apply to the copied gradient vector and gradient normals. Any
+  gradient transforms that are specified on the reference gradient are
+  applied before any <a>graphics element</a> transformations are
+  applied to the gradient.
+</p>
 
 <p>Color transitions for mesh gradients are defined by an array of
 color <a href="#GradientStops">stops</a>. The mapping of colors to
@@ -2126,7 +2177,7 @@ colors..." but "ramp" is used nowhere else in this section.</p>
       <dl class="attrdef-svg2">
 
 	<dt>Value</dt>                <dd><a>&lt;number&gt;</a> | <a>&lt;percentage&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>see notes below</dd>
+	<dt><a>Initial value</a></dt>  <dd>0</dd>
 	<dt><a>Animatable</a></dt>    <dd>yes</dd>
 
       </dl>
@@ -2176,26 +2227,28 @@ colors..." but "ramp" is used nowhere else in this section.</p>
 <h4 id="StopColorProperties">Properties</h4>
 
   <dl class="propdef-list-svg2">
-
     <dt id="StopColorProperty"><span class="propdef-title property">'stop-color'</span></dt>
     <dd>
-
       <p>
-	The <a>'stop-color'</a> property indicates what color to use
-	at that gradient stop. The keyword
-	<span class="attr-value">currentColor</span> and ICC colors
-	can be specified in the same manner as within a
-	<a href="painting.html#SpecifyingPaint">&lt;paint&gt;</a>
-	specification for the <a>'fill'</a> and <a>'stroke'</a>
-	properties.
+      The <a>'stop-color'</a> property indicates what color to use
+      at that gradient stop. The keyword
+      <span class="attr-value">currentColor</span> and ICC colors
+      can be specified in the same manner as within a
+      <a href="painting.html#SpecifyingPaint">&lt;paint&gt;</a>
+      specification for the <a>'fill'</a> and <a>'stroke'</a>
+      properties.
       </p>
-
+      <p class="note">
+      With respect to gradients, SVG treats the 'transparent' keyword 
+      differently than CSS. SVG does not calculate gradients in pre-multiplied
+      space, so 'transparent' really means transparent black. Specifying
+      a <a>'stop-color'</a> with the value 'transparent' is equivalent to
+      specifying a <a>'stop-color'</a> with the value 'black' and a 
+      <a>'stop-opacity'</a> with the value '0'.
+      </p>
       <dl class="propdef-svg2">
-	<dt>Value</dt>
-        <dd>
-	  currentColor |
-          <a>&lt;color&gt;</a> <a>&lt;icccolor&gt;</a>
-	</dd>
+    <dt>Value</dt>
+    <dd>currentColor | <a>&lt;color&gt;</a> <a>&lt;icccolor&gt;</a></dd>
         <dt>Initial</dt>            <dd>black</dd>
         <dt>Applies to</dt>         <dd><a>'stop'</a> elements</dd>
         <dt>Inherited</dt>          <dd>no</dd>
@@ -2204,15 +2257,12 @@ colors..." but "ramp" is used nowhere else in this section.</p>
         <dt><a>Animatable</a></dt>  <dd>yes</dd>
       </dl>
     </dd>
-
     <dt id="StopOpacityProperty"><span class="propdef-title property">'stop-opacity'</span></dt>
     <dd>
-
       <p>
-	The <a>'stop-opacity'</a> property defines the opacity of
-	a given gradient stop.
+      The <a>'stop-opacity'</a> property defines the opacity of
+      a given gradient stop.
       </p>
-
       <dl class="propdef-svg2">
         <dt>Value</dt>              <dd>&lt;opacity-value&gt;</dd>
         <dt>Initial</dt>            <dd>1</dd>
@@ -2222,20 +2272,23 @@ colors..." but "ramp" is used nowhere else in this section.</p>
         <dt>Media</dt>              <dd>visual</dd>
         <dt><a>Animatable</a></dt>  <dd>yes</dd>
       </dl>
-
       <dl class="propdef-values">
-	<dt>&lt;opacity-value&gt;</dt>
-	<dd>
-	  The opacity of the 'stopColor'. Any values outside the
-	  range 0.0 (fully transparent) to 1.0 (fully opaque) must be
-	  clamped to this range. The value of 'stop-opacity' is
-	  independent of the opacity used to render the paint via
-	  <a>'fill'</a> or <a>'stroke'</a>.
-	</dd>
+        <dt>&lt;opacity-value&gt;</dt>
+        <dd>
+          The opacity of the 'stopColor'. Any values outside the
+          range 0.0 (fully transparent) to 1.0 (fully opaque) must be
+          clamped to this range. The value of 'stop-opacity' is
+          independent of the opacity used to render the paint via
+          <a>'fill'</a> or <a>'stroke'</a>.
+          <span class='ready-for-wg-review'>
+          The opacity value used for the gradient calculation is the product
+          of the value of <a>'stop-opacity'</a> and the opacity of the value of
+          <a>'stop-color'</a>. For <a>'stop-color'</a> value types of  that
+          don't include explicit opacity information, the opacity of that
+          component must be treated as 1.</span>
+        </dd>
       </dl>
-
     </dd>
-
   </dl><!-- propdef-list -->
 
 <h4 id="StopNotes">Notes on gradient stops</h4>
