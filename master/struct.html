@@ -1649,36 +1649,29 @@ to also be animated.</p>
   For animation effects applied
   using a <a href="https://www.w3.org/TR/web-animations-1/">Web Animations API</a> method  
   <a href="refs.html#ref-WAAPI">[WAAPI]</a>,
-  the user agent must create a read-only <dfn id="TermAnimationInstance">animation instance</dfn>
-  targetting an <a>element instance</a> in the shadow tree
-  for each <dfn id="TermCorrespondingAnimation">corresponding animation</dfn> object
-  that target's that shadow element's <a>corresponding element</a>.
-  Specifically,
-  the user agent must generate a new <a href="https://www.w3.org/TR/web-animations-1/#the-animation-interface"><code>Animation</code></a> object,
-  with its <a href="https://www.w3.org/TR/web-animations-1/#dom-animation-timeline"><code>timeline</code></a>
-  set to the document timeline,
-  and with its <a href="https://www.w3.org/TR/web-animations-1/#dom-animation-effect"><code>effect</code></a> created by constructing a new
-  <a href="https://www.w3.org/TR/web-animations-1/#keyframeeffectreadonly"><code>KeyframeEffectReadOnly</code></a> 
-  using the keyframe effect of the <a>corresponding animation</a> as its source,
-  and then modifying its <a href="https://www.w3.org/TR/web-animations-1/#dom-keyframeeffectreadonly-target"><code>target</code></a>
-  to point to the <a>element instance</a> instead of the <a>corresponding element</a>.
+  if the target of the animation is a <a>corresponding element</a>
+  to an <a>element instance</a> in a shadow tree, 
+  the user agent must construct a <a>ShadowAnimation</a>
+  whose source is that <a>Animation</a> object
+  and whose target is the <a>element instance</a>.
+  If there are multiple instances of the element in different trees,
+  then there will be multiple shadow animations, one for each.
 </p>
 <p>
-  The user agent must create such an <a>animation instance</a>
-  for all animations in effect 
+  The user agent must create such a <a>ShadowAnimation</a>
+  for all Web Animations API animations in effect 
   (including pending and frozen animations)
   at the time the shadow tree is generated,
-  and any new animations applied while the shadow tree exists.
-  The user agent must not clone animation objects
-  that were generated based on CSS animations or animation elements
+  and for any new animations applied while the shadow tree exists.
+  The user agent must not create <a>ShadowAnimation</a> objects
+  for CSS animations or animation elements
   (as these are duplicated separately).
 </p>
   
-<p>
-  Each <a>animation instance</a> created for the shadow tree is read-only.
-  However, the user agent must ensure that
-  any changes to the <a>corresponding animation</a> are reflected 
-  in changes to the relevant <a>animation instance</a>.
+<p class="note">
+  As part of the inteface definition,
+  a <a>ShadowAnimation</a> is read-only,
+  and must reflect any changes to its <a>ShadowAnimation::sourceAnimation</a>.
 </p>
 
 <p>
@@ -3432,7 +3425,48 @@ or is null otherwise.</p>
 points to the <a>corresponding use element</a> if this element is an <a>element instance</a> in a <a>use-element shadow tree</a>,
 or is null otherwise.</p>
 
+<h3 id="InterfaceShadowAnimation">Interface ShadowAnimation</h3>
+  
+<p>The <a>ShadowAnimation</a> inteface defines a read-only <a>Animation</a> object,
+  which mirrors all changes to the <a>ShadowAnimation::sourceAnimation</a> object
+  from which it was constructed.
+  They are used to mirror author-initiated animation objects in the
+  <a>use-element shadow tree</a>.
+</p>
+  
 
+<pre class="idl">
+[<i>Constructor</i> (<a>Animation</a> source, <a>Animatable</a> newTarget) ]
+interface <b>ShadowAnimation</b> : <a>Animation</a> {
+  [SameObject] readonly attribute <a>Animation</a> <a href="#__svg__ShadowAnimation__sourceAnimation">sourceAnimation</a>;
+};</pre>
+  
+<p>The <b id="__svg__ShadowAnimation__sourceAnimation">sourceAnimation</b> IDL property
+  points to the <a>Animation</a> object passed in the constructor.
+</p>
+  
+<p>
+  The constructor generates a new <a>ShadowAnimation</a> object,
+  which reflects all properties on the <a>ShadowAnimation::sourceAnimation</a>,
+  except that its <a href="https://www.w3.org/TR/web-animations-1/#dom-animation-effect"><code>effect</code></a> is created by constructing a new
+  <a href="https://www.w3.org/TR/web-animations-1/#keyframeeffectreadonly"><code>KeyframeEffectReadOnly</code></a> 
+  using the keyframe effect of the <a>ShadowAnimation::sourceAnimation</a> as its source,
+  and then modifying its <a href="https://www.w3.org/TR/web-animations-1/#dom-keyframeeffectreadonly-target"><code>target</code></a>
+  to match the <code>newTarget</code> parameter.
+</p>
+
+  
+<p>
+  A <a>ShadowAnimation</a> is read-only.
+  Any attempt to set any of the inherited IDL properties, 
+  or call any of the <a>Animation</a> methods that change its state,
+  must throw a <code>NoModificationAllowedError</code>.
+  However, the user agent must ensure that
+  any changes to the properties or state
+  of the <a>ShadowAnimation::sourceAnimation</a> are reflected 
+  in changes to the <a>ShadowAnimation</a>.
+</p>
+  
 <h3 id="InterfaceSVGSwitchElement">Interface SVGSwitchElement</h3>
 
 <edit:with element="switch">
