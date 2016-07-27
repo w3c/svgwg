@@ -1135,13 +1135,6 @@ are rendered in the same way as if the shadow DOM was implemented.
     as part of the shadow tree of another <a>'use'</a> element.
   </dd>
 </dl>
-
-  <!--
-<p>The <dfn id="TermGraphicalContents">graphical contents</dfn>
-are any <a>'svg'</a>, <a>'symbol'</a>, <a>'g'</a>, <a>graphics element</a> or
-other <a>'use'</a> elements, that a <a>'use'</a> element references.
-</p>
--->
     
 <p>When the user agent successfully resolves a <a>'use'</a> element 
 to identify a <a>referenced element</a>,
@@ -1207,91 +1200,6 @@ If either the <a>'use'</a> element or the <a>referenced element</a> is altered
 in a way that causes the <a>'use'</a> element's URL reference to become <a>unresolved</a> again,
 then the entire shadow tree for that use element is discarded.
 </p>
-
-  <!--
-<p>A <a>'use'</a> element has the
-same visual effect as if the <a>'use'</a> element were replaced by the
-following generated content:</p>
-
-<p class="issue" data-issue="36">Except that the replaced content shouldn't affect
-how styles are matched.</p>
-
-<p>
-  In the generated content, the <a>'use'</a> will be replaced
-  by <a>'g'</a>, where all attributes from the <a>'use'</a> element
-  except for <a>'x'</a>, <a>'y'</a>, <a>'width'</a>,
-  <a>'height'</a>, <a>'use/href'</a> and the deprecated <a>'xlink:href'</a>
-  are transferred to the generated <a>'g'</a> element. An additional transformation
-  <span class="attr-value">translate(x,y)</span> is appended to the
-  end (i.e., right-side) of the <a>'transform'</a> property on the
-  generated <a>'g'</a>, where <span class="attr-value">x</span>
-  and <span class="attr-value">y</span> represent the values of
-  the <a>'x'</a> and <a>'y'</a> attributes on the <a>'use'</a>
-  element.
-</p>
-
-<ul>
-  <li>
-    <p>
-      <strong>If the <a>'use'</a> element references a <a>'symbol'</a> element</strong>:
-    </p>
-    <p>
-      The referenced <a>'symbol'</a> and its contents are deep-cloned
-      into the generated tree, with the exception that the
-      <a>'symbol'</a> is replaced by an <a>'svg'</a>. This
-      generated <a>'svg'</a> will always have explicit values for its
-      <a>'width'</a> and <a>'height'</a> presentation attributes. If
-      attributes <a>'width'</a> and/or <a>'height'</a> are
-      provided on the <a>'use'</a> element, then these attributes will
-      be transferred to the generated <a>'svg'</a>. If
-      attributes <a>'width'</a> and/or <a>'height'</a> are not
-      specified, the generated <a>'svg'</a> element will use values
-      of <span class='attr-value'>'100%'</span> for these attributes.
-    </p>
-  </li>
-  <li>
-    <p>
-      <strong>If the <a>'use'</a> element references an <a>'svg'</a> element:</strong>
-    </p>
-    <p>
-      The referenced <a>'svg'</a> and its contents are deep-cloned
-      into the generated tree. If attributes <a>'width'</a>
-      and/or <a>'height'</a> are provided on the <a>'use'</a>
-      element, then these values will override the corresponding
-      attributes on the <a>'svg'</a> in the generated tree.
-    </p>
-  </li>
-  <li>
-    <p>
-      <strong>Otherwise:</strong>
-    </p>
-    <p>
-      The referenced object and its contents are deep-cloned into the
-      generated tree.
-    </p>
-  </li>
-</ul>
--->
-<!--
-<div class="ready-for-wider-review">
-<p>
-The element referenced by <a>'use'</a> may be in a separate document. However,
-this specification does not define how or if the user agent will process
-stylesheets in that document, or what SVG viewport will be used for
-resolving percentages and media queries in such documents, if animations run
-in the separate document and which document controls the animation timeline. Script elements in the
-resource document must not be executed, and the corresponding conceptually cloned script elements
-must also not execute.
-</p>
-<p class="note">
-When re-using external assets, therefore, authors are advised not to include any scripts in the external
-file and to use inline styles or presentation attributes only. Percentage
-lengths should only be used if the re-used assets define their own SVG viewport
-(i.e., if the re-used element is an <a>'svg'</a> or <a>'symbol'</a>). 
-Declarative animations in external assets should not be used.
-</p>
-</div>
--->
 
 <p>When a <a>'use'</a> references
 another element which is another <a>'use'</a> or whose content contains a
@@ -1514,25 +1422,7 @@ or from their effect in CSS box layout.
     depending on which element the user is interacting with.
   </p>
 </div>
-    
-  <!--
-<p>The conceptual deep cloning of the referenced element into a
-non-exposed DOM tree also copies any property values resulting
-from <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html">the CSS cascade</a>
-([<a href="refs.html#ref-CSS21">CSS21</a>], chapter 6)
-on the referenced element and its contents. CSS2 selectors can
-be applied to the original (i.e., referenced) elements because
-they are part of the formal document structure. CSS2 selectors
-cannot be applied to the (conceptually) cloned DOM tree because
-its contents are not part of the formal document structure.</p>
-
-<p>Property inheritance, however, works as if the referenced
-element had been textually included as a deeply cloned child of
-the <a>'use'</a> element. The
-referenced element inherits properties from the <a>'use'</a> element and the <a>'use'</a> element's ancestors. An
-instance of a referenced element does not inherit properties
-from the referenced element's original parents.</p>
--->
+  
 <div class="example">
   <p>
   Specifying <span
@@ -1585,71 +1475,9 @@ svg:hover .dark, svg:focus .dark {
     (<a>'fill'</a> and <a>'stroke'</a>)
     specified on the <a>'use'</a> elements,
     and how these are also not used if any elements within the symbol
-    specify explicit values (e.g., the pink noses and ears).
+    specify explicit values (e.g., the pink noses and ears and the white tails).
   </p>
 </div>
-    
-<!--
-
-<p><span class="example-ref">Example Use01</span> below has a
-simple <a>'use'</a> on a <a>'rect'</a>.</p>
-
-<edit:example href='images/struct/Use01.svg' name='Use01' description="Simple case of 'use' on a 'rect'" link='yes' image='yes'/>
-
-<p>The visual effect would be equivalent to the following document:</p>
-
-<edit:example href='images/struct/Use01-GeneratedContent.svg' link='yes'/>
-
-<p><span class="example-ref">Example Use02</span> below has a
-<a>'use'</a> on a <a>'symbol'</a>.</p>
-
-<edit:example href='images/struct/Use02.svg' name='Use02' description="'use' on a 'symbol'" link='yes' image='yes'/>
-
-<p>The visual effect would be equivalent to the following document:</p>
-
-<edit:example href='images/struct/Use02-GeneratedContent.svg' link='yes'/>
-
-<p><span class="example-ref">Example Use03</span> illustrates
-what happens when a <a>'use'</a> has
-a <a>'transform'</a> property.</p>
-
-<edit:example href='images/struct/Use03.svg' name='Use03' description="'use' with a 'transform' property" link='yes' image='yes'/>
-
-<p>The visual effect would be equivalent to the following document:</p>
-
-<edit:example href='images/struct/Use03-GeneratedContent.svg' link='yes'/>
-
-<p><span class="example-ref">Example Use04</span> illustrates a
-<a>'use'</a> element with various
-methods of applying CSS styling.</p>
-
-<edit:example href='images/struct/Use04.svg' name='Use04' description="'use' with CSS styling" link='yes' image='yes'/>
-
-<p>The visual effect would be equivalent to the following
-document. Observe that some of the style rules above apply to
-the generated content (i.e., rules 1-6, 10-12), whereas others
-do not (i.e., rules 7-9). The rules which do not affect the
-generated content are:</p>
-
-<ul>
-  <li>Rules 7 and 8: CSS selectors only apply to the formal
-  document tree, not on the generated tree; thus, these
-  selectors will not yield a match.</li>
-
-  <li>Rule 9: The generated tree only inherits from the
-  ancestors of the <a>'use'</a>
-  element and does not inherit from the ancestors of the
-  referenced element; thus, this rule does not affect the
-  generated content.</li>
-</ul>
-
-<p>In the generated content below, the selectors that yield a
-match have been transferred into inline <a>'style attribute'</a> attributes for
-illustrative purposes.</p>
-
-<edit:example href='images/struct/Use04-GeneratedContent.svg' link='yes'/>
-
--->
     
 <h3 id="UseMultimedia">Multimedia in use-element shadow trees</h3>
   
@@ -1680,16 +1508,6 @@ illustrative purposes.</p>
 </ul>
     
 <h3 id="UseAnimations">Animations in use-element shadow trees</h3>
-<p class="issue">
-  Update per Brian Birtles recommendations: https://github.com/w3c/svgwg/pull/206#issuecomment-234436749
-  
-  Also, it would be nice to have a TR version of SVG Animations to link to!
-</p>
-  
-<!--
-<p>Animations on a referenced element will cause the instances
-to also be animated.</p>
--->
   
 <p>
   The <a href="https://www.w3.org/TR/web-animations-1/">Web Animations API</a>
@@ -1991,11 +1809,6 @@ other elements (such as via a <a>'use'</a>).</p>
   (e.g., a <a>'pattern'</a> or a <a>'mask element'</a>) 
   will affect whether that child content contributes to the graphical effect.</li>
 </ul>
-  
-<p class="issue" data-issue="69">
-  Need to define how conditional processing affects audio/video and other elements borrowed from HTML.
-  See <a href="https://github.com/w3c/svgwg/issues/44">GitHub issue #44</a>.
-</p>
   
 <div class="note">
   <p>Previous versions of SVG included a third conditional processing attribute,
