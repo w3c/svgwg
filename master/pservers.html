@@ -104,6 +104,98 @@ redefine them here. -->
   property on the paint-server element or any of its ancestors is set
   to <span class="prop-value">none</span>.
 </p>
+  
+<h3 id="PaintServerTemplates">Using paint servers as templates</h3>
+  
+<p>
+  Most paint server elements accept an <a>'href'</a> attribute,
+  which can be used to define a compatible paint server element as a template.
+  Attributes defined for the template element
+  can replace the initial value if corresponding attributes are not specified
+  on the current element.
+  Furthermore, if the current element does not have any
+  child content other than <a>descriptive elements</a>,
+  than the child content of the template element is cloned to replace it.
+</p>
+  
+<p class="note">
+  The exclusion of descriptive content is new in SVG 2, 
+  consistent with changes to allow descriptive content for any SVG element.
+  Also new: template cross-references may be to external file resources
+  (different chapters in SVG 1.1 had inconsistent guidance on this point),
+  and the "inheritance" of child elements is represented through a shadow tree.
+</p>
+
+<p>
+Templating can be indirect to an arbitrary level
+(subject to security limits on external file resources,
+which can make a reference invalid).
+Thus, if the referenced template element defines its attribute values
+or clones its shadow content
+from another element referenced by its own <a>'href'</a> attribute, 
+then that value or content can be used for the current element.
+</p>
+  
+<p>
+The description of each <a>'href'</a> attribute defines
+the limits of the templating process, as follows:
+</p>
+<ul>
+  <li>What type of element is a valid target for the reference</li>
+  <li>Which attributes are duplicated from the template</li>
+</ul>
+
+<p>
+  If any of the specified attributes are not
+  defined on the current element,
+  or if the current element has no child elements other than <a>descriptive elements</a>,
+  the user agent must <a href="linking.html#processingURL">process the URL</a>
+  to identify the referenced resource.
+  If the URL reference is not <a>invalid</a>,
+  then the URL's target element is used as the template element, as follows:
+</p>
+<ul>
+  <li>
+    <p>
+      For any of the specified attributes not defined on the current element,
+      the user agent must determine the value of the attribute
+      for the template element
+      and use it as the value for the current element.
+      The template value is derived
+      from recursive cross-references if required.
+      The initial value for the attribute is only substituted 
+      after all valid URL references are exhausted.
+    </p>
+  </li>
+  <li>
+    <p>
+      If the current element has no child elements other than <a>descriptive elements</a>,
+      the user agent must generate a <a>shadow tree</a> for this element, 
+      which must behave equivalently to a <a>use-element shadow tree</a>,
+      except that the host is the current paint server element.
+      The <a>corresponding elements</a> for the <a>element instances</a> 
+      clones into the shadow tree are
+      the child content of the template element, 
+      if it has child elements other than <a>descriptive elements</a>,
+      or the <a>corresponding elements</a> that would be used to generate
+      the template element's own shadow tree, otherwise.
+    </p>
+  </li>
+</ul>
+        
+<p>
+When a paint-server element has a shadow tree,
+the <a>element instances</a> in that tree
+must be used in rendering the paint server effect,
+as if they were the paint server element's own children.
+</p>
+  
+<p class="note">
+  The <a>use-element shadow tree</a> model for templating
+  allows cloned content to inherit different styles than the original.
+  This behavior is newly defined in SVG 2;
+  SVG 1.1 did not define how styles applied to inherited paint server content.
+</p>
 
 <h2 id="Solidcolors">Solid colors</h2>
 
@@ -576,26 +668,29 @@ in the stops. This is discussed in detail in the
     </dt>
     <dd>
       <p>
-        A <a>URL reference</a> to a
+        A <a>URL reference</a> to a template gradient element;
+        to be valid, the reference must be to a 
         different <a>'linearGradient'</a> or
-        <a>'radialGradient'</a> element within the current SVG
-        document fragment. Any <a>'linearGradient'</a> attributes
-        which are defined on the referenced element which are not
-        defined on this element are inherited by this element. If this
-        element has no defined gradient stops, and the referenced
-        element does (possibly due to its own <a>'href'</a>
-        attribute), then this element inherits the gradient stop from
-        the referenced element.  Inheritance can be indirect to an
-        arbitrary level; thus, if the referenced element inherits
-        attribute or gradient stops due to its own <a>'href'</a>
-        attribute, then the current element can inherit those
-        attributes or gradient stops.
+        a <a>'radialGradient'</a> element.
       </p>
       <p>
-        Refer to the common handling defined for <a
+        Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
+        and to the common handling defined for <a
         href="linking.html#linkRefAttrs">URL reference attributes</a> and
         <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
       </p>
+      <p>
+        The specified attributes that will be copied from the template are:
+      </p>
+      <ul>
+        <li><a>'x1'</a></li>
+        <li><a>'y1'</a></li>
+        <li><a>'x2'</a></li>
+        <li><a>'y2'</a></li>
+        <li><a>'gradientTransform'</a></li>
+        <li><a>'gradientUnits'</a></li>
+        <li><a>'spreadMethod'</a></li>
+      </ul>
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></dd>
@@ -965,21 +1060,31 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
     </dt>
     <dd>
       <p>
-        A <a>URL reference</a>
-        to a different <a>'linearGradient'</a> or
-        <a>'radialGradient'</a> element within the current SVG
-        document fragment. Any <a>'radialGradient'</a> attributes
-        which are defined on the referenced element which are not
-        defined on this element are inherited by this element. If this
-        element has no defined gradient stops, and the referenced
-        element does (possibly due to its own <a>'href'</a>
-        attribute), then this element inherits the gradient stop from
-        the referenced element.  Inheritance can be indirect to an
-        arbitrary level; thus, if the referenced element inherits
-        attribute or gradient stops due to its own <a>'href'</a>
-        attribute, then the current element can inherit those
-        attributes or gradient stops.
+        A <a>URL reference</a> to a template gradient element;
+        to be valid, the reference must be to a 
+        <a>'linearGradient'</a> element or
+        a different <a>'radialGradient'</a> element.
       </p>
+      <p>
+        Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
+        and to the common handling defined for <a
+        href="linking.html#linkRefAttrs">URL reference attributes</a> and
+        <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
+      </p>
+      <p>
+        The specified attributes that will be copied from the template are:
+      </p>
+      <ul>
+        <li><a>'cx'</a></li>
+        <li><a>'cy'</a></li>
+        <li><a>'r'</a></li>
+        <li><a>'fx'</a></li>
+        <li><a>'fy'</a></li>
+        <li><a>'fr'</a></li>
+        <li><a>'gradientTransform'</a></li>
+        <li><a>'gradientUnits'</a></li>
+        <li><a>'spreadMethod'</a></li>
+      </ul>
       <p>
         Refer to the common handling defined for <a
         href="linking.html#linkRefAttrs">URL reference attributes</a> and
@@ -2080,16 +2185,32 @@ element.</p>
     </dt>
     <dd>
       <p>
-        A <a>URL reference</a> to a
-        different <a>'mesh'</a> element within the current SVG
-        document fragment. Any <a>'mesh'</a> attributes
-        which are defined on the referenced element which are not
-        defined on this element are inherited by this element.
-	Inheritance can be indirect to an
-        arbitrary level; thus, if the referenced element inherits
-        attribute due to its own <a>'href'</a>
-        attribute, then the current element can inherit those
-        attributes.
+        A <a>URL reference</a> to a template element,
+        which must be a different <a>'meshgradient'</a> element to be valid.
+      </p>
+      <p>
+        Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
+        and to the common handling defined for <a
+        href="linking.html#linkRefAttrs">URL reference attributes</a> and
+        <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
+      </p>
+      <p>
+        The specified attributes that will be copied from the template are:
+      </p>
+      <ul>
+        <li><a>'x'</a></li>
+        <li><a>'y'</a></li>
+        <li><a>'width'</a></li>
+        <li><a>'height'</a></li>
+        <li><a>'transform'</a></li>
+        <li><a>'gradientUnits'</a></li>
+        <li><a>'type'</a></li>
+      </ul>
+      <p>
+        Processing of template child content
+        is the same as for <a>'linearGradient'</a>
+        except that all <a>'meshrow'</a>, <a>'meshpatch'</a>, and <a>'stop'</a> elements
+        are considered and cloned into the shadow tree.
       </p>
       <p>
         Refer to the common handling defined for <a
@@ -2593,38 +2714,29 @@ and <em>n</em>.</p>
     <dt id="PatternElementHrefAttribute"><span class="adef">href</span></dt>
     <dd>
       <p>
-        A <a href="linking.html#URLReference">URL reference</a> to a
-        different <a>'pattern'</a> element within the current SVG
-        document fragment. The following attributes, must be inherited by this
-        element if they are not defined on this element but are defined on
-        the referenced element:
-      </p>
-      <ul class='ready-for-wg-review'>
-        <li>x</li>
-        <li>y</li>
-        <li>width</li>
-        <li>height</li>
-        <li>viewBox</li>
-        <li>preserveAspectRatio</li>
-        <li>patternTransform</li>
-        <li>patternUnits</li>
-        <li>patternContentUnits</li>
-      </ul>
-      <p>
-        If this element has no children,
-        and the referenced element does (possibly due to its
-        own <a>'href'</a> attribute), then this element inherits
-        the children from the referenced element. Inheritance can be
-        indirect to an arbitrary level; thus, if the referenced
-        element inherits attributes or children due to its
-        own <a>'href'</a> attribute, then the current element
-        can inherit those attributes or children.
+        A <a>URL reference</a> to a template element,
+        which must be a different <a>'pattern'</a> element to be valid.
       </p>
       <p>
-        Refer to the common handling defined for <a
+        Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
+        and to the common handling defined for <a
         href="linking.html#linkRefAttrs">URL reference attributes</a> and
         <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
       </p>
+      <p>
+        The specified attributes that will be copied from the template are:
+      </p>
+      <ul class='ready-for-wg-review'>
+        <li><a>'x'</a></li>
+        <li><a>'y'</a></li>
+        <li><a>'width'</a></li>
+        <li><a>'height'</a></li>
+        <li><a>'viewBox'</a></li>
+        <li><a>'preserveAspectRatio'</a></li>
+        <li><a>'patternTransform'</a></li>
+        <li><a>'patternUnits'</a></li>
+        <li><a>'patternContentUnits'</a></li>
+      </ul>
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></dd>
@@ -2998,23 +3110,27 @@ for each possible integer value of <em>m</em>.</p>
     <dt id="HatchElementHrefAttribute"><span class="adef">href</span></dt>
     <dd>
       <p>
-        A <a href="linking.html#URLReference">URL reference</a> to a
-        different <a>'hatch'</a> element within the current SVG
-        document fragment. Any attributes which are defined on the
-        referenced element which are not defined on this element are
-        inherited by this element. If this element has no children,
-        and the referenced element does (possibly due to its
-        own <a>'href'</a> attribute), then this element inherits
-        the children from the referenced element. Inheritance can be
-        indirect to an arbitrary level; thus, if the referenced
-        element inherits attributes or children due to its
-        own <a>'href'</a> attribute, then the current element
-        can inherit those attributes or children.
+        A <a>URL reference</a> to a template element,
+        which must be a different <a>'hatch'</a> element to be valid.
       </p>
       <p>
-        Refer to the common handling defined for <a
-        href="linking.html#linkRefAttrs">URL reference attributes</a>.
+        Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
+        and to the common handling defined for <a
+        href="linking.html#linkRefAttrs">URL reference attributes</a> and
+        <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
       </p>
+      <p>
+        The specified attributes that will be copied from the template are:
+      </p>
+      <ul>
+        <li><a>'x'</a></li>
+        <li><a>'y'</a></li>
+        <li><a>'pitch'</a></li>
+        <li><a>'rotate'</a></li>
+        <li><a>'hatchUnits'</a></li>
+        <li><a>'hatchContentUnits'</a></li>
+        <li><a>'transform'</a></li>
+      </ul>
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></dd>
