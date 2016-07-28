@@ -95,6 +95,7 @@ have been made.</p>
   <li>overflow:auto may clip and show scroll bars in some cases.</li>
   <li>overflow:scroll may show scroll bars on svg elements.</li>
   <li>Removed definition of initial clipping path.</li>
+  <li>Updated rendering requirements to reflect shadow DOM model for use elements.</li>
 </ul>
 
 <h3 id="types">Basic Data Types and Interfaces chapter</h3>
@@ -253,6 +254,51 @@ have been made.</p>
 
   <li>Update section on element roles to conform to latest SVG Accessibility API Mappings specification.</li>
   
+  <li>Soften recommendation to put pre-defined content in a defs element even if not required.</li>
+  
+  <li>Change display behavior of defs, title, desc, metadata, and symbol elements to be defined using user agent styles.</li>
+  
+  <li>Allow x, y, width, and height presentation attributes on a symbol, with the same effect on a rendered instance as on a nested svg element.</li>
+  
+  <li>Specify a backwards-compatible default behavior for <a>'symbol/refX'</a> and <a>'symbol/refY'</a> on a symbol (which will be different from marker); clarify that keywords have same behavior as marker.</li>
+  
+  <li>Re-define use-element shadow trees to be consistent with the shadow DOM spec,
+    to integrate better with other SVG 2 changes,
+    and to clarify much related behavior, including:
+    <ul>
+      <li>x/y/width/height are presentation attributes, albeit ones with a unique effect on final layout</li>
+      <li>zero values for width and height are only significant through their impact on the used value of a cloned svg/symbol; negative values are parse errors</li>
+      <li>Allow use elements to reference any element that can be a valid child of an SVG container, rather than only graphics elements</li>
+      <li>Define the SVGUseElementShadowRoot interface as an extension of the ShadowRoot interface, and require it to be used for use-element shadow trees</li>
+      <li>Define a number of terms related to shadow DOM and use elements, referencing the DOM standard where applicable</li>
+      <li>Clarify that use-element shadow trees are generated even if the element is in a conditional processing failed branch (consistent with previous guidance re display:none)</li>
+      <li>Element instances in the shadow tree must appear to be regular Element nodes, except they are read-only.</li>
+      <li>Properties formerly defined on the SVGElementInstance object are now defined as a mixin interface extending SVGElement</li>
+      <li>Clarify that URL references in cloned content are made absolute relative to the source file.</li>
+      <li>Clarify that the shadow tree is discarded if the cross-references change, including due to declarative animation (the original and animated shadow trees are not preserved in parallel).</li>
+      <li>Clarify that circular references only block the rendering of the use-element that would connect the circle, and not it's own host.</li>
+      <li>Added warning about x/y behaving as a transformation on the use element, and the impact on userSpaceOnUse graphical effects.</li>
+      <li>Redefine the way width/height on use elements impact svg/symbol to be consistent with geometry properties and auto values.</li>
+      <li>Clarify that for other re-used graphics (not svg/symbol), the shadow elements are laid out in the use element's coordinate system, including for the resolution of percentage lengths.</li>
+      <li>Redefine style cloning in shadow trees to be consistent with style scoping in shadow DOM, including by requiring style sheets to be cloned into the shadow DOM's scope.</li>
+      <li>Add warning and example regarding the cases where this results in different styles than an SVG 1.1-conforming user agent.</li>
+      <li>Add example regarding the inherited behavior of the visibility property.</li>
+      <li>Require multimedia in use-element copies to be synchronized with all other instances of the same original element.</li>
+      <li>Clarify that the shadow tree shares the document timeline for animations with its host document.</li>
+      <li>Define a ShadowAnimation interface to represent the cloning of Web Animations API animations</li>
+      <li>Prohibit WAAPI animations from being directly applied to element instances in the use-element shadow tree.</li>
+      <li>Define the propagation of SMIL-style animations through the cloning of animation elements; require that animations elements affecting the referenced graphic be cloned into the shadow tree, even if they are not descendents of the referenced element.</li>
+      <li>Define how event-based animation element triggers and animation element href attributes behave when you have multiple elements with the same id in different node trees.</li>
+      <li>Require event handling in use-element shadow trees to follow the event retargetting rules from the Shadow DOM spec.</li>
+      <li>Clarify that the copying of event listeners from referenced graphics to their element instances applies to listeners added by script as well as by event attributes.</li>
+      <li>Prohibit event listeners from being directly added to elements in the use-element shadow tree.</li>
+      <li>Make use elements and symbols map to the graphics-object role by default, so the shadow content will be accessible.</li>
+      <li>Make the SVGSymbolElement interface extend from SVGGraphicsElement, so that rendered symbol element instances have all the behavior of graphics elements (e.g., getBBox)</li>
+      <li>Restore the (animated)instanceRoot properties on the SVGUseElement interface.</li>
+    </ul>
+  </li>
+  <li>Change role mapping for the <a>'a'</a> element to depend on whether it is actually a valid link.</li>
+  <li></li>
 </ul>
 
 <h3 id="styling">Styling chapter</h3>
@@ -282,6 +328,9 @@ have been made.</p>
   style sheets in an HTML document with inline SVG content must
   apply to all content in the document.</li>
   <li class='added-since-last-wd'>Allow presentation attributes on any svg namespaced element.</li>
+  <li>Change display behavior of style element to be defined using user agent styles.</li>
+  <li>Add !important user agent style rules controlling never-rendered elements,
+    with a note explaining their impact.</li>
 </ul>
 
 <h3 id="geometry">Geometry Properties chapter</h3>
@@ -495,6 +544,10 @@ have been made.</p>
   <a>'stroke-linecap'</a> attribute.</li>
 
   <li class='added-since-last-wd'>Allow markers on all <a>shapes</a>.</li>
+  
+  <li>Clarify the description of context-stroke and context-fill, particularly re use element shadow content.</li>
+  
+  <li>Change display behavior of marker elements to be defined using user agent styles.</li>
 </ul>
 
 <h3 id="color">Color chapter</h3>
@@ -529,6 +582,17 @@ have been made.</p>
 
   <li>Renamed <span class="attr-name">'gradientTransform'</span> on the <a>'mesh'</a> element
   and <span class="attr-name">'hatchTransform'</span> on the <a>'hatch'</a> element to <span class="attr-name">'transform'</span>.</li>
+  
+  <li>Change display behavior of paint server elements to be defined using user agent styles.</li>
+  
+  <li>Define common handling of paint server template cross-references,
+    allowing external file references,
+    using a use-element shadow DOM model for cloned child content,
+    defining consistent behavior for whether title and desc affect child cloning,
+    and explicitly defining which attributes are derived from the template for each element.
+  </li>
+  
+  <li>Add notes warning about attributes that look like presentation attributes, but aren't.</li>
 </ul>
 
 <h3 id="masking">Clipping, Masking and Compositing chapter</h3>
@@ -566,6 +630,8 @@ have been made.</p>
   <li>Added keyboard events.</li>
   <li>Removed mutation events.</li>
   <li>Removed SVGZoomEvent.</li>
+  <li>Clarify that shadow DOM content is focusable and interactive.</li>
+  <li>Change display behavior of script elements to be defined using user agent styles.</li>
 </ul>
 
 <h3 id="linking">Linking chapter</h3>

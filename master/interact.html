@@ -937,6 +937,8 @@ that the cursor can be visible over most backgrounds.</p>
 <p>
     The following SVG elements are <dfn id="TermFocusable">focusable</dfn>
     in an interactive document.
+    Any <a>instance</a> of such an element in a <a>use-element shadow tree</a>
+    is also focusable.
     For the purpose of the HTML focus model, 
     interactive user agents must treat them as
     <a href="https://www.w3.org/TR/html51/editing.html#focusable">focusable areas</a> 
@@ -985,6 +987,9 @@ that the cursor can be visible over most backgrounds.</p>
     The sequential focus order is generated from the set of all <a>focusable</a> elements,
     processing <a>'tabindex'</a> attributes on SVG elements
     in the same way as <a href="https://www.w3.org/TR/html51/editing.html#the-tabindex-attribute">tabindex attributes on HTML elements</a>.
+    Content within a <a>use-element shadow tree</a>
+    is inserted in the focus order as if it was child content
+    of the <a>'use'</a> element.
 </p>
 <div class='note'>
     A <a>non-rendered element</a> can never receive focus, 
@@ -1018,7 +1023,7 @@ that the cursor can be visible over most backgrounds.</p>
     For documents that contain a mix of inline HTML and SVG, 
     focus is handled for the document as a whole 
     (with a combined sequential focus order), 
-    not with each inline SVG or HTML fragment as being an isolated subdocument.
+    not with each inline SVG or HTML fragment as an isolated subdocument.
 </p>
 
 <div class='note'>
@@ -1144,6 +1149,13 @@ attribute.</p>
   HTML and thus is the place for scripts (e.g., ECMAScript). Any functions
   defined within any <a>'script'</a> element have a "global" scope across the
   entire current document.</p>
+  
+  <p>The script's text content is never directly rendered;
+  the <a>'display'</a> value for the <a>'script element'</a> element
+  must always be set to <span class="prop-value">none</span>
+  by the <a>user agent style sheet</a>,
+  and this declaration must have importance over any other CSS rule or presentation attribute.
+  </p>
 
   <p id="ScriptElementExecution">Before attempting to execute the <a>'script'</a>
   element the resolved media type value for <a>'script/type'</a> must be inspected.
@@ -1279,9 +1291,9 @@ attribute.</p>
       Refer to the common handling defined for <a
       href="linking.html#linkRefAttrs">URL reference attributes</a> and
       <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
-      <p>To get the referenced resource, do a potentially CORS-enabled fetch of the absolute URL that resulted from the earlier step, with the <em>mode</em> being the current state of the
-      element's <a>'script/crossorigin'</a> attribute, the <em>origin</em> being the <a>origin</a> of the <a>'script'</a> element's <a>Document</a>, and the <em>default origin behaviour</em> set to <em>taint</em>.
-      For <a>origin</a>, the rules defined for the html <a href="http://www.w3.org/TR/html51/semantics-scripting.html#the-script-element">'script'</a> element apply the same way to the svg <a>'script'</a> element.
+      <p>
+        The URL is processed and the resource is fetched
+        <a href="linking.html#processingURL">as described in the Linking chapter</a>.
       </p>
     </dd>
   </dl>
