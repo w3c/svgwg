@@ -792,26 +792,30 @@ the <em>cursor</em>. Three types of cursors are available:</p>
 
 <ul>
   <li>Standard built-in cursors</li>
-  <li>Platform-specific custom cursors</li>
-  <li>Platform-independent custom cursors</li>
+  <li>Custom cursors</li>
 </ul>
 
 <p>The <a>'cursor property'</a> property is used to
 specify which cursor to use. The <a>'cursor property'</a> property can be used to
 reference standard built-in cursors by specifying a keyword
 such as <em>crosshair</em> or a custom cursor. Custom cursors
-are referenced via a <a>&lt;url&gt;</a> and can point to either an
-external resource such as a platform-specific cursor file or to
-a <a>'cursor element'</a> element, which can be
+are defined by referencing an image that can be
 used to define a platform-independent cursor.</p>
+  
+<p>When defining a platform-independent cursor file,
+  either the SVG or the PNG format are recommended,
+  because they support alpha transparency to define a cursor shape.
+  Cursor images ideally contain at least two colors so
+  that the cursor can be visible over most backgrounds.</p>
+
 
 <div class="ready-for-wider-review">
 <h3 id="CursorProperty">The effect of the <span class="property">'cursor'</span> property</h3>
 
 <p class="note">See the CSS Basic User Interface Module Level 3 specification
-for the definition of <a>'cursor property'</a>. [<a href="refs.html#ref-CSS3UI">CSS3UI</a>]</p>
+for the definition of <a href="https://www.w3.org/TR/css-ui-3/#cursor">cursor</a>. [<a href="refs.html#ref-CSS3UI">CSS3UI</a>]</p>
 
-<p>SVG uses the <a>'cursor property'</a> property to specify the type of cursor to
+<p>The <a>'cursor property'</a> property specifies the type of cursor to
 be displayed for the pointing device when it is over a region of an
 element that is sensitive to pointer events, according to the value of
 the <a>'pointer-events'</a> property.  SVG extends the definition of
@@ -829,29 +833,17 @@ specification as follows:</p>
 </div>
 
 <h3 id="CursorElement">The <span class="element-name">'cursor'</span> element</h3>
+  
+<p>The cursor element is deprecated, as the standard CSS <a>'cursor property'</a>
+  now supports custom image references.
+  User agents are required to support it in interactive SVG documents only.
+  </p>
 
 <edit:with element='cursor'>
 
 <p>The <a>'cursor element'</a> element can
-be used to define a platform-independent custom cursor. A
-recommended approach for defining a platform-independent custom
-cursor is to create a PNG image [<a href="refs.html#ref-PNG">PNG</a>]
-and define a <a>'cursor element'</a> element
-that references the PNG image and identifies the exact position
-within the image which is the pointer position (i.e., the hot spot).</p>
-
-<p>The PNG format is recommended because it supports the
-ability to define a transparency mask via an alpha channel. If
-a different image format is used, this format should support
-the definition of a transparency mask (two options: provide an
-explicit alpha channel or use a particular pixel color to
-indicate transparency). If the transparency mask can be
-determined, the mask defines the shape of the cursor;
-otherwise, the cursor is an opaque rectangle. Typically, the
-other pixel information (e.g., the R, G and B channels) defines
-the colors for those parts of the cursor which are not masked
-out. Note that cursors usually contain at least two colors so
-that the cursor can be visible over most backgrounds.</p>
+be used to define an image for a platform-independent custom cursor,
+and the offset from the image dimensions to the active cursor point.</p>
 
 <edit:elementsummary name='cursor'/>
 
@@ -877,6 +869,8 @@ that the cursor can be visible over most backgrounds.</p>
   <dd>
     The x- and y-coordinates of the position in the cursor's coordinate system
     which represents the precise position that is being pointed to.
+    These coordinates apply if coordinates are not specified 
+    when the <a>'cursor element'</a> is referenced.
   </dd>
   <dt>
     <table class="attrdef def">
