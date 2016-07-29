@@ -6240,18 +6240,30 @@ can take.  Their meanings are as follows:</p>
 for <a>'lengthAdjust'</a> are as described above in the numeric length adjust type
 constant table.</p>
 
+<div class='ready-for-wg-review'>
 <p>The <b id="__svg__SVGTextContentElement__getNumberOfChars">getNumberOfChars</b>
-method is used to determine the total number of characters available for
-rendering within the current element.  When getNumberOfChars() is called,
+method returns the total number of characters available for rendering within
+the current element, regardless of whether they will be rendered.
+When getNumberOfChars() is called,
 the following steps are run:</p>
 
 <ol class='algorithm'>
-  <li>Let <var>text</var> be the result that would be obtained
-  from getting the 
-  <a href="http://www.w3.org/TR/dom/#dom-node-textcontent">textContent</a>
-  IDL attribute on the current element.</li>
-  <li>Return the length of <var>text</var>.</li>
+  <li>Let <var>node</var> be the text node upon which this method was called</li>
+  <li>If the <a>'display'</a> property has the value <span class='prop-value'>none</span>,
+    then return 0</li>
+  <li>Set <var>length</var> equal to the length of the text content of
+    <var>node</var>, after normalizing whitespace according to the value of the
+    <a>'white-space'</a> property on <var>node</var>
+  </li>
+  <li>For each child of <var>node</var> that is a <a>text content element</a>,
+      an <a>'a'</a> element, or an <a>'unknown'</a> element:
+    <ol>
+      <li>Recursively call this algorithm and add the returned value to <var>length</var></li>
+    </ol>
+  </li>
+  <li>return <var>length</var></li>
 </ol>
+</div>
 
 <p>The <b id="__svg__SVGTextContentElement__getComputedTextLength">getComputedTextLength</b>
 method is used to compute a "length" for the text within the element.
