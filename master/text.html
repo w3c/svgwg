@@ -163,7 +163,9 @@
       attributes and SVG DOM text methods. Characters discarded during
       layout such as
       <a href="https://www.w3.org/TR/css-text-3/#white-space-phase-1">collapsed
-      white space characters</a> are not addressable.
+      white space characters</a> are not addressable, neither are characters
+      within an element with a value of <span class='prop-value'>none</span> for
+      the <a>'display'</a> property.
     </dd>
 
     <dt id="TermTypographicCharacterUnit">typographic character</dt>
@@ -6242,15 +6244,14 @@ constant table.</p>
 
 <div class='ready-for-wg-review'>
 <p>The <b id="__svg__SVGTextContentElement__getNumberOfChars">getNumberOfChars</b>
-method returns the total number of characters available for rendering within
-the current element, regardless of whether they will be rendered.
-When getNumberOfChars() is called,
-the following steps are run:</p>
+method returns the total number of <a>addressable characters</a> available for
+rendering within the current element, regardless of whether they will be rendered.
+When getNumberOfChars() is called, the following steps are run:</p>
 
 <ol class='algorithm'>
   <li>Let <var>node</var> be the text node upon which this method was called</li>
-  <li>If the <a>'display'</a> property has the value <span class='prop-value'>none</span>,
-    then return 0</li>
+  <li>If the <a>'display'</a> property for <var>node</var> has the value
+    <span class='prop-value'>none</span>, then return 0</li>
   <li>Set <var>length</var> equal to the length of the text content of
     <var>node</var>, after normalizing whitespace according to the value of the
     <a>'white-space'</a> property on <var>node</var>
@@ -6285,12 +6286,12 @@ element.  When getSubStringLength(<var>charnum</var>, <var>nchars</var>)
 is called, the following steps are run:</p>
 
 <ol class='algorithm'>
-  <li>Assign an index to each character in the DOM within this element,
+  <li>Assign an index to each <a>addressable character</a> in the DOM within this element,
   where the first character has index 0.</li>
   <li>If <var>charnum</var> is greater than the highest index assigned
   to a character or if <var>nchars</var>, then <a>throw</a> an <a>IndexSizeError</a>.</li>
   <li>Let <var>length</var> be a length in user units, initialized to 0.</li>
-  <li>For each character in the DOM within this element that has an
+  <li>For each <a>addressable character</a> in the DOM within this element that has an
     index such that
     <var>charnum</var> ≤ index &lt; (<var>charnum</var> + <var>nchars</var>):
     <ol>
@@ -6318,7 +6319,7 @@ character for a character</dfn> at index <var>index</var> within an
 element <var>element</var>, the following steps are run:</p>
 
 <ol class="algorithm">
-  <li>Assign an index to each character in the DOM within this element,
+  <li>Assign an index to each <a>addressable character</a> in the DOM within this element,
   where the first character has index 0.</li>
   <li>Let <var>last</var> be the highest index assigned to a character.</li>
   <li>While <var>charnum</var> &lt; <var>last</var> and
