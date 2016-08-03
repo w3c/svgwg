@@ -3,8 +3,8 @@
   <head lang="en">
     <title>SVG Authoring Guide</title>
     <meta charset="utf-8">
-    <script src="http://www.w3.org/Tools/respec/respec-w3c-common" async class="remove"></script>
-
+    <!-- <script src="http://www.w3.org/Tools/respec/respec-w3c-common" async class="remove"></script> -->
+    <script src="_ignore/respec-w3c-common.js" async class="remove"></script>
     <script class="remove">
       var respecConfig = {
           specStatus:           "ED",
@@ -72,6 +72,10 @@
       figure {
         display: inline-block;
       }
+
+        figure > figcaption {
+          max-width: 250px;
+        }
   /*
       .tip::before, .tip > .marker, details.tip > summary::before, details.tip > summary > .marker {
           text-transform: uppercase;
@@ -457,13 +461,6 @@
       </section>
 
       <section>
-        <h3>ARIA: Markup Attributes for Accessible Rich Internet Applications</h3>
-        <p>.</p>
-
-        <p class="note">TODO: talk about ARIA</p>
-      </section>
-
-      <section>
         <h3>SVG in HTML</h3>
           <p>There are 5 main ways to use SVG in HTML content: inclusion in <a href="inline-svg">inline markup</a>; referenced in the <a href="#svg-in-object"><code>object</code></a> element; referenced in the <a href="#svg-in-img"><code>img</code></a> element; referenced in the <a href="#svg-in-iframe"><code>iframe</code></a> element; or referenced as a <a href="#svg-in-css-background">CSS background</a>.</p>
 
@@ -478,6 +475,35 @@
 
           <pre class="example highlight" data-include="examples/inline-svg.html" data-include-format="text"></pre>
           <iframe src="examples/inline-svg.html" width="510" height="510" style="border: thin black solid; overflow:hidden;"> </iframe>
+
+          <p>It's not necessary in inline SVG to include the SVG and XLink namespace attributes. However, it is still necessary to include them in standalone SVG, so if an SVG file is intended for use both inline and standalone, it's a safe practice to include the SVG and XLink namespace attributes, in case an inline SVG is reused as a standalone file.</p>
+
+
+          <section>
+            <h4 id="inline-svg">Script in Inline SVG in HTML</h4>
+            <p>HTML5 specifies that the HTML external <code>script</code> element is not a self-closing element, unlike the SVG element of the same name, but also specifies that the SVG external <code>script</code> element in inline SVG should be parsed as normal for SVG. Thus, a self-closing external <code>script</code> element is valid, like so:</p>
+            <pre class='example'>
+&lt;svg&gt;
+  &lt;script xlink:href="…"/&gt;
+&lt;/svg&gt;
+            </pre> 
+            <p>However, not all browsers parse this self-closing element correctly, and may not load and run the script, so it is safer in inline SVG to use a closing tags for the exernal <code>script</code> element, like this:</p> 
+            <pre class='example'>
+&lt;svg&gt;
+  &lt;script xlink:href="…"&gt; &lt;/script&gt;
+&lt;/svg&gt;
+            </pre>             
+            <p>The example <a href="examples/inline-svg-script.html" target="_blank">inline-svg-script.html</a> shows an inline SVG with with both styles of external <code>script</code> element, which are theoretically the same but may differ in practice:</p>
+
+            <pre class="example highlight" data-include="examples/inline-svg-script.html" data-include-format="text"></pre>
+            <!-- 
+            <iframe src="examples/inline-svg-script.html" width="510" height="510" style="border: thin black solid; overflow:hidden;"> </iframe> 
+            -->
+
+            <p class="note">TODO: describe different behavior in onload and document in inline vs standalone</p>
+
+          </section>
+
         </section>
 
         <section>
@@ -491,12 +517,12 @@
 
           <figure>
             <object data="examples/orbits.svg" width="300" height="300"> </object> 
-            <figcaption>SVG in &lt;object&gt;</figcaption>
+            <figcaption>SVG in &lt;object&gt;, with animation, script, and full interactivity</figcaption>
           </figure>
 
           <figure>
             <img src="examples/orbits.svg" width="300" height="300" />
-            <figcaption>SVG in &lt;img&gt;</figcaption>
+            <figcaption>SVG in &lt;img&gt;, with animation, but no script or interactivity</figcaption>
           </figure>
           
           <p>In comparison to the <code>iframe</code> element, the <code>object</code> element doesn't have a default border, and also scales to matches the intrinsic size and dimensions of the SVG content, while the <code>iframe</code> size is determined by styles in the HTML page. This is illustrated in these two examples, which have no CSS sizing defined:, the first using &lt;object&gt; and the second using &lt;iframe&gt; (which uses the default width and height of <code>300px</code> by <code>150px</code> for <a href="#def-replaced-element">replaced elements</a> in HTML):</p>
@@ -510,17 +536,22 @@
             <iframe src="examples/fixed-size.svg"> </iframe>
             <figcaption>SVG in &lt;iframe&gt;</figcaption>
           </figure>
+
+          <p>The <code>embed</code> element is also a valid HTML5 element, which acts effectively the same as the <code>object</code> element. As with the <code>iframe</code> element, there are no advantages to using the <code>embed</code> element rather than the <code>object</code> element, so authors are encouraged to using <code>object</code> instead. Thus, this guide doesn't describe the <code>embed</code> element in any more detail.</p>
         </section>
 
         <section>
           <h4 id="svg-in-img">SVG in the <code>img</code> element</h4>
           <p>The <code>img</code> element is another common way to reference an external SVG. The advantage of <code>img</code> is that many graphical authoring tools and environments support the insertion of <code>img</code> element, and may not support inserting the <code>object</code> element.</p>
 
+          <p>The <code>img</code> element allows animation, but does not enable text search and selection, interactivity on a per-element level, or the execution of script.</p>
+
           <p>The example <a href="examples/svg-in-img.html" target="_blank">svg-in-img.html</a> shows an external SVG referenced with the <code>img</code> element:</p>
 
-
           <pre class="example highlight" data-include="examples/svg-in-img.html" data-include-format="text"></pre>
-          <iframe src="examples/svg-in-img.html" width="520" height="600" style="border: thin black solid; overflow:hidden;"> </iframe>
+          <iframe src="examples/svg-in-img.html" width="520" height="665" style="border: thin black solid; overflow:hidden;"> </iframe>
+
+          <p class="note">Note that not all browsers support animation in the <code>img</code> element, so the safest approach is to use <a href="inline-svg">inline SVG</a> or the <a href="#svg-in-object"><code>object</code></a> element.</p>
         </section>
 
         <section>
@@ -544,13 +575,31 @@
           <p>The example <a href="examples/svg-in-css-background.html" target="_blank">svg-in-css-background.html</a> shows an external SVG referenced as a CSS background image:</p>
 
           <pre class="example highlight" data-include="examples/svg-in-css-background.html" data-include-format="text"></pre>
-          <iframe src="examples/svg-in-css-background.html" width="520" height="600" style="border: thin black solid; overflow:hidden;"> </iframe>
+          <iframe src="examples/svg-in-css-background.html" width="520" height="630" style="border: thin black solid; overflow:hidden;"> </iframe>
         </section>
       </section>
 
       <section>
-        <h3>ARIA: Markup Attributes for Accessible Rich Internet Applications</h3>
-        <p>.</p>
+        <h3>ARIA: Semantic Markup Attributes</h3>
+        <p>SVG is a semantically-neutral markup language, so you can add semantics by using <abbr title="Accessible Rich Internet Applications"></abbr>ARIA markup attributes. 
+        HTML is a moderately semantic markup language, with elements that convey specific meaning about document structure (e.g. <code>h2</code>, <code>section</code>), 
+
+        Aside from a few functional semantic elements such as <code>a</code>, <code>title</code>, and <code>desc</code> and structural semantic elements like <code>g</code> and <code>defs</code>, SVG has none of these semantics or native controls and focuses solely on geometry, positioning, presentation, and implicit semantics such as document order and structure (including grouping and nesting). This means that SVG is a blank canvas to apply whatever semantics you wish to your elements.
+
+
+        Unlike in HTML, there are very few native semantics to SVG, particularly around text or widget controls. If you want a well-structured document that ......</p>
+
+        <p>For instance, you can make SVG text explicitly considered to be a list, as in the following example, <a href="examples/aria-list.svg" target="_blank">aria-list.svg</a>, which uses ARIA to add a heading and a set of nested list items:</p>
+
+        <pre class="example highlight" data-include="examples/aria-list.svg" data-include-format="text"></pre>
+        <object data="examples/aria-list.svg" width="300" height="330"> </object>
+
+        <p>You can even create even more complex semantic structures like a table, as in the following example, <a href="examples/aria-table.svg" target="_blank">aria-table.svg</a>:</p>
+
+        <pre class="example highlight" data-include="examples/aria-table.svg" data-include-format="text"></pre>
+        <object data="examples/aria-table.svg" width="660" height="220"> </object>
+
+        <p>Note that you can very effectively style ARIA-decorated elements using the CSS attribute selector, similar to how you would style their semantic-element equivalents.</p>
 
         <p class="note">TODO: talk about ARIA</p>
       </section>
