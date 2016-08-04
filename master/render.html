@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
 <head>
   <title>Rendering Model</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -127,8 +127,10 @@ match the conformance requirements).</p>
     <p>
         An element that has a direct representation in the
         <a>rendering tree</a> for the current document.
-        Does not include elements that are only
-        in the rendering tree as re-used graphics.
+        Includes a rendered <a>instance</a> of an element in a <a>use-element shadow tree</a>.
+        Does not include elements that affect rendering
+        as the source definition of re-used graphics
+        but are not directly rendered themselves.
         See <a href="#Rendered-vs-NonRendered">Rendered versus non-rendered elements</a>
     </p>
   </dd>
@@ -148,9 +150,10 @@ match the conformance requirements).</p>
         Graphical components that are included in the rendering tree
         but do not have a single direct equivalent element
         in the document model.
-        Includes <a>markers</a>, paint server content,
-        and content duplicated by <a>'use'</a> elements,
-        as well as graphics used in <a>'clipPath'</a> or <a>'mask element'</a>.
+        They may be represented through shadow DOM elements
+        (as in graphics re-used with a <a>'use'</a> element),
+        or as image fragments generated as part of a graphical effect
+        (as in patterns or masks).
     </p>
   </dd>
 
@@ -160,7 +163,9 @@ match the conformance requirements).</p>
           Any element type that is <em>never directly rendered</em>,
           regardless of context or <a>'display'</a> style value.
           It includes the following elements: 
-          <edit:elementcategory name='never-rendered'/>
+          <edit:elementcategory name='never-rendered'/>;
+          it also includes a <a>'symbol'</a> element that is not
+          the <a>instance root</a> of a <a>use-element shadow tree</a>.
       </p>
   </dd>
   <dt id="TermRenderableElement">renderable element</dt>
@@ -170,7 +175,9 @@ match the conformance requirements).</p>
         in the <a>rendering tree</a>, 
         as a graphic, container, text, audio, or animation.  
         It includes the following elements: 
-        <edit:elementcategory name='renderable'/>
+        <edit:elementcategory name='renderable'/>;
+        it also includes a <a>'symbol'</a> element that <em>is</em>
+        the <a>instance root</a> of a <a>use-element shadow tree</a>.
     </p>
     <p> A renderable element may or may not be rendered
         in a given document or point in time.
@@ -181,7 +188,9 @@ match the conformance requirements).</p>
     
 <h3 id="Rendered-vs-NonRendered">Rendered versus non-rendered elements</h3>
     
-<p> At any given time, an SVG element is either rendered or non-rendered.
+<p> At any given time, every SVG element 
+    (or <a>element instance</a> in a <a>use-element shadow tree</a>)
+    is either rendered or non-rendered.
     Whether an element is currently rendered or not affects
     not only its visual display but also interactivity
     and geometric calculations.
@@ -244,7 +253,7 @@ properties</h3>
 
 <p class="note">See the CSS 2.1 specification for the definitions
 of <a>'display'</a> and <a>'visibility'</a>.
-[<a href="refs.html#ref-CSS21">CSS21</a>]</p>
+[<a href="refs.html#ref-css2">CSS2</a>]</p>
     
 <p>
     Setting  <a>'display'</a> to <span class="prop-value">none</span> 
@@ -283,7 +292,7 @@ of <a>'display'</a> and <a>'visibility'</a>.
 </p>
 
 <p>
-    When applied to a <a>graphics element</a> or <a>text content element</a>,
+    When applied to a <a>graphics element</a>,
     setting <a>'visibility'</a> to <span class="prop-value">hidden</span>
     or <span class="prop-value">collapse</span>
     results in the element not being painted.  
@@ -297,9 +306,9 @@ of <a>'display'</a> and <a>'visibility'</a>.
 
 <p>
     The <a>'visibility'</a> property only directly applies to
-    <a>graphics elements</a> and <a>text content elements</a>.
+    <a>graphics elements</a>, including <a>text content elements</a>.
     Since <a>'visibility'</a> is an inherited property, however,
-    although it has no effect on a <a>container element</a> itself,
+    although it has no effect on a <a>'use'</a> element or <a>container element</a> itself,
     its inherited value can affect descendant elements.
 </p>
     
@@ -308,30 +317,58 @@ of <a>'display'</a> and <a>'visibility'</a>.
 <p> Graphical content defined in one part of the document
     (or in another document)
     may be used to render other elements.
-    This includes the graphics created by style properties
-    (such as a <a>'pattern'</a> paint server, or line <a>markers</a>)
-    as well as graphics that are instantiated with a <a>'use'</a> element.
-    In the case of <a>'use'</a> instances,
-    the original graphical elements may or may not be rendered themselves.
+    There are two types of re-used graphics from a rendering perspective:
+</p>
+<ul>
+  <li>
+    shadow DOM elements, 
+    such as those generated by <a>'use'</a> elements
+    or by cross-references between paint servers;
+  </li>
+  <li>
+    content re-used as part of a graphical effect on another element, 
+    including the child content of 
+    <a>markers</a>, <a>paint server elements</a>,
+    <a>'clipPath'</a>, and <a>'mask element'</a>.
+  </li>
+</ul>
+  
+<p>
+  Shadow DOM elements are rendered in the same way as normal elements,
+  as if the host element (e.g., the <a>'use'</a> element)
+  was a container and the shadow content was its descendents.
+  Style and geometry properties on the shadow DOM elements
+  are resolved independently from those on their <a>corresponding element</a>
+  in the source document.
+  The <a>'display'</a> property has its normal effect on shadow elements,
+  except for special rules that apply to the <a>'symbol'</a> element.
 </p>
 <p>
-    Each instance of the re-used graphics creates a fragment of the <a>rendering tree</a>.
-    The component graphics may need their styles resolved based on context,
-    then they are rendered and composited as described in this chapter.
-    The re-used fragment as a whole is treated as a <a>stacking context</a>
-    and a <a>non-isolated group</a>.
+  Unless properties on the host element create a stacking context,
+  <a>'z-index'</a> values on shadow DOM elements 
+  can change their rendering order relative to elements in the main DOM.
+  For blending purposes, the <a>'use'</a> element forms a <a>non-isolated group</a>.
+</p>
+  
+<p>
+  In contrast,
+  graphical effects elements generate a self-contained SVG fragment
+  which is rendered independently as a <a>stacking context</a>
+  and an <a>isolated group</a>. 
+  The canvas for this fragment is scaled
+  
+  The graphical effect element's child content
+  is rendered and composited into this canvas.
+  The flattened canvas as a whole is treated as a vector image
+  when compositing and blending with other paint layers
 </p>
 <p> 
-    The <a>'display'</a> property on any child content of re-used graphics
-    has its normal effect when set to <code>none</code>,
-    preventing that branch of the document fragment from being used in rendering.
-    Similarly, when a <a>'use'</a> element references a
-    <a>renderable element</a> (as opposed to a <a>'symbol'</a>),
-    a value of <code>display: none</code> on the referenced element
-    will result in an empty rendering-tree fragment for that 'use' element.
-    However, re-used graphics are never affected
-    when the original DOM elements themselves are not rendered
-    because of a value of <code>display: none</code> on an ancestor.
+  The <a>'display'</a> property on any child content of a graphical effects element
+  has its normal effect when set to <code>none</code>,
+  excluding that subtree from being used in rendering.
+  However, the graphical effect is not altered
+  by a value of <code>display: none</code> 
+  on the graphical effect element or an ancestor.
 </p>
 </div>
 
@@ -381,7 +418,7 @@ with a lower value.</p>
 <p class="note at-risk">This feature is at risk.</p>
 
 <p class="note">See the CSS 2.1 specification for the definition
-of <a>'z-index'</a>. [<a href="refs.html#ref-CSS21">CSS21</a>]</p>
+of <a>'z-index'</a>. [<a href="refs.html#ref-css2">CSS2</a>]</p>
 
 <p>The <a>'z-index'</a> property allows an element to be assigned to a 
 stack level.
@@ -580,7 +617,9 @@ members of that group. See <a href="#Grouping">How groups are rendered</a>.
 <div class="ready-for-wider-review">
 <p>
 Grouping elements, such as the <a>'g'</a> element (see <a>container elements</a>
-) create a <a>compositing group</a>. The <a>Compositing and Blending</a> 
+) create a <a>compositing group</a>.
+Similarly, a <a>'use'</a> element creates a compositing group for its shadow content.
+The <a>Compositing and Blending</a> 
 specification normatively describes how to render <a>compositing groups</a>.
 In SVG, effects may be applied to a group. For example, opacity, filters 
 or masking. These effects are applied to the rendered result of the group
@@ -624,7 +663,7 @@ as they are rendered.</li>
 effect of the <span class="property">'opacity'</span> property</h3>
 
 <p class="note">See the CSS Color Module Level 3 for the definition
-of <a>'opacity'</a>. [<a href="refs.html#ref-CSS3COLOR">CSS3COLOR</a>]</p>
+of <a>'opacity'</a>. [<a href="refs.html#ref-css3-color">css3-color</a>]</p>
 
 <p>The <a>'opacity'</a> property specifies how opaque a given
 graphical element or container element will be when it is
@@ -765,7 +804,7 @@ positions required on the output device. Resampling
 requirements are discussed under
 <a href="conform.html">conformance requirements</a>.</p>
 <p class="ready-for-wider-review">
-As in HTML [<a href="refs.html#ref-HTML">HTML</a>, 10.4.2], 
+As in HTML [<a href="refs.html#ref-html51">HTML</a>, 10.4.2], 
 all animated images with the same absolute URL and the same image 
 data are expected to be rendered synchronised to the same timeline as a group,
 with the timeline starting at the time of the least recent addition to the 
@@ -812,7 +851,7 @@ foreground objects into the current background.</li>
 </ul>
 
 <p>Both, clipping and masking, are specified in the module CSS Masking
-[<a href="refs.html#ref-CSS-MASKING">CSS-MASKING</a>].</p>
+[<a href="refs.html#ref-css-masking-1">css-masking-1</a>].</p>
 </div>
 
 <h2 id="ParentCompositing">Parent compositing</h2>
@@ -833,7 +872,7 @@ document with opacity preserved.
 property</h2>
 
 <p class="note">See the Cascading Style Sheets Level 2 Revision 1 (CSS 2.1)
-Specification [<a href="refs.html#ref-CSS21">CSS21</a>] for the definition of 
+Specification [<a href="refs.html#ref-css2">CSS2</a>] for the definition of 
 <a>'overflow'</a>.</p>
 <div class="ready-for-wider-review">
 <table class="data compact">
@@ -858,6 +897,12 @@ Specification [<a href="refs.html#ref-CSS21">CSS21</a>] for the definition of
 <th>other svg</th><td>visible</td><td>hidden</td><td>visible | scroll</td><td>visible</td><td>hidden</td><td>scroll</td>
 </tr>
 <tr>
+<th>mesh</th><td>visible</td><td>n/a</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
+</tr>
+<tr>
+<th>text</th><td>visible</td><td>hidden</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
+</tr>
+<tr>
 <th>pattern</th><td>visible</td><td>hidden</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
 </tr>
 <tr>
@@ -876,14 +921,14 @@ Specification [<a href="refs.html#ref-CSS21">CSS21</a>] for the definition of
 <th>iframe</th><td>visible</td><td>n/a</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
 </tr>
 <tr>
-<th>foreignObject</th><td>visible</td><td>n/a</td><td>visble</td><td>visible</td><td>hidden</td><td>hidden</td>
+<th>foreignObject</th><td>visible</td><td>n/a</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
 </tr>
 </tbody>
 </table>
 
 <p>The <a>'overflow'</a> property has the same parameter values and has the
 same meaning <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visufx.html#propdef-overflow">as defined in CSS 2.1</a>
-([<a href="refs.html#ref-CSS21">CSS21</a>], section 11.1.1);
+([<a href="refs.html#ref-css2">CSS2</a>], section 11.1.1);
 however, the following additional points apply:</p>
 
 <ul>

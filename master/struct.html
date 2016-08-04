@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
 <head>
   <title>Document Structure</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -249,6 +249,8 @@ information, refer to the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060
   For embedded <a>'svg'</a> elements, they specify the size
   of the rectangular region into which the <a>'svg'</a> element
   is placed.
+  In either case, a computed style of <span class="prop-value">auto</span>
+  is treated equivalent to <span class="prop-value">100%</span>.
 </p>
 
 <p><em>Attribute definitions:</em></p>
@@ -330,7 +332,10 @@ within it, to an arbitrary depth.</p>
     </tr>
     <tr>
       <th>Resolution:</th>
-      <td><a href="http://www.w3.org/2012/01/13-svg-irc#T00-25-54">Accept having unknown elements treated as <span class='element-name'>'g'</span> for the purpose of rendering.</a></td>
+      <td><ul><li>
+        <a href="http://www.w3.org/2012/01/13-svg-irc#T00-25-54">Accept having unknown elements treated as <span class='element-name'>'g'</span> for the purpose of rendering.</a></li>
+        <li><a href="https://www.w3.org/2016/06/30-svg-minutes.html">Treat unknown elements as tspan when inside text. Presentation and inherited style apply, but nothing text-specific.</a>
+        </li></ul></td>
     </tr>
     <tr>
       <th>Purpose:</th>
@@ -349,10 +354,31 @@ within it, to an arbitrary depth.</p>
 
 <edit:elementsummary name='unknown'/>
 
-<p>The <a>SVGUnknownElement</a> interface must be used for elements in the SVG namespace that are not defined by this specification.</p>
-<p>Known elements in the SVG namespace that occur in places where SVG's content model doesn't explicitly allow it must not render.</p>
-<p>Unknown elements in the SVG namespace render as if the unknown element was a <a>'g'</a> element.</p>
-<p>Known and unknown elements in other namespaces that occur as a child of any SVG element except <a>'foreignObject'</a>, must not render unless
+<p class="issue" data-issue="70">Treating unknown elements as a generic container element, resulting in the
+rendering of their child trees, and assigning the SVGUnknownElement interface to
+unknown elements are both at risk, with no known implementations.</p>
+
+<p>Unknown elements are all elements that are in the SVG namespace that are not
+defined by this specification or any SVG module. The <a>SVGUnknownElement</a>
+interface must be used for unknown elements.</p>
+  
+<p>Unknown elements in the SVG namespace are <a>renderable elements</a> and <a>container elements</a>.
+They must render as if the unknown element
+were replaced with a <a>'g'</a> element or <a>'tspan'</a>, according to context. 
+Any global attribute or property that is valid on any SVG graphics element 
+is also valid on unknown elements, and must be processed as normal.
+This includes conditional processing attributes, ARIA attributes, data attributes,
+and the <a>'lang'</a>, <a>'id'</a>, <a>'class'</a>, <a>'tabindex'</a> and <a>'style attribute'</a>.
+Styles specified on unknown elements must be inherited by
+their child elements according to the normal rules for inheritance for each style property.  
+</p>
+  
+<p>Known and unknown elements in other namespaces that occur as a child of any
+SVG element except <a>'foreignObject'</a>, must not render unless
+explicitly stated otherwise in this specification.</p>
+  
+<p>Known elements in the SVG namespace that occur in places where SVG's content
+model doesn't explicitly allow it must not render unless
 explicitly stated otherwise in this specification.</p>
 
 <p>Consequently, in the following example:</p>
@@ -369,16 +395,13 @@ the <span class="element-name">'div'</span> element and its contents must not re
 
 <edit:example href='images/struct/unknownelms01.svg' image='no' link='yes'/>
 
-<p class="issue" data-issue="64">Do we need to mention anything about attributes, properties and such on SVGUnknownElements?</p>
-<p class="issue" data-issue="65">Should SVGUnknownElement be a <a>container element</a>?</p>
-
 <h2 id="Head">Defining content for reuse, and the <span class='element-name'>'defs'</span> element</h2>
 
 <h3 id="Overview">Overview</h3>
 
 <p>SVG allows graphical objects to be defined for later reuse.
 To do this, it makes extensive use of <a>URL references</a>
-[<a href="refs.html#ref-RFC3987">RFC3987</a>] to these other objects.
+[<a href="refs.html#ref-rfc3987">rfc3987</a>] to these other objects.
 For example, to fill a rectangle with a linear gradient, you first
 define a <a>'linearGradient'</a> element and give it an ID, as in:</p>
 
@@ -395,12 +418,13 @@ define a <a>'linearGradient'</a> element and give it an ID, as in:</p>
 
 <p>Some types of element, such as gradients, will not by themselves produce a graphical result. They can therefore be placed anywhere convenient. However, sometimes it is desired to define a graphical object and prevent it from being directly rendered. it is only there to be referenced elsewhere. To do this, and to allow convenient grouping defined content, SVG provides the <span class='element-name'>'defs'</span> element.</p>
 
-<p>It is recommended that, wherever possible, referenced elements be defined
-inside of a <a>'defs'</a> element. Among the elements that are always
-referenced: <a>'clipPath'</a>, <a>'cursor element'</a>,
-<a>'filter element'</a>, <a>'linearGradient'</a>, <a>'marker element'</a>,
-<a>'mask element'</a>, <a>'pattern'</a>, <a>'radialGradient'</a> and
-<a>'symbol'</a>.</p>
+<p>It is recommended that, where possible, referenced elements be defined
+prior to the elements that use them, in document order.
+Collecting all referenced elements 
+inside of a single <a>'defs'</a> element
+near the top of the file
+can make the markup easier to read and understand.
+</p>
 
 <h3 id="DefsElement">The <span class='element-name'>'defs'</span> element</h3>
 
@@ -417,13 +441,14 @@ of a <a>'defs'</a>.</p>
 <a>'g'</a> can also be a child of a <a>'defs'</a>, and vice versa.</p>
 
 <p>Elements that are descendants of a <a>'defs'</a> are not rendered directly;
-they are prevented from becoming part of the <a>rendering tree</a>
-just as if the <a>'defs'</a> element were a <a>'g'</a> element and the
-<a>'display'</a> property were set to <span class="prop-value">none</span>.
+the <a>'display'</a> value for the <a>'defs'</a> element
+must always be set to <span class="prop-value">none</span>
+by the <a>user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
 Note, however, that the descendants of a <a>'defs'</a> are
 always present in the source tree and thus can always be
 referenced by other elements; thus, the value of the <a>'display'</a>
-property on the <a>'defs'</a> element or any of its descendants does not
+property on the <a>'defs'</a> element does not
 prevent those elements from being referenced by other elements.</p>
 
 <h2 id="DescriptionAndTitleElements">The <span class='element-name'>'desc'</span>
@@ -437,15 +462,7 @@ and <span class='element-name'>'title'</span> elements</h2>
   <edit:elementcategory name='descriptive'/>.</dd>
 </dl>
 
-<div id='DescElement'>
-<edit:elementsummary name='desc'/>
-</div>
-
-<div id='TitleElement'>
-<edit:elementsummary name='title'/>
-</div>
-
-<p class="note">The attribute <a>'lang'</a> added to allow internationalization
+<p class="note">Multilingual descriptive text selection, based on the <a>'lang'</a> attribute, was added to allow internationalization
 of the <a>'desc'</a> and <a>'title element'</a> elements.</p>
 
 <p class="annotation">New in SVG 2. Adding 'lang' resolved at Rigi Kaltbad face-to-face.
@@ -455,72 +472,129 @@ Removed text that limited number of 'desc' and 'title' elements. Status: Done.</
 <p>Any <a>container element</a> or <a>graphics element</a> in an SVG document
 can have zero or more <a>'desc'</a> and/or <a>'title'</a> elements as children,
 whose content is text. <a>'desc'</a> and <a>'title'</a> elements are
-not visually rendered as part of the graphics.</p>
+not visually rendered as part of the graphics.
+The <a>'display'</a> value for the <a>'title'</a> and <a>'desc'</a> elements
+must always be set to <span class="prop-value">none</span>
+by the <a>user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
+</p>
 
 <p>Multiple sibling <a>'desc'</a> or <a>'title'</a> elements must have
-different <a>'lang'</a> attributes. The element whose <a>'lang'</a> attribute best
-matches the language set by the user agent will be used as the <a>'title'</a> or
-<a>'desc'</a>. If no match exists, the first element must be used. If multiple equally
-valid matches exist, the first match is used.</p>
+different languages, 
+as defined using a <a>'lang'</a> attribute (or <code>xml:lang</code> attribute) on the descriptive element or an ancestor. 
+The user agent must select the element of each type whose language best
+matches language preferences set by the user. 
+A descriptive element with an empty-string language tag 
+(indicating no language, for example a text alternative consisting of emoji symbols) 
+is a lowest-priority match for any user, ranked below all user-specified language preferences.
+If multiple equally valid matches exist, the first match should be used.
+If no match exists for either 'title' or 'desc', the first element of that type must be selected.</p>
+  
+<div class="example">
+  <p>The following example shows alternative language titles on a re-used star icon,
+    inline in an HTML document.  
+    The example assumes that the HTML document as a whole has a correctly-declared language of <code>en</code> (English without a specified country code).
+  </p>
+  <pre>
+&lt;svg&gt;
+  &lt;use href="#star"&gt;
+    &lt;title&gt;Favourite&lt;/title&gt;
+    &lt;title lang="en-us"&gt;Favorite&lt;/title&gt;
+    &lt;title lang="nl"&gt;Favoriet&lt;/title&gt;
+    &lt;title lang=""&gt;★&lt;/title&gt;
+  &lt;/use&gt;
+&lt;/svg&gt;
+  </pre>
+  <p>
+    The first <code>title</code> element inherits the language of the document (<code>en</code>); the others have explicitly-declared languages for each element.
+    If the user's preferred language (out of those provided) is American English, the icon title is the American spelling "Favorite". 
+    If the user's preferred language is Dutch, the icon title is "Favoriet". 
+    If the user's preference list includes generic English ranked higher than Dutch, the title is "Favourite" with British spelling.
+    If the user does not understand either Dutch or English, the title will be the star symbol character—which is not ideal (most screen readers will read it as a localized version of "black star"), but better than no text alternative at all.
+  </p>
+  <p class="note">
+    Authors should be aware that SVG 1.1-supporting user agents 
+    that have not yet implemented multi-lingual descriptive text
+    will normally select the first element of each type, regardless of user preferences.
+    SVG 1.1 user agents may also fail to recognize a <code>title</code> element that is not the first child of its parent,
+    or a <code>desc</code> element that has previous siblings that are not other descriptive elements.
+  </p>
+</div>
 
 <p class="issue" data-issue="67">The use of more than one <a>'title'</a> or <a>'desc'</a> element to
 provide localised information is at risk, with no known implementations.</p>
+
+<p>User agents must make the text content of selected 'title' and 'desc' elements available to platform accessibility APIs as part of the name and description computation for the parent element, as defined in the <a href="http://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings [SVG-AAM]</cite></a> specification.</p>
+  
+<p>Inclusion of any 'title' or 'desc' elements as a direct child of a <a>rendered element</a> indicates that the rendered element is of semantic importance in the graphic.  
+Authors should not, and authoring tools must not, include empty 'title' or 'desc' elements with no text content or whitespace-only text content, 
+as this will result in a nameless object being presented to assistive technology users.
+</p>
+  
+<p>
+If an individual graphic element has no meaning on its own, 
+alternative text should instead be provided for the nearest container element that describes a meaningful object.
+Authors should use grouping (<a>'g'</a>) elements to structure their drawing elements into meaningful objects, and name those groups with <a>'title'</a>.
+Conversely, if a container object is used simply to apply styles or layout, 
+and neither defines an object nor provides meaningful grouping structure,
+it does not need alternative text.</p>
+  
+<p>
+  Descriptive text elements whose parent is <a>not rendered</a> may be used by authors or authoring tools as reference information; authors are warned that this data is not normally available to end users viewing the graphic through assistive technologies.  Nonetheless, a <a>non-rendered element</a> may be referenced as part of the accessible name or description of a rendered element (as defined in <a href="http://www.w3.org/TR/svg-aam-1.0/">SVG-AAM</a>), and the recursive computation will use descriptive child elements of the referenced element.
+</p>
+
+<div id='TitleElement'>
+<edit:elementsummary name='title'/>
+</div>
 
 <p>The <a>'title'</a> child element represents a short text alternative for the
 element.</p>
 
 <p>On a link, this could be the title or a description of the target resource; on an
-image or drawing object, it could be the image credit or short description of the
-object; on interactive content, it could be a label for, or instructions for, use
+image or drawing object, it could be a short description of the
+graphic; on interactive content, it could be a label for, or instructions for, use
 of the element; and so forth.</p>
 
-<p>Interactive User agents commonly render <a>'title'</a> elements as
+<p>Authors should not provide redundant information in a <a>'title'</a> element
+if there is also a visible label for the drawing element (e.g., using a <a>'text'</a> element).
+Instead, the visual label should be associated with the drawing element 
+using an <a>'aria-labelledby'</a> attribute.</p>
+
+<p>Interactive user agents should make the plain text content of <a>'title'</a> elements available in response to user interaction, in a manner consistent with platform conventions; 
+existing user agents commonly render <a>'title'</a> elements as
 a tooltip on hovering the parent element.</p>
-
-<p>User agents should make title and desc elements available to platform accessibility APIs
-as per SVG-AAM.</p>
-
-<p>Authors should not provide both a visible label for a drawing element by using a <a>'text'</a>
-element, and a <a>'title'</a> element, as they will be both presented, redundantly, to users.</p>
-
-<p>The <a>'desc'</a> element represents more detailed textual
-information for the element such as a description. This is typically exposed to assistive
-technologies to provide more detailed information, such as help information
-about the element.</p>
-
-<p>Authors should provide a <a>'title'</a> child element to the outermost svg
+  
+<p>Authors should provide a <a>'title'</a> child element to the root svg
 element within a stand-alone SVG document. Since users often consult documents
 out of context, authors should provide context-rich titles. Thus, instead of a
 title such as "Introduction", which doesn't provide much contextual background,
 authors should supply a title such as "Introduction to Medieval Bee-Keeping"
 instead. For reasons of accessibility, user agents should always make the
-content of the ‘title’ child element to the outermost svg element available to
-users.</p>
+content of the ‘title’ child element to the root svg element available to
+users. 
+However, this is typically done through other means than the tooltips used for nested SVG and graphics elements, e.g., by displaying in a browser tab.</p>
+
+<div id='DescElement'>
+<edit:elementsummary name='desc'/>
+</div>
+
+<p>The <a>'desc'</a> element represents more detailed textual
+information for the element such as a description. This is typically exposed to assistive
+technologies to provide more detailed information, such as a description of the visual appearance of a graphic or help to explain the functionality of a complex widget.  It is not typically available to other users, so should not be used for essential instructions.</p>
+
 
 <p>
-Unlike the desc element, authors also have the ability to associate more
-detailed information with content that includes visible text. This can be
-achieved by applying <a>'aria-describedby'</a> to the element, or container of
-elements being described and passing an ID reference to content that includes
-text that describes the element in question. However, if the text describing
-the object is hidden the text within the description would be exposed to
-assistive technologies as detailed text information, similar to a descendant
-<a>'desc'</a> element. The <a>'aria-describedby'</a> attribute takes precedence
-over the child <a>'desc'</a> when providing a description, consequently authors
-should only use <a>'aria-describedby'</a> when an element is described by
-visible text on the screen, otherwise the use of a child <a>'desc'</a> is
-preferred.
+Authors may associate detailed information, including visible text, with part of the graphic
+using <a>'aria-describedby'</a> attribute 
+(on the described element or a parent container),
+with the value being an ID reference to one or more SVG or HTML elements containing the description. 
+The <a>'aria-describedby'</a> attribute takes precedence
+over the child <a>'desc'</a> when providing a description.
+If an element has both visible description and a child <a>'desc'</a> element providing supplementary information, 
+authors should explicitly include the <a>'id'</a> of the element itself in its own <a>'aria-describedby'</a> list, in order to concatenate the two descriptions together.
 </p>
-
-<p>Alternate presentations are possible, both visual and
-aural, which display the <a>'desc'</a> and <a>'title'</a> elements but do not
-display <a>'path'</a> elements or other <a>graphics elements</a>. For deep
-hierarchies, and for following <a>'use'</a> element references, it is
-sometimes desirable to allow the user to control how deep they drill down into
-descriptive text.</p>
-
-</div> <!--  class="ready-for-wg-review" -->
-
+  
+<!--
 <p>The following is an example. In typical operation, the SVG user agent would
 not render the <a>'desc'</a> and <a>'title'</a> elements but would render the
 remaining contents of the <a>'g'</a> element.</p>
@@ -538,14 +612,14 @@ remaining contents of the <a>'g'</a> element.</p>
   </g>
 </svg>
 ]]></pre>
+-->
+<p>Description and title elements may contain marked-up text
+from other namespaces.
+However, authors should not rely on such markup to provide meaning to alternative text; 
+only the plain text content is currently required to be exposed to assistive technologies.</p>
 
-<p>Description and title elements can contain marked-up text
-from other namespaces.</p>
 
-<p class="issue" data-issue="23">We should say what purpose including other-namespaced
-markup in <a>'title'</a> and <a>'desc'</a> has.  If it is just that
-these are basically metadata extension points for other profiles or
-uses of SVG, then we should say that.</p>
+</div> <!--  class="ready-for-wg-review" -->
 
 
 <h2 id="MetadataElement">The <span class="element-name">'metadata'</span> element</h2>
@@ -561,6 +635,13 @@ expressed in a manner conforming with the <a href="http://www.w3.org/TR/2006/REC
 elements in any particular way. </p>
 
 <edit:elementsummary name='metadata'/>
+  
+<p>Metadata content is not directly rendered;
+the <a>'display'</a> value for the <a>'metadata'</a> element
+must always be set to <span class="prop-value">none</span>
+by the <a>user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
+</p>
 
 <p>Here is an example of how metadata can be included in an SVG
 document. The example uses the Dublin Core version 1.1 schema.
@@ -603,9 +684,37 @@ based on RDF, can be used also.)</p>
 </svg>
 ]]></pre>
 
+<div class="ready-for-wg-review">
 <h2 id="SymbolElement">The <span class='element-name'>'symbol'</span> element</h2>
 
+<p>The <a>'symbol'</a> element is used to define graphical templates
+which can be instantiated by a <a>'use'</a> element but which are not rendered
+directly.</p>
+  
+<p>A <a>'symbol'</a> establishes a nested coordinate system 
+  for the graphics it contains.
+  When a symbol is instantiated 
+  as the <a>referenced element</a> of a <a>'use'</a> element,
+  it is therefore rendered very similarly to a nested <a>'svg'</a> element.</p>
+
 <edit:elementsummary name='symbol'/>
+  
+<p>The <a>'x'</a>, <a>'y'</a>, <a>'width'</a>, and <a>'height'</a> geometry properties 
+  have the same effect as on an <a>'svg'</a> element,
+  when the <a>'symbol'</a> is instantiated by a <a>'use'</a> element.
+  In particular, if <a>'width'</a> and <a>'height'</a> 
+  compute to <span class="prop-value">auto</span>
+  (and are not over-ridden by values on the instantiating <a>'use'</a> element),
+  then they will be treated as a value of <span class="prop-value">100%</span>. 
+</p>
+  
+<p class="note">
+  New in SVG 2.
+  Allowing geometry properties to be specified on a symbol
+  provides a more consistent rendering model,
+  and allows authors to set a default size for each symbol
+  (which may still be over-ridden by attributes on the <a>'use'</a> element).
+</p>
 
 <edit:with element='symbol'>
 
@@ -623,13 +732,13 @@ based on RDF, can be used also.)</p>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="symbol" id="SymbolElementRefXAttribute">refX</dfn></td>
         <td><a>&lt;length&gt;</a> | left | center | right</td>
-        <td>0</td>
+        <td>(none)</td>
         <td>yes</td>
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="symbol" id="SymbolElementRefYAttribute">refY</dfn></td>
         <td><a>&lt;length&gt;</a> | top | center | bottom</td>
-        <td>0</td>
+        <td>(none)</td>
         <td>yes</td>
       </tr>
     </table>
@@ -658,10 +767,36 @@ based on RDF, can be used also.)</p>
     <p>
       The <a>'refX'</a> and <a>'refY'</a> attributes define the
       reference point of the symbol which is to be placed exactly at
-      the symbol's position as defined by the <a>'use'</a> element.
-      They are interpreted as being in the coordinate system of the
+      the symbol's <span class="prop-value">x,y</span> positioning coordinate, 
+      as defined by the cumulative effect of the <a>'x'</a> and <a>'y'</a>
+      properties and any transformations on the <a>'symbol'</a> 
+      and its <a>host</a> <a>'use'</a> element.
+    </p>
+    <p>
+      Keyword values have the same meaning as for the 
+      <a>'marker/refX'</a> and <a>'marker/refY'</a> attributes on the <a>'marker element'</a> element,
+      resolving to 0%, 50%, or 100% in the applicable direction.
+    </p>
+    <p>
+      Unlike other positioning attributes,
+      <a>'refX'</a> and <a>'refY'</a> 
+      are interpreted as being in the coordinate system of the
       symbol contents, after application of the <a>'viewBox'</a>
       and <a>'preserveAspectRatio'</a> attributes.
+      If one or both of the attributes is not specified,
+      no adjustment is made in the corresponding dimension,
+      and the top or left side of the symbol's rectangular viewport region
+      (regardless of the <a>'viewBox'</a> coordinates)
+      is positioned at the <span class="prop-value">x,y</span> point.
+    </p>
+    
+    <p class="note">
+      For backwards compatibility,
+      the behavior when <a>'refX'</a> and <a>'refY'</a>
+      are not specified on a <a>'symbol'</a>
+      is different from when they are specified with a value of <span class="attr-value">0</span>,
+      and therefore different from the behavior 
+      when equivalent attributes are not specified on a <a>'marker element'</a>.
     </p>
 
   </dd>
@@ -669,14 +804,17 @@ based on RDF, can be used also.)</p>
 
 <h3 id="SymbolNotes">Notes on symbols</h3>
 
-<p>The <a>'symbol'</a> element is used to define graphical template objects
-which can be instantiated by a <a>'use'</a> element but are not rendered
-directly.</p>
-
 <p>The use of <a>'symbol'</a> elements for graphics that are used multiple
 times in the same document adds structure and semantics.
 Closely related to the <a>'symbol'</a> element are the
-<a>'marker element'</a> and <a>'pattern'</a> elements.</p>
+<a>'marker element'</a> and <a>'pattern'</a> elements;
+all three define a container of graphical content
+that can be rendered repeatedly at various positions and scales in the SVG.
+However, while <a>re-used graphics</a> in a pattern and marker
+provide a graphical effect on another element,
+the content in a <a>'symbol'</a> will be embedded
+as fully interactive content, within a <a>use-element shadow tree</a>.
+</p>
 
 <p>The <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
 the <a>'overflow'</a> property for <a>'symbol element'</a> elements to
@@ -685,15 +823,38 @@ path to be created at the bounds of symbol's SVG viewport.  Unless the
 <a>'overflow'</a> property is overridden, any graphics within the symbol which
 goes outside of the symbol's SVG viewport will be clipped.</p>
 
-<p><a>'symbol'</a> elements must never be rendered directly; their only usage is
-as something that can be referenced using the
-<a>'use'</a> element. The <a>'display'</a> property does not apply
+<p><a>'symbol'</a> elements must never be rendered directly; 
+their only usage is as something that can be referenced 
+using the <a>'use'</a> element. 
+<!--
+The <a>'display'</a> property does not apply
 to the <a>'symbol'</a> element; thus, <a>'symbol'</a> elements are
 not directly rendered even if the <a>'display'</a> property is set to a
 value other than <span class="prop-value">none</span>, and <a>'symbol'</a>
 elements are available for referencing even when the
 <a>'display'</a> property on the <a>'symbol'</a> element or any of its
-ancestors is set to <span class="prop-value">none</span>.</p>
+ancestors is set to <span class="prop-value">none</span>.
+-->
+The user agent must set the 
+<a>'display'</a> property on the <a>'symbol'</a> element
+to <span class="prop-value">none</span>,
+as part of the <a>user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
+</p>
+  
+<p>The generated <a>instance</a> of a <a>'symbol'</a> 
+that is the direct <a>referenced element</a> of a <a>'use'</a> element 
+must always have a computed value of <span class="prop-value">inline</span> 
+for the <a>'display'</a> property.
+In other words, it must be rendered whenever the host <a>'use'</a> element is rendered.
+The <a>user agent style sheet</a> again defines this
+declaration to have importance over any other CSS rule or presentation attribute.
+Any other <a>'symbol'</a> that is cloned
+to create an <a>element instance</a>
+within the <a>use-element shadow tree</a>
+behaves as a symbol definition, and must not be rendered.
+</p>
+
 
 </edit:with>
 
@@ -729,56 +890,44 @@ ancestors is set to <span class="prop-value">none</span>.</p>
 <edit:elementsummary name='use'/>
 
 <p>The <a>'use'</a> element
-references another element and indicates that a copy of the <a>graphical
-contents</a> of that element is rendered at that given point
-in the document.  
-These <a>re-used graphics</a> inherit styles from the <a>'use'</a> element
-and in certain cases can be re-sized.
-However, they remain linked to the referenced source and reflect DOM mutations, animations, and style changes in the original.
+references another element, a copy of which
+is rendered in place of the <a>'use'</a> in the document.
+The <a>referenced element</a> may be a <a>container element</a>,
+in which case a copy of 
+the complete SVG document subtree rooted at that element is used.
+</p>
+<p>
+The cloned content inherits styles from the <a>'use'</a> element
+and can be the target of user events.
+However, these cloned <a>element instances</a> remain linked to the referenced source 
+and reflect DOM mutations in the original.
+In addition, all style rules that apply in the scope of the referenced element
+also apply in the scope of the cloned <a>shadow tree</a>.
 </p>
     
-<h3 id="UseAttributes">Attributes</h3>
-    
-<dl class="attrdef-list">
-  <dt>
-    <table class="attrdef def">
-      <tr>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Initial value</th>
-        <th>Animatable</th>
-      </tr>
-      <tr>
-        <td><dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementXAttribute">x</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementYAttribute">y</dfn></td>
-        <td><a>&lt;length&gt;</a></td>
-        <td>0</td>
-        <td>yes</td>
-      </tr>
-      <tr>
-        <td><dfn data-dfn-type="element-attr" data-dfn-for="use" id="UseElementWidthAttribute">width</dfn>, <dfn id="UseElementHeightAttribute">height</dfn></td>
-        <td><a>&lt;length&gt;</a></td>
-        <td>(see below)</td>
-        <td>yes</td>
-      </tr>
-    </table>
-  </dt>
-  <dd>
+
     <p>The <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a>
-    attributes specify the positioning of the referenced element.
-    The <a>'width'</a> and <a>'height'</a> attributes have different
-    <a>initial values</a> depending on the type of the referenced element:</p>
-    <dl class='switch'>
-      <dt><a>'svg'</a></dt>
-      <dd>The <a>initial values</a> are the <a>'width'</a> and <a>'height'</a>
-      presentation attribute values from the referenced <a>'svg'</a> element.</dd>
-      <dt>anything else</dt>
-      <dd>The <a>initial values</a> are <span class='attr-value'>'100%'</span>.</dd>
-    </dl>
-    <p>A negative value for <a>'width'</a> or <a>'height'</a> is an error (see
-    <a href="implnote.html#ErrorProcessing">Error processing</a>).  If
-    <a>'width'</a> or <a>'height'</a> is zero then rendering of the
-    <a>'use'</a> element is disabled.</p>
-  </dd>
+    geometric properties specify the positioning of the referenced element.
+    The <a>'width'</a> and <a>'height'</a> attributes 
+    only have an effect if the <a>referenced element</a>
+    defines a viewport (i.e., if it is a <a>'svg'</a> or <a>'symbol'</a>);
+    if so, a value other than <span class="prop-value">auto</span> 
+    for the <a>'use'</a> element overrides the value 
+    of the corresponding geometric property on that element.
+    </p>
+    <p>A negative value for <a>'width'</a> or <a>'height'</a>
+    must be treated as an illegal value.  
+    If <a>'width'</a> or <a>'height'</a> is zero,
+    and the properties have an effect on the <a>referenced element</a>, 
+    then rendering of that element will be disabled.</p>
+  
+    <p class="note">
+    The <a>'x'</a> and <a>'y'</a> properties 
+    affect the user coordinate system for the element.
+    See the <a href="#UseLayout">Layout</a> section for implementation details.
+    </p>
+  
+<dl class="attrdef-list">
   <dt>
     <table class="attrdef def">
       <tr>
@@ -799,296 +948,787 @@ However, they remain linked to the referenced source and reflect DOM mutations, 
     <p>An <a href="linking.html#URLReference">URL reference</a> to the
     element/fragment within an SVG document to be cloned for
     rendering.</p>
+    <p>The <a>'use'</a> element can reference an entire SVG document
+    by specifying an <a>'href'</a> value without a fragment.
+    Such references are taken to be referring to the root element
+    of the referenced document.</p>
     Refer to the common handling defined for <a
     href="linking.html#linkRefAttrs">URL reference attributes</a> and
     <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
   </dd>
 </dl>
 
-</edit:with>
-
-<h3 id="UseReUse">Re-usable graphics and the shadow tree</h3>
-
-<p>The <dfn id="TermGraphicalContents">graphical contents</dfn>
-are any <a>'svg'</a>, <a>'symbol'</a>, <a>'g'</a>, <a>graphics element</a> or
-other <a>'use'</a> elements, that a <a>'use'</a> element references.
-</p>
-
-<div class="ready-for-wider-review">
-<p>The <a>'use'</a> element can reference an entire SVG document
-by specifying an <a>'href'</a> value without a fragment.
-Such references are taken to be referring to the root element
-of the referenced document.</p>
-
-<p class="note">New in SVG 2. This allows an entire SVG document to be referenced
+<p class="note">New in SVG 2. 
+An <a>'href'</a> without a fragment allows an entire SVG document to be referenced
 without having to ensure that it has an ID on its root element.</p>
-</div>
-    
-<p>The effect of a <a>'use'</a>
-element is as if the contents of the referenced element were
-deeply cloned into a separate non-exposed DOM tree which had
-the <a>'use'</a> element as its
-parent and all of the <a>'use'</a>
-element's ancestors as its higher-level ancestors. Because the
-cloned DOM tree is non-exposed, the SVG Document Object Model
-(DOM) only contains the <a>'use'</a>
-element and its attributes. The SVG DOM does not show the
-referenced element's contents as children of <a>'use'</a> element.</p>
-
-<p>The non-exposed DOM tree must be created even if
-<span class="prop-value">'display: none'</span> is set on the <a>'use'</a> element.
-Note that <a>'script'</a> elements that get conceptually cloned into the non-exposed DOM tree
-do not execute again, and <a>'audio'</a> and <a>'video'</a> elements that may play audio
-must only do so if the <a>'use'</a> element is rendered.
-</p>
-
-<p>A <a>'use'</a> element has the
-same visual effect as if the <a>'use'</a> element were replaced by the
-following generated content:</p>
-
-<p class="issue" data-issue="36">Except that the replaced content shouldn't affect
-how styles are matched.</p>
-
+  
 <p>
-  In the generated content, the <a>'use'</a> will be replaced
-  by <a>'g'</a>, where all attributes from the <a>'use'</a> element
-  except for <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a>,
-  <a>'use/height'</a>, <a>'use/href'</a> and <a>'xlink:href'</a> are transferred
-  to the generated <a>'g'</a> element. An additional transformation
-  <span class="attr-value">translate(x,y)</span> is appended to the
-  end (i.e., right-side) of the <a>'transform'</a> property on the
-  generated <a>'g'</a>, where <span class="attr-value">x</span>
-  and <span class="attr-value">y</span> represent the values of
-  the <a>'use/x'</a> and <a>'use/y'</a> attributes on the <a>'use'</a>
-  element.
-</p>
-
-<ul>
-  <li>
-    <p>
-      <strong>If the <a>'use'</a> element references a <a>'symbol'</a> element</strong>:
-    </p>
-    <p>
-      The referenced <a>'symbol'</a> and its contents are deep-cloned
-      into the generated tree, with the exception that the
-      <a>'symbol'</a> is replaced by an <a>'svg'</a>. This
-      generated <a>'svg'</a> will always have explicit values for its
-      <a>'width'</a> and <a>'height'</a> presentation attributes. If
-      attributes <a>'use/width'</a> and/or <a>'use/height'</a> are
-      provided on the <a>'use'</a> element, then these attributes will
-      be transferred to the generated <a>'svg'</a>. If
-      attributes <a>'use/width'</a> and/or <a>'use/height'</a> are not
-      specified, the generated <a>'svg'</a> element will use values
-      of <span class='attr-value'>'100%'</span> for these attributes.
-    </p>
-  </li>
-  <li>
-    <p>
-      <strong>If the <a>'use'</a> element references an <a>'svg'</a> element:</strong>
-    </p>
-    <p>
-      The referenced <a>'svg'</a> and its contents are deep-cloned
-      into the generated tree. If attributes <a>'use/width'</a>
-      and/or <a>'use/height'</a> are provided on the <a>'use'</a>
-      element, then these values will override the corresponding
-      attributes on the <a>'svg'</a> in the generated tree.
-    </p>
-  </li>
-  <li>
-    <p>
-      <strong>Otherwise:</strong>
-    </p>
-    <p>
-      The referenced object and its contents are deep-cloned into the
-      generated tree.
-    </p>
-  </li>
-</ul>
-
-
-<div class="ready-for-wider-review">
-<p>
-The element referenced by <a>'use'</a> may be in a separate document. However,
-this specification does not define how or if the user agent will process
-stylesheets in that document, or what SVG viewport will be used for
-resolving percentages and media queries in such documents, if animations run
-in the separate document and which document controls the animation timeline. Script elements in the
-resource document must not be executed, and the corresponding conceptually cloned script elements
-must also not execute.
-</p>
-<p class="note">
-When re-using external assets, therefore, authors are advised not to include any scripts in the external
-file and to use inline styles or presentation attributes only. Percentage
-lengths should only be used if the re-used assets define their own SVG viewport
-(i.e., if the re-used element is an <a>'svg'</a> or <a>'symbol'</a>). 
-Declarative animations in external assets should not be used.
-</p>
-<p>
-User agents may restrict restrict external resource documents for security
+User agents may restrict external resource documents for security
 reasons. In particular, this specification does not allow cross-origin resource requests in <a>'use'</a>.
 A future version of this or another specification may provide a method of securely enabling cross-origin re-use
 of assets.
 </p>
-</div>
+  
+<p>When the <a>'href'</a> attribute is set
+(or, in the absence of an <a>'href'</a> attribute, an <a>'xlink:href'</a> attribute),
+the user agent must <a href="linking.html#processingURL">process the URL</a>.
+The target element that results from URL processing is the <a>referenced element</a> of the <a>'use'</a>.
+</p>
+  
+<p>If the <a>referenced element</a> that results from resolving the URL 
+  is neither an SVG element 
+  nor an HTML-namespaced element 
+  <a href="embedded.html#HTMLElements">that may be included as a child of an SVG container element</a>, 
+  then the reference is <a>invalid</a> and the <a>'use'</a> element is in error.
+</p>
+<p>
+  If the referenced element is a (shadow-including) ancestor
+  of the <a>'use'</a> element, 
+  then this is an <a>invalid circular reference</a>
+  and the <a>'use'</a> element is in error.
+</p>
+<p>
+  Otherwise, the user agent must generate a <a>shadow tree</a>
+  of <a>re-used graphics</a> to render as the contents of the <a>'use'</a> element,
+  as described in the next section, <a href="#UseShadowTree">The use-element shadow tree</a>.
+</p>
+  
+<p>A <a>'use'</a> that has an <a>unresolved</a> or <a>invalid</a> URL reference
+  is not rendered.
+  For the purpose of bounding box calculations,
+  it is equivalent to an empty container element.</p>
 
+</edit:with>
+  
+
+<h3 id="UseShadowTree">The use-element shadow tree</h3>
+  
+<p>The <a>re-used graphics</a> generated by a <a>'use'</a> element
+are defined in terms of a <a>shadow tree</a>.
+In terms of interactivity and style inheritance,
+they are therefore quite different from other types of <a>re-used graphics</a> in SVG,
+such as <a>'pattern'</a> and <a>'marker element'</a> content.
+</p>
+  
+<p>
+Elements in the shadow tree are rendered as if 
+the <a>'use'</a> element was a container and they were its children.
+However, the SVG Document Object Model (DOM) only contains 
+the <a>'use'</a> element and its attributes. 
+The SVG DOM does not include the
+element instances as children of the <a>'use'</a> element.
+</p>
+  
+<p>User agents that support scripting and the document object model
+must implement the <a>use-element shadow tree</a> as described in this section
+and in conformance with the <a href="https://www.w3.org/TR/shadow-dom/">Shadow DOM</a> specification <a href="refs.html#ref-shadow-dom">[SHADOWDOM]</a>,
+or its future replacement.
+In contrast, user agents that do <em>not</em> support 
+the dynamic interactive processing mode 
+may not need to implement all the details of the shadow DOM. 
+However, all user agents must ensure that the <a href="#UseLayout">layout</a> 
+and <a href="#UseStyleInheritance">style inheritance</a> for the re-used graphics,
+and any <a href="#UseMultimedia">multimedia</a> 
+and <a href="#UseAnimations">declarative animations</a> if applicable,
+are rendered in the same way as if the shadow DOM was implemented. 
+</p>
+  
+<p>The following definitions apply when discussing <a>'use'</a> elements 
+  and their shadow trees:</p>
+
+<dl>
+  <dt id="TermReferencedElement">referenced element</dt>
+  <dd>The element specified by the <a>'href'</a> (or <a>'xlink:href'</a>) attribute on the <a>'use'</a> element, or the root element of a document referenced by that attribute if the URL provided does not include a target fragment that links to a specific element <a>'id'</a>.</dd>
+  
+  <dt id="TermReferencedDocumentSubtree">referenced document subtree</dt>
+  <dt>referenced graphics</dt>
+  <dd>The referenced element, and all of its descendent nodes.</dd>
+  
+  <dt id="TermShadowRoot">shadow root</dt>
+  <dd>A <a>ShadowRoot</a> object,
+  a type of <a>DocumentFragment</a> node which is associated with a host <a>Element</a>,
+  and which contains the content that will be used to render that host.
+  A shadow root should be implemented in conformance with the <a href="https://www.w3.org/TR/shadow-dom/">Shadow DOM</a> specification <a href="refs.html#ref-shadow-dom">[SHADOWDOM]</a>,
+  or its future replacement.
+  </dd>
+  
+  <dt id="TermShadowHost">shadow host</dt>
+  <dt>host</dt>
+  <dd>An element that has an associated shadow root; 
+    usage is consistent the definition of <a href="https://dom.spec.whatwg.org/#concept-documentfragment-host">host</a> in the DOM standard.
+  </dd>
+  
+  <dt id="TermShadowTree">shadow tree</dt>
+  <dd>A node tree whose root is a shadow root; 
+    usage is consistent the definition of <a href="https://dom.spec.whatwg.org/#shadow-trees">shadow tree</a> in the DOM standard.
+  </dd>
+  
+  <dt id="TermUseElementShadowTree">use-element shadow tree</dt>
+  <dd>A shadow tree whose host is a <a>'use'</a> element, 
+  which contains element instances generated by cloning the referenced graphics.
+  </dd>
+  
+  <dt id="TermElementInstance">element instance</dt>
+  <dt>instance</dt>
+  <dd>An element in the <a>use-element shadow tree</a>,
+    which is generated by cloning a corresponding element in the referenced document subtree.
+  </dd>
+  
+  <dt id="TermInstanceRoot">instance root</dt>
+  <dd>The <a>element instance</a> for the referenced element;
+    it is always a direct child of the <a>'use'</a> element's shadow root.
+  </dd>
+  
+  <dt id="TermCorrespondingElement">corresponding element</dt>
+  <dd>For each element instance, 
+    the element in the referenced document subtree from which it is cloned.</dd>
+  
+  <dt id="TermCorrespondingUseElement">corresponding use element</dt>
+  <dd>For each element instance, 
+    the <a>'use'</a> element which causes it to be rendered in the document.
+    This is the instance's shadow root's host <a>'use'</a> element 
+    <em>if</em> that element is not itself an element instance within a <a>'use'</a> element shadow tree, 
+    or is that element's corresponding use element otherwise,
+    recursively exiting shadow trees as many times as necessary 
+    to reach a <a>'use'</a> element that was not itself generated 
+    as part of the shadow tree of another <a>'use'</a> element.
+  </dd>
+</dl>
+    
+<p>When the user agent successfully resolves a <a>'use'</a> element 
+to identify a <a>referenced element</a>,
+the user agent must create a 
+<a>use-element shadow tree</a> whose host is the <a>'use'</a> element itself.
+The shadow tree must be created even if
+the <a>'use'</a> element is not rendered
+because it is a descendent of a <a>never-rendered element</a>,
+because of conditional processing,
+or because of the <a>'display'</a> property being set to <span class="prop-value">none</span>
+on it or an ancestor element.
+</p>
+  
+<p>
+Each node in the shadow tree is an <a>instance</a> of a corresponding node 
+from the <a>referenced document subtree</a>.
+The shadow nodes all descend from the <a>instance root</a>, 
+which is the instance of the <a>referenced element</a>,
+and which itself is a direct child of the <a>shadow root</a> node.
+</p>
+<p>
+The shadow tree is open (inspectable by script), but read-only.
+Any attempt to directly modify the elements, attributes, and other nodes in the shadow tree
+must throw a <code>NoModificationAllowedError</code>.
+</p>
+  
+<p>
+Within a <a>use-element shadow tree</a>,
+<a>'script'</a> elements are inert (do not execute);
+<a>'audio'</a> and <a>'video'</a> elements 
+are subject to the limitations specified in the <a href="#UseMultimedia">Multimedia</a> section.
+</p>
+  
+<p class="note">
+  Previous versions of SVG restricted the contents
+  of the shadow tree to SVG graphics elements.
+  This specification allows any valid SVG document subtree
+  to be cloned.
+  Cloning non-graphical content, however,
+  will not usually have any visible effect.
+</p>
+  
+<p>
+If the <a>referenced element</a> is in an external file,
+then all <a>URL references</a> in attributes and style properties
+must be made absolute as described in <a href="linking.html#processingURL-absolute">Generating the absolute URL</a>,
+before copying the value to the <a>element instances</a>.
+The shadow tree itself uses the same document base URL
+as the document that includes it.
+</p>
+  
+<p>
+The user agent must ensure that 
+all mutations to the <a>referenced document subtree</a> are reflected in the shadow tree.
+This includes changes to elements, attributes, and text and other nodes.
+In addition, changes to the stylesheets in effect for the referenced graphics
+must be reflected in changes to the stylesheets in the shadow tree's scope,
+as described futher in the section on <a href="#UseStyleInheritance">style inheritance</a>.
+</p>
+  
+<p>
+If either the <a>'use'</a> element or the <a>referenced element</a> is altered
+in a way that causes the <a>'use'</a> element's URL reference to become <a>unresolved</a> again,
+then the entire shadow tree for that use element is discarded.
+</p>
 
 <p>When a <a>'use'</a> references
 another element which is another <a>'use'</a> or whose content contains a
-<a>'use'</a> element, then the deep
+<a>'use'</a> element, then the shadow DOM
 cloning approach described above is recursive. However, a set
 of references that directly or indirectly reference a element
-to create a circular dependency is an error, as described in <a
-href="#Head">References and the <span class='element-name'>'defs'</span> element</a>.</p>
+to create a circular dependency is an <a>invalid circular reference</a>.
+The <a>'use'</a> element or element instance
+whose shadow tree would create the circular reference
+is in error and must not be rendered by the user agent.</p>
 
     
-<h3 id="UseLayout">Layout</h3>
+<h3 id="UseLayout">Layout of re-used graphics</h3>
 
-<p>The <a>'use'</a> element has
-optional attributes <a>'use/x'</a>, <a>'use/y'</a>, <a>'use/width'</a> and <a>'use/height'</a> which are used to map the
-graphical contents of the referenced element onto a rectangular
-region within the current coordinate system.</p>
+<p>The value of the <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> properties
+on a <a>'use'</a> element 
+are used to position the re-used graphics
+and to set the viewport size 
+if the <a>referenced element</a> defines a nested viewport.
+The effect of these properties on a <a>'use'</a> element
+is notably different from their effect on a <a>graphics element</a>,
+or from their effect in CSS box layout.
+</p>
+  
+<p>
+  The <a>'x'</a> and <a>'y'</a> properties define
+  an additional transformation 
+  (<span class="attr-value">translate(x,y)</span>,
+  where <span class="attr-value">x</span>
+  and <span class="attr-value">y</span> represent the computed value of the corresponding property)
+  to be applied to the <a>'use'</a> element,
+  after any transformations specified with other properties
+  (i.e., appended to the right-side of the transformation list).
+</p>
+  
+<div class="note">
+  <p>
+  For historical reasons, 
+  the supplemental transformation is applied to the <a>'use'</a> element itself,
+  rather than solely to the re-used content in the shadow tree.
+  This affects the coordinate system used for
+  any masks, clipping paths, or filters
+  applied to the <a>'use'</a> element
+  and calculated in <span class="attr-value">userSpaceOnUse</span> units.
+  </p>
+  <p>
+  To apply <span class="attr-value">userSpaceOnUse</span> graphical effects in an un-transformed coordinate space,
+  while also using the <a>'x'</a> and <a>'y'</a> to position the graphics,
+  authors can nest the <a>'use'</a> element inside a <a>'g'</a>,
+  and apply the graphical effects to the <a>'g'</a> element.
+  </p>
+</div>
+  
+<p>
+  The <a>'width'</a> and <a>'height'</a> properties 
+  on the <a>'use'</a> element
+  override the values for the corresponding properties
+  on a referenced <a>'svg'</a> or <a>'symbol'</a> element
+  when determining the used value for that property on the <a>instance root</a> element.
+  However, if the computed value for the property on the <a>'use'</a> element is <span class="prop-value">auto</span>,
+  then the property is computed as normal for the element instance.
+</p>
+<p>
+  These properties can therefore be used to scale a graphic
+  that defines its own coordinate system,
+  each time it is re-used. 
+  Because <span class="prop-value">auto</span> is the initial value,
+  if dimensions are not explicitly set on the <a>'use'</a> element,
+  the values set on the <a>'svg'</a> or <a>'symbol'</a> will be used as defaults.
+</p>
+<p>
+  The <a>'width'</a> and <a>'height'</a> properties 
+  on the <a>'use'</a> element have no effect 
+  if the <a>referenced element</a> does not
+  <a href="coords.html#EstablishingANewSVGViewport">establish a new viewport</a>.
+  In particular, the <a>'use'</a> element does not itself establish a new viewport,
+  and therefore does not affect the interpretation of percentages in the re-used graphics.
+</p>
+  
+<p>
+  In all other ways,
+  rendering and layout of elements within the 
+  <a>use-element shadow tree</a>
+  occurs as if the <a>'use'</a> element was a container for its shadow content.
+  In particular, unless elements within the shadow tree establish a new viewport, 
+  they must be drawn in the coordinate system in which the <a>'use'</a> element is defined
+  (including any cumulative transformations).
+  This affects the interpretation of percentage lengths,
+  and also graphical effects with <span class="prop-value">userSpaceOnUse</span> units.
+</p>
     
-<h3 id="UseStyleInheritance">Style Inheritance</h3>
+<h3 id="UseStyleInheritance">Style Scoping and Inheritance</h3>
+  
+<p>The <a>use-element shadow tree</a>, like other shadow trees,
+  exhibits style encapsulation, 
+  as defined in the <a href="https://www.w3.org/TR/css-scoping-1/">CSS Scoping</a> module <a href="refs.html#ref-css-scoping-1">[css-scoping-1]</a>.
+  This means that elements in the shadow tree inherit styles
+  from its <a>host</a> <a>'use'</a> element,
+  but that style rules defined in the outer document 
+  do not match the elements in the shadow tree.
+  Instead, the shadow tree maintains its own list of stylesheets,
+  whose CSS rules are matched against elements in the shadow tree.
+</p>
+  
+<p class="note">
+  Presentation attributes and the <a>'style attribute'</a> attribute
+  are cloned from the elements in the <a>referenced graphics</a>
+  into the <a>element instances</a>
+  in the same manner as other attributes.
+</p>
+  
+<p>
+  When the <a>referenced element</a>
+  is from the same document as the <a>'use'</a> element,
+  the same document stylesheets will apply in
+  both the original document and the shadow tree document fragment.
+  Any changes to the stylesheets in the main document
+  also affect the shadow tree;
+  the <code>StyleSheetList</code> object accessed through the
+  document and shadow root document fragment's 
+  <code>styleSheets</code> properties must be identical.
+  If a <a>'style element'</a> element is duplicated
+  as part of the <a>referenced document subtree</a>,
+  then the <code>styleSheet</code> property on the <a>element instance</a>
+  points to the same object as for the <a>corresponding element</a>.
+</p>
+  
+<p>
+  When the <a>referenced element</a>
+  is from an external document, 
+  the stylesheet objects generated when processing that document
+  apply to the shadow tree, and are read-only.
+  All <a>URL references</a> in the stylesheet,
+  including fragment-only references,
+  must be made absolute, relative to the URL of the document
+  that contains the <a>referenced element</a>. 
+  User agents may re-use the same stylesheet objects for any shadow trees
+  that reference that same external document.
+</p>
+  
+<p>
+  Style rules that are scoped to the shadow tree
+  cannot normally affect any elements in the main document.
+  Similarly, style rules in the main document can only
+  affect the shadow tree elements by changing inherited values. 
+  However, <a href="https://www.w3.org/TR/css-scoping-1/">CSS Scoping</a> 
+  defines special selectors for styling the <a>host</a> element from within the shadow tree,
+  or for adjusting styles within the shadow tree
+  in response to changes in the host's context
+  <a href="refs.html#ref-css-scoping-1">[css-scoping-1]</a>.
+</p>
+  
+<p>
+  CSS media queries within a shadow tree's scope
+  are evaluated using the same device features and dimensions
+  as the corresponding "light" document
+  (that is, the document that contains the <a>corresponding use element</a>
+  for the shadow tree, after recursively exiting all nested shadow trees).
+</p>
+  
+<div class="note">
+  <p>
+    In most cases, 
+    the <a>element instance</a> in the shadow tree will match the same style rules
+    as its <a>corresponding element</a> in the original document.
+    However, if a CSS rule uses a <a href="https://drafts.csswg.org/selectors/#complex">complex selector</a>
+    to match an element based on its ancestors or siblings,
+    and those ancestors or siblings are not cloned as part of the shadow tree,
+    then that rule would no longer match the <a>element instance</a>.
+    Similarly, child-indexed pseudo-classes 
+    such as <code>nth-of-type</code> and <code>nth-child</code>
+    may apply to one element but not the other.
+    This represents a change 
+    from how style cloning was defined in previous versions of SVG.
+  </p>
+  
+  <p>
+    The following example demonstrates both the consistent and changed style-matching rules.
+    The circle on the left is re-used to draw the circle on the right.
+    The original circle has styles set in various ways:
+  </p>
+  <ul>
+    <li><a>'stroke-width'</a> (20) is set in a presentation attribute on the circle itself.</li>
+    <li><a>'stroke-opacity'</a> (0.7) is set via a CSS rule with a simple selector matching the circle tag name.</li>
+    <li><a>'stroke'</a> color (green) is set using a complex CSS selector, matching the circle as a descendent of an element with class <code>special</code>.</li>
+    <li><a>'fill'</a> color is not set directly on the circle, so is inherited from the style set on the containing <a>'g'</a> element (blue).</li>
+  </ul>
+  <p>
+    In the SVG 1.1 style-cloning model,
+    the <a href="https://www.w3.org/TR/css-cascade-3/#specified">specified style values</a>
+    would be cloned from the original element to the element instance.
+    The re-used circle would have the same styles as the original,
+    except that the <a>'fill'</a> value would be inherited from the <a>'use'</a> (orange)
+    instead of from the <a>'g'</a> (blue).
+  </p>
+  <p>
+    In the shadow DOM model required by SVG 2,
+    the styles for the re-used circle are calculated as follows:
+  </p>
+  <ul>
+    <li>the <a>'stroke-width'</a> (20) presentation attribute is cloned to the element instance.</li>
+    <li>the CSS rule setting <a>'stroke-opacity'</a> (0.7) is part of the CSS stylesheet cloned into the shadow tree; it matches the circle tag name of the <a>element instance</a>, so is applied.</li>
+    <li>the CSS rule with the complex selector is also part of the cloned stylesheet, but it does not match the <a>element instance</a> of the circle, which is not a descendent of an element with class <code>special</code>; instead, <a>'stroke'</a> color on the circle is inherited from the host <a>'use'</a> element (purple).</li>
+    <li><a>'fill'</a> color is still not set directly, so is once again inherited from the host <a>'use'</a> element.</li>
+  </ul>
+  <p>
+    The re-used circle therefore differs from the original in both fill color (because it inherits from a different element) and stroke color (because the complex selector no longer matches).
+  </p>
+  
+  <edit:example href='images/struct/Use-changed-styles.svg' name='Use-changed-styles' description="A 'use' element copying a 'circle', with various style matching rules demonstrated" link='yes' image='yes'/>
+  
+  <p>
+    Previous versions of SVG
+    were not clear about how dynamic pseudo-classes 
+    (such as <code>:hover</code>)
+    should apply to element instances.
+    The shadow tree model requires that all such pseudo-classes
+    are matched independently to the 
+    <a>element instance</a> or to its <a>corresponding element</a>,
+    depending on which element the user is interacting with.
+  </p>
+</div>
+  
+<div class="example">
+  <p>
+  Specifying <span
+  class="prop-value">'visibility:hidden'</span> on a <a>'use'</a> element does not guarantee
+  that the referenced content will not be rendered. 
+  Unlike the <a>'display'</a> or the <a>'opacity'</a> properties,
+  the <a>'visibility'</a> property does not appy directly to container elements,
+  and therefore does not apply directly to the <a>'use'</a> element.
+  Because <a>'visibility'</a> is normally inherited,
+  hiding the use element will often hide the child content,
+  but not necessarily.
+  If any graphics elements in the shadow tree have 
+  <span class="prop-value">'visibility:visible'</span> specified, then that
+  element will be visible even if the <a>'use'</a> element specifies <span
+  class="prop-value">'visibility:hidden'</span>.</p>
+  
+  <p>
+    In the following example, key style rules are as follows:
+  </p>
+<pre class="css">
+.dark {
+  visibility: hidden;
+}
+.eyes {
+  visibility: visible;
+}
+svg:hover .dark, svg:focus .dark {
+  visibility: visible;
+}
+</pre>
+  <p>
+    The "dark" class is set on the group containing the <a>'use'</a> elements,
+    so all parts of the re-used graphics inherit the hidden visibility setting,
+    except for the subtrees with class "eyes", where it is reset to visible.
+    Upon hovering or focusing the graphic, the hiding effect is removed.
+  </p>
+  <div class="figure">
+    <img alt="Multiple use-copies of a creature-symbol on a black background; the use elements have visibility: hidden, but the creatures' eyes have visibility: visible." src="images/struct/Use-visibility-inheritance.png" />
+    <p class="caption">Example Use-visibility-hidden, default styles</p>
+  </div>
+  <div class="figure">
+    <img alt="Multiple use-copies of a rabbit-symbol on a light green background; each rabbit has different=coloured fur, but the same pink noses and white fluffy tails." src="images/struct/Use-visibility-inheritance.2.png" />
+    <p class="caption">Example Use-visibility-hidden, interactive styles</p>
+  </div>
+  
+  <p class="view-as-svg"><a href="images/struct/Use-visibility-inheritance.svg">View this example as SVG</a></p>
+  
+  <p>
+    The example also demonstrates inheritance of other style properties
+    (<a>'fill'</a> and <a>'stroke'</a>)
+    specified on the <a>'use'</a> elements,
+    and how these are also not used if any elements within the symbol
+    specify explicit values (e.g., the pink noses and ears and the white tails).
+  </p>
+</div>
     
-<p>The conceptual deep cloning of the referenced element into a
-non-exposed DOM tree also copies any property values resulting
-from <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html">the CSS cascade</a>
-([<a href="refs.html#ref-CSS21">CSS21</a>], chapter 6)
-on the referenced element and its contents. CSS2 selectors can
-be applied to the original (i.e., referenced) elements because
-they are part of the formal document structure. CSS2 selectors
-cannot be applied to the (conceptually) cloned DOM tree because
-its contents are not part of the formal document structure.</p>
-
-<p>Property inheritance, however, works as if the referenced
-element had been textually included as a deeply cloned child of
-the <a>'use'</a> element. The
-referenced element inherits properties from the <a>'use'</a> element and the <a>'use'</a> element's ancestors. An
-instance of a referenced element does not inherit properties
-from the referenced element's original parents.</p>
-
-<p class="note">Note that specifying <span
-class="prop-value">'visibility:hidden'</span> on a <a>'use'</a> element does not guarantee
-that the referenced content will not be rendered. If the <a>'use'</a> element specifies <span
-class="prop-value">'visibility:hidden'</span> and the element
-it references specifies <span
-class="prop-value">'visibility:hidden'</span> or <span
-class="prop-value">'visibility:inherit'</span>, then that one
-element will be hidden. However, if the referenced element
-instead specifies <span
-class="prop-value">'visibility:visible'</span>, then that
-element will be visible even if the <a>'use'</a> element specifies <span
-class="prop-value">'visibility:hidden'</span>.</p>
-
-<p>Animations on a referenced element will cause the instances
-to also be animated.</p>
-    
-
-<p>For user agents that support <a
-href="styling.html">Styling with CSS</a>, the
-generated <a>'g'</a> element carries along with
-it the "cascaded" property values on the <a>'use'</a> element which result from
-<a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html">the CSS cascade</a>
-([<a href="refs.html#ref-CSS21">CSS21</a>], chapter 6).
-Additionally, the copy (deep clone) of the referenced resource
-carries along with it the "cascaded" property values resulting
-from the CSS cascade on the original (i.e., referenced)
-elements. Thus, the result of various CSS selectors in
-combination with the <a>'class'</a> and <a>'style attribute'</a> attributes are, in effect,
-replaced by the functional equivalent of a <a>'style attribute'</a> attribute in the generated
-content which conveys the "cascaded" property values.</p>
-
-<p><span class="example-ref">Example Use01</span> below has a
-simple <a>'use'</a> on a <a>'rect'</a>.</p>
-
-<edit:example href='images/struct/Use01.svg' name='Use01' description="Simple case of 'use' on a 'rect'" link='yes' image='yes'/>
-
-<p>The visual effect would be equivalent to the following document:</p>
-
-<edit:example href='images/struct/Use01-GeneratedContent.svg' link='yes'/>
-
-<p><span class="example-ref">Example Use02</span> below has a
-<a>'use'</a> on a <a>'symbol'</a>.</p>
-
-<edit:example href='images/struct/Use02.svg' name='Use02' description="'use' on a 'symbol'" link='yes' image='yes'/>
-
-<p>The visual effect would be equivalent to the following document:</p>
-
-<edit:example href='images/struct/Use02-GeneratedContent.svg' link='yes'/>
-
-<p><span class="example-ref">Example Use03</span> illustrates
-what happens when a <a>'use'</a> has
-a <a>'transform'</a> property.</p>
-
-<edit:example href='images/struct/Use03.svg' name='Use03' description="'use' with a 'transform' property" link='yes' image='yes'/>
-
-<p>The visual effect would be equivalent to the following document:</p>
-
-<edit:example href='images/struct/Use03-GeneratedContent.svg' link='yes'/>
-
-<p><span class="example-ref">Example Use04</span> illustrates a
-<a>'use'</a> element with various
-methods of applying CSS styling.</p>
-
-<edit:example href='images/struct/Use04.svg' name='Use04' description="'use' with CSS styling" link='yes' image='yes'/>
-
-<p>The visual effect would be equivalent to the following
-document. Observe that some of the style rules above apply to
-the generated content (i.e., rules 1-6, 10-12), whereas others
-do not (i.e., rules 7-9). The rules which do not affect the
-generated content are:</p>
-
+<h3 id="UseMultimedia">Multimedia in use-element shadow trees</h3>
+  
+<p>
+  When a <a>use-element shadow tree</a> includes
+  <a>'audio'</a> or <a>'video'</a> elements,
+  the following behaviors must be enforced:
+</p>
 <ul>
-  <li>Rules 7 and 8: CSS selectors only apply to the formal
-  document tree, not on the generated tree; thus, these
-  selectors will not yield a match.</li>
-
-  <li>Rule 9: The generated tree only inherits from the
-  ancestors of the <a>'use'</a>
-  element and does not inherit from the ancestors of the
-  referenced element; thus, this rule does not affect the
-  generated content.</li>
+  <li>
+  The user agent must synchronize playback of the media
+  with the <a>corresponding element</a> 
+  (if it is rendered as part of the same document)
+  and any other <a>instances</a> of the same <a>corresponding element</a>
+  in the document.
+  </li>
+  <li>
+  The <a>instance</a> must not play any audio 
+  if the <a>'use'</a> element is not rendered.
+  </li>
+  <li>
+  If user-agent provided playback controls are included
+  for the <a>corresponding element</a>  
+  (or would be included, if the element was rendered),
+  then they must be included for all instances in the document,
+  and a user action on any instance must control playback on them all.
+  </li>
 </ul>
-
-<p>In the generated content below, the selectors that yield a
-match have been transferred into inline <a>'style attribute'</a> attributes for
-illustrative purposes.</p>
-
-<edit:example href='images/struct/Use04-GeneratedContent.svg' link='yes'/>
     
-<h3 id="UseEventHandling">Event handling</h3>
-
-<p>If event attributes are assigned to referenced elements,
-then the actual target for the event will be the
-element within the "instance tree" corresponding to the given
-referenced element.</p>
-
-<p>The event handling for the non-exposed tree works as if the
-referenced element had been textually included as a deeply
-cloned child of the <a>'use'</a>
-element, and events are dispatched according to the shadow tree
-<a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#event-dispatch">event dispatching algorithm</a> [<a href="refs.html#ref-SHADOWDOM">SHADOWDOM</a>].
-The event's target and currentTarget attributes are set to the
-instance tree element that
-corresponds to the target and current target elements in the
-referenced subtree. An event propagates through the exposed and
-non-exposed portions of the tree in the same manner as it would
-in the regular document tree: first going from the root element
-to the <a>'use'</a> element and then
-through non-exposed tree elements in the capture phase,
-followed by the target phase at the target of the event, then
-bubbling back through non-exposed tree to the use element and
-then back through regular tree to the root element in bubbling
-phase. In order to maintain encapsulation events must use the
-<a href="http://www.w3.org/TR/2013/WD-shadow-dom-20130514/#event-retargeting">event retargeting algorithm</a> [<a href="refs.html#ref-SHADOWDOM">SHADOWDOM</a>]
-when crossing from a non-exposed tree to the regular tree.
+<h3 id="UseAnimations">Animations in use-element shadow trees</h3>
+  
+<p>
+  The <a href="https://www.w3.org/TR/web-animations-1/">Web Animations API</a>
+  and the <a href="https://svgwg.org/specs/animations/">SVG Animations</a> specification
+  define ways to animate attributes and styles
+  on targetted elements without directly manipulating DOM properties.
+  User agents that implement those features
+  must ensure that all animations 
+  that apply to an element in a <a>referenced document subtree</a>
+  also apply to instances of that element
+  in a <a>use-element shadow tree</a>,
+  as described in this section.
+</p>
+  
+<div class="note">
+  <p>
+    Scripted animations created by directly manipulating
+    attributes on elements in the <a>referenced graphics</a>
+    (including the <a>'style attribute'</a> attribute or its IDL property)
+    will be propagated to the <a>element instances</a>
+    in the shadow tree in the same manner as any other DOM manipulations.
+  </p>
+  <p>
+    Animation effects applied using CSS
+    will be duplicated along with other stylesheet rules,
+    following the procedure specified in the
+    <a href="#UseStyleInheritance">Style Scoping and Inheritance</a> section.
+  </p>
+</div>
+  
+<p>
+  All animations within a <a>use-element shadow tree</a>
+  operate in the same document timeline as for the
+  <a>corresponding use element</a>,
+  regardless of whether the <a>referenced element</a>
+  is from the same or an external document.
+</p>
+  
+<p>
+  For animation effects applied
+  using a <a href="https://www.w3.org/TR/web-animations-1/">Web Animations API</a> method  
+  <a href="refs.html#ref-WAAPI">[WAAPI]</a>,
+  if the target of the animation is a <a>corresponding element</a>
+  to an <a>element instance</a> in a shadow tree, 
+  the user agent must construct a <a>ShadowAnimation</a>
+  whose source is that <a>Animation</a> object
+  and whose target is the <a>element instance</a>.
+  If there are multiple instances of the element in different trees,
+  then there will be multiple shadow animations, one for each.
+</p>
+<p>
+  The user agent must create such a <a>ShadowAnimation</a>
+  for all Web Animations API animations in effect 
+  (including pending and frozen animations)
+  at the time the shadow tree is generated,
+  and for any new animations applied while the shadow tree exists.
+  The user agent must not create <a>ShadowAnimation</a> objects
+  for CSS animations or animation elements
+  (as these are duplicated separately).
+</p>
+  
+<p class="note">
+  As part of the inteface definition,
+  a <a>ShadowAnimation</a> is read-only,
+  and must reflect any changes to its <a>ShadowAnimation::sourceAnimation</a>.
 </p>
 
-<p class="issue" data-issue="28">We should define the behavior of <a>'use'</a>
-in terms of Web Components. See <a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3729">ACTION-3729</a> (Tab)
-<a href="https://github.com/w3c/svgwg/issues/99">Github Issue #99</a>
+<p>
+  Any attempts to directly apply new animations
+  to a target that is a read-only <a>element instance</a> (or pseudo-element)
+  within a <a>use-element shadow tree</a>
+  must throw a <code>NoModificationAllowedError</code>.
+</p>
+  
+<p>
+  For each <a>animation element</a> that targets an element in the
+  <a>referenced document subtree</a>, 
+  the user agent must ensure that an equivalent animation element 
+  is in effect in the <a>use-element shadow tree</a>.
+  If the animation element itself is part of the referenced document subtree,
+  then this happens as a matter of course through the creation
+  of an <a>element instance</a> for the animation element.
+  Otherwise, the user agent must generate an <a>element instance</a>
+  for the animation element
+  that has the same effect as if it was a node in the shadow tree.
+  The effective document order for these generated animation elements
+  must be the same as the document order for their <a>corresponding elements</a>.
+</p>
+  
+<p>
+  Each animation element or instance must only affect a target element
+  in the same node tree (shadow or light),
+  regardless of whether the targetting is implicit (the parent element)
+  or explicit (a URL cross-reference to an element <a>'id'</a>).
+  In this way, the one-to-one relationship between animation elements
+  and target elements is preserved.
+</p>
+  
+<p class="note">
+  The <a>'id'</a> attribute is cloned, like any other attribute,
+  from the <a>corresponding element</a> to the <a>element instance</a>;
+  This does not conflict with the requirement for <a>'id'</a> to be unique,
+  because the clone and the original are in distinct node trees.
+</p>
+  
+<p>
+  All animation elements, in the document or in the shadow trees,
+  which are timed to begin or end in response to an event
+  on another element identified by its <a>'id'</a> attribute,
+  must also begin or end when any <a>instance</a> of an element with that <a>'id'</a>
+  receives the same event.
+  This is consistent with how event listeners on a 
+  referenced element also listen to events on instances of that element,
+  as described in the section on 
+  <a href="#UseEventHandling">Event handling in use-element shadow trees</a>.
+  This behavior does not apply to animation begin or end times
+  defined only by an event and not by an <a>'id'</a>
+  (and therefore implicitly listening for the event on the target element);
+  in that case, each animation element is only triggered by its own target.
+</p>
+  
+<p>
+  At the time an <a>instance</a> of an animation element
+  is generated within a shadow tree,
+  if there is an active animation associated with the <a>corresponding element</a>
+  (including a frozen animation),
+  and the timing event that initiated that animation would also have initiated the instance if it existed,
+  then the animation for the <a>element instance</a> must be initiated,
+  with its begin time 
+  adjusted backwards in the document timeline
+  to match the timing of the <a>corresponding element</a>.
+</p>
+  
+<div class="note">
+  <p>
+    In many cases,
+    the requirements of this section mean that 
+    the <a>element instance</a> and its <a>corresponding element</a>
+    will animate synchronously.
+    This will be the case if the animation is purely time-based,
+    or if it begins and ends in response to user interaction
+    on an element referenced by its <a>'id'</a>.
+    However, if the animation is triggered by a user interaction event
+    on the targetted element (implicitly),
+    then only the element or element instance that receives the interaction event
+    will display the animation.
+  </p>
+  <p>
+    This is a change from previous versions of SVG,
+    which required all animations on the <a>corresponding element</a> to be mirrored,
+    regardless of user interaction,
+    but which did not offer clear guidance for responding to
+    user interactions with the element instances.
+    The change ensures that interactive animations declared with animation elements
+    behave in the same manner as interactive CSS styles and CSS animations.
+  </p>
+  <p>
+    In order to create animations
+    that apply to all instances when any instance or the original element
+    receives an event,
+    specify the element <a>'id'</a> explicitly:
+  </p>
+  <pre><code>
+&lt;set href="#target" begin="mouseover" ... />
+  &lt;!-- only affects the element that is moused over --&gt;
+  
+&lt;set href="#target" begin="target.mouseover" ... />
+  &lt;!-- affects all instances of the element with the id 'target',
+          in all light and shadow node trees,
+          when any of them are moused over --&gt;
+  </code></pre>
+</div>
+  
+  
+    
+<h3 id="UseEventHandling">Event handling in use-element shadow trees</h3>
+  
+<p>Element in a <a>use-element shadow tree</a>
+  can both listen for and be the target of DOM events.
+  Event retargetting provides encapsulation,
+  so that the details of the shadow DOM structure
+  are masked when an event bubbles out of the shadow tree and into the light.
+</p>
+  
+<p class="note">
+  Event retargeting is new in SVG 2.
+  It provides consistency with the Shadow DOM specification,
+  with existing implementations,
+  and with the expectations of authors who are only concerned with elements in the main DOM.
 </p>
 
+<p>
+  Any event listeners defined on an element
+  in the <a>referenced graphics</a>
+  must also listen for the same event, at the same capture phase,
+  on each <a>instance</a> of that element in a <a>use-element shadow tree</a>.
+  This includes event listeners assigned using <a>event attributes</a>
+  (which would be duplicated as with any other DOM attribute)
+  and also event listeners assigned using the <a href="http://www.w3.org/TR/dom/#dom-eventtarget-addeventlistener"><code>addEventListener</code></a> method.
+  The user agent must ensure that the list of event listeners
+  for each <a>element instance</a> is synchronized to match
+  its <a>corresponding element</a>.
+  An event listener cannot be directly assigned
+  to a read-only <a>element instance</a> in a <a>use-element shadow tree</a>.
+  Any attempt to add an event listener to such an element
+  must throw a <code>NoModificationAllowedError</code>.
+</p>
+
+<p>Events in the <a>use-element shadow tree</a> 
+  are dispatched and bubble according to the shadow tree
+  <a href="https://www.w3.org/TR/shadow-dom/#events">event path and event retargeting algorithm</a> [<a href="refs.html#ref-shadow-dom">SHADOWDOM</a>].
+</p>
+  
+<div class="note">
+  <p>
+    In general, the event path for a <a>use-element shadow tree</a>
+    is constructed from the ancestors of the event target element
+    up to the <a>shadow root</a>,
+    then the <a>host</a> <a>'use'</a> element
+    and its event path through to the document window.
+    This means that, in the capture phase, 
+    an event propagates from the window through the regular document tree
+    to the <a>'use'</a> element 
+    and then to the shadow root object 
+    and down through the shadow tree 
+    (or recursively through multiple shadow trees) 
+    to the event target element.
+    In the bubbling phase, the event passes in the opposite direction, 
+    from the shadow tree elements to the shadow root,
+    then to the <a>'use'</a> element and its ancestors.
+  </p>
+  <p>
+    The event retargeting algorithm ensures that
+    from the perspective of event listeners
+    on the <a>'use'</a> element or its ancestors,
+    all events targetted to <a>element instances</a> in the shadow tree
+    instead have a target of the <a>'use'</a> element itself.
+    If the event has both a <a href="https://www.w3.org/TR/dom/#dom-event-target"><code>target</code></a>
+    and a <code>relatedTarget</code>,
+    and both of these properties would be retargeted 
+    to point to the same <a>'use'</a> element,
+    then the event is not propagated at all outside of the shadow tree.
+    This would occur, for example,
+    if focus moved from one element inside the shadow tree to another.
+    Certain other event types are constrained to
+    not propagate outside of the shadow tree in which they were created.
+  </p>
+  <p>
+    In contrast, event listeners that process the event
+    while it is propagating through the shadow tree
+    (because the listener has been added to a 
+    <a>corresponding element</a>)
+    will receive the event with its <a href="https://www.w3.org/TR/dom/#dom-event-target"><code>target</code></a>
+    pointing to a read-only <a>element instance</a> in the shadow tree.
+    The <a>SVGElementInstance::correspondingElement</a>
+    and <a>SVGElementInstance::correspondingUseElement</a>
+    properties of that <a>element instance</a>
+    can be used to connect it to the modifiable elements in the main DOM.
+  </p>
+</div>
+  
+</div><!-- ready-for-wg-review -->
 
 <h2 id="ConditionalProcessing">Conditional processing</h2>
 
@@ -1105,7 +1745,9 @@ its children for which all of these attributes test true. If
 the given attribute is not specified, then a true value is
 assumed.</p>
 
-<p>Similar to the <a>'display'</a> property, conditional processing
+<p>When an element is excluded because of conditional processing,
+it is treated as if it had a used value of <code>none</code> for the <a>'display'</a> property.
+Similar to the <a>'display'</a> property, conditional processing
 attributes only affect the direct rendering of elements and do
 not prevent elements from being successfully referenced by
 other elements (such as via a <a>'use'</a>).</p>
@@ -1113,18 +1755,29 @@ other elements (such as via a <a>'use'</a>).</p>
 <p>In consequence:</p>
 
 <ul>
-  <li><a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes affect
-  <a>'a'</a>, <a>'foreignObject'</a>, <a>'textPath'</a>, and <a>'tspan'</a> elements.</li>
+  <li>conditional processing affects the visual display of <a>graphics elements</a>,
+  <a>'a'</a>, <a>'foreignObject'</a>, and <a>text content elements</a>.</li>
+  
+  <li>conditional processing prevents <a>animation elements</a> from playing.</li>
 
-  <li><a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes will
-  have no effect on the <a>'clipPath'</a>, <a>'filter element'</a>, <a>'marker element'</a>, <a>'mask element'</a>,
-  <a>'pattern'</a> and <a>'symbol'</a> elements or on <a>gradient elements</a>.</li>
+  <li>conditional processing will
+  have no effect on <a>never-rendered elements</a>; 
+  in particular, conditional processing does not affect the processing of a <a>'style element'</a> or <a>'script'</a> element.</li>
 
-  <li><a>'requiredExtensions'</a> and <a>'systemLanguage'</a> attributes do not
-  apply to the <a>'defs'</a>, and
-  <a>'cursor element'</a> elements because
-  they are not part of the <a>rendering tree</a>.</li>
+  <li>conditional processing of child content of a never-rendered container element
+  (e.g., a <a>'pattern'</a> or a <a>'mask element'</a>) 
+  will affect whether that child content contributes to the graphical effect.</li>
 </ul>
+  
+<div class="note">
+  <p>Previous versions of SVG included a third conditional processing attribute,
+  <code>requiredFeatures</code>.
+  This was intended to allow authors to provide fallback behavior for user agents
+  that only implemented parts of the SVG specification.
+  Unfortunately, poor specification and implementation of this attribute made it unreliable
+  as a test of feature support.
+  </p>
+</div>
 
 <h3 id="ConditionalProcessingDefinitions">Definitions</h3>
 <dl class='definitions'  data-dfn-type="dfn" data-export="">
@@ -1134,7 +1787,7 @@ other elements (such as via a <a>'use'</a>).</p>
   but not all, may have conditional processing attributes specified
   on them.  See <a href="struct.html#ConditionalProcessing">Conditional processing</a>
   for details.  The conditional processing attributes defined in
-  SVG 1.1 are <edit:attributecategory name='conditional processing'/>.</dd>
+  SVG 2 are <edit:attributecategory name='conditional processing'/>.</dd>
 </dl>
 
 <h3 id="SwitchElement">The <span class='element-name'>'switch'</span> element</h3>
@@ -1149,6 +1802,13 @@ attributes evaluate to true. All others will be bypassed and therefore
 not rendered. If the child element is a container element such as a
 <a>'g'</a>, then the entire subtree is either processed/rendered or
 bypassed/not rendered.</p>
+
+<p class='ready-for-wg-review'>
+In SVG, when evaluating the <a>'systemLanguage'</a> attribute, the order of
+evaluation of descendant elements of the <a>'switch'</a> element must be as if the
+<a href="https://www.w3.org/TR/REC-smil/smil-content.html#adef-allowReorder">'allowReorder'</a>
+attribute, defined in the SMIL specification [<a href="refs.html#ref-SMIL">SMIL</a>]
+always has a value of 'yes'.</p>
 
 <p>Note that the values of properties <a>'display'</a> and
 <a>'visibility'</a> have no effect on <a>'switch'</a> element
@@ -1365,8 +2025,29 @@ Note that the <a class="html" href="http://www.w3.org/TR/html/document-metadata.
   </dt>
   <dd class="ready-for-wider-review">
     <p>Must reflect the <a href="http://www.w3.org/TR/dom/#concept-id">element's
-    ID</a> [<a href="refs.html#ref-DOM4">DOM4</a>].  The <a>'id'</a> attribute
-    must be any value other than the empty string.</p>
+    ID</a> [<a href="refs.html#ref-dom">DOM</a>].  
+    The <a>'id'</a> attribute must be unique within the node tree,
+    must not be an empty string,
+    and must not contain any whitespace characters.
+    </p>
+    <p>
+      Additional requirements apply in order for 
+      the <a>'id'</a> attribute to be valid in XML documents,
+      as defined in the specification for the relevant version of XML.
+      A stand-alone SVG document uses XML 1.0 syntax [<a href="refs.html#ref-xml">XML</a>],
+      which specifies that valid <a>'id'</a> values are <a href="https://www.w3.org/TR/xml/#NT-Name">XML name tokens</a>.
+      Valid XML 1.0 names only include designated characters (letters, digits, and a few punctuation marks),
+      and do not start with a digit, a full stop (.) character, or a hyphen-minus (-) character.
+    </p>
+    <p>
+      User agents should process <a>'id'</a> values in SVG files irrespective of XML validity.
+    </p>
+    <p>
+      Authors should avoid the use of <a>'id'</a> values that would be parsed
+      as an <a href="linking.html#SVGViewSpecification">SVG view specification</a>
+      or a <a href="linking.html#MediaFragments">basic media fragment</a>
+      when used as a URL target fragment.
+    </p>
   </dd>
 </dl>
 
@@ -1519,31 +2200,33 @@ for custom data attributes</a> in the HTML specification.</p>
 
 <dl class='definitions'  data-dfn-type="dfn" data-export="">
   <dt id="TermARIAAttribute"><dfn>ARIA attributes</dfn></dt>
-  <dd>These are the attributes used consisting of WAI-ARIA states and properties as well as
-  the role attribute whose values are defined defined in WAI-ARIA. See the WAI-ARIA
+  <dd>These are the attributes defined in WAI-ARIA,
+    consisting of WAI-ARIA states and properties
+    as well as the role attribute. 
+    See the WAI-ARIA
   <a href="http://www.w3.org/TR/wai-aria-1.1/#role_definitions">Definition of Roles</a>, the WAI-ARIA
 Graphics Module <a href="https://www.w3.org/TR/graphics-aria-1.0/#roles">Graphics Roles</a>, 
  and the WAI-ARIA <a href="http://www.w3.org/TR/wai-aria/states_and_properties">Supported States and Properties</a>.
   The aria attributes are <edit:attributecategory name='aria'/>.</dd>
 </dl>
 
-<p class="issue" data-issue="68">Note that the above list ARIA attributes is likely to change in 
-an upcoming version of the
-<a href="https://w3c.github.io/aria/svg-aam/svg-aam.html">SVG Accessibility API mappings specification.</a>.
+<p class="note">Note that the above list of ARIA attributes may be expanded by future WAI-ARIA specifications.
 </p>
 
 <h3 id="roleattribute">Role attribute</h3>
 
-<p>SVG elements having native semantics that are not limited to <a href="http://www.w3.org/TR/wai-aria-1.1/#presentation">presentation</a> (having "no role"), may have an ARIA role attribute specified. The attribute, if specified, must have a value that is a <a>set of space-separated
+<p>Any <a>renderable element</a> may have an ARIA role attribute specified; the role attribute is ignored on <a>non-rendered elements</a>. 
+The attribute, if specified, must have a value that is a <a>set of space-separated
 tokens</a> representing the various WAI-ARIA roles that the element belongs to.
 These tokens are role values defined in
 <a href="http://www.w3.org/TR/wai-aria-1.1/#role_definitions">Definition of Roles</a>
 ([<a href="refs.html#ref-wai-aria">wai-aria</a>], section 5.4) and <a href="https://www.w3.org/TR/graphics-aria-1.0/#roles">Graphics Roles</a>
 ([<a href="refs.html#ref-ARIA-GRAPHICS">ARIA-GRAPHICS</a>], section 4).</p>
 
-<p>The WAI-ARIA role that an SVG element has assigned to it is the first
-non-abstract role found in the list of values generated when the role attribute
-is split on spaces. </p>
+<p>The WAI-ARIA role that an SVG element has assigned to it is the first valid
+role found in the list of tokens generated when the role attribute
+is split on spaces.  
+A valid role is a recognized, non-abstract role that is <a href="#implicit-aria-semantics">allowed for the element type</a>.</p>
 
 <dl class="attrdef-list">
    <dt>
@@ -1572,11 +2255,20 @@ is split on spaces. </p>
     <a href="#implicit-aria-semantics">default implied ARIA semantic for SVG elements</a>.</p>
   </dd>
 </dl>
+  
+<p>To be valid and useful, many element roles require additional information to be provided 
+in the form of an accessible name 
+or explicit <a href="#ARIAStateandPropertyAttributes">state and property values</a>.
+Accessible names may be provided using SVG <a>descriptive elements</a> or <a>ARIA attributes</a>.
+The requirements for each role are indicated where the role is defined, e.g., in 
+<a href="http://www.w3.org/TR/wai-aria-1.1/#role_definitions">WAI-ARIA</a>
+([<a href="refs.html#ref-wai-aria">WAI-ARIA</a>]) or the <a href="https://www.w3.org/TR/graphics-aria-1.0/#roles">WAI-ARIA Graphics Module</a>
+([<a href="refs.html#ref-ARIA-GRAPHICS">ARIA-GRAPHICS</a>]).</p>
 
 <h3 id="ARIAStateandPropertyAttributes">State and property attributes (all aria- attributes)</h3>
 
-<p>SVG elements having native semantics that are not limited to <a href="http://www.w3.org/TR/wai-aria-1.1/#presentation">presentation</a> (having "no role"), may have an may have WAI-ARIA state and property attributes
-specified. These attributes are defined by ARIA in
+<p>WAI-ARIA state and property attributes may be specified on SVG elements.
+These attributes are defined by ARIA in
 <a href="http://www.w3.org/TR/wai-aria-1.1/#state_prop_def">Definitions of States and Properties (all aria-* attributes)</a>
 (<a href="https://svgwg.org/svg2-draft/refs.html#ref-ARIA">[ARIA]</a>, section 6.6).</p>
 
@@ -1585,6 +2277,13 @@ type in the "Value" field of the definition for the state or property, mapped to
 the appropriate SVG value type according to
 <a href="http://www.w3.org/TR/wai-aria-1.1/#typemapping">Mapping WAI-ARIA Value types to languages</a>
 using the SVG mapping ([<a href="refs.html#ref-wai-aria">wai-aria</a>], section 10.2).</p>
+  
+<p>The attributes are animatable;
+  if animation is used to change the state of the graphic,
+  or to change its content in a way that alters the correct alternative text description,
+  the same method of animation should be used to update the corresponding 
+  ARIA state or property attribute.
+</p>
 
 <p>WAI-ARIA State and Property attributes can be used on any element. They are
 not always meaningful, however, and in such cases user agents might not perform
@@ -1593,36 +2292,58 @@ processed according to the <a href="http://www.w3.org/TR/wai-aria-1.1/"><cite>AR
 <a href="http://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings</cite></a> specification
 specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.html#ref-svg-aam-1.0">svg-aam-1.0</a>]</p>
 
-<h3 id="implicit-aria-semantics">Implicit ARIA Semantics</h3>
+<h3 id="implicit-aria-semantics">Implicit and Allowed ARIA Semantics</h3>
 <p>The following table defines the <span>default implicit ARIA
   semantics</span> that apply to <a href="eltindex.html">SVG elements</a>. Each
   language feature (element) in a cell in the first
   column implies the ARIA semantics (role, states, and/or properties)
   given in the cell in the second column of the same row. The third column defines restrictions as to what WAI-ARIA semantic (role, state, or property) may or may not apply.</p>
+<p>For many graphics elements, an implicit role is only assigned 
+  if the author provides information that indicates semantic importance.  
+  The complete <dfn id="TermInclusionCriteria">inclusion criteria</dfn> for the accessibility tree
+  are defined by the <a href="http://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings</cite></a> specification for user agents [<a href="refs.html#ref-svg-aam-1.0">svg-aam-1.0</a>].
+  For authors, the preferred means of indicating semantic importance is to provide an accessible name for the element.
+  This can be done through a direct child <a>'title'</a> element,
+  or through the <a>'aria-label'</a> or <a>'aria-labelledby'</a> attributes.
+  Authors should use one of these methods to provide an accessible name 
+  for any content that is essential to the comprehension of the SVG, 
+  and especially for any interactive content.  
+</p>
 
   <table id="table-aria-implicit" class="vert">
       <thead>
-          <tr><th>Language feature</th><th>Default implied ARIA semantics</th><th>Restrictions</th></tr>
+          <tr>
+            <th>Language feature</th>
+            <th>Default implied ARIA semantics</th>
+            <th>Allowed roles</th></tr>
       </thead>
 
    <tbody>
     <tr><td><a>'a'</a></td>
-        <td><code title="attr-aria-role-link">link</code> role</td>
+        <td><code title="attr-aria-role-link">link</code> role
+    if the element has a valid <code>href</code> or <code>xlink:href</code> attribute. 
+    For <code>a</code> elements that are not links, the default semantics are the same as 
+    <code>tspan</code> if the <code>a</code> element is a descendent of <code>text</code>,
+    or the same as <code>g</code> otherwise.</td>
         <td>no restrictions</td>
     </tr>
     <tr>
       <td><a>'audio'</a></td>
-      <td><code title="attr-group-role">group</code> role </td>
-      <td>If specified, role must be <code title="attr-aria-role-application">application</code></td>
+      <td>platform-specific role mappings, 
+        as defined in the <a href="http://w3c.github.io/aria/html-aam/html-aam.html#html-element-role-mappings">HTML Accessibility API Mappings</a> specification</td>
+      <td>If specified, role must be <code>application</code></td>
     </tr>
     <tr>
       <td><a>'canvas'</a></td>
-      <td><code title="attr-group-role">group</code> role</td>
+      <td>platform-specific role mappings, 
+        as defined in the <a href="http://w3c.github.io/aria/html-aam/html-aam.html#html-element-role-mappings">HTML Accessibility API Mappings</a> specification</td>
       <td>no restrictions</td>
     </tr>
     <tr>
       <td><a>'circle'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td><code>graphics-symbol</code> role 
+        if the element meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
@@ -1633,7 +2354,7 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
     <tr>
       <td><a>'cursor element'</a></td>
       <td>none</td>
-      <td>no restrictions</td>
+      <td>no role may be applied</td>
     </tr>
     <tr>
       <td><a>'defs'</a></td>
@@ -1647,7 +2368,9 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
     </tr>
     <tr>
       <td><a>'ellipse'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td><code>graphics-symbol</code> role 
+        if the element meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
@@ -1782,12 +2505,16 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
     </tr>
     <tr>
       <td><a>'foreignObject'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td><code>group</code> role 
+        if the element meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
       <td><a>'g'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td><code>group</code> role 
+        if the element meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
@@ -1802,7 +2529,8 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
     </tr>
     <tr>
       <td><a>'iframe'</a></td>
-      <td>no role</td>
+      <td>platform-specific role mappings, 
+        as defined in the <a href="http://w3c.github.io/aria/html-aam/html-aam.html#html-element-role-mappings">HTML Accessibility API Mappings</a> specification</td>
       <td>If Specified, role must be either <code title="attr-aria-role-application">application</code>, <code title="attr-aria-role-document">document</code>, or <code title="attr-aria-role-img">img</code> roles</td>
     </tr>
     <tr>
@@ -1812,7 +2540,9 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
     </tr>
     <tr>
       <td><a>'line'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td><code>graphics-symbol</code> role 
+        if the element meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
@@ -1832,8 +2562,15 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
     </tr>
     <tr>
       <td><a>'mesh'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-img">img</code> role</td>
+      <td><code>img</code> role 
+        if the element meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
+    </tr>
+    <tr>
+      <td><a>'meshgradient'</a></td>
+      <td>none</td>
+      <td>no role may be applied</td>
     </tr>
     <tr>
       <td><a>'meshpatch'</a></td>
@@ -1857,7 +2594,9 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
     </tr>
     <tr>
       <td><a>'path'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td><code>graphics-symbol</code> role 
+        if the element meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
@@ -1867,12 +2606,16 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
     </tr>
     <tr>
       <td><a>'polygon'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td><code>graphics-symbol</code> role 
+        if the element meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
       <td><a>'polyline'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td><code>graphics-symbol</code> role 
+        if the element meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
@@ -1882,7 +2625,9 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
     </tr>
     <tr>
       <td><a>'rect'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td><code>graphics-symbol</code> role 
+        if the element meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
@@ -1907,27 +2652,34 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
     </tr>
     <tr>
       <td><a>'svg'</a></td>
-      <td><code title="attr-aria-role-graphics-">graphics-doc</code> role</td>
+      <td><code>graphics-document</code> role</td>
       <td>no restrictions</td>
     </tr>
     <tr>
       <td><a>'switch'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
-      <td>no restrictions</td>
+      <td>none</td>
+      <td>no role may be applied</td>
     </tr>
     <tr>
       <td><a>'symbol'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td><code>graphics-object</code> role 
+        if the element is a rendered <a>element instance</a>
+        that meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
       <td><a>'text'</a></td>
-      <td><code title="attr-group-role">group</code> role</td>
+      <td><code>group</code>role, 
+        with platform-specific role mappings, 
+        as defined in the <a href="https://w3c.github.io/aria/svg-aam/svg-aam.html#role-map-text">SVG Accessibility API Mappings</a> specification</td>
       <td>no restrictions</td>
     </tr>
     <tr>
       <td><a>'textPath'</a></td>
-      <td><code title="attr-group-role">group</code> role</td>
+      <td><code>group</code> role 
+        if the element meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
@@ -1937,23 +2689,28 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
     </tr>
     <tr>
       <td><a>'tspan'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
+      <td><code>group</code> role 
+        if the element meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
       <td><a>'use'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-graphics-symbol">graphics-symbol</code> role</td>
+      <td><code>graphics-object</code> role 
+        if the element meets the <a>inclusion criteria</a>,
+        otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
       <td><a>'video'</a></td>
-      <td><code title="attr-group-role">group</code> role </td>
-      <td>If specified, role must be <code title="attr-aria-role-application">application</code></td>
+      <td>platform-specific role mappings, 
+        as defined in the <a href="http://w3c.github.io/aria/html-aam/html-aam.html#html-element-role-mappings">HTML Accessibility API Mappings</a> specification</td>
+      <td>If specified, role must be <code>application</code></td>
     </tr>
     <tr>
       <td><a>'view'</a></td>
-      <td><code title="attr-aria-role-none">none</code> role provided no associated <a>'title'</a> element, <a>'desc'</a> element, <a>'aria-label'</a> attribute, <a>'aria-labelledby'</a> attribute, <a>'aria-describedby'</a> attribute; or <a>'tabindex'</a> attribute; otherwise, <code title="attr-aria-role-group">group</code> role</td>
-      <td>no restrictions</td>
+      <td>none</td>
+      <td>no role may be applied</td>
     </tr>
    </tbody>
   </table>
@@ -2043,6 +2800,8 @@ IDL attribute.</p>
   <a>DOMRect</a> <a href="struct.html#__svg__SVGSVGElement__createSVGRect">createSVGRect</a>();
   <a>SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransform">createSVGTransform</a>();
   <a>SVGTransform</a> <a href="struct.html#__svg__SVGSVGElement__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>(<a>DOMMatrixReadOnly</a> matrix);
+
+  <a>Element</a> <a href="struct.html#__svg__SVGSVGElement__getElementById">getElementById</a>(DOMString elementId);
 
   <span class="comment">// Deprecated methods that have no effect when called,</span>
   <span class="comment">// but which are kept for compatibility reasons.</span>
@@ -2192,13 +2951,14 @@ to be interpreted, the following steps are run:</p>
           <li>Let <var>root</var> be the root of the <var>child</var>'s shadow tree.</li>
           <li>Let <var>descendants</var> be the result of
           <a href="#TermFindIntersectingOrEnclosedDescendants">finding the
-          intersecting (or enclosed) descendants</a> of <var>child</var> with
+          intersecting (or enclosed) descendants</a> of <var>root</var> with
           <var>rectangle</var> in <var>ancestor</var>'s coordinate space.</li>
           <li>If <var>descendants</var> is not empty, then append <var>child</var>
           to <var>result</var>.
-            <p class="note">This means that although we look at the specific
-            content referenced by the <a>'use'</a> element, we don't place the
-            referencing content in the <var>result</var> list; only the <a>'use'</a>
+            <p class="note">This means that although we look at the 
+            the elements in the <a>use-element shadow tree</a>, 
+            we don't place the <a>element instances</a> or their <a>corresponding element</a>
+            in the <var>result</var> list; only the <a>'use'</a>
             element itself is returned.</p>
           </li>
         </ol>
@@ -2265,7 +3025,7 @@ the following steps are run:</p>
   as an ancestor.</li>
   <li>Return a <a href="http://www.w3.org/TR/dom/#concept-collection-static">static</a>
   <a>NodeList</a> that contains all of the elements in <var>descendants</var>.
-  ([<a href="refs.html#ref-DOM4">DOM4</a>], section 5.2.7)</li>
+  ([<a href="refs.html#ref-dom">DOM</a>], section 5.2.7)</li>
 </ol>
 
 <p>When checkIntersection(<var>element</var>, <var>rect</var>) or
@@ -2303,7 +3063,7 @@ all <a href="http://www.w3.org/TR/2014/WD-dom-20140204/#concept-range">ranges</a
 from the document's <a href="http://w3c.github.io/selection-api/#dfn-selection">selection</a>
 are removed and the <a href="http://w3c.github.io/selection-api/#dfn-selection">selection</a>'s
 <a href="http://w3c.github.io/selection-api/#dfn-direction">direction</a> is set to
-forwards. [<a href="refs.html#ref-DOM4">DOM4</a>][<a href="refs.html#ref-EDITING">EDITING</a>]
+forwards. [<a href="refs.html#ref-dom">DOM</a>][<a href="refs.html#ref-editing">EDITING</a>]
 This method is deprecated, as it duplicates functionality from the Selection API.</p>
 
 <p class="note">This is equivalent to calling <code>document.getSelection().removeAllRanges()</code>
@@ -2345,6 +3105,13 @@ method is used to create a new <a>SVGTransform</a> object from a matrix object.
 Its behavior is the same as the
 <a href="coords.html#__svg__SVGTransformList__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>
 method on <a>SVGTransformList</a>.</p>
+
+<div class='ready-for-wg-review'>
+<p>The <b id="__svg__SVGSVGElement__getElementById">getElementById</b> method,
+must return the first element in <a>tree order</a>, within the
+<a>'svg'</a> element's descendants, whose ID is <var>elementId</var>, or
+null if there is no such element.</p>
+</div>
 
 </edit:with>
 
@@ -2427,10 +3194,16 @@ method on <a>SVGTransformList</a>.</p>
 
 <p>An <a>SVGSymbolElement</a> object represents a <a>'symbol'</a> element in the DOM.</p>
 
-<pre class="idl">interface <b>SVGSymbolElement</b> : <a>SVGElement</a> {
+<pre class="idl">interface <b>SVGSymbolElement</b> : <a>SVGGraphicsElement</a> {
 };
 
 <a>SVGSymbolElement</a> implements <a>SVGFitToViewBox</a>;</pre>
+  
+<p class="note">
+  New in SVG 2.
+  The <a>SVGSymbolElement</a> interface now inherits from <a>SVGGraphicsElement</a>,
+  so that the instantiated symbol in the shadow DOM can be queried as a graphics element.
+</p>
 
 </edit:with>
 
@@ -2446,6 +3219,8 @@ method on <a>SVGTransformList</a>.</p>
   [SameObject] readonly attribute <a>SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__y">y</a>;
   [SameObject] readonly attribute <a>SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__width">width</a>;
   [SameObject] readonly attribute <a>SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__height">height</a>;
+  [SameObject] readonly attribute <a>SVGElement</a>? <a href="struct.html#__svg__SVGUseElement__instanceRoot">instanceRoot</a>;
+  [SameObject] readonly attribute <a>SVGElement</a>? <a href="struct.html#__svg__SVGUseElement__animatedInstanceRoot">animatedInstanceRoot</a>;
 };
 
 <a>SVGUseElement</a> implements <a>SVGURIReference</a>;</pre>
@@ -2458,10 +3233,124 @@ method on <a>SVGTransformList</a>.</p>
 <a>reflect</a> the computed values of the <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and
 <a>'height'</a> properties and their corresponding
 presentation attributes, respectively.</p>
+  
+<p>The <b id="__svg__SVGUseElement__instanceRoot">instanceRoot</b> and
+<b id="__svg__SVGUseElement__animatedInstanceRoot">animatedInstanceRoot</b>
+IDL attributes both point to the <a>instance root</a>, 
+the <a>SVGElementInstance</a> that is a direct child 
+of this element's shadow root
+(<code>u.instanceRoot</code> is equivalent to getting <code>u.shadowRoot.firstChild</code>). 
+If this element does not have a shadow tree 
+(for example, because its URI is invalid
+or because it has been disabled by <a>conditional processing</a>),
+then getting these attributes returns null.</p>
 
 </edit:with>
 
 
+<h3 id="InterfaceSVGUseElementShadowRoot">Interface SVGUseElementShadowRoot</h3>
+  
+<p>The root object of each <a>use-element shadow tree</a> 
+  implements the <a>SVGUseElementShadowRoot</a> interface.
+  This interface does not currently define any extensions
+  to the properties and methods defined for the
+  <a>ShadowRoot</a> interface
+  and <a href="https://www.w3.org/TR/shadow-dom/#extensions-to-the-documentorshadowroot-mixin">DocumentOrShadowRoot</a> mixin.
+  However, the tree rooted at this node 
+  is entirely read-only from the perspective of author scripts.</p>
+
+<pre class="idl">
+interface <b>SVGElementInstance</b> : <a>ShadowRoot</a> {
+
+};</pre>
+
+<h3 id="InterfaceSVGElementInstance">Interface SVGElementInstance</h3>
+
+<p>The <a>SVGElementInstance</a> interface defines extensions to the <a>SVGElement</a> interface,
+  which are only used for elements in a <a>use-element shadow tree</a>.</p>
+  
+<p class="note">
+  In previous versions of SVG, 
+  SVG element instances were defined as non-element objects
+  that were valid event targets but not full DOM nodes.
+  This specification re-defines the <a>use-element shadow tree</a> 
+  to be consistent with the Shadow DOM specification,
+  which means that instances are actual SVGElement objects.
+  This interface adds the missing functionality for backwards compatibility.
+  However, authors should be aware that compatibility is not perfect,
+  and design their scripts accordingly.
+  Also note that these properties will not be available
+  on HTML-namespaced element objects in the shadow tree.
+</p>
+
+<pre class="idl">[NoInterfaceObject]
+interface <b>SVGElementInstance</b> {
+  [SameObject] readonly attribute <a>SVGElement</a>? <a href="#__svg__SVGElementInstance__correspondingElement">correspondingElement</a>;
+  [SameObject] readonly attribute <a>SVGUseElement</a>? <a href="#__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</a>;
+};</pre>
+
+<p>The <b id="__svg__SVGElementInstance__correspondingElement">correspondingElement</b> IDL attribute
+points to the <a>corresponding element</a> if this element is an <a>element instance</a> in a <a>use-element shadow tree</a>,
+or is null otherwise.</p>
+  
+<p class="issue" data-issue="71">
+  When the <a>referenced element</a> is in an external file,
+  the presence of this pointer
+  implies that the entire DOM of the external file 
+  must be maintained in memory.
+  However, as currently specified, the external DOM is read-only.
+  It therefore offers limited functionality and a potentially large performance impact.
+  Pending feedback from implementers,
+  authors should consider the use of <code>correspondingElement</code>
+  with external file references to be at-risk.
+</p>
+
+<p>The <b id="__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</b> IDL attribute
+points to the <a>corresponding use element</a> if this element is an <a>element instance</a> in a <a>use-element shadow tree</a>,
+or is null otherwise.</p>
+
+<h3 id="InterfaceShadowAnimation">Interface ShadowAnimation</h3>
+  
+<p>The <a>ShadowAnimation</a> inteface defines a read-only <a>Animation</a> object,
+  which mirrors all changes to the <a>ShadowAnimation::sourceAnimation</a> object
+  from which it was constructed.
+  They are used to mirror author-initiated animation objects in the
+  <a>use-element shadow tree</a>.
+</p>
+  
+
+<pre class="idl">
+[<i>Constructor</i> (<a>Animation</a> source, <a>Animatable</a> newTarget) ]
+interface <b>ShadowAnimation</b> : <a>Animation</a> {
+  [SameObject] readonly attribute <a>Animation</a> <a href="#__svg__ShadowAnimation__sourceAnimation">sourceAnimation</a>;
+};</pre>
+  
+<p>The <b id="__svg__ShadowAnimation__sourceAnimation">sourceAnimation</b> IDL property
+  points to the <a>Animation</a> object passed in the constructor.
+</p>
+  
+<p>
+  The constructor generates a new <a>ShadowAnimation</a> object,
+  which reflects all properties on the <a>ShadowAnimation::sourceAnimation</a>,
+  except that its <a href="https://www.w3.org/TR/web-animations-1/#dom-animation-effect"><code>effect</code></a> is created by constructing a new
+  <a href="https://www.w3.org/TR/web-animations-1/#keyframeeffectreadonly"><code>KeyframeEffectReadOnly</code></a> 
+  using the keyframe effect of the <a>ShadowAnimation::sourceAnimation</a> as its source,
+  and then modifying its <a href="https://www.w3.org/TR/web-animations-1/#dom-keyframeeffectreadonly-target"><code>target</code></a>
+  to match the <code>newTarget</code> parameter.
+</p>
+
+  
+<p>
+  A <a>ShadowAnimation</a> is read-only.
+  Any attempt to set any of the inherited IDL properties, 
+  or call any of the <a>Animation</a> methods that change its state,
+  must throw a <code>NoModificationAllowedError</code>.
+  However, the user agent must ensure that
+  any changes to the properties or state
+  of the <a>ShadowAnimation::sourceAnimation</a> are reflected 
+  in changes to the <a>ShadowAnimation</a>.
+</p>
+  
 <h3 id="InterfaceSVGSwitchElement">Interface SVGSwitchElement</h3>
 
 <edit:with element="switch">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
 <head>
   <title>Paths</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -198,7 +198,7 @@ command.</p>
 current bearing, which is an angle set by the <em>bearing</em>
 commands.  This allows for paths to be specified using a
 style of "turtle graphics", where straight line and curved
-path segments are placed with their starting point at a
+<a>path segments</a> are placed with their starting point at a
 tangent (or at some other angle) to the current bearing.</p>
 
 </div>
@@ -230,7 +230,7 @@ and <var>cb</var> represents the current bearing.</p>
   </tr>
   <tr>
     <th>Value:</th>
-    <td>none | path(<a>&lt;string&gt;</a>)</td>
+    <td>none | <a>&lt;string&gt;</a></td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -238,7 +238,7 @@ and <var>cb</var> represents the current bearing.</p>
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td><a>'path'</a> and <a>'textPath'</a></td>
+    <td><a>'path'</a></td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -262,17 +262,21 @@ and <var>cb</var> represents the current bearing.</p>
   </tr>
 </table>
 
-<p>The <a>'d'</a> property is used to specify the shape of a <a>'path'</a> element
-and the path along which text flows for a <a>'textPath'</a> element.</p>
+<p>The <a>'d'</a> property is used to specify the shape of a <a>'path'</a> element.</p>
 
 <p>The value <span class='prop-value'>none</span> indicates that there is no
 path data for the element.  For <a>'path'</a> elements, this means that the
 element does not render or contribute to the <a>bounding box</a> of ancestor
-<a>container elements</a>.  For <a>'textPath'</a> elements, this means that
-the text within the <a>'textPath'</a> does not render or contribute to
-the <a>bounding box</a> of the <a>'text'</a> element.</p>
+<a>container elements</a>.</p>
 
-<p>The <span class='prop-value'>path(<a>&lt;string&gt;</a>)</span> value
+<p>A path is made up of multiple segments, and every command, either explicit
+or implicit, other than moveto or closepath,
+defines one <dfn id="TermPathSegment">path segment</dfn>.</p>
+
+<p>All coordinates and lengths specified within path data must be treated as
+being in <a>user units</a> in the current user coordinate system.</p>
+
+<p>The <span class='prop-value'><a>&lt;string&gt;</a></span> value
 specifies a shape using a path data string.  The contents of the
 <a>&lt;string&gt;</a> value must match the <a href="#PathDataBNF">svg-path</a>
 <a href="types.html#syntax">EBNF grammar</a> defined below, and errors within the string are handled according to
@@ -280,30 +284,34 @@ the rules in the <a href="paths.html#PathDataErrorHandling">Path Data Error Hand
 If the path data string contains no valid commands, then the behavior
 is the same as the <span class='prop-value'>none</span> value.</p>
 
-<p>While the <a>'d'</a> property takes the above values, the <span class='attr-name'>'d'</span>
-presentation attribute for the <a>'path'</a> and <a>'textPath'</a> elements instead
-accept path data string contents without the surrounding <span class='prop-value'>path("...")</span>
-function and string quotes.</p>
+<p>
+  For animation, two <a>'d'</a> property values can only be
+  interpolated smoothly when the path data strings contain have the
+  same structure, (i.e. exactly the same number and types of path data
+  commands which are in the same order). If an animation is specified
+  and the lists of path data commands do not have the same structure,
+  then the values must be
+  <a href="https://w3c.github.io/web-animations/#animation-interpolation">interpolated</a>
+  using the
+  <a href="https://w3c.github.io/web-animations/#discrete-animation-type-section">discrete</a>
+  animation type.
+</p>
+<p>
+  If the list of path data commands have the same structure, then each
+  parameter to each path data command must be
+  <a href="https://w3c.github.io/web-animations/#animation-interpolation">interpolated</a>
+  separately <a href="https://w3c.github.io/web-animations/#real-number-animation-type">as
+  real numbers</a>.  Flags and booleans must be interpolated as
+  fractions between zero and one, with any non-zero value considered
+  to be a value of one/true.
+</p>
 
-<div class='note'>
-  <p>For example, the following two path definitions are equivalent:</p>
-  <pre>&lt;path style="d: path('M 100,100 L 200,200');"/&gt;
-&lt;path d="M 100,100 L 200,200"/&gt;</pre>
-</div>
-
-<p>For animation, two <a>'d'</a> property values can only be interpolated
-smoothly when they both are <span class='prop-value'>path(...)</span> values
-and the path data strings contain exactly the number and types of path data commands.
-If an animation is specified and the lists of path data commands are not the
-same, then the values must be <a href="https://w3c.github.io/web-animations/#animation-interpolation">interpolated</a>
-using the <a href="https://w3c.github.io/web-animations/#discrete-animation-type-section">discrete</a> animation type.</p>
-
-<p>If the list of path data commands are the same, then each parameter
-to each path data command must be <a href="https://w3c.github.io/web-animations/#animation-interpolation">interpolated</a>
-separately <a href="https://w3c.github.io/web-animations/#real-number-animation-type">as real numbers</a>.
-Flags and booleans must be interpolated as fractions between zero and one, with any non-zero value
-considered to be a value of one/true.</p>
-
+<p class="annotation">
+  Resolved that "d will become a presentation attribute (no name
+  change) with path data string as value" at
+  <a href="https://www.w3.org/2016/04/21-svg-minutes.html">London
+  Editor's Meeting</a>.
+</p>
 
 </div>
 
@@ -339,9 +347,9 @@ and the <a href="paths.html#PathDataClosePathCommand">close path commands</a>
 <h3 id="PathDataMovetoCommands">The <strong>"moveto"</strong> commands</h3>
 
 <p>The "moveto" commands (<strong>M</strong> or
-<strong>m</strong>) establish a new current point. The effect
-is as if the "pen" were lifted and moved to a new location. A
-path data segment (if there is one) must begin with a "moveto"
+<strong>m</strong>) must establish a new <dfn id="TermInitialPoint">initial point</dfn>
+and a new current point. The effect is as if the "pen" were lifted and moved to
+a new location. A path data segment (if there is one) must begin with a "moveto"
 command. Subsequent "moveto" commands (i.e., when the "moveto"
 is not the first command) represent the start of a new
 <em>subpath</em>:</p>
@@ -387,23 +395,88 @@ position moved to is (<var>cpx</var> + <var>x</var> cos <var>cb</var>
 <h3 id="PathDataClosePathCommand">The <strong>"closepath"</strong> command</h3>
 
 <p>The "closepath" (<strong>Z</strong> or <strong>z</strong>)
-  ends the current subpath by connecting it back to its initial point
+  must end the current subpath by connecting it back to its <a>initial point</a>
   in either of two ways:
 </p>
+
 <ol>
   <li>
     If the previous command is <q>complete</q>, that is that all the
     required coordinate data has been supplied, then an automatic
-    straight line is drawn from the current point to the initial
-    point of the current subpath. This path segment may be of zero
+    straight line must be drawn from the current point to the <a>initial point</a>
+    of the current subpath. This <a>path segment</a> may be of zero
     length.
   </li>
-  <li>
-    If the previous command is missing required coordinate data then
-    the initial point is used to fill in the missing data (but only
-    for the last point or points).
+  <li class='ready-for-wg-review'>
+    If the previous command is a <a href="paths.html#PathDataLinetoCommands">"lineto"</a>,
+    <a href="paths.html#PathDataCubicBezierCommands">"curveto"</a>,
+    <a href="paths.html#PathDataCubicBezierCommands">"smooth curveto"</a>,
+    <a href="paths.html#PathDataQuadraticBezierCommands">"quadratic Bézier curveto"</a>,
+    <a href="paths.html#PathDataQuadraticBezierCommands">"smooth quadratic Bézier curveto"</a>,
+    or <a href="paths.html#PathDataEllipticalArcCommands">"elliptical arc"</a>, 
+    that is missing required coordinate data, 
+    then this is a <dfn id="TermSegment-CompletingClosePath">segment-completing close path command</dfn>.
+    No additional path segment is generated by the command; instead,
+    the <a>initial point</a> for this subpath must be used
+    in place of each missing <var>(x,y)</var> coordinate to complete the previous segment. 
   </li>
 </ol>
+
+<table class="PathDataTable">
+  <tr>
+    <th>Command</th>
+    <th>Name</th>
+    <th>Parameters</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>Z</strong> or<br />
+     <strong>z</strong></td>
+    <td>closepath</td>
+    <td>(none)</td>
+    <td>Close the current subpath by connecting it back to the current
+    subpath's <a>initial point</a> (see prose above). Since the
+    <strong>Z</strong> and <strong>z</strong>
+    commands take no parameters, they have an identical effect.</td>
+  </tr>
+</table>
+
+<p class="note">
+  SVG 2 adds the ability to fill in missing coordinate data with
+  the <strong>Z</strong> or <strong>z</strong> command to avoid the
+  need to add a zero length (or very short in the case of relative
+  paths with rounding errors) <a>path segment</a> to close a subpath. This
+  can effect the number of markers drawn and their orientation at
+  the beginning/end of a closed subpath.
+</p>
+<p class="annotation">
+  The use of <strong>Z</strong> or <strong>z</strong> to replace
+  missing coordinate data with the coordinate of the <a>initial point</a> in
+  a subpath was resolved at the
+  <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item04">Sydney
+    (2015)</a> meeting.
+</p>
+
+<p>A <dfn id="TermClosedSubpath">closed subpath</dfn> must be closed with a
+"closepath" command, this "joins" the first and last <a>path segments</a>.
+Any other path is an <dfn id="TermOpenSubpath">open subpath</dfn>.</p>
+
+<p class="note ready-for-wg-review">A <a>closed subpath</a> differs in behavior
+from an <a>open subpath</a> whose final coordinate is the <a>initial point</a>
+of the subpath.
+The first and last <a>path segments</a> of an <a>open subpath</a> will not be
+joined, even when the final coordinate of the last <a>path segment</a> is the
+<a>initial point</a> of the subpath. This will result in the first and last 
+<a>path segments</a> being capped using the current value of <a>'stroke-linecap'</a>
+rather than joined using the current value of <a>'stroke-linejoin'</a>.</p>
+
+<p>If a "closepath" is followed immediately by a
+"moveto", then the "moveto" identifies the start point of the
+next subpath. If a "closepath" is followed immediately by any
+other command, then the next subpath must start at the same <a>initial point</a>
+as the current subpath.</p>
+
+<p class='ready-for-wider-review'>The current bearing does not affect a <strong>z</strong> command.</p>
 
 <p>Examples:</p>
 <ul>
@@ -423,82 +496,20 @@ position moved to is (<var>cpx</var> + <var>x</var> cos <var>cb</var>
     m 100,100 a 50,50 0 0 1 100,0 50,50 0 0 1 z:
 
     Second set of coordinates for the <strong>a</strong> command
-    missing final point, <strong>z</strong> causes initial point to
+    missing final point, <strong>z</strong> causes <a>initial point</a> to
     be used as final point resulting in a closed circular path.
   </li>
   <li>
     m 100,100 a 50,50 0 0 1 100,0 c z:
 
     <strong>c</strong> command missing three coordinates,
-    <strong>z</strong> causes initial point to be used as coordinate
+    <strong>z</strong> causes <a>initial point</a> to be used as coordinate
     data for all <strong>c</strong> coordinates resulting in a
     closed semi-circle. Visually <strong>c</strong>
     <strong>z</strong> is the same as <strong>z</strong> but may be
     useful in animating path data.
   </li>
 </ul>
-
-<p class="note">
-  SVG 2 adds the ability to fill in missing coordinate data with
-  the <strong>Z</strong> or <strong>z</strong> command to avoid the
-  need to add a zero length (or very short in the case of relative
-  paths with rounding errors) path segment to close a subpath. This
-  can effect the number of markers drawn and their orientation at
-  the beginning/end of a closed subpath.
-</p>
-<p class="annotation">
-  The use of <strong>Z</strong> or <strong>z</strong> to replace
-  missing coordinate data with the coordinate of the initial point in
-  a subpath was resolved at the
-  <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item04">Sydney
-    (2015)</a> meeting.
-</p>
-
-
-<p>If a "closepath" is followed immediately by a
-"moveto", then the "moveto" identifies the start point of the
-next subpath. If a "closepath" is followed immediately by any
-other command, then the next subpath starts at the same initial
-point as the current subpath.</p>
-
-
-<p>When a subpath ends in a "closepath," it differs in behavior
-from what happens when "manually" closing a subpath via a
-"lineto" command in how <a>'stroke-linejoin'</a>
-and <a>'stroke-linecap'</a> are implemented. With "closepath", the end of the final segment
-of the subpath is "joined" with the start of the initial
-segment of the subpath using the current value of <a>'stroke-linejoin'</a>.
-If you instead "manually" close the subpath via a "lineto"
-command, the start of the first segment and the end of the last
-segment are not joined but instead are each capped using the
-current value of <a>'stroke-linecap'</a>.
-At the end of the command, the new current point is set to the
-initial point of the current subpath.</p>
-
-<div class="ready-for-wider-review">
-
-<p>The current bearing does not affect a <strong>z</strong> command.</p>
-
-</div>
-
-<table  class="PathDataTable">
-  <tr>
-    <th>Command</th>
-    <th>Name</th>
-    <th>Parameters</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td><strong>Z</strong> or<br />
-     <strong>z</strong></td>
-    <td>closepath</td>
-    <td>(none)</td>
-    <td>Close the current subpath by connecting it back to the current
-    subpath's initial point (see prose above). Since the
-    <strong>Z</strong> and <strong>z</strong>
-    commands take no parameters, they have an identical effect.</td>
-  </tr>
-</table>
 
 <h3 id="PathDataLinetoCommands">The <strong>"lineto"</strong> commands</h3>
 
@@ -662,7 +673,7 @@ for the previous "C" command relative to the start point of the
 <p>The following picture shows some how cubic Bézier
 curves change their shape depending on the position of the
 control points. The first five examples illustrate a single
-cubic Bézier path segment. The example at the lower
+cubic Bézier <a>path segment</a>. The example at the lower
 right shows a "C" command followed by an "S" command.</p>
 <p><img
 alt="Example cubic02 - cubic Bézier commands in path data"
@@ -781,7 +792,7 @@ command.</p>
     orientation of the ellipse are defined by two radii
     (<strong>rx</strong>, <strong>ry</strong>) and an
     <strong>x-axis-rotation</strong>, which indicates how the
-    ellipse as a whole is rotated relative to the current
+    ellipse as a whole is rotated, in degrees, relative to the current
     coordinate system. The center (<strong>cx</strong>,
     <strong>cy</strong>) of the ellipse is calculated
     automatically to satisfy the constraints imposed by the
@@ -809,7 +820,7 @@ simple uses of arc commands within a path.</p>
 <edit:example href='images/paths/arcs01.svg' name='arcs01' description='arc commands in path data' image='yes' link='yes'/>
 
 <p>The elliptical arc command draws a section of an ellipse
-which meets the following constraints:</p>
+which must meet the following constraints:</p>
 
 <ul>
   <li>the arc starts at the current point</li>
@@ -818,7 +829,7 @@ which meets the following constraints:</p>
   <li>the ellipse has the two radii (<strong>rx</strong>,
   <strong>ry</strong>)</li>
   <li>the x-axis of the ellipse is rotated by
-  <strong>x-axis-rotation</strong> relative to the x-axis of
+  <strong>x-axis-rotation</strong> degrees relative to the x-axis of
   the current coordinate system.</li>
 </ul>
 
@@ -950,127 +961,112 @@ it is possible to set the bearing to that tangent by using
 
 <h3 id="PathDataBNF">The grammar for path data</h3>
 
-<p class="issue" data-issue="13">Update for new 'Z'/'z' behavior.</p>
-
 <p>SVG path data matches the following EBNF grammar.</p>
+<pre class='grammar ready-for-wg-review'>
+svg_path::= wsp* moveto? (moveto drawto_command*)?
 
-<pre class='grammar'>
-svg-path:
-    <a>wsp</a>* moveto-drawto-command-groups? <a>wsp</a>*
-moveto-drawto-command-groups:
-    moveto-drawto-command-group
-    | moveto-drawto-command-group <a>wsp</a>* moveto-drawto-command-groups
-moveto-drawto-command-group:
-    moveto <a>wsp</a>* drawto-commands?
-drawto-commands:
-    drawto-command
-    | drawto-command <a>wsp</a>* drawto-commands
-drawto-command:
-    closepath
+drawto_command::=
+    moveto
+    | closepath
     | lineto
-    | horizontal-lineto
-    | vertical-lineto
+    | horizontal_lineto
+    | vertical_lineto
     | curveto
-    | smooth-curveto
-    | quadratic-bezier-curveto
-    | smooth-quadratic-bezier-curveto
-    | elliptical-arc
+    | smooth_curveto
+    | quadratic_bezier_curveto
+    | smooth_quadratic_bezier_curveto
+    | elliptical_arc
     | bearing
-moveto:
-    ( "M" | "m" ) <a>wsp</a>* moveto-argument-sequence
-moveto-argument-sequence:
-    coordinate-pair
-    | coordinate-pair <a>comma-wsp</a>? lineto-argument-sequence
-closepath:
+
+moveto::=
+    ( "M" | "m" ) wsp* coordinate_pair_sequence wsp* closepath?
+
+closepath::= 
     ("Z" | "z")
-lineto:
-    ( "L" | "l" ) <a>wsp</a>* lineto-argument-sequence
-lineto-argument-sequence:
-    coordinate-pair
-    | coordinate-pair <a>comma-wsp</a>? lineto-argument-sequence
-horizontal-lineto:
-    ( "H" | "h" ) <a>wsp</a>* horizontal-lineto-argument-sequence
-horizontal-lineto-argument-sequence:
-    coordinate
-    | coordinate <a>comma-wsp</a>? horizontal-lineto-argument-sequence
-vertical-lineto:
-    ( "V" | "v" ) <a>wsp</a>* vertical-lineto-argument-sequence
-vertical-lineto-argument-sequence:
-    coordinate
-    | coordinate <a>comma-wsp</a>? vertical-lineto-argument-sequence
-curveto:
-    ( "C" | "c" ) <a>wsp</a>* curveto-argument-sequence
-curveto-argument-sequence:
-    curveto-argument
-    | curveto-argument <a>comma-wsp</a>? curveto-argument-sequence
-curveto-argument:
-    coordinate-pair <a>comma-wsp</a>? coordinate-pair <a>comma-wsp</a>? coordinate-pair
-smooth-curveto:
-    ( "S" | "s" ) <a>wsp</a>* smooth-curveto-argument-sequence
-smooth-curveto-argument-sequence:
-    smooth-curveto-argument
-    | smooth-curveto-argument <a>comma-wsp</a>? smooth-curveto-argument-sequence
-smooth-curveto-argument:
-    coordinate-pair <a>comma-wsp</a>? coordinate-pair
-quadratic-bezier-curveto:
-    ( "Q" | "q" ) <a>wsp</a>* quadratic-bezier-curveto-argument-sequence
-quadratic-bezier-curveto-argument-sequence:
-    quadratic-bezier-curveto-argument
-    | quadratic-bezier-curveto-argument <a>comma-wsp</a>?
-        quadratic-bezier-curveto-argument-sequence
-quadratic-bezier-curveto-argument:
-    coordinate-pair <a>comma-wsp</a>? coordinate-pair
-smooth-quadratic-bezier-curveto:
-    ( "T" | "t" ) <a>wsp</a>* smooth-quadratic-bezier-curveto-argument-sequence
-smooth-quadratic-bezier-curveto-argument-sequence:
-    coordinate-pair
-    | coordinate-pair <a>comma-wsp</a>? smooth-quadratic-bezier-curveto-argument-sequence
-elliptical-arc:
-    ( "A" | "a" ) <a>wsp</a>* elliptical-arc-argument-sequence
-elliptical-arc-argument-sequence:
-    elliptical-arc-argument
-    | elliptical-arc-argument <a>comma-wsp</a>? elliptical-arc-argument-sequence
-elliptical-arc-argument:
-    number <a>comma-wsp</a>? number <a>comma-wsp</a>?
-        number <a>comma-wsp</a> flag <a>comma-wsp</a>? flag <a>comma-wsp</a>? coordinate-pair
-bearing:
-    ( "B" | "b" ) <a>wsp</a>* bearing-argument-sequence
-bearing-argument-sequence:
-    number
-    | number <a>comma-wsp</a>? bearing-argument-sequence
-coordinate-pair:
-    coordinate <a>comma-wsp</a>? coordinate
-coordinate:
-    number
-nonnegative-number:
-    integer-constant
-    | floating-point-constant
-number:
-    sign? integer-constant
-    | sign? floating-point-constant
-flag:
-    "0" | "1"
-integer-constant:
-    digit-sequence
-floating-point-constant:
-    fractional-constant exponent?
-    | digit-sequence exponent
-fractional-constant:
-    digit-sequence? "." digit-sequence
-    | digit-sequence "."
-exponent:
-    ( "e" | "E" ) sign? digit-sequence
-sign:
-    "+" | "-"
-digit-sequence:
-    digit
-    | digit digit-sequence
-digit:
-    "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+
+lineto::=
+    ("L"|"l") wsp* (coordinate_pair_sequence | closepath)
+
+horizontal_lineto::=
+    ("H"|"h") wsp* coordinate_sequence
+
+vertical_lineto::=
+    ("V"|"v") wsp* coordinate_sequence
+
+curveto::=
+    ("C"|"c") wsp* (curveto_coordinate_sequence | (coordinate_pair_sequence? closepath))
+
+curveto_coordinate_sequence::=
+    coordinate_pair_triplet
+    | (coordinate_pair_triplet comma_wsp? curveto_coordinate_sequence)
+
+smooth_curveto::=
+    ("S"|"s") wsp* (smooth_curveto_coordinate_sequence
+    | (coordinate_pair_sequence? closepath))
+
+smooth_curveto_coordinate_sequence::=
+    coordinate_pair_double
+    | (coordinate_pair_double comma_wsp? smooth_curveto_coordinate_sequence)
+
+quadratic_bezier_curveto::=
+    ("Q"|"q") wsp*
+    (quadratic_bezier_curveto_coordinate_sequence | (coordinate_pair_sequence? closepath))
+
+quadratic_bezier_curveto_coordinate_sequence::=
+    coordinate_pair_double
+    | (coordinate_pair_double comma_wsp? quadratic_bezier_curveto_coordinate_sequence)
+
+smooth_quadratic_bezier_curveto::=
+    ("T"|"t") wsp* (coordinate_pair_sequence | closepath)
+
+elliptical_arc::=
+    ( "A" | "a" ) wsp*
+    (elliptical_arc_argument_sequence
+    | (elliptical_arc_argument_sequence? elliptical_arc_closing_argument))
+
+elliptical_arc_argument_sequence::=
+    elliptical_arc_argument
+    | (elliptical_arc_argument comma_wsp? elliptical_arc_argument_sequence)
+
+elliptical_arc_argument::=
+    number comma_wsp? number comma_wsp? number comma_wsp
+    flag comma_wsp? flag comma_wsp? coordinate_pair
+
+elliptical_arc_closing_argument::=
+    number comma_wsp? number comma_wsp? number comma_wsp
+    flag comma_wsp? flag comma_wsp? closepath
+
+bearing::=
+    ( "B" | "b" ) wsp* bearing_argument_sequence
+
+bearing_argument_sequence::=
+    number | (number comma_wsp? bearing_argument_sequence)
+
+coordinate_pair_double::=
+    coordinate_pair comma_wsp? coordinate_pair
+
+coordinate_pair_triplet::=
+    coordinate_pair comma_wsp? coordinate_pair comma_wsp? coordinate_pair
+
+coordinate_pair_sequence::=
+    coordinate_pair | (coordinate_pair comma_wsp? coordinate_pair_sequence)
+
+coordinate_sequence::=
+    coordinate | (coordinate comma_wsp? coordinate_sequence)
+
+coordinate_pair::= coordinate comma_wsp? coordinate
+
+coordinate::= sign? number
+
+sign::= "+"|"-"
+number ::= ([0-9])+
+flag::=("0"|"1")
+comma_wsp::=(wsp+ ","? wsp*) | ("," wsp*)
+wsp ::= (#x9 | #x20 | #xA | #xC | #xD)
 </pre>
 
-<p>The processing of the BNF must consume as much of a given
-BNF production as possible, stopping at the point when a
+<p>The processing of the EBNF must consume as much of a given
+EBNF production as possible, stopping at the point when a
 character is encountered which no longer satisfies the
 production. Thus, in the string "M 100-200", the first
 coordinate for the "moveto" consumes the characters "100" and
@@ -1086,7 +1082,7 @@ a "coordinate" only allows one decimal point. The result is
 that the first coordinate will be "0.6" and the second
 coordinate will be ".5".</p>
 
-<p>Note that the BNF allows the path data string in the
+<p>Note that the EBNF allows the path data string in the
 <a>'d'</a> property to be empty. This is not
 an error, instead it disables rendering of the path.
 Rendering is also disabled when the <a>'d'</a> property
@@ -1127,10 +1123,13 @@ distance along the path is defined as follows:</p>
 
   <div class="note">This will "move past"
   zero length segments, and choose the later segment if the distance
-  is at the boundary between two non-zero length segments.</div></li>
+  is at the boundary between two non-zero length segments.</div>
+  <div class="note">The default direction at segment boundaries is overriden
+  when calculating a <a>cap shape</a> and when <a href="painting.html#RenderingMarkers">rendering markers</a>.
+  </div></li>
 
   <li>Otherwise, the given distance along the path occurs in the middle
-  of a non-zero length path segment.  The direction is simply the direction
+  of a non-zero length <a>path segment</a>.  The direction is simply the direction
   of the curve at that point.  If the point lies at a discontinuity, such as
   a cusp in a Bézier segment, then the direction is undefined; in this case,
   a direction between the incoming and outgoing direction around the discontinuity
@@ -1138,25 +1137,25 @@ distance along the path is defined as follows:</p>
 </ul>
 
 <p>The <dfn id="TermPathSegmentStartDirection">direction at the start
-of a path segment</dfn> is defined as follows:</p>
+of a <a>path segment</a></dfn> is defined as follows:</p>
 
 <ul>
   <li>If length of the entire path the segment belongs to is zero, then the
   direction at the start of the segment points in the same direction as the
   positive x-axis.</li>
 
-  <li>Otherwise, if the path segment is zero length and the segment does not
+  <li>Otherwise, if the <a>path segment</a> is zero length and the segment does not
   have any preceding non-zero length segments, then the direction at the
   start of the segment is the same as the
   <a href="#TermPathSegmentEndDirection">direction at the end of the segment</a>.</li>
 
-  <li>Otherwise, if the path segment is zero length and there is some non-zero
+  <li>Otherwise, if the <a>path segment</a> is zero length and there is some non-zero
   length segment preceding this segment, then the direction at the start of
   this segment is the same as the
   <a href="#TermPathSegmentEndDirection">direction at the end of the closest
   preceding non-zero length segment</a>.</li>
 
-  <li>Otherwise, the path segment is non-zero length.  The direction at the
+  <li>Otherwise, the <a>path segment</a> is non-zero length.  The direction at the
   start of the segment is simply the direction coming out of the segment's start
   point.</li>
 </ul>
@@ -1169,18 +1168,18 @@ segment</dfn> is defined as follows:</p>
   direction at the end of the segment points in the same direction as the
   positive x-axis.</li>
 
-  <li>Otherwise, if the path segment is zero length and the segment does not
+  <li>Otherwise, if the <a>path segment</a> is zero length and the segment does not
   have any following non-zero length segments, then the direction at the
   end of the segment is the same as the
   <a href="#TermPathSegmentStartDirection">direction at the start of the segment</a>.</li>
 
-  <li>Otherwise, if the path segment is zero length and there is some non-zero
+  <li>Otherwise, if the <a>path segment</a> is zero length and there is some non-zero
   length segment following this segment, then the direction at the end of
   this segment is the same as the
   <a href="#TermPathSegmentStartDirection">direction at the start of the closest
   following non-zero length segment</a>.</li>
 
-  <li>Otherwise, the path segment is non-zero length.  The direction at the
+  <li>Otherwise, the <a>path segment</a> is non-zero length.  The direction at the
   end of the segment is simply the direction coming in to the segment's end
   point.</li>
 </ul>
@@ -1208,8 +1207,8 @@ segment</dfn> is defined as follows:</p>
 
       <li>If a path data command contains an incorrect set of
       parameters, then the given path data command is rendered
-      up to and including the last correctly defined path
-      segment, even if that path segment is a sub-component of
+      up to and including the last correctly defined <a>path segment</a>,
+      even if that <a>path segment</a> is a sub-component of
       a compound path data command, such as a "lineto" with
       several pairs of coordinates. For example, for the path
       data string <span class='attr-value'>'M 10,10 L 20,20,30'</span>,
@@ -1224,11 +1223,11 @@ segment</dfn> is defined as follows:</p>
     </ul>
   </li>
   <li>
-    Markers and zero-length path segments:
+    Markers and zero-length <a>path segments</a>:
     <ul>
       <li>If markers are specified, then a marker is drawn on
       every applicable vertex, even if the given vertex is the
-      end point of a zero-length path segment and even if
+      end point of a zero-length <a>path segment</a> and even if
       "moveto" commands follow each other.</li>
 
       <li>As mentioned in <a href="painting.html#StrokeProperties">Stroke Properties</a>,
@@ -1241,13 +1240,13 @@ segment</dfn> is defined as follows:</p>
   <li>
     The S/s commands indicate that the first control point of
     the given cubic Bézier segment is calculated by
-    reflecting the previous path segments second control point
+    reflecting the previous <a>path segments</a> second control point
     relative to the current point. The exact math is as
     follows. If the current point is (<var>curx</var>, <var>cury</var>) and the
-    second control point of the previous path segment is
+    second control point of the previous <a>path segment</a> is
     (<var>oldx2</var>, <var>oldy2</var>), then the reflected point (i.e., (<var>newx1</var>,
-    <var>newy1</var>), the first control point of the current path
-    segment) is:
+    <var>newy1</var>), the first control point of the current <a>path
+    segment</a>) is:
 <pre>
 (newx1, newy1) = (curx - (oldx2 - curx), cury - (oldy2 - cury))
                = (2*curx - oldx2, 2*cury - oldy2)
@@ -1316,13 +1315,12 @@ commands contribute to path length calculations.</p>
     calculations for <a href="text.html#TextLayoutPath">text on a path</a>,
     <a href="https://svgwg.org/specs/animations/#AnimateMotionElement">motion animation</a> and
     various <a href="painting.html#StrokeProperties">stroke operations</a>.</p>
-    <p>A negative value is an error (see <a href="paths.html#PathDataErrorHandling">Error handling</a>).</p>
-
-    <p class="issue" data-issue="14">
-        A clear definition for the meaning of a value of zero for pathLength
-        must be provided.
-        <a href="https://github.com/w3c/svgwg/issues/81">github issue #81</a>
+    <p class="ready-for-wg-review">
+    A value of zero is valid and must be treated as a scaling factor of infinity.
+    A value of zero scaled infinitely must remain zero, while any value greater
+    than zero must become +Infinity.
     </p>
+    <p>A negative value is an error (see <a href="paths.html#PathDataErrorHandling">Error handling</a>).</p>
   </dd>
 </dl>
 

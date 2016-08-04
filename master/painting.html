@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
 <head>
   <title>Painting: Filling, Stroking and Marker Symbols</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -48,7 +48,7 @@ different paints that the fill and stroke of a graphical element can be painted 
   <li>a gradient (linear, radial, or mesh),</li>
   <li>a pattern (vector or raster, possibly tiled),</li>
   <li>a hatch,</li>
-  <li>other images as specified using CSS Image Value syntax [<a href="refs.html#ref-CSS3IMAGES">CSS3IMAGES</a>].</li>
+  <li>other images as specified using CSS Image Value syntax [<a href="refs.html#ref-css3-images">css3-images</a>].</li>
 </ul>
 
 <p>The paint to use for filling and stroking an element is specified using the
@@ -141,8 +141,8 @@ and <a href="pservers.html#Hatches">hatches</a>.</p>
 <p class="note">The ability to apply more than one paint layer to an element is new in SVG 2.</p>
 
 <p>A <a>&lt;paint&gt;</a> value can either be a comma-separated list of paint layers,
-or a special keyword that references the value of <a>'fill'</a> or <a>'stroke'</a> in
-a referencing context.  Each paint layer can take one of the following values:</p>
+or <a href="#context-paint">one of the context keywords</a>, which reference the paint value of <a>'fill'</a> or <a>'stroke'</a> from a <a>context element</a>.
+Each paint layer can take one of the following values:</p>
 
 <dl>
   <dt><a>&lt;url&gt;</a></dt>
@@ -246,8 +246,8 @@ must be supported, including <span class='prop-value'>rgb()</span>,
 the <a href="http://www.w3.org/TR/css3-color/#svg-color">extended color keywords</a> and
 the <span class='prop-value'>currentColor</span> value.</p>
 
-<p>The <span class='prop-value'>context-fill</span> and <span class='prop-value'>context-stroke</span>
-values are a reference to the computed value of the <a>'fill'</a> or <a>'stroke'</a>
+<p id="context-paint">The <span class='prop-value'>context-fill</span> and <span class='prop-value'>context-stroke</span>
+values are a reference to the paint layers generated for the <a>'fill'</a> or <a>'stroke'</a>
 property, respectively, of the <dfn id="TermContextElement">context element</dfn>
 of the element being painted.  The context element of an element is defined as follows:</p>
 
@@ -263,14 +263,21 @@ of the element being painted.  The context element of an element is defined as f
 </ul>
 
 <p>If there is no context element and these keywords are used, then no paint is
-applied.  If the referenced paint is a gradient or a pattern, then the
-coordinate space to use and the object used for any
-<span class='attr-value'>'objectBoundingBox'</span>-relative values are the
-same as those of the <a>context element</a>.</p>
+applied.  
+</p>
+<p>
+When the context paint layers include paint server references, then the
+coordinate space and the bounding box used 
+to scale the paint server elements and content are
+those of the <a>context element</a>.
+In other words, any gradients and patterns referenced with these keywords
+should be continuous from the main shape to the markers,
+or from one element within a <a>use-element shadow tree</a> to another.
+</p>
 
 <p>If the referenced value of <a>'fill'</a> or <a>'stroke'</a> is a
 <span class='prop-value'>context-fill</span> and <span class='prop-value'>context-stroke</span>
-value, then those context references are followed too.</p>
+value, then those contextual referencing is recursive.</p>
 
 <div class="example">
   <edit:includefile href="images/painting/marker-context.svg2.svg"/>
@@ -290,7 +297,7 @@ value, then those context references are followed too.</p>
 
 <p class="note">See the CSS Color Module Level 3 specification for the
 definition of <a>'color'</a>.
-[<a href="refs.html#ref-CSS3COLOR">CSS3COLOR</a>]</p>
+[<a href="refs.html#ref-css3-color">css3-color</a>]</p>
 
 <p>The <a>'color'</a> property is used to provide a potential indirect value,
 <span class="prop-value">currentColor</span>, for the <a>'fill'</a>,
@@ -387,10 +394,10 @@ associated with the current value of the <a>'fill-rule'</a> property.
 The zero-width geometric outline of a shape is included in the area to
 be painted.</p>
 
-<p>The fill operation fills open subpaths by performing the fill
+<p>The fill operation fills <a>open subpaths</a> by performing the fill
 operation as if an additional "closepath" command were added to the
 path to connect the last point of the subpath with the first point of
-the subpath. Thus, fill operations apply to both open subpaths within
+the subpath. Thus, fill operations apply to both <a>open subpaths</a> within
 <a>'path'</a> elements (i.e., subpaths without a closepath command) and
 <a>'polyline'</a> elements.</p>
 
@@ -502,7 +509,7 @@ property</h3>
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a>&lt;number&gt;</a></td>
+    <td>&lt;number&gt; | &lt;percentage&gt;</td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -526,7 +533,7 @@ property</h3>
   </tr>
   <tr>
     <th>Computed&#160;value:</th>
-    <td>as specified, but clamped to the range [0, 1]</td>
+    <td>number clamped to the range [0, 1], or percentage</td>
   </tr>
   <tr>
     <th><a>Animatable</a>:</th>
@@ -534,12 +541,23 @@ property</h3>
   </tr>
 </table>
 
-<p><a>'fill-opacity'</a> specifies the
-opacity of the painting operation used to paint the interior
-the current object. (See <a
-href="render.html#PaintingShapesAndText">Painting shapes and
-text</a>.)  A value of 0 means fully transparent, and a
-value of 1 means fully opaque.</p>
+<p><a>'fill-opacity'</a> specifies the opacity of the painting operation used
+to paint the fill the current object. (See
+<a href="render.html#PaintingShapesAndText">Painting shapes and text</a>).</p>
+
+<dl>
+  <dt><span class='prop-value'>&lt;number&gt;</span></dt>
+  <dd>
+    The opacity of the fill. Any values outside the
+    range 0 (fully transparent) to 1 (fully opaque) must be
+    clamped to this range.
+  </dd>
+  <dt><span class='prop-value'>&lt;percentage&gt;</span></dt>
+  <dd>
+    The opacity of the fill expressed as a percentage
+    of the range 0 to 1.
+  </dd>
+</dl>
 
 <p class="note">See also the <a>'opacity'</a> property, which
 specifies group opacity.</p>
@@ -689,7 +707,7 @@ property</h3>
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a>&lt;number&gt;</a></td>
+    <td>&lt;number&gt; | &lt;percentage&gt;</td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -713,7 +731,7 @@ property</h3>
   </tr>
   <tr>
     <th>Computed&#160;value:</th>
-    <td>as specified, but clamped to the range [0, 1]</td>
+    <td>number clamped to the range [0, 1], or percentage</td>
   </tr>
   <tr>
     <th><a>Animatable</a>:</th>
@@ -724,8 +742,21 @@ property</h3>
 <p>The <a>'stroke-opacity'</a> property specifies the opacity of the
 painting operation used to stroke the current object.  (See
 <a href="render.html#PaintingShapesAndText">Painting shapes and text</a>.)
-As with <a>'fill-opacity'</a>, a value of 0 means fully transparent, and a value of 1
-means fully opaque.</p>
+As with <a>'fill-opacity'</a>.</p>
+
+<dl>
+  <dt><span class='prop-value'>&lt;number&gt;</span></dt>
+  <dd>
+    The opacity of the stroke. Any values outside the
+    range 0 (fully transparent) to 1 (fully opaque) must be
+    clamped to this range.
+  </dd>
+  <dt><span class='prop-value'>&lt;percentage&gt;</span></dt>
+  <dd>
+    The opacity of the stroke expressed as a percentage
+    of the range 0 to 1.
+  </dd>
+</dl>
 
 <p class="note">See also the <a>'opacity'</a> property, which specifies
 group opacity.</p>
@@ -819,7 +850,7 @@ property</h3>
 </table>
 
 <p><a>'stroke-linecap'</a> specifies the shape to be used at the end of
-open subpaths when they are stroked, <span class="ready-for-wg-review">
+<a>open subpaths</a> when they are stroked, <span class="ready-for-wg-review">
 and the shape to be drawn for zero length
 subpaths whether they are open or closed.</span>  The possible values are:</p>
 
@@ -1386,58 +1417,62 @@ The ideal stroke shape is determined as follows:
 
 <ol class="algorithm">
   <li>Let <var>shape</var> be an empty shape.</li>
-  <li>Let <var>scale</var> be a scale factor for the dash pattern.  If we are
-  computing the stroke shape of a <a>basic shape</a> or an individual <a>'text'</a>
-  chunk, then <var>scale</var> is 1.  Otherwise, it is determined as follows:
+  <li class="ready-for-wg-review">If <a>'stroke-width'</a> > 0, then:
     <ol>
-      <li>Let <var>length</var> be the user agent's computed length of the
-      <a>'path'</a>.</li>
-      <li>Let <var>authorlength</var> be the value of the <a>'path/pathLength'</a>
-      attribute on the <a>'path'</a> element.</li>
-      <li><var>scale</var> is <var>authorlength</var> / <var>length</var>.</li>
-    </ol>
-  </li>
-  <li>Let <var>path</var> be the <a>equivalent path</a> of the element (or the individual
-  chunk of a <a>'text'</a> element).</li>
-  <li>For each subpath of <var>path</var>:
-    <ol>
-      <li>Let <var>positions</var> be the <a>dash positions</a> for the subpath.</li>
-      <li>For each pair &lt;<var>start</var>, <var>end</var>&gt; in <var>positions</var>:
+      <li>Let <var>scale</var> be a scale factor for the dash pattern.  If we are
+      computing the stroke shape of a <a>basic shape</a> or an individual <a>'text'</a>
+      chunk, then <var>scale</var> is 1.  Otherwise, it is determined as follows:
         <ol>
-          <li>Scale <var>start</var> and <var>end</var> by <var>scale</var>.</li>
-
-          <li>Let <var>dash</var> be the shape that includes, for all distances
-          between <var>start</var> and <var>end</var> along the subpath, all
-          points that lie on the line perpendicular to the subpath at that
-          distance and which are within distance <a>'stroke-width'</a> of
-          the point on the subpath at that position.</li>
-
-          <li>Set <var>dash</var> to be the union of <var>dash</var> and the
-          starting <a>cap shape</a> for the subpath at position <var>start</var>.</li>
-
-          <li>Set <var>dash</var> to be the union of <var>dash</var> and the
-          ending <a>cap shape</a> for the subpath at position <var>end</var>.</li>
-
-          <li>
-            Let <var>index</var> and <var>last</var> be the indexes of the
-            path segments in the subpath at distance <var>start</var> and
-            <var>end</var> along the subpath.
-
-            <p class="note">It does not matter whether any zero length segments are
-            included when choosing <var>index</var> and <var>last</var>.</p>
-          </li>
-
-          <li>While <var>index</var> &lt; <var>last</var>:
+          <li>Let <var>length</var> be the user agent's computed length of the
+          <a>'path'</a>.</li>
+          <li>Let <var>authorlength</var> be the value of the <a>'path/pathLength'</a>
+          attribute on the <a>'path'</a> element.</li>
+          <li><var>scale</var> is <var>authorlength</var> / <var>length</var>.</li>
+        </ol>
+      </li>
+      <li>Let <var>path</var> be the <a>equivalent path</a> of the element (or the individual
+      chunk of a <a>'text'</a> element).</li>
+      <li>For each subpath of <var>path</var>:
+        <ol>
+          <li>Let <var>positions</var> be the <a>dash positions</a> for the subpath.</li>
+          <li>For each pair &lt;<var>start</var>, <var>end</var>&gt; in <var>positions</var>:
             <ol>
-              <li>Set <var>dash</var> to be the union of <var>dash</var> and the
-              <a>line join shape</a> for the subpath at segment index <var>index</var>.</li>
+              <li>Scale <var>start</var> and <var>end</var> by <var>scale</var>.</li>
 
-              <li>Set <var>index</var> to <var>index</var> + 1.</li>
+              <li>Let <var>dash</var> be the shape that includes, for all distances
+              between <var>start</var> and <var>end</var> along the subpath, all
+              points that lie on the line perpendicular to the subpath at that
+              distance and which are within distance <a>'stroke-width'</a> of
+              the point on the subpath at that position.</li>
+
+              <li>Set <var>dash</var> to be the union of <var>dash</var> and the
+              starting <a>cap shape</a> for the subpath at position <var>start</var>.</li>
+
+              <li>Set <var>dash</var> to be the union of <var>dash</var> and the
+              ending <a>cap shape</a> for the subpath at position <var>end</var>.</li>
+
+              <li>
+                Let <var>index</var> and <var>last</var> be the indexes of the
+                path segments in the subpath at distance <var>start</var> and
+                <var>end</var> along the subpath.
+
+                <p class="note">It does not matter whether any zero length segments are
+                included when choosing <var>index</var> and <var>last</var>.</p>
+              </li>
+
+              <li>While <var>index</var> &lt; <var>last</var>:
+                <ol>
+                  <li>Set <var>dash</var> to be the union of <var>dash</var> and the
+                  <a>line join shape</a> for the subpath at segment index <var>index</var>.</li>
+
+                  <li>Set <var>index</var> to <var>index</var> + 1.</li>
+                </ol>
+              </li>
+
+              <li>Set <var>shape</var> to be the union of <var>shape</var> and
+              <var>stroke</var>.</li>
             </ol>
           </li>
-
-          <li>Set <var>shape</var> to be the union of <var>shape</var> and
-          <var>stroke</var>.</li>
         </ol>
       </li>
     </ol>
@@ -1513,16 +1548,22 @@ determined as follows:</p>
     <ol>
       <li>If this is a starting cap, then return a semicircle of diameter <a>'stroke-width'</a> positioned such that:
         <ul>
+          <li class='ready-for-wg-review'>The subpath that the semicircle is relative to is the subpath starting 
+          at distance <var>position</var>.</li>
           <li>Its straight edge is parallel to the line perpendicular to the subpath at distance <var>position</var> along it.</li>
           <li>The midpoint of its straight edge is at the point that is along the subpath at distance <var>position</var>.</li>
-          <li>The direction from the midpoint of its arc to the midpoint of its straight edge is the same as the direction of the subpath at distance <var>position</var> along it.</li>
+          <li>The direction from the midpoint of its arc to the midpoint of its straight edge is the same as the direction of
+          the subpath at distance <var>position</var>.</li>
         </ul>
       </li>
       <li>Otherwise, this is an ending cap.  Return a semicircle of diameter <a>'stroke-width'</a> positioned such that:
         <ul>
+          <li class='ready-for-wg-review'>The subpath that the semicircle is relative to is the subpath ending 
+          at distance <var>position</var>.</li>
           <li>Its straight edge is parallel to the line perpendicular to the subpath at distance <var>position</var> along it.</li>
           <li>The midpoint of its straight edge is at the point that is along the subpath at distance <var>position</var>.</li>
-          <li>The direction from the midpoint of its straight edge to the midpoint of its arc is the same as the direction of the subpath at distance <var>position</var> along it.</li>
+          <li>The direction from the midpoint of its straight edge to the midpoint of its arc is the same as the
+          direction of the subpath.</li>
         </ul>
       </li>
     </ol>
@@ -1615,11 +1656,17 @@ a subpath is determined as follows:</p>
     <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> with the
     same curvature as the edges at those points (see below). If both
     curvatures are zero fall through to <span class="prop-value">miter-clip</span>.
-    Extend the stroke edges using these circles (or a line, in the case
-    of zero curvature). If the two circles (or circle and line) do not
-    intersect, fall through to <span class="prop-value">miter-clip</span>.
+    If either curvature is greater than 2/(stroke width), fallback to
+    <span class="prop-value">round</span>.
 
-    If the two circles (or circle and line) intersect, the line join
+    Extend the stroke edges using these circles (or a line, in the case
+    of zero curvature).
+
+    If the two circles (or circle and line) do not intersect, adjust
+    the radii of the two circles by an equal amount (or just the circle
+    in case of a circle and line) until they do intersect (see below).
+
+    The line join
     region is defined by the lines that connect <var>P</var>
     with <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> and the
     arcs defined by the circles (or arc and line) between the closest
@@ -1670,7 +1717,7 @@ a subpath is determined as follows:</p>
        alt="Image showing the lines and points computed to construct an arcs line join."/>
   <p class="caption">Construction of an arcs line join shape, shown in
     pink. The white line is the original path, which has two segments
-    that come to a point, and the gray region is the stroke. The
+    that come to a point, and the dark gray region is the stroke. The
     dashed lines show circles that are tangent to and have the
     curvature of the segments at the join.  The olive-green circles
     (concentric with the dashed circles) define the join shape.</p>
@@ -1692,7 +1739,7 @@ a subpath is determined as follows:</p>
   the path end a distance of <var>r<sub>c</sub></var> away from the
   outer stroke edge at the end.</p>
 
-<p>For a line: the curvature is infinite. Extend the outer stroke edge by a line.</p>
+<p>For a line: the curvature is zero. Extend the outer stroke edge by a line.</p>
 
 <p>For an elliptical arc:</p>
 
@@ -2074,9 +2121,102 @@ a subpath is determined as follows:</p>
   <var>P<sub>2</sub></var> and <var>P<sub>3</sub></var> are degenerate, the
   curvature will be infinite and a line should be used in constructing the join.</p>
 
+<h3 id="ArcsLinejoinFallback">Adjusting the circles for the <span class="prop-value">arcs</span>
+'stroke-linejoin' when the initial circles do not intersect</h3>
+
+  <p class="annotation">
+    The fallback behavior was resolved at
+    the <a href="https://www.w3.org/2016/02/03-svg-minutes.html#item02">Sydney
+    2016 F2F</a>. It gives a smooth transition between the fallback
+    and non-fallback states.
+  </p>
+
+  <p>
+    When the initial circles calculated for the
+    <span class="prop-value">arcs</span> <a>'stroke-linejoin'</a> do
+    not intersect, they need to be adjusted by changing both radii by
+    the same magnitude (moving the circle centers to keep the circles
+    tangent to the offset paths) until the circles just touch. There
+    are two cases to consider. The first is when one circle encloses
+    the other circle. In this case the larger circle is reduced in
+    size while the smaller circle is increased in size:
+  </p>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/linejoin-construction-fallback.svg"
+	 alt="Image showing the lines and points computed to construct an arcs line join
+	      when the original offset circles do not intersect."/>
+    <p class="caption">Construction of an arcs line join shape, shown
+      in pink. The white line is the original path and the dark gray
+      region is the stroke. The dashed lines show circles that are
+      tangent to and have the curvature of the segments at the
+      join. Note the circles do not intersect. Two new circles are
+      constructed by adjusting the radii of the original circles by
+      the same magnitude with the larger circle being made smaller and
+      the smaller circle being made larger until the new circles just
+      touch as shown by the olive-green circles. These new circles
+      then define the join shape.
+    </p>
+  </div>
+
+  <p>
+    The second case is when there is no overlap between the circles.
+    In this case the radii of both circles are increased by the same
+    amount:
+  </p>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/linejoin-construction-fallback2.svg"
+	 alt="Image showing the lines and points computed to construct an arcs line join
+	      when the original offset circles do not intersect."/>
+    <p class="caption">Construction of an arcs line join shape, shown
+      in pink. The white line is the original path and the dark gray
+      region is the stroke. The dashed lines show circles that are
+      tangent to and have the curvature of the segments at the
+      join. Note they do not intersect. Two new circles are
+      constructed by increasing the radii of the original circles by
+      the same amount until the new circles just touch as shown by the
+      olive-green circles. These new circles then define the join
+      shape.
+    </p>
+  </div>
+
+  <p>
+    If in this latter case, the tangents of the offset paths at the
+    line join are parallel, the circles cannot be adjusted so that
+    they touch. The line join should then be constructed as a
+    rectangle whose width is the stroke width and whose length is the
+    stroke width times one half of the value of the
+    <a>'stroke-miterlimit'</a>:
+  </p>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/linejoin-construction-fallback3.svg"
+	 alt="Image showing the lines and points computed to construct an arcs line join
+	      when the original offset circles do not intersect."/>
+    <p class="caption">Construction of an arcs line join shape, shown
+      in pink. The white line is the original path, which has two
+      segments that come to a point, and the dark gray region is the
+      stroke. The dashed lines show circles that are tangent to and
+      have the curvature of the segments at the join. Note they do not
+      intersect. Even if the radii of the circles is increased to infinity,
+      the circles will not intersect. The line join is then a rectangle
+      with the length determined by the miter limit (shown as a vertical
+      dashed line).
+    </p>
+  </div>
+
+  <p class="note">
+    There are a couple of ways to implement the fallback algorithm. The first
+    way is by recursive trial and error on the magnitude of the radius change.
+    The second is by an exact calculation utilizing the <em>touching circle
+      condition</em> and the constraints that the centers of the circles must
+    remain on lines normal to the path segments at the join. This leads to
+    a quadratic equation where one solution is the required radius change.
+  </p>
 
 </div>
-    
+
 <h2 id="PaintingVectorEffects">Vector effects</h2>
 
 <p>This chapter explains <a>'vector-effect'</a> related to Painting. Please refer to <a href="coords.html#VectorEffects">this</a> for the perspective of <a>'vector-effect'</a>. </p>
@@ -2125,14 +2265,8 @@ a subpath is determined as follows:</p>
 </div>
 
 <p>A marker is a graphical object that is painted at particular positions along
-a <a>'path'</a>, <a>'line'</a>, <a>'polyline'</a> or <a>'polygon'</a>
-element.  These elements are known as the
+any <a>shape</a> element.  These elements are known as the
 <dfn id="TermMarkableElement">markable elements</dfn>.</p>
-
-<!-- Probably should generate the list of elements above with
-     <edit:elementcategory name='markable'/> but that gives us an
-     "and" before the last element, and not an "or" which would
-     read better! -->
 
 <p>The <a>'marker-start'</a> and <a>'marker-end'</a> properties
 can be used to place markers at the first and last vertex of a
@@ -2205,8 +2339,7 @@ following meanings:</p>
   <dd><a>'markerWidth'</a>, <a>'markerHeight'</a> and the contents
   of the <a>'marker element'</a> have values in a coordinate system
   which has a single unit equal to the size in user units of the
-  current stroke width (see the <a>'stroke-width'</a> property) of
-  the element referencing the marker.</dd>
+  painted stroke width of the element referencing the marker.</dd>
 
   <dt><span class="attr-value">userSpaceOnUse</span></dt>
   <dd><a>'markerWidth'</a>, <a>'markerHeight'</a> and the contents
@@ -2217,6 +2350,15 @@ following meanings:</p>
 
 </dd>
 <dt>
+
+<p class="note">
+When <a>'markerUnits'</a> has the value <span class="attr-value">strokeWidth</span>,
+the size of the marker is relative to the <a>'stroke-width'</a> after it has
+had any transforms applied that affect the width of the stroke in the
+<a>local coordinate system</a> for the stroke. This means that, for example,
+the <a>'vector-effect'</a> attribute with a value of
+<span class="attr-value">non-scaling-stroke</span> will result in the markers
+also being non scaling.</p>
 
 <table class="attrdef def">
   <tr>
@@ -2285,9 +2427,26 @@ for either attribute is an error (see
 
 <p>The <a>'refX'</a> and <a>'refY'</a> attributes define the reference
 point of the marker, which is to be placed exactly at the marker's
-position on the <a>markable element</a>.  They are interpreted as being in the
-coordinate system of the marker contents, after application of the
-<a>'viewBox'</a> and <a>'preserveAspectRatio'</a> attributes.</p>
+position on the <a>markable element</a>.  Lengths and numbers must be interpreted
+as being in the coordinate system of the marker contents, after application of the
+<a>'viewBox'</a> and <a>'preserveAspectRatio'</a> attributes. Percentage
+values must be interpreted as being a percentage of the <a>'viewBox'</a>
+width for <a>'refX'</a> or a percentage of the <a>'viewBox'</a> height for
+<a>'refY'</a>.</p>
+<p>The keyword values must evaluate to the following percentages:</p>
+<table class="data compact">
+<caption>Mapping of refX and refY keywords to percentages.</caption>
+<thead>
+<tr><th>keyword</th><th>percentage equivalent</th></tr>
+</thead>
+<tbody>
+<tr><td>left</td><td>0%</td></tr>
+<tr><td>center</td><td>50%</td></tr>
+<tr><td>right</td><td>100%</td></tr>
+<tr><td>top</td><td>0%</td></tr>
+<tr><td>bottom</td><td>100%</td></tr>
+</tbody>
+</table>
 
 </dd>
 <dt>
@@ -2318,8 +2477,9 @@ Values have the following meanings:</p>
   <dt><span class="attr-value">'auto'</span></dt>
   <dd>
     <p>The marker is oriented such that its positive x-axis
-    is pointing in the direction of the path at the point it
-    is placed.</p>
+    is pointing in a direction relative to the path
+    at the position the marker is placed (See
+    <a href="#RenderingMarkers">Rendering Markers</a>).</p>
   </dd>
 </dl>
 
@@ -2429,12 +2589,38 @@ Possible values for <a>'marker-start'</a>, <a>'marker-mid'</a> and
   vertex or vertices.</dd>
 </dl>
 
-<p>For <a>'polygon'</a> elements, the last vertex is the same as the first
-vertex, and for <a>'path'</a> elements that end with a closed subpath, the last
-vertex is the same as the first vertex of that final subpath.
-In this case, if the value of <a>'marker-end'</a> is not
-<span class="prop-value">none</span>, then it is possible that two markers
-will be rendered on that final vertex.</p>
+<p>For all <a>markable elements</a>, the path that must be used when calculating
+marker positions is the <a>equivalent path</a>.</p>
+
+<div class='ready-for-wg-review'>
+<p>For all <a>shape</a> elements, except <a>'polyline'</a> and <a>'path'</a>,
+the last vertex is the same as the first
+vertex. In this case, if the value of <a>'marker-start'</a> and <a>'marker-end'</a>
+are both not <span class="prop-value">none</span>, then two markers
+will be rendered on that final vertex.
+For <a>'path'</a> elements, for each <a>closed subpath</a>, the last vertex is
+the same as the first vertex. <a>'marker-start'</a> must only be rendered on
+the first vertex of the <a>path data</a>. <a>'marker-end'</a> must only be
+rendered on the final vertex of the <a>path data</a>. 
+<a>'marker-mid'</a> must be rendered on every vertex other than the first
+vertex of the <a>path data</a> and the last vertex of the <a>path data</a>.
+</p>
+<div class="example">
+  <edit:includefile href='images/painting/marker-doubled.svg'/>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/marker-doubled.svg"
+         alt="Image showing that for closed subpaths, two markers are painted at the start of each subpath."/>
+    <p class="caption">For <a>path data</a> containing <a>closed subpaths</a>,
+    two markers are drawn at the first/last vertex of each <a>closed subpath</a>.
+    For the leftmost <a>closed subpath</a>, a <a>'marker-mid'</a> is drawn over
+    the <a>'marker-start'</a>. For the middle <a>closed subpath</a>, two 
+    <a>'marker-mid'</a> are drawn on top of one another. For the rightmost
+    <a>closed subpath</a>, <a>'marker-end'</a> is drawn over <a>'marker-mid'</a>.
+    </p>
+  </div>
+</div>
+</div>
 
 <p class="note">Note that <a>'marker-start'</a> and <a>'marker-end'</a>
 refer to the first and last vertex of the entire path, not each subpath.</p>
@@ -2511,7 +2697,7 @@ directly for all three of the corresponding longhand properties.</p>
 as <span class='attr-value'>'auto'</span>, the following rules are used:</p>
 
 <ul>
-  <li>If the vertex is the start or end of an open subpath, then the marker is
+  <li>If the vertex is the start or end of an <a>open subpath</a>, then the marker is
   oriented in the <a href='paths.html#TermPathDirection'>path direction</a>.</li>
 
   <li>Otherwise, the marker is oriented in a direction half way between the
@@ -2565,10 +2751,17 @@ the mouse is clicked or moved over a rendered marker.</p>
 
 <p>Markers are not rendered directly
 and must be referenced by one of the <a>marker properties</a>
-to be rendered.  The <a>'display'</a> property does not apply to the
+to be rendered.  
+The <a>'display'</a> value for the <a>'marker element'</a> element
+must always be set to <span class="prop-value">none</span>
+by the <a>user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
+  <!--  
+The <a>'display'</a> property does not apply to the
 <a>'marker element'</a> element; thus, <a>'marker element'</a> elements are not
 directly rendered even if the <a>'display'</a> property is
 set to a value other than <span class="prop-value">none</span>, and
+-->
 <a>'marker element'</a> elements are available for referencing even when the
 <a>'display'</a> property on the <a>'marker element'</a> element or any of its
 ancestors is set to <span class="prop-value">none</span>.</p>
@@ -2583,7 +2776,7 @@ does not show the cloned instance of the marker.</p>
 <a>'marker element'</a> element into a non-exposed DOM tree also
 copies any property values resulting from
 <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html">the CSS cascade</a>
-([<a href="refs.html#ref-CSS21">CSS21</a>], chapter 6) and
+([<a href="refs.html#ref-css2">CSS2</a>], chapter 6) and
 property inheritance on the referenced element and its contents. CSS
 selectors can be applied to the original (i.e., referenced) elements
 because they are part of the formal document structure. CSS selectors
@@ -2871,7 +3064,7 @@ property controls which color space is used for the following graphics operation
 
 <p class="note">For <a href="http://www.w3.org/TR/filter-effects/">filter effects</a>, the
 <a>'color-interpolation-filters'</a> property controls which color space is used.
-[<a href="refs.html#ref-FILTERS">FILTERS</a>]</p>
+[<a href="refs.html#ref-filter-effects-1">filter-effects-1</a>]</p>
 </div>
 
 <div class='ready-for-wg-review'>

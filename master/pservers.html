@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
 <head>
   <title>Paint Servers: Solid Colors, Gradients, Patterns, and Hatches</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -14,7 +14,7 @@
   <!-- W3C style sheet will be added here during processing. -->
 </head>
 <body>
-
+<div class="ready-for-wg-review">
 <h1>Paint Servers: Solid Colors, Gradients, Patterns and Hatches</h1>
 
 <h2 id="Introduction">Introduction</h2>
@@ -81,23 +81,132 @@ redefine them here. -->
 
 <p>
   <a>Properties</a> inherit
-  into a paintserver element from its ancestors;
+  into a paint-server element from its ancestors;
   properties do <em>not</em> inherit from the element referencing
-  the paintserver element.
+  the paint server element.
 </p>
 
 <p>
-  Paintserver elements are never rendered directly (with the exception
-  of <a>'mesh'</a> which may be rendered in a non-paintserver
-  mode); their only usage is as something that can be referenced using
-  the <a>'fill'</a> and <a>'stroke'</a> properties. The
-  <a>'display'</a> property does not apply to a paintserver element;
-  thus, paintserver elements are not directly rendered even if
+  Paint-server elements are never rendered directly; their only usage is
+  as something that can be referenced using
+  the <a>'fill'</a> and <a>'stroke'</a> properties. 
+  The <a>'display'</a> value for these elements
+  must always be set to <span class="prop-value">none</span>
+  by the <a>user agent style sheet</a>,
+  and this declaration must have importance over any other CSS rule or presentation attribute.
+  <!--The
+  <a>'display'</a> property does not apply to a paint-server element;
+  thus, paint-server elements are not directly rendered even if
   the <a>'display'</a> property is set to a value other
-  than <span class="prop-value">none</span>, and paintserver elements
+  than <span class="prop-value">none</span>, and -->
+  Paint-server elements
   are available for referencing even when the <a>'display'</a>
-  property on the paintserver element or any of its ancestors is set
+  property on the paint-server element or any of its ancestors is set
   to <span class="prop-value">none</span>.
+</p>
+  
+<h3 id="PaintServerTemplates">Using paint servers as templates</h3>
+  
+<p>
+  Most paint server elements accept an <span class="attr-name">‘href’</span> attribute,
+  which can be used to define a compatible paint server element as a template.
+  Attributes defined for the template element
+  are used instead of the initial value 
+  if corresponding attributes are not specified
+  on the current element.
+  Furthermore, if the current element does not have any
+  child content other than <a>descriptive elements</a>,
+  than the child content of the template element is cloned to replace it.
+</p>
+  
+<div class="note">
+  <p>
+  The exclusion of descriptive content is new in SVG 2 for <a>'pattern'</a>, 
+  consistent with the behavior of gradients,
+  and with changes to make descriptive content valid for any SVG element.
+  </p>
+  <p>
+  Also new: template cross-references may be to external file resources
+  (different chapters in SVG 1.1 had inconsistent guidance on this point),
+  and the "inheritance" of child elements is represented through a shadow tree.
+  </p>
+</div>
+
+<p>
+Templating can be indirect to an arbitrary level
+(subject to security limits on external file resources,
+which can make a reference invalid).
+Thus, if the referenced template element does not have relevant child content
+or does not define the specified attribute,
+then the attribute value or cloned content is derived
+from another element referenced by the template's own <span class="attr-name">‘href’</span> attribute.
+</p>
+  
+<p>
+The description of each <span class="attr-name">‘href’</span> attribute in this chapter defines
+the limits of the templating process, as follows:
+</p>
+<ul>
+  <li>What type of element is a valid target for the reference</li>
+  <li>Which attributes are duplicated from the template</li>
+</ul>
+
+<p>
+  If any of the specified attributes are not
+  defined on the current element,
+  or if the current element has no child elements other than <a>descriptive elements</a>,
+  the user agent must <a href="linking.html#processingURL">process the URL</a>
+  to identify the referenced resource.
+  If the URL reference is not <a>invalid</a>,
+  then the URL's target element is used as the template element, as follows:
+</p>
+<ul>
+  <li>
+    <p>
+      For any of the specified attributes not defined on the current element,
+      the user agent must determine the value of the attribute
+      for the template element
+      and use it as the value for the current element.
+      The template value is derived
+      from recursive cross-references if required.
+      The initial value for the attribute is only substituted 
+      after all valid URL references are exhausted.
+    </p>
+  </li>
+  <li>
+    <p>
+      If the current element has no child elements other than <a>descriptive elements</a>,
+      the user agent must generate a <a>shadow tree</a> for this element, 
+      which must behave equivalently to a <a>use-element shadow tree</a>,
+      except that the host is the current paint server element.
+      The <a>corresponding elements</a> for the <a>element instances</a> 
+      cloned into the shadow tree are:
+    </p>
+    <ul>
+      <li>
+      the child content of the template element, 
+      if it has child elements other than <a>descriptive elements</a>,
+      </li>
+      <li>
+      the <a>corresponding elements</a> that are used, or would be used, to generate
+      the template element's own shadow tree, otherwise.
+      </li>
+    </ul>
+  </li>
+</ul>
+        
+<p>
+When a paint-server element has a shadow tree,
+the <a>element instances</a> in that tree
+must be used in rendering the paint server effect,
+as if they were the paint server element's own children.
+</p>
+  
+<p class="note">
+  The <a>use-element shadow tree</a> model for templating
+  allows cloned content to inherit different styles than the original.
+  This behavior is newly defined in SVG 2;
+  SVG 1.1 did not define how styles applied to inherited paint server content.
 </p>
 
 <h2 id="Solidcolors">Solid colors</h2>
@@ -130,7 +239,7 @@ color with opacity. It can be referenced any place a single color
 can be used. The 'solidcolor' element allows a palette to be defined
 and used consistently throughout a document. It is also useful as
 away of animating a palette colors.  (See CSS3 Color for a more general
-discussion of color [<a href="refs.html#ref-CSS3COLOR">CSS3COLOR</a>].)</p>
+discussion of color [<a href="refs.html#ref-css3-color">css3-color</a>].)</p>
 
 <p class="note">
   In SVG 1.1, <em>1-stop</em> gradients can be used to to produce a
@@ -179,14 +288,14 @@ element.</p>
 
     <dt id="SolidOpacityProperty"><span class="propdef-title property">'solid-opacity'</span></dt>
     <dd>
-
       <p>
-	The <a>'solid-opacity'</a> property defines the opacity of
-	the <a>'solidcolor'</a>.
-      </p>
+      The <a>'solid-opacity'</a> property defines the opacity of
+      the <a>'solidcolor'</a>.
+      The value of 'solid-opacity' is independent of the opacity used to
+      render the paint via <a>'fill'</a> or <a>'stroke'</a>.</p>
 
       <dl class="propdef-svg2">
-        <dt>Value</dt>              <dd>&lt;opacity-value&gt;</dd>
+        <dt>Value</dt>              <dd>&lt;number&gt; | &lt;percentage&gt;</dd>
         <dt>Initial</dt>            <dd>1</dd>
         <dt>Applies to</dt>         <dd><a>'solid-color'</a> elements</dd>
         <dt>Inherited</dt>          <dd>no</dd>
@@ -196,19 +305,21 @@ element.</p>
       </dl>
 
       <dl class="propdef-values">
-	<dt>&lt;opacity-value&gt;</dt>
-	<dd>
-	  The opacity of the 'solidcolor'. Any values outside the
-	  range 0.0 (fully transparent) to 1.0 (fully opaque) must be
-	  clamped to this range. The value of 'solid-opacity' is
-	  independent of the opacity used to render the paint via
-	  <a>'fill'</a> or <a>'stroke'</a>.
-	</dd>
+        <dt>&lt;number&gt;</dt>
+        <dd>
+          The opacity of the <a>'solid-color'</a>. Any values outside the
+          range 0.0 (fully transparent) to 1.0 (fully opaque) must be
+          clamped to this range. 
+        </dd>
+        <dt>&lt;percentage&gt;</dt>
+        <dd>
+          The opacity of the <a>'solid-color'</a> expressed as a percentage
+          of the range 0 to 1.
+        </dd>
       </dl>
-
     </dd>
-
   </dl><!-- propdef-list -->
+
 
 <edit:example href='images/pservers/solidcolor.svg' name='solidcolor.svg'
   description='fill objects using a solidcolor paint server'
@@ -240,16 +351,6 @@ or <a>'stroke'</a> properties to reference the gradient.</p>
   circle intersecting the vector at a right angle. Each gradient
   normal is painted with one color determined by the vector.
 </p>
-<p>
-  When a <a>graphics element</a> references a gradient, conceptually the
-  <a>graphics element</a> should take a copy of the gradient vector
-  with gradient normals and treat it as part of its own geometry. Any
-  transformations applied to the <a>graphics element</a> geometry also
-  apply to the copied gradient vector and gradient normals. Any
-  gradient transforms that are specified on the reference gradient are
-  applied before any <a>graphics element</a> transformations are
-  applied to the gradient.
-</p>
 
 <div class="figure">
   <img
@@ -262,6 +363,67 @@ or <a>'stroke'</a> properties to reference the gradient.</p>
     circles. One gradient normal is shown for each gradient.
   </p>
 </div>
+
+<p class='ready-for-wg-review'>
+  For linear and radial gradients, the color value between two stops along the
+  gradient vector is the linear interpolation, per channel, of the color for
+  each stop, weighted by the distance from each stop.
+</p>
+<div role="math" aria-describedby="math-gradient-linear-interpolation" class='ready-for-wg-review'>
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <mi>V</mi>
+    <mo>=</mo>
+    <msub>
+      <mi>C</mi><mn>0</mn>
+    </msub>
+    <mo>+</mo>
+    <mo>(</mo>
+      <msub>
+        <mi>C</mi><mn>1</mn>
+      </msub>
+      <mo>-</mo>
+      <msub><mi>C</mi><mn>0</mn></msub>
+    <mo>)</mo>
+    <mo>(</mo>
+    <mfrac>
+      <mrow>
+          <mi>D</mi>
+          <mo>-</mo>
+          <msub><mi>O</mi><mn>0</mn></msub>
+      </mrow>
+      <mrow>
+          <msub><mi>O</mi><mn>1</mn></msub>
+          <mo>-</mo>
+          <msub><mi>O</mi><mn>0</mn></msub>
+      </mrow>
+    </mfrac>
+    <mo>)</mo>
+  </math>
+  <pre id="math-gradient-linear-interpolation">
+    $V = C0.rgba + (C1.rgba - C0.rgba) * ((D - C0.offset) / (C1.offset - C0.offset));
+  </pre>
+</div>
+<p class='ready-for-wg-review'>
+Where, for each channel:
+</p>
+<ul class='ready-for-wg-review'>
+<li>V is the interpolated result for that channel</li>
+<li>C<sub>0</sub> is the stop color for the stop with the lowest offset</li> 
+<li>O<sub>0</sub> is the offset of C<sub>0</sub></li> 
+<li>C<sub>1</sub> is the other stop color</li> 
+<li>O<sub>1</sub> is the offset of C<sub>1</sub></li> 
+<li>D is the distance along the gradient vector</li> 
+</ul>
+<p>
+  When a <a>graphics element</a> references a gradient, conceptually the
+  <a>graphics element</a> should take a copy of the gradient vector
+  with gradient normals and treat it as part of its own geometry. Any
+  transformations applied to the <a>graphics element</a> geometry also
+  apply to the copied gradient vector and gradient normals. Any
+  gradient transforms that are specified on the reference gradient are
+  applied before any <a>graphics element</a> transformations are
+  applied to the gradient.
+</p>
 
 <p>Color transitions for mesh gradients are defined by an array of
 color <a href="#GradientStops">stops</a>. The mapping of colors to
@@ -289,6 +451,14 @@ in the stops. This is discussed in detail in the
 <edit:elementsummary name='linearGradient'/>
 
 <h4 id="LinearGradientAttributes">Attributes</h4>
+  
+  <p class="note">
+    Note that the <a>'x1'</a>,<a>'y1'</a>, <a>'x2'</a> and <a>'y2'</a> attributes 
+    on a <a>'linearGradient'</a> are not presentation attributes;
+    the used value is not affected by CSS styles.
+    The <a>'gradientTransform'</a> attribute is a presentation attribute 
+    for the <a>'transform'</a> property.
+  </p>
 
   <dl class="attrdef-list-svg2">
 
@@ -520,26 +690,29 @@ in the stops. This is discussed in detail in the
     </dt>
     <dd>
       <p>
-        A <a>URL reference</a> to a
+        A <a>URL reference</a> to a template gradient element;
+        to be valid, the reference must be to a 
         different <a>'linearGradient'</a> or
-        <a>'radialGradient'</a> element within the current SVG
-        document fragment. Any <a>'linearGradient'</a> attributes
-        which are defined on the referenced element which are not
-        defined on this element are inherited by this element. If this
-        element has no defined gradient stops, and the referenced
-        element does (possibly due to its own <a>'href'</a>
-        attribute), then this element inherits the gradient stop from
-        the referenced element.  Inheritance can be indirect to an
-        arbitrary level; thus, if the referenced element inherits
-        attribute or gradient stops due to its own <a>'href'</a>
-        attribute, then the current element can inherit those
-        attributes or gradient stops.
+        a <a>'radialGradient'</a> element.
       </p>
       <p>
-        Refer to the common handling defined for <a
+        Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
+        and to the common handling defined for <a
         href="linking.html#linkRefAttrs">URL reference attributes</a> and
         <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
       </p>
+      <p>
+        The specified attributes that will be copied from the template are:
+      </p>
+      <ul>
+        <li><a>'x1'</a></li>
+        <li><a>'y1'</a></li>
+        <li><a>'x2'</a></li>
+        <li><a>'y2'</a></li>
+        <li><a>'gradientTransform'</a></li>
+        <li><a>'gradientUnits'</a></li>
+        <li><a>'spreadMethod'</a></li>
+      </ul>
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></dd>
@@ -577,6 +750,14 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
 <edit:elementsummary name='radialGradient'/>
 
 <h4 id="RadialGradientAttributes">Attributes</h4>
+  
+  <p class="note">
+    Note that the <a>'cx'</a>,<a>'cy'</a>, and <a>'r'</a> attributes 
+    on a <a>'radialGradient'</a> are not presentation attributes;
+    the used value is not affected by CSS styles.
+    The <a>'gradientTransform'</a> attribute is a presentation attribute 
+    for the <a>'transform'</a> property.
+  </p>
 
   <dl class="attrdef-list-svg2">
 
@@ -628,7 +809,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
             If <span class="attr-value">gradientUnits="objectBoundingBox"</span>,
             the user coordinate system for attributes
 
-            <a>'cx'</a>, <a>'cy'</a>, <a>'r'</a>, <a>'fx'</a>, <a>'fr'</a>,
+            <a>'cx'</a>, <a>'cy'</a>, <a>'r'</a>, <a>'fx'</a>, <a>'fy'</a>,
             and <a>'fr'</a>
 
 	    is established using the bounding box of the element to
@@ -794,7 +975,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
 	  of the innermost circle (<a>'fx'</a>,<a>'fy'</a>). The
 	  dashed lines show two gradient vectors. Vectors connect
 	  corresponding points on the inner and outer most circles.
-	  The region outside the outer circle is painted with the the
+	  The region outside the outer circle is painted with the
 	  last <a>'stop-color'</a> while the region inside the inner
 	  circle is painted with the first <a>'stop-color'</a>.
 	</p>
@@ -909,21 +1090,31 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
     </dt>
     <dd>
       <p>
-        A <a>URL reference</a>
-        to a different <a>'linearGradient'</a> or
-        <a>'radialGradient'</a> element within the current SVG
-        document fragment. Any <a>'radialGradient'</a> attributes
-        which are defined on the referenced element which are not
-        defined on this element are inherited by this element. If this
-        element has no defined gradient stops, and the referenced
-        element does (possibly due to its own <a>'href'</a>
-        attribute), then this element inherits the gradient stop from
-        the referenced element.  Inheritance can be indirect to an
-        arbitrary level; thus, if the referenced element inherits
-        attribute or gradient stops due to its own <a>'href'</a>
-        attribute, then the current element can inherit those
-        attributes or gradient stops.
+        A <a>URL reference</a> to a template gradient element;
+        to be valid, the reference must be to a 
+        <a>'linearGradient'</a> element or
+        a different <a>'radialGradient'</a> element.
       </p>
+      <p>
+        Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
+        and to the common handling defined for <a
+        href="linking.html#linkRefAttrs">URL reference attributes</a> and
+        <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
+      </p>
+      <p>
+        The specified attributes that will be copied from the template are:
+      </p>
+      <ul>
+        <li><a>'cx'</a></li>
+        <li><a>'cy'</a></li>
+        <li><a>'r'</a></li>
+        <li><a>'fx'</a></li>
+        <li><a>'fy'</a></li>
+        <li><a>'fr'</a></li>
+        <li><a>'gradientTransform'</a></li>
+        <li><a>'gradientUnits'</a></li>
+        <li><a>'spreadMethod'</a></li>
+      </ul>
       <p>
         Refer to the common handling defined for <a
         href="linking.html#linkRefAttrs">URL reference attributes</a> and
@@ -1038,7 +1229,10 @@ server.</p>
 
 <h3 id="MeshGradients">Mesh gradients</h3>
 
-<edit:with element='mesh'>
+<edit:with element='meshgradient'>
+
+<p id="MeshGradientElement">Mesh gradients are defined by a
+<a>'meshgradient'</a> element.</p>
 
 <div class="annotation svg2-requirement">
   <table>
@@ -1105,17 +1299,10 @@ server.</p>
   line.
 </p>
 
-<p>
-  Unlike other paint servers, a mesh defined outside of a
-  <a>'defs'</a> section is rendered. In this the case, the mesh has a
-  bounding box determined by its maximum extent, taking into account
-  all of its patches.
-</p>
-
 <h4 id="MeshStructure">Mesh Structure</h4>
 
 <p>
-  A mesh consists of patches placed in an array. There
+  A mesh gradient consists of patches placed in an array. There
   are two reasons for using an array. The first is that an array of
   meshes is a natural result for most content creation processes
   (start with a path and then subdivide its area into rows and
@@ -1174,7 +1361,8 @@ server.</p>
   the previous edge of the patch (which for the first <a>'stop'</a> in
   a patch is defined in the patch to the left or top), except for the
   first patch in the first row where the initial point is given by the
-  <a>'mesh/x'</a> and <a>'mesh/y'</a> attributes in the <a>'mesh'</a>
+  <a>'meshgradient/x'</a> and <a>'meshgradient/y'</a> attributes in
+  the <a>'meshgradient'</a>
   element. The path command in the last <a>'stop'</a> element of
   a <a>'meshpatch'</a> has one less point than normal as this
   "missing" point necessary to close the path is already defined.
@@ -1191,12 +1379,12 @@ server.</p>
 </p>
 
 <p>
-  Here is an annotated example of a two by two mesh:
+  Here is an annotated example of a two by two mesh gradient:
 </p>
 
 <div class="example">
   <pre>
-&lt;mesh x="50" y="50" id="example"&gt; &lt;!-- x, y used for initial point in first patch. --&gt;
+&lt;meshgradient x="50" y="50" id="example"&gt; &lt;!-- x, y used for initial point in first patch. --&gt;
   &lt;meshrow&gt; &lt;!-- No attributes, used only to define begin/end of row. --&gt;
 	&lt;meshpatch&gt;
 	  &lt;stop path="c  25,-25  75, 25  100,0" stop-color="lightblue" /&gt;
@@ -1225,12 +1413,12 @@ server.</p>
 	  &lt;!-- Last path (left side) taken from right side of previous path (with points reversed). --&gt;
 	&lt;/meshpatch&gt;
   &lt;/meshrow&gt;
-&lt;/mesh&gt;
+&lt;/meshgradient&gt;
   </pre>
 </div>
 
 <p>
-  The above mesh is rendered as:
+  The above mesh gradient is rendered as:
 </p>
 
 <div class="figure">
@@ -1884,16 +2072,37 @@ server.</p>
   non-smooth transitions across patch boundaries.
 </p>
 
-<p id="MeshElement">Mesh gradients are defined by a <a>'mesh'</a>
+<p id="MeshElement">Mesh gradients are defined by a <a>'meshgradient'</a>
 element.</p>
+  
+<p class="note">
+  Note that in case-sensitive contexts (XML parsing and scripting),
+  the name of the element is all lowercase,
+  unlike the older elements <a>'linearGradient'</a> and <a>'radialGradient'</a>.
+</p>
+  
+<p class="issue" data-issue="12">
+  The capitalization of <a>'meshgradient'</a> posed a conflict of priorities.
+  While inconsistency with the older elements is unfortunate,
+  mixed-case names require special treatment in HTML contexts.
+  Feedback from implementers and authors on the practicality of 
+  mixed-case versus all-lowercase names is welcomed during the implementation period.
+</p>
 
-<edit:elementsummary name='mesh'/>
+<edit:elementsummary name='meshgradient'/>
 
-<h4 id="MeshAttributes">Attributes</h4>
+<h4 id="MeshGradientAttributes">Attributes</h4>
+  
+  <p class="note">
+    Note that the <a>'x'</a> and <a>'y'</a> attributes 
+    on a <a>'meshgradient'</a> are not presentation attributes;
+    the used value is not affected by CSS styles.
+    The <a>'transform'</a> attribute is a presentation attribute.
+  </p>
 
   <dl class="attrdef-list-svg2">
 
-    <dt id="MeshElementGradientUnitsAttribute"><span class="adef">gradientUnits</span></dt>
+    <dt id="MeshGradientElementGradientUnitsAttribute"><span class="adef">gradientUnits</span></dt>
     <dd>
        <p>
 	Defines the coordinate system for attributes <a>'x'</a> and
@@ -1964,7 +2173,7 @@ element.</p>
       </dl><!-- Attribute values -->
     </dd>
 
-    <dt id="MeshElementTransformAttribute">
+    <dt id="MeshGradientElementTransformAttribute">
       <span class="adef">transform</span>
     </dt>
     <dd>
@@ -1991,7 +2200,7 @@ element.</p>
 
     </dd>
 
-    <dt id="MeshElementXAttribute"><span class="adef">x</span></dt>
+    <dt id="MeshGradientElementXAttribute"><span class="adef">x</span></dt>
     <dd>
 
       <p>
@@ -2007,7 +2216,7 @@ element.</p>
 
     </dd>
 
-    <dt id="MeshElementYAttribute"><span class="adef">y</span></dt>
+    <dt id="MeshGradientElementYAttribute"><span class="adef">y</span></dt>
     <dd>
 
       <p>
@@ -2022,27 +2231,30 @@ element.</p>
 
     </dd>
 
-    <dt id="MeshElementHrefAttribute">
+    <dt id="MeshGradientElementHrefAttribute">
       <span class="adef">href</span>
     </dt>
     <dd>
       <p>
-        A <a>URL reference</a> to a
-        different <a>'mesh'</a> element within the current SVG
-        document fragment. Any <a>'mesh'</a> attributes
-        which are defined on the referenced element which are not
-        defined on this element are inherited by this element.
-	Inheritance can be indirect to an
-        arbitrary level; thus, if the referenced element inherits
-        attribute due to its own <a>'href'</a>
-        attribute, then the current element can inherit those
-        attributes.
+        A <a>URL reference</a> to a template element,
+        which must be a different <a>'meshgradient'</a> element to be valid.
       </p>
       <p>
-        Refer to the common handling defined for <a
+        Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
+        and to the common handling defined for <a
         href="linking.html#linkRefAttrs">URL reference attributes</a> and
         <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
       </p>
+      <p>
+        The specified attributes that will be copied from the template are:
+      </p>
+      <ul>
+        <li><a>'x'</a></li>
+        <li><a>'y'</a></li>
+        <li><a>'transform'</a></li>
+        <li><a>'gradientUnits'</a></li>
+        <li><a>'type'</a></li>
+      </ul>
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></dd>
@@ -2052,7 +2264,7 @@ element.</p>
 
     </dd>
 
-    <dt id="MeshElementTypeAttribute">
+    <dt id="MeshGradientElementTypeAttribute">
       <span class="adef">type</span>
     </dt>
     <dd>
@@ -2124,7 +2336,7 @@ colors..." but "ramp" is used nowhere else in this section.</p>
       <dl class="attrdef-svg2">
 
 	<dt>Value</dt>                <dd><a>&lt;number&gt;</a> | <a>&lt;percentage&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>see notes below</dd>
+	<dt><a>Initial value</a></dt>  <dd>0</dd>
 	<dt><a>Animatable</a></dt>    <dd>yes</dd>
 
       </dl>
@@ -2174,26 +2386,28 @@ colors..." but "ramp" is used nowhere else in this section.</p>
 <h4 id="StopColorProperties">Properties</h4>
 
   <dl class="propdef-list-svg2">
-
     <dt id="StopColorProperty"><span class="propdef-title property">'stop-color'</span></dt>
     <dd>
-
       <p>
-	The <a>'stop-color'</a> property indicates what color to use
-	at that gradient stop. The keyword
-	<span class="attr-value">currentColor</span> and ICC colors
-	can be specified in the same manner as within a
-	<a href="painting.html#SpecifyingPaint">&lt;paint&gt;</a>
-	specification for the <a>'fill'</a> and <a>'stroke'</a>
-	properties.
+      The <a>'stop-color'</a> property indicates what color to use
+      at that gradient stop. The keyword
+      <span class="attr-value">currentColor</span> and ICC colors
+      can be specified in the same manner as within a
+      <a href="painting.html#SpecifyingPaint">&lt;paint&gt;</a>
+      specification for the <a>'fill'</a> and <a>'stroke'</a>
+      properties.
       </p>
-
+      <p class="note">
+      With respect to gradients, SVG treats the 'transparent' keyword 
+      differently than CSS. SVG does not calculate gradients in pre-multiplied
+      space, so 'transparent' really means transparent black. Specifying
+      a <a>'stop-color'</a> with the value 'transparent' is equivalent to
+      specifying a <a>'stop-color'</a> with the value 'black' and a 
+      <a>'stop-opacity'</a> with the value '0'.
+      </p>
       <dl class="propdef-svg2">
-	<dt>Value</dt>
-        <dd>
-	  currentColor |
-          <a>&lt;color&gt;</a> <a>&lt;icccolor&gt;</a>
-	</dd>
+    <dt>Value</dt>
+    <dd>currentColor | <a>&lt;color&gt;</a> <a>&lt;icccolor&gt;</a></dd>
         <dt>Initial</dt>            <dd>black</dd>
         <dt>Applies to</dt>         <dd><a>'stop'</a> elements</dd>
         <dt>Inherited</dt>          <dd>no</dd>
@@ -2202,17 +2416,20 @@ colors..." but "ramp" is used nowhere else in this section.</p>
         <dt><a>Animatable</a></dt>  <dd>yes</dd>
       </dl>
     </dd>
-
     <dt id="StopOpacityProperty"><span class="propdef-title property">'stop-opacity'</span></dt>
     <dd>
-
       <p>
-	The <a>'stop-opacity'</a> property defines the opacity of
-	a given gradient stop.
+      The <a>'stop-opacity'</a> property defines the opacity of
+      a given gradient stop. 
+      <span class='ready-for-wg-review'>
+      The opacity value used for the gradient calculation is the product
+      of the value of <a>'stop-opacity'</a> and the opacity of the value of
+      <a>'stop-color'</a>. For <a>'stop-color'</a> value types of that
+      don't include explicit opacity information, the opacity of that
+      component must be treated as 1.</span>
       </p>
-
       <dl class="propdef-svg2">
-        <dt>Value</dt>              <dd>&lt;opacity-value&gt;</dd>
+        <dt>Value</dt>              <dd>&lt;number&gt; | &lt;percentage&gt;</dd>
         <dt>Initial</dt>            <dd>1</dd>
         <dt>Applies to</dt>         <dd><a>'stop'</a> elements</dd>
         <dt>Inherited</dt>          <dd>no</dd>
@@ -2220,20 +2437,20 @@ colors..." but "ramp" is used nowhere else in this section.</p>
         <dt>Media</dt>              <dd>visual</dd>
         <dt><a>Animatable</a></dt>  <dd>yes</dd>
       </dl>
-
       <dl class="propdef-values">
-	<dt>&lt;opacity-value&gt;</dt>
-	<dd>
-	  The opacity of the 'stopColor'. Any values outside the
-	  range 0.0 (fully transparent) to 1.0 (fully opaque) must be
-	  clamped to this range. The value of 'stop-opacity' is
-	  independent of the opacity used to render the paint via
-	  <a>'fill'</a> or <a>'stroke'</a>.
-	</dd>
+        <dt>&lt;number&gt;</dt>
+        <dd>
+          The opacity of the <a>'stop-color'</a>. Any values outside the
+          range 0.0 (fully transparent) to 1.0 (fully opaque) must be
+          clamped to this range.
+        </dd>
+        <dt>&lt;percentage&gt;</dt>
+        <dd>
+          The opacity of the <a>'stop-color'</a> expressed as a percentage
+          of the range 0 to 1.
+        </dd>
       </dl>
-
     </dd>
-
   </dl><!-- propdef-list -->
 
 <h4 id="StopNotes">Notes on gradient stops</h4>
@@ -2311,6 +2528,13 @@ and <em>n</em>.</p>
 <edit:elementsummary name='pattern'/>
 
 <h3 id="PatternElementAttributes">Attributes</h3>
+  
+  <p class="note">
+    Note that the <a>'x'</a>,<a>'y'</a>, <a>'width'</a> and <a>'height'</a> attributes 
+    on a <a>'pattern'</a> are not presentation attributes;
+    the used value is not affected by CSS styles.
+    The <a>'patternTransform'</a> attribute is a presentation attribute for the <a>'transform'</a> property.
+  </p>
 
   <dl class="attrdef-list-svg2">
 
@@ -2538,47 +2762,33 @@ and <em>n</em>.</p>
     <dt id="PatternElementHrefAttribute"><span class="adef">href</span></dt>
     <dd>
       <p>
-        A <a href="linking.html#URLReference">URL reference</a> to a
-        different <a>'pattern'</a> element within the current SVG
-        document fragment. Any attributes which are defined on the
-        referenced element which are not defined on this element are
-        inherited by this element. If this element has no children,
-        and the referenced element does (possibly due to its
-        own <a>'href'</a> attribute), then this element inherits
-        the children from the referenced element. Inheritance can be
-        indirect to an arbitrary level; thus, if the referenced
-        element inherits attributes or children due to its
-        own <a>'href'</a> attribute, then the current element
-        can inherit those attributes or children.
+        A <a>URL reference</a> to a template element,
+        which must be a different <a>'pattern'</a> element to be valid.
       </p>
       <p>
-        Refer to the common handling defined for <a
+        Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
+        and to the common handling defined for <a
         href="linking.html#linkRefAttrs">URL reference attributes</a> and
         <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
       </p>
+      <p>
+        The specified attributes that will be copied from the template are:
+      </p>
+      <ul class='ready-for-wg-review'>
+        <li><a>'x'</a></li>
+        <li><a>'y'</a></li>
+        <li><a>'width'</a></li>
+        <li><a>'height'</a></li>
+        <li><a>'viewBox'</a></li>
+        <li><a>'preserveAspectRatio'</a></li>
+        <li><a>'patternTransform'</a></li>
+        <li><a>'patternUnits'</a></li>
+        <li><a>'patternContentUnits'</a></li>
+      </ul>
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></dd>
 	<dt><a>Initial value</a></dt>  <dd>empty</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
-      </dl>
-
-    </dd>
-
-    <dt id="PatternElementPreserveAspectRatioAttribute"><span class="adef">preserveAspectRatio</span></dt>
-    <dd>
-
-      <p>
-        See <a>'preserveAspectRatio'</a>.
-      </p>
-
-      <dl class="attrdef-svg2">
-	<dt>Value</dt>
-	<dd>
-	  <a href="coords.html#PreserveAspectRatioAttribute">[defer] &lt;align&gt;
-	    [&lt;meetOrSlice&gt;]</a>
-	</dd>
-	<dt><a>Initial value</a></dt>  <dd>xMidYMid meet</dd>
 	<dt><a>Animatable</a></dt>    <dd>yes</dd>
       </dl>
 
@@ -2592,11 +2802,23 @@ the <a>'overflow'</a> property for <a>'pattern'</a> elements to
 <span class="prop-value">hidden</span>, which causes a rectangular clipping
 path to be created at the bounds of the pattern tile.  Unless the
 <a>'overflow'</a> property is overridden, any graphics within the pattern
-which goes outside of the pattern rectangle will be clipped.  Note that if
-the <a>'overflow'</a> property is set to <span class="prop-value">visible</span>
-the rendering behavior for the pattern is undefined.
+which goes outside of the pattern rectangle will be clipped.
 <a href="pservers.html#ExamplePattern01">Example pattern01</a> below shows the
 effect of clipping to the pattern tile.</p>
+
+<p class="note">
+  Note that if the <a>'overflow'</a> property is set to
+  to <span class="prop-value">visible</span> the rendering behavior
+  for the pattern outside the bounds of the pattern is currently
+  undefined. A future version of SVG may require the overflow to be
+  shown. SVG implementers are encouraged to render the overflow as
+  this is the behavior expected by authors. If overflow is rendered,
+  the pattern tiles should be rendered left to right in rows and the
+  rows from top to bottom.
+</p>
+<p class="annotation">
+  See <a href="https://github.com/w3c/svgwg/issues/129">GitHub Issue 129</a>
+</p>
 
 <p>The contents of the <a>'pattern'</a> are relative to a new coordinate
 system. If there is a <a>'viewBox'</a> attribute, then the new coordinate
@@ -2712,6 +2934,13 @@ for each possible integer value of <em>m</em>.</p>
 <edit:elementsummary name='hatch'/>
 
 <h3 id="HatchElementAttributes">Attributes</h3>
+  
+  <p class="note">
+    Note that the <a>'x'</a> and <a>'y'</a> attributes 
+    on a <a>'hatch'</a> are not presentation attributes;
+    the used value is not affected by CSS styles.
+    The <a>'transform'</a> attribute is a presentation attribute.
+  </p>
 
   <dl class="attrdef-list-svg2">
 
@@ -2936,23 +3165,27 @@ for each possible integer value of <em>m</em>.</p>
     <dt id="HatchElementHrefAttribute"><span class="adef">href</span></dt>
     <dd>
       <p>
-        A <a href="linking.html#URLReference">URL reference</a> to a
-        different <a>'hatch'</a> element within the current SVG
-        document fragment. Any attributes which are defined on the
-        referenced element which are not defined on this element are
-        inherited by this element. If this element has no children,
-        and the referenced element does (possibly due to its
-        own <a>'href'</a> attribute), then this element inherits
-        the children from the referenced element. Inheritance can be
-        indirect to an arbitrary level; thus, if the referenced
-        element inherits attributes or children due to its
-        own <a>'href'</a> attribute, then the current element
-        can inherit those attributes or children.
+        A <a>URL reference</a> to a template element,
+        which must be a different <a>'hatch'</a> element to be valid.
       </p>
       <p>
-        Refer to the common handling defined for <a
-        href="linking.html#linkRefAttrs">URL reference attributes</a>.
+        Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
+        and to the common handling defined for <a
+        href="linking.html#linkRefAttrs">URL reference attributes</a> and
+        <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
       </p>
+      <p>
+        The specified attributes that will be copied from the template are:
+      </p>
+      <ul>
+        <li><a>'x'</a></li>
+        <li><a>'y'</a></li>
+        <li><a>'pitch'</a></li>
+        <li><a>'rotate'</a></li>
+        <li><a>'hatchUnits'</a></li>
+        <li><a>'hatchContentUnits'</a></li>
+        <li><a>'transform'</a></li>
+      </ul>
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></dd>
@@ -3266,7 +3499,7 @@ attributes on gradient elements are as follows:</p>
 <p>The <b id="__svg__SVGGradientElement__gradientTransform">gradientTransform</b> IDL
 attribute <a>reflects</a> the computed value of the <a>'transform'</a> property
 and either the <span class='attr-name'>'transform'</span> presentation attribute,
-for <a>'mesh'</a> elements, or the
+for <a>'meshgradient'</a> elements, or the
 <span class='gradientTransform'>'gradientTransform'</span> presentation attribute
 for <a>'linearGradient'</a> and <a>'radialGradient'</a> elements.</p>
 
@@ -3331,17 +3564,17 @@ in the DOM.</p>
 </edit:with>
 
 
-<h3 id="InterfaceSVGMeshElement">Interface SVGMeshElement</h3>
+<h3 id="InterfaceSVGMeshGradientElement">Interface SVGMeshGradientElement</h3>
 
-<edit:with element="mesh">
+<edit:with element="meshgradient">
 
-The <a>SVGMeshElement</a> interface corresponds to the
+The <a>SVGMeshGradientElement</a> interface corresponds to the
 <a>'mesh'</a> element.
 
-<pre class="idl">interface <b>SVGMeshElement</b> : <a>SVGGradientElement</a> {
+<pre class="idl">interface <b>SVGMeshGradientElement</b> : <a>SVGGradientElement</a> {
 };</pre>
 
-<p class="note">Note that the <a>SVGMeshElement</a> does not have any
+<p class="note">Note that the <a>SVGMeshGradientElement</a> does not have any
 <a>reflecting</a> IDL attributes for its <a>'x'</a>, <a>'y'</a>,
 <span class='attr-name'>'transform'</span>, <a>'href'</a> and <a>'type'</a>
 attributes.</p>
@@ -3469,6 +3702,6 @@ attributes.</p>
 
 </edit:with>
 </div>
-
+</div>
 </body>
 </html>

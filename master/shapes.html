@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
 <head>
   <title>Basic Shapes</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -36,8 +36,9 @@
   <li>circles, created with the <a>'circle'</a> element,</li>
   <li>ellipses, created with the <a>'ellipse'</a> element,</li>
   <li>straight lines, created with the <a>'line'</a> element,</li>
-  <li>polylines, created with the <a>'polyline'</a> element, and</li>
-  <li>polygons, created with the <a>'polygon'</a> element.</li>
+  <li>polylines, created with the <a>'polyline'</a> element,</li>
+  <li>polygons, created with the <a>'polygon'</a> element, and</li>
+  <li>meshes, created with the <a>'mesh'</a> element.</li>
 </ul>
 
 <p>Mathematically, these shape elements are equivalent to a
@@ -55,103 +56,118 @@ shapes.</p>
 
 <p>The <a>'rect'</a> element defines a rectangle which is axis-aligned
 with the current <a>local coordinate system</a>. Rounded rectangles can be achieved by setting
-appropriate values for attributes <a>'rx'</a> and <a>'ry'</a>.</p>
+non-zero values for the <a>'rx'</a> and <a>'ry'</a> geometric properties.</p>
 
 <edit:elementsummary name='rect'/>
 
 <p>The <a>'x'</a> and <a>'y'</a> coordinates refer to the left and top edges of the rectangle,
 in the current user coordinate system.</p>
 
-<p>The <a>'width'</a> and <a>'height'</a> of the rectangle.  A negative value for either
-attribute is an error (see <a href="implnote.html#ErrorProcessing">Error processing</a>).
-A value of zero for either attribute disables rendering of the element.</p>
+<p>The <a>'width'</a> and <a>'height'</a> properties define the overall width and height of the rectangle.  
+A negative value for either property is illegal and <a href="https://www.w3.org/TR/CSS21/syndata.html#parsing-errors">must be ignored as a parsing error</a>.
+A computed value of zero for either dimension disables rendering of the element.</p>
 
-<p>For rounded rectangles, the x- and y-axis radii of the
-ellipse used to round off the corners of the rectangle.
-A negative value for either attribute is an error
-(see <a href="implnote.html#ErrorProcessing">Error processing</a>).</p>
+<p>For rounded rectangles, 
+the computed values of the <a>'rx'</a> and <a>'ry'</a> properties define
+the x- and y-axis radii of elliptical arcs used to round off the corners of the rectangle.
+The arc are always symmetrical along both horizontal and vertical axis; to create a rectangle with uneven corner rounding, define the shape explicitly with a <a>'path'</a>.
+A negative value for either property is illegal and <a href="https://www.w3.org/TR/CSS21/syndata.html#parsing-errors">must be ignored as a parsing error</a>.
+A computed value of zero for either dimension, 
+or a computed value of <code>auto</code> for <em>both</em> dimensions,
+results in a rectangle without corner rounding.
+</p>
 
-<p>The values used for the x- and y-axis rounded corner radii are
-determined implicitly if the <a>'rx'</a> or <a>'ry'</a> attributes (or both)
-are not specified, or are specified but with <a>invalid values</a>.
-The values are also subject to clamping so that the lengths of
-the straight segments of the rectangle are never negative.  The
-effective values for <a>'rx'</a> and <a>'ry'</a> are determined by following
-these steps in order:</p>
+<p>The used values for the x- and y-axis rounded corner radii
+may be determined implicitly from the other dimension (using the <code>auto</code> value),
+and are also subject to clamping so that the lengths of
+the straight segments of the rectangle are never negative.  
+The used values for <a>'rx'</a> and <a>'ry'</a> are determined
+from the computed values by following these steps in order:</p>
 
 <ol>
-  <li>Let <var>rx</var> and <var>ry</var> be length values.</li>
+  <li>If both <a>'rx'</a> and <a>'ry'</a> have a computed value of <code>auto</code> 
+  (since <code>auto</code> is the initial value for both properties, this will also occur if neither are specified by the author or if all author-supplied values are invalid), 
+  then the used value of both <a>'rx'</a> and <a>'ry'</a> is 0.  (This will result in square corners.)</li>
+ <li>Otherwise, convert specified values to absolute values as follows:
+   <ol>
+  <li>If <a>'rx'</a> is set to a length value or a percentage, 
+  but <a>'ry'</a> is <code>auto</code>, 
+  calculate an absolute length equivalent for <a>'rx'</a>, resolving percentages against the used <a>'width'</a> of the rectangle;
+  the absolute value for <a>'ry'</a> is the same.</li>
 
-  <li>If neither <a>'rx'</a> nor <a>'ry'</a> are properly specified, then set both
-  <var>rx</var> and <var>ry</var> to 0.  (This will result in square corners.)</li>
+  <li>If <a>'ry'</a> is set to a length value or a percentage, 
+  but <a>'rx'</a> is <code>auto</code>,  
+  calculate the absolute length equivalent for <a>'ry'</a>, resolving percentages against the used <a>'height'</a> of the rectangle;
+  the absolute value for <a>'rx'</a> is the same.</li>
 
-  <li>Otherwise, if a properly specified value is provided for <a>'rx'</a>, but
-  not for <a>'ry'</a>, then set both <var>rx</var> and <var>ry</var> to the value of <a>'rx'</a>.</li>
+  <li>If both <a>'rx'</a> and <a>'ry'</a> were set to lengths or percentages, 
+  absolute values are generated individually, 
+  resolving <a>'rx'</a> percentages against the used <a>'width'</a>,
+  and resolving <a>'ry'</a> percentages against the used <a>'height'</a>.</li>
+ </ol></li>
+ <li>Finally, apply clamping to generate the used values:
+   <ol>
+  <li>If the absolute <a>'rx'</a> (after the above steps) 
+  is greater than half of the used <a>'width'</a>, 
+  then the used value of <a>'rx'</a> is half of the used <a>'width'</a>.</li>
 
-  <li>Otherwise, if a properly specified value is provided for <a>'ry'</a>, but
-  not for <a>'rx'</a>, then set both <var>rx</var> and <var>ry</var> to the value of <a>'ry'</a>.</li>
+  <li>If the absolute <a>'ry'</a> (after the above steps) 
+  is greater than half of the used <a>'height'</a>, 
+  then the used value of <a>'ry'</a> is half of the used <a>'height'</a>.</li>
 
-  <li>Otherwise, both <a>'rx'</a> and <a>'ry'</a> were specified properly.  Set <var>rx</var> to
-  the value of <a>'rx'</a> and <var>ry</var> to the value of <a>'ry'</a>.</li>
-
-  <li>If <var>rx</var> is greater than half of <a>'width'</a>, then set
-  <var>rx</var> to half of <a>'width'</a>.</li>
-
-  <li>If <var>ry</var> is greater than half of <a>'height'</a>, then set
-  <var>ry</var> to half of <a>'height'</a>.</li>
-
-  <li>The effective values of <a>'rx'</a> and <a>'ry'</a> are <var>rx</var> and
-  <var>ry</var>, respectively.</li>
+  <li>Otherwise, the used values of <a>'rx'</a> and <a>'ry'</a> are the absolute values computed previously.</li>
+ </ol></li>
 </ol>
 
 <p>Mathematically, a <a>'rect'</a> element is mapped to an
-equivalent <a>'path'</a> element as follows: (Note: all coordinate and
-length values are first converted into local coordinate system coordinates according
-to <a href="coords.html#Units">Units</a>.)</p>
+equivalent <a>'path'</a> element as follows, 
+after generating absolute used values
+<var>x</var>, <var>y</var>, <var>width</var>, <var>height</var>,
+<var>rx</var>, and <var>rx</var> 
+in user units for the local coordinate system,
+for each of the equivalent geometric properties
+following the rules specified above and in <a href="coords.html#Units">Units</a>: </p>
 
-<ul>
+<ol class='algorithm ready-for-wg-review'>
   <li>perform an absolute <a
   href="paths.html#PathDataMovetoCommands">moveto</a> operation to
-  location (<em>x+rx</em>,<em>y</em>), where <em>x</em> is the value of
-  the <a>'rect'</a> element's <a>'x'</a> attribute converted to user
-  space, <em>rx</em> is the effective value of the <a>'rx'</a> attribute
-  converted to local coordinate system and <em>y</em> is the value of the <a>'y'</a>
-  attribute converted to local coordinate system</li>
+  location (<var>x+rx</var>,<var>y</var>);</li>
 
   <li>perform an absolute horizontal <a href="paths.html#PathDataLinetoCommands">lineto</a>
-  operation to location (<em>x+width-rx</em>,<em>y</em>), where <em>width</em>
-  is the <a>'rect'</a> element's <a>'width'</a> attribute converted to user
-  space</li>
+  with parameter <var>x+width-rx</var>;</li>
 
-  <li>perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
-  operation to coordinate (<em>x+width</em>,<em>y+ry</em>), where the effective
-  values for the <a>'rx'</a> and <a>'ry'</a> attributes on the <a>'rect'</a>
-  element converted to local coordinate system are used as the <em>rx</em> and <em>ry</em>
-  attributes on the <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
-  command, respectively, the <em>x-axis-rotation</em> is set to zero, the
-  <em>large-arc-flag</em> is set to zero, and the <em>sweep-flag</em> is set
-  to one</li>
+  <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
+  perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
+  operation to coordinate (<var>x+width</var>,<var>y+ry</var>), 
+  where <var>rx</var> and <var>ry</var> are used as the equivalent parameters to
+  the <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a> command, 
+  the <var>x-axis-rotation</var> and <var>large-arc-flag</var> are set to zero,
+  the <var>sweep-flag</var> is set to one;</li>
 
-  <li>perform a absolute vertical <em>lineto</em> to location
-  (<em>x+width</em>,<em>y+height-ry</em>), where <em>height</em> is the
-  <a>'rect'</a> element's <a>'height'</a> attribute converted to user
-  space</li>
+  <li>perform an absolute vertical <a href="paths.html#PathDataLinetoCommands">lineto</a>
+  parameter <var>y+height-ry</var>;</li>
 
-  <li>perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
-  operation to coordinate (<em>x+width-rx</em>,<em>y+height</em>)</li>
+  <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
+  perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
+  operation to coordinate (<var>x+width-rx</var>,<var>y+height</var>),
+  using the same parameters as previously;</li>
 
-  <li>perform an absolute horizontal <em>lineto</em> to location
-  (<em>x+rx</em>,<em>y+height</em>)</li>
+  <li>perform an absolute horizontal <a href="paths.html#PathDataLinetoCommands">lineto</a>
+  parameter <var>x+rx</var>;</li>
 
-  <li>perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
-  operation to coordinate (<em>x</em>,<em>y+height-ry</em>)</li>
+  <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
+  perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
+  operation to coordinate (<var>x</var>,<var>y+height-ry</var>),
+  using the same parameters as previously;</li>
 
-  <li>perform an absolute absolute vertical <em>lineto</em> to location
-  (<em>x</em>,<em>y+ry</em>)</li>
+  <li>perform an absolute vertical <a href="paths.html#PathDataLinetoCommands">lineto</a>
+  parameter <var>y+ry</var></li>
 
-  <li>perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
-  operation to coordinate (<em>x+rx</em>,<em>y</em>)</li>
-</ul>
+  <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
+  perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
+  operation with a <a>segment-completing close path</a> command,
+  using the same parameters as previously.</li>
+</ol>
 
 <p class="annotation">
   Path decomposition resolved during teleconference on
@@ -168,7 +184,7 @@ and stroked with navy.</p>
 <p id="ExampleRect02"><span class="example-ref">Example rect02</span> shows
 two rounded rectangles. The <a>'rx'</a> specifies how to round the corners of
 the rectangles. Note that since no value has been specified for the <a>'ry'</a>
-attribute, it will be assigned the same value as the <a>'rx'</a> attribute.</p>
+attribute, the used value will be derived from the <a>'rx'</a> attribute.</p>
 
 <edit:example href='images/shapes/rect02.svg' name='rect02' description='rounded rectangles expressed in user coordinates' link='yes' image='yes'/>
 
@@ -187,9 +203,8 @@ radius.</p>
 </p>
 
 <p>
-  The <a>'r'</a> attribute defines the radius of the circle.  A negative value
-  is an error (see <a href="implnote.html#ErrorProcessing">Error processing</a>).
-  A value of zero disables rendering of the element.
+  The <a>'r'</a> attribute defines the radius of the circle. 
+  A negative value for either property is illegal and <a href="https://www.w3.org/TR/CSS21/syndata.html#parsing-errors">must be ignored as a parsing error</a>.
 </p>
 
 <p>
@@ -199,7 +214,22 @@ radius.</p>
   arc</a> segments, each covering a quarter of the circle. The path
   begins at the "3 o'clock" point on the radius and proceeds in a
   clock-wise direction (before any transformations).
+  The <var>rx</var> and <var>ry</var> parameters to the arc commands
+  are both equal to the used value of the <a>'r'</a> property, after conversion to local user units, 
+  while the <var>x-axis-rotation</var>, 
+  the <var>large-arc-flag</var>, 
+  and the <var>sweep-flag</var> are all set to zero.
+  The coordinates are computed as follows, 
+  where <var>cx</var>, <var>cy</var>, and <var>r</var> are the used values of the equivalent properties, converted to user units:
 </p>
+<ol>
+  <li>A move-to command to the point
+  <var>cx+r</var>,<var>cy</var>;</li>
+  <li>arc to <var>cx</var>,<var>cy+r</var>;</li>
+  <li>arc to <var>cx-r</var>,<var>cy</var>;</li>
+  <li>arc to <var>cx</var>,<var>cy-r</var>;</li>
+  <li>arc with a <a>segment-completing close path command</a>.</li>
+</ol>
 
 <p class="annotation">
   Path decomposition resolved during teleconference on
@@ -228,10 +258,32 @@ with the current <a>local coordinate system</a> based on a center point and two 
 </p>
 
 <p>
-  The <a>'cx'</a> and <a>'cy'</a> attributes define the x- and y-axis radii of the
-  ellipse.  A negative value for either attribute is an error (see
-  <a href="implnote.html#ErrorProcessing">Error processing</a>).
-  A value of zero disables rendering of the element.
+  The <a>'rx'</a> and <a>'ry'</a> properties define the x- and y-axis radii of the
+  ellipse. 
+  A negative value for either property is illegal and <a href="https://www.w3.org/TR/CSS21/syndata.html#parsing-errors">must be ignored as a parsing error</a>.
+  A computed value of zero for either dimension, 
+  or a computed value of <code>auto</code> for <em>both</em> dimensions,
+  disables rendering of the element.
+</p>
+
+<p>
+  An <code>auto</code> value for <em>either</em> <a>'rx'</a> or <a>'ry'</a>
+  is converted to a used value following the rules given above for rectangles,
+  except without any clamping based on <a>'width'</a> and <a>'height'</a>.
+  Effectively, an <code>auto</code> value creates a circular shape
+  whose radius is defined by a value expressed solely in one dimension,
+  allowing you to create circles with radii defined as a percentage of the coordinate system width
+  (a percantage value for <a>'rx'</a> and an auto value for <a>'ry'</a>)
+  or height
+  (an auto value for <a>'rx'</a> and a percantage value for <a>'ry'</a>).
+</p>
+  
+<p class="note">
+  New in SVG 2. 
+  The <code>auto</code> value for <a>'rx'</a> and <a>'ry'</a> was added to allow consistent
+  parsing of these properties for both ellipses and rectangles.
+  Previously, if either <a>'rx'</a> or <a>'ry'</a> was unspecified,
+  the ellipse would not render.
 </p>
 
 <p>
@@ -241,7 +293,23 @@ with the current <a>local coordinate system</a> based on a center point and two 
   arc</a> segments, each covering a quarter of the ellipse. The path
   begins at the "3 o'clock" point on the radius and proceeds in a
   clock-wise direction (before any transformation).
+  The <var>rx</var> and <var>ry</var> parameters to the arc commands
+  are the used values of the equivalent properties after conversion to local user units, 
+  while the <var>x-axis-rotation</var>, 
+  the <var>large-arc-flag</var>, 
+  and the <var>sweep-flag</var> are all set to zero.
+  The coordinates are computed as follows, 
+  where <var>cx</var>, <var>cy</var>, <var>rx</var>, and <var>ry</var> 
+  are the used values of the equivalent properties, converted to user units:
 </p>
+<ol>
+  <li>A move-to command to the point
+  <var>cx+rx</var>,<var>cy</var>;</li>
+  <li>arc to <var>cx</var>,<var>cy+ry</var>;</li>
+  <li>arc to <var>cx-rx</var>,<var>cy</var>;</li>
+  <li>arc to <var>cx</var>,<var>cy-ry</var>;</li>
+  <li>arc with a <a>segment-completing close path command</a>.</li>
+</ol>
 
 <p class="annotation">
   Path decomposition resolved during teleconference on
@@ -312,22 +380,24 @@ and ends at another.</p>
     The x- and y-axis coordinates of the end of the line.
   </dd>
 </dl>
+  
+<p class="note">
+  A future specification may convert the <a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a>, and <a>'y2'</a> attributes to geometric properties.
+  Currently, they can only be specified via element attributes, and not CSS.
+</p>
 
 <p>Mathematically, a <a>'line'</a> element can be mapped to an
-equivalent <a>'path'</a> element as follows: (Note: all coordinate and
-length values are first converted into local coordinate system coordinates according
-to <a href="coords.html#Units">Units</a>.)</p>
+equivalent <a>'path'</a> element as follows, 
+after converting coordinates into local coordinate system user units according
+to <a href="coords.html#Units">Units</a> 
+to generate values <var>x1</var>, <var>y1</var>, <var>x2</var>, and <var>y2</var>:</p>
 
 <ul>
   <li>perform an absolute <a href="paths.html#PathDataMovetoCommands">moveto</a>
-  operation to absolute location (<em>x1</em>,<em>y1</em>), where <em>x1</em>
-  and <em>y1</em> are the values of the <a>'line'</a> element's <a>'x1'</a> and
-  <a>'y1'</a> attributes converted to local coordinate system, respectively</li>
+  operation to absolute location (<var>x1</var>,<var>y1</var>)</li>
 
   <li>perform an absolute <a href="paths.html#PathDataLinetoCommands">lineto</a>
-  operation to absolute location (<em>x2</em>,<em>y2</em>), where <em>x2</em>
-  and <em>y2</em> are the values of the <a>'line'</a> element's <a>'x2'</a> and
-  <a>'y2'</a> attributes converted to local coordinate system, respectively</li>
+  operation to absolute location (<var>x2</var>,<var>y2</var>)</li>
 </ul>
 
 <p>Because <a>'line'</a> elements are single lines and thus are geometrically
@@ -376,7 +446,7 @@ shapes.</p>
     <p>where:</p>
     <div class="definition">
       <dfn id="DataTypePoints">&lt;points&gt;</dfn> =
-      <div style="margin-left: 4em">[<a>&lt;number&gt;</a> ,? <a>&lt;number&gt;</a> ,?]+</div>
+      <div style="margin-left: 4em">[[<a>&lt;number&gt;</a> ,? <a>&lt;number&gt;</a> ]# ]+</div>
     </div>
     <p>The points that make up the polyline. All coordinate
     values are in the user coordinate system.</p>
@@ -388,6 +458,11 @@ shapes.</p>
     is valid but does not render.</p>
   </dd>
 </dl>
+  
+<p class="note">
+  A future specification may convert the <a>'points'</a> attribute to a geometric property.
+  Currently, it can only be specified via an element attribute, and not CSS.
+</p>
 
 <p>Mathematically, a <a>'polyline'</a> element can be mapped to an
 equivalent <a>'path'</a> element as follows:</p>
@@ -447,6 +522,11 @@ set of connected straight line segments.</p>
     is valid, but does not render.</p>
   </dd>
 </dl>
+  
+<p class="note">
+  A future specification may convert the <a>'points'</a> attribute to a geometric property.
+  Currently, it can only be specified via an element attribute, and not CSS.
+</p>
 
 <p>Mathematically, a <a>'polygon'</a> element can be mapped to an
 equivalent <a>'path'</a> element as follows:</p>
@@ -472,6 +552,118 @@ on the <a>'svg'</a> element.</p>
 
 </edit:with>
 
+<h2 id="MeshElement">The <span class="element-name">'mesh'</span> element</h2>
+
+<p class="note">
+  New in SVG 2.
+</p>
+<p class="annotation">
+  Added by resolution at the
+  <a href="https://www.w3.org/2016/06/21-svg-minutes.html#item07">Amsterdam
+  Editor's Meeting</a> in order to distinguish a mesh as a graphics
+  element from mesh as a paint server. Behavior of overflow resolved
+  on the last day.
+</p>
+
+<edit:with element='mesh'>
+
+  <p>
+    The <a>'mesh'</a> element is a wrapper for a <a>'meshgradient'</a>
+    paint server. Its geometry is determined by the referenced
+    <a>'meshgradient'</a>.
+  </p>
+
+  <edit:elementsummary name='mesh'/>
+
+  <dl class="attrdef-list">
+    <dt>
+      <table class="attrdef def">
+	<tr>
+          <th>Name</th>
+          <th>Value</th>
+          <th>Initial value</th>
+          <th>Animatable</th>
+	</tr>
+	<tr>
+          <td><dfn id="MeshElementHrefAttribute">href</dfn></td>
+          <td>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></td>
+          <td>(none)</td>
+          <td>yes</td>
+	</tr>
+      </table>
+    </dt>
+    <dd>
+      <p>
+	An <a href="linking.html#URLReference">URL reference</a> to
+	a <a>'meshgradient'</a> paint server.
+      </p>
+      Refer to the common handling defined for
+      <a href="linking.html#linkRefAttrs">URL reference attributes</a>.
+    </dd>
+  </dl>
+
+  <p>
+    If the <a>'href'</a> points to a valid <a>'meshgradient'</a> paint
+    server, use that to render the <a>'mesh'</a> element; else if the
+    first <a>'meshgradient'</a> child element is valid use that.
+    Otherwise, the <a>'mesh'</a> will not render. A non-rendered
+    <a>'mesh'</a> behaves the same as a <a>'path'</a> that has
+    a <a>'d'</a> property with value
+    <span class="prop-value">none</span>. Note: The
+    <a>'fill'</a> property is not used to define the paint of a
+    <a>'mesh'</a>, however a <a>'mesh'</a> may have a stroke and
+    markers positioned using the <a>equivalent path</a>.
+  </p>
+  <p>
+    The <a>equivalent path</a> consists of a path constructed to match
+    the outer shape of the referenced <a>'meshgradient'</a>. To
+    construct the path, start at the first corner of the first
+    <a>'meshpatch'</a> and then walk around the ouside of
+    the <a>'meshgradient'</a>, adding each linear or Bézier segment
+    encountered to the path. When the starting point is reached, the
+    path should be closed with a <a>segment-completing close path
+    command</a>.
+  </p>
+
+  <div class="figure">
+    <img alt="A simple 2x2 patch mesh with a thick black stroke along
+       the outside.  A red dot is at the upper left corner and an
+       arrow showing the direction the path is constructed."
+       src="images/shapes/mesh-example.png"/>
+    <p class="caption">
+      A 2x2 patch mesh gradient. The equivalent path is shown by the
+      heavy black path. The path starting point is indicated by the red
+      circle and the path direction by the arrow.
+    </p>
+  </div>
+
+  <p>
+    Meshes can fold over such that there may be painted regions that
+    are outside the equivalent path. Painting of these regions is
+    controlled by the <a>'overflow'</a> property. The initial value
+    for this property is
+    <span class="prop-value">visible</span>.
+  </p>
+
+  <div class="figure">
+    <img alt="Two simple one patch meshes with thick black strokes along
+       the outsides."
+       src="images/shapes/mesh-overflow.png"/>
+    <p class="caption">
+      Single patch mesh gradient with different values of the
+      <a>'overflow'</a> property. Left: <a>'overflow'</a> with value
+      <span class="prop-value">display</span>. Right <a>'overflow'</a>
+      with value <span class="prop-value">hidden</span>.
+    </p>
+  </div>
+
+  <p>
+    A <a>'mesh'</a> is always painted as if the fill rule
+    is <span class="prop-value">nonzero</span> regardless of the
+    value of the <a>'fill-rule'</a> property.
+  </p>
+
+</edit:with>
 
 <div class='ready-for-wider-review'>
 <h2 id="DOMInterfaces">DOM interfaces</h2>
@@ -575,6 +767,19 @@ element.
 <b id="__svg__SVGLineElement__y2">y2</b> IDL attributes
 <a>reflect</a> the <a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a> and <a>'y2'</a>
 content attributes, respectively</p>
+
+</edit:with>
+
+
+<h3 id="InterfaceSVGMeshElement">Interface SVGMeshElement</h3>
+
+<edit:with element="mesh">
+
+<p>An <a>SVGMeshElement</a> object represents a <a>'mesh'</a> element in the DOM.</p>
+
+<pre class="idl">interface <b>SVGMeshElement</b> : <a>SVGGeometryElement</a> {};
+
+<a>SVGMeshElement</a> implements <a>SVGURIReference</a>;</pre>
 
 </edit:with>
 

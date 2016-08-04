@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
 <head>
   <title>Embedded Content</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -99,7 +99,11 @@ image files such as PNG or JPEG or to files with MIME type of
 "image/svg+xml". <a
 href="conform.html#ConformingSVGViewers">Conforming SVG
 viewers</a> need to support at least PNG, JPEG and SVG format
-files.</p>
+files.
+SVG files must be processed in <a>secure animated mode</a>
+if the current document supports animation,
+or in <a>secure static mode</a> if the current document is static.
+</p>
 
 <p>The result of processing an <a>'image'</a> is always a four-channel
 RGBA result. When an <a>'image'</a>
@@ -112,13 +116,12 @@ into a 4-channel RGBA image, where the single channel from the
 referenced object is used to compute the three color channels
 and the alpha channel is uniformly set to 1.</p>
 
-<p>For the SVG images, unless the value of
-<a>'preserveAspectRatio'</a> on the <a>'image'</a> element starts with 'defer',
-the <a>'preserveAspectRatio'</a> attribute on the root element in
-the referenced SVG image is also ignored (see <a>'preserveAspectRatio'</a>
+<p>For <a>'image'</a> elements referencing a file with MIME type of "image/svg+xml",
+the <a>'preserveAspectRatio'</a> attribute on the root
+element in the referenced SVG image is ignored (see <a>'preserveAspectRatio'</a>
 for details).  Instead, the <a>'preserveAspectRatio'</a> attribute on
 the referencing <a>'image'</a>
-element defines how the SVG image content is fitted into the
+element defines how the SVG image content is fit into the
 viewport.</p>
 
 <p>The value of the <a>'viewBox'</a> attribute to use when
@@ -148,7 +151,7 @@ viewport, and the top/left of the raster would be aligned with
 the top/left of the viewport as defined by the attributes <a>'x'</a>, <a>'y'</a>, <a>'width'</a> and <a>'height'</a> on the <a>'image'</a> element.  If the value
 of <a>'preserveAspectRatio'</a> was <span class='attr-value'>'none'</span>
 then aspect ratio of the image would not be preserved. The
-image would be fitted such that the top/left corner of the
+image would be fit such that the top/left corner of the
 raster exactly aligns with coordinate (<a>'x'</a>, <a>'y'</a>) and the bottom/right corner of
 the raster exactly aligns with coordinate (<a>'x'</a>+<a>'width'</a>, <a>'y'</a>+<a>'height'</a>).</p>
 
@@ -243,7 +246,7 @@ elements within an SVG file.</p>
     </table>
   </dt>
   <dd>
-    <p>The crossorigin attribute is a <a>CORS settings attribute</a>, and unless otherwise specified follows the same processing rules as in html [<a href="refs.html#ref-HTML">HTML</a>].</p>
+    <p>The crossorigin attribute is a <a>CORS settings attribute</a>, and unless otherwise specified follows the same processing rules as in HTML [<a href="refs.html#ref-html51">HTML</a>].</p>
   </dd>
   <dt>
     <table class="attrdef def">
@@ -267,32 +270,10 @@ elements within an SVG file.</p>
     Refer to the common handling defined for <a
     href="linking.html#linkRefAttrs">URL reference attributes</a> and
     <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.</p>
-    <p>To get the referenced resource, do a potentially CORS-enabled fetch of the absolute URL that resulted from the earlier step, with the <em>mode</em> being the current state of the
-    element's <a>'crossorigin'</a> attribute, the <em>origin</em> being the <a>origin</a> of the <a>'image'</a> element's <a>Document</a>, and the <em>default origin behaviour</em> set to <em>taint</em>.
-    For <a>origin</a>, the rules defined for the html <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#the-img-element">'img'</a> element apply the same way to the svg <a>'image'</a> element.
+    <p>
+        The URL is processed and the resource is fetched
+        <a href="linking.html#processingURL">as described in the Linking chapter</a>.
     </p>
-    <p class='issue' data-issue="10">The above should probably just be replaced with a link to <a href="http://www.w3.org/TR/html51/document-metadata.html#obtain">obtain</a>.</p>
-  </dd>
-  <dt>
-    <table class="attrdef def">
-      <tr>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Initial value</th>
-        <th>Animatable</th>
-      </tr>
-      <tr>
-        <td><dfn data-dfn-type="element-attr" data-dfn-for="image" id="ImageElementPreserveAspectRatioAttribute">preserveAspectRatio</dfn></td>
-        <td>defer? <a>&lt;align&gt;</a> [ meet | slice ]?</td>
-        <td>xMidYMid meet</td>
-        <td>yes</td>
-      </tr>
-    </table>
-  </dt>
-  <dd>
-    <p>Specifies the fitting behavior when the aspect ratio of the referenced image
-    does not match the aspect ratio of the rectangle it is placed in.
-    See the definition of <a>'preserveAspectRatio'</a> for details.</p>
   </dd>
 </dl>
 
@@ -310,6 +291,17 @@ elements within an SVG file.</p>
 &lt;/svg&gt;
 </pre>
 </div>
+  
+<p>
+  Since image references always refer to a complete document,
+  a target-only URL is treated as a link to the same file,
+  which is rendered again as an independent embedded image.
+  Since the embedded image is processed in a secure mode,
+  its own embedded references are not processed,
+  preventing infinite recursion.
+</p>
+
+  <edit:example href='images/embedded/recursive-image.svg' name='recursive-image' description='an SVG that embeds itself, creating a bulls-eye pattern' image='yes' link='yes'/>
 
 </edit:with>
 
@@ -325,11 +317,17 @@ elements within an SVG file.</p>
 
 <edit:example href='images/embedded/videoinsvg.svg' name='videoinsvg' link='no' image='no'/>
 
-<p>HTML elements, in the HTML namespace, used as children of <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#the-video-element">'video'</a>, <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#the-audio-element">'audio'</a>, <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#the-iframe-element">'iframe'</a> and <a href="http://www.w3.org/TR/html51/semantics-scripting.html#the-canvas-element">'canvas'</a> elements within an SVG document fragment behave as specified in HTML. This applies in particular to <a href="http://www.w3.org/TR/html51/dom.html#fallback-content">fallback content</a>.</p>
+<p>HTML elements, in the HTML namespace, used as children of <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#the-video-element">'video'</a>, <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#the-audio-element">'audio'</a>, <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#the-iframe-element">'iframe'</a> and <a href="http://www.w3.org/TR/html51/semantics-scripting.html#the-canvas-element">'canvas'</a> elements within an SVG document fragment behave as specified in HTML. This applies in particular to <a href="http://www.w3.org/TR/html51/dom.html#fallback-content">fallback content</a>;
+if fallback content is rendered, 
+the embedded element behaves like an SVG <a>'foreignObject'</a> element to contain the HTML content.
+This would occur, for example, 
+for a <a>'video'</a> element if the user agent does not support the specified video formats,
+or for a <a>'canvas'</a> element if scripting is disabled.
+</p>
 
 <edit:example href='images/embedded/videofallback.svg' name='videofallback' link='no' image='no'/>
 
-<p>This is applicable also for the <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#the-track-element">'track'</a> and <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#elementdef-media-source">'source'</a> elements.</p>
+<p>The HTML specification is applicable also for the <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#the-track-element">'track'</a> and <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#elementdef-media-source">'source'</a> elements.</p>
 
 <edit:example href='images/embedded/sourceinsvg.svg' name='sourceinsvg' link='no' image='no'/>
 
