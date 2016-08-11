@@ -17,7 +17,559 @@
 
 <h1>Conformance Criteria</h1>
 
-<p class="normativity"><strong>This appendix is normative.</strong></p>
+<p class="normativity"><strong>This section is normative.</strong></p>
+
+
+<section>
+    <style>
+      .feature {
+          text-align: right;
+      }
+      .embedcontext, table.ref_modes td {
+          width: 120px;
+          height: 120px;
+      }
+      table.ref_modes td {
+          border: gainsboro 1px solid;
+      }
+      th, td {
+          text-align: center;
+      }
+      .bg {
+          background-image: url(.images/conform/smiley.svg);
+          width: 120px;
+          height: 120px;
+      }
+      table.features {
+          border: gray 1px solid;
+          margin-top: 1em;
+      }
+        table.features th, table.features td {
+            text-align: left;
+            background-color: gainsboro !important;
+            color: black !important;
+            padding: 0.5em !important;
+        }
+        table.features thead th {
+            text-align: center;
+            background-color: gray !important;
+            color: white !important;
+            font-weight: normal;
+        }
+    </style>
+  <h2 id="referencing-modes">Referencing modes</h2>
+
+  <p>There are various ways that an SVG document fragment can be
+  referenced by or included in other documents and then as a consequence
+  be processed by a user agent.  SVG documents can also be viewed as a
+  top-level document.  Each different method by which an SVG document fragment
+  can be used implies a certain set of requirements on how the SVG document
+  fragment is to be processed.</p>
+
+  <p>This section defines a number of <dfn id="referencing-mode">referencing
+  modes</dfn> that encompass the different ways SVG documents can
+  be used on the Web platform and which specify how the documents must be
+  processed.  Each referencing mode is defined by requiring the SVG document
+  be processed in a given <a href="#processing-mode">processing mode</a>.
+  Processing modes are introduced in <a href="#processing-modes">section 3</a> below
+  and define which features are enabled or disabled in the document.</p>
+
+  <p class="note">This document does not place normative requirements on
+  other specifications that can reference or include SVG documents, such as
+  HTML and various CSS specifications.  The intention is for these other
+  specifications to normatively point to the appropriate referencing mode
+  from this document.</p>
+
+  <p>The available <a href="#referencing-mode">referencing modes</a> are as follows:</p>
+
+  <dl>
+    <dt><dfn id="top-level-document-mode">top-level document</dfn></dt>
+    <dd>
+      <p>This referencing mode is for SVG documents that are loaded as a top-level
+      document in a user agent.</p>
+      <p>SVG documents processed with the
+      <a href="#top-level-document-mode">top-level document</a>
+      <a href="#referencing-mode">referencing mode</a> must use the
+      <a href="#dynamic-interactive-mode">dynamic interactive</a>
+      <a href="#processing-mode">processing mode</a>.</p>
+
+      <p class="note">This referencing mode is intended to be used when
+      an SVG document is loaded in a browser's
+      <a href="http://www.w3.org/TR/2014/CR-html5-20140204/browsers.html#top-level-browsing-context">top-level browsing context</a>.
+      <a href='#ref-HTML5'>[HTML5]</a></p>
+    </dd>
+
+    <dt><dfn id="embedded-document-mode">embedded document</dfn></dt>
+    <dd>
+      <p>This referencing mode is for SVG documents that are externally referenced
+      and embedded for presentation in a host document.  SVG documents referenced by the
+      <a>'iframe'</a> element from SVG 2 or the
+      <a>'animation'</a> element from SVG Tiny 1.2 must use the
+      <a href="#embedded-document-mode">embedded document</a>
+      <a href="#referencing-mode">referencing mode</a>.</p>
+
+      <p class="note">Note that the embedded document referencing mode
+      is not used for inline SVG fragments within an HTML document.</p>
+
+      <p>SVG documents processed with the
+      <a href="#embedded-document-mode">embedded document</a>
+      <a href="#referencing-mode">referencing mode</a> must use the
+      <a href="#dynamic-interactive-mode">dynamic interactive</a>
+      <a href="#processing-mode">processing mode</a>.</p>
+
+      <p class="note">This referencing mode is intended to be used when
+      an SVG document is loaded in an HTML
+      <span class='element-name'>'embed'</span>,
+      <span class='element-name'>'iframe'</span> or
+      <span class='element-name'>'object'</span> element.</p>
+    </dd>
+
+    <dt><dfn id="animated-image-document-mode">animated image document</dfn></dt>
+    <dd>
+      <p>This referencing mode is for SVG documents that are used as images,
+      where the context would typically be expecting a raster image that can
+      animate.  SVG documents referenced by the SVG <a>'image'</a> element must
+      use the <a href="#animated-image-document-mode">animated image document</a>
+      <a href="#referencing-mode">referencing mode</a> if
+      the referencing SVG document is using the
+      <a href='#top-level-document-mode'>top-level document</a>,
+      <a href='#embedded-document-mode'>embedded document</a> or
+      <a href='#animated-image-document-mode'>animated image document mode</a>.</p>
+
+      <p>SVG documents processed with the
+      <a href="#animated-image-document-mode">animated image document</a>
+      <a href="#referencing-mode">referencing mode</a> must use the
+      <a href="#secure-animated-mode">secure animated</a>
+      <a href="#processing-mode">processing mode</a>.</p>
+
+      <p class="note">This referencing mode is intended to be used when
+      an SVG document is referenced by an HTML
+      <span class='element-name'>'img'</span> element or
+      by any CSS property that takes an
+      <a href='http://www.w3.org/TR/css3-values/#images'>&lt;image&gt;</a>
+      value, and if animations can be run.</p>
+    </dd>
+
+    <dt><dfn id="static-image-document-mode">static image document</dfn></dt>
+    <dd>
+      <p>This referencing mode is for SVG documents that are used as images,
+      where the context would typically be expecting a raster image but where
+      animations are unable to run.  SVG documents
+      referenced by the SVG <a>'image'</a> element must use the
+      <a href="#static-image-document-mode">static image document</a>
+      <a href="#referencing-mode">referencing mode</a> if
+      the referencing SVG document is using the
+      <a href='#static-image-document-mode'>static image document mode</a>.</p>
+
+      <p>SVG documents processed with the
+      <a href="#static-image-document-mode">static image document</a>
+      <a href="#referencing-mode">referencing mode</a> must use the
+      <a href="#secure-static-mode">secure static</a>
+      <a href="#processing-mode">processing mode</a>.</p>
+
+      <p class="note">This referencing mode is intended to be used when
+      an SVG document is referenced by an HTML
+      <span class='element-name'>'img'</span> element or
+      by any CSS property that takes an
+      <a href='http://www.w3.org/TR/css3-values/#images'>&lt;image&gt;</a>
+      value, and if animations cannot be run.</p>
+    </dd>
+
+    <dt><dfn id="resource-document-mode">resource document</dfn></dt>
+    <dd>
+      <p>This referencing mode is for SVG documents that are loaded
+      as resource documents in order to use their <a>'mask element'</a>,
+      <a>'pattern element'</a>, gradient, or other resource elements.
+      SVG documents loaded due to a reference to an external document from any
+      of the following features must use the
+      <a href="#resource-document-mode">resource document</a>
+      <a href="#referencing-mode">referencing mode</a>:</p>
+
+      <ul>
+        <li>the <a>'clip-path'</a>, <a>'cursor property'</a>, <a>'fill'</a>,
+        <a>'filter property'</a> <a>'stroke'</a>, <a>'marker-mid'</a>,
+        <a>'marker-start'</a>, <a>'marker-end'</a> and <a>'mask property'</a>
+        properties</li>
+
+        <li>the <a>'altGlyph'</a>, <a>'cursor element'</a>, <a>'feImage'</a>,
+        <a>'filter element'</a>, <a>'linearGradient'</a>, <a>'mpath'</a>,
+        <a>'pattern'</a>, <a>'radialGradient'</a>, <a>'textPath'</a>,
+        <a>'tref'</a> and <a>'use'</a> elements</li>
+      </ul>
+
+      <p>SVG documents processed with the
+      <a href="#resource-document-mode">resource document</a>
+      <a href="#referencing-mode">referencing mode</a> must use the
+      <a href="#secure-animated-mode">secure animated</a>
+      <a href="#processing-mode">processing mode</a>.</p>
+
+      <p class='issue' data-issue="3">Should animations run in the resource document?</p>
+    </dd>
+
+    <dt><dfn id="font-document-mode">font document</dfn></dt>
+    <dd>
+      <p>This referencing mode is for SVG documents that are being used
+      to define font glyphs.</p>
+
+      <p>SVG documents processed with the
+      <a href="#font-document-mode">font document</a>
+      <a href="#referencing-mode">referencing mode</a> must use the
+      <a href="#secure-animated-mode">secure animated</a>
+      <a href="#processing-mode">processing mode</a>.</p>
+
+      <p>Additionally, SVG documents processed with the
+      <a href="#font-document-mode">font document</a>
+      <a href="#referencing-mode">referencing mode</a> must apply the
+      following user agent style sheet:</p>
+
+      <pre style="background-color: #eee; padding: 0.5em">@namespace svg url(http://www.w3.org/2000/svg);
+
+  svg|text, svg|foreignObject {
+    display: none !important;
+  }
+
+  :root {
+    fill: context-fill;
+    fill-opacity: context-fill-opacity;
+    stroke: context-stroke;
+    stroke-opacity: context-stroke-opacity;
+    stroke-width: context-value;
+    stroke-dasharray: context-value;
+    stroke-dashoffset: context-value;
+  }</pre>
+      <p class="note">This referencing mode is intended to used by the
+      OpenType specification for processing documents from the "SVG"
+      table.</p>
+      <p class="issue" data-issue="4">Should the CSS Variables that map the palette
+      colors into the document be defined here too?  It probably makes
+      sense to keep that in the OpenType specification.</p>
+    </dd>
+  </dl>
+
+  <p>SVG document fragments that are included inline in a host document
+  use a <a href='#referencing-mode'>referencing mode</a> that matches
+  that of the host document.  SVG document fragments included as
+  children of an SVG <a>'foreignObject'</a> element must use the
+  <a href='#referencing-mode'>referencing mode</a> of the referencing
+  SVG document.</p>
+
+  <p class='note'>For example, if an SVG document is being used in
+  <a href='#animated-image-document-mode'>animated image document mode</a>
+  due to being referenced by an HTML <a>'image'</a> element, then any
+  inline SVG fragment that is a child of a <a>'foreignObject'</a> element
+  within that document is also processed using
+  <a href='#animated-image-document-mode'>animated image document mode</a>.</p>
+
+
+  <h2 id="processing-modes">Processing modes</h2>
+
+  <p>This section defines a number of <dfn id="processing-mode">processing modes</dfn>
+  for SVG documents.  Each processing mode specifies whether certain high level
+  SVG features are enabled.</p>
+
+  <h3 id="features">Features</h3>
+
+  <p>The features that can be enabled or disabled depending
+  on the processing mode are as follows:</p>
+
+  <dl>
+    <dt>declarative animation</dt>
+    <dd>
+      <p>Declarative animation includes both the SMIL animation elements in SVG –
+      <a>'animate'</a>, <a>'animateColor'</a>, <a>'animateMotion'</a>,
+      <a>'animateTransform'</a> and <a>'set'</a> – and CSS Transitions and Animations.
+      When declarative animations are disabled in an SVG document, any SMIL
+      animations or CSS Transitions or Animations must not be applied or run.</p>
+      <p class='note'>This is not the same as pausing the document's animated
+      state at 0s document time; if a SMIL animation is defined to begin at 0s,
+      it still will not be applied.</p>
+    </dd>
+
+    <dt>references to external resources</dt>
+    <dd>
+      <p>References to external resources are URLs that can be used in any of the following
+      SVG features, where any of the URL's components, ignoring the fragment,
+      do not match the document's URL:</p>
+      <ul>
+        <li>the <a>'clip-path'</a>, <a>'cursor property'</a>, <a>'fill'</a>,
+        <a>'filter property'</a> <a>'stroke'</a>, <a>'marker-mid'</a>,
+        <a>'marker-start'</a>, <a>'marker-end'</a> and <a>'mask property'</a>
+        properties</li>
+
+        <li>the <a>'altGlyph'</a>, <a>'audio'</a>, <a>'color-profile element'</a>,
+        <a>'cursor element'</a>, <a>'feImage'</a>, <a>'filter element'</a>,
+        <a>'font-face-uri'</a>, <a>'foreignObject'</a>, <a>'glyphRef'</a>,
+        <a>'image'</a>, <a>'linearGradient'</a>, <a>'mpath'</a>, <a>'pattern'</a>,
+        <a>'radialGradient'</a>, <a>'script'</a>, <a>'textPath'</a>,
+        <a>'tref'</a>, <a>'use'</a> and <a>'video'</a> elements</li>
+
+        <li>any other network requests made by script, HTML, CSS or other
+        Web platform features used in the document</li>
+      </ul>
+      <p>User agents must apply <a href="#ref-CORS">CORS</a> policies when fetching external resources
+        used in any of the SVG features listed above.</p>
+      <p>To protect against unlimited resource fetching and cycles in external
+        resources, user agents must limit external resources to a single level of
+        depth, so that referenced external resources
+        cannot reference external resources.</p>
+      <p>As noted in <a href="#processing-modes">Referencing modes</a> section, external resources must use
+        <a href="#resource-document-mode">resource document</a>
+        <a href="#referencing-mode">referencing mode</a>.</p>
+      <p>When external references are disabled in an SVG document, any attempt to
+      fetch a document through an external reference must instead be treated as
+      if a network error occurred and no data was received.</p>
+      <p class='issue' data-issue="5">This is all too handwavy.  And we perhaps shouldn't try
+      to make an exhaustive list.  This needs to be defined in
+      terms of Fetch, probably.  And the URL Standard for comparing the URLs.</p>
+    </dd>
+
+    <dt>script execution</dt>
+    <dd>
+      <p>Script execution is the execution of any SVG <a>'script'</a> elements,
+      script found in event listener attributes (such as <a>'onclick'</a> on
+      SVG elements), or any other script defined by other Web platform features
+      used in the document such as any HTML <a>'script'</a> elements.
+      When script execution is disabled in an SVG document, no script in the
+      document must be run.</p>
+    </dd>
+
+    <dt>interaction</dt>
+    <dd>
+      <p>Interaction refers to the delivery of DOM Events or the invocation of
+      any user agent specific UI behaviors such as text selection, focus changing,
+      link traversal, or animation or transition triggering that is done in
+      response to user input such as mouse or keyboard activity.  When
+      interaction is disabled in an SVG document, any user input events that would
+      be targetted at the document or any elements within the document must have
+      no effect.</p>
+    </dd>
+  </dl>
+
+  <h3 id="dynamic-interactive-mode">Dynamic interactive mode</h3>
+
+  <p>This <a>processing mode</a> imposes no restrictions on any
+  feature of the SVG language.</p>
+
+  <table class="features">
+    <thead>
+      <tr>
+        <th colspan="2">Dynamic Interactive Features</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>script execution</th>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <th>external references</th>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <th>declarative animation</th>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <th>interactivity</th>
+        <td>yes</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="animated-mode">Animated mode</h3>
+
+  <p>This <a>processing mode</a> is intended for circumstances where
+  an SVG document is to be used as an animated image that is allowed
+  to resolve external references, but which is not intended to be used
+  as an interactive document.</p>
+
+  <p class='note'>Note that this <a>processing mode</a> is not used
+  by any of the <a>referencing modes</a> defined in this specification.</p>
+
+  <p class='issue' data-issue="6">Should we remove this processing mode?</p>
+
+  <table class="features">
+    <thead>
+      <tr>
+        <th colspan="2">Animated Features</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>script execution</th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>external references</th>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <th>declarative animation</th>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <th>interactivity</th>
+        <td>no</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="secure-animated-mode">Secure animated mode</h3>
+
+  <p>This <a>processing mode</a> is intended for circumstances where
+  an SVG document is to be used as an animated image that is not allowed
+  to resolve external references, and which is not intended to be used
+  as an interactive document.  This mode might be used where image support
+  has traditionally been limited to raster images (such as JPEG, PNG and
+  GIF).</p>
+
+  <table class="features">
+    <thead>
+      <tr>
+        <th colspan="2">Secure Animated Features</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>script execution</th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>external references</th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>declarative animation</th>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <th>interactivity</th>
+        <td>no</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="static-mode">Static mode</h3>
+
+  <p>This <a>processing mode</a> is intended for circumstances where
+  an SVG document is to be used as a non-animated image that is allowed
+  to resolve external references, but which is not intended to be used
+  as an interactive document.</p>
+
+  <p class='note'>Note that this <a>processing mode</a> is not used
+  by any of the <a>referencing modes</a> defined in this specification.</p>
+
+  <p class='issue' data-issue="7">Should we remove this processing mode?</p>
+
+  <table class="features">
+    <thead>
+      <tr>
+        <th colspan="2">Static Features</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>script execution</th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>external references</th>
+        <td>yes</td>
+      </tr>
+      <tr>
+        <th>declarative animation</th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>interactivity</th>
+        <td>no</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="secure-static-mode">Secure static mode</h3>
+
+  <p>This <a>processing mode</a> is intended for circumstances where
+  an SVG document is to be used as a non-animated image that is not allowed
+  to resolve external references, and which is not intended to be used
+  as an interactive document.  This mode might be used where image support
+  has traditionally been limited to non-animated raster images (such as JPEG
+  and PNG.)</p>
+
+  <table class="features">
+    <thead>
+      <tr>
+        <th colspan="2">Secure Static Features</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>script execution</th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>external references</th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>declarative animation</th>
+        <td>no</td>
+      </tr>
+      <tr>
+        <th>interactivity</th>
+        <td>no</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="examples">Examples</h3>
+
+  <p><em>This section is non-normative.</em></p>
+
+  <div class="example">
+  <p>Below are various methods of embedding SVG in an HTML page by
+  reference. Each <a>referencing mode</a> element should display a yellow
+  smiley face. In each example below, clicking on the eyes tests link
+  traversal, and clicking on the face tests declarative interactivity
+  and script execution. The link should replace the image with a blue
+  square (clicking on that will return you to the original image). The
+  declarative interactivity, which uses the <a>'set'</a> element, should change
+  the image from shades of yellow to shades of green. The script should fill
+  in the smile.  Time-based (as opposed to interactivity-based) declarative
+  animation is supported if the left eye is winking.</p>
+
+  <table class="ref_modes">
+    <tbody>
+      <tr>
+        <th>object</th>
+        <th>iframe</th>
+        <!--
+        <th>embed</th>
+        -->
+        <th>img</th>
+        <th>CSS background</th>
+      </tr>
+      <tr>
+        <td>
+          <object class="embedcontext" type="image/svg+xml" data="images/conform/smiley.svg">Please use FF1.5+, Opera 9+, WebKit/Safari3.0, or IE with an SVG plugin!</object>
+        </td>
+        <td>
+          <iframe class="embedcontext" src="images/conform/smiley.svg" style="border: 0">Please use FF1.5+, Opera 9+, WebKit/Safari3.0, or IE with an SVG plugin!</iframe>
+        </td>
+        <!--
+        <td>
+          <embed class="embedcontext" src="smiley.svg" type="image/svg+xml">
+        </td>
+        -->
+        <td>
+          <img class="embedcontext" alt="images/conform/smiley face" src="smiley.svg" />
+        </td>
+        <td><div class="bg">&#xA0;</div></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>  
+</section>
 
 <h2 id="Introduction">Introduction</h2>
 
