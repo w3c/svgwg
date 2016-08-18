@@ -72,7 +72,8 @@ function gatherSections(conf, page) {
           id != 'pagesubtitle' &&
           id != 'abstract' &&
           id != 'status' &&
-          id != 'toc') {
+          id != 'toc' &&
+          id != 'contents') {
         var level = n.nodeName.substring(1) - 1;
         if (section.length >= level - 1) {
           if (section.length == level - 1) {
