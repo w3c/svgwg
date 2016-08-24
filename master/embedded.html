@@ -51,39 +51,87 @@ This is the same definition as <a href="http://www.w3.org/TR/html51/">HTML5's</a
 
 <p>Additionally SVG allows embedded content using HTML5 <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#the-video-element">'video'</a>, <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#the-audio-element">'audio'</a>, <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#the-iframe-element">'iframe'</a> and <a href="http://www.w3.org/TR/html51/semantics-scripting.html#the-canvas-element">'canvas'</a> elements.</p>
 
-<p>Except <a>'canvas'</a> and <a>'foreignObject'</a>, embedded content supports <a href="https://dvcs.w3.org/hg/webperf/raw-file/tip/specs/ResourcePriorities/Overview.html">Resource Priorities</a> for hinting of downloading external resources. </p>
+<p class="note">Except <a>'canvas'</a> and <a>'foreignObject'</a>, embedded content is compatible with <a href="https://www.w3.org/TR/resource-hints/">Resource Hints</a> for prioritizing downloading of external resources. </p>
 
-<h2 id="Placement">Placement of the referenced resource</h2>
-<p><em>Attribute definitions:</em></p>
-<dl class="attrdef-list">
-  <dt>
-    <table class="attrdef def">
-      <tr>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Initial value</th>
-        <th>Animatable</th>
-      </tr>
-      <tr>
-        <td><dfn data-dfn-type="element-attr" data-dfn-for="image" id="PlacementXAttribute">x</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="image" id="PlacementYAttribute">y</dfn></td>
-        <td><a>&lt;length&gt;</a></td>
-        <td>0</td>
-        <td>yes</td>
-      </tr>
-      <tr>
-        <td><dfn data-dfn-type="element-attr" data-dfn-for="image" id="PlacementWidthAttribute">width</dfn>, <dfn data-dfn-type="element-attr" data-dfn-for="image" id="PlacementHeightAttribute">height</dfn></td>
-        <td><a>&lt;length&gt;</a> | auto</td>
-        <td>0</td>
-        <td>yes</td>
-      </tr>
-    </table>
-  </dt>
-  <dd>
-    <p>The <edit:attributecategory name='embedding placement'/>, <edit:attributecategory name='embedding size'/> attributes specify the rectangular region into which the referenced resource is placed.</p>
-    <p>A negative value for <edit:attributecategory name='embedding size'/> is invalid (see Error processing). A value of zero for either attribute disables rendering of the element. </p>
-    <p class="ready-for-wider-review">The <span class="attr-value">'auto'</span> value for <edit:attributecategory name='embedding size'/> is used to size the corresponding element automatically based on the intrinsic size or aspect ratio of the referenced resource. If the intrinsic aspect ratio of the referenced resource is unknown, it is assumed to be 2:1. If the intrinsic size of the referenced resource is unknown, it is assumed to be 300x150, just as is required for CSS replaced elements. If <span class="attr-value">'auto'</span> is specified for just one of <a>'image/width'</a> or <a>'image/height'</a>, then the other is determined based on the intrinsic aspect ratio. The automatically determined <edit:attributecategory name='embedding size'/> values are interpreted as user units, and are reflected in the x and y IDL attributes as <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</a> values.</p>
-  </dd>
-</dl>
+<h2 id="Placement">Placement of the embedded content</h2>
+
+  <p>
+    The <a>'x'</a>, <a>'y'</a>, <a>'width'</a>, and <a>'height'</a> geometry properties specify the rectangular region into which the embedded content is positioned
+    (the <dfn id="TermPositioningRectangle">positioning rectangle</dfn>).
+    The <a>positioning rectangle</a> is used as the bounding box of the element;
+    note, however, that graphics may overflow the positioning rectangle,
+    depending on the value of the <a>'overflow'</a> property.
+  </p>
+  
+    <div class="note">
+      <p>
+        The elements in the HTML namespace do not have SVG presentation attributes
+        for the geometry properties.
+        Most of these elements, however, accept the HTML
+        <code>width</code> and <code>height</code> <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#dimension-attributes">dimensional attributes</a>,
+        which are used as presentational hints
+        to set default values for the corresponding sizing properties.
+      </p>
+      <p>
+        The HTML dimensional attributes must be parsed and interpretted 
+        as defined in the HTML specification  [<a href="refs.html#ref-html51">HTML</a>].
+        Specifically, they only accept integer values, not CSS lengths or percentages.
+        In addition, on a <a>'canvas'</a> element, 
+        <a href="https://www.w3.org/TR/html51/semantics-scripting.html#element-attrdef-canvas-width">the attributes</a> affect the rendered bitmap, not only its layout.
+      </p>
+      <p>
+        The <a>'x'</a> and <a>'y'</a> geometry properties 
+        can only be set on HTML-namespaced elements via CSS.
+      </p>
+    </div>
+  
+  <p>
+    When the embedded content consists of a single referenced resource 
+    (e.g., an <a>'image'</a>, <a>'video'</a>, or <a>'canvas'</a>),
+    the dimensions of the <a>positioning rectangle</a>, 
+    in the current coordinate system after applying all transforms,
+    define the <a>specified size</a> for the embedded object.
+    A <a>concrete object size</a> and final position must be determined for the object using the
+    <a href='https://www.w3.org/TR/css3-images/#default-sizing'>Default Sizing Algorithm</a>
+    defined for replaced elements in CSS layout [<a href="refs.html#ref-css3-images">css3-images</a>].
+    The <a>'object-fit'</a> and <a>'object-position'</a> affect the final
+    position and size of the object,
+    and may cause it to be extend beyond the <a>positioning rectangle</a>.
+    In that case, the <a>'overflow'</a> property determines whether
+    the rendered object should be clipped to its <a>positioning rectangle</a>.
+  </p>
+  <p>
+    When the embedded content consists of a document fragment
+    (e.g., a <a>'foreignObject'</a>, 
+    an <a>'audio'</a> or <a>'video'</a> with user-agent generated controls,
+    or a <a>'video'</a>, <a>'audio'</a>, or <a>'canvas'</a> displaying HTML fallback content),
+    the <a>positioning rectangle</a> defines the bounds of a 
+    <a href="https://www.w3.org/TR/CSS21/visuren.html#containing-block">containing block</a> for laying out the child content using CSS or XSL.
+    The scale of the containing block is defined in the current coordinate system, 
+    including all explicit and implicit (e.g., <a>'viewBox'</a>) transformations.
+    The <a>'foreignObject'</a>, or other element that is positioned using SVG layout attributes,
+    is implicitly <a href="https://www.w3.org/TR/CSS21/visuren.html#propdef-position">absolutely-positioned</a> for the purposes of CSS layout.
+    As a result, any absolutely-positioned child elements 
+    are positioned relative to this containing block.
+    Again, the <a>'overflow'</a> property determines
+    whether content that extends outside the <a>positioning rectangle</a> will be hidden.
+  </p>
+  <p>
+    A value of zero for either <a>'width'</a> or <a>'height'</a> disables rendering of the element and its embedded content.
+  </p>
+  <p>
+    The <span class="attr-value">'auto'</span> value for <a>'width'</a> or <a>'height'</a> is used to size the corresponding element automatically based on the <a>intrinsic dimensions</a> or <a>intrinsic aspect ratio</a> of the referenced resource. 
+    Computation of automatically-sized values follows the 
+    <a href='https://www.w3.org/TR/css3-images/#default-sizing'>Default Sizing Algorithm</a>
+    defined for replaced elements in CSS layout [<a href="refs.html#ref-css3-images">css3-images</a>].
+    In particular, when the referenced resource does not have an intrinsic size 
+    (such as an <a>'iframe'</a> or an image types with no defined dimensions),
+    it is assumed to have a width of 300px and a height of 150px.
+  </p>
+  <p>
+    CSS positioning properties (e.g. <span class="prop-name">top</span> and <span class="prop-name">margin</span>) have no effect when positioning the embedded content element in the SVG coordinate system.
+    They can, however, be used to position child elements of a <a>'foreignObject'</a> or HTML embedding element.
+  </p>
 
 <h2 id="ImageElement">The <span class='element-name'>'image'</span> element</h2>
 
@@ -107,39 +155,59 @@ or in <a>secure static mode</a> if the current document is static.
 
 <p>The result of processing an <a>'image'</a> is always a four-channel
 RGBA result. When an <a>'image'</a>
-element references a raster image file such as PNG or JPEG
-files which only has three channels (RGB), then the effect is
+element references an image (such as many PNG or JPEG
+files) which only has three channels (RGB), then the effect is
 as if the object were converted into a 4-channel RGBA image
-with the alpha channel uniformly set to 1. For a single-channel
+with the alpha channel uniformly set to 1. For a single-channel (grayscale)
 raster image, the effect is as if the object were converted
 into a 4-channel RGBA image, where the single channel from the
 referenced object is used to compute the three color channels
 and the alpha channel is uniformly set to 1.</p>
 
-<p>For <a>'image'</a> elements referencing a file with MIME type of "image/svg+xml",
-the <a>'preserveAspectRatio'</a> attribute on the root
-element in the referenced SVG image is ignored (see <a>'preserveAspectRatio'</a>
-for details).  Instead, the <a>'preserveAspectRatio'</a> attribute on
-the referencing <a>'image'</a>
-element defines how the SVG image content is fit into the
-viewport.</p>
+<p>The <a>'preserveAspectRatio'</a> attribute
+determines how the referenced image is scaled and positioned to fit
+into the <a>concrete object size</a> determined from the
+<a>positioning rectangle</a> and the <a>'object-fit'</a> and <a>'object-position'</a> properties.
+The result of applying this attribute defines an <dfn id="TermImageRenderingRectangle">image-rendering rectangle</dfn>
+used for actual image rendering.
+When the referenced image is an SVG,
+the <a>image-rendering rectangle</a> defines
+the <a>SVG viewport</a> used for rendering that SVG.
+</p>
+  
+<p class="note">
+  The <a>'preserveAspectRatio'</a> calculations
+  are applied <em>after</em> determining the <a>concrete object size</a>,
+  and only have an effect if that size does not match the
+  <a>intrinsic aspect ratio</a> of the embedded image.
+  If a value of <a>'object-fit'</a> is used that
+  ensures that the concrete object size matches the intrinsic aspect ratio
+  (i.e., any value other than the default <span class="prop-value">fill</span>), 
+  then the <a>'preserveAspectRatio'</a> value will have no effect;
+  the <a>image-rendering rectangle</a> will be that determined
+  when scaling and positioning the object with CSS.
+  The <a>'preserveAspectRatio'</a> attribute can therefore be safely used
+  as a fallback for most values of <a>'object-fit'</a> and <a>'object-position'</a>;
+  it must be explicitly set to <span class="attr-value">none</span>
+  to turn off aspect ratio control, regardless of <a>'object-fit'</a> value.
+</p>
 
-<p>The value of the <a>'viewBox'</a> attribute to use when
+<p>
+The aspect ratio to use when
 evaluating the <a>'preserveAspectRatio'</a> attribute is
-defined by the referenced content. For content that clearly
-identifies a viewBox (e.g. an SVG file with the <a>'viewBox'</a> attribute on the
-<a>outermost svg element</a>) that value should be used. For most
-raster content (PNG, JPEG) the bounds of the image should be
-used (i.e. the <a>'image'</a>
-element has an implicit <a>'viewBox'</a> of <span class='attr-value'>'0 0 raster-image-width
-raster-image-height'</span>). Where no value is readily available
-(e.g. an SVG file with no <a>'viewBox'</a> attribute on the
+defined by the <a>intrinsic aspect ratio</a> of the referenced content. 
+For an SVG file, the aspect ratio is defined
+in <a href="coords.html#SizingSVGInCSS">Intrinsic sizing properties of SVG content"</a>.
+For most raster content (PNG, JPEG) the pixel width and height of the image file
+define an intrinsic aspect ratio.
+Where the embedded image does not have an <a>intrinsic aspect ratio</a>
+(e.g. an SVG file with neither <a>'viewBox'</a> attribute nor explicit dimensions for the
 <a>outermost svg element</a>) the <a>'preserveAspectRatio'</a> attribute is
-ignored, and only the translation due to the <a>'x'</a> &amp; <a>'y'</a> attributes of the viewport is
-used to display the content.</p>
-
-To link into particular view of the SVG document, authors can use media fragments as defined in <a href="linking.html#LinksIntoSVG">Linking into SVG content</a>.
-
+ignored;
+the embedded image is drawn to fill the <a>positioning rectangle</a> defined by the geometry properties
+on the <a>'image'</a> element.
+</p>
+  
 <p>For example, if the image element referenced a PNG or JPEG
 and <span class="attr-value">preserveAspectRatio="xMinYMin
 meet"</span>, then the aspect ratio of the raster would be
@@ -154,6 +222,63 @@ then aspect ratio of the image would not be preserved. The
 image would be fit such that the top/left corner of the
 raster exactly aligns with coordinate (<a>'x'</a>, <a>'y'</a>) and the bottom/right corner of
 the raster exactly aligns with coordinate (<a>'x'</a>+<a>'width'</a>, <a>'y'</a>+<a>'height'</a>).</p>
+
+<p>
+For <a>'image'</a> elements embedding an SVG image,
+the <a>'preserveAspectRatio'</a> attribute on the root
+element in the referenced SVG image must be ignored,
+and instead treated as if it had a value of <span class="attr-value">none</span>.
+(see <a>'preserveAspectRatio'</a> for details).
+This ensures that the <a>'preserveAspectRatio'</a> attribute on
+the referencing <a>'image'</a> has its intended effect,
+even if it is <span class="attr-value">none</span>.
+</p>
+  
+<p class="note">
+When the value of the <a>'preserveAspectRatio'</a> attribute on the <a>'image'</a>
+is <em>not</em> <span class="attr-value">none</span>, 
+the <a>image-rendering rectangle</a> determined
+from the properties of the <a>'image'</a> element
+will exactly match the embedded SVG's intrinsic aspect ratio.
+Ignoring the <a>'preserveAspectRatio'</a> attribute from the embedded SVG
+will therefore not usually have any effect.
+The exception is if the aspect ratio of that image
+is determined from absolute values for the <a>'width'</a> and <a>'height'</a> attributes
+which <em>do not</em> match its <a>'viewBox'</a> aspect ratio.
+This is an unusual situation that authors are advised to avoid, for many reasons.
+</p>
+  
+<p>
+The user agent stylesheet sets the value of the <a>'overflow'</a> property
+on <a>'image'</a> element to <span class="prop-value">hidden</span>.
+Unless over-ridden by the author, images will therefore be clipped to 
+the <a>positioning rectangle</a> defined by the geometry properties.
+</p>
+  
+<p>
+For <a>'image'</a> elements embedding an SVG image,
+two different <a>'overflow'</a> values apply.
+The value specified on the <a>'image'</a> element determines
+whether the <a>image-rendering rectangle</a> is clipped to the <a>positioning rectangle</a>.
+The value on the root element of the referenced SVG 
+determines whether the graphics are clipped to the <a>image-rendering rectangle</a>.
+</p>
+  
+<p class="note">
+New in SVG 2.
+Previous versions of SVG required that the <a>'overflow'</a> (and also <a>'clip'</a>)
+property on the embedded SVG be ignored.
+The new rules ensure that an overflowing <span class="attr-value">slice</span> layout
+can be safely used without compromising the overflow control from the referenced image.
+</p>
+  
+<p>
+  To link into particular view of an embedded SVG image,
+  authors can use media fragments as defined in <a href="linking.html#LinksIntoSVG">Linking into SVG content</a>.
+  To crop to a specific section of a raster image,
+  authors can use <em>Basic media fragments identifiers</em> [<a href="refs.html#ref-media-frags">Media Fragments URI 1.0 (basic)</a>].
+  Either type of fragment may affect the <a>intrinsic dimensions</a> and/or <a>intrinsic aspect ratio</a> of the image.
+</p>
 
 <p>The resource referenced by the <a>'image'</a> element represents a
 separate document which generates its own parse tree and
@@ -331,147 +456,88 @@ or for a <a>'canvas'</a> element if scripting is disabled.
 
 <edit:example href='images/embedded/sourceinsvg.svg' name='sourceinsvg' link='no' image='no'/>
 
-<p>The HTML subtree, defined by the root HTML element and its children, contributes to <a href="coords.html#ContainerElementBoudingBoxComputation">SVG container bounding box computations</a>.</p>
-
-<p>CSS positioning properties (e.g. 'top') are not allowed for positioning the HTML subtree root element in the SVG coordinate system. The HTML element can be positioned in the SVG coordinate system using the <a>'transform'</a> property or by positioning the current SVG viewport.</p>
-
-<edit:example href='images/embedded/videotransform.svg' name='videotransform' link='no' image='no'/>
-
-<p>For the purpose of sizing the HTML subtree root element, the HTML <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#element-attrdef-media-width">'width'</a> and <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#element-attrdef-media-height">'height'</a> attributes and the CSS sizing properties (e.g. <a>'width'</a> or 'min-width') are used. For the purpose of resolving percentage values in the element sizing or in the layout and positioning of children elements in the HTML subtree, the current SVG viewport is defined to be the <a href="http://www.w3.org/TR/CSS21/visudet.html#containing-block-details">containing block</a> of the HTML subtree.</p>
 <p class="note">
-Note that html specification says that <a class="html" href="http://www.w3.org/TR/html51/semantics-embedded-content.html#element-attrdef-media-width"><code>'width'</code></a> and <a class="html" href="http://www.w3.org/TR/html51/semantics-embedded-content.html#element-attrdef-media-height"><code>'height'</code></a> attributes of embedded content of html accepts integer. Accordingly, if you want to point to a floating point number for those sizing, you should use css <a href="geometry.html#Sizing">sizing property</a> instead of such html attributes.
-</p>
-<edit:example href='images/embedded/videosizing.svg' name='videosizing' link='no' image='no'/>
-
-<edit:example href='images/embedded/videofallbacksizing.svg' name='videofallbacksizing' link='no' image='no'/>
-
-<p>As SVG elements are implicitly <a href="http://www.w3.org/TR/CSS21/visuren.html#position-props">positioned</a>, the root of the HTML subtree has <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#display-prop">block display</a>.</p>
-
-<p class="note">The <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#element-attrdef-media-width">'width'</a> and <a href="http://www.w3.org/TR/html51/semantics-embedded-content.html#element-attrdef-media-height">'height'</a> attributes of the HTML elements are defined by the HTML specification and are not SVG geometry properties. In particular, they do accept units. The 'width' and 'height' properties do.</p>
-
-<p>Other HTML5 elements in an SVG subtree, when used outside of a <a>'foreignObject'</a> element, in any namespace, are treated as <a href="struct.html#UnknownElement">unknown elements</a>.</p>
-
-<p class="note">The HTML5 elements in the HTML namespace in an SVG subtree, itself nested in an HTML5 document, are not parsed by the HTML parser as HTML elements. In such case, the nested HTML elements should be created and inserted in the DOM using DOM APIs</p>
-
-<h2 id="ForeignNamespaces">Foreign namespaces and private data</h2>
-
-<p>SVG allows inclusion of elements from foreign namespaces
-anywhere within the SVG content. In general, the SVG user agent
-will include the unknown elements in the DOM but will otherwise
-ignore unknown elements. (The notable exception is described
-under <a href="#ForeignObjectElement">Embedding Foreign Object
-Types</a>.) Also see the handling of
-<a href="struct.html#UnknownElement">unknown elements</a>.
+  Currently, the HTML parser does not recognize these tagnames within an SVG subtree 
+  to be HTML-namespaced elements, although this may change in the future. 
+  Therefore, in order to include these elements within your SVG, 
+  you must either use an XML serialization that recognizes namespace declarations 
+  (such as stand-alone SVG or XHTML),
+  or you must create namespaced elements via the <code>createElementNS</code> DOM API method. 
+  Alternatively, you can use the foreignObject element 
+  to wrap the HTML-namespaced elements; 
+  the HTML parser correctly parses HTML elements within a foreignObject.
 </p>
 
-<p>Additionally, SVG allows inclusion of attributes from
-foreign namespaces on any SVG element. The SVG user agent will
-include unknown attributes in the DOM but will otherwise ignore
-unknown attributes.</p>
+<p>
+Other HTML elements in an SVG subtree, 
+other than those inside a <a>'foreignObject'</a> element, 
+must be treated as <a href="struct.html#UnknownElement">unknown elements</a> for rendering purposes.
+</p>
+<p class="note">
+  Many HTML elements will be treated as a parse error by the HTML parser, 
+  causing the SVG fragment to terminate.
+</p>
 
-<p>SVG's ability to include foreign namespaces can be used for
-the following purposes:</p>
 
-<ul>
-  <li>Application-specific information so that authoring
-  applications can include model-level data in the SVG content
-  to serve their "roundtripping" purposes (i.e., the ability to
-  write, then read a file without loss of higher-level
-  information).</li>
+<h2 id="ForeignObjectElement">The <span class="element-name">'foreignObject'</span> element</h2>
 
-  <li>Supplemental data for extensibility. For example, suppose
-  you have an extrusion extension which takes any 2D graphics
-  and extrudes it in three dimensions. When applying the
-  extrusion extension, you probably will need to set some
-  parameters. The parameters can be included in the SVG content
-  by inserting elements from an extrusion extension
-  namespace.</li>
-</ul>
+<edit:elementsummary name='foreignObject' />
 
-<p>To illustrate, a business graphics authoring application
-might want to include some private data within an SVG document
-so that it could properly reassemble the chart (a pie chart in
-this case) upon reading it back in:</p>
-
-<div class="example">
-<pre><![CDATA[
-<?xml version="1.0" standalone="yes"?>
-<svg width="4in" height="3in"
-     xmlns = 'http://www.w3.org/2000/svg'>
-  <defs>
-    <myapp:piechart xmlns:myapp="http://example.org/myapp"
-                    title="Sales by Region">
-      <myapp:pieslice label="Northern Region" value="1.23"/>
-      <myapp:pieslice label="Eastern Region" value="2.53"/>
-      <myapp:pieslice label="Southern Region" value="3.89"/>
-      <myapp:pieslice label="Western Region" value="2.04"/>
-      <!-- Other private data goes here -->
-    </myapp:piechart>
-  </defs>
-  <desc>This chart includes private data in another namespace
-  </desc>
-  <!-- In here would be the actual SVG graphics elements which
-       draw the pie chart -->
-</svg>
-]]></pre>
-</div>
-
-<h2 id="EmbeddingForeignObjects">Embedding foreign object types</h2>
-
-<p>One goal for SVG is to provide a mechanism by which other
-XML language processors can render into an area within an SVG
-drawing, with those renderings subject to the various
-transformations and compositing parameters that are currently
-active at a given point within the SVG content tree. One
-particular example of this is to provide a frame for XML
-content styled with CSS or XSL so that dynamically reflowing
-text (subject to SVG transformations and compositing) could be
-inserted into the middle of some SVG content. Another example
-is inserting a <a
-href="http://www.w3.org/TR/2003/REC-MathML2-20031021/">MathML</a> expression into
-an SVG drawing [<a href="refs.html#ref-mathml3">MathML3</a>].</p>
-
-<p>The <a>'foreignObject'</a>
-element allows for inclusion of a foreign namespace which has
-its graphical content drawn by a different user agent. The
+<p>SVG is designed to be compatible with other XML languages
+for describing and rendering other types of content.
+The <a>'foreignObject'</a>
+element allows for inclusion of elements in a non-SVG namespace which 
+is rendered within a region of the SVG graphic using other user agent processes. The
 included foreign graphical content is subject to SVG
-transformations, filters, clipping, masking and compositing.</p>
+transformations, filters, clipping, masking and compositing.
+Examples include
+inserting a <a
+href="http://www.w3.org/TR/2003/REC-MathML2-20031021/">MathML</a> expression into
+an SVG drawing [<a href="refs.html#ref-mathml3">MathML3</a>],
+or adding a block of complex CSS-formatted HTML text or form inputs.
+</p>
 
-<p>The contents of <a>'foreignObject'</a> are assumed to be
-from a different namespace. Any SVG elements within a <a>'foreignObject'</a> will not be drawn,
+<p class="note">
+  The HTML parser treats elements inside the <a>'foreignObject'</a>
+  equivalent to elements inside an HTML document fragment.
+  Any <code>svg</code> or <code>math</code> element,
+  and their descendents,
+  will be parsed as being in the SVG or MathML namespace, respectively;
+  all other tags will be parsed as being in the HTML namespace.
+</p>
+
+<p>
+SVG-namespaced elements within a <a>'foreignObject'</a> will not be rendered,
 except in the situation where a properly defined SVG
-subdocument with a proper <span class="attr-name">'xmlns'</span>
-(see <a href="http://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a>
-[<a href="refs.html#ref-xml-names">xml-names</a>])
-attribute specification is embedded recursively. One situation
-where this can occur is when an SVG document fragment is
-embedded within another non-SVG document fragment, which in
-turn is embedded within an SVG document fragment (e.g., an SVG
-document fragment contains an XHTML document fragment which in
-turn contains yet another SVG document fragment).</p>
+fragment, including a root <a>'svg'</a> element is 
+defined as a descendent of the <a>'foreignObject'</a>.</p>
 
-<p>Usually, a <a>'foreignObject'</a>
-will be used in conjunction with the <a>'switch'</a> element and
+<p>A <a>'foreignObject'</a>
+may be used in conjunction with the <a>'switch'</a> element and
 the <a>'requiredExtensions'</a> attribute to
 provide proper checking for user agent support and provide an
 alternate rendering in case user agent support is not
 available.</p>
+  
+<p class="note">
+  This specification does not define how <a>'requiredExtensions'</a>
+  values should be mapped to support for different XML languages;
+  a future specification may do so.
+</p>
 
-<h2 id="ForeignObjectElement">The <span class="element-name">'foreignObject'</span> element</h2>
+<p>It is not required that SVG user agent support the ability
+to invoke other arbitrary user agents to handle embedded
+foreign object types; however, all conforming SVG user agents
+would need to support the <a>'switch'</a> element and
+must be able to render valid SVG elements when they appear as
+one of the alternatives within a <a>'switch'</a>
+element.</p>
 
-<edit:with element='foreignObject'>
-<edit:elementsummary name='foreignObject'/>
-  <p>
-    The <a>'x'</a> and <a>'y'</a> attributes define the coordinates of the left and top edges of the 'foreignObject', in the current user coordinate system.
-  </p>
-
-  <p>
-    The <a>'width'</a> and <a>'height'</a> attributes define width and height of the
-    'foreignObject' respectively. A negative value for either
-    attribute is an error (see <a href="implnote.html#ErrorProcessing">Error processing</a>).
-    A value of zero for either attribute disables rendering of the element.
-  </p>
-</edit:with>
+<p>It is expected that commercial Web browsers will
+support the ability for SVG to embed 
+CSS-formatted HTML and also MathML content,
+with the rendered content subject to transformations and compositing defined in the SVG fragment.
+At this time, such a capability is not a requirement.</p>
 
 <div class="example">
 
@@ -507,21 +573,6 @@ available.</p>
 </svg>
 ]]></pre>
 </div>
-
-<p>It is not required that SVG user agent support the ability
-to invoke other arbitrary user agents to handle embedded
-foreign object types; however, all conforming SVG user agents
-would need to support the <a>'switch'</a> element and
-must be able to render valid SVG elements when they appear as
-one of the alternatives within a <a>'switch'</a>
-element.</p>
-
-<p>Ultimately, it is expected that commercial Web browsers will
-support the ability for SVG to embed content from other XML
-grammars which use CSS or XSL to format their content, with the
-resulting CSS- or XSL-formatted content subject to SVG
-transformations and compositing. At this time, such a
-capability is not a requirement.</p>
 
 
 <div class='ready-for-wider-review'>

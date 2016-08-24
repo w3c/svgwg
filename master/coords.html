@@ -1019,7 +1019,7 @@ element.  The inputs to the algorithm are:</p>
         </ol>
       </li>
       <li>If <var>clipped</var> is true and the value of <a>'clip-path'</a> on <var>element</var> is not
-      <span class='prop-value'>none</span>, then set <var>box</var> to be the tighest rectangle
+      <span class='prop-value'>none</span>, then set <var>box</var> to be the tightest rectangle
       in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
       <li>Return <var>box</var>.</li>
     </ol>
@@ -1033,15 +1033,29 @@ element.  The inputs to the algorithm are:</p>
       root of the <a>'use'</a> element's shadow tree otherwise.</li>
       <li>For each descendant <a>graphics element</a> <var>child</var> of <var>parent</var>:
         <ol>
-          <li>If <var>child</var> has an ancestor element within <var>parent</var> that is
-          <span class='prop-value'>'display: none'</span>, has a failing <a>conditional processing attribute</a>,
-          or is not an <a>'a'</a>, <a>'g'</a>, <a>'svg'</a> or <a>'switch'</a> element, then
+          <li>If <var>child</var> is <a>not rendered</a> then
           continue to the next descendant <a>graphics element</a>.</li>
           <li>Otherwise, set <var>box</var> to be the union of <var>box</var> and the result of invoking the
           algorithm to compute a bounding box with <var>child</var> as the element
           and the same values for <var>space</var>, <var>fill</var>, <var>stroke</var>,
           <var>markers</var> and <var>clipped</var> as the corresponding algorithm input values.</li>
         </ol>
+      </li>
+      <li>If <var>clipped</var> is true:
+        <ul>
+          <li>If the value of <a>'clip-path'</a> on <var>element</var> is not
+          <span class='prop-value'>none</span>,
+          then set <var>box</var> to be the tightest rectangle
+          in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
+          <li>If the <a>'overflow'</a> property applies to the <var>element</var>
+          and does not have a value of <span class='prop-value'>visible</span>,
+          then set <var>box</var> to be the tightest rectangle
+          in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the element's overflow bounds.</li>
+          <li>If the <a>'clip'</a> property applies to the <var>element</var> 
+          and does not have a value of <span class='prop-value'>auto</span>,
+          then set <var>box</var> to be the tightest rectangle
+          in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the rectangle specified by <a>'clip'</a>.</li>
+        </ul>
       </li>
       <li>Return <var>box</var>.</li>
     </ol>
@@ -1053,16 +1067,25 @@ element.  The inputs to the algorithm are:</p>
   <dt><a>'video'</a></dt>
   <dd>
     <ol class="algorithm">
-      <li>Return the tightest rectangle in coordinate space <var>space</var> that
-      contains the rectangle defined by the
+      <li>Let <var>box</var> be the tightest rectangle in coordinate space <var>space</var> that
+      contains the <a>positioning rectangle</a> defined by the
       <span class='attr-name'>'x'</span>,
       <span class='attr-name'>'y'</span>,
       <span class='attr-name'>'width'</span> and
-      <span class='attr-name'>'height'</span> attributes of the element.
+      <span class='attr-name'>'height'</span> geometric properties of the element.
       <p class='note'>The <var>fill</var>, <var>stroke</var> and <var>markers</var>
       input arguments to this algorithm do not affect the bounding box returned
       for these elements.</p>
       </li>
+      <li>If <var>clipped</var> is true and the value of <a>'clip-path'</a> on <var>element</var> is not
+      <span class='prop-value'>none</span>, then set <var>box</var> to be the tightest rectangle
+      in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
+      <!--
+      <li>If <var>clipped</var> is true and the value of <a>'overflow'</a> on <var>element</var> is not
+      <span class='prop-value'>visible</span>, then set <var>box</var> to be the tightest rectangle
+      in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the element's <a>positioning rectangle</a>.</li>
+      -->
+      <li>Return <var>box</var>.</li>
     </ol>
   </dd>
 </dl>

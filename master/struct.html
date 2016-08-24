@@ -1982,8 +1982,107 @@ the HTML namespace) must be supported in SVG documents:</p>
 </ul>
 
 <p class="note">
-Note that the <a class="html" href="http://www.w3.org/TR/html/document-metadata.html#the-base-element"><code>base</code></a> element will affect all URL values in the document, including e.g paint server references.
+Note that the <a class="html" href="http://www.w3.org/TR/html/document-metadata.html#the-base-element"><code>base</code></a> element will affect all URL values in the document, including e.g. paint server references or <a>'use'</a> element references.
+However, when <a href="linking.html#processingURL-absolute">processing URL references</a>
+to identify a specific target element,
+the user agent must always compare the generated absolute URL against the current document base URL 
+to determine whether it is a <a>same-document URL reference</a>.
+In this way, target-fragment only references to elements in the same document remain valid,
+regardless of any changes to the document base URL.
 </p>
+
+
+<h2 id="ForeignNamespaces">Foreign namespaces and private data</h2>
+
+<p>
+SVG allows inclusion of elements from foreign namespaces
+anywhere within the SVG content.
+In general, the SVG user agent
+must include the unknown foreign-namespaced elements in the DOM
+but will ignore and exclude them for rendering purposes.
+</p>
+<p>
+The notable exceptions are described in the <a href="embedded.html">Embedded Content chapter</a>
+under <a href="embedded.html#HTMLElements">HTML5 elements in SVG subtrees</a>
+and <a href="embedded.html#ForeignObjectElement">Embedding Foreign Object
+Types</a>.
+Also see the handling of
+<a href="struct.html#UnknownElement">unknown elements</a>
+in the SVG namespace, which are treated differently.
+</p>
+
+<p>
+Additionally, SVG allows inclusion of attributes from
+foreign namespaces on any SVG element.
+The SVG user agent must
+include unknown attributes in the DOM but should otherwise ignore
+unknown attributes.
+</p>
+  
+<div class="note">
+  <p>
+  Authors should be aware that unknown namespaced elements and attributes 
+  will not be parsed as such by the HTML parser.
+  Instead, the namespace prefix will be included in the tag or attribute name,
+  elements will be placed in the parent element namespace and attributes in the default namespace.
+  </p>
+  <p>
+  To add custom attributes in a way that will result in consistent parsing
+  in both XML and HTML documents, 
+  authors may use the <a href="#DataAttributes"><span class='attr-name'>'data-*'</span> attributes</a>.
+  These can be added to SVG <a>'metadata'</a> elements 
+  if the information they encode is not associated with any other element in the document.
+  </p>
+</div>
+
+<p>SVG's ability to include foreign namespaces can be used for
+the following purposes:</p>
+
+<ul>
+  <li>Application-specific information so that authoring
+  applications can include model-level data in the SVG content
+  to serve their "roundtripping" purposes (i.e., the ability to
+  write, then read a file without loss of higher-level
+  information).</li>
+
+  <li>Supplemental data for extensibility. For example, suppose
+  you have an extrusion extension which takes any 2D graphics
+  and extrudes it in three dimensions. When applying the
+  extrusion extension, you probably will need to set some
+  parameters. The parameters can be included in the SVG content
+  by inserting elements from an extrusion extension
+  namespace.</li>
+</ul>
+
+<p>
+For example, a business graphics authoring application
+might want to include some private data within an SVG document
+so that it could properly reassemble the chart (a pie chart in
+this case) upon reading it back in:
+</p>
+
+<div class="example">
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg width="4in" height="3in"
+     xmlns = 'http://www.w3.org/2000/svg'>
+  <defs>
+    <myapp:piechart xmlns:myapp="http://example.org/myapp"
+                    title="Sales by Region">
+      <myapp:pieslice label="Northern Region" value="1.23"/>
+      <myapp:pieslice label="Eastern Region" value="2.53"/>
+      <myapp:pieslice label="Southern Region" value="3.89"/>
+      <myapp:pieslice label="Western Region" value="2.04"/>
+      <!-- Other private data goes here -->
+    </myapp:piechart>
+  </defs>
+  <desc>This chart includes private data in another namespace
+  </desc>
+  <!-- In here would be the actual SVG graphics elements which
+       draw the pie chart -->
+</svg>
+]]></pre>
+</div>
 
 <h2 id="CommonAttributes">Common attributes</h2>
 
@@ -2192,7 +2291,6 @@ which are those in no namespace whose names begin with the string "data-".
 See the <a href="https://www.w3.org/TR/2014/CR-html5-20140204/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes">requirements
 for custom data attributes</a> in the HTML specification.</p>
 </div>
-
 
 <h2 id="WAIARIAAttributes">WAI-ARIA attributes</h2>
 
