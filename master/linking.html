@@ -73,9 +73,22 @@ on the scripting context when a <a>'script'</a> element's
   &lt;relativeURL&gt; and a identifier of the fragment in that resource. See <a href="struct.html#Head">References and the
   <span class="element-name">'defs'</span> element</a>. URL reference with fragment identifiers are commonly used to reference <a href="pservers.html">paint servers</a>.</dd>
   
+  <dt id="TermExternalReference">external file reference</dt>
+  <dd>A <a>URL reference</a> or <a>URL reference with fragment identifier</a>
+    which refers to a resource that is not part of the current document.
+  </dd>
+  
   <dt id="TermSameDocumentURL">same-document URL reference</dt>
   <dd>A <a>URL reference with fragment identifier</a>
     where the non-fragment part of the URL refers to the current document.
+  </dd>
+  
+  <dt id="TermDataURL">data URL</dt>
+  <dd>A <a>URL reference</a> to an embedded document
+    specified using the <a href="http://www.ietf.org/rfc/rfc2397.txt">"data" URL scheme</a>
+  [<a href="refs.html#ref-rfc2397">rfc2397</a>].
+    Data URL references are neither 
+    <a>external file references</a> nor <a>same-document URL references</a>.
   </dd>
 
   <dt id="TermCircularReference">circular reference</dt>
@@ -481,17 +494,18 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
     <p>
       If the URL reference is from 
       the <span class="attr-name">href</span> attribute on <a href="https://svgwg.org/specs/animations/#TargetElement">SVG animation elements</a>,
-      only <a>same-document URL</a> references are allowed.
+      only <a>same-document URL</a> references are allowed
+      [<a href="refs.html#ref-svg-animation">svg-animation</a>].
       A URL referring to a different document is invalid 
       and the document must not be fetched.
     </p>
   </li>
   <li>
     <p>
-      If the document containing the reference uses a
-      <a href="https://svgwg.org/specs/integration/#processing-modes">secure</a> SVG processing mode,
-      external file resources are disallowed.
-      Unless the absolute URL uses the <a href="https://tools.ietf.org/html/rfc2397"><code>data</code></a> protocol,
+      If the document containing the reference is being processed in
+      <a>secure static mode</a> or <a>secure animated mode</a>,
+      <a>external file references</a> are disallowed.
+      Unless the reference is a <a>data URL</a>,
       the user agent must treat the reference as if there was a network error,
       making this an <a>invalid reference</a>.
     </p>
@@ -499,14 +513,14 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
   <li>
     <p>
       If any other security restrictions 
-      on the browsing context or user agent prevent external file references,
+      on the browsing context or user agent prevent accessing the external file,
       then the user agent must treat the reference as if there was a network error.
     </p>
   </li>
 </ul>
   
 <p>
-  When fetching external resources,
+  When fetching external resources from the Internet,
   user agents must use a <a href="https://www.w3.org/TR/html51/infrastructure.html#creating-a-potential-cors-request">potentially CORS-enabled request</a>
   as defined in HTML [<a href="refs.html#ref-html51">HTML</a>]
   with the <em>corsAttributeState</em> as follows:
@@ -644,9 +658,6 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
   
 <ul>
   <li>the <a>'a'</a> element can reference any local or non-local resource</li>
-  <li>the <a>'animate'</a> element (see <a href="https://svgwg.org/specs/animations/#TargetElement">Identifying the target element for an animation</a> for reference rules)</li>
-  <li>the <a>'animateMotion'</a> element (see <a href="https://svgwg.org/specs/animations/#TargetElement">Identifying the target element for an animation</a> for reference rules)</li>
-  <li>the <a>'animateTransform'</a> element (see <a href="https://svgwg.org/specs/animations/#TargetElement">Identifying the target element for an animation</a> for reference rules)</li>
   <li>the <a>'cursor element'</a> element must reference a document that can be processed as an image</li>
   <li>the <a>'hatch'</a> element must reference another <a>'hatch'</a> element</li>
   <li>the <a>'image'</a> element must reference a document that can be processed as an image</li>
@@ -656,7 +667,6 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
   <li>the <a>'pattern'</a> element must reference another <a>'pattern'</a> element</li>
   <li>the <a>'radialGradient'</a> element must reference a <a>'linearGradient'</a> or another <a>'radialGradient'</a> element</li>
   <li>the <a>'script'</a> element must reference an external document that provides the script content</li>
-  <li>the <a>'set'</a> element (see <a href="https://svgwg.org/specs/animations/#TargetElement">Identifying the target element for an animation</a> for reference rules)</li>
   <li>the <a>'textPath'</a> element must reference an element type
     that implements the <a>SVGGeometryElement</a> interface</li>
   <li>the <a>'use'</a> element must reference either an SVG-namespaced element 
