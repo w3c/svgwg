@@ -15,12 +15,17 @@
       .feature {
           text-align: right;
       }
-      .embedcontext, table.ref_modes td {
+      .embedcontext {
           width: 120px;
           height: 120px;
       }
       table.ref_modes td {
+          width: 120px;
           border: gainsboro 1px solid;
+      }
+      table.ref_modes th {
+          padding: 0.5em 0;
+          background-color: gainsboro;
       }
       th, td {
           text-align: center;
@@ -52,216 +57,49 @@
 <body>
 
 <h1>Conformance Criteria</h1>
+  
+  <h2 id="conformance-overview">Overview</h2>
+  
+  <p>Graphics defined with SVG have many different applications.
+  As a result, not all software that uses SVG will have the same features.
+  Conformance to the SVG specification is therefore not a binary matter;
+  sofware may be conforming within a restricted feature set.
+  </p>
 
-<section>
-
-  <h2 id="referencing-modes">Referencing modes</h2>
-
-  <p>There are various ways that an SVG document fragment can be
-  referenced by or included in other documents and then as a consequence
-  be processed by a user agent.  SVG documents can also be viewed as a
-  top-level document.  Each different method by which an SVG document fragment
+  <p>
+  Furthermore, SVG is designed to be integrated into other types of documents;
+  depending on the type of integration, only a limited feature-set may be appropriate.
+  There are various ways that an SVG document fragment can be
+  referenced by or included in other documents and thereby
+  be processed by a user agent.  SVG documents can also be viewed directly,
+  as the primary document.
+  Each different method by which an SVG document fragment
   can be used implies a certain set of requirements on how the SVG document
   fragment must be processed.</p>
 
-  <p>This section defines a number of <dfn id="referencing-mode">referencing
-  modes</dfn> that encompass the different ways SVG documents can
-  be used on the Web platform and which specify how the documents must be
-  processed.  Each referencing mode is defined by requiring the SVG document
-  be processed in a given <a href="#processing-mode">processing mode</a>.
-  Processing modes are introduced in <a href="#processing-modes">section 3</a> below
-  and define which features are enabled or disabled in the document.</p>
+  <p>This chapter therefore defines a number of 
+  <dfn id="processing-mode">processing modes</dfn> 
+  that encompass the different combinations of features
+  which may be enabled or disabled in the document.
+  In addition, it specifies normative requirements for which processing mode
+  must be used when SVG documents reference or embed other SVG documents.
+  The same set of processing modes may be used by reference in other specifications
+  to describe how SVG documents should be processed.</p>
 
   <p class="note">This document does not place normative requirements on
   other specifications that can reference or include SVG documents, such as
   HTML and various CSS specifications.  The intention is for these other
-  specifications to normatively point to the appropriate referencing mode
+  specifications to normatively point to the appropriate processing mode
   from this document.</p>
-
-  <p>The available <a href="#referencing-mode">referencing modes</a> are as follows:</p>
-
-  <dl>
-    <dt><dfn id="top-level-document-mode">top-level document</dfn></dt>
-    <dd>
-      <p>This referencing mode is for SVG documents that are loaded as a top-level
-      document in a user agent.</p>
-      <p>SVG documents processed with the
-      <a href="#top-level-document-mode">top-level document</a>
-      <a href="#referencing-mode">referencing mode</a> must use the
-      <a href="#dynamic-interactive-mode">dynamic interactive</a>
-      <a href="#processing-mode">processing mode</a>.</p>
-
-      <p class="note">This referencing mode is intended to be used when
-      an SVG document is loaded in a browser's
-      <a href="https://www.w3.org/TR/html/browsers.html#top-level-browsing-context">top-level browsing context</a>.
-      <a href="refs.html#ref-html51">[HTML]</a></p>
-    </dd>
-
-    <dt><dfn id="embedded-document-mode">embedded document</dfn></dt>
-    <dd>
-      <p>This referencing mode is for SVG documents that are externally referenced
-      and embedded for presentation in a host document.  SVG documents referenced by the
-      SVG <a>'iframe'</a> element must use the
-      <a href="#embedded-document-mode">embedded document</a>
-      <a href="#referencing-mode">referencing mode</a>.</p>
-
-      <p class="note">Note that the embedded document referencing mode
-      is not used for inline SVG fragments within an HTML document.</p>
-
-      <p>SVG documents processed with the
-      <a href="#embedded-document-mode">embedded document</a>
-      <a href="#referencing-mode">referencing mode</a> must use the
-      <a href="#dynamic-interactive-mode">dynamic interactive</a>
-      <a href="#processing-mode">processing mode</a>.</p>
-
-      <p class="note">This referencing mode is intended to be used when
-      an SVG document is loaded in an HTML
-      <span class='element-name'>'embed'</span>,
-      <span class='element-name'>'iframe'</span> or
-      <span class='element-name'>'object'</span> element.</p>
-    </dd>
-
-    <dt><dfn id="animated-image-document-mode">animated image document</dfn></dt>
-    <dd>
-      <p>This referencing mode is for SVG documents that are used as images,
-      where the context would typically be expecting a raster image that can
-      animate.  SVG documents referenced by the SVG <a>'image'</a> element must
-      use the <a href="#animated-image-document-mode">animated image document</a>
-      <a href="#referencing-mode">referencing mode</a> if
-      the referencing SVG document is using the
-      <a href='#top-level-document-mode'>top-level document</a>,
-      <a href='#embedded-document-mode'>embedded document</a> or
-      <a href='#animated-image-document-mode'>animated image document mode</a>.</p>
-
-      <p>SVG documents processed with the
-      <a href="#animated-image-document-mode">animated image document</a>
-      <a href="#referencing-mode">referencing mode</a> must use the
-      <a href="#secure-animated-mode">secure animated</a>
-      <a href="#processing-mode">processing mode</a>.</p>
-
-      <p class="note">This referencing mode is intended to be used when
-      an SVG document is referenced by an HTML
-      <span class='element-name'>'img'</span> element or
-      by any CSS property that takes an
-      <a href='https://www.w3.org/TR/css3-values/#images'>&lt;image&gt;</a>
-      value, and if animations can be run.</p>
-    </dd>
-
-    <dt><dfn id="static-image-document-mode">static image document</dfn></dt>
-    <dd>
-      <p>This referencing mode is for SVG documents that are used as images,
-      where the context would typically be expecting a raster image but where
-      animations are unable to run.  SVG documents
-      referenced by the SVG <a>'image'</a> element must use the
-      <a href="#static-image-document-mode">static image document</a>
-      <a href="#referencing-mode">referencing mode</a> if
-      the referencing SVG document is using the
-      <a href='#static-image-document-mode'>static image document mode</a>.</p>
-
-      <p>SVG documents processed with the
-      <a href="#static-image-document-mode">static image document</a>
-      <a href="#referencing-mode">referencing mode</a> must use the
-      <a href="#secure-static-mode">secure static</a>
-      <a href="#processing-mode">processing mode</a>.</p>
-
-      <p class="note">This referencing mode is intended to be used when
-      an SVG document is referenced by an HTML
-      <span class='element-name'>'img'</span> element or
-      by any CSS property that takes an
-      <a href='https://www.w3.org/TR/css3-values/#images'>&lt;image&gt;</a>
-      value, and if animations cannot be run.</p>
-    </dd>
-
-    <dt><dfn id="resource-document-mode">resource document</dfn></dt>
-    <dd>
-      <p>This referencing mode is for SVG documents that are loaded
-      as resource documents in order to use their <a>'mask element'</a>,
-      <a>'pattern element'</a>, gradient, or other resource elements.
-      SVG documents loaded due to a reference to an external document from any
-      of the following features must use the
-      <a href="#resource-document-mode">resource document</a>
-      <a href="#referencing-mode">referencing mode</a>:</p>
-
-      <ul>
-        <li>the <a>'clip-path'</a>, <a>'cursor property'</a>, <a>'fill'</a>,
-        <a>'filter property'</a> <a>'stroke'</a>, <a>'marker-mid'</a>,
-        <a>'marker-start'</a>, <a>'marker-end'</a> and <a>'mask property'</a>
-        properties</li>
-
-        <li>the <a>'cursor element'</a>, <a>'feImage'</a>,
-        <a>'filter element'</a>, <a>'linearGradient'</a>,
-        <a>'radialGradient'</a>, <a>'mesh'</a>, <a>'meshgradient'</a>, 
-        <a>'hatch'</a>, <a>'pattern'</a>, <a>'mpath'</a>, <a>'textPath'</a>,
-        and <a>'use'</a> elements</li>
-      </ul>
-
-      <p>SVG documents processed with the
-      <a href="#resource-document-mode">resource document</a>
-      <a href="#referencing-mode">referencing mode</a> must use the
-      <a href="#secure-static-mode">secure static</a>
-      <a href="#processing-mode">processing mode</a>.</p>
-
-    <p class="note">Note that animations do not run in documents referenced
-    via the <a href="#resource-document-mode">resource document</a> <a href="#referencing-mode">referencing mode</a>
-    for both performance reasons and because there is currently no context
-    defined for resource documents to reference their timeline against.</p>
-    </dd>
-
-    <dt><dfn id="font-document-mode">font document</dfn></dt>
-    <dd>
-      <p>This referencing mode is for SVG documents that are being used
-      to define font glyphs.</p>
-
-      <p>SVG documents processed with the
-      <a href="#font-document-mode">font document</a>
-      <a href="#referencing-mode">referencing mode</a> must use the
-      <a href="#secure-animated-mode">secure animated</a>
-      <a href="#processing-mode">processing mode</a>.</p>
-
-      <p>Additionally, SVG documents processed with the
-      <a href="#font-document-mode">font document</a>
-      <a href="#referencing-mode">referencing mode</a> must apply the
-      following user agent style sheet:</p>
-
-      <pre style="background-color: #eee; padding: 0.5em">@namespace svg url(http://www.w3.org/2000/svg);
-
-  svg|text, svg|foreignObject {
-    display: none !important;
-  }
-
-  :root {
-    fill: context-fill;
-    fill-opacity: context-fill-opacity;
-    stroke: context-stroke;
-    stroke-opacity: context-stroke-opacity;
-    stroke-width: context-value;
-    stroke-dasharray: context-value;
-    stroke-dashoffset: context-value;
-  }</pre>
-      <p class="note">This referencing mode is intended to used by the
-      OpenType specification for processing documents from the "SVG"
-      table.</p>
-    </dd>
-  </dl>
-
-  <p>SVG document fragments that are included inline in a host document
-  use a <a href='#referencing-mode'>referencing mode</a> that matches
-  that of the host document.  SVG document fragments included as
-  children of an SVG <a>'foreignObject'</a> element must use the
-  <a href='#referencing-mode'>referencing mode</a> of the referencing
-  SVG document.</p>
-
-  <p class='note'>For example, if an SVG document is being used in
-  <a href='#animated-image-document-mode'>animated image document mode</a>
-  due to being referenced by an HTML <a>'image'</a> element, then any
-  inline SVG fragment that is a child of a <a>'foreignObject'</a> element
-  within that document is also processed using
-  <a href='#animated-image-document-mode'>animated image document mode</a>.</p>
-
+  
+  <p>This chapter also outlines specific conformance requirements
+    for <a href="#DocumentConformanceClasses">different types of SVG content</a>,
+    and <a href="#SoftwareConformanceClasses">different classes of software</a> that use or create SVG.
+  </p>
 
   <h2 id="processing-modes">Processing modes</h2>
 
-  <p>This section defines a number of <dfn id="processing-mode">processing modes</dfn>
+  <p>This section defines a standard set of <a>processing modes</a>
   for SVG documents.  Each processing mode specifies whether certain high level
   SVG features are enabled.</p>
 
@@ -273,58 +111,45 @@
   <dl>
     <dt>declarative animation</dt>
     <dd>
-      <p>Declarative animation includes both the SMIL animation elements in SVG –
+      <p>Declarative animation includes both the animation elements in SVG –
       <a>'animate'</a>, <a>'animateMotion'</a>,
-      <a>'animateTransform'</a> and <a>'set'</a> – and CSS Transitions and Animations.
-      When declarative animations are disabled in an SVG document, any SMIL
-      animations or CSS Transitions or Animations must not be applied or run.</p>
+      <a>'animateTransform'</a> and <a>'set'</a> – and CSS Transitions and Animations
+      (see the <a href="animate.html">Animation appendix</a> for details).
+      When declarative animations are disabled in an SVG document, any
+      animation elements or CSS Transitions or Animations must not be applied or run.</p>
       <p class='note'>This is not the same as pausing the document's animated
-      state at 0s document time; if a SMIL animation is defined to begin at 0s,
+      state at 0s document time; if an animation is defined to begin at 0s,
       it still will not be applied.</p>
     </dd>
 
     <dt>references to external resources</dt>
     <dd>
-      <p>References to external resources are URLs that can be used in any of the following
-      SVG features, where any of the URL's components, ignoring the fragment,
-      do not match the document's URL:</p>
+      <p>References to <a>external resources</a> are URLs references
+        or network access requests 
+        made by markup, style properties, script or other Web platform features
+        used in the document, except for:
+      </p>
       <ul>
-        <li>the <a>'clip-path'</a>, <a>'cursor property'</a>, <a>'fill'</a>,
-        <a>'filter property'</a> <a>'stroke'</a>, <a>'marker-mid'</a>,
-        <a>'marker-start'</a>, <a>'marker-end'</a> and <a>'mask property'</a>
-        properties</li>
-
-        <li>the <a>'audio'</a>,
-        <a>'cursor element'</a>, <a>'feImage'</a>, <a>'filter element'</a>,
-        <a>'foreignObject'</a>, <a>'hatch'</a>,
-        <a>'image'</a>, <a>'linearGradient'</a>, <a>'mesh'</a>,
-        <a>'meshgradient'</a>, <a>'mpath'</a>, <a>'pattern'</a>,
-        <a>'radialGradient'</a>, <a>'script'</a>, <a>'textPath'</a>,
-        <a>'use'</a> and <a>'video'</a> elements</li>
-
-        <li>any other network requests made by script, HTML, CSS or other
-        Web platform features used in the document</li>
+        <li><a>same-document URL references</a>, as defined in the <a href="linking.html">Linking chapter</a></li>
+        <li><a>data URL references</a>, as defined by <a href="http://www.ietf.org/rfc/rfc2397.txt">the "data" URL scheme</a>
+  [<a href="refs.html#ref-rfc2397">rfc2397</a>]</li>
       </ul>
-      <p>User agents must apply <a href="refs.html#ref-cors">CORS</a> policies when fetching external resources
-        used in any of the SVG features listed above.</p>
-      <p>To protect against unlimited resource fetching and cycles in external
-        resources, user agents must limit external resources to a single level of
-        depth, so that referenced external resources
-        cannot reference external resources.</p>
-      <p>As noted in <a href="#processing-modes">Referencing modes</a> section, external resources must use
-        <a href="#resource-document-mode">resource document</a>
-        <a href="#referencing-mode">referencing mode</a>.</p>
       <p>When external references are disabled in an SVG document, any attempt to
       fetch a document through an external reference must instead be treated as
       if a network error occurred and no data was received.</p>
+      <p>When external references are enabled,
+        user agents that support external file requests from the Internet
+        must adhere to the restrictions on cross-origin resource fetching,
+        as outlined in <a href="linking.html#processingURL-fetch">the Linking chapter</a>.
+      </p>
     </dd>
 
     <dt>script execution</dt>
     <dd>
       <p>Script execution is the execution of any SVG <a>'script'</a> elements,
-      script found in event listener attributes (such as <a>'onclick'</a> on
+      script found in <a>event attributes</a> (such as <a>'onclick'</a> on
       SVG elements), or any other script defined by other Web platform features
-      used in the document such as any HTML <a>'script'</a> elements.
+      used in the document, such as any HTML <a>'script'</a> elements.
       When script execution is disabled in an SVG document, no script in the
       document must be run.</p>
     </dd>
@@ -371,6 +196,40 @@
       </tr>
     </tbody>
   </table>
+  
+  
+<h3 id="animated-mode">Animated mode</h3>
+
+<p>This <a>processing mode</a> is intended for circumstances where
+an SVG document is to be used as an animated image that is allowed
+to resolve external references, but which is not intended to be used
+as an interactive document.</p>
+
+<table class="features">
+  <thead>
+    <tr>
+      <th colspan="2">Animated Features</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>script execution</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>external references</th>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>declarative animation</th>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>interactivity</th>
+      <td>no</td>
+    </tr>
+  </tbody>
+</table>
 
   <h3 id="secure-animated-mode">Secure animated mode</h3>
 
@@ -406,6 +265,44 @@
       </tr>
     </tbody>
   </table>
+  
+<h3 id="static-mode">Static mode</h3>
+
+<p>This <a>processing mode</a> is intended for circumstances where
+an SVG document is to be used as a non-animated image that is allowed
+to resolve external references, but which is not intended to be used
+as an interactive document.
+For example, 
+an SVG viewer that processes graphics for inclusion in print documents 
+would likely use static mode.
+</p>
+
+<table class="features">
+  <thead>
+    <tr>
+      <th colspan="2">Static Features</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>script execution</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>external references</th>
+      <td>yes</td>
+    </tr>
+    <tr>
+      <th>declarative animation</th>
+      <td>no</td>
+    </tr>
+    <tr>
+      <th>interactivity</th>
+      <td>no</td>
+    </tr>
+  </tbody>
+</table>
+
 
   <h3 id="secure-static-mode">Secure static mode</h3>
 
@@ -442,81 +339,268 @@
     </tbody>
   </table>
 
+  <h2 id="referencing-modes">Processing modes for SVG sub-resource documents</h2>
+
+  <p>
+    When an SVG document is viewed directly,
+    it is expected to be displayed using the most comprehensive
+    <a>processing mode</a> supported by the user agent.
+    However, when an SVG is processed
+    as a sub-resource or embedded document,
+    the following restrictions must apply:
+  </p>
+
+  <dl>
+    <dt id="image-document-mode"><a>'image'</a> references</dt>
+    <dd>
+      <p>An SVG embedded within an <a>'image'</a> element
+        must be processed in <a>secure animated mode</a>
+        if the embedding document supports <a>declarative animation</a>,
+        or in <a>secure static mode</a> otherwise.
+      </p>
+
+      <p class="note">The same processing modes are expected to be used 
+      for other cases where SVG is used in place of a raster image,
+      such as an HTML <span class='element-name'>'img'</span> element or
+      in any CSS property that takes an
+      <a href='https://www.w3.org/TR/css3-values/#images'>&lt;image&gt;</a> data type.
+      This is consistent with <a href="https://www.w3.org/TR/html/semantics-embedded-content.html#the-img-element">HTML's requirement</a>
+      that image sources must reference
+      "a non-interactive, optionally animated, image resource that is neither paged nor scripted"
+      [<a href="refs.html#ref-html51">HTML</a>]</p>
+    </dd>
+
+    <dt id="embedded-document-mode"><a>'iframe'</a> references</dt>
+    <dd>
+      <p>SVG documents referenced by the
+      an HTML <a>'iframe'</a> element in an SVG document must use the
+      same processing mode as the embedding document,
+      subject to any restrictions defined by the
+      <a href="https://www.w3.org/TR/html/semantics-embedded-content.html#element-attrdef-iframe-sandbox"><span class="attr-name">sandbox</span> attribute</a>
+      on the embedding <a>'iframe'</a>.</p>
+
+      <p class="note">The same processing rules are intended to be used when
+      an SVG document is loaded in an HTML
+      <span class='element-name'>'embed'</span>,
+      <span class='element-name'>'iframe'</span> or
+      <span class='element-name'>'object'</span> element
+      <a href="refs.html#ref-html51">[HTML]</a>.
+      An HTML document that is a 
+      <a href="https://www.w3.org/TR/html/browsers.html#top-level-browsing-context">top-level browsing context</a>
+      in an interactive web browser is equivalent to SVG's
+      <a>dynamic interactive processing mode</a>.
+      </p>
+    </dd>
+
+    <dt id="template-document-mode"><a>'use'</a> element and other <a>'href'</a> references</dt>
+    <dd>
+      <p>When SVG documents are loaded
+      through <a>'use'</a> element references
+      or <a>paint server element</a> cross-references
+      they must be processed in <a>secure static mode</a>.
+      </p>
+
+    <p class="note">
+    Note that animations do not run while processing the sub-resource document,
+    for both performance reasons and because there is currently no context
+    defined for resource documents to reference their timeline against.
+    However, when elements from a sub-resource document are cloned
+    into the current document because of a <a>'use'</a> element reference
+    or paint-server cross-reference,
+    the cloned <a>element instances</a> may be animated
+    in the current document's timeline,
+    as described in <a href="struct.html#UseAnimations">Animations in use-element shadow trees</a>,
+    and may trigger the loading of additional sub-resource files.
+      </p>
+    </dd>
+
+    <dt id="resource-document-mode">Graphical effects references</dt>
+    <dd>
+      <p>When SVG documents are loaded
+      through any style property references that target specific elements in the document
+      (as opposed to SVG as an image format),
+      they must be processed in <a>secure static mode</a>.
+      </p>
+
+    <p class="note">Note that animations do not run in sub-resource documents,
+    for both performance reasons and because there is currently no context
+    defined for resource documents to reference their timeline against.
+      </p>
+      
+      <p>Some style properties may reference either specific elements
+        or entire image files;
+        the processing mode is more restrictive in the first case.
+        For example, a reference to an SVG <a>'mask element'</a> element
+        will not be animated,
+        but an entire SVG file used as an image mask can be.
+      </p>
+    </dd>
+
+    <dt id="font-document-mode">SVG in fonts</dt>
+    <dd>
+      <p>When SVG files are processed as part of a font reference,
+        they must use the
+        <a>secure animated mode</a> if animated glyphs are supported,
+        or <a>secure static mode</a> otherwise.
+      </p>
+      
+      <p class="note">These restrictions are included in the
+      OpenType specification for processing documents from the "SVG"
+      table.
+      OpenType also applies additional restrictions,
+      in the form of a <a href="styling.html#UAStyleSheet">user agent style sheet</a>
+      that prevents rendering of text and foreign objects
+      [<a href="refs.html#ref-opentype">OPENTYPE</a>].</p>
+    </dd>
+  </dl>
+
+  <p>SVG document fragments that are included inline in a host document
+  must use a <a>processing mode</a> that matches that of the host document.
+  SVG document fragments included as
+  children of an SVG <a>'foreignObject'</a> element must use the
+  <a>processing mode</a> of the surrounding SVG document;
+  non-SVG foreign content must be processed with equivalent restrictions.</p>
+
+  <p class='note'>
+  For example, if an SVG document is being used in
+  <a>secure animated mode</a> due to being referenced 
+  by an HTML <span class="element-name">'img'</span> 
+  or SVG <a>'image'</a> element,
+  then any content within a <a>'foreignObject'</a> element
+  must have scripts, interactivity, and external file references disabled,
+  but should have declarative animation enabled.</p>
+
+  
+
   <h3 id="examples">Examples</h3>
 
   <div class="example">
   <p>Below are various methods of embedding SVG in an HTML page by
-  reference. Each <a>referencing mode</a> element should display a yellow
-  smiley face. In each example below, clicking on the eyes tests link
-  traversal, and clicking on the face tests declarative interactivity
-  and script execution. The link should replace the image with a blue
-  square (clicking on that will return you to the original image). The
-  declarative interactivity, which uses the <a>'set'</a> element, should change
-  the image from shades of yellow to shades of green. The script should fill
-  in the smile.  Time-based (as opposed to interactivity-based) declarative
-  animation is supported if the left eye is winking.</p>
+  reference,
+    along with the expected processing mode
+    and allowed features for each.
+  </p>
+  <p>
+    Each cell in the "Live Example" row should display a yellow
+  smiley face. 
+    In each example below, clicking on the eyes tests link
+  traversal, 
+    and clicking on the face tests declarative interactivity
+  and script execution.
+    The link should replace the image with a blue
+  square (clicking on that will return you to the original image).
+    The declarative interactivity
+    uses the <a>'set'</a> element to change the face from shades of yellow to shades of green,
+    and uses CSS pseudoclasses to add a stroke to the interactive elements.
+    The script should fill in the smile.
+    Time-based (as opposed to interactivity-based) declarative animation is supported if the left eye is winking (using the <a>'animate'</a> element)
+    and if the eyes are dark blue with regular flashes of light blue (using CSS keyframe animation).
+  </p>
+    
+  <p class="note">
+    The expected processing modes and features outlined here
+    are subject to any future changes in the corresponding HTML or CSS specification.
+  </p>
 
   <table class="ref_modes">
     <tbody>
       <tr>
-        <th>object</th>
-        <th>iframe</th>
-        <!--
-        <th>embed</th>
-        -->
+        <th scope="row">Embedding method</th>
+        <th>object without sandboxing</th>
+        <th>iframe with <code>sandbox=""</code></th>
         <th>img</th>
         <th>CSS background</th>
       </tr>
       <tr>
+        <th scope="row">Expected processing mode</th>
+        <td>dynamic interactive</td>
+        <td>dynamic interactive, with restrictions</td>
+        <td>secure animated</td>
+        <td>secure animated</td>
+      </tr>
+      <tr>
+        <th scope="row">Declarative, time-based animation<br/> (winking left eye, color-change in both eyes)</th>
+        <td>allowed</td>
+        <td>allowed</td>
+        <td>allowed</td>
+        <td>allowed</td>
+      </tr>
+      <tr>
+        <th scope="row">Declarative, interactive animation and style changes<br/> (face color changes when clicked, face/eyes outlined when hovered or focused)</th>
+        <td>allowed</td>
+        <td>allowed</td>
+        <td>disabled</td>
+        <td>disabled</td>
+      </tr>
+      <tr>
+        <th scope="row">Link navigation within the same browsing context, to the same domain<br/> (image changes when clicking eyes)</th>
+        <td>allowed</td>
+        <td>allowed</td>
+        <td>disabled</td>
+        <td>disabled</td>
+      </tr>
+      <tr>
+        <th scope="row">Scripted interaction<br/> (smile widens when clicking face)</th>
+        <td>allowed</td>
+        <td>disabled (because of sandboxing)</td>
+        <td>disabled</td>
+        <td>disabled</td>
+      </tr>
+      <tr>
+        <th scope="row">Live example</th>
         <td>
-          <object class="embedcontext" type="image/svg+xml" data="images/conform/smiley.svg">Please use FF1.5+, Opera 9+, WebKit/Safari3.0, or IE with an SVG plugin!</object>
+          <object class="embedcontext" type="image/svg+xml" data="images/conform/smiley.svg" aria-label="smiley face, as an object">Your browser does not support embedded SVG images.</object>
         </td>
         <td>
-          <iframe class="embedcontext" src="images/conform/smiley.svg" style="border: 0">Please use FF1.5+, Opera 9+, WebKit/Safari3.0, or IE with an SVG plugin!</iframe>
+          <iframe sandbox="" class="embedcontext" src="images/conform/smiley.svg" style="border: 0"  aria-label="smiley face, as an iframe">Your browser does not support embedded SVG images.</iframe>
         </td>
-        <!--
         <td>
-          <embed class="embedcontext" src="smiley.svg" type="image/svg+xml">
+          <img id="js-embed-img" class="embedcontext" alt="smiley face, as an image" src="images/conform/smiley.svg" />
         </td>
-        -->
-        <td>
-          <img class="embedcontext" alt="images/conform/smiley face" src="images/conform/smiley.svg" />
-        </td>
-        <td><div style="background-image: url(./images/conform/smiley.svg); width: 120px; height: 120px;">&#xA0;</div></td>
+        <td><div class="embedcontext" style="background-image: url(./images/conform/smiley.svg);"  aria-label="smiley face, as a background image">&#xA0;</div></td>
       </tr>
     </tbody>
   </table>
   </div>  
-</section>
+  
+<h2 id="DocumentConformanceClasses">Document Conformance Classes </h2>
+  
+<p>SVG is defined in terms of a document object model (DOM),
+  rather than a particular file format or document type.
+  For SVG content, therefore,
+  conformance with this specification is defined by whether
+  the content is or can generate a conforming DOM.
+  Additional conformance classes depend on whether the content
+  is also valid and well-formed XML [<a href="refs.html#ref-xml">xml</a>].
+</p>
 
-<h2 id="ConformingSVGDocuments">Conforming SVG Document Fragments</h2>
+<h3 id="ConformingSVGDOMSubtrees">Conforming SVG DOM Subtrees</h3>
 
-<p>An SVG document fragment is a <em>Conforming SVG Document Fragment</em> if
-it adheres to the specification described in this document
-(<a href="Overview.html">Scalable Vector Graphics (SVG) Specification</a>) and also:</p>
-
+<p>A DOM node tree or subtree rooted at a given element
+is a <dfn>conforming SVG DOM subtree</dfn>
+if it forms a <a>SVG document fragment</a>
+that adheres to the specification described in this document
+(<a href="Overview.html">Scalable Vector Graphics (SVG) Specification</a>). 
+Specifically, it:</p>
 <ul>
-  <li>is <a href="https://www.w3.org/TR/2008/REC-xml-20081126/#sec-well-formed">XML well-formed</a>
-  ([<a href="refs.html#ref-xml">xml</a>], section 2.1),</li>
+  <li>is rooted by an <a>'svg'</a> element in the <a>SVG namespace</a>,</li>
 
-  <li>conforms to the <a href="https://www.w3.org/TR/xml-names"><cite>Namespaces in XML</cite></a>
-  specification [<a href="refs.html#ref-xml-names">xml-names</a>],</li>
-
-  <li>any CSS stylesheets conform to the core grammar of
-  <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/"><cite>Cascading Style Sheets, level 2 revision 1</cite></a>
-  [<a href="refs.html#ref-css2">CSS2</a>],</li>
-
-  <li>and any <code>&lt;?xml-stylesheet?&gt;</code> processing instruction conforms to
-  <a href="https://www.w3.org/TR/xml-stylesheet"><cite>Associating stylesheets with XML documents</cite></a>
-  [<a href='refs.html#ref-xml-stylesheet'>xml-stylesheet</a>],</li>
-
-  <li>conforms to the content model and attributes rules for the elements defined in this document (<a href="Overview.html">Scalable Vector Graphics (SVG) Specification</a>)</li>
+  <li>conforms to the content model and attributes rules for the elements defined in this document (<a href="Overview.html">Scalable Vector Graphics (SVG) Specification</a>), and</li>
+  
+  <li>conforms to the content model and attributes rules defined 
+  by other specifications for any elements in the <a>SVG namespace</a> defined by those specifications 
+  (including:
+  [<a href="refs.html#ref-filter-effects-1">filter-effects-1</a>],
+  [<a href="refs.html#ref-css-masking-1">css-masking-1</a>],
+  [<a href="refs.html#ref-svg-animation">svg-animation</a>]).</li>
+  
 </ul>
+
 
 <p>SVG document fragments can be included within parent XML documents using
 the XML namespace facilities described in
 <a href="https://www.w3.org/TR/xml-names">Namespaces in XML</a> [<a href="refs.html#ref-xml-names">xml-names</a>].
-Note, however, that since a Conforming SVG Document Fragment must have an
+Note, however, that since a conforming SVG DOM subtree must have an
 <a>'svg'</a> element as its root, the use of an individual non-<a>'svg'</a>
 element from the SVG namespace is disallowed.  Thus, the SVG part of the
 following document is <em>not</em> conforming:</p>
@@ -531,7 +615,7 @@ following document is <em>not</em> conforming:</p>
   &lt;!-- More elements from ParentXML go here --&gt;
 &lt;/ParentXML&gt;</pre>
 
-<p>Instead, for the SVG part to become a Conforming SVG Document Fragment,
+<p>Instead, for the SVG part to become a <a>conforming SVG DOM subtree</a>,
 the file could be modified as follows:</p>
 
 <pre>
@@ -548,124 +632,195 @@ the file could be modified as follows:</p>
 &lt;/ParentXML&gt;
 </pre>
 
-<p>The SVG language or these conformance criteria provide no designated
+<p>The SVG language and these conformance criteria provide no designated
 size limits on any aspect of SVG content. There are no maximum values on
 the number of elements, the amount of character data, or the number of
 characters in attribute values.</p>
 
-<h2 id="ConformingSVGStandAloneFiles">Conforming SVG Stand-Alone Files</h2>
 
-<p>A file is a <em>Conforming SVG Stand-Alone File</em> if:</p>
-
-<ul>
-  <li>it is an XML document,</li>
-  <li>its root element is an <a>'svg'</a> element, and</li>
-  <li>the SVG document fragment rooted at the document element is a <a href="#ConformingSVGDocuments">Conforming SVG Document Fragment</a>.</li>
-</ul>
-
-<h2 id="ConformingSVGGenerators">Conforming SVG Generators</h2>
-
-<p>A <em>Conforming SVG Generator</em> is a program which:</p>
-
-<ul>
-  <li>always creates <a href="#ConformingSVGDocuments">Conforming SVG Document Fragments</a>
-  and/or <a href="#ConformingSVGStandAloneFiles">Conforming SVG Stand-Alone Files</a>.</li>
-
-  <li>does not create non-conforming SVG document fragments of the above types.</li>
-</ul>
-
-<p>Additionally, an authoring tool which is a Conforming SVG
-Generator conforms to all of the Priority 1 accessibility
-guidelines from the document <a href="https://www.w3.org/TR/ATAG10"><cite>Authoring Tool Accessibility
-Guidelines 1.0</cite></a> [<a href="refs.html#ref-atag10">atag10</a>] that are relevant
-to generators of SVG content. (Priorities 2 and 3 are
-encouraged but not required for conformance.)</p>
-
-<p>SVG generators are encouraged to follow <a
-href="http://www.w3.org/International/">W3C developments in the
-area of internationalization</a>. Of particular interest is the
-<em>W3C Character Model</em> and the concept of <em>Webwide
-Early Uniform Normalization</em>, which promises to enhance the
-interchangability of Unicode character data across users and
-applications. Future versions of the SVG specification are
-likely to require support of the <em>W3C Character Model</em>
-in Conforming SVG Generators.</p>
-
-<p>On occasions when expression of the information exceeding single precision is desired for some use cases such as maps and technical drawings, it is encouraged that the following generation steps are utilized. </p>
-
-<p>Although the <a href="types.html#Precision">real number precision</a> of SVG is
-single-precision, presentation with an effective precision higher than
-single-precision may be obtained by generating SVG content that takes advantage
-of the fact that at least double-precision floating point must be used 
-when generating a CTM (See CTM generation processing in the
-<a href="#ConformingSVGViewers">Conforming SVG Viewers</a> section). 
-The steps for generating content that takes advantage of this are:
-</p>
-<ol>
-  <li>Split content into tiles such that the number of significant digits
-  required to position and size each object within a tile is within the 
-  range of single precision floats. Besides, in this description, 
-  the coordinate system which the original content has originally will be called source space. </li>
-  <li>Generate a coordinate transformation matrix per tile to transform from
-  source space to tile space, where tile space is a coordinate system with origin
-  <var>(0,0)</var> at the top left of the the tile. Each element of the
-  transformation matrix must be within the range of single precision.</li>
-  <li>Transform the contents of each tile from source space to tile space using
-  the generated coordinate transformation matrix. The result is that the parameters of each object can now be
-  expressed with significant digits within the range of single precision floats.</li>
-  <li>For each tile, generate an inverse transformation matrix for the
-  conversion of tile space to source space. This is used as a <a>'transform'</a> attribute of the element for the tile of the next step. </li>
-  <li>Arrange each tile as a separate user coordinate system in SVG. For example,
-  the tiles may be expressed a <a>'g'</a> elements 
-  with an <a>'transform'</a> attribute having the transformation matrix generated by the previous step.
-  And the split graphics generated by the third step will be placed as children of it. </li>
+<h3 id="ConformingSVGFragments">Conforming SVG Markup Fragments</h3>
   
-</ol>
+<p>A document or part of a document is a <dfn>conforming SVG markup fragment</dfn>
+  if it can be parsed without error (other than network errors)
+  by the appropriate parser for the document MIME type
+  to form a <a>conforming SVG DOM subtree</a>,
+  and in addition if:</p>
+<ul>
+  <li>any CSS stylesheets included in the document
+  conform to the core grammar of
+  <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/"><cite>Cascading Style Sheets, level 2 revision 1</cite></a>
+  [<a href="refs.html#ref-css2">CSS2</a>].</li>
+</ul>
 
-<table>
-  <caption>
-    Example Splitting vector graphics bigger than a tile
-  </caption>
-  <tr>
-    <th>Before Splitting</th>
-    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-    <th>After Splitting</th>
-  </tr>
-  <tr>
-    <td><img alt="Example Before splitting"
-    src="images/conform/betterPrecisionTiling3.png" width="200"/></td>
-    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td><img alt="Example After Splitting"
-    src="images/conform/betterPrecisionTiling4.png" width="200"/></td>
-  </tr>
-</table>
+<h3 id="ConformingSVGXMLFragments">Conforming XML-Compatible SVG Markup Fragments</h3>
 
-<table >
-  <caption>
-    Example Improving Significant Digits
-  </caption>
-  <tr>
-    <th>Step 1 : Splitting content</th>
-    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-    <th>Step 5 : Arranging tiles with smaller effective digits and appropriate translate</th>
-  </tr>
-  <tr>
-    <td><img alt="Example Split content into tiles"
-    src="images/conform/betterPrecisionTiling1.png" width="400"/></td>
-    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td><img alt="Example Translate and assign split contents"
-    src="images/conform/betterPrecisionTiling2.png" width="400"/></td>
-  </tr>
-  <tr><td colspan="3">This example provides the significant figure of eight digits using tiles with the user coordinate system of seven digits.</td></tr>
-</table>
+<p>A <a>conforming SVG markup fragment</a> is also a 
+<dfn>conforming XML-compatible SVG markup fragment</dfn>
+if it:</p>
 
-<h2 id="ConformingSVGServers">Conforming SVG Servers</h2>
-<p>Conforming SVG Servers must meet all the requirements of a Conforming SVG
-Generator. In addition, Conforming SVG Servers using HTTP or other protocols
+<ul>
+  <li>meets all <a href="https://www.w3.org/TR/2008/REC-xml-20081126/#sec-well-formed">XML well-formedness constraints</a>
+  ([<a href="refs.html#ref-xml">xml</a>]),</li>
+
+  <li>conforms to the <a href="https://www.w3.org/TR/xml-names"><cite>Namespaces in XML</cite></a>
+  specification [<a href="refs.html#ref-xml-names">xml-names</a>],</li>
+  
+  <li>all <a>'id'</a> attributes are <a href="https://www.w3.org/TR/xml/#sec-attribute-types">valid XML IDs</a>
+  ([<a href="refs.html#ref-xml">xml</a>], section 3.3.1), and </li>
+
+  <li>any <code>&lt;?xml-stylesheet?&gt;</code> processing instruction conforms to
+  <a href="https://www.w3.org/TR/xml-stylesheet"><cite>Associating stylesheets with XML documents</cite></a>
+  [<a href='refs.html#ref-xml-stylesheet'>xml-stylesheet</a>].</li>
+</ul>
+  
+<h3 id="ConformingSVGXMLDOMSubtrees">Conforming XML-Compatible SVG DOM Subtrees</h3>
+
+<p>A DOM node tree or subtree rooted at a given element
+is an <dfn>conforming XML-compatible SVG DOM subtree</dfn>
+if, once serialized to XML, 
+it could form a <a>conforming XML-compatible SVG markup fragment</a>.
+</p>
+<p>
+If the DOM subtree cannot be serialized to conforming XML without altering it,
+such as when an <a>'id'</a> value is not a valid XML name, or when a
+<a>Comment</a> node's data contains the substring "--", then the subtree is not
+a conforming XML-compatible SVG DOM subtree.</p>
+
+<h3 id="ConformingSVGStandAloneFiles">Conforming SVG Stand-Alone Files</h3>
+
+<p>A document is a <dfn>conforming SVG stand-alone file</dfn> if:</p>
+
+<ul>
+  <li>it is a well-formed XML document,</li>
+  <li>its root element is an <a>'svg'</a> element,</li>
+  <li>the SVG document fragment rooted at the document element is a <a>conforming XML-Compatible SVG markup fragment</a>, and</li>
+  <li>any other <a>SVG document fragments</a> within the document
+    (such as those within a <a>'foreignObject'</a>)
+    form a <a>conforming XML-Compatible SVG markup fragment</a>.
+  </li>
+</ul>
+
+<h2 id="SoftwareConformanceClasses">Software Conformance Classes</h2>
+  
+<p>For software, the requirements for conformance depend
+on the category of program:
+</p>
+<dl>
+  <dt id="TermSVGGenerator">SVG generators</dt>
+  <dd>Any software that creates or makes available SVG content,
+    either as markup or as a DOM
+    (as is the case with client-side JavaScript libraries).
+  </dd>
+  <dt id="TermSVGAuthoringTool">SVG authoring tools</dt>
+  <dd>Any software that provides an interface for human content creators
+    to manipulate graphics or code that will be used to generate SVG.
+    SVG authoring tools are implicitly also <a>SVG generators</a>.
+  </dd>
+  <dt id="TermSVGServer">SVG servers</dt>
+  <dd>Any network or file server that makes available SVG content
+    in response to requests from other software.
+    SVG servers are implicitly also <a>SVG generators</a>.
+  </dd>
+  <dt id="TermSVGInterpreter">SVG interpreters</dt>
+  <dd>Any software that parses or processes SVG documents or markup fragments.
+    An SVG interpreter is an <a>SVG user agent</a>
+    for the purpose of any sections of this specification that
+    relate to the parsing or processing steps undertaken by the interpreter.
+  </dd>
+  <dt id="TermSVGViewer">SVG viewers</dt>
+  <dd>Any software that creates a rendered graphical representation
+    after parsing or processing an SVG document or SVG markup fragment.
+    SVG viewers are implicitly also <a>SVG interpreters</a>.
+    An SVG viewer is always an <a>SVG user agent</a> for the purpose of this specification.
+  </dd>
+  <dt id="TermSVGUserAgent">SVG user agent</dt>
+  <dd>An SVG user agent is a <a>user agent</a> that is able to retrieve and
+  render SVG content.</dd>
+  <dt id="TermUserAgent">user agent</dt>
+  <dd>
+    <p>The general definition of a user agent is an application
+    that retrieves and renders Web content, including text,
+    graphics, sounds, video, images, and other content types. A
+    user agent may require additional user agents that handle
+    some types of content. For instance, a browser may run a
+    separate program or plug-in to render sound or video. User
+    agents include graphical desktop browsers, multimedia
+    players, text browsers, voice browsers, and assistive
+    technologies such as screen readers, screen magnifiers,
+    speech synthesizers, onscreen keyboards, and voice input
+    software.</p>
+
+    <p>In general terms,
+    a "user agent" may or may not have the ability to retrieve
+    and render SVG content;
+    however, unless the context requires an alternative interpretation,
+    all references to a "user agent" in this specification
+    are assumed to be references to an <a>SVG user agent</a> that
+    retrieves and renders SVG content.</p>
+  </dd>
+</dl>
+  
+<p>Many programs will fall under multiple software classes.
+For example, a graphical editor that can import and display SVG files,
+allow the user to modify them,
+and then export the modified graphic to file,
+is an SVG interpreter,
+an SVG viewer,
+an SVG authoring tool,
+and an SVG generator.
+</p>
+  
+<h3 id="ConformingSVGGenerators">Conforming SVG Generators</h3>
+
+<p>A <dfn>conforming SVG generator</dfn> is a 
+  <a>SVG generator</a> that:</p>
+
+<ul>
+  <li>always creates 
+  a <a>conforming SVG DOM subtree</a>,
+  a <a>conforming SVG markup fragment</a>,
+  or a <a>conforming SVG stand-alone file</a>;</li>
+
+  <li>does not create documents containing non-conforming SVG document fragments;</li>
+  
+  <li>meets all normative requirements in this specification for SVG authors,
+    as well as specific normative requirements for SVG generators.</li>
+</ul>
+
+<p>SVG generators are strongly encouraged to
+use a Unicode character encoding by default,
+and to follow the other guidelines of the 
+<a href="https://www.w3.org/TR/charmod/">Character Model for the World Wide Web</a>
+[<a href="refs.html#ref-unicode">UNICODE</a>]
+[<a href="refs.html#ref-charmod">charmod</a>].
+</p>
+
+<p class="note">SVG generators handling high-precision data
+are encouraged to follow the guidelines in the section
+<a href="implnote.html#NumericPrecisionImplementationNotes">Notes on generating high-precision geometry</a>.
+</p>
+  
+<h3 id="ConformingSVGAuthoringTools">Conforming SVG Authoring Tools</h3>
+
+<p>
+An <a href="https://www.w3.org/TR/ATAG20/#def-Authoring-Tool">authoring tool</a>, 
+as defined in the <a href="https://www.w3.org/TR/ATAG20"><cite>Authoring Tool Accessibility
+Guidelines 2.0</cite></a>,
+is a <dfn>conforming SVG authoring tool</dfn>
+if it is a <a>conforming SVG generator</a>
+and it also conforms to all relevant Level A requirements from that document
+[<a href="refs.html#ref-atag20">atag20</a>].
+Level AA and Level AAA requirements are
+encouraged but not required for conformance.</p>
+
+<h3 id="ConformingSVGServers">Conforming SVG Servers</h3>
+
+<p>A <dfn>conforming SVG server</dfn> must meet all the requirements of a <a>conforming SVG
+generator</a>. In addition, conforming SVG servers using HTTP or other protocols
 that use Internet Media types must serve SVG stand-alone files with the media
 type <code>"image/svg+xml"</code>.</p>
 
-<p>Also, if the SVG file is compressed with gzip or deflate, Conforming SVG
+<p>Also, if the SVG file is compressed with gzip or deflate, conforming SVG
 Servers must indicate this with the appropriate header, according to what the
 protocol supports.  Specifically, for content compressed by the server
 immediately prior to transfer, the server must use the "Transfer-Encoding:&nbsp;gzip"
@@ -674,57 +829,51 @@ stored in a compressed format on the server (e.g. with the file extension "svgz"
 the server must use the "Content-Encoding:&nbsp;gzip" or
 "Content-Encoding:&nbsp;deflate" headers as appropriate.</p>
 
-<p><em>Note:</em> Compression of stored <em>content</em> (the "entity," in HTTP
+<p class="note">
+Compression of stored <em>content</em> (the "entity," in HTTP
 terms) is distinct from automatic compression of the <em>message body</em>, as
 defined in HTTP/1.1 <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.39">TE</a>/
 <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.41">Transfer Encoding</a>
 ([<a href="refs.html#ref-rfc2616">rfc2616</a>], sections 14.39 and 14.41).</p>
 
-<h2 id="ConformingSVGDOMSubtree">Conforming SVG DOM Subtree</h2>
+<h3 id="ConformingSVGInterpreters">Conforming SVG Interpreters</h3>
 
-<p>A DOM subtree rooted at a given element is a <em>Conforming SVG DOM Subtree</em>
-if, once serialized to XML, is a <a href="#ConformingSVGDocuments">Conforming SVG Document Fragment</a>.
-If the DOM subtree cannot be serialized to XML, such as when a
-<a>Comment</a> node's data contains the substring "--", then the subtree is not
-a Conforming SVG DOM Subtree.</p>
-
-<h2 id="ConformingSVGInterpreters">Conforming SVG Interpreters</h2>
-
-<p>An SVG Interpreter is a program which can parse and process
-SVG document fragments. Examples of SVG Interpreters are
-server-side transcoding tools (e.g., a tool which converts SVG
+<p class="note">An <a>SVG interpreter</a> is a program which can parse and process
+SVG document fragments. Examples of SVG interpreters are
+server-side transcoding tools or optimizers (e.g., a tool which converts SVG
 content into modified SVG content) or analysis tools (e.g., a
-tool which extracts the text content from SVG content).
+tool which extracts the text content from SVG content,
+or a validity checker).
+A transcoder from SVG into another graphics
+representation, such as an SVG-to-raster transcoder, represents
+a viewer, and thus viewer conformance criteria also apply.
+</p>
 
-An SVG viewer also satisfies the requirements of an SVG interpreter in that it
-can parse and process SVG document fragments, where processing consists of
-rendering the SVG content to the target medium.</p>
-
-<p>A <a>Conforming SVG Interpreter</a> must be able to parse and process all
-XML constructs defined <a href="https://www.w3.org/TR/2008/REC-xml-20081126/">XML 1.0</a>
+<p>A <dfn>conforming SVG interpreter</dfn> must be able to parse and process all
+XML constructs defined in <a href="https://www.w3.org/TR/2008/REC-xml-20081126/">XML 1.0</a>
 [<a href="refs.html#ref-xml">xml</a>] and
 <a href="https://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a>
 [<a href="refs.html#ref-xml-names">xml-names</a>].</p>
 
-<p>A <a>Conforming SVG Interpreter</a> must parse any SVG document
-correctly. It is not required to interpret the semantics of all
+<p>A <a>conforming SVG interpreter</a> must parse any 
+<a>conforming XML-compatible SVG markup fragment</a> 
+in a manner that correctly respects the DOM structure 
+(elements, attributes, text content, comments, etc.) of the content.
+The interpreter is not required to interpret the semantics of all
 features correctly.</p>
 
-<p>
-A <a>Conforming SVG Interpreter</a> must be able to support at least one of the
-following processing modes defined in the SVG integration specification
-[<a href="refs.html#ref-svg-integration">svg-integration</a>]:</p>
-<ul>
-<li><a>dynamic interactive mode</a></li>
-<li><a>secure animated mode</a></li>
-<li><a>secure static mode</a></li>
-</ul>
+<p>If the SVG interpreter supports non-XML syntaxes (such as HTML),
+it must correctly parse any <a>conforming SVG markup fragment</a> in that syntax.
+</p>
+  
+<p>If the SVG interpreter runs scripts or fetches external resource files
+as a consequence of processing the SVG content,
+it must follow the restrictions described for <a>user agents</a> in
+<a href="#referencing-modes">Processing modes for SVG sub-resource documents</a>
+and in the <a href="linking.html">Linking chapter</a>.
+</p>
 
-<p>Note: A transcoder from SVG into another graphics
-representation, such as an SVG-to-raster transcoder, represents
-a viewer, and thus viewer conformance criteria apply.</p>
-
-<h2 id="ConformingSVGViewers">Conforming SVG Viewers</h2>
+<h3 id="ConformingSVGViewers">Conforming SVG Viewers</h3>
 
 <div class="annotation">
   <table>
@@ -749,52 +898,54 @@ a viewer, and thus viewer conformance criteria apply.</p>
   </table>
 </div>
 
-<p>An SVG viewer is a program which can parse and process an
+<p class="note">
+An <a>SVG viewer</a> is a program which can parse and process an
 SVG document fragment and render the contents of the document
-onto some sort of output medium such as a display or printer;
-thus, an <em>SVG Viewer</em> is also an <em>SVG Interpreter</em>.</p>
+onto some sort of graphical output medium such as a display, printer, or engraver.
+Thus, an <a>SVG viewer</a> is also an <a>SVG interpreter</a>
+(in that it can parse and process SVG document fragments),
+but with the additional requirement of correct rendering.
+</p>
 
 <p>
-A <a>Conforming SVG Viewer</a> must be able to support at least one of the
-following processing modes defined in the SVG integration specification
-[<a href="refs.html#ref-svg-integration">svg-integration</a>]:</p>
+A <dfn>conforming SVG viewer</dfn>
+must be a <a>conforming SVG interpreter</a>, and
+must be able to support rendering output in at least one of the
+processing modes defined in this chapter:</p>
 <ul>
 <li><a>dynamic interactive mode</a></li>
+<li><a>animated mode</a></li>
 <li><a>secure animated mode</a></li>
+<li><a>static mode</a></li>
 <li><a>secure static mode</a></li>
 </ul>
+  
+<p>A conforming SVG viewer must meet all normative requirements
+indicated in this specification for <a>user agents</a>,
+for all features supported by its processing mode(s).
+</p>
 
-<p>Specific criteria that must apply to a <a>Conforming SVG Viewer</a>:</p>
+<p>Specific criteria that must apply to all <a>conforming SVG viewers</a>:</p>
 
 <ul>
-  <li>The program must also be a <a>Conforming SVG Interpreter</a>.</li>
 
-  <li>For interactive user environments, facilities must exist
-  for zooming and panning of stand-alone SVG documents or SVG
-  document fragments embedded within parent XML documents.</li>
-
-  <li>In environments that have appropriate user interaction
-  facilities, the viewer must support the ability to activate
-  hyperlinks.</li>
-
-  <li>If printing devices are supported, SVG content must be
-  printable at printer resolutions with the same graphics
-  features available as required for display (e.g., the
-  specified colors must be rendered on color printers).</li>
-
-  <li>On systems where this information is available, the
-  parent environment must provide the viewer with information
-  about physical device resolution. In situations where this
-  information is impossible to determine, the parent
-  environment shall pass a reasonable value for device
-  resolution which tends to approximate most common target
-  devices.</li>
-
-  <li>The viewer must support JPEG and PNG
-  image formats [<a href="refs.html#ref-jpeg">JPEG</a>] [<a href="refs.html#ref-png">PNG</a>].</li>
-
-  <li>Resampling of image data must be consistent with the
-  specification of property <a>'image-rendering'</a>.</li>
+<li>The viewer must be able to parse all CSS syntax features
+defined in <a href="https://www.w3.org/TR/CSS2/"><cite>Cascading Style Sheets, level 2 revision 1</cite></a>
+[<a href="refs.html#ref-css2">CSS2</a>], 
+and must support CSS styling of SVG content including 
+all <a href="styling.html#RequiredProperties">required properties</a>
+and <a href="styling.html#RequiredCSSFeatures">required features</a>
+listed in the 
+<a href="styling.html">Styling</a> chapter.
+The viewer may support other CSS language features,
+and any other properties that are defined by the corresponding specification to apply to SVG elements.
+The supported features from CSS 2.1 must be implemented in accordance with
+the <a href="https://www.w3.org/TR/CSS2/conform.html#conformance">conformance
+definitions from the CSS 2.1 specification</a>
+  ([<a href="refs.html#ref-css2">CSS2</a>], section 3.2).</li>
+  
+  <li>The viewer must be able to apply
+  styling properties to SVG content using <a>presentation attributes</a>.</li>
 
   <li>
   Areas of an image of SVG content may have opacity less than 100%.
@@ -803,6 +954,62 @@ following processing modes defined in the SVG integration specification
   Compositing and Blending Specification
   [<a href="refs.html#ref-compositing-1">compositing-1</a>].
   </li>
+
+  <li>The viewer must support <a>data URL references</a>
+    containing base64-encoded or URL-encoded content,
+    in conformance with
+  <a href="http://www.ietf.org/rfc/rfc2397.txt"> the "data:" URL scheme</a>
+  [<a href="refs.html#ref-rfc2397">rfc2397</a>],
+  wherever a URI reference to another document is permitted within
+  SVG content.
+  When the encoded document is of MIME type <code>image/svg+xml</code>,
+  it must be a well-formed, complete SVG document in order to be processed.
+  </li>
+
+  <li>The viewer must support JPEG and PNG
+  image formats [<a href="refs.html#ref-jpeg">JPEG</a>] [<a href="refs.html#ref-png">PNG</a>].
+    <p class="note">
+      Even if the viewer only supports secure processing modes,
+      it is still required to support these image formats,
+      in order to process <a>data URL references</a>.
+    </p>
+  </li>
+
+  <li>Resampling of image data must be consistent with the
+  specification of property <a>'image-rendering'</a>.</li>
+
+  <li>Whenever possible in the parent environment,
+  the viewer must use information about physical device resolution
+  and expected viewing conditions in order to accurately
+  determine the initial scale 
+  in conformance with <a href="https://www.w3.org/TR/CSS2/syndata.html#length-units">the rules described in CSS 2.1</a>
+  ([<a href="refs.html#ref-css2">CSS2</a>], section 4.3.2).
+  In situations where this
+  information is impossible to determine, 
+  the viewer or the parent environment must make a reasonable approximation 
+  for common target devices.</li>
+
+  <li>All visual rendering must be accurate to within one
+  device pixel or point of the mathematically correct result
+  at the initial 1:1 zoom ratio. It is suggested that viewers
+  attempt to keep a high degree of accuracy when zooming.
+    <p class="note">
+    On lower-resolution display devices, 
+    support for anti-aliasing or other smoothing methods is highly recommended.
+    It is a requirement for <a>conforming high-quality SVG viewers</a>.
+    </p>
+  </li>
+
+  <li>If printing devices are supported, SVG content must be
+  printable at printer resolutions with the same graphics
+  features available as required for display (e.g., the
+  specified colors must be rendered on color printers).</li>
+
+  <li>On systems which support accurate sRGB
+  [<a href="refs.html#ref-srgb">SRGB</a>] color, all
+  sRGB color computations and all resulting color values must
+  be accurate to within one sRGB color component value, where
+  sRGB color component values range from 0 to 255.</li>
 
   <li>SVG implementations must correctly support
   <a href="http://www.ietf.org/rfc/rfc1952.txt">gzip-encoded</a>
@@ -827,41 +1034,6 @@ following processing modes defined in the SVG integration specification
   compression method that has been applied to the content, then
   the SVG viewer must not render the content and must treat the
   document as being <a href="implnote.html#ErrorProcessing">in error</a>.</li>
-
-  <li>The viewer must support base64 encoded content using the
-  <a href="http://www.ietf.org/rfc/rfc2397.txt">"data:" URL scheme</a>
-  [<a href="refs.html#ref-rfc2397">rfc2397</a>]
-  wherever URI referencing of whole documents (such as raster images,
-  SVG documents, fonts and color profiles) is permitted within
-  SVG content. (Note: fragments of SVG content which do not
-  constitute an entire SVG document are not available using the
-  "data:" URL scheme.)</li>
-
-  <li>
-    The viewer must support the following W3C Recommendations
-    with regard to SVG content:
-    <ul>
-      <li>complete support for the <a href="https://www.w3.org/TR/2008/REC-xml-20081126/">XML 1.0 specification</a>
-      [<a href="refs.html#ref-xml">xml</a>].</li>
-
-      <li>complete support for inclusion of non-SVG namespaces
-      within SVG content as defined in <a href="https://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a>
-      [<a href="refs.html#ref-xml-names">xml-names</a>].
-      (Note that data from non-SVG namespaces are included in
-      the DOM but are otherwise ignored.)</li>
-    </ul>
-  </li>
-
-  <li>All visual rendering must be accurate to within one
-  device pixel (px unit) to the mathematically correct result
-  at the initial 1:1 zoom ratio. It is suggested that viewers
-  attempt to keep a high degree of accuracy when zooming.</li>
-
-  <li>On systems which support accurate sRGB
-  [<a href="refs.html#ref-srgb">SRGB</a>] color, all
-  sRGB color computations and all resulting color values must
-  be accurate to within one sRGB color component value, where
-  sRGB color component values range from 0 to 255.</li>
 
   <li>The viewer must use at least single-precision floating point for intermediate calculations on any numerical operations for conversion of coordinates. However, in order to prevent the rounding error on coordinate transformation, at least double-precision floating point computation must be used on <a>CTM</a> generation processing. Such minimum typical computation way is expressed with following formulas.
 
@@ -1140,14 +1312,18 @@ Furthermore, when it has nested viewport coordinate sytstems, the <a href="types
   </li>
 </ul>
 
-<p>Although anti-aliasing support is not a strict requirement
-for a Conforming SVG Viewer, it is highly recommended for
-display devices. Lack of anti-aliasing support will generally
-result in poor results on display devices.</p>
-
-<p>A <a>Conforming SVG Viewer</a> that supports <a>processing modes</a> that
+<p>A <a>conforming SVG viewer</a> that supports <a>processing modes</a> that
 include <a>interaction</a> must support the following additional features:</p>
 <ul>
+
+  <li>For interactive user environments, facilities must exist
+  for zooming and panning of stand-alone SVG documents or SVG
+  document fragments embedded within parent XML documents.</li>
+
+  <li>In environments that have appropriate user interaction
+  facilities, the viewer must support the ability to activate
+  hyperlinks.</li>
+  
   <li>In Web browser environments, the viewer must have the
   ability to search and select text strings within SVG
   content.</li>
@@ -1155,9 +1331,16 @@ include <a>interaction</a> must support the following additional features:</p>
   <li>If display devices are supported, the viewer must have
   the ability to select and copy text from SVG content to the
   system clipboard.</li>
+  
+  <li>The viewer must meet all applicable Level A requirements of the 
+    <a href="https://www.w3.org/TR/UAAG20/"><cite>User Agent Accessibility Guidelines 2.0</cite></a>
+[<a href="refs.html#ref-uaag20">UAAG20</a>].
+    Level AA and level AAA features are encouraged,
+    but not required.
+  </li>
 </ul>
 
-<p>A <a>Conforming SVG Viewer</a> that supports <a>processing modes</a> that
+<p>A <a>conforming SVG viewer</a> that supports <a>processing modes</a> that
 include <a>script execution</a> must support the following additional features:</p>
 <ul>
   <li>The viewer must be a
@@ -1166,32 +1349,9 @@ include <a>script execution</a> must support the following additional features:<
   [<a href="refs.html#ref-webidl">WebIDL</a>]</li>
 </ul>
 
-<p>The <a href="http://www.w3.org/WAI/">Web Accessibility Initiative</a>
-is defining <a href="https://www.w3.org/TR/UAAG20/"><cite>User Agent Accessibility Guidelines 2.0</cite></a>
-[<a href="refs.html#ref-uaag20">UAAG20</a>]. Viewers are
-encouraged to conform to the Priority 1 accessibility
-guidelines defined in this document, and preferably also
-Priorities 2 and 3. Once the guidelines are completed, a future
-version of this specification is likely to require conformance
-to the Priority 1 guidelines in Conforming SVG Viewers.</p>
-
-<p>A <a>Conforming SVG Viewer</a> must be able to apply
-styling properties to SVG content using <a>presentation attributes</a>.</p>
-
-<p>If the user agent supports <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/"><cite>Cascading Style Sheets, level 2 revision 1</cite></a>
-[<a href="refs.html#ref-css2">CSS2</a>], a
-<a>Conforming SVG Viewer</a> must support CSS styling of SVG
-content and must support all features from
-CSS 2.1 that are described in this specification as applying to SVG (see
-<a href="styling.html">Styling</a>).
-The supported features from CSS 2.1 must be implemented in accordance with
-the <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/conform.html#conformance">conformance
-definitions from the CSS 2.1 specification</a>
-([<a href="refs.html#ref-css2">CSS2</a>], section 3.2).</p>
-
 <p>If the user agent includes an HTML or XHTML viewing
 capability or can apply CSS/XSL styling properties to XML
-documents, then a <a>Conforming SVG Viewer</a> must support
+documents, then a <a>conforming SVG viewer</a> must support
 resources of MIME type "image/svg+xml" wherever raster image
 external resources can be used, such as in the HTML or XHTML
 <span class="element-name">'img'</span> element and in CSS/XSL
@@ -1199,9 +1359,9 @@ properties that can refer to raster image resources (e.g.,
 <span class="property">'background-image'</span>).</p>
 
 <h3 id="ConformingHighQualitySVGViewers">Conforming High-Quality SVG Viewer</h3>
-<p>A higher order concept is that of a <a>Conforming High-Quality SVG Viewer</a>.</p>
-
-<p>A <a>Conforming High-Quality SVG Viewer</a> must 
+  
+<p>In order for a <a>conforming SVG viewer</a> to be considered
+a <dfn>conforming high-quality SVG viewer</dfn>, it must
 support the following additional features:</p>
 
 <ul>
@@ -1218,14 +1378,14 @@ support the following additional features:</p>
   ability to support colors defined using ICC profiles).</li>
 
   <li>Resampling of image data must conform to the requirements
-  for Conforming High-Quality SVG Viewers as specified in the
+  for conforming high-quality SVG viewers as specified in the
   description of property <a>'image-rendering'</a>.</li>
 
   <li>At least double-precision floating point computation on
   coordinate system transformation numerical calculations.</li>
 </ul>
 
-<p>A <a>Conforming High-Quality SVG Viewer</a> that supports <a>processing modes</a> that
+<p>A <a>conforming high-quality SVG viewer</a> that supports <a>processing modes</a> that
 include <a>script execution</a>, <a>declarative animation</a>, or <a>interaction</a>
 must support the following additional features:</p>
 <ul>
@@ -1238,7 +1398,7 @@ must support the following additional features:</p>
   the display are updated in response to redraw events).</li>
 </ul>
 
-<p>A <a>Conforming High-Quality SVG Viewer</a> that supports <a>processing modes</a>
+<p>A <a>conforming high-quality SVG viewer</a> that supports <a>processing modes</a>
 that include <a>interaction</a> must support the following additional features:</p>
 <ul>
   <li>Background downloading of images and fonts retrieved from
