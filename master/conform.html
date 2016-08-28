@@ -93,7 +93,8 @@
   from this document.</p>
   
   <p>This chapter also outlines specific conformance requirements
-    for different classes of software that use SVG.
+    for <a href="#DocumentConformanceClasses">different types of SVG content</a>,
+    and <a href="#SoftwareConformanceClasses">different classes of software</a> that use or create SVG.
   </p>
 
   <h2 id="processing-modes">Processing modes</h2>
@@ -692,36 +693,99 @@ a conforming XML-compatible SVG DOM subtree.</p>
 <ul>
   <li>it is a well-formed XML document,</li>
   <li>its root element is an <a>'svg'</a> element,</li>
-  <li>the SVG document fragment rooted at the document element is a <a>Conforming XML-Compatible SVG Markup Fragment</a>, and</li>
+  <li>the SVG document fragment rooted at the document element is a <a>conforming XML-Compatible SVG markup fragment</a>, and</li>
   <li>any other <a>SVG document fragments</a> within the document
     (such as those within a <a>'foreignObject'</a>)
-    form a <a>Conforming XML-Compatible SVG Markup Fragment</a>.
+    form a <a>conforming XML-Compatible SVG markup fragment</a>.
   </li>
 </ul>
 
 <h2 id="SoftwareConformanceClasses">Software Conformance Classes</h2>
   
+<p>For software, the requirements for conformance depend
+on the category of program:
+</p>
+<dl>
+  <dt id="TermSVGGenerator">SVG generators</dt>
+  <dd>Any software that creates or makes available SVG content,
+    either as markup or as a DOM
+    (as is the case with client-side JavaScript libraries).
+  </dd>
+  <dt id="TermSVGAuthoringTool">SVG authoring tools</dt>
+  <dd>Any software that provides an interface for human content creators
+    to manipulate graphics or code that will be used to generate SVG.
+    SVG authoring tools are implicitly also <a>SVG generators</a>.
+  </dd>
+  <dt id="TermSVGServer">SVG servers</dt>
+  <dd>Any network or file server that makes available SVG content
+    in response to requests from other software.
+    SVG servers are implicitly also <a>SVG generators</a>.
+  </dd>
+  <dt id="TermSVGInterpreter">SVG interpreters</dt>
+  <dd>Any software that parses or processes SVG documents or markup fragments.
+    An SVG interpreter is an <a>SVG user agent</a>
+    for the purpose of any sections of this specification that
+    relate to the parsing or processing steps undertaken by the interpreter.
+  </dd>
+  <dt id="TermSVGViewer">SVG viewers</dt>
+  <dd>Any software that creates a rendered graphical representation
+    after parsing or processing an SVG document or SVG markup fragment.
+    SVG viewers are implicitly also <a>SVG interpreters</a>.
+    An SVG viewer is always an <a>SVG user agent</a> for the purpose of this specification.
+  </dd>
+  <dt id="TermSVGUserAgent">SVG user agent</dt>
+  <dd>An SVG user agent is a <a>user agent</a> that is able to retrieve and
+  render SVG content.</dd>
+  <dt id="TermUserAgent">user agent</dt>
+  <dd>
+    <p>The general definition of a user agent is an application
+    that retrieves and renders Web content, including text,
+    graphics, sounds, video, images, and other content types. A
+    user agent may require additional user agents that handle
+    some types of content. For instance, a browser may run a
+    separate program or plug-in to render sound or video. User
+    agents include graphical desktop browsers, multimedia
+    players, text browsers, voice browsers, and assistive
+    technologies such as screen readers, screen magnifiers,
+    speech synthesizers, onscreen keyboards, and voice input
+    software.</p>
+
+    <p>In general terms,
+    a "user agent" may or may not have the ability to retrieve
+    and render SVG content;
+    however, unless the context requires an alternative interpretation,
+    all references to a "user agent" in this specification
+    are assumed to be references to an <a>SVG user agent</a> that
+    retrieves and renders SVG content.</p>
+  </dd>
+</dl>
+  
+<p>Many programs will fall under multiple software classes.
+For example, a graphical editor that can import and display SVG files,
+allow the user to modify them,
+and then export the modified graphic to file,
+is an SVG interpreter,
+an SVG viewer,
+an SVG authoring tool,
+and an SVG generator.
+</p>
+  
 <h3 id="ConformingSVGGenerators">Conforming SVG Generators</h3>
 
-<p>A <dfn>conforming SVG generator</dfn> is a program which
-  generates SVG content, such that it:</p>
+<p>A <dfn>conforming SVG generator</dfn> is a 
+  <a>SVG generator</a> that:</p>
 
 <ul>
   <li>always creates 
   a <a>conforming SVG DOM subtree</a>,
   a <a>conforming SVG markup fragment</a>,
-  or a <a>conforming SVG stand-alone file</a>.</li>
+  or a <a>conforming SVG stand-alone file</a>;</li>
 
-  <li>does not create documents containing non-conforming SVG document fragments.</li>
+  <li>does not create documents containing non-conforming SVG document fragments;</li>
+  
+  <li>meets all normative requirements in this specification for SVG authors,
+    as well as specific normative requirements for SVG generators.</li>
 </ul>
-
-<p>Additionally, if the SVG generator is
-an <a href="https://www.w3.org/TR/ATAG10/#def-Authoring-Tool">authoring tool</a> 
-as defined in the <a href="https://www.w3.org/TR/ATAG10"><cite>Authoring Tool Accessibility
-Guidelines 1.0</cite></a> [<a href="refs.html#ref-atag10">atag10</a>],
-it must conform to all relevant Level A requirements from that document.
-(Level AA and Level AAA requirements are
-encouraged but not required for conformance.)</p>
 
 <p>SVG generators are strongly encouraged to
 use a Unicode character encoding by default,
@@ -735,15 +799,28 @@ and to follow the other guidelines of the
 are encouraged to follow the guidelines in the section
 <a href="implnote.html#NumericPrecisionImplementationNotes">Notes on generating high-precision geometry</a>.
 </p>
+  
+<h3 id="ConformingSVGAuthoringTools">Conforming SVG Authoring Tools</h3>
+
+<p>
+An <a href="https://www.w3.org/TR/ATAG20/#def-Authoring-Tool">authoring tool</a>, 
+as defined in the <a href="https://www.w3.org/TR/ATAG20"><cite>Authoring Tool Accessibility
+Guidelines 2.0</cite></a>,
+is a <dfn>conforming SVG authoring tool</dfn>
+if it is a <a>conforming SVG generator</a>
+and it also conforms to all relevant Level A requirements from that document
+[<a href="refs.html#ref-atag20">atag20</a>].
+Level AA and Level AAA requirements are
+encouraged but not required for conformance.</p>
 
 <h3 id="ConformingSVGServers">Conforming SVG Servers</h3>
 
-<p>A <dfn>Conforming SVG Server</dfn> must meet all the requirements of a <a>conforming SVG
-generator</a>. In addition, Conforming SVG Servers using HTTP or other protocols
+<p>A <dfn>conforming SVG server</dfn> must meet all the requirements of a <a>conforming SVG
+generator</a>. In addition, conforming SVG servers using HTTP or other protocols
 that use Internet Media types must serve SVG stand-alone files with the media
 type <code>"image/svg+xml"</code>.</p>
 
-<p>Also, if the SVG file is compressed with gzip or deflate, Conforming SVG
+<p>Also, if the SVG file is compressed with gzip or deflate, conforming SVG
 Servers must indicate this with the appropriate header, according to what the
 protocol supports.  Specifically, for content compressed by the server
 immediately prior to transfer, the server must use the "Transfer-Encoding:&nbsp;gzip"
@@ -761,32 +838,40 @@ defined in HTTP/1.1 <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.h
 
 <h3 id="ConformingSVGInterpreters">Conforming SVG Interpreters</h3>
 
-<p>An SVG Interpreter is a program which can parse and process
-SVG document fragments. Examples of SVG Interpreters are
-server-side transcoding tools (e.g., a tool which converts SVG
+<p class="note">An <a>SVG interpreter</a> is a program which can parse and process
+SVG document fragments. Examples of SVG interpreters are
+server-side transcoding tools or optimizers (e.g., a tool which converts SVG
 content into modified SVG content) or analysis tools (e.g., a
-tool which extracts the text content from SVG content).
+tool which extracts the text content from SVG content,
+or a validity checker).
+A transcoder from SVG into another graphics
+representation, such as an SVG-to-raster transcoder, represents
+a viewer, and thus viewer conformance criteria also apply.
+</p>
 
-An SVG viewer is also an SVG interpreter, in that it
-can parse and process SVG document fragments, where processing consists of
-rendering the SVG content to the target medium.</p>
-
-<p>A <dfn>Conforming SVG Interpreter</dfn> must be able to parse and process all
-XML constructs defined <a href="https://www.w3.org/TR/2008/REC-xml-20081126/">XML 1.0</a>
+<p>A <dfn>conforming SVG interpreter</dfn> must be able to parse and process all
+XML constructs defined in <a href="https://www.w3.org/TR/2008/REC-xml-20081126/">XML 1.0</a>
 [<a href="refs.html#ref-xml">xml</a>] and
 <a href="https://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a>
 [<a href="refs.html#ref-xml-names">xml-names</a>].</p>
 
-<p>A <a>Conforming SVG Interpreter</a> must parse any 
+<p>A <a>conforming SVG interpreter</a> must parse any 
 <a>conforming XML-compatible SVG markup fragment</a> 
 in a manner that correctly respects the DOM structure 
 (elements, attributes, text content, comments, etc.) of the content.
 The interpreter is not required to interpret the semantics of all
 features correctly.</p>
 
-<p>Note: A transcoder from SVG into another graphics
-representation, such as an SVG-to-raster transcoder, represents
-a viewer, and thus viewer conformance criteria apply.</p>
+<p>If the SVG interpreter supports non-XML syntaxes (such as HTML),
+it must correctly parse any <a>conforming SVG markup fragment</a> in that syntax.
+</p>
+  
+<p>If the SVG interpreter runs scripts or fetches external resource files
+as a consequence of processing the SVG content,
+it must follow the restrictions described for <a>user agents</a> in
+<a href="#referencing-modes">Processing modes for SVG sub-resource documents</a>
+and in the <a href="linking.html">Linking chapter</a>.
+</p>
 
 <h3 id="ConformingSVGViewers">Conforming SVG Viewers</h3>
 
@@ -813,15 +898,20 @@ a viewer, and thus viewer conformance criteria apply.</p>
   </table>
 </div>
 
-<p>An SVG viewer is a program which can parse and process an
+<p class="note">
+An <a>SVG viewer</a> is a program which can parse and process an
 SVG document fragment and render the contents of the document
 onto some sort of graphical output medium such as a display, printer, or engraver.
-Thus, an <em>SVG Viewer</em> is also an <em>SVG Interpreter</em>,
-but with the additional requirement of correct rendering.</p>
+Thus, an <a>SVG viewer</a> is also an <a>SVG interpreter</a>
+(in that it can parse and process SVG document fragments),
+but with the additional requirement of correct rendering.
+</p>
 
 <p>
-A <dfn>Conforming SVG Viewer</dfn> must be able to support at least one of the
-following processing modes defined in this chapter:</p>
+A <dfn>conforming SVG viewer</dfn>
+must be a <a>conforming SVG interpreter</a>, and
+must be able to support rendering output in at least one of the
+processing modes defined in this chapter:</p>
 <ul>
 <li><a>dynamic interactive mode</a></li>
 <li><a>animated mode</a></li>
@@ -829,46 +919,97 @@ following processing modes defined in this chapter:</p>
 <li><a>static mode</a></li>
 <li><a>secure static mode</a></li>
 </ul>
+  
+<p>A conforming SVG viewer must meet all normative requirements
+indicated in this specification for <a>user agents</a>,
+for all features supported by its processing mode(s).
+</p>
 
-<p>Specific criteria that must apply to a <a>Conforming SVG Viewer</a>:</p>
+<p>Specific criteria that must apply to all <a>conforming SVG viewers</a>:</p>
 
 <ul>
-  <li>The program must also be a <a>Conforming SVG Interpreter</a>.</li>
 
-  <li>For interactive user environments, facilities must exist
-  for zooming and panning of stand-alone SVG documents or SVG
-  document fragments embedded within parent XML documents.</li>
+<li>The viewer must be able to parse all CSS syntax features
+defined in <a href="https://www.w3.org/TR/CSS2/"><cite>Cascading Style Sheets, level 2 revision 1</cite></a>
+[<a href="refs.html#ref-css2">CSS2</a>], 
+and must support CSS styling of SVG content including 
+all <a href="styling.html#RequiredProperties">required properties</a>
+and <a href="styling.html#RequiredCSSFeatures">required features</a>
+listed in the 
+<a href="styling.html">Styling</a> chapter.
+The viewer may support other CSS language features,
+and any other properties that are defined by the corresponding specification to apply to SVG elements.
+The supported features from CSS 2.1 must be implemented in accordance with
+the <a href="https://www.w3.org/TR/CSS2/conform.html#conformance">conformance
+definitions from the CSS 2.1 specification</a>
+  ([<a href="refs.html#ref-css2">CSS2</a>], section 3.2).</li>
+  
+  <li>The viewer must be able to apply
+  styling properties to SVG content using <a>presentation attributes</a>.</li>
 
-  <li>In environments that have appropriate user interaction
-  facilities, the viewer must support the ability to activate
-  hyperlinks.</li>
-
-  <li>If printing devices are supported, SVG content must be
-  printable at printer resolutions with the same graphics
-  features available as required for display (e.g., the
-  specified colors must be rendered on color printers).</li>
-
-  <li>On systems where this information is available, the
-  parent environment must provide the viewer with information
-  about physical device resolution. In situations where this
-  information is impossible to determine, the parent
-  environment shall pass a reasonable value for device
-  resolution which tends to approximate most common target
-  devices.</li>
-
-  <li>The viewer must support JPEG and PNG
-  image formats [<a href="refs.html#ref-jpeg">JPEG</a>] [<a href="refs.html#ref-png">PNG</a>].</li>
-
-  <li>Resampling of image data must be consistent with the
-  specification of property <a>'image-rendering'</a>.</li>
-
-  <li class="ready-for-wider-review">
+  <li>
   Areas of an image of SVG content may have opacity less than 100%.
   The viewer must at least support Simple Alpha Compositing
   of the image of the SVG content onto the target canvas, as described in the
   Compositing and Blending Specification
   [<a href="refs.html#ref-compositing-1">compositing-1</a>].
   </li>
+
+  <li>The viewer must support <a>data URL references</a>
+    containing base64-encoded or URL-encoded content,
+    in conformance with
+  <a href="http://www.ietf.org/rfc/rfc2397.txt"> the "data:" URL scheme</a>
+  [<a href="refs.html#ref-rfc2397">rfc2397</a>],
+  wherever a URI reference to another document is permitted within
+  SVG content.
+  When the encoded document is of MIME type <code>image/svg+xml</code>,
+  it must be a well-formed, complete SVG document in order to be processed.
+  </li>
+
+  <li>The viewer must support JPEG and PNG
+  image formats [<a href="refs.html#ref-jpeg">JPEG</a>] [<a href="refs.html#ref-png">PNG</a>].
+    <p class="note">
+      Even if the viewer only supports secure processing modes,
+      it is still required to support these image formats,
+      in order to process <a>data URL references</a>.
+    </p>
+  </li>
+
+  <li>Resampling of image data must be consistent with the
+  specification of property <a>'image-rendering'</a>.</li>
+
+  <li>Whenever possible in the parent environment,
+  the viewer must use information about physical device resolution
+  and expected viewing conditions in order to accurately
+  determine the initial scale 
+  in conformance with <a href="https://www.w3.org/TR/CSS2/syndata.html#length-units">the rules described in CSS 2.1</a>
+  ([<a href="refs.html#ref-css2">CSS2</a>], section 4.3.2).
+  In situations where this
+  information is impossible to determine, 
+  the viewer or the parent environment must make a reasonable approximation 
+  for common target devices.</li>
+
+  <li>All visual rendering must be accurate to within one
+  device pixel or point of the mathematically correct result
+  at the initial 1:1 zoom ratio. It is suggested that viewers
+  attempt to keep a high degree of accuracy when zooming.
+    <p class="note">
+    On lower-resolution display devices, 
+    support for anti-aliasing or other smoothing methods is highly recommended.
+    It is a requirement for <a>conforming high-quality SVG viewers</a>.
+    </p>
+  </li>
+
+  <li>If printing devices are supported, SVG content must be
+  printable at printer resolutions with the same graphics
+  features available as required for display (e.g., the
+  specified colors must be rendered on color printers).</li>
+
+  <li>On systems which support accurate sRGB
+  [<a href="refs.html#ref-srgb">SRGB</a>] color, all
+  sRGB color computations and all resulting color values must
+  be accurate to within one sRGB color component value, where
+  sRGB color component values range from 0 to 255.</li>
 
   <li>SVG implementations must correctly support
   <a href="http://www.ietf.org/rfc/rfc1952.txt">gzip-encoded</a>
@@ -894,44 +1035,7 @@ following processing modes defined in this chapter:</p>
   the SVG viewer must not render the content and must treat the
   document as being <a href="implnote.html#ErrorProcessing">in error</a>.</li>
 
-  <li>The viewer must support <a>data URL references</a>
-    containing base64-encoded or URL-encoded content,
-    in conformance with
-  <a href="http://www.ietf.org/rfc/rfc2397.txt"> the "data:" URL scheme</a>
-  [<a href="refs.html#ref-rfc2397">rfc2397</a>].
-  wherever a URI reference to another document is permitted within
-  SVG content.
-  When the encoded document is of MIME type <code>image/svg+xml</code>,
-  it must be a valid, complete SVG document in order to be processed.
-  </li>
-
-  <li>
-    The viewer must support the following W3C Recommendations
-    with regard to SVG content:
-    <ul>
-      <li>complete support for the <a href="https://www.w3.org/TR/2008/REC-xml-20081126/">XML 1.0 specification</a>
-      [<a href="refs.html#ref-xml">xml</a>].</li>
-
-      <li>complete support for inclusion of non-SVG namespaces
-      within SVG content as defined in <a href="https://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a>
-      [<a href="refs.html#ref-xml-names">xml-names</a>].
-      (Note that data from non-SVG namespaces are included in
-      the DOM but are otherwise ignored.)</li>
-    </ul>
-  </li>
-
-  <li>All visual rendering must be accurate to within one
-  device pixel to the mathematically correct result
-  at the initial 1:1 zoom ratio. It is suggested that viewers
-  attempt to keep a high degree of accuracy when zooming.</li>
-
-  <li>On systems which support accurate sRGB
-  [<a href="refs.html#ref-srgb">SRGB</a>] color, all
-  sRGB color computations and all resulting color values must
-  be accurate to within one sRGB color component value, where
-  sRGB color component values range from 0 to 255.</li>
-
-  <li class="ready-for-wider-review">The viewer must use at least single-precision floating point for intermediate calculations on any numerical operations for conversion of coordinates. However, in order to prevent the rounding error on coordinate transformation, at least double-precision floating point computation must be used on <a>CTM</a> generation processing. Such minimum typical computation way is expressed with following formulas.
+  <li>The viewer must use at least single-precision floating point for intermediate calculations on any numerical operations for conversion of coordinates. However, in order to prevent the rounding error on coordinate transformation, at least double-precision floating point computation must be used on <a>CTM</a> generation processing. Such minimum typical computation way is expressed with following formulas.
 
 <div role="math" aria-describedby="ctm-matrix">
   <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -1208,15 +1312,18 @@ Furthermore, when it has nested viewport coordinate sytstems, the <a href="types
   </li>
 </ul>
 
-<p>Although anti-aliasing support is not a strict requirement
-for a Conforming SVG Viewer, it is highly recommended for
-display devices. Lack of anti-aliasing support will generally
-result in poor results on display devices.</p>
-
-<div class='ready-for-wg-review'>
-<p>A <a>Conforming SVG Viewer</a> that supports <a>processing modes</a> that
+<p>A <a>conforming SVG viewer</a> that supports <a>processing modes</a> that
 include <a>interaction</a> must support the following additional features:</p>
 <ul>
+
+  <li>For interactive user environments, facilities must exist
+  for zooming and panning of stand-alone SVG documents or SVG
+  document fragments embedded within parent XML documents.</li>
+
+  <li>In environments that have appropriate user interaction
+  facilities, the viewer must support the ability to activate
+  hyperlinks.</li>
+  
   <li>In Web browser environments, the viewer must have the
   ability to search and select text strings within SVG
   content.</li>
@@ -1224,9 +1331,16 @@ include <a>interaction</a> must support the following additional features:</p>
   <li>If display devices are supported, the viewer must have
   the ability to select and copy text from SVG content to the
   system clipboard.</li>
+  
+  <li>The viewer must meet all applicable Level A requirements of the 
+    <a href="https://www.w3.org/TR/UAAG20/"><cite>User Agent Accessibility Guidelines 2.0</cite></a>
+[<a href="refs.html#ref-uaag20">UAAG20</a>].
+    Level AA and level AAA features are encouraged,
+    but not required.
+  </li>
 </ul>
 
-<p>A <a>Conforming SVG Viewer</a> that supports <a>processing modes</a> that
+<p>A <a>conforming SVG viewer</a> that supports <a>processing modes</a> that
 include <a>script execution</a> must support the following additional features:</p>
 <ul>
   <li>The viewer must be a
@@ -1234,34 +1348,10 @@ include <a>script execution</a> must support the following additional features:<
   of all the IDL fragments in this specification.
   [<a href="refs.html#ref-webidl">WebIDL</a>]</li>
 </ul>
-</div>
-
-<p>The <a href="http://www.w3.org/WAI/">Web Accessibility Initiative</a>
-is defining <a href="https://www.w3.org/TR/UAAG20/"><cite>User Agent Accessibility Guidelines 2.0</cite></a>
-[<a href="refs.html#ref-uaag20">UAAG20</a>]. Viewers are
-encouraged to conform to the Priority 1 accessibility
-guidelines defined in this document, and preferably also
-Priorities 2 and 3. Once the guidelines are completed, a future
-version of this specification is likely to require conformance
-to the Priority 1 guidelines in Conforming SVG Viewers.</p>
-
-<p>A <a>Conforming SVG Viewer</a> must be able to apply
-styling properties to SVG content using <a>presentation attributes</a>.</p>
-
-<p>If the user agent supports <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/"><cite>Cascading Style Sheets, level 2 revision 1</cite></a>
-[<a href="refs.html#ref-css2">CSS2</a>], a
-<a>Conforming SVG Viewer</a> must support CSS styling of SVG
-content and must support all features from
-CSS 2.1 that are described in this specification as applying to SVG (see
-<a href="styling.html">Styling</a>).
-The supported features from CSS 2.1 must be implemented in accordance with
-the <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/conform.html#conformance">conformance
-definitions from the CSS 2.1 specification</a>
-([<a href="refs.html#ref-css2">CSS2</a>], section 3.2).</p>
 
 <p>If the user agent includes an HTML or XHTML viewing
 capability or can apply CSS/XSL styling properties to XML
-documents, then a <a>Conforming SVG Viewer</a> must support
+documents, then a <a>conforming SVG viewer</a> must support
 resources of MIME type "image/svg+xml" wherever raster image
 external resources can be used, such as in the HTML or XHTML
 <span class="element-name">'img'</span> element and in CSS/XSL
@@ -1269,9 +1359,9 @@ properties that can refer to raster image resources (e.g.,
 <span class="property">'background-image'</span>).</p>
 
 <h3 id="ConformingHighQualitySVGViewers">Conforming High-Quality SVG Viewer</h3>
-<p>A higher order concept is that of a <a>Conforming High-Quality SVG Viewer</a>.</p>
-
-<p>A <a>Conforming High-Quality SVG Viewer</a> must 
+  
+<p>In order for a <a>conforming SVG viewer</a> to be considered
+a <dfn>conforming high-quality SVG viewer</dfn>, it must
 support the following additional features:</p>
 
 <ul>
@@ -1288,15 +1378,14 @@ support the following additional features:</p>
   ability to support colors defined using ICC profiles).</li>
 
   <li>Resampling of image data must conform to the requirements
-  for Conforming High-Quality SVG Viewers as specified in the
+  for conforming high-quality SVG viewers as specified in the
   description of property <a>'image-rendering'</a>.</li>
 
   <li>At least double-precision floating point computation on
   coordinate system transformation numerical calculations.</li>
 </ul>
 
-<div class='ready-for-wg-review'>
-<p>A <a>Conforming High-Quality SVG Viewer</a> that supports <a>processing modes</a> that
+<p>A <a>conforming high-quality SVG viewer</a> that supports <a>processing modes</a> that
 include <a>script execution</a>, <a>declarative animation</a>, or <a>interaction</a>
 must support the following additional features:</p>
 <ul>
@@ -1309,14 +1398,13 @@ must support the following additional features:</p>
   the display are updated in response to redraw events).</li>
 </ul>
 
-<p>A <a>Conforming High-Quality SVG Viewer</a> that supports <a>processing modes</a>
+<p>A <a>conforming high-quality SVG viewer</a> that supports <a>processing modes</a>
 that include <a>interaction</a> must support the following additional features:</p>
 <ul>
   <li>Background downloading of images and fonts retrieved from
   a Web server, with updating of the display once the downloads
   are complete.</li>
 </ul>
-</div>
 
 </body>
 </html>
