@@ -293,7 +293,7 @@ function buildSinglePage() {
     utils.forEachNode(clonedPageBody, function(n) {
       if (n.nodeType == n.ELEMENT_NODE) {
         ['id', 'aria-describedby'].forEach(function(attr) {
-          if (n.hasAttribute(attr)) {
+          if (n.hasAttribute(attr) && !n.hasAttribute('data-never-rename')) {
             n.setAttribute(attr, page + '-' + n.getAttribute(attr));
           }
         });
