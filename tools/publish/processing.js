@@ -135,15 +135,14 @@ exports.addHeaderFooter = function(conf, page, doc) {
   var previous = conf.pageOrder[index - 1];
   var next = conf.pageOrder[index + 1];
 
-  var markup = '<div class="header {{side}}"><span class="namedate">{{shortTitle}} – {{publicationDate}}</span> <a href="{{index}}.html">Top</a>';
+  var markup = '<div class="header {{side}}">';
 
-  if (conf.toc)            markup += ' ⋅ <a href="{{toc}}">Contents</a>';
-  if (previous)            markup += ' ⋅ <a href="{{previous}}.html">Previous</a>';
-  if (next)                markup += ' ⋅ <a href="{{next}}.html">Next</a>';
-  if (conf.elementIndex)   markup += ' ⋅ <a href="{{elementIndex}}">Elements</a>';
-  if (conf.attributeIndex) markup += ' ⋅ <a href="{{attributeIndex}}">Attributes</a>';
-  if (conf.propertyIndex)  markup += ' ⋅ <a href="{{propertyIndex}}">Properties</a>';
-
+  if (conf.toc)            markup += '<a href="Overview.html">Overview</a>';
+  if (previous)            markup += ' . <a href="{{previous}}.html">Previous</a>';
+  if (next)                markup += ' . <a href="{{next}}.html">Next</a>';
+  if (conf.elementIndex)   markup += ' . <a href="{{elementIndex}}">Elements</a>';
+  if (conf.attributeIndex) markup += ' . <a href="{{attributeIndex}}">Attributes</a>';
+  if (conf.propertyIndex)  markup += ' . <a href="{{propertyIndex}}">Properties</a>';
   markup += "</div>";
 
   function header(side) {
@@ -159,11 +158,21 @@ exports.addHeaderFooter = function(conf, page, doc) {
                                  side: side });
   }
 
-  if (conf.pages[page].type != 'index') {
-    doc.body.insertBefore(header("top"), doc.body.firstChild);
+  function getChildNodeById(parent, id) {
+    let n = parent.firstChild;
+    while (n != null) {
+      if (n.nodeType === n.ELEMENT_NODE && n.getAttribute('id') === id)
+          return n;
+      n = n.nextSibling;
+    }
   }
 
-  doc.body.appendChild(header("bottom"));
+  if (conf.pages[page].type != 'index') {
+    let toc = getChildNodeById(doc.body, 'toc');
+    if (toc) {
+        toc.insertBefore(header("top"), toc.firstChild);
+    }
+  }
 }
 
 
