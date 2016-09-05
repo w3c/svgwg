@@ -279,7 +279,8 @@ function buildSinglePage() {
       // Place before any other style sheets because we must not override
       // the W3C TR style sheets.
       if (n.nodeName == 'style') {
-        head.insertBefore(n.cloneNode(true), head.firstChild);
+        let firstStyleSheet = head.getElementsByTagName('link')[0];
+        head.insertBefore(n.cloneNode(true), firstStyleSheet);
       }
       // Note if Mathjax was used anywhere.
       if (n.nodeName == 'script' &&
