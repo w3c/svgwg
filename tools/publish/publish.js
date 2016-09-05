@@ -276,8 +276,10 @@ function buildSinglePage() {
 
     utils.forEachNode(pageHead, function(n) {
       // Copy a <style> in any chapter's <head> into the single page <head>.
+      // Place before any other style sheets because we must not override
+      // the W3C TR style sheets.
       if (n.nodeName == 'style') {
-        head.appendChild(n.cloneNode(true));
+        head.insertBefore(n.cloneNode(true), head.firstChild);
       }
       // Note if Mathjax was used anywhere.
       if (n.nodeName == 'script' &&
