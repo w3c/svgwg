@@ -324,16 +324,22 @@ function buildSinglePage() {
                                    pagebody: clonedPageBody }));
   }
 
-  // Remove all references to expanders.js.
+  // Remove all references to expanders.js and fixup.js.
   utils.forEachNode(doc, function(n) {
-    if (n.nodeName == 'script' &&
-        n.getAttribute('src') == 'style/expanders.js') {
+    if (
+      n.nodeName == 'script' &&
+      (
+        n.getAttribute('src') == 'style/expanders.js' || 
+        n.getAttribute('src') == '//www.w3.org/scripts/TR/2016/fixup.js'
+      )
+    ) {
       n.parentNode.removeChild(n);
     }
   });
 
-  // Add one reference to expanders.js at the end of the document.
+  // Add one reference at the end of the document.
   body.appendChild(utils.parse('<script src="style/expanders.js"></script>'));
+  body.appendChild(utils.parse('<script src="//www.w3.org/scripts/TR/2016/fixup.js"></script>'));
 
   // Add reference to load-mathjax.js if we found one in any chapter.
   if (foundMathjax) {
