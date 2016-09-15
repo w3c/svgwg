@@ -3,8 +3,8 @@
   <head lang="en">
     <title>SVG Authoring Guide</title>
     <meta charset="utf-8">
-    <!-- <script src="http://www.w3.org/Tools/respec/respec-w3c-common" async class="remove"></script> -->
-    <script src="_ignore/respec-w3c-common.js" async class="remove"></script>
+    <script src="http://www.w3.org/Tools/respec/respec-w3c-common" async class="remove"></script>
+    <!-- <script src="_ignore/respec-w3c-common.js" async class="remove"></script> -->
     <script class="remove">
       var respecConfig = {
           specStatus:           "ED",
@@ -580,6 +580,30 @@
       </section>
 
       <section>
+        <h3>HTML in SVG</h3>
+        <p>Sometimes, you may wish to include HTML in your SVG, such as structured text content like lists or form controls. The SVG <code>foreignObject</code> element lets you embed chunks of HTML directly into your SVG. You can include a whole HTML document, or just individual snippets of HTML. The most reliable content in a <code>foreignObject</code> element is a single <a href="https://www.w3.org/TR/html/sections.html#the-body-element">HTML <code>body</code> element</a> containing other HTML content, or one or more <a href="https://www.w3.org/TR/html/dom.html#kinds-of-content-flow-content">HTML flow content elements</a>.</p>
+
+        <p>Because of SVG's XML origins, the HTML content should be well-formed XHTML, and you must use the HTML namespace declaration, <code>xmlns="http://www.w3.org/1999/xhtml"</code>, in each HTML parent element in the <code>foreignObject</code> element. If you don't use the namespace declaration, the HTML content won't be rendered in current browsers.</p>
+
+        <p>For instance, in the following example, <a href="examples/foreignObject-html-bad.svg" target="_blank">foreignObject-html-bad.svg</a>, there is a list with 3 list items contained in a parent HTML <code>ul</code> element that has a namespace declaration that will render, and a paragraph that doesn't have namespace declaration that won't render:</p>
+
+        <pre class="example highlight" data-include="examples/foreignObject-html-bad.svg" data-include-format="text"></pre>
+        <object data="examples/foreignObject-html-bad.svg" width="300" height="330"> </object>
+
+        <p>The following example, <a href="examples/foreignObject-html.svg" target="_blank">foreignObject-html.svg</a>, has two parent HTML elements in the <code>foreignObject</code> element, <code>ul</code> and <code>select</code>, and both have namespace declarations, so they'll both render correctly:</p>
+
+        <pre class="example highlight" data-include="examples/foreignObject-html.svg" data-include-format="text"></pre>
+        <object data="examples/foreignObject-html.svg" width="300" height="330"> </object>
+
+
+        <p class="note"><span class="accessibility-tip">Accessibility Tip:</span> Because modern screenreaders were designed to interface with HTML, using HTML in your SVG can often be a very effective way to make your structured content or interactive controls accessible.</p>
+
+        <p class="note"><span class="authoring-tool-tip">Authoring Tool Tip:</span> Most SVG authoring tools, and some other SVG graphics tools, don't support HTML, so they won't render any HTML in your SVG. Some may not accept even an SVG file containing HTML as valid. Some authoring tools may accept the file, but not include the HTML content when saving the file. Be sure to test your SVG tools for HTML support before relying on them.</p>
+
+        <p>As defined in the SVG specification, the <code>foreignObject</code> element is not limited to rendering HTML, but should be able to contain any arbitrary XML, such as MathML. In practice, modern browser support for any other content than HTML in the <code>foreignObject</code> element is unreliable.</p>
+      </section>
+
+      <section>
         <h3>ARIA: Semantic Markup Attributes</h3>
         <p>SVG is a semantically-neutral markup language, so you can add semantics by using <abbr title="Accessible Rich Internet Applications"></abbr>ARIA markup attributes. 
         HTML is a moderately semantic markup language, with elements that convey specific meaning about document structure (e.g. <code>h2</code>, <code>section</code>), 
@@ -677,6 +701,39 @@
 
         <p class="note">TODO: detail embedding data in dataviz, navigation, colors, using right dataviz for data</p>
       </section>
+    </section>
+
+
+
+    <section>
+      <h2>New Features in SVG 2</h2> 
+
+      <div class="note">
+        <p>There are several new features in SVG 2 that could be included in this authoring guide, based on the <a href="https://github.com/w3c/svgwg/wiki/SVG-2-new-features">rough outline of new features</a>.</p>
+
+        <h3>Pros</h3>
+        <p>Adding new SVG 2 features to this authoring guide could serve multiple purposes:</p>
+
+        <ul>
+          <li>make authors aware of new capabilities, to ease authoring and increase usage of those features</li>
+          <li>promote early adoption for helping generate tests, filing bug reports in browsers, and showing grassroots support for features to get native implementations in browsers and authoring tools</li>
+          <li>demonstrate the proper use of the new features to establish best practices</li>
+          <li>help support efforts at polyfilling new features prior to native browser support</li>
+          <li>call out new features that are <i>at-risk</i>, which may be dropped or deferred if not supported by browsers</li>
+        </ul>
+
+        <h3>Cons</h3>
+        <p>However, there are also reasons not to do this:</p>
+
+        <ul>
+          <li>writing it up is effort that could be spent on writing tests and other tasks that more directly move SVG 2 to Recommendation status</li>
+          <li>some features won't work until there's browser support (you can't polyfill everything), so it's could be confusing for authors to mix best practices with more experimental features</li>
+          <li>it might make this document seem dated in a few years (if it's not updated)</li>
+          <li>such write-ups might be better done on other sites, dedicated to developers</li>
+        </ul>
+
+        <p class="issue">Ask if there is significant interest from the developer community in adding explanations and examples of new SVG 2 features to this authoring guide.</p>
+      </div>   
     </section>
 
 
