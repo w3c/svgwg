@@ -118,6 +118,12 @@ paint servers.</p>
       <th>Owner:</th>
       <td>Tav (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3500">ACTION-3500</a>)</td>
     </tr>
+    <tr>
+      <th>Deferred:</th>
+      <td>This was dropped for SVG 2, but will be added later in sync with
+        <a href="https://drafts.fxtf.org/paint/">CSS Fill and Stroke Level 3</a>
+      </td>
+    </tr>
   </table>
 </div>
 
@@ -132,23 +138,20 @@ Four types of paints within these paint layers are supported:
 and <a href="pservers.html#Hatches">hatches</a>.</p>
 
 <p>A <a>&lt;paint&gt;</a> value is defined as follows:</p>
+<p class="definition">
+<dfn id="DataTypePaint">&lt;paint&gt;</dfn>
+= none
+| child
+| child(<a>&lt;integer&gt;</a>)
+| <a>&lt;color&gt;</a>
+| <a>&lt;url&gt;</a> [none | currentColor | <a>&lt;color&gt;</a>]?
+| context-fill | context-stroke
+</p>
 
-<p class="definition"><dfn id="DataTypePaint">&lt;paint&gt;</dfn> = [ [ <a>&lt;paint-layer&gt;</a> , ]* <a>&lt;final-paint-layer&gt;</a> ] | context-fill | context-stroke</p>
-<p class="definition"><dfn id="DataTypePaintLayer">&lt;paint-layer&gt;</dfn> = <a>&lt;paint-source&gt;</a></p>
-<p class="definition"><dfn id="DataTypeFinalPaintLayer">&lt;final-paint-layer&gt;</dfn> = <a>&lt;paint-source&gt;</a> || <a>&lt;color&gt;</a></p>
-<p class="definition"><dfn id="DataTypePaintSource">&lt;paint-source&gt;</dfn> = none | child | child(<a>&lt;integer&gt;</a>) | <a>&lt;url&gt;</a></p>
-
-<p class="note">The ability to apply more than one paint layer to an element is new in SVG 2.</p>
-
-<p>A <a>&lt;paint&gt;</a> value can either be a comma-separated list of paint layers,
-or <a href="#context-paint">one of the context keywords</a>, which reference the paint value of <a>'fill'</a> or <a>'stroke'</a> from a <a>context element</a>.
-Each paint layer can take one of the following values:</p>
-
+<p>With the possible values:</p>
 <dl>
-  <dt><a>&lt;url&gt;</a></dt>
-  <dd>A URL reference to a <dfn id="TermPaintServerElement">paint server element</dfn>,
-  which is an element that defines a <a href="pservers.html">paint server</a>:
-  <edit:elementcategory name='paint server'/>.</dd>
+  <dt>none</dt>
+  <dd>No paint is applied in this layer.</dd>
 
   <dt>child</dt>
   <dd>A reference to the last child <a>paint server element</a> of the element being
@@ -158,31 +161,21 @@ Each paint layer can take one of the following values:</p>
   <dd>A reference to the <var>n</var>th child <a>paint server element</a> of the
   element being painted.</dd>
 
-  <dt>none</dt>
-  <dd>No paint is applied in this layer.</dd>
+  <dt><a>&lt;url&gt;</a> [none | <a>&lt;color&gt;</a>]?</dt>
+  <dd>A URL reference to a <dfn id="TermPaintServerElement">paint server element</dfn>,
+  which is an element that defines a <a href="pservers.html">paint server</a>:
+  <edit:elementcategory name='paint server'/>, optionally followed by a fall-back
+  value that is used if the paint server reference cannot be resolved.</dd>
+
+  <dt><a>&lt;color&gt;</a></dt>
+  <dd>A solid color paint.</dd>
+
+  <dt>context-fill</dt>
+  <dd>Use the paint value of <a>'fill'</a> from a <a>context element</a>.</dd>
+
+  <dt>context-stroke</dt>
+  <dd>Use the paint value of <a>'stroke'</a> from a <a>context element</a>.</dd>
 </dl>
-
-<p>The list of paint layers describes the sequence of paint servers and an optional
-color to render within the fill or stroke shape.  These paint layers are rendered, one after
-another, in reverse order – that is, the right-most paint layer (the <a>&lt;final-paint-layer&gt;</a>
-value) is rendered first, then the next paint layer to the left is rendered, and so on
-proceeding left.  Multiple paint layers can be used to build up a composite paint made
-up of more than one semi-transparent paint.</p>
-
-<p class="note">The reverse rendering order used here follows the rendering order of
-the CSS background properties.</p>
-
-<div class="example">
-  <pre><![CDATA[
-<rect width="100" height="100" fill="url(#MyHatch1), url(#MyHatch2), powderblue">
-  ]]></pre>
-  <div class="figure">
-    <img
-       alt="An example of applying three paints to a rectangle."
-       src="images/painting/multiple_paints.svg"/>
-    <p class="caption">The rightmost rectangle is filled by stacking the paints shown in the other rectangles.</p>
-  </div>
-</div>
 
 <p>The <span class='prop-value'>child</span> keyword value references the last
 child <a>paint server element</a> and the <span class='prop-value'>child(<var>n</var>)</span>
@@ -204,22 +197,19 @@ property value to be invalid.</p>
   </div>
 </div>
 
-<p>A <a>&lt;final-paint-layer&gt;</a> allows a paint server reference, a <a>&lt;color&gt;</a>
-value, or both to be given.  When both are given, the <a>&lt;color&gt;</a> value is a
-fallback color to use if the paint server reference in the layer is invalid
-(due to pointing to an element that does not exist or which is not a valid paint server).
-When only a paint server reference is given, it is used as the paint just as in any other
-<a>&lt;paint-layer&gt;</a>.  When only a <a>&lt;color&gt;</a> is given, the color is
-used as the paint unconditionally.</p>
+<p>A <a>&lt;paint&gt;</a> allows a paint server reference, to be optionally followed 
+by a <a>&lt;color&gt;</a> or the keyword <span class='prop-value'>none</span>.
+When this optional value is given, the <a>&lt;color&gt;</a> value or the value
+<span class='prop-value'>none</span> is a fallback value to use if the paint
+server reference in the layer is invalid (due to pointing to an element that
+does not exist or which is not a valid paint server).</p>
 
 <p class="note">Note that this is slightly different from CSS background syntax, where
 a background image and color specified in the final layer of a <a>'background'</a>
-value will result in both the image and color being rendered.  The fallback nature
-of the color in SVG <a>&lt;paint&gt;</a> values is needed for compatibility with
-SVG 1.1, which supported only a single paint server reference plus a fallback color.</p>
+value will result in both the image and color being rendered.</p>
 
-<p>If a paint server reference in a <a>&lt;paint-layer&gt;</a> is invalid, then
-no paint is rendered for that layer.</p>
+<p>If a paint server reference in a <a>&lt;paint&gt;</a> is invalid, and no
+fall-back value is given, no paint is rendered for that layer.</p>
 
 <p class="annotation">This is changed from SVG 1.1 behavior where the document
 is in error if a paint server reference is invalid and there is no fallback
@@ -227,17 +217,18 @@ color specified.</p>
 
 <div class="example">
   <pre><![CDATA[
-<rect width="100" height="100" fill="url(#MyHatch1), url(#MyHatch2) powderblue">
+<rect width="100" height="100" fill="url(#MyHatch) powderblue">
   ]]></pre>
   <div class="figure">
     <img
        alt="An example with a fallback solid paint fill."
-       src="images/painting/multiple_paints2.svg"/>
-    <p class="caption">The left rectangle shows the expected fill if both MyHatch1  and MyHatch2 are defined. The right rectangle shows the expected fill if MyHatch1 is defined but MyHatch2 is missing.</p>
+       src="images/painting/fallback_paint.svg"/>
+    <p class="caption">The left rectangle shows the expected fill if MyHatch is defined.
+    The right rectangle shows the expected fill if MyHatch is missing.</p>
   </div>
 </div>
 
-<p>For a <a>&lt;color&gt;</a> value in the final paint layer, all color syntaxes
+<p>For any <a>&lt;color&gt;</a> value, all color syntaxes
 defined in <a href="http://www.w3.org/TR/css3-color/#colorunits">CSS Color Module Level 3</a>
 must be supported, including <span class='prop-value'>rgb()</span>,
 <span class='prop-value'>rgba()</span>,
@@ -2932,7 +2923,7 @@ the following:</p>
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td><a>graphics elements</a> and <a>text content elements</a></td>
+    <td><a>shapes</a> and <a>text content elements</a></td>
   </tr>
   <tr>
     <th>Inherited:</th>
