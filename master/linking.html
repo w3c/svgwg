@@ -73,9 +73,22 @@ on the scripting context when a <a>'script'</a> element's
   &lt;relativeURL&gt; and a identifier of the fragment in that resource. See <a href="struct.html#Head">References and the
   <span class="element-name">'defs'</span> element</a>. URL reference with fragment identifiers are commonly used to reference <a href="pservers.html">paint servers</a>.</dd>
   
+  <dt id="TermExternalReference">external file reference</dt>
+  <dd>A <a>URL reference</a> or <a>URL reference with fragment identifier</a>
+    which refers to a resource that is not part of the current document.
+  </dd>
+  
   <dt id="TermSameDocumentURL">same-document URL reference</dt>
   <dd>A <a>URL reference with fragment identifier</a>
     where the non-fragment part of the URL refers to the current document.
+  </dd>
+  
+  <dt id="TermDataURL">data URL</dt>
+  <dd>A <a>URL reference</a> to an embedded document
+    specified using the <a href="http://www.ietf.org/rfc/rfc2397.txt">"data" URL scheme</a>
+  [<a href="refs.html#ref-rfc2397">rfc2397</a>].
+    Data URL references are neither 
+    <a>external file references</a> nor <a>same-document URL references</a>.
   </dd>
 
   <dt id="TermCircularReference">circular reference</dt>
@@ -193,7 +206,7 @@ is the ID of the referenced element.</p>
 <span class="attr-value">#&lt;elementID&gt;</span> and
 <span class="attr-value">#xpointer(id(&lt;elementID&gt;))</span>)
 are formulated in syntaxes compatible with "XML Pointer Language (XPointer)"
-[<a href="http://www.w3.org/TR/xptr">XPTR</a>]. These two formulations of URL
+[<a href="https://www.w3.org/TR/xptr">XPTR</a>]. These two formulations of URL
 references are the only XPointer formulations that are required in SVG 1.1 user
 agents.)</p>
 
@@ -212,7 +225,7 @@ attribute must be a URL.</p>
 a value is an <a>URL reference</a>, this specification follows the lead
 of the <a href="http://www.ietf.org/rfc/rfc3986.txt">URL Specification</a>
 in this matter and imposes no such conformance testing
-requirement on SVG authoring tools.
+requirement on <a>SVG authoring tools</a>.
 An invalid URL does not make an SVG document non-conforming.
 SVG user agents are only required to process URLs when needed,
 as specified in <a href="#processingURL">Processing of URL references</a>.
@@ -301,7 +314,7 @@ been deprecated.</p>
     starting resource.</p>
     <p>The <span class="attr-name">'title'</span> attribute, if used, must be
     in the XLink namespace.
-    Refer to the <a href="http://www.w3.org/TR/xlink/">XML Linking Language
+    Refer to the <a href="https://www.w3.org/TR/xlink/">XML Linking Language
     (XLink)</a> [<a href="refs.html#ref-xlink">xlink</a>].</p>
   </dd>
 </dl>
@@ -362,8 +375,8 @@ XLink attributes. For example:</p>
   until processing either results in an <a>invalid reference</a>
   or in the identification of the target resource.
   Unresolved references in the non-presentation attributes of
-  <a>structurally external elements</a> prevent the <a href="interact.html#LoadEvent">load event</a>from firing.
-  User agents may place time limits on the resolution of references
+  <a>structurally external elements</a> prevent the <a href="interact.html#LoadEvent">load event</a>
+  from firing. User agents may place time limits on the resolution of references
   that are not <a>same-document URL references</a>,
   after which the reference is treated as a network error
   (and therefore as an <a>invalid reference</a>).
@@ -402,7 +415,7 @@ The absolute URL should be generated using one of the following methods:
   The <a href="https://www.w3.org/TR/xmlbase/#syntax"><span class="attr-name">'xml:base'</span></a> attribute 
   will only have an effect in XML documents;
   this includes SVG documents and XHTML documents but not HTML documents that are not XML.
-  In contrast, a <a class="html" href="http://www.w3.org/TR/html/document-metadata.html#the-base-element"><code>base</code></a> element 
+  In contrast, a <a class="html" href="https://www.w3.org/TR/html/document-metadata.html#the-base-element"><code>base</code></a> element 
   affects relative URLs in any SVG or HTML document,
   by altering the <a href="https://www.w3.org/TR/html51/infrastructure.html#document-base-url">document base URL</a>.
 </p>
@@ -481,17 +494,18 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
     <p>
       If the URL reference is from 
       the <span class="attr-name">href</span> attribute on <a href="https://svgwg.org/specs/animations/#TargetElement">SVG animation elements</a>,
-      only <a>same-document URL</a> references are allowed.
+      only <a>same-document URL</a> references are allowed
+      [<a href="refs.html#ref-svg-animation">svg-animation</a>].
       A URL referring to a different document is invalid 
       and the document must not be fetched.
     </p>
   </li>
   <li>
     <p>
-      If the document containing the reference uses a
-      <a href="https://svgwg.org/specs/integration/#processing-modes">secure</a> SVG processing mode,
-      external file resources are disallowed.
-      Unless the absolute URL uses the <a href="https://tools.ietf.org/html/rfc2397"><code>data</code></a> protocol,
+      If the document containing the reference is being processed in
+      <a>secure static mode</a> or <a>secure animated mode</a>,
+      <a>external file references</a> are disallowed.
+      Unless the reference is a <a>data URL</a>,
       the user agent must treat the reference as if there was a network error,
       making this an <a>invalid reference</a>.
     </p>
@@ -499,14 +513,14 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
   <li>
     <p>
       If any other security restrictions 
-      on the browsing context or user agent prevent external file references,
+      on the browsing context or user agent prevent accessing the external file,
       then the user agent must treat the reference as if there was a network error.
     </p>
   </li>
 </ul>
   
 <p>
-  When fetching external resources,
+  When fetching external resources from the Internet,
   user agents must use a <a href="https://www.w3.org/TR/html51/infrastructure.html#creating-a-potential-cors-request">potentially CORS-enabled request</a>
   as defined in HTML [<a href="refs.html#ref-html51">HTML</a>]
   with the <em>corsAttributeState</em> as follows:
@@ -526,10 +540,10 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
     For all other references,
     the "no-cors" state.
   </li>
-</ul><a class="html" href="http://www.w3.org/TR/html/document-metadata.html#the-base-element"><code>base</code></a>
+</ul><a class="html" href="https://www.w3.org/TR/html/document-metadata.html#the-base-element"><code>base</code></a>
 <p>
   The request's <em>origin</em> is computed using the 
-  <a href="https://www.w3.org/TR/html51/browsers.html#concept-cross-origin" >same rules as HTML</a>,
+  <a href="https://www.w3.org/TR/html/browsers.html#concept-cross-origin" >same rules as HTML</a>,
   with an SVG <a>'script'</a> element treated like an HTML <code>script</code> element,
   and an SVG <a>'image'</a> element treated like an HTML <code>img</code> element.
   The <em>default origin behaviour</em> must be set to <em>taint</em>.
@@ -644,9 +658,6 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
   
 <ul>
   <li>the <a>'a'</a> element can reference any local or non-local resource</li>
-  <li>the <a>'animate'</a> element (see <a href="https://svgwg.org/specs/animations/#TargetElement">Identifying the target element for an animation</a> for reference rules)</li>
-  <li>the <a>'animateMotion'</a> element (see <a href="https://svgwg.org/specs/animations/#TargetElement">Identifying the target element for an animation</a> for reference rules)</li>
-  <li>the <a>'animateTransform'</a> element (see <a href="https://svgwg.org/specs/animations/#TargetElement">Identifying the target element for an animation</a> for reference rules)</li>
   <li>the <a>'cursor element'</a> element must reference a document that can be processed as an image</li>
   <li>the <a>'hatch'</a> element must reference another <a>'hatch'</a> element</li>
   <li>the <a>'image'</a> element must reference a document that can be processed as an image</li>
@@ -656,7 +667,6 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
   <li>the <a>'pattern'</a> element must reference another <a>'pattern'</a> element</li>
   <li>the <a>'radialGradient'</a> element must reference a <a>'linearGradient'</a> or another <a>'radialGradient'</a> element</li>
   <li>the <a>'script'</a> element must reference an external document that provides the script content</li>
-  <li>the <a>'set'</a> element (see <a href="https://svgwg.org/specs/animations/#TargetElement">Identifying the target element for an animation</a> for reference rules)</li>
   <li>the <a>'textPath'</a> element must reference an element type
     that implements the <a>SVGGeometryElement</a> interface</li>
   <li>the <a>'use'</a> element must reference either an SVG-namespaced element 
@@ -703,7 +713,7 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
 as <em>hyperlinks</em> or <em>Web links</em>). 
 An <a>'a'</a> element forms a link if it has a <a>'href'</a> or <a>'xlink:href'</a> attribute; without these attributes the <a>'a'</a> element is an inactive placeholder for a link.</p>
 
-<p class="note">SVG 1.1 defined links in terms of the XLink specification ([<a href="http://www.w3.org/TR/2001/REC-xlink-20010627/">XLink</a>]), 
+<p class="note">SVG 1.1 defined links in terms of the XLink specification ([<a href="https://www.w3.org/TR/2001/REC-xlink-20010627/">XLink</a>]), 
 using attributes defined in the XLink namespace. 
 SVG 2 uses an alternative set of attributes in the default namespace that are consistent with HTML links, and <a href="#XLinkRefAttrs">deprecates the XLink attributes</a>.</p>
   
@@ -818,13 +828,13 @@ or frame to be replaced by the W3C home page.</p>
       (the same as <span class="attr-value">'_blank'</span>, except that
       it now has a name).  The name must be a valid XML Name [XML11], and should not start
       with an underscore (U+005F LOW LINE character), to meet the requirements of a
-      <a href="http://www.w3.org/TR/html51/browsers.html#valid-browsing-context-name">valid
+      <a href="https://www.w3.org/TR/html51/browsers.html#valid-browsing-context-name">valid
       browsing context name</a> from HTML.</dd>
     </dl>
     <p> The normative definitions for browsing contexts and security
         restrictions on navigation actions between browsing contexts
-        is HTML 5 [<a href="refs.html#ref-html51">HTML</a>], specifically
-        <a href="http://www.w3.org/TR/html51/browsers.html">the chapter on
+        is HTML [<a href="refs.html#ref-html51">HTML</a>], specifically
+        <a href="https://www.w3.org/TR/html51/browsers.html">the chapter on
             loading web pages</a>.
     </p>
     <!--
@@ -834,7 +844,7 @@ or frame to be replaced by the W3C home page.</p>
       <dd>A new un-named window or tab is requested for the display of the
       linked content. If this fails, the result is the same as <span class="attr-value">_top</span></dd>
 
-        However, under HTML 5 a request for a new tab may fail
+        However, under HTML a request for a new tab may fail
         because of sandboxing/no-popups, in which case the link is simply not followed.
         The new language reflects this restriction while still supporting the old
         behavior in single-window SVG viewers (if such exist).
@@ -868,12 +878,6 @@ or frame to be replaced by the W3C home page.</p>
       </tr>
       <tr>
         <td><dfn id="AElementRelAttribute">rel</dfn></td>
-        <td>space-separated keyword tokens <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#set-of-space-separated-tokens" class="syntax">[HTML]</a></td>
-        <td>(none)</td>
-        <td>yes</td>
-      </tr>
-      <tr>
-        <td><dfn id="AElementRevAttribute">rev</dfn></td>
         <td>space-separated keyword tokens <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#set-of-space-separated-tokens" class="syntax">[HTML]</a></td>
         <td>(none)</td>
         <td>yes</td>
@@ -967,10 +971,10 @@ locate resources of MIME media type "image/svg+xml".</p>
 <p>An SVG fragment identifier is defined as follows:</p>
 
 <pre class='grammar'>
-SVGFragmentIdentifier ::= BareName *( "&amp;" <a href="http://www.w3.org/TR/media-frags/#timesegment">timesegment</a> ) |
-                          SVGViewSpec *( "&amp;" <a href="http://www.w3.org/TR/media-frags/#timesegment">timesegment</a> ) |
-                          <a href="http://www.w3.org/TR/media-frags/#spacesegment">spacesegment</a> *( "&amp;" timesegment ) |
-                          <a href="http://www.w3.org/TR/media-frags/#timesegment">timesegment</a> *( "&amp;" spacesegment )
+SVGFragmentIdentifier ::= BareName *( "&amp;" <a href="https://www.w3.org/TR/media-frags/#timesegment">timesegment</a> ) |
+                          SVGViewSpec *( "&amp;" <a href="https://www.w3.org/TR/media-frags/#timesegment">timesegment</a> ) |
+                          <a href="https://www.w3.org/TR/media-frags/#spacesegment">spacesegment</a> *( "&amp;" timesegment ) |
+                          <a href="https://www.w3.org/TR/media-frags/#timesegment">timesegment</a> *( "&amp;" spacesegment )
 
 BareName ::= XML_Name
 SVGViewSpec ::= 'svgView(' SVGViewAttributes ')'
@@ -1013,7 +1017,7 @@ zoomAndPanSpec ::= 'zoomAndPan(' ZoomAndPanParams ')'
 </ul>
 
 <p>SVG view box parameters are applied in order, as defined in
-<a href="http://www.w3.org/TR/css3-transforms/">CSS Transforms</a> specification (e.g. SVG view is transformed as defined in <em>ViewBoxParams</em>,
+<a href="https://www.w3.org/TR/css3-transforms/">CSS Transforms</a> specification (e.g. SVG view is transformed as defined in <em>ViewBoxParams</em>,
 then as defined in <em>TransformParams</em>).</p>
 
 <p>Spaces are allowed in fragment specifications. Commas
@@ -1024,7 +1028,7 @@ and semicolons are used to separate attributes (e.g.,
 
 <div class="note">
   <p>Fragment identifiers may be url-escaped according to the rules defined in
-    <a href="http://www.w3.org/TR/cssom/#common-serializing-idioms">CSS Object Model (CSSOM)</a> specification.
+    <a href="https://www.w3.org/TR/cssom/#common-serializing-idioms">CSS Object Model (CSSOM)</a> specification.
     For example semicolons can be escaped as %3B to allow animating a (semi-colon separated) list of URLs because otherwise the semicolon would
     be interpreted as a list separator.</p>
 </div>
@@ -1048,7 +1052,7 @@ as follows:</p>
   specification attributes (i.e., <a>'viewBox'</a>, etc.) on the
   <a>outermost svg element</a>.</li>
 
-  <li>If the SVG fragment identifier addresses a <a href="http://www.w3.org/TR/media-frags/#spacesegment">space segment</a>
+  <li>If the SVG fragment identifier addresses a <a href="https://www.w3.org/TR/media-frags/#spacesegment">space segment</a>
   (e.g., <span class="attr-value">MyDrawing.svg#xywh=0,0,100,100</span>),then the initial
   view into the SVG document is established using the view specification attributes
   on the <a>outermost svg element</a> where the 'viewBox' is overriden by the
@@ -1058,9 +1062,9 @@ as follows:</p>
   <li>Media fragments can be specified as "pixel:" (default) and "percent:". In the latter case the resulting 'viewBox' transformation is
   calculated against referenced SVG resolved size (width and height). When the host document cannot resolve the width and height of the SVG document,
   the used values for width and height should be calculated accorting to CSS rules for
-  <a href="http://www.w3.org/TR/CSS21/visudet.html#inline-replaced-width">calculating width and ratio for inline replaced elements</a>.</li>
+  <a href="https://www.w3.org/TR/CSS21/visudet.html#inline-replaced-width">calculating width and ratio for inline replaced elements</a>.</li>
 
-  <li>If the SVG fragment identifier addresses a <a href="http://www.w3.org/TR/media-frags/#timesegment">time segment</a>
+  <li>If the SVG fragment identifier addresses a <a href="https://www.w3.org/TR/media-frags/#timesegment">time segment</a>
   (e.g., <span class="attr-value">MyDrawing.svg#t=10</span>),then the initial
   view into the SVG document is established as if no fragment identifier was
   provided. The rendering of the SVG Document shall be as if the setCurrentTime
@@ -1130,7 +1134,6 @@ as follows:</p>
   [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__download">download</a>;
   [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__rel">rel</a>;
   [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__rel">relList</a>;
-  [SameObject] readonly attribute <a>DOMTokenList</a> <a href="linking.html#__svg__SVGAElement__rev">rev</a>;
   [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__hreflang">hreflang</a>;
   [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__type">type</a>;
 };
@@ -1141,7 +1144,6 @@ as follows:</p>
 <p>The <b id="__svg__SVGAElement__target">target</b>,
   <b id="__svg__SVGAElement__download">download</b>,
   <b id="__svg__SVGAElement__rel">rel</b>,
-  <b id="__svg__SVGAElement__rev">rev</b>,
   <b id="__svg__SVGAElement__hreflang">hreflang</b>,
   <b id="__svg__SVGAElement__type">type</b>,
   IDL attributes

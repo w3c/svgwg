@@ -24,9 +24,6 @@
 
 <h3 id="NewDocumentOverview">Overview</h3>
 
-<p class="issue" data-issue="66">The content model and set of allowed attributes, as listed
-in definitions.xml, needs to be reviewed for consistency across all elements.</p>
-
 <p>An <a>SVG document fragment</a> consists of any number of SVG elements
 contained within an <a>'svg'</a> element.</p>
 
@@ -75,7 +72,7 @@ SVG viewport</a>.)</p>
 <h3 id="Namespace">Namespace</h3>
 
 <p>When SVG is parsed as a XML, for compliance with the
-<a href="http://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a> Recommendation
+<a href="https://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a> Recommendation
 [<a href="refs.html#ref-xml-names">xml-names</a>], an SVG namespace
 declaration must be provided so that all SVG elements are identified
 as belonging to the SVG namespace.</p>
@@ -127,7 +124,7 @@ explicit namespace prefix must be assigned to the elements:</p>
 
 <p>Namespace prefixes can be specified on ancestor elements (illustrated
 in the <a href="#EmbeddedSVGExample">above example</a>). For more
-information, refer to the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a> Recommendation
+information, refer to the <a href="https://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a> Recommendation
 [<a href="refs.html#ref-xml-names">xml-names</a>].</p>
 
 <h3 id="Definitions">Definitions</h3>
@@ -145,29 +142,6 @@ information, refer to the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060
   Specifically, the following elements are structurally external elements when
   they have an <span class="attr-name">'href'</span> attribute:
   <edit:elementcategory name='structurally external'/>.</dd>
-
-  <dt id="TermSVGUserAgent">SVG user agent</dt>
-  <dd>An SVG user agent is a <a>user agent</a> that is able to retrieve and
-  render SVG content.</dd>
-
-  <dt id="TermUserAgent">user agent</dt>
-  <dd>
-    <p>The general definition of a user agent is an application
-    that retrieves and renders Web content, including text,
-    graphics, sounds, video, images, and other content types. A
-    user agent may require additional user agents that handle
-    some types of content. For instance, a browser may run a
-    separate program or plug-in to render sound or video. User
-    agents include graphical desktop browsers, multimedia
-    players, text browsers, voice browsers, and assistive
-    technologies such as screen readers, screen magnifiers,
-    speech synthesizers, onscreen keyboards, and voice input
-    software.</p>
-
-    <p>A "user agent" may or may not have the ability to retrieve
-    and render SVG content; however, an "SVG user agent"
-    retrieves and renders SVG content.</p>
-  </dd>
 
   <dt id="TermCurrentSVGDocumentFragment">current SVG document fragment</dt>
   <dd>The document sub-tree which starts with the outermost
@@ -187,9 +161,8 @@ information, refer to the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060
   An SVG document fragment can consist of a stand-alone SVG document,
   or a fragment of a parent document enclosed by an <a>'svg'</a>
   element.
-  When an <a>'svg'</a> element is a descendant of another <a>'svg'</a>
-  element, only the <a>outermost svg element</a> is the root of an SVG
-  document fragment.
+  Howevere, an <a>'svg'</a> element that is a direct child of another SVG-namespaced element
+  is not the root of an SVG document fragment.
   </dd>
 
   <dt id="TermSVGElements"> SVG elements</dt>
@@ -451,238 +424,6 @@ referenced by other elements; thus, the value of the <a>'display'</a>
 property on the <a>'defs'</a> element does not
 prevent those elements from being referenced by other elements.</p>
 
-<h2 id="DescriptionAndTitleElements">The <span class='element-name'>'desc'</span>
-and <span class='element-name'>'title'</span> elements</h2>
-
-<h3 id='DescriptionDefinitions'>Definition</h3>
-<dl class='definitions'  data-dfn-type="dfn" data-export="">
-  <dt id="TermDescriptiveElement"><dfn>descriptive element</dfn></dt>
-  <dd>An element which provides supplementary descriptive information about
-  its parent.  Specifically, the following elements are descriptive elements:
-  <edit:elementcategory name='descriptive'/>.</dd>
-</dl>
-
-<p class="note">Multilingual descriptive text selection, based on the <a>'lang'</a> attribute, was added to allow internationalization
-of the <a>'desc'</a> and <a>'title element'</a> elements.</p>
-
-<p class="annotation">New in SVG 2. Adding 'lang' resolved at Rigi Kaltbad face-to-face.
-Removed text that limited number of 'desc' and 'title' elements. Status: Done.</p>
-
-<div class="ready-for-wg-review">
-<p>Any <a>container element</a> or <a>graphics element</a> in an SVG document
-can have zero or more <a>'desc'</a> and/or <a>'title'</a> elements as children,
-whose content is text. <a>'desc'</a> and <a>'title'</a> elements are
-not visually rendered as part of the graphics.
-The <a>'display'</a> value for the <a>'title'</a> and <a>'desc'</a> elements
-must always be set to <span class="prop-value">none</span>
-by the <a>user agent style sheet</a>,
-and this declaration must have importance over any other CSS rule or presentation attribute.
-</p>
-
-<p>Multiple sibling <a>'desc'</a> or <a>'title'</a> elements must have
-different languages, 
-as defined using a <a>'lang'</a> attribute (or <code>xml:lang</code> attribute) on the descriptive element or an ancestor. 
-The user agent must select the element of each type whose language best
-matches language preferences set by the user. 
-A descriptive element with an empty-string language tag 
-(indicating no language, for example a text alternative consisting of emoji symbols) 
-is a lowest-priority match for any user, ranked below all user-specified language preferences.
-If multiple equally valid matches exist, the first match should be used.
-If no match exists for either 'title' or 'desc', the first element of that type must be selected.</p>
-  
-<div class="example">
-  <p>The following example shows alternative language titles on a re-used star icon,
-    inline in an HTML document.  
-    The example assumes that the HTML document as a whole has a correctly-declared language of <code>en</code> (English without a specified country code).
-  </p>
-  <pre>
-&lt;svg&gt;
-  &lt;use href="#star"&gt;
-    &lt;title&gt;Favourite&lt;/title&gt;
-    &lt;title lang="en-us"&gt;Favorite&lt;/title&gt;
-    &lt;title lang="nl"&gt;Favoriet&lt;/title&gt;
-    &lt;title lang=""&gt;★&lt;/title&gt;
-  &lt;/use&gt;
-&lt;/svg&gt;
-  </pre>
-  <p>
-    The first <code>title</code> element inherits the language of the document (<code>en</code>); the others have explicitly-declared languages for each element.
-    If the user's preferred language (out of those provided) is American English, the icon title is the American spelling "Favorite". 
-    If the user's preferred language is Dutch, the icon title is "Favoriet". 
-    If the user's preference list includes generic English ranked higher than Dutch, the title is "Favourite" with British spelling.
-    If the user does not understand either Dutch or English, the title will be the star symbol character—which is not ideal (most screen readers will read it as a localized version of "black star"), but better than no text alternative at all.
-  </p>
-  <p class="note">
-    Authors should be aware that SVG 1.1-supporting user agents 
-    that have not yet implemented multi-lingual descriptive text
-    will normally select the first element of each type, regardless of user preferences.
-    SVG 1.1 user agents may also fail to recognize a <code>title</code> element that is not the first child of its parent,
-    or a <code>desc</code> element that has previous siblings that are not other descriptive elements.
-  </p>
-</div>
-
-<p class="issue" data-issue="67">The use of more than one <a>'title'</a> or <a>'desc'</a> element to
-provide localised information is at risk, with no known implementations.</p>
-
-<p>User agents must make the text content of selected 'title' and 'desc' elements available to platform accessibility APIs as part of the name and description computation for the parent element, as defined in the <a href="http://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings [SVG-AAM]</cite></a> specification.</p>
-  
-<p>Inclusion of any 'title' or 'desc' elements as a direct child of a <a>rendered element</a> indicates that the rendered element is of semantic importance in the graphic.  
-Authors should not, and authoring tools must not, include empty 'title' or 'desc' elements with no text content or whitespace-only text content, 
-as this will result in a nameless object being presented to assistive technology users.
-</p>
-  
-<p>
-If an individual graphic element has no meaning on its own, 
-alternative text should instead be provided for the nearest container element that describes a meaningful object.
-Authors should use grouping (<a>'g'</a>) elements to structure their drawing elements into meaningful objects, and name those groups with <a>'title'</a>.
-Conversely, if a container object is used simply to apply styles or layout, 
-and neither defines an object nor provides meaningful grouping structure,
-it does not need alternative text.</p>
-  
-<p>
-  Descriptive text elements whose parent is <a>not rendered</a> may be used by authors or authoring tools as reference information; authors are warned that this data is not normally available to end users viewing the graphic through assistive technologies.  Nonetheless, a <a>non-rendered element</a> may be referenced as part of the accessible name or description of a rendered element (as defined in <a href="http://www.w3.org/TR/svg-aam-1.0/">SVG-AAM</a>), and the recursive computation will use descriptive child elements of the referenced element.
-</p>
-
-<div id='TitleElement'>
-<edit:elementsummary name='title'/>
-</div>
-
-<p>The <a>'title'</a> child element represents a short text alternative for the
-element.</p>
-
-<p>On a link, this could be the title or a description of the target resource; on an
-image or drawing object, it could be a short description of the
-graphic; on interactive content, it could be a label for, or instructions for, use
-of the element; and so forth.</p>
-
-<p>Authors should not provide redundant information in a <a>'title'</a> element
-if there is also a visible label for the drawing element (e.g., using a <a>'text'</a> element).
-Instead, the visual label should be associated with the drawing element 
-using an <a>'aria-labelledby'</a> attribute.</p>
-
-<p>Interactive user agents should make the plain text content of <a>'title'</a> elements available in response to user interaction, in a manner consistent with platform conventions; 
-existing user agents commonly render <a>'title'</a> elements as
-a tooltip on hovering the parent element.</p>
-  
-<p>Authors should provide a <a>'title'</a> child element to the root svg
-element within a stand-alone SVG document. Since users often consult documents
-out of context, authors should provide context-rich titles. Thus, instead of a
-title such as "Introduction", which doesn't provide much contextual background,
-authors should supply a title such as "Introduction to Medieval Bee-Keeping"
-instead. For reasons of accessibility, user agents should always make the
-content of the ‘title’ child element to the root svg element available to
-users. 
-However, this is typically done through other means than the tooltips used for nested SVG and graphics elements, e.g., by displaying in a browser tab.</p>
-
-<div id='DescElement'>
-<edit:elementsummary name='desc'/>
-</div>
-
-<p>The <a>'desc'</a> element represents more detailed textual
-information for the element such as a description. This is typically exposed to assistive
-technologies to provide more detailed information, such as a description of the visual appearance of a graphic or help to explain the functionality of a complex widget.  It is not typically available to other users, so should not be used for essential instructions.</p>
-
-
-<p>
-Authors may associate detailed information, including visible text, with part of the graphic
-using <a>'aria-describedby'</a> attribute 
-(on the described element or a parent container),
-with the value being an ID reference to one or more SVG or HTML elements containing the description. 
-The <a>'aria-describedby'</a> attribute takes precedence
-over the child <a>'desc'</a> when providing a description.
-If an element has both visible description and a child <a>'desc'</a> element providing supplementary information, 
-authors should explicitly include the <a>'id'</a> of the element itself in its own <a>'aria-describedby'</a> list, in order to concatenate the two descriptions together.
-</p>
-  
-<!--
-<p>The following is an example. In typical operation, the SVG user agent would
-not render the <a>'desc'</a> and <a>'title'</a> elements but would render the
-remaining contents of the <a>'g'</a> element.</p>
-
-<pre><![CDATA[
-<?xml version="1.0" standalone="no"?>
-<svg xmlns="http://www.w3.org/2000/svg"
-     viewBox="0 0 400 300">
-  <g>
-    <title>Company sales by region</title>
-    <title lang="fr">Chiffre d'affaires par région</title>
-    <desc>Bar chart which shows company sales by region.</desc>
-    <desc lang="fr">Graphique illustrant les ventes par région.</desc>
-    <line x1="30" y1="10" x2="380" y2="270"/>
-  </g>
-</svg>
-]]></pre>
--->
-<p>Description and title elements may contain marked-up text
-from other namespaces.
-However, authors should not rely on such markup to provide meaning to alternative text; 
-only the plain text content is currently required to be exposed to assistive technologies.</p>
-
-
-</div> <!--  class="ready-for-wg-review" -->
-
-
-<h2 id="MetadataElement">The <span class="element-name">'metadata'</span> element</h2>
-
-<p>Metadata which is included with SVG content should be
-specified within <a>'metadata'</a>
-elements. The contents of the <a>'metadata'</a> should be elements from
-other XML namespaces, with these elements from these namespaces
-expressed in a manner conforming with the <a href="http://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a> Recommendation
-[<a href="refs.html#ref-xml-names">xml-names</a>].</p>
-
-<p class="annotation">SVG 2 removes the recommendation to structure metadata
-elements in any particular way. </p>
-
-<edit:elementsummary name='metadata'/>
-  
-<p>Metadata content is not directly rendered;
-the <a>'display'</a> value for the <a>'metadata'</a> element
-must always be set to <span class="prop-value">none</span>
-by the <a>user agent style sheet</a>,
-and this declaration must have importance over any other CSS rule or presentation attribute.
-</p>
-
-<p>Here is an example of how metadata can be included in an SVG
-document. The example uses the Dublin Core version 1.1 schema.
-(Other XML-compatible metadata languages, including ones not
-based on RDF, can be used also.)</p>
-
-<pre><![CDATA[
-<?xml version="1.0" standalone="yes"?>
-<svg width="4in" height="3in"
-    xmlns = 'http://www.w3.org/2000/svg'>
-    <desc xmlns:myfoo="http://example.org/myfoo">
-      <myfoo:title>This is a financial report</myfoo:title>
-      <myfoo:descr>The global description uses markup from the
-        <myfoo:emph>myfoo</myfoo:emph> namespace.</myfoo:descr>
-      <myfoo:scene><myfoo:what>widget $growth</myfoo:what>
-      <myfoo:contains>$three $graph-bar</myfoo:contains>
-        <myfoo:when>1998 $through 2000</myfoo:when> </myfoo:scene>
-   </desc>
-    <metadata>
-      <rdf:RDF
-           xmlns:rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-           xmlns:rdfs = "http://www.w3.org/2000/01/rdf-schema#"
-           xmlns:dc = "http://purl.org/dc/elements/1.1/" >
-        <rdf:Description about="http://example.org/myfoo"
-             dc:title="MyFoo Financial Report"
-             dc:description="$three $bar $thousands $dollars $from 1998 $through 2000"
-             dc:publisher="Example Organization"
-             dc:date="2000-04-11"
-             dc:format="image/svg+xml"
-             dc:language="en" >
-          <dc:creator>
-            <rdf:Bag>
-              <rdf:li>Irving Bird</rdf:li>
-              <rdf:li>Mary Lambert</rdf:li>
-            </rdf:Bag>
-          </dc:creator>
-        </rdf:Description>
-      </rdf:RDF>
-    </metadata>
-</svg>
-]]></pre>
 
 <div class="ready-for-wg-review">
 <h2 id="SymbolElement">The <span class='element-name'>'symbol'</span> element</h2>
@@ -760,7 +501,7 @@ directly.</p>
       refX/refY on marker/symbol. Resolved at
       <a href="http://www.w3.org/2014/08/26-svg-minutes.html#item07">London
       F2F</a>. Values inspired by
-      <a href="http://www.w3.org/TR/css3-background/#the-background-position">'background-position'</a>.
+      <a href="https://www.w3.org/TR/css3-background/#the-background-position">'background-position'</a>.
       Status: Done.
     </p>
 
@@ -1470,9 +1211,12 @@ svg:hover .dark, svg:focus .dark {
   
 <p>
   The <a href="https://www.w3.org/TR/web-animations-1/">Web Animations API</a>
+  [<a href="refs.html#ref-web-animations-1">web-animations-1</a>]
   and the <a href="https://svgwg.org/specs/animations/">SVG Animations</a> specification
-  define ways to animate attributes and styles
-  on targetted elements without directly manipulating DOM properties.
+  [<a href="refs.html#ref-svg-animation">svg-animation</a>]
+  define non-CSS ways to animate attributes and styles
+  on targetted elements without directly manipulating DOM properties
+  (see the <a href="animate.html">Animation appendix</a> for details).
   User agents that implement those features
   must ensure that all animations 
   that apply to an element in a <a>referenced document subtree</a>
@@ -1529,7 +1273,7 @@ svg:hover .dark, svg:focus .dark {
 </p>
   
 <p class="note">
-  As part of the inteface definition,
+  As part of the interface definition,
   a <a>ShadowAnimation</a> is read-only,
   and must reflect any changes to its <a>ShadowAnimation::sourceAnimation</a>.
 </p>
@@ -1542,7 +1286,8 @@ svg:hover .dark, svg:focus .dark {
 </p>
   
 <p>
-  For each <a>animation element</a> that targets an element in the
+  For each <a>animation element</a> [<a href="refs.html#ref-svg-animation">svg-animation</a>]
+  that targets an element in the
   <a>referenced document subtree</a>, 
   the user agent must ensure that an equivalent animation element 
   is in effect in the <a>use-element shadow tree</a>.
@@ -1665,7 +1410,7 @@ svg:hover .dark, svg:focus .dark {
   on each <a>instance</a> of that element in a <a>use-element shadow tree</a>.
   This includes event listeners assigned using <a>event attributes</a>
   (which would be duplicated as with any other DOM attribute)
-  and also event listeners assigned using the <a href="http://www.w3.org/TR/dom/#dom-eventtarget-addeventlistener"><code>addEventListener</code></a> method.
+  and also event listeners assigned using the <a href="https://www.w3.org/TR/dom/#dom-eventtarget-addeventlistener"><code>addEventListener</code></a> method.
   The user agent must ensure that the list of event listeners
   for each <a>element instance</a> is synchronized to match
   its <a>corresponding element</a>.
@@ -1967,6 +1712,232 @@ all cases.</p>
 in conjunction with the <a>'switch'</a> element. If the <a>'systemLanguage'</a> is used in other
 situations, then it represents a simple switch on the given
 element whether to render the element or not.</p>
+  
+<h2 id="DescriptionAndTitleElements">The <span class='element-name'>'desc'</span>
+and <span class='element-name'>'title'</span> elements</h2>
+
+<h3 id='DescriptionDefinitions'>Definition</h3>
+<dl class='definitions'  data-dfn-type="dfn" data-export="">
+  <dt id="TermDescriptiveElement"><dfn>descriptive element</dfn></dt>
+  <dd>An element which provides supplementary descriptive information about
+  its parent.  Specifically, the following elements are descriptive elements:
+  <edit:elementcategory name='descriptive'/>.</dd>
+</dl>
+
+<p class="note">Multilingual descriptive text selection, based on the <a>'lang'</a> attribute, was added to allow internationalization
+of the <a>'desc'</a> and <a>'title element'</a> elements.</p>
+
+<p class="annotation">New in SVG 2. Adding 'lang' resolved at Rigi Kaltbad face-to-face.
+Removed text that limited number of 'desc' and 'title' elements. Status: Done.</p>
+
+<div class="ready-for-wg-review">
+<p>Any <a>container element</a> or <a>graphics element</a> in an SVG document
+can have zero or more <a>'desc'</a> and/or <a>'title'</a> elements as children,
+whose content is text. <a>'desc'</a> and <a>'title'</a> elements are
+not visually rendered as part of the graphics.
+The <a>'display'</a> value for the <a>'title'</a> and <a>'desc'</a> elements
+must always be set to <span class="prop-value">none</span>
+by the <a>user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
+</p>
+
+<p>Multiple sibling <a>'desc'</a> or <a>'title'</a> elements must have
+different languages, 
+as defined using a <a>'lang'</a> attribute (or <code>xml:lang</code> attribute) on the descriptive element or an ancestor. 
+The user agent must select the element of each type whose language best
+matches language preferences set by the user. 
+A descriptive element with an empty-string language tag 
+(indicating no language, for example a text alternative consisting of emoji symbols) 
+is a lowest-priority match for any user, ranked below all user-specified language preferences.
+If multiple equally valid matches exist, the first match should be used.
+If no match exists for either 'title' or 'desc', the first element of that type must be selected.</p>
+  
+<div class="example">
+  <p>The following example shows alternative language titles on a re-used star icon,
+    inline in an HTML document.  
+    The example assumes that the HTML document as a whole has a correctly-declared language of <code>en</code> (English without a specified country code).
+  </p>
+  <pre>
+&lt;svg&gt;
+  &lt;use href="#star"&gt;
+    &lt;title&gt;Favourite&lt;/title&gt;
+    &lt;title lang="en-us"&gt;Favorite&lt;/title&gt;
+    &lt;title lang="nl"&gt;Favoriet&lt;/title&gt;
+    &lt;title lang=""&gt;★&lt;/title&gt;
+  &lt;/use&gt;
+&lt;/svg&gt;
+  </pre>
+  <p>
+    The first <code>title</code> element inherits the language of the document (<code>en</code>); the others have explicitly-declared languages for each element.
+    If the user's preferred language (out of those provided) is American English, the icon title is the American spelling "Favorite". 
+    If the user's preferred language is Dutch, the icon title is "Favoriet". 
+    If the user's preference list includes generic English ranked higher than Dutch, the title is "Favourite" with British spelling.
+    If the user does not understand either Dutch or English, the title will be the star symbol character—which is not ideal (most screen readers will read it as a localized version of "black star"), but better than no text alternative at all.
+  </p>
+  <p class="note">
+    Authors should be aware that SVG 1.1-supporting user agents 
+    that have not yet implemented multi-lingual descriptive text
+    will normally select the first element of each type, regardless of user preferences.
+    SVG 1.1 user agents may also fail to recognize a <code>title</code> element that is not the first child of its parent,
+    or a <code>desc</code> element that has previous siblings that are not other descriptive elements.
+  </p>
+</div>
+
+<p class="issue" data-issue="67">The use of more than one <a>'title'</a> or <a>'desc'</a> element to
+provide localised information is at risk, with no known implementations.</p>
+
+<p>User agents must make the text content of selected 'title' and 'desc' elements available to platform accessibility APIs as part of the name and description computation for the parent element, as defined in the <a href="https://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings [SVG-AAM]</cite></a> specification.</p>
+  
+<p>Inclusion of any 'title' or 'desc' elements as a direct child of a <a>rendered element</a> indicates that the rendered element is of semantic importance in the graphic.  
+Authors should not, and <a>SVG generators</a> must not, include empty 'title' or 'desc' elements with no text content or whitespace-only text content, 
+as this will result in a nameless object being presented to assistive technology users.
+</p>
+  
+<p>
+If an individual graphic element has no meaning on its own, 
+alternative text should instead be provided for the nearest container element that describes a meaningful object.
+Authors should use grouping (<a>'g'</a>) elements to structure their drawing elements into meaningful objects, and name those groups with <a>'title'</a>.
+Conversely, if a container object is used simply to apply styles or layout, 
+and neither defines an object nor provides meaningful grouping structure,
+it does not need alternative text.</p>
+  
+<p>
+  Descriptive text elements whose parent is <a>not rendered</a> may be used by authors or authoring tools as reference information; authors are warned that this data is not normally available to end users viewing the graphic through assistive technologies.  Nonetheless, a <a>non-rendered element</a> may be referenced as part of the accessible name or description of a rendered element (as defined in <a href="https://www.w3.org/TR/svg-aam-1.0/">SVG-AAM</a>), and the recursive computation will use descriptive child elements of the referenced element.
+</p>
+  
+<p>Description and title elements may contain marked-up text
+from other namespaces, using standard XML mechanisms to indicate the namespace.
+However, authors should not rely on such markup to provide meaning to alternative text; 
+only the plain text content is currently required to be exposed to assistive technologies.</p>
+  
+<p class="note">
+  The HTML parser treats all markup within <a>'title'</a> and <a>'desc'</a>
+  the same way it treats markkup in an HTML fragment;
+  most elements will be assigned to the HTML namespace.
+</p>
+  
+<p>User agents may use markup within <a>'title'</a>
+to influence the visual presentation of titles (such as tooltips),
+but are not required to do so.
+</p>
+
+<div id='TitleElement'>
+<edit:elementsummary name='title'/>
+</div>
+
+<p>The <a>'title'</a> child element represents a short text alternative for the
+element.</p>
+
+<p>On a link, this could be the title or a description of the target resource; on an
+image or drawing object, it could be a short description of the
+graphic; on interactive content, it could be a label for, or instructions for, use
+of the element; and so forth.</p>
+
+<p>Authors should not provide redundant information in a <a>'title'</a> element
+if there is also a visible label for the drawing element (e.g., using a <a>'text'</a> element).
+Instead, the visual label should be associated with the drawing element 
+using an <a>'aria-labelledby'</a> attribute.</p>
+
+<p>Interactive user agents should make the plain text content of <a>'title'</a> elements available in response to user interaction, in a manner consistent with platform conventions; 
+existing user agents commonly render <a>'title'</a> elements as
+a tooltip on hovering the parent element.</p>
+  
+<p>Authors should provide a <a>'title'</a> child element to the root svg
+element within a stand-alone SVG document. Since users often consult documents
+out of context, authors should provide context-rich titles. Thus, instead of a
+title such as "Introduction", which doesn't provide much contextual background,
+authors should supply a title such as "Introduction to Medieval Bee-Keeping"
+instead. For reasons of accessibility, user agents should always make the
+content of the ‘title’ child element to the root svg element available to
+users. 
+However, this is typically done through other means than the tooltips used for nested SVG and graphics elements, e.g., by displaying in a browser tab.</p>
+
+<div id='DescElement'>
+<edit:elementsummary name='desc'/>
+</div>
+
+<p>The <a>'desc'</a> element represents more detailed textual
+information for the element such as a description. This is typically exposed to assistive
+technologies to provide more detailed information, such as a description of the visual appearance of a graphic or help to explain the functionality of a complex widget.  It is not typically available to other users, so should not be used for essential instructions.</p>
+
+
+<p>
+Authors may associate detailed information, including visible text, with part of the graphic
+using <a>'aria-describedby'</a> attribute 
+(on the described element or a parent container),
+with the value being an ID reference to one or more SVG or HTML elements containing the description. 
+The <a>'aria-describedby'</a> attribute takes precedence
+over the child <a>'desc'</a> when providing a description.
+If an element has both visible description and a child <a>'desc'</a> element providing supplementary information, 
+authors should explicitly include the <a>'id'</a> of the element itself in its own <a>'aria-describedby'</a> list, in order to concatenate the two descriptions together.
+</p>
+
+
+</div> <!--  class="ready-for-wg-review" -->
+
+
+<h2 id="MetadataElement">The <span class="element-name">'metadata'</span> element</h2>
+
+<p>Metadata which is included with SVG content should be
+specified within <a>'metadata'</a>
+elements. The contents of the <a>'metadata'</a> should be elements from
+other XML namespaces, with these elements from these namespaces
+expressed in a manner conforming with the <a href="https://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a> Recommendation
+[<a href="refs.html#ref-xml-names">xml-names</a>].</p>
+
+<p class="annotation">SVG 2 removes the recommendation to structure metadata
+elements in any particular way. </p>
+
+<edit:elementsummary name='metadata'/>
+  
+<p>Metadata content is not directly rendered;
+the <a>'display'</a> value for the <a>'metadata'</a> element
+must always be set to <span class="prop-value">none</span>
+by the <a>user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
+</p>
+
+<p>Here is an example of how metadata can be included in an SVG
+document. The example uses the Dublin Core version 1.1 schema.
+(Other XML-compatible metadata languages, including ones not
+based on RDF, can be used also.)</p>
+
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg width="4in" height="3in"
+    xmlns = 'http://www.w3.org/2000/svg'>
+    <desc xmlns:myfoo="http://example.org/myfoo">
+      <myfoo:title>This is a financial report</myfoo:title>
+      <myfoo:descr>The global description uses markup from the
+        <myfoo:emph>myfoo</myfoo:emph> namespace.</myfoo:descr>
+      <myfoo:scene><myfoo:what>widget $growth</myfoo:what>
+      <myfoo:contains>$three $graph-bar</myfoo:contains>
+        <myfoo:when>1998 $through 2000</myfoo:when> </myfoo:scene>
+   </desc>
+    <metadata>
+      <rdf:RDF
+           xmlns:rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+           xmlns:rdfs = "http://www.w3.org/2000/01/rdf-schema#"
+           xmlns:dc = "http://purl.org/dc/elements/1.1/" >
+        <rdf:Description about="http://example.org/myfoo"
+             dc:title="MyFoo Financial Report"
+             dc:description="$three $bar $thousands $dollars $from 1998 $through 2000"
+             dc:publisher="Example Organization"
+             dc:date="2000-04-11"
+             dc:format="image/svg+xml"
+             dc:language="en" >
+          <dc:creator>
+            <rdf:Bag>
+              <rdf:li>Irving Bird</rdf:li>
+              <rdf:li>Mary Lambert</rdf:li>
+            </rdf:Bag>
+          </dc:creator>
+        </rdf:Description>
+      </rdf:RDF>
+    </metadata>
+</svg>
+]]></pre>
+
 
 <h2 id="HTMLMetadataElements">HTML metadata elements</h2>
 
@@ -1974,16 +1945,115 @@ element whether to render the element or not.</p>
 the HTML namespace) must be supported in SVG documents:</p>
 
 <ul>
-  <li>the <a class="html" href="http://www.w3.org/TR/html/document-metadata.html#the-base-element"><code>base</code></a> element</li>
-  <li>the <a class="html" href="http://www.w3.org/TR/html/document-metadata.html#the-link-element"><code>link</code></a> element</li>
-  <li>the <a class="html" href="http://www.w3.org/TR/html/document-metadata.html#the-meta-element"><code>meta</code></a> element</li>
-  <li>the <a class="html" href="http://www.w3.org/TR/html/document-metadata.html#the-style-element"><code>style</code></a> element</li>
-  <li>the <a class="html" href="http://www.w3.org/TR/html/scripting-1.html#the-script-element"><code>script</code></a> element</li>
+  <li>the <a class="html" href="https://www.w3.org/TR/html/document-metadata.html#the-base-element"><code>base</code></a> element</li>
+  <li>the <a class="html" href="https://www.w3.org/TR/html/document-metadata.html#the-link-element"><code>link</code></a> element</li>
+  <li>the <a class="html" href="https://www.w3.org/TR/html/document-metadata.html#the-meta-element"><code>meta</code></a> element</li>
+  <li>the <a class="html" href="https://www.w3.org/TR/html/document-metadata.html#the-style-element"><code>style</code></a> element</li>
+  <li>the <a class="html" href="https://www.w3.org/TR/html/semantics-scripting.html#the-script-element"><code>script</code></a> element</li>
 </ul>
 
 <p class="note">
-Note that the <a class="html" href="http://www.w3.org/TR/html/document-metadata.html#the-base-element"><code>base</code></a> element will affect all URL values in the document, including e.g paint server references.
+Note that the <a class="html" href="https://www.w3.org/TR/html/document-metadata.html#the-base-element"><code>base</code></a> element will affect all URL values in the document, including e.g. paint server references or <a>'use'</a> element references.
+However, when <a href="linking.html#processingURL-absolute">processing URL references</a>
+to identify a specific target element,
+the user agent must always compare the generated absolute URL against the current document base URL 
+to determine whether it is a <a>same-document URL reference</a>.
+In this way, target-fragment only references to elements in the same document remain valid,
+regardless of any changes to the document base URL.
 </p>
+
+
+<h2 id="ForeignNamespaces">Foreign namespaces and private data</h2>
+
+<p>
+SVG allows inclusion of elements from foreign namespaces
+anywhere within the SVG content.
+In general, the SVG user agent
+must include the unknown foreign-namespaced elements in the DOM
+but will ignore and exclude them for rendering purposes.
+</p>
+<p>
+The notable exceptions are described in the <a href="embedded.html">Embedded Content chapter</a>
+under <a href="embedded.html#HTMLElements">HTML elements in SVG subtrees</a>
+and <a href="embedded.html#ForeignObjectElement">Embedding Foreign Object
+Types</a>.
+Also see the handling of
+<a href="struct.html#UnknownElement">unknown elements</a>
+in the SVG namespace, which are treated differently.
+</p>
+
+<p>
+Additionally, SVG allows inclusion of attributes from
+foreign namespaces on any SVG element.
+The SVG user agent must
+include unknown attributes in the DOM but should otherwise ignore
+unknown attributes.
+</p>
+  
+<div class="note">
+  <p>
+  Authors should be aware that unknown namespaced elements and attributes 
+  will not be parsed as such by the HTML parser.
+  Instead, the namespace prefix will be included in the tag or attribute name,
+  elements will be placed in the parent element namespace and attributes in the default namespace.
+  </p>
+  <p>
+  To add custom attributes in a way that will result in consistent parsing
+  in both XML and HTML documents, 
+  authors may use the <a href="#DataAttributes"><span class='attr-name'>'data-*'</span> attributes</a>.
+  These can be added to SVG <a>'metadata'</a> elements 
+  if the information they encode is not associated with any other element in the document.
+  </p>
+</div>
+
+<p>SVG's ability to include foreign namespaces can be used for
+the following purposes:</p>
+
+<ul>
+  <li>Application-specific information so that authoring
+  applications can include model-level data in the SVG content
+  to serve their "roundtripping" purposes (i.e., the ability to
+  write, then read a file without loss of higher-level
+  information).</li>
+
+  <li>Supplemental data for extensibility. For example, suppose
+  you have an extrusion extension which takes any 2D graphics
+  and extrudes it in three dimensions. When applying the
+  extrusion extension, you probably will need to set some
+  parameters. The parameters can be included in the SVG content
+  by inserting elements from an extrusion extension
+  namespace.</li>
+</ul>
+
+<p>
+For example, a business graphics authoring application
+might want to include some private data within an SVG document
+so that it could properly reassemble the chart (a pie chart in
+this case) upon reading it back in:
+</p>
+
+<div class="example">
+<pre><![CDATA[
+<?xml version="1.0" standalone="yes"?>
+<svg width="4in" height="3in"
+     xmlns = 'http://www.w3.org/2000/svg'>
+  <defs>
+    <myapp:piechart xmlns:myapp="http://example.org/myapp"
+                    title="Sales by Region">
+      <myapp:pieslice label="Northern Region" value="1.23"/>
+      <myapp:pieslice label="Eastern Region" value="2.53"/>
+      <myapp:pieslice label="Southern Region" value="3.89"/>
+      <myapp:pieslice label="Western Region" value="2.04"/>
+      <!-- Other private data goes here -->
+    </myapp:piechart>
+  </defs>
+  <desc>This chart includes private data in another namespace
+  </desc>
+  <!-- In here would be the actual SVG graphics elements which
+       draw the pie chart -->
+</svg>
+]]></pre>
+</div>
 
 <h2 id="CommonAttributes">Common attributes</h2>
 
@@ -2024,7 +2094,7 @@ Note that the <a class="html" href="http://www.w3.org/TR/html/document-metadata.
     </table>
   </dt>
   <dd class="ready-for-wider-review">
-    <p>Must reflect the <a href="http://www.w3.org/TR/dom/#concept-id">element's
+    <p>Must reflect the <a href="https://www.w3.org/TR/dom/#concept-id">element's
     ID</a> [<a href="refs.html#ref-dom">DOM</a>].  
     The <a>'id'</a> attribute must be unique within the node tree,
     must not be an empty string,
@@ -2143,7 +2213,7 @@ or the empty string. Setting the attribute to the empty string indicates that th
     is preserved in character data. The only possible values
     are the strings <span class='attr-value'>'default'</span> and <span class='attr-value'>'preserve'</span>, without
     white space.  Refer to the
-    <a href="http://www.w3.org/TR/2008/REC-xml-20081126/"><cite>Extensible Markup Language (XML) 1.0</cite></a>
+    <a href="https://www.w3.org/TR/2008/REC-xml-20081126/"><cite>Extensible Markup Language (XML) 1.0</cite></a>
     Recommendation [<a href="refs.html#ref-xml">xml</a>] and to the
     discussion <a href="text.html#WhiteSpace">white space
     handling</a> in SVG.</p>
@@ -2193,7 +2263,6 @@ See the <a href="https://www.w3.org/TR/2014/CR-html5-20140204/dom.html#embedding
 for custom data attributes</a> in the HTML specification.</p>
 </div>
 
-
 <h2 id="WAIARIAAttributes">WAI-ARIA attributes</h2>
 
 <h3 id="WAIARIA-definitions">Definitions</h3>
@@ -2204,9 +2273,9 @@ for custom data attributes</a> in the HTML specification.</p>
     consisting of WAI-ARIA states and properties
     as well as the role attribute. 
     See the WAI-ARIA
-  <a href="http://www.w3.org/TR/wai-aria-1.1/#role_definitions">Definition of Roles</a>, the WAI-ARIA
+  <a href="https://www.w3.org/TR/wai-aria-1.1/#role_definitions">Definition of Roles</a>, the WAI-ARIA
 Graphics Module <a href="https://www.w3.org/TR/graphics-aria-1.0/#roles">Graphics Roles</a>, 
- and the WAI-ARIA <a href="http://www.w3.org/TR/wai-aria/states_and_properties">Supported States and Properties</a>.
+ and the WAI-ARIA <a href="https://www.w3.org/TR/wai-aria/states_and_properties">Supported States and Properties</a>.
   The aria attributes are <edit:attributecategory name='aria'/>.</dd>
 </dl>
 
@@ -2219,7 +2288,7 @@ Graphics Module <a href="https://www.w3.org/TR/graphics-aria-1.0/#roles">Graphic
 The attribute, if specified, must have a value that is a <a>set of space-separated
 tokens</a> representing the various WAI-ARIA roles that the element belongs to.
 These tokens are role values defined in
-<a href="http://www.w3.org/TR/wai-aria-1.1/#role_definitions">Definition of Roles</a>
+<a href="https://www.w3.org/TR/wai-aria-1.1/#role_definitions">Definition of Roles</a>
 ([<a href="refs.html#ref-wai-aria">wai-aria</a>], section 5.4) and <a href="https://www.w3.org/TR/graphics-aria-1.0/#roles">Graphics Roles</a>
 ([<a href="refs.html#ref-graphics-aria-1.0">graphics-aria-1.0</a>], section 4).</p>
 
@@ -2248,7 +2317,7 @@ A valid role is a recognized, non-abstract role that is <a href="#implicit-aria-
   <dd>
     <p>The <a>'role'</a> attribute must be a
     <a>set of space-separated tokens</a> having values defined in
-    <a href="http://www.w3.org/TR/wai-aria-1.1/#role_definitions">Definition of Roles</a> ([<a href="refs.html#ref-wai-aria">wai-aria</a>], section 5.4).
+    <a href="https://www.w3.org/TR/wai-aria-1.1/#role_definitions">Definition of Roles</a> ([<a href="refs.html#ref-wai-aria">wai-aria</a>], section 5.4).
     </p>
     <p>The role value is a set of white-space separated machine-extractable semantic information used to define the purpose of the element.</p>
     <p>The <a>initial value</a> for the <a>'role'</a> attribute, for each SVG element, is the corresponding
@@ -2261,7 +2330,7 @@ in the form of an accessible name
 or explicit <a href="#ARIAStateandPropertyAttributes">state and property values</a>.
 Accessible names may be provided using SVG <a>descriptive elements</a> or <a>ARIA attributes</a>.
 The requirements for each role are indicated where the role is defined, e.g., in 
-<a href="http://www.w3.org/TR/wai-aria-1.1/#role_definitions">WAI-ARIA</a>
+<a href="https://www.w3.org/TR/wai-aria-1.1/#role_definitions">WAI-ARIA</a>
 ([<a href="refs.html#ref-wai-aria">WAI-ARIA</a>]) or the <a href="https://www.w3.org/TR/graphics-aria-1.0/#roles">WAI-ARIA Graphics Module</a>
 ([<a href="refs.html#ref-graphics-aria-1.0">graphics-aria-1.0</a>]).</p>
 
@@ -2269,13 +2338,13 @@ The requirements for each role are indicated where the role is defined, e.g., in
 
 <p>WAI-ARIA state and property attributes may be specified on SVG elements.
 These attributes are defined by ARIA in
-<a href="http://www.w3.org/TR/wai-aria-1.1/#state_prop_def">Definitions of States and Properties (all aria-* attributes)</a>
+<a href="https://www.w3.org/TR/wai-aria-1.1/#state_prop_def">Definitions of States and Properties (all aria-* attributes)</a>
 ([<a href="refs.html#ref-wai-aria">wai-aria</a>], section 6.6).</p>
 
 <p>These attributes, if specified, must have a value that is the WAI-ARIA value
 type in the "Value" field of the definition for the state or property, mapped to
 the appropriate SVG value type according to
-<a href="http://www.w3.org/TR/wai-aria-1.1/#typemapping">Mapping WAI-ARIA Value types to languages</a>
+<a href="https://www.w3.org/TR/wai-aria-1.1/#typemapping">Mapping WAI-ARIA Value types to languages</a>
 using the SVG mapping ([<a href="refs.html#ref-wai-aria">wai-aria</a>], section 10.2).</p>
   
 <p>The attributes are animatable;
@@ -2288,8 +2357,8 @@ using the SVG mapping ([<a href="refs.html#ref-wai-aria">wai-aria</a>], section 
 <p>WAI-ARIA State and Property attributes can be used on any element. They are
 not always meaningful, however, and in such cases user agents might not perform
 any processing aside from including them in the DOM. State and property attributes are
-processed according to the <a href="http://www.w3.org/TR/wai-aria-1.1/"><cite>ARIA</cite></a> and
-<a href="http://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings</cite></a> specification
+processed according to the <a href="https://www.w3.org/TR/wai-aria-1.1/"><cite>ARIA</cite></a> and
+<a href="https://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings</cite></a> specification
 specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.html#ref-svg-aam-1.0">svg-aam-1.0</a>]</p>
 
 <h3 id="implicit-aria-semantics">Implicit and Allowed ARIA Semantics</h3>
@@ -2301,7 +2370,7 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
 <p>For many graphics elements, an implicit role is only assigned 
   if the author provides information that indicates semantic importance.  
   The complete <dfn id="TermInclusionCriteria">inclusion criteria</dfn> for the accessibility tree
-  are defined by the <a href="http://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings</cite></a> specification for user agents [<a href="refs.html#ref-svg-aam-1.0">svg-aam-1.0</a>].
+  are defined by the <a href="https://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings</cite></a> specification for user agents [<a href="refs.html#ref-svg-aam-1.0">svg-aam-1.0</a>].
   For authors, the preferred means of indicating semantic importance is to provide an accessible name for the element.
   This can be done through a direct child <a>'title'</a> element,
   or through the <a>'aria-label'</a> or <a>'aria-labelledby'</a> attributes.
@@ -2731,7 +2800,7 @@ referencing document (e.g., an XHTML document). The second DOM hierarchy
 will be for the referenced SVG document.</p>
 
 <pre class="idl">partial interface <a>Document</a> {
-  readonly attribute <a>SVGSVGElement</a> <a href="struct.html#__svg__SVGDocument__rootElement">rootElement</a>;
+  readonly attribute <a>SVGSVGElement</a>? <a href="struct.html#__svg__SVGDocument__rootElement">rootElement</a>;
 };</pre>
 
 <p>The <b id="__svg__SVGDocument__rootElement">rootElement</b> IDL attribute
@@ -2741,11 +2810,11 @@ of the document is returned, if it is an <a>'svg'</a> element, or null
 otherwise.</p>
 
 <p class="note">This attribute is deprecated, and may be removed in a future SVG specification.
-Authors are encouraged to use the <a href="http://www.w3.org/TR/dom/#dom-document-documentelement">documentElement</a> attribute on <a>Document</a> instead.</p>
+Authors are encouraged to use the <a href="https://www.w3.org/TR/dom/#dom-document-documentelement">documentElement</a> attribute on <a>Document</a> instead.</p>
 <!--<p class="issue" data-issue="47">Data point: <a href="https://www.chromestatus.com/metrics/feature/timeline/popularity/251">UseCounter in blink</a> shows ~0.010.</p>-->
 
 <p>SVG implementations that implement HTML must support the
-<a href="http://www.w3.org/TR/html51/dom.html#the-document-object">HTML extensions to the document interface</a>.
+<a href="https://www.w3.org/TR/html51/dom.html#the-document-object">HTML extensions to the document interface</a>.
 
 Other SVG implementations must support the following IDL fragment.
 </p>
@@ -2759,7 +2828,7 @@ partial interface <a>Document</a> {
 };</pre>
 
 <p>The title, referrer, domain and <span id="__svg__SVGDocument__activeElement">activeElement</span> IDL attributes must behave the same as
-<a href="http://www.w3.org/TR/html51/dom.html#the-document-object">the corresponding IDL attributes defined in HTML</a>.</p>
+<a href="https://www.w3.org/TR/html51/dom.html#the-document-object">the corresponding IDL attributes defined in HTML</a>.</p>
 
 <h3 id="InterfaceSVGSVGElement">Interface SVGSVGElement</h3>
 
@@ -3023,7 +3092,7 @@ the following steps are run:</p>
   <li>If <var>referenceElement</var> is not null, then remove from
   <var>descendants</var> any element that does not have <var>referenceElement</var>
   as an ancestor.</li>
-  <li>Return a <a href="http://www.w3.org/TR/dom/#concept-collection-static">static</a>
+  <li>Return a <a href="https://www.w3.org/TR/dom/#concept-collection-static">static</a>
   <a>NodeList</a> that contains all of the elements in <var>descendants</var>.
   ([<a href="refs.html#ref-dom">DOM</a>], section 5.2.7)</li>
 </ol>
@@ -3059,7 +3128,7 @@ the following steps are run:</p>
 <div class='ready-for-wider-review'>
 <p>The <b id="__svg__SVGSVGElement__deselectAll">deselectAll</b> method is
 used to remove any selections from the document.  When deselectAll() is called,
-all <a href="http://www.w3.org/TR/2014/WD-dom-20140204/#concept-range">ranges</a>
+all <a href="https://www.w3.org/TR/2014/WD-dom-20140204/#concept-range">ranges</a>
 from the document's <a href="http://w3c.github.io/selection-api/#dfn-selection">selection</a>
 are removed and the <a href="http://w3c.github.io/selection-api/#dfn-selection">selection</a>'s
 <a href="http://w3c.github.io/selection-api/#dfn-direction">direction</a> is set to

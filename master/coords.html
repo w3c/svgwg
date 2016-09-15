@@ -125,7 +125,7 @@ following conditions are met:</p>
   styled using CSS [<a href="refs.html#ref-css2">CSS2</a>] or
   XSL [<a href="refs.html#ref-XSL">XSL</a>];</li>
 
-  <li>and there are <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#positioning-scheme">CSS-compatible positioning properties</a>
+  <li>and there are <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#positioning-scheme">CSS-compatible positioning properties</a>
   ([<a href="refs.html#ref-css2">CSS2</a>], section 9.3)
    specified on the referencing element (e.g.,
   the <span class="element-name">'object'</span> element) or on
@@ -137,7 +137,7 @@ following conditions are met:</p>
 positioning properties.</p>
 
 <p>Similarly, if there are
-<a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#positioning-scheme">positioning properties</a>
+<a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#positioning-scheme">positioning properties</a>
 specified on the referencing element or on the
 <a>outermost svg element</a> that are
 sufficient to establish the height of the viewport, then these
@@ -184,7 +184,7 @@ initial <a>local coordinate system</a> such that the
 two coordinates systems are identical. The origin of both
 coordinate systems must be at the origin of the SVG viewport, and one
 unit in the initial coordinate system must equal one 
-<a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/syndata.html#length-units">CSS 2.1 px</a>
+<a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/syndata.html#length-units">CSS 2.1 px</a>
 ([<a href="refs.html#ref-css2">CSS2</a>], section 4.3.2)
 in the SVG viewport. 
 
@@ -211,7 +211,7 @@ otherwise, if the user agent can determine the size of a
 <em>px</em> unit from its environment, it should use that
 value; otherwise, it should choose an appropriate size for one
 <em>px</em> unit. In all cases, the size of a <em>px</em> must
-be in conformance with <a href="http://www.w3.org/TR/2011/REC-CSS2-20110607/syndata.html#length-units">the rules described in CSS 2.1</a>
+be in conformance with <a href="https://www.w3.org/TR/CSS2/syndata.html#length-units">the rules described in CSS 2.1</a>
 ([<a href="refs.html#ref-css2">CSS2</a>], section 4.3.2).</p>
 
 <p id="ExampleInitialCoords"><span class="example-ref">Example InitialCoords</span> below
@@ -244,7 +244,10 @@ as defined in [<a href="refs.html#ref-css-transforms-1">css-transforms-1</a>].</
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="svg">viewBox</dfn></td>
-        <td>[<span class="attr-value">&lt;min-x&gt;</span> <span class="attr-value">&lt;min-y&gt;</span> <span class="attr-value">&lt;width&gt;</span> <span class="attr-value">&lt;height&gt;</span>]</td>
+        <td>[<span class="attr-value">&lt;min-x&gt;</span>,?
+            <span class="attr-value">&lt;min-y&gt;</span>,?
+            <span class="attr-value">&lt;width&gt;</span>,?
+            <span class="attr-value">&lt;height&gt;</span>]</td>
         <td>As if not specified.</td>
         <td>yes</td>
       </tr>
@@ -936,7 +939,6 @@ of the EM box if no vertical advance is defined in the font.
 </span>
 For example, for horizontal text, the calculations must assume that each glyph
 extends vertically to the full ascent and descent values for the font.  </p>
-nikos
 <p>Because declarative or scripted animation can change the shape, size, and
 position of an element, the bounding box is mutable. Thus, the bounding box
 for an element shall reflect the current values for the element at the snapshot
@@ -1020,7 +1022,7 @@ element.  The inputs to the algorithm are:</p>
         </ol>
       </li>
       <li>If <var>clipped</var> is true and the value of <a>'clip-path'</a> on <var>element</var> is not
-      <span class='prop-value'>none</span>, then set <var>box</var> to be the tighest rectangle
+      <span class='prop-value'>none</span>, then set <var>box</var> to be the tightest rectangle
       in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
       <li>Return <var>box</var>.</li>
     </ol>
@@ -1034,15 +1036,29 @@ element.  The inputs to the algorithm are:</p>
       root of the <a>'use'</a> element's shadow tree otherwise.</li>
       <li>For each descendant <a>graphics element</a> <var>child</var> of <var>parent</var>:
         <ol>
-          <li>If <var>child</var> has an ancestor element within <var>parent</var> that is
-          <span class='prop-value'>'display: none'</span>, has a failing <a>conditional processing attribute</a>,
-          or is not an <a>'a'</a>, <a>'g'</a>, <a>'svg'</a> or <a>'switch'</a> element, then
+          <li>If <var>child</var> is <a>not rendered</a> then
           continue to the next descendant <a>graphics element</a>.</li>
           <li>Otherwise, set <var>box</var> to be the union of <var>box</var> and the result of invoking the
           algorithm to compute a bounding box with <var>child</var> as the element
           and the same values for <var>space</var>, <var>fill</var>, <var>stroke</var>,
           <var>markers</var> and <var>clipped</var> as the corresponding algorithm input values.</li>
         </ol>
+      </li>
+      <li>If <var>clipped</var> is true:
+        <ul>
+          <li>If the value of <a>'clip-path'</a> on <var>element</var> is not
+          <span class='prop-value'>none</span>,
+          then set <var>box</var> to be the tightest rectangle
+          in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
+          <li>If the <a>'overflow'</a> property applies to the <var>element</var>
+          and does not have a value of <span class='prop-value'>visible</span>,
+          then set <var>box</var> to be the tightest rectangle
+          in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the element's overflow bounds.</li>
+          <li>If the <a>'clip'</a> property applies to the <var>element</var> 
+          and does not have a value of <span class='prop-value'>auto</span>,
+          then set <var>box</var> to be the tightest rectangle
+          in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the rectangle specified by <a>'clip'</a>.</li>
+        </ul>
       </li>
       <li>Return <var>box</var>.</li>
     </ol>
@@ -1054,16 +1070,25 @@ element.  The inputs to the algorithm are:</p>
   <dt><a>'video'</a></dt>
   <dd>
     <ol class="algorithm">
-      <li>Return the tightest rectangle in coordinate space <var>space</var> that
-      contains the rectangle defined by the
+      <li>Let <var>box</var> be the tightest rectangle in coordinate space <var>space</var> that
+      contains the <a>positioning rectangle</a> defined by the
       <span class='attr-name'>'x'</span>,
       <span class='attr-name'>'y'</span>,
       <span class='attr-name'>'width'</span> and
-      <span class='attr-name'>'height'</span> attributes of the element.
+      <span class='attr-name'>'height'</span> geometric properties of the element.
       <p class='note'>The <var>fill</var>, <var>stroke</var> and <var>markers</var>
       input arguments to this algorithm do not affect the bounding box returned
       for these elements.</p>
       </li>
+      <li>If <var>clipped</var> is true and the value of <a>'clip-path'</a> on <var>element</var> is not
+      <span class='prop-value'>none</span>, then set <var>box</var> to be the tightest rectangle
+      in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
+      <!--
+      <li>If <var>clipped</var> is true and the value of <a>'overflow'</a> on <var>element</var> is not
+      <span class='prop-value'>visible</span>, then set <var>box</var> to be the tightest rectangle
+      in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the element's <a>positioning rectangle</a>.</li>
+      -->
+      <li>Return <var>box</var>.</li>
     </ol>
   </dd>
 </dl>
@@ -1442,7 +1467,7 @@ through this property.</p>
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td><a>graphics elements</a></td>
+    <td><a>graphics elements</a> and <a>'use'</a></td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -1533,8 +1558,8 @@ it is not specified is <span class="prop-value">viewport</span>.</p>
   coordinate system on CSS pixel of rootmost content. Generally, the pixel (or
   dot) of a device and pixel of CSS are not always equal by influences of the
   zoom function which <a>user agent</a> itself has, and variation of dpi. (see
-  <a href="http://www.w3.org/TR/css3-values/#resolution">resolution</a>
-  [<a href="http://www.w3.org/TR/css3-values/">CSS Values and Units Module Level 3</a>])
+  <a href="https://www.w3.org/TR/css3-values/#resolution">resolution</a>
+  [<a href="https://www.w3.org/TR/css3-values/">CSS Values and Units Module Level 3</a>])
   Accordingly, this value does not specify constrained transformations toward
   the such a device coordinate system.</dd>
 </dl>
@@ -3308,7 +3333,7 @@ setMatrix(<var>matrix</var>) is called, the following steps are run:</p>
   <li>If the <a>SVGTransform</a> object is <a href='#ReadOnlyTransform'>read only</a>, then
   <a>throw</a> a <a>NoModificationAllowedError</a>.</li>
   <li>If <var>matrix</var> would return true from its
-  <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dommatrixreadonly-is2d">is2d</a>
+  <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dommatrixreadonly-is2d">is2d</a>
   method, then set the <a>SVGTransform</a> object's
   <a href='#TransformValue'>value</a> to a <span class='prop-value'>matrix(…)</span>
   value that represents the same matrix as <var>matrix</var>.</li>
@@ -3362,7 +3387,7 @@ the following steps are run:</p>
 
 <p>This specification imposes additional requirements on the behavior of <a>DOMMatrix</a>
 objects beyond those described in the
-the <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/">Geometry Interfaces</a>
+the <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/">Geometry Interfaces</a>
 specification, so that they can be used to reflect presentation attributes
 that take transform values.</p>
 
@@ -3398,7 +3423,7 @@ the following steps are run after updating the internal matrix value:</p>
   then:
     <ol>
       <li>If the <a>DOMMatrix</a> would return true from its
-      <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dommatrixreadonly-is2d">is2d</a>
+      <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dommatrixreadonly-is2d">is2d</a>
       method, then set the <a>SVGTransform</a> object's
       <a href='#TransformValue'>value</a> to a <span class='prop-value'>matrix(…)</span>
       value that represents the same matrix as the <a>DOMMatrix</a>.</li>
@@ -3475,7 +3500,7 @@ consolidate() method is called, the following steps are run:</p>
   <var>matrix</var>.</li>
   <li>If <var>transform</var>'s
   <a href="#TransformMatrixObject">matrix object</a> would return true from its
-  <a href="http://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dommatrixreadonly-is2d">is2d</a>
+  <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dommatrixreadonly-is2d">is2d</a>
   method, then set <var>transform</var>'s
   <a href='#TransformValue'>value</a> to a <span class='prop-value'>matrix(…)</span>
   value that represents the same matrix as the <a href="#TransformMatrixObject">matrix object</a>.</li>
