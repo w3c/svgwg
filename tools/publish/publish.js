@@ -279,7 +279,7 @@ function buildSinglePage() {
       // Place before any other style sheets because we must not override
       // the W3C TR style sheets.
       if (n.nodeName == 'style') {
-        let firstStyleSheet = head.getElementsByTagName('link')[0];
+        var firstStyleSheet = head.getElementsByTagName('link')[0];
         head.insertBefore(n.cloneNode(true), firstStyleSheet);
       }
       // Note if Mathjax was used anywhere.
