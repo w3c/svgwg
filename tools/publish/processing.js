@@ -159,7 +159,7 @@ exports.addHeaderFooter = function(conf, page, doc) {
   }
 
   function getChildNodeById(parent, id) {
-    let n = parent.firstChild;
+    var n = parent.firstChild;
     while (n != null) {
       if (n.nodeType === n.ELEMENT_NODE && n.getAttribute('id') === id)
           return n;
@@ -168,7 +168,7 @@ exports.addHeaderFooter = function(conf, page, doc) {
   }
 
   if (conf.pages[page].type != 'index') {
-    let toc = getChildNodeById(doc.body, 'toc');
+    var toc = getChildNodeById(doc.body, 'toc');
     if (toc) {
         toc.insertBefore(header("top"), toc.firstChild);
     }
