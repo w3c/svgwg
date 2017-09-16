@@ -970,106 +970,74 @@ it is possible to set the bearing to that tangent by using
 
 <p>SVG path data matches the following EBNF grammar.</p>
 <pre class='grammar ready-for-wider-review'>
-svg_path::= wsp* moveto? (moveto drawto_command*)?
+svg_path                        ::= wsp* moveto wsp* (command wsp*)*
 
-drawto_command::=
-    moveto
-    | closepath
-    | lineto
-    | horizontal_lineto
-    | vertical_lineto
-    | curveto
-    | smooth_curveto
-    | quadratic_bezier_curveto
-    | smooth_quadratic_bezier_curveto
-    | elliptical_arc
-    | bearing
+command                         ::= closepath
+                                    | moveto
+                                    | lineto
+                                    | horizontal_lineto
+                                    | vertical_lineto
+                                    | curveto
+                                    | smooth_curveto
+                                    | quadratic_bezier_curveto
+                                    | smooth_quadratic_bezier_curveto
+                                    | elliptical_arc
+                                    | bearing
 
-moveto::=
-    ( "M" | "m" ) wsp* coordinate_pair_sequence wsp* closepath?
+closepath                       ::= [Zz]
+moveto                          ::= [Mm] wsp* moveto_argument (delimiter? lineto_argument)*
+lineto                          ::= [Ll] wsp* coordpair_singlet_sequence
+horizontal_lineto               ::= [Hh] wsp* number_sequence
+vertical_lineto                 ::= [Vv] wsp* number_sequence
+curveto                         ::= [Cc] wsp* coordpair_triplet_sequence
+smooth_curveto                  ::= [Ss] wsp* coordpair_doublet_sequence
+quadratic_bezier_curveto        ::= [Qq] wsp* coordpair_doublet_sequence
+smooth_quadratic_bezier_curveto ::= [Tt] wsp* coordpair_singlet_sequence
+elliptical_arc                  ::= [Aa] wsp* arc_argument_sequence
+bearing                         ::= [Bb] wsp* number_sequence
 
-closepath::= 
-    ("Z" | "z")
 
-lineto::=
-    ("L"|"l") wsp* (coordinate_pair_sequence | closepath)
+number_sequence                 ::= number (delimiter? number)*
+coordpair_singlet_sequence      ::= coordpair (delimiter? coordpair)*
+                                    | closepath
+coordpair_doublet_sequence      ::= coordpair_doublet (delimiter? coordpair_doublet)*
+                                    (delimiter? incomplete_coordpair_doublet)?
+                                    | incomplete_coordpair_doublet
+                                    | closepath
+coordpair_triplet_sequence      ::= coordpair_triplet (delimiter? coordpair_triplet)*
+                                    (delimiter? incomplete_coordpair_triplet)?
+                                    | incomplete_coordpair_triplet
+                                    | closepath
+arc_argument_sequence           ::= arc_argument (delimiter? arc_argument)*
+                                    (delimiter? incomplete_arc_argument)?
+                                    | incomplete_arc_argument
 
-horizontal_lineto::=
-    ("H"|"h") wsp* coordinate_sequence
 
-vertical_lineto::=
-    ("V"|"v") wsp* coordinate_sequence
+moveto_argument                 ::= coordpair
+lineto_argument                 ::= coordpair
+coordpair                       ::= number delimiter? number
 
-curveto::=
-    ("C"|"c") wsp* (curveto_coordinate_sequence | (coordinate_pair_sequence? closepath))
+coordpair_doublet               ::= coordpair delimiter? coordpair
+incomplete_coordpair_doublet    ::= coordpair wsp* closepath
 
-curveto_coordinate_sequence::=
-    coordinate_pair_triplet
-    | (coordinate_pair_triplet comma_wsp? curveto_coordinate_sequence)
+coordpair_triplet               ::= coordpair delimiter? coordpair delimiter? coordpair
+incomplete_coordpair_triplet    ::= ( coordpair_doublet | coordpair ) wsp* closepath
 
-smooth_curveto::=
-    ("S"|"s") wsp* (smooth_curveto_coordinate_sequence
-    | (coordinate_pair_sequence? closepath))
+arc_argument                    ::= number delimiter? number delimiter? number delimiter
+                                    flag delimiter? flag delimiter? coordpair
+incomplete_arc_argument         ::= number delimiter? number delimiter? number delimiter
+                                    flag delimiter? flag wsp* closepath
 
-smooth_curveto_coordinate_sequence::=
-    coordinate_pair_double
-    | (coordinate_pair_double comma_wsp? smooth_curveto_coordinate_sequence)
-
-quadratic_bezier_curveto::=
-    ("Q"|"q") wsp*
-    (quadratic_bezier_curveto_coordinate_sequence | (coordinate_pair_sequence? closepath))
-
-quadratic_bezier_curveto_coordinate_sequence::=
-    coordinate_pair_double
-    | (coordinate_pair_double comma_wsp? quadratic_bezier_curveto_coordinate_sequence)
-
-smooth_quadratic_bezier_curveto::=
-    ("T"|"t") wsp* (coordinate_pair_sequence | closepath)
-
-elliptical_arc::=
-    ( "A" | "a" ) wsp*
-    (elliptical_arc_argument_sequence
-    | (elliptical_arc_argument_sequence? elliptical_arc_closing_argument))
-
-elliptical_arc_argument_sequence::=
-    elliptical_arc_argument
-    | (elliptical_arc_argument comma_wsp? elliptical_arc_argument_sequence)
-
-elliptical_arc_argument::=
-    number comma_wsp? number comma_wsp? number comma_wsp
-    flag comma_wsp? flag comma_wsp? coordinate_pair
-
-elliptical_arc_closing_argument::=
-    number comma_wsp? number comma_wsp? number comma_wsp
-    flag comma_wsp? flag comma_wsp? closepath
-
-bearing::=
-    ( "B" | "b" ) wsp* bearing_argument_sequence
-
-bearing_argument_sequence::=
-    number | (number comma_wsp? bearing_argument_sequence)
-
-coordinate_pair_double::=
-    coordinate_pair comma_wsp? coordinate_pair
-
-coordinate_pair_triplet::=
-    coordinate_pair comma_wsp? coordinate_pair comma_wsp? coordinate_pair
-
-coordinate_pair_sequence::=
-    coordinate_pair | (coordinate_pair comma_wsp? coordinate_pair_sequence)
-
-coordinate_sequence::=
-    coordinate | (coordinate comma_wsp? coordinate_sequence)
-
-coordinate_pair::= coordinate comma_wsp? coordinate
-
-coordinate::= sign? number
-
-sign::= "+"|"-"
-number ::= ([0-9])+
-flag::=("0"|"1")
-comma_wsp::=(wsp+ ","? wsp*) | ("," wsp*)
-wsp ::= (#x9 | #x20 | #xA | #xC | #xD)
+delimiter                       ::= wsp+ comma_wsp? | comma_wsp
+comma_wsp                       ::= "," wsp*
+flag                            ::= [01]
+number                          ::= sign? fraction exponent?
+fraction                        ::= digits ( dot digits? )? | dot digits
+exponent                        ::= [Ee] sign? digits
+sign                            ::= "+" | "-"
+digits                          ::= [0-9]+
+dot                             ::= "."
+wsp                             ::= [#x9#xA#xD#x20]
 </pre>
 
 <p>The processing of the EBNF must consume as much of a given
