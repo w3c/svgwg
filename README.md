@@ -5,6 +5,8 @@ SVG Working Group specifications.
 
 Editor's drafts:
 * [SVG2](https://svgwg.org/svg2-draft/)
+* [SVG-AAM](https://w3c.github.io/aria/svg-aam/svg-aam.html)
+<!--
 * [SVG Animations](https://svgwg.org/specs/animations/)
 * [SVG Integration](https://svgwg.org/specs/integration/)
 * [SVG Streaming](https://svgwg.org/specs/streaming/)
@@ -12,8 +14,11 @@ Editor's drafts:
 * [SVG Markers](https://svgwg.org/specs/markers/)
 * [SVG Paths](https://svgwg.org/specs/paths/)
 * [SVG Strokes](https://svgwg.org/specs/strokes/)
+-->
 
-All of the above spec drafts are automatically rebuilt on pushes to this repository.
+The SVG2 spec draft is automatically rebuilt on pushes to this repository.
+
+SVG-AAM is in the [ARIA repository](https://github.com/w3c/aria/tree/master/svg-aam)
 
 The SVG working group welcomes contributions to their specifications.
 These can be made by filing a pull request.
