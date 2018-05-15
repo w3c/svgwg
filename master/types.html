@@ -400,13 +400,38 @@ interface <b>SVGGeometryElement</b> : <a>SVGGraphicsElement</a> {
   <a>DOMPoint</a> <a href="types.html#__svg__SVGGeometryElement__getPointAtLength">getPointAtLength</a>(float distance);
 };</pre>
 
-<p>The <b id="__svg__SVGGeometryElement__isPointInFill">isPointInFill</b> and
-<b id="__svg__SVGGeometryElement__isPointInStroke">isPointInStroke</b> methods
-determine whether a given point is within the fill or stroke shape of an element.
-Normal hit testing rules apply; the value of the <a>'pointer-events'</a>
-property on the element determines whether a point is considered to be
-within the fill or stroke.  The <var>point</var> argument is interpreted
-as a point in the local coordiante system of the element.</p>
+<p>The <b id="__svg__SVGGeometryElement__isPointInFill">isPointInFill</b> method,
+when invoked, must return true if the point given by <var>point</var> passed to the method,
+in the coordinate space of an element, is inside the intended path as determined by the winding
+rule indicated by the <a>'fill-rule'</a> property of an element; and must return false otherwise.
+Open subpaths must be implicitly closed when computing the area inside the path, without affecting
+the actual subpaths. Points on the path itself must be considered to be inside the path.
+The returned value is independent of any visual CSS property but <a>'fill-rule'</a>
+If either of the <var>x</var> or <var>y</var> properties on <var>point</var> are infinite or NaN,
+then the method must return false.</p>
+
+<p class="note"><a>isPointInFill</a> takes the winding
+rule indicated by the <a>'fill-rule'</a> property of an element even if the element is a child
+of a <a>'clipPath'</a> element.</p>
+
+<p class="note"><a>isPointInFill</a> is aligned
+with the <a>isPointInPath</a> method on the <a>CanvasDrawPath</a> mixin as much as the SVG context
+allows it to be.</p>
+
+<p>The <a>isPointInStroke</a> method,
+when invoked, must return true if the point given by <var>point</var> passed to the method,
+in the coordinate space of an element, is in or on the outline path of an applied stroke on
+an element; and must return false otherwise.
+The outline path must take the stroke properties <a>'stroke-width'</a>,
+<a>'stroke-linecap'</a>, <a>'stroke-linejoin'</a>, <a>'stroke-miterlimit'</a>, <a>'stroke-dasharray'</a>
+and <a>'stroke-dashoffset'</a> of an element into account.
+The returned value is independent of any visual CSS property but the listed stroke properties.
+If either of the <var>x</var> or <var>y</var> properties on <var>point</var> are infinite or NaN,
+then the method must return false.</p>
+
+<p class="note"><a>isPointInStroke</a> is aligned
+with the <a>isPointInPath</a> method on the <a>CanvasDrawPath</a> mixin as much as the SVGcontext
+allows it to be.</p>
 
 <p>The <b id="__svg__SVGGeometryElement__pathLength">pathLength</b> IDL attribute
 <a>reflects</a> the <a>'pathLength'</a> content attribute.</p>
@@ -970,7 +995,7 @@ are run:</p>
 </ol>
 
 <p>The <b id="__svg__SVGAngle__value">value</b> IDL attribute represents
-the <a>SVGAngle</a>'s <a href='#AngleValue'>value</a> in user units.
+the <a>SVGAngle</a>'s <a href='#AngleValue'>value</a> in degrees.
 On getting <a href='#__svg__SVGAngle__value'>value</a>, the following steps
 are run:</p>
 
@@ -1591,7 +1616,7 @@ or a property.  The way this reflection is done depends on the type of the IDL a
    on <a>SVGElement</a>) or <b>DOMString</b> (as used by
   <a href="styling.html#__svg__SVGStyleElement__title">title</a> on <a>SVGStyleElement</a>),
   then the rules for
-  <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#reflect">reflecting
+  <a href="https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#reflect">reflecting
   content attributes in IDL attributes</a> in HTML are used.</li>
 
   <li>If the type of the reflecting IDL attribute is an <a>SVGAnimatedBoolean</a>,
