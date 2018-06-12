@@ -27,9 +27,9 @@ contributors in the pull request's body or in subsequent comments.
 # Tests
 
 For normative changes for any specification in CR or later,
-a corresponding [web-platform-tests](https://github.com/w3c/web-platform-tests) PR must be
+a corresponding [web-platform-tests](https://github.com/web-platform-tests/wpt) PR must be
 provided, except if testing is not practical; for other specifications it is usually appreciated.
 Typically, both PRs will be merged at the same time. Note that a test change that contradicts the
 spec should not be merged before the corresponding spec change. If testing is not practical, please
-explain why and if appropriate [file an issue](https://github.com/w3c/web-platform-tests/issues/new)
+explain why and if appropriate [file an issue](https://github.com/web-platform-tests/wpt/issues/new)
 to follow up later. Add the `type:untestable` or `type:missing-coverage` label as appropriate.
