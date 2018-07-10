@@ -413,8 +413,7 @@ function doCompleteIDL(conf, page, n) {
       if (n.nodeType == n.ELEMENT_NODE &&
           n.localName == "pre" &&
           n.getAttribute("class") == "idl") {
-        if (n.svg_excludefromidl) {
-          delete n.svg_excludefromidl;
+        if (n.classList.contains("extract")) {
           return;
         }
         if (idl.length) {
@@ -867,10 +866,6 @@ exports.formatMarkup = function(conf, page, doc) {
         }
       }
       n.removeAttribute("edit:toc");
-      if (n.hasAttribute("edit:excludefromidl")) {
-        n.svg_excludefromidl = true;
-        n.removeAttribute("edit:excludefromidl");
-      }
     }
   });
 
