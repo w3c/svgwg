@@ -72,22 +72,22 @@ on the scripting context when a <a>'script'</a> element's
   can include an &lt;absoluteURL&gt; or
   &lt;relativeURL&gt; and a identifier of the fragment in that resource. See <a href="struct.html#Head">References and the
   <span class="element-name">'defs'</span> element</a>. URL reference with fragment identifiers are commonly used to reference <a href="pservers.html">paint servers</a>.</dd>
-  
+
   <dt><dfn id="TermExternalReference" data-dfn-type="dfn" data-export="">external file reference</dfn></dt>
   <dd>A <a>URL reference</a> or <a>URL reference with fragment identifier</a>
     which refers to a resource that is not part of the current document.
   </dd>
-  
+
   <dt><dfn id="TermSameDocumentURL" data-dfn-type="dfn" data-export="">same-document URL reference</dfn></dt>
   <dd>A <a>URL reference with fragment identifier</a>
     where the non-fragment part of the URL refers to the current document.
   </dd>
-  
+
   <dt><dfn id="TermDataURL" data-dfn-type="dfn" data-export="">data URL</dfn></dt>
   <dd>A <a>URL reference</a> to an embedded document
     specified using the <a href="http://www.ietf.org/rfc/rfc2397.txt">"data" URL scheme</a>
   [<a href="refs.html#ref-rfc2397">rfc2397</a>].
-    Data URL references are neither 
+    Data URL references are neither
     <a>external file references</a> nor <a>same-document URL references</a>.
   </dd>
 
@@ -96,8 +96,8 @@ on the scripting context when a <a>'script'</a> element's
   themselves are treated as invalid circular references.
     What constitutes a circular reference will depend on how the referenced resource is used,
     and may include a reference to an ancestor of the current element.
-  </dd> 
-  
+  </dd>
+
   <dt><dfn id="TermUnresolvedReference" data-dfn-type="dfn" data-export="">unresolved reference</dfn></dt>
   <dd>A reference that is still being processed,
     and has not yet resulted in either an error or an identified resource.
@@ -118,7 +118,7 @@ on the scripting context when a <a>'script'</a> element's
       <li>
         A <a href="#TermURLReference">URL references</a> to elements which are
         inappropriate targets for the given reference shall be treated as invalid
-        references 
+        references
         (see <a href="#processingURL-validity">Valid URL targets</a>
         for appropriate targets).
         For example, the <a>'clip-path'</a> property can only refer to
@@ -172,8 +172,8 @@ This is simply a URL delimited with a functional notation.
 </p>
 
 <p>SVG makes extensive use of <a>URL</a> references, both absolute and relative,
-to other objects. 
-For example, a <a>'linearGradient'</a> element 
+to other objects.
+For example, a <a>'linearGradient'</a> element
 may be based on another gradient element,
 so that only the differences between the two need to be specified,
 by referencing the source gradient with a URL in the <a>'href'</a> attribute:
@@ -338,13 +338,13 @@ XLink attributes. For example:</p>
 
 
 <h3 id="processingURL">Processing of URL references</h3>
-  
+
 <p>
   URLs are processed to identify a resource at the time they are needed, as follows:
 </p>
-  
+
 <ul>
-  <li>For the <a>'a/href'</a> attribute of the <a>'a'</a> element, 
+  <li>For the <a>'a/href'</a> attribute of the <a>'a'</a> element,
     at the time the link is activated by the user.
   </li>
   <li>For all other <a>'href'</a> attributes,
@@ -352,22 +352,22 @@ XLink attributes. For example:</p>
     or at the time when the attribute is set, whichever is later.
   </li>
   <li>For source URLs on embedded HTML media elements,
-    as required based on source selection rules 
+    as required based on source selection rules
     <a href="https://www.w3.org/TR/html51/semantics-embedded-content.html#the-media-elements">in the HTML specification</a> [<a href="refs.html#ref-html51">HTML</a>].
   </li>
   <li>For all presentation attributes and style properties,
     at the time the property is required for rendering an element.
   </li>
 </ul>
-  
+
 <p>
-  Legacy <a>'xlink:href'</a> attributes are processed 
+  Legacy <a>'xlink:href'</a> attributes are processed
   at the time a corresponding <a>'href'</a> attribute would be processed,
   but only if no such <a>'href'</a> attribute exists on the element.
 </p>
 
-<p>Processing a URL involves three steps: 
-  generating the absolute URL; 
+<p>Processing a URL involves three steps:
+  generating the absolute URL;
   fetching the document (if required);
   identifying the target element (if required).
 </p>
@@ -383,7 +383,7 @@ XLink attributes. For example:</p>
   after which the reference is treated as a network error
   (and therefore as an <a>invalid reference</a>).
 </p>
-  
+
 <p>
   For <a>same-document URL references</a> in a dynamic document,
   modifications or animations of attributes or properties,
@@ -391,9 +391,9 @@ XLink attributes. For example:</p>
   may cause an URL reference to return to the <a>unresolved</a> state.
   The user agent must once again attempt to resolve the URI to identify the referenced resource.
 </p>
-  
+
 <h4 id="processingURL-absolute">Generating the absolute URL</h4>
-  
+
 <p>If the <a>URL reference</a> is relative, its absolute version must be computed before use.
 The absolute URL should be generated using one of the following methods:
 </p>
@@ -407,17 +407,17 @@ The absolute URL should be generated using one of the following methods:
     if the reference occurs in any other attribute in an XML document
   </li>
   <li>
-    as described in the <a href="https://www.w3.org/TR/html51/infrastructure.html#parsing-urls">HTML specification</a> 
-    if the reference occurs in a non-presentation attribute 
+    as described in the <a href="https://www.w3.org/TR/html51/infrastructure.html#parsing-urls">HTML specification</a>
+    if the reference occurs in a non-presentation attribute
     in an HTML document that is not an XML document [<a href="refs.html#ref-html51">HTML</a>]
   </li>
 </ul>
-  
+
 <p class="note">
-  The <a href="https://www.w3.org/TR/xmlbase/#syntax"><span class="attr-name">'xml:base'</span></a> attribute 
+  The <a href="https://www.w3.org/TR/xmlbase/#syntax"><span class="attr-name">'xml:base'</span></a> attribute
   will only have an effect in XML documents;
   this includes SVG documents and XHTML documents but not HTML documents that are not XML.
-  In contrast, a <a class="html" href="https://www.w3.org/TR/html/document-metadata.html#the-base-element"><code>base</code></a> element 
+  In contrast, a <a class="html" href="https://www.w3.org/TR/html/document-metadata.html#the-base-element"><code>base</code></a> element
   affects relative URLs in any SVG or HTML document,
   by altering the <a href="https://www.w3.org/TR/html51/infrastructure.html#document-base-url">document base URL</a>.
 </p>
@@ -425,13 +425,13 @@ The absolute URL should be generated using one of the following methods:
 <p>If the protocol, such as HTTP, does not support <a>URLs</a> directly,
 the <a>URL</a> must be converted to a URI by the user agent, as described
 in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specification</a> [<a href="refs.html#ref-rfc3987">rfc3987</a>].</p>
-  
+
 <p>After generating the absolute URL:</p>
 <ul>
   <li>
     <p>
       If the URL is being processed following the activation of a link,
-      the user agent must follow the <a href="https://www.w3.org/TR/html51/browsers.html#browsing-the-web">algorithm for navigating to a URL</a> 
+      the user agent must follow the <a href="https://www.w3.org/TR/html51/browsers.html#browsing-the-web">algorithm for navigating to a URL</a>
       described in the HTML specification [<a href="refs.html#ref-html51">HTML</a>].
       The outcome of this algorithm varies depending on the
       <a>'a/target'</a> browsing context and security restrictions between browsing contexts,
@@ -444,7 +444,7 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
   </li>
   <li>
     <p>
-      If the URL being processed is only <a href="#processingURL-validity">valid</a> 
+      If the URL being processed is only <a href="#processingURL-validity">valid</a>
       if it refers to a complete document file
       (such as the <a>'href'</a> attribute of
       an <a>'image'</a> and <a>'script'</a> element),
@@ -472,20 +472,20 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
     </p>
   </li>
 </ul>
-  
+
 <p class="note">
   As defined in <a href="https://drafts.csswg.org/css-values/#local-urls">CSS Values and Units</a>,
-  a fragment-only URL in a style property must be treated as 
+  a fragment-only URL in a style property must be treated as
   a <a>same-document URL reference</a>,
   regardless of the file in which the property was declared.
 </p>
-  
+
 
 <h4 id="processingURL-fetch">Fetching the document</h4>
-  
+
 <p>
   SVG properties and attributes may reference other documents.
-  When processing such a URL, 
+  When processing such a URL,
   the user agent should fetch the referenced document
   as described in this section,
   except under the following conditions:
@@ -494,11 +494,11 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
 <ul>
   <li>
     <p>
-      If the URL reference is from 
+      If the URL reference is from
       the <span class="attr-name">href</span> attribute on <a href="https://svgwg.org/specs/animations/#TargetElement">SVG animation elements</a>,
       only <a>same-document URL</a> references are allowed
       [<a href="refs.html#ref-svg-animation">svg-animation</a>].
-      A URL referring to a different document is invalid 
+      A URL referring to a different document is invalid
       and the document must not be fetched.
     </p>
   </li>
@@ -514,13 +514,13 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
   </li>
   <li>
     <p>
-      If any other security restrictions 
+      If any other security restrictions
       on the browsing context or user agent prevent accessing the external file,
       then the user agent must treat the reference as if there was a network error.
     </p>
   </li>
 </ul>
-  
+
 <p>
   When fetching external resources from the Internet,
   user agents must use a <a href="https://www.w3.org/TR/html51/infrastructure.html#creating-a-potential-cors-request">potentially CORS-enabled request</a>
@@ -529,7 +529,7 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
 </p>
 <ul>
   <li>
-    For an <a>'href'</a> reference on an 
+    For an <a>'href'</a> reference on an
     <a>'image'</a> element or
     <a>'script'</a> element,
     the CORS state specified by the <a>'image/crossorigin'</a> attribute.
@@ -544,18 +544,18 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
   </li>
 </ul><a class="html" href="https://www.w3.org/TR/html/document-metadata.html#the-base-element"><code>base</code></a>
 <p>
-  The request's <em>origin</em> is computed using the 
-  <a href="https://www.w3.org/TR/html/browsers.html#concept-cross-origin" >same rules as HTML</a>,
+  The request's <em>origin</em> is computed using the
+  <a href="https://fetch.spec.whatwg.org/#concept-cors-check" >same rules as HTML</a>,
   with an SVG <a>'script'</a> element treated like an HTML <code>script</code> element,
   and an SVG <a>'image'</a> element treated like an HTML <code>img</code> element.
   The <em>default origin behaviour</em> must be set to <em>taint</em>.
 </p>
-  
+
 <p class="note">
   A future SVG specification may enable CORS references
   on other SVG elements with <a>'href'</a> attributes.
 </p>
-  
+
 <p>
   If the fetching algorithm results in an error or an empty response body,
   the reference URL is treated as an <a>invalid reference</a>.
@@ -571,18 +571,18 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
 </p>
 
 <h4 id="processingURL-parsing">Processing the subresource document</h4>
-  
+
 <p>
   Otherwise, the subresource must be parsed to identify the target element.
   If the fetched document is a type that the user agent can parse
   to create a document object model,
-  it must process it in <a>secure static mode</a> 
-  (meaning, do not fetch any additional external resources 
+  it must process it in <a>secure static mode</a>
+  (meaning, do not fetch any additional external resources
   and do not run scripts or play animations or video).
   The document model generated for an external subresource reference
   must be immutable (read-only) and cannot be modified.
 </p>
-  
+
 <p>
   If a document object model can be generated from the fetched file,
   processing the URL must continue
@@ -601,14 +601,14 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
 </p>
 
 <h4 id="processingURL-target">Identifying the target element</h4>
-  
+
 <p>
   For URL references to a specific element,
-  whether the reference is valid depends on whether 
+  whether the reference is valid depends on whether
    the element can be located within the referenced document
   and whether it is of an allowed type.
 </p>
-  
+
 <p>
   Using the referenced document identified in previous processing steps
   (either an external subresource document or the current document),
@@ -641,23 +641,23 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
   </li>
   <li>
     <p>
-      Otherwise, observe mutations to the referenced document 
+      Otherwise, observe mutations to the referenced document
       until the URL can be successfully resolved
       to define a target element,
-      or until the document becomes immutable 
+      or until the document becomes immutable
       (e.g., a non-dynamic document finishes parsing).
     </p>
   </li>
 </ul>
-  
+
 <p>The target element provides the referenced resource
   if (and only if) it is a <a href="#processingURL-validity">valid URL target</a> for the reference.
 </p>
-  
+
 <h4 id="processingURL-validity">Valid URL targets</h4>
-  
+
 <p>The valid target element types for <a>'href'</a> (or <a>'xlink:href'</a>) attributes are based on the element that has the attribute, as follows:</p>
-  
+
 <ul>
   <li>the <a>'a'</a> element can reference any local or non-local resource</li>
   <li>the <a>'image'</a> element must reference a document that can be processed as an image</li>
@@ -667,11 +667,11 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
   <li>the <a>'script'</a> element must reference an external document that provides the script content</li>
   <li>the <a>'textPath'</a> element must reference an element type
     that implements the <a>SVGGeometryElement</a> interface</li>
-  <li>the <a>'use'</a> element must reference either an SVG-namespaced element 
-    or an HTML-namespaced element 
+  <li>the <a>'use'</a> element must reference either an SVG-namespaced element
+    or an HTML-namespaced element
   <a href="embedded.html#HTMLElements">that may be included as a child of an SVG container element</a></li>
 </ul>
-  
+
 <p>The valid target element types for style properties defined in this specification are as follows: </p>
 
 <ul>
@@ -695,39 +695,39 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
   the referenced resource is the entire document file;
   the target fragment is used in processing that file as with any other image.
   </p>
-  
+
 <p>In all other cases, if the resolved target element type (or document type) is not allowed for the URL reference,
   it is an <a>invalid reference</a>.
 </p>
-  
+
 </div>
-  
+
 <h2 id="Links">Links out of SVG content: the <span class="element-name">'a'</span> element</h2>
 
 <edit:with element='a'>
 
 <p>SVG provides an <a>'a'</a> element, to indicate links (also known
-as <em>hyperlinks</em> or <em>Web links</em>). 
+as <em>hyperlinks</em> or <em>Web links</em>).
 An <a>'a'</a> element forms a link if it has a <a>'href'</a> or <a>'xlink:href'</a> attribute; without these attributes the <a>'a'</a> element is an inactive placeholder for a link.</p>
 
-<p class="note">SVG 1.1 defined links in terms of the XLink specification ([<a href="https://www.w3.org/TR/2001/REC-xlink-20010627/">XLink</a>]), 
-using attributes defined in the XLink namespace. 
+<p class="note">SVG 1.1 defined links in terms of the XLink specification ([<a href="https://www.w3.org/TR/2001/REC-xlink-20010627/">XLink</a>]),
+using attributes defined in the XLink namespace.
 SVG 2 uses an alternative set of attributes in the default namespace that are consistent with HTML links, and <a href="#XLinkRefAttrs">deprecates the XLink attributes</a>.</p>
-  
+
 <p>The <a>'a'</a> element may
-contain any element that its parent may contain, except for another <a>'a'</a> element; 
+contain any element that its parent may contain, except for another <a>'a'</a> element;
 the same element is used for both graphical and textual linked content.
-Links may not be nested; 
-if an <a>'a'</a> element is a descendent of another hyperlink element 
+Links may not be nested;
+if an <a>'a'</a> element is a descendent of another hyperlink element
 (whether in the SVG namespace or another namespace),
 user agents must ignore its href attribute and treat it as inactive.
 The invalid <a>'a'</a> element must still be rendered as a generic container element.
 </p>
-  
+
 <p class="issue" data-issue="18">The rendering of invalid nested links is at risk, and will likely be synchronized with any decisions regarding the rendering of <a>'unknown'</a> elements.</p>
 
 
-<p>For pointer events processing, 
+<p>For pointer events processing,
 a linked hit region is defined for each separate rendered element contained
 within the <a>'a'</a> element (according to the value of their <a>'pointer-events'</a> property),
 rather than for the bounding box of the <a>'a'</a> element itself.
@@ -738,8 +738,8 @@ a <a>URL</a> specified by the <a>'href'</a> attribute on the <a>'a'</a>
 element. The remote resource may be any Web resource (e.g., an image, a video
 clip, a sound bite, a program, another SVG document, an HTML document, an
 element within the current document, an element within a different document, etc.).
-In response to user activation of a link 
-(by clicking with the mouse, through keyboard input, voice commands, etc.), 
+In response to user activation of a link
+(by clicking with the mouse, through keyboard input, voice commands, etc.),
 user agents should attempt to fetch the specified resource document and either display it or make it available as a downloaded file.</p>
 
 <p id="ExampleLink01"><span class="example-ref">Example link01</span> assigns
@@ -894,7 +894,7 @@ or frame to be replaced by the W3C home page.</p>
     </table>
   </dt>
   <dd>
-    These attributes further describe the targetted resource 
+    These attributes further describe the targetted resource
     and its relationship to the current document.
     Allowed values and meaning are <a href="https://www.w3.org/TR/html51/textlevel-semantics.html#the-a-element">as defined for the <code>a</code> element in HTML</a>.
   </dd>
