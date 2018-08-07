@@ -4,8 +4,9 @@ svgwg
 SVG Working Group specifications.
 
 Editor's drafts:
-* [SVG2](https://svgwg.org/svg2-draft/)
+* [SVG 2](https://svgwg.org/svg2-draft/)
 * [SVG-AAM](https://w3c.github.io/aria/svg-aam/svg-aam.html)
+* [SVG 2.1](https://svgwg.org/svg-next/)
 <!--
 * [SVG Animations](https://svgwg.org/specs/animations/)
 * [SVG Integration](https://svgwg.org/specs/integration/)
