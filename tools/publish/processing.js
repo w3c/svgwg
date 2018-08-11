@@ -262,17 +262,19 @@ exports.addTableOfContents = function(conf, page, doc) {
                   h1.firstChild);
 
   var sections = conf.getSectionHierarchy(page);
+  var toc;
   if (!sections || !sections.children.length) {
-    return;
+    toc = utils.parse('<nav id="toc"></nav>');
   }
+  else {
+    var tocClass = pageType == 'appendix' ? 'toc appendix-toc' : 'toc';
 
-  var tocClass = pageType == 'appendix' ? 'toc appendix-toc' : 'toc';
-
-  var toc = utils.parse(
-    '<nav id="toc">' +
-      '<h2 id="Contents" class="contents">Contents</h2>' +
-      '<ol class="{{class}}"><li>{{toc}}</li></ol>' +
-    '</nav>', { class: tocClass, toc: generateTOC(conf, page, tocClass) });
+    toc = utils.parse(
+      '<nav id="toc">' +
+        '<h2 id="Contents" class="contents">Contents</h2>' +
+        '<ol class="{{class}}"><li>{{toc}}</li></ol>' +
+      '</nav>', { class: tocClass, toc: generateTOC(conf, page, tocClass) });
+  }
 
   h1.parentNode.insertBefore(toc, h1.nextSibling);
 }
