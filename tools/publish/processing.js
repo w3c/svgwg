@@ -98,9 +98,13 @@ function hasMathElements(n) {
   return false;
 }
 
+exports.getMathJaxScript = function() {
+  return utils.parse('<script data-script-mathjax="" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_SVG"></script>')
+}
+
 exports.insertMathJaxScript = function(conf, page, doc) {
   if (hasMathElements(doc)) {
-    doc.head.appendChild(utils.parse('<script data-script-mathjax="" src="style/load-mathjax.js"></script>'));
+    doc.head.appendChild( exports.getMathJaxScript() );
   }
 }
 
