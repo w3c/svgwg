@@ -275,10 +275,12 @@ function buildSinglePage() {
     }
 
     utils.forEachNode(pageHead, function(n) {
-      // Copy a <style> in any chapter's <head> into the single page <head>.
+      // Copy a <style> or <link data-keep=""> in any chapter's <head>
+      // into the single page <head>.
       // Place before any other style sheets because we must not override
       // the W3C TR style sheets.
-      if (n.nodeName == 'style') {
+      if ((n.nodeName == 'style')||
+          (n.nodeName == 'link' && n.hasAttribute('data-keep')) ) {
         var firstStyleSheet = head.getElementsByTagName('link')[0];
         head.insertBefore(n.cloneNode(true), firstStyleSheet);
       }

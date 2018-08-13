@@ -35,11 +35,12 @@ exports.insertSpecNameInTitle = function(conf, page, doc) {
 // -- Link to the document and W3C style sheet for the document's maturity ---
 
 exports.insertStyleSheets = function(conf, page, doc) {
-  // Remove existing links to W3C style sheets.
+  // Remove existing stylesheet links, unless marked with a data-keep attribute.
   for (var next, n = doc.head.firstChild; n; n = next) {
     next = n.nextSibling;
     if (n.nodeName == 'link' &&
-        n.getAttribute('media') != 'print') {
+        /\bstylesheet\b/.test(n.getAttribute('rel')) &&
+        !n.hasAttribute('data-keep') ) {
       n.parentNode.removeChild(n);
     }
   }
