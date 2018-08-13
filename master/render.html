@@ -17,27 +17,6 @@
 
 <div class="annotation">
   <p>
-    SVG 2 Requirement: Support the z-index.
-  </p>
-  <p>
-    Resolution: We will add Jonathan Watt's z-index proposal to SVG 2.
-  </p>
-  <p>
-    <a href="http://www.w3.org/2011/03/03-svg-minutes.html#item03">Auckland 2011 F2F day 5</a>.
-  </p>
-  <p>
-    Purpose: Allow reordering (such as when a planet orbits the sun). Reordering without script support (e.g. CSS :hover).
-  </p>
-  <p>
-    Owner: Jonathan (Action 3002).
-  </p>
-  <p>
-    Status: Done.
-  </p>
-</div>
-
-<div class="annotation">
-  <p>
     The SVG 2 rendering model will follow the rules defined by the <a href="https://www.w3.org/TR/compositing/">Compositing and Blending specification</a>.
   </p>
   <p>
@@ -108,7 +87,7 @@ match the conformance requirements).</p>
 <h3 id="Definitions">Definitions</h3>
     
 <dl class="definitions">
-    <dt><dfn id="TermRenderingTree" data-dfn-type="dfn" data-dfn-export="">rendering tree</dfn></dt>
+    <dt><dfn id="TermRenderingTree" data-dfn-type="dfn" data-export="">rendering tree</dfn></dt>
     <dd>
     <p>
         The rendering tree is the set of elements being rendered
@@ -117,12 +96,12 @@ match the conformance requirements).</p>
         by excluding <a>non-rendered elements</a>
         and inserting additional fragments for <a>re-used graphics</a>.
         Graphics are painted and composited in rendering-tree order,
-        subject to stacking and re-ordering based on the
-        <a>'z-index'</a> and <a>'paint-order'</a> properties.
+        subject to re-ordering based on the
+        <a>'paint-order'</a> property.
         Note that elements that have no visual paint may still be in the rendering tree.
     </p>
   </dd>
-  <dt><dfn id="TermRenderedElement" data-dfn-type="dfn" data-dfn-export="">rendered element</dfn></dt>
+  <dt><dfn id="TermRenderedElement" data-dfn-type="dfn" data-export="">rendered element</dfn></dt>
   <dd>
     <p>
         An element that has a direct representation in the
@@ -134,7 +113,7 @@ match the conformance requirements).</p>
         See <a href="#Rendered-vs-NonRendered">Rendered versus non-rendered elements</a>
     </p>
   </dd>
-  <dt><dfn id="TermNonRenderedElement" data-dfn-type="dfn" data-dfn-export="">non-rendered element</dfn></dt>
+  <dt><dfn id="TermNonRenderedElement" data-dfn-type="dfn" data-export="">non-rendered element</dfn></dt>
   <dd>
     <p>
         An element that does not have a direct representation in the
@@ -144,7 +123,7 @@ match the conformance requirements).</p>
         See <a href="#Rendered-vs-NonRendered">Rendered versus non-rendered elements</a>.
     </p>
   </dd>
-  <dt><dfn id="TermReusedGraphics" data-dfn-type="dfn" data-dfn-export="">re-used graphics</dfn></dt>
+  <dt><dfn id="TermReusedGraphics" data-dfn-type="dfn" data-export="">re-used graphics</dfn></dt>
   <dd>
     <p>
         Graphical components that are included in the rendering tree
@@ -157,7 +136,7 @@ match the conformance requirements).</p>
     </p>
   </dd>
 
-  <dt><dfn id="TermNeverRenderedElement" data-dfn-type="dfn" data-dfn-export="">never-rendered element</dfn></dt>
+  <dt><dfn id="TermNeverRenderedElement" data-dfn-type="dfn" data-export="">never-rendered element</dfn></dt>
   <dd>
       <p>
           Any element type that is <em>never directly rendered</em>,
@@ -168,7 +147,7 @@ match the conformance requirements).</p>
           the <a>instance root</a> of a <a>use-element shadow tree</a>.
       </p>
   </dd>
-  <dt><dfn id="TermRenderableElement" data-dfn-type="dfn" data-dfn-export="">renderable element</dfn></dt>
+  <dt><dfn id="TermRenderableElement" data-dfn-type="dfn" data-export="">renderable element</dfn></dt>
   <dd>
     <p>
         Any element type that <em>can</em> have a direct representation
@@ -345,9 +324,6 @@ of <a>'display'</a> and <a>'visibility'</a>.
   except for special rules that apply to the <a>'symbol'</a> element.
 </p>
 <p>
-  Unless properties on the host element create a stacking context,
-  <a>'z-index'</a> values on shadow DOM elements 
-  can change their rendering order relative to elements in the main DOM.
   For blending purposes, the <a>'use'</a> element forms a <a>non-isolated group</a>.
 </p>
   
@@ -397,89 +373,7 @@ position on the x and y axis of the <a>SVG viewport</a>, SVG elements are also
 positioned on the z axis. The position on the z-axis defines the order that 
 they are painted.</p>
 
-<p>Along the z axis, elements are grouped into <dfn id="TermStackingContext" data-dfn-type="dfn" data-dfn-export="">stacking contexts</dfn>, each stacking
-context has an associated stack level.
-A stack level may contain one or more child nodes - either child
-stack levels, <a>graphics elements</a>, or <a>'g'</a> elements.
-<a>Graphics elements</a> and <a>'g'</a> elements within single
-stack level are painted in document order - that is, they are painted
-in the order that they are defined in the document.</p>
-
-<p>Each stack level is assigned an integer value that defines it's
-position on the z axis relative to other stack levels within the same
-stacking context. Lower values are painted first, and so
-elements in a stack level with a higher value will paint over one 
-with a lower value.</p>
-
-<p>By default, everything is placed in stack level zero.</p>
-</div>
-
-<h3 id="ZIndexProperty">Controlling element rendering order: the <span class='property'>'z-index'</span> property</h3>
-
-<p class="note at-risk">This feature is at risk.</p>
-
-<p class="note">See the CSS 2.1 specification for the definition
-of <a>'z-index'</a>. [<a href="refs.html#ref-css2">CSS2</a>]</p>
-
-<p>The <a>'z-index'</a> property allows an element to be assigned to a 
-stack level.
-</p>
-
-<p class="ready-for-wider-review">
-The rules governing behavior for SVG elements with the <a>'z-index'</a>
-property specified are outlined below:
-</p>
-
-<p class="note">CSS <a href="https://www.w3.org/TR/CSS2/visuren.html#propdef-z-index">specifies</a> a
-property named <a>'z-index'</a>.  The <a href="https://www.w3.org/TR/CSS2/zindex.html">CSS rules
-that define the effect of the <span class='property'>'z-index'</span> property</a>
-were written specifically for the CSS box model, and those rules do not make
-sense as they stand for most SVG elements (most SVG elements do not participate
-in or establish a CSS box model layout).  This section specifies how
-implementations must handle the <a>'z-index'</a> property on elements in the SVG
-namespace.</p>
-
-<p>Contrary to the rules in CSS 2.1, the <a>'z-index'</a> property applies to all SVG
-elements regardless of the value of the <a>'position'</a> property, with one exception:
-as for boxes in CSS 2.1, outer <a>'svg'</a> elements must be positioned for <a>'z-index'</a>
-to apply to them.</p>
-
-<p>The <a>'z-index'</a> property specifies:</p>
-
-<ol>
-  <li>The stack level of the element in the current stacking context.</li>
-  <li>Whether the element establishes a new local stacking context.</li>
-</ol>
-
-<p>Values have the following meanings:</p>
-
-<dl>
-  <dt>&lt;integer&gt;</dt>
-  <dd>This integer is the stack level of the element in the current
-  stacking context. The element also establishes a new local
-  stacking context for its descendants.</dd>
-
-  <dt>auto</dt>
-  <dd>The stack level of the element in the current stacking context
-  is the same as its parent element, unless its parent established
-  a new stacking context, in which case its stack level is 0. The
-  element does not establish a new local stacking context.</dd>
-</dl>
-
-<div class="example">
-  <p>Here is a simple example:</p>
-  <pre>&lt;svg xmlns="http://www.w3.org/2000/svg"&gt;
-  &lt;rect x="0"  width="100" height="100" style="fill: red;    z-index: -1;"/&gt;
-  &lt;rect x="40" width="100" height="100" style="fill: lime;"/&gt;
-  &lt;rect x="80" width="100" height="100" style="fill: blue;   z-index: 1;"/&gt;
-  &lt;rect x="60" width="100" height="100" style="fill: aqua;"/&gt;
-  &lt;rect x="20" width="100" height="100" style="fill: yellow; z-index: -1;"/&gt;
-&lt;/svg&gt;</pre>
-  <p>In this example there are three stack levels: -1, 0 (the default) and 1. The red
-  and yellow rects are in stack level -1, the lime and aqua rects are in stack
-  level 0 (the default), and the blue rect is in stack level 1. Going from lowest
-  stack level to highest, and painting the elements in each stack level in
-  document order, the painting order is: red, yellow, lime, aqua, blue.</p>
+<p>Along the z axis, elements are grouped into <dfn id="TermStackingContext" data-dfn-type="dfn" data-export="">stacking contexts</dfn>.</p>
 </div>
 
 <h3 id="EstablishingStackingContex">Establishing a stacking context in SVG</h3>
@@ -487,9 +381,6 @@ to apply to them.</p>
 
 <ul>
   <li>it is the root element</li>
-
-  <li>the <a>'z-index'</a> property applies to the element and its computed
-   value is an integer</li>
 
   <li>the element is an <a>outermost svg element</a>, or a <a>'foreignObject'</a>,
   <a>'image'</a>, <a>'marker element'</a>, <a>'mask element'</a>, <a>'pattern'</a>,
@@ -521,16 +412,10 @@ to apply to them.</p>
   applied and that property is defined to establish a stacking context in SVG</li>
 </ul>
 
-<!--
-<p>For a user friendly explanation of the terms "stack level" and "stacking
-context", see the z-index primer document. For the normative rules regarding how
-stacking contexts and stack levels affect SVG elements, see below.</p>
--->
-
-<p>Stacking contexts and stack levels are conceptual tools used to describe the
+<p>Stacking contexts are conceptual tools used to describe the
 order in which elements must be painted one on top of the other when the
 document is rendered, and for determining which element is highest when
-determining the target of a pointer event. Stacking contexts and stack levels do
+determining the target of a pointer event. Stacking contexts do
 not affect the position of elements in the DOM tree, and their presence or
 absence does not affect an element's position, size or orientation in the
 canvas' X-Y plane - only the order in which it is painted.</p>
@@ -539,11 +424,8 @@ canvas' X-Y plane - only the order in which it is painted.</p>
 atomic from the point of view of its parent stacking context; elements in
 ancestor stacking contexts may not come between any of its elements.</p>
 
-<p>Each element belongs to one stacking context. Each element in a given stacking
-context has an integer stack level. Elements with a higher stack level must be
-placed in front of elements with lower stack levels in the same stacking
-context. Elements may have negative stack levels. Elements with the same stack
-level in a stacking context must be stacked according to document order.</p>
+<p>Each element belongs to one stacking context. Elements in a stacking context
+must be stacked according to document order.</p>
 
 <p>With the exception of the <a>'foreignObject'</a> element, the back to front
 stacking order for a stacking context created by an SVG element is:</p>
@@ -552,55 +434,12 @@ stacking order for a stacking context created by an SVG element is:</p>
   <li>the background and borders of the element forming the stacking
   context, if any</li>
 
-  <li>child stacking contexts created by descendants with negative stack
-  levels, primarily ordered by most negative first, then by tree order</li>
-
-  <li>descendants with <span class='prop-value'>'z-index: auto'</span> or
-  <span class='prop-value'>'z-index: 0'</span>, in tree order</li>
-
-  <li>child stacking contexts created by descendants with positive stack levels,
-  primarily ordered by lowest index first, then by tree order</li>
+  <li>descendants, in tree order</li>
 </ol>
 
 <p>Since the <a>'foreignObject'</a> element creates a "fixed position containing block" in
 CSS terms, the normative rules for the stacking order of the stacking context
 created by <a>'foreignObject'</a> elements are the rules in Appendix E of CSS 2.1.</p>
-
-<div class="example">
-  <p>In the following example, the <a>'z-index'</a> property on the <a>'g'</a>
-  element is set to zero. This creates a new stacking context to contain the
-  <a>'g'</a> element's children without moving the <a>'g'</a> to a different
-  level in the document's root stacking context:</p>
-  <pre>&lt;svg xmlns="http://www.w3.org/2000/svg"&gt;
-  &lt;g style="z-index: 0;"&gt;
-    &lt;!-- this is a self contained graphic --&gt;
-    &lt;rect x="40" width="100" height="100" style="fill: lime; z-index: 1;"/&gt;
-    &lt;rect x="20" width="100" height="100" style="fill: yellow;"/&gt;
-  &lt;/g&gt;
-  &lt;rect x="60" width="100" height="100" style="fill: aqua;"/&gt;
-  &lt;rect x="0" width="100" height="100" style="fill: red; z-index: -1;"/&gt;
-&lt;/svg&gt;</pre>
-
-  <p>The example's root stacking context contains two stack levels: -1 and 0. The red
-  <a>'rect'</a> is in level -1, and the <a>'g'</a> element and aqua <a>'rect'</a> are in level 0. Inside
-  stack level 0, the <a>'g'</a> element's <a>'z-index'</a> property creates a new nested stacking
-  context at the <a>'g'</a> for the <a>'g'</a> element's children. In this child stacking
-  context there are two stack levels: 0 and 1. The yellow <a>'rect'</a> is in level 0 (the
-  default), and the lime <a>'rect'</a> is in level 1.</p>
-
-  <p>Painting of this example starts with the stack levels of the root stacking
-  context. First the red rect is painted in level -1, then in level 0 the <a>'g'</a>
-  element is painted followed by the aqua rect. When the <a>'g'</a> element is painted,
-  the child stacking context that its z-index created and all of that context's
-  stack levels are also painted. In this child stacking context, first the yellow
-  rect in level 0 is painted, followed by the lime rect in level 1. It's only
-  after the <a>'g'</a> and the stacking context that it creates has been painted that the
-  aqua rect is painted. Note that this means that although the z-index of 1 for
-  the lime rect is a higher value than the (implicit) z-index of 0 for the aqua
-  rect, the containment provided by the <a>'g'</a>'s child stacking context results in the
-  aqua rect painting over the lime rect. The painting order is therefore: red,
-  yellow, lime, aqua.</p>
-</div>
 
 <h2 id="Elements">How elements are rendered</h2>
 <div class="ready-for-wider-review">
@@ -681,10 +520,7 @@ is the same.</p>
 operation;</li>
 
 <li><a>'stroke-opacity'</a>, which specifies the opacity of a stroking
-operation;</li>
-
-<li><a>'solid-opacity'</a>, which specifies the opacity of a solid color
-paint server; and</li>
+operation; and</li>
 
 <li><a>'stop-opacity'</a>, which specifies the opacity of a gradient stop.</li>
 </ul>
@@ -894,16 +730,10 @@ Specification [<a href="refs.html#ref-css2">CSS2</a>] for the definition of
 <th>other svg</th><td>visible</td><td>hidden</td><td>visible | scroll</td><td>visible</td><td>hidden</td><td>scroll</td>
 </tr>
 <tr>
-<th>mesh</th><td>visible</td><td>n/a</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
-</tr>
-<tr>
 <th>text</th><td>visible</td><td>hidden</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
 </tr>
 <tr>
 <th>pattern</th><td>visible</td><td>hidden</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
-</tr>
-<tr>
-<th>hatches</th><td>visible</td><td>hidden</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
 </tr>
 <tr>
 <th>marker</th><td>visible</td><td>hidden</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
@@ -966,8 +796,7 @@ however, the following additional points apply:</p>
 <div class="note">
 Although the initial value for <a>'overflow'</a> is auto. In the User Agent style sheet,
 overflow is overriden for the <a>'svg'</a> element when it is not the root
-element of a stand-alone document, the <a>'pattern'</a> element, <a>'hatch'</a>
-element, and the <a>'marker element'</a> element to be hidden by default.
+element of a stand-alone document, the <a>'pattern'</a> element, and the <a>'marker element'</a> element to be hidden by default.
 </div>
 </div> <!-- ready-for-wider-review -->
 </body>
