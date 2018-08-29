@@ -275,16 +275,18 @@ function buildSinglePage() {
     }
 
     utils.forEachNode(pageHead, function(n) {
-      // Copy a <style> in any chapter's <head> into the single page <head>.
+      // Copy a <style> or <link data-keep=""> in any chapter's <head>
+      // into the single page <head>.
       // Place before any other style sheets because we must not override
       // the W3C TR style sheets.
-      if (n.nodeName == 'style') {
+      if ((n.nodeName == 'style')||
+          (n.nodeName == 'link' && n.hasAttribute('data-keep')) ) {
         var firstStyleSheet = head.getElementsByTagName('link')[0];
         head.insertBefore(n.cloneNode(true), firstStyleSheet);
       }
       // Note if Mathjax was used anywhere.
       if (n.nodeName == 'script' &&
-          n.getAttribute('src') == 'style/load-mathjax.js') {
+          n.hasAttribute('data-script-mathjax')) {
         foundMathjax = true;
       }
     });
@@ -342,9 +344,9 @@ function buildSinglePage() {
   body.appendChild(utils.parse('<script src="style/expanders.js"></script>'));
   body.appendChild(utils.parse('<script src="//www.w3.org/scripts/TR/2016/fixup.js"></script>'));
 
-  // Add reference to load-mathjax.js if we found one in any chapter.
+  // Add reference to mathjax if we found one in any chapter.
   if (foundMathjax) {
-    head.appendChild(utils.parse('<script src="style/load-mathjax.js"></script>'));
+    head.appendChild( processing.getMathJaxScript() );
   }
 
   fs.writeFileSync(outputFilename, doc.toString());
