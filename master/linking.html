@@ -166,7 +166,7 @@ class="attr-name">'href'</span></a> attribute.
 However, many <a>presentation attributes</a> allow both URLs and text strings as content.
 To disambiguate a text string from a relative URL, the <a>&lt;url&gt;</a>
 production is used for presentation attributes,
-and their corresponding CSS properties [<a href="refs.html#ref-css-values">css-values</a>].
+and their corresponding CSS properties [<a href="refs.html#ref-css-values-3">css-values</a>].
 This is simply a URL delimited with a functional notation.
 </p>
 
@@ -399,7 +399,7 @@ The absolute URL should be generated using one of the following methods:
 <ul>
   <li>
     as described in <a href="https://drafts.csswg.org/css-values/#local-urls">CSS Values and Units</a> if the reference occurs in a CSS file or in a <a>presentation attribute</a>
-[<a href="refs.html#ref-css-values">css-values</a>]
+[<a href="refs.html#ref-css-values-3">css-values</a>]
   </li>
   <li>
     as described in <a href="https://www.w3.org/TR/xmlbase/">XML Base</a> before use [<a href="refs.html#ref-xmlbase">xmlbase</a>]
@@ -868,7 +868,13 @@ or frame to be replaced by the W3C home page.</p>
       </tr>
       <tr>
         <td><dfn id="AElementDownloadAttribute" data-dfn-type="element-attr" data-dfn-for="a" data-export="">download</dfn></td>
-        <td>any value (meaning is conveyed by presence or absence of attribute)</td>
+        <td>any value (if non-empty, value represents a suggested file name)</td>
+        <td>(none)</td>
+        <td>no</td>
+      </tr>
+      <tr>
+        <td><dfn id="AElementPingAttribute" data-dfn-type="element-attr" data-dfn-for="a" data-export="">ping</dfn></td>
+        <td>space-separated valid non-empty URL tokens <a href="https://html.spec.whatwg.org/multipage/links.html#ping" class="syntax">[HTML]</a></td>
         <td>(none)</td>
         <td>no</td>
       </tr>
@@ -876,19 +882,25 @@ or frame to be replaced by the W3C home page.</p>
         <td><dfn id="AElementRelAttribute" data-dfn-type="element-attr" data-dfn-for="a" data-export="">rel</dfn></td>
         <td>space-separated keyword tokens <a href="https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#set-of-space-separated-tokens" class="syntax">[HTML]</a></td>
         <td>(none)</td>
-        <td>yes</td>
+        <td>no</td>
       </tr>
       <tr>
         <td><dfn id="AElementHreflangAttribute" data-dfn-type="element-attr" data-dfn-for="a" data-export="">hreflang</dfn></td>
         <td>A BCP 47 language tag string <a href="https://html.spec.whatwg.org/multipage/links.html#attr-hyperlink-hreflang" class="syntax">[HTML]</a></td>
         <td>(none)</td>
-        <td>yes</td>
+        <td>no</td>
       </tr>
       <tr>
         <td><dfn id="AElementTypeAttribute" data-dfn-type="element-attr" data-dfn-for="a" data-export="">type</dfn></td>
         <td>A MIME type string <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#mime-type" class="syntax">[HTML]</a></td>
         <td>(none)</td>
-        <td>yes</td>
+        <td>no</td>
+      </tr>
+      <tr>
+        <td><dfn id="AElementReferrerpolicyAttribute" data-dfn-type="element-attr" data-dfn-for="a" data-export="">referrerPolicy</dfn></td>
+        <td>A referrer policy string <a href="https://w3c.github.io/webappsec-referrer-policy/#referrer-policy" class="syntax">[REFERRERPOLICY]</a></td>
+        <td>(none)</td>
+        <td>no</td>
       </tr>
     </table>
   </dt>
@@ -1128,11 +1140,16 @@ as follows:</p>
 <pre class="idl">[Exposed=Window]
 interface <b>SVGAElement</b> : <a>SVGGraphicsElement</a> {
   [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__target">target</a>;
-  [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__download">download</a>;
-  [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__rel">rel</a>;
-  [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__rel">relList</a>;
-  [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__hreflang">hreflang</a>;
-  [SameObject] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__type">type</a>;
+  attribute DOMString <a href="linking.html#__svg__SVGAElement__download">download</a>;
+  attribute USVString <a href="linking.html#__svg__SVGAElement__ping">ping</a>;
+  attribute DOMString <a href="linking.html#__svg__SVGAElement__rel">rel</a>;
+  [SameObject, PutsForward=value] readonly attribute <a>DOMTokenList</a> <a href="linking.html#__svg__SVGAElement__rel">relList</a>;
+  attribute DOMString <a href="linking.html#__svg__SVGAElement__hreflang">hreflang</a>;
+  attribute DOMString <a href="linking.html#__svg__SVGAElement__type">type</a>;
+
+  attribute DOMString <a href="linking.html#__svg__SVGAElement__text">text</a>;
+
+  attribute DOMString <a href="linking.html#__svg__SVGAElement__referrerPolicy">referrerPolicy</a>;
 };
 
 <a>SVGAElement</a> includes <a>SVGURIReference</a>;
@@ -1140,6 +1157,7 @@ interface <b>SVGAElement</b> : <a>SVGGraphicsElement</a> {
 
 <p>The <b id="__svg__SVGAElement__target">target</b>,
   <b id="__svg__SVGAElement__download">download</b>,
+  <b id="__svg__SVGAElement__ping">ping</b>,
   <b id="__svg__SVGAElement__rel">rel</b>,
   <b id="__svg__SVGAElement__hreflang">hreflang</b>,
   <b id="__svg__SVGAElement__type">type</b>,
@@ -1147,8 +1165,15 @@ interface <b>SVGAElement</b> : <a>SVGGraphicsElement</a> {
 <a>reflect</a> the content attributes of the same name.</p>
 <p>The <b id="__svg__SVGAElement__relList">relList</b>
   IDL attribute
-<a>reflects</a> the <a>'rel'</a> content attribute as a token list.</p>
-
+<a>reflects</a> the <a>'rel'</a> content attribute.</p>
+<p>The <b id="__svg__SVGAElement__referrerPolicy">referrerPolicy</b>
+  IDL attribute
+<a>reflects</a> the <a>'referrerpolicy'</a> content attribute,
+ <a href="https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#limited-to-only-known-values">limited to only known values</a>.</p>
+<p>The <b id="__svg__SVGAElement__text">text</b> IDL attribute,
+ on getting, must return the same value as the <a href="https://dom.spec.whatwg.org/#dom-node-textcontent">textContent</a> IDL attribute
+ on the element, and on setting, must act as if the <a href="https://dom.spec.whatwg.org/#dom-node-textcontent">textContent</a> IDL attribute
+ on the element had been set to the new value.</p>
 </edit:with>
 
 
