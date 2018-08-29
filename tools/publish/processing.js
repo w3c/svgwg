@@ -35,11 +35,12 @@ exports.insertSpecNameInTitle = function(conf, page, doc) {
 // -- Link to the document and W3C style sheet for the document's maturity ---
 
 exports.insertStyleSheets = function(conf, page, doc) {
-  // Remove existing links to W3C style sheets.
+  // Remove existing stylesheet links, unless marked with a data-keep attribute.
   for (var next, n = doc.head.firstChild; n; n = next) {
     next = n.nextSibling;
     if (n.nodeName == 'link' &&
-        n.getAttribute('media') != 'print') {
+        /\bstylesheet\b/.test(n.getAttribute('rel')) &&
+        !n.hasAttribute('data-keep') ) {
       n.parentNode.removeChild(n);
     }
   }
@@ -98,9 +99,13 @@ function hasMathElements(n) {
   return false;
 }
 
+exports.getMathJaxScript = function() {
+  return utils.parse('<script data-script-mathjax="" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_SVG"></script>')
+}
+
 exports.insertMathJaxScript = function(conf, page, doc) {
   if (hasMathElements(doc)) {
-    doc.head.appendChild(utils.parse('<script data-script-mathjax="" src="style/load-mathjax.js"></script>'));
+    doc.head.appendChild( exports.getMathJaxScript() );
   }
 }
 
@@ -262,17 +267,19 @@ exports.addTableOfContents = function(conf, page, doc) {
                   h1.firstChild);
 
   var sections = conf.getSectionHierarchy(page);
+  var toc;
   if (!sections || !sections.children.length) {
-    return;
+    toc = utils.parse('<nav id="toc"></nav>');
   }
+  else {
+    var tocClass = pageType == 'appendix' ? 'toc appendix-toc' : 'toc';
 
-  var tocClass = pageType == 'appendix' ? 'toc appendix-toc' : 'toc';
-
-  var toc = utils.parse(
-    '<nav id="toc">' +
-      '<h2 id="Contents" class="contents">Contents</h2>' +
-      '<ol class="{{class}}"><li>{{toc}}</li></ol>' +
-    '</nav>', { class: tocClass, toc: generateTOC(conf, page, tocClass) });
+    toc = utils.parse(
+      '<nav id="toc">' +
+        '<h2 id="Contents" class="contents">Contents</h2>' +
+        '<ol class="{{class}}"><li>{{toc}}</li></ol>' +
+      '</nav>', { class: tocClass, toc: generateTOC(conf, page, tocClass) });
+  }
 
   h1.parentNode.insertBefore(toc, h1.nextSibling);
 }
@@ -413,8 +420,7 @@ function doCompleteIDL(conf, page, n) {
       if (n.nodeType == n.ELEMENT_NODE &&
           n.localName == "pre" &&
           n.getAttribute("class") == "idl") {
-        if (n.svg_excludefromidl) {
-          delete n.svg_excludefromidl;
+        if (n.classList.contains("extract")) {
           return;
         }
         if (idl.length) {
@@ -867,10 +873,6 @@ exports.formatMarkup = function(conf, page, doc) {
         }
       }
       n.removeAttribute("edit:toc");
-      if (n.hasAttribute("edit:excludefromidl")) {
-        n.svg_excludefromidl = true;
-        n.removeAttribute("edit:excludefromidl");
-      }
     }
   });
 
