@@ -419,8 +419,9 @@ function doCompleteIDL(conf, page, n) {
     utils.forEachNode(doc, function(n) {
       if (n.nodeType == n.ELEMENT_NODE &&
           n.localName == "pre" &&
-          n.getAttribute("class") == "idl") {
-        if (n.classList.contains("extract")) {
+          /\bidl\b/.test(n.getAttribute("class")) ) {
+        if (n.svg_excludefromidl) {
+          delete n.svg_excludefromidl;
           return;
         }
         if (idl.length) {
@@ -873,6 +874,12 @@ exports.formatMarkup = function(conf, page, doc) {
         }
       }
       n.removeAttribute("edit:toc");
+      if (n.hasAttribute("edit:excludefromidl")) {
+        n.svg_excludefromidl = true;
+        n.setAttribute("class", n.getAttribute("class")+" extract");
+        //`extract` class is used by Reffy when building IDL indexes
+        n.removeAttribute("edit:excludefromidl");
+      }
     }
   });
 
