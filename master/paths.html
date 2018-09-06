@@ -61,7 +61,11 @@ implementation notes</a>.</p>
 <p>The <a>basic shapes</a> are all described in terms of what their
 <dfn id="TermEquivalentPath">equivalent path</dfn> is, which is
 what their shape is as a path.  (The equivalent path of a
-<a>'path'</a> element is simply the path itself.)</p>
+<a>'path'</a> element is simply the path itself.)
+In order to define the basic shapes as equivalent paths,
+a <a>segment-completing close path</a> operation is defined,
+which cannot currently be represented in the basic path syntax.
+</p>
 
 <h2 id="PathElement">The <span class="element-name">'path'</span> element</h2>
 
@@ -402,6 +406,31 @@ rather than joined using the current value of <a>'stroke-linejoin'</a>.</p>
 next subpath. If a "closepath" is followed immediately by any
 other command, then the next subpath must start at the same <a>initial point</a>
 as the current subpath.</p>
+
+<h4 id="Segment-CompletingClosePath">Segment-completing close path operation</h4>
+
+<p>
+In order to represent the basic shapes as equivalent paths,
+there must be a way to close curved shapes
+without introducing an additional straight-line segment
+(even if that segment would have zero length).
+For that purpose, a segment-completing close path operation is defined here.
+</p>
+<p>
+A <dfn id="TermSegment-CompletingClosePath">segment-completing close path</dfn> operation <em>combines</em> with the previous path command,
+with two effects:
+</p>
+<ul>
+  <li>It ensures that the final coordinate point of the previous command exactly matches
+  the <a>initial point</a> of the current subpath.</li>
+  <li>It joins the final and initial points of the subpath, making it a closed subpath.</li>
+</ul>
+
+<p class="note">
+Segment-completing close path operations are not currently supported
+as a command in the path data syntax.
+The working group has proposed such a syntax for future versions of the specification.
+</p>
 
 <h3 id="PathDataLinetoCommands">The <strong>"lineto"</strong> commands</h3>
 
