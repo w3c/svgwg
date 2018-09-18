@@ -1256,7 +1256,7 @@
       </p>
       <p>
 	A negative value is an error
-        (see <a href="implnote.html#ErrorProcessing">Error
+        (see <a href="conform.html#ErrorProcessing">Error
         processing</a>).
       </p>
       <p>
@@ -6165,7 +6165,7 @@ the dash pattern at the same positions across different implementations.</p>
   <p>
     Detailed rules for determining which characters to highlight
     during a text selection operation are provided in
-    <a href="implnote.html#TextSelectionImplementationNotes">Text
+    <a href="#TextSelectionImplementationNotes">Text
       selection implementation notes</a>.
   </p>
 
@@ -6201,6 +6201,78 @@ the dash pattern at the same positions across different implementations.</p>
     in other words, the DOM order of the text should match
     the natural reading order of the text.
   </p>
+
+<h3 id="TextSelectionImplementationNotes">Text selection implementation notes</h3>
+
+<p>The following implementation notes describe the algorithm
+for deciding which characters are selected during a <a
+href="#TextSelection">text selection</a>
+operation.</p>
+
+<p>As the text selection operation occurs (e.g., while the user
+clicks and drags the mouse to identify the selection), the user
+agent determines a <em>start selection position</em> and an
+<em>end selection position</em>, each of which represents a
+position in the text string between two characters. After
+determining start selection position and end selection
+position, the user agent selects the appropriate characters,
+where the resulting text selection consists of either:</p>
+
+<ul>
+  <li>no selection or</li>
+
+  <li>a <em>start character</em>, an <em>end character</em>
+  (possibly the same character), and all of the characters
+  within the same <a>'text'</a> element whose position
+  in the DOM is logically between the start character and end
+  character.</li>
+</ul>
+
+<p>On systems with pointer devices, to determine the <em>start
+selection position</em>, the SVG user agent determines which
+boundary between characters corresponding to rendered glyphs is
+the best target (e.g., closest) based on the current pointer
+location at the time of the event that initiates the selection
+operation (e.g., the mouse down event). The user agent then
+tracks the completion of the selection operation (e.g., the
+mouse drag, followed ultimately by the mouse up). At the end of
+the selection operation, the user agent determines which
+boundary between characters is the best target (e.g., closest)
+for the <em>end selection position</em>.</p>
+
+<p>If no character reordering has occurred due to bidirectionality,
+then the selection consists of all characters between the
+<em>start selection position</em> and <em>end selection
+position</em>. For example, if a <a>'text'</a> element contains the
+string "abcdef" and the start selection position and end
+selection positions are 0 and 3 respectively (assuming the left
+side of the "a" is position zero), then the selection will
+consist of "abc".</p>
+
+<p>When the user agent is implementing selection of
+bidirectional text, and when the selection starts (or ends)
+between characters which are not contiguous in logical order,
+then there might be multiple potential combinations of
+characters that can be considered part of the selection. The
+algorithms to choose among the combinations of potential
+selection options shall choose the selection option which most
+closely matches the text string's visual rendering order.</p>
+<p>When multiple characters map inseparably to a given set of
+one or more glyphs, the user agent can either disallow the
+selection to start in the middle of the glyph set or can
+attempt to allocate portions of the area taken up by the glyph
+set to the characters that correspond to the glyph.</p>
+
+<p>For systems which support pointer devices such as a mouse,
+the user agent is required to provide a mechanism for selecting
+text even when the given text has associated event handlers or
+links, which might block text selection due to event processing
+precedence rules (see <a href="interact.html#PointerEvents">Pointer events</a>).
+One implementation option: For platforms which support a pointer
+device such as a mouse, the user agent may provide for a small
+additional region around character cells which initiates text
+selection operations but does not initiate event handlers or
+links.</p>
 
 <h2 id="DOMInterfaces">DOM interfaces</h2>
 

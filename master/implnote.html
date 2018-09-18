@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional+edit//EN" "xhtml1-transitional+edit.dtd">
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:edit="http://xmlns.grorg.org/SVGT12NG/">
 <head>
-  <title>Implementation Requirements</title>
+  <title>Implementation Notes</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport"           content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
@@ -14,93 +14,42 @@
 </head>
 <body>
 
-<h1>Implementation Requirements</h1>
-
-<p class="normativity"><strong>This appendix is normative.</strong></p>
+<h1>Implementation Notes</h1>
 
 <h2 id="Introduction">Introduction</h2>
 
-<p>The following are notes about implementation requirements
-corresponding to various features in the SVG language.</p>
+<p>The following notes describe algorithms and other strategies
+which can be used by software developers when converting content
+to and from the formats required by features in the SVG language.</p>
 
-<h2 id="ErrorProcessing">Error processing</h2>
+<h2 id="ArcImplementationNotes">Elliptical arc parameter conversion</h2>
 
-<p>There are various scenarios where an SVG document fragment
-is technically <em>in error</em>:</p>
+<p>
+To be consistent with other path segment notation,
+arcs in SVG paths are defined in terms of start and end points on the curve.
+</p>
 
-<ul>
-  <li>For the standalone SVG documents, when the content does not conform to the <a href="https://www.w3.org/TR/2008/REC-xml-20081126/">XML 1.0
-  specification</a> [<a href="refs.html#ref-xml">xml</a>], such as the
-  use of incorrect XML syntax
-  </li>
+<p>
+This parameterization of elliptical arcs will be referred to
+as <em>endpoint parameterization</em>. One of the
+advantages of endpoint parameterization is that it permits a
+consistent path syntax in which all path commands end in the
+coordinates of the new "current point".
+</p>
 
-  <li>Other situations that are described as being <em>in error</em> in this
-  specification</li>
-</ul>
-
-<p>A document can go in and out of error over time. For
-example, document changes from the <a href="svgdom.html">SVG DOM</a>
-or from <a href="https://svgwg.org/specs/animations/">animation</a> can cause
-a document to become <em>in error</em> and a further change can
-cause the document to become correct again.</p>
-
-<p>The following error processing shall occur when a document
-is in error:</p>
-
-<ul>
-  <li>
-    The document rendering shall continue after encountering element which has an error. The element or it's part that is in error won't be rendered.
-  </li>
-
-  <li>If the user agent has access to an error reporting
-  capability such as status bar, it is recommended that the
-  user agent provide whatever additional detail it can to
-  enable the user or developer to quickly find the source of
-  the error. For example, the user agent might provide an error
-  message along with a line number and character number at
-  which the error was encountered.</li>
-</ul>
-
-<p>Because of situations where a block of scripting changes
-might cause a given SVG document fragment to go into and out of
-error, error processing shall occur only at times when document
-presentation (e.g., rendering to the display device) is
-updated.</p>
-
-<h2 id="RangeClamping">Clamping values which are restricted to a particular range</h2>
-
-<p>Some numeric attribute and property values have restricted
-ranges, such as color component values. When out-of-range
-values are provided, the user agent shall defer any error
-checking until after presentation time, as composited actions
-might produce intermediate values which are out-of-range but
-final values which are within range.</p>
-
-<p>Color values are not in error if they are out-of-range, even
-if final computations produce an out-of-range color value at
-presentation time. It is recommended that user agents clamp
-color values to the nearest color value (possibly determined by
-simple clipping) which the system can process as late as
-possible (e.g., presentation time), although it is acceptable
-for user agents to clamp color values as early as parse time.
-Thus, implementation dependencies might preclude consistent
-behavior across different systems when out-of-range color
-values are used.</p>
-
-<p>Opacity values out-of-range are not in error and should be
-clamped to the range 0 to 1 at the time which opacity values
-have to be processed (e.g., at presentation time or when it is
-necessary to perform intermediate filter effect
-calculations).</p>
-
-<h2 id="ArcImplementationNotes">Elliptical arc implementation notes</h2>
+<p>
+However, this is not the only way of describing arc geometry
+used in software or mathematics.
+This section describes the alternative center parameterization,
+and how to convert it from and to SVG's endpoint parameterization.
+</p>
 
 <div class='math'>
 
-<h3 id="ArcSyntax">Elliptical arc syntax</h3>
+<h3 id="ArcSyntax">Elliptical arc endpoint syntax</h3>
 
-<p>An elliptical arc is a particular path command. As
-such, it is described by the following parameters in order:</p>
+<p>An elliptical arc, as represented in the SVG path command,
+is described by the following parameters in order:</p>
 
 <p>(<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>) are the absolute coordinates of the
 current point on the path, obtained from the last two
@@ -128,68 +77,12 @@ through increasing angles.</p>
 <p>(<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>) are the absolute coordinates of the
 final point of the arc.</p>
 
-<p>This parameterization of elliptical arcs will be referred to
-as <em>endpoint parameterization</em>. One of the
-advantages of endpoint parameterization is that it permits a
-consistent path syntax in which all path commands end in the
-coordinates of the new "current point". The following
-notes give rules and formulas to help implementers deal with
-endpoint parameterization.</p>
-
-<h3 id="ArcOutOfRangeParameters">Out-of-range parameters</h3>
-
-<p>Arbitrary numerical values are permitted for all elliptical
-arc parameters, but where these values are invalid or
-out-of-range, an implementation must make sense of them as
-follows:</p>
-
-<p>If the endpoints (<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>)
-and (<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>) are identical, then this is
-equivalent to omitting the elliptical arc segment entirely.</p>
-
-<p>If <var>r<sub>x</sub></var>&nbsp;=&nbsp;0 or
-<var>r<sub>y</sub></var>&nbsp;=&nbsp;0
-then this arc is treated as a straight line segment
-(a "lineto") joining the endpoints.</p>
-
-<p>If <var>r<sub>x</sub></var> or <var>r<sub>y</sub></var>
-have negative signs, these are dropped; the absolute value is
-used instead.</p>
-
-<p>If <var>r<sub>x</sub></var>, <var>r<sub>y</sub></var>
-and <var>φ</var> are such that there is no solution
-(basically, the ellipse is not big enough to reach
-from (<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>)
-to (<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>))
-then the ellipse is scaled up
-uniformly until there is exactly one solution (until the
-ellipse is just big enough).</p>
-
-<p><var>φ</var> is taken mod 360 degrees.</p>
-
-
-<p>This forgiving yet consistent treatment of out-of-range
-values ensures that:</p>
-
-<ul>
-  <li>The inevitable approximations arising from computer
-  arithmetic cannot cause a valid set of values written by one
-  SVG implementation to be treated as invalid when read by
-  another SVG implementation. This would otherwise be a
-  problem for common boundary cases such as a semicircular
-  arc.</li>
-
-  <li>Continuous animations that cause parameters to pass
-  through invalid values are not a problem. The motion
-  remains continuous.</li>
-</ul>
-
 <h3 id="ArcParameterizationAlternatives">Parameterization alternatives</h3>
 
 <p>An arbitrary point (<var>x</var>,&nbsp;<var>y</var>) on the elliptical
 arc can be described by the 2-dimensional matrix equation:</p>
 
-(F.6.3.1)
+(eq. 3.1)
 <div role="math" aria-describedby="math-arbitrary-point-on-elliptical-arc">
   <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
     <mrow>
@@ -308,7 +201,7 @@ parameterization and endpoint parameterization.</p>
   <tr>
     <td>
     <!--<img
-    alt="Equation F.6.4.1"
+    alt="Equation 4.1"
     src="images/implnote/arcs/image004.png" />-->
 
 <div role="math">
@@ -431,12 +324,12 @@ parameterization and endpoint parameterization.</p>
 </div>
 
     </td>
-    <td style="text-align: right">(F.6.4.1)</td>
+    <td style="text-align: right">(eq. 4.1)</td>
   </tr>
   <tr>
     <td>
     <!--<img
-    alt="Equation F.6.4.2"
+    alt="Equation 4.2"
     src="images/implnote/arcs/image006.png" />-->
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -571,12 +464,12 @@ parameterization and endpoint parameterization.</p>
 </math>
 </div>
     </td>
-    <td style="text-align: right">(F.6.4.2)</td>
+    <td style="text-align: right">(eq. 4.2)</td>
   </tr>
   <tr>
     <td>
     <!--<img
-    alt="Equation F.6.4.3"
+    alt="Equation 4.3"
     src="images/implnote/arcs/image008.png" />-->
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -637,12 +530,12 @@ parameterization and endpoint parameterization.</p>
 </div>
 
     </td>
-    <td style="text-align: right">(F.6.4.3)</td>
+    <td style="text-align: right">(eq. 4.3)</td>
   </tr>
   <tr>
     <td>
     <!--<img
-    alt="Equation F.6.4.4"
+    alt="Equation 4.4"
     src="images/implnote/arcs/image010.png" />-->
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -694,7 +587,7 @@ parameterization and endpoint parameterization.</p>
 </math>
 </div>
     </td>
-    <td style="text-align: right">(F.6.4.4)</td>
+    <td style="text-align: right">(eq. 4.4)</td>
   </tr>
 </table>
 
@@ -740,7 +633,7 @@ following steps:</p>
     >
       <tr>
         <td><!--<img
-        alt="Equation F.6.5.1"
+        alt="Equation 5.1"
         src="images/implnote/arcs/image012.png" />-->
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -850,7 +743,7 @@ following steps:</p>
 </math>
 </div>
         </td>
-        <td style="text-align: right">(F.6.5.1)</td>
+        <td style="text-align: right">(eq. 5.1)</td>
       </tr>
     </table>
   </li>
@@ -861,7 +754,7 @@ following steps:</p>
     >
       <tr>
         <td><!--<img
-        alt="Equation F.6.5.2"
+        alt="Equation 5.2"
         src="images/implnote/arcs/image014.png" />-->
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -1055,7 +948,7 @@ following steps:</p>
 </math>
 </div>
         </td>
-        <td style="text-align: right">(F.6.5.2)</td>
+        <td style="text-align: right">(eq. 5.2)</td>
       </tr>
     </table>
     <p>where the + sign is chosen if <var>f<sub>A</sub></var>&nbsp;≠&nbsp;<var>f<sub>S</sub></var>, and
@@ -1069,7 +962,7 @@ following steps:</p>
     >
       <tr>
         <td><!--<img
-        alt="Equation F.6.5.3"
+        alt="Equation 5.3"
         src="images/implnote/arcs/image016.png" />-->
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -1200,7 +1093,7 @@ following steps:</p>
 </math>
 </div>
         </td>
-        <td style="text-align: right">(F.6.5.3)</td>
+        <td style="text-align: right">(eq. 5.3)</td>
       </tr>
     </table>
   </li>
@@ -1214,7 +1107,7 @@ following steps:</p>
     >
       <tr>
         <td><!--<img
-        alt="Equation F.6.5.4"
+        alt="Equation 5.4"
         src="images/implnote/arcs/image018.png" />-->
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -1278,7 +1171,7 @@ following steps:</p>
 </math>
 </div>
         </td>
-        <td style="text-align: right">(F.6.5.4)</td>
+        <td style="text-align: right">(eq. 5.4)</td>
       </tr>
     </table>
 
@@ -1292,7 +1185,7 @@ following steps:</p>
     >
       <tr>
         <td><!--<img
-        alt="Equation F.6.5.5"
+        alt="Equation 5.5"
         src="images/implnote/arcs/image020.png" />-->
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -1392,11 +1285,11 @@ following steps:</p>
 </math>
 </div>
         </td>
-        <td style="text-align: right">(F.6.5.5)</td>
+        <td style="text-align: right">(eq. 5.5)</td>
       </tr>
       <tr>
         <td><!--<img
-        alt="Equation F.6.5.6"
+        alt="Equation 5.6"
         src="images/implnote/arcs/image022.png" />-->
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -1547,7 +1440,7 @@ following steps:</p>
 </math>
 </div>
         </td>
-        <td style="text-align: right">(F.6.5.6)</td>
+        <td style="text-align: right">(eq. 5.6)</td>
       </tr>
     </table>
 
@@ -1558,18 +1451,18 @@ following steps:</p>
     <p class='indented'>else if <var>f<sub>S</sub></var>&nbsp;=&nbsp;1, then Δ<var>θ</var>&nbsp;&gt;&nbsp;0.</p>
 
     <p>In other words, if <var>f<sub>S</sub></var>&nbsp;=&nbsp;0 and the
-    right side of (F.6.5.6) is greater than 0, then subtract 360°,
+    right side of (eq. 5.6) is greater than 0, then subtract 360°,
     whereas if <var>f<sub>S</sub></var>&nbsp;=&nbsp;1 and the right
-    side of (F.6.5.6) is less than 0, then add 360°. In all other cases
+    side of (eq. 5.6) is less than 0, then add 360°. In all other cases
     leave it as is.</p>
   </li>
 </ul>
 
 <h3 id="ArcCorrectionOutOfRangeRadii">Correction of out-of-range radii</h3>
 
-<p>This section formalizes the adjustments to out-of-range
-<var>r<sub>x</sub></var> and <var>r<sub>y</sub></var> mentioned in
-F.6.2. Algorithmically these adjustments consist of the following
+<p>This section describes the mathematical adjustments required for out-of-range <var>r<sub>x</sub></var> and <var>r<sub>y</sub></var>,
+as described in the <a href="paths.html#ArcOutOfRangeParameters">Path implementation notes</a>.
+Algorithmically these adjustments consist of the following
 steps:</p>
 
 <ul>
@@ -1589,7 +1482,7 @@ steps:</p>
     >
       <tr>
         <td><!--<img
-        alt="Equation F.6.6.1"
+        alt="Equation 6.1"
         src="images/implnote/arcs/image024.png" />-->
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -1633,20 +1526,20 @@ steps:</p>
 </math>
 </div>
         </td>
-        <td style="text-align: right">(F.6.6.1)</td>
+        <td style="text-align: right">(eq. 6.1)</td>
       </tr>
     </table>
   </li>
 
   <li>
     <p><em>Step 3: Ensure radii are large enough</em></p>
-    <p>Using the primed coordinate values of equation (F.6.5.1),
+    <p>Using the primed coordinate values of equation (eq. 5.1),
     compute</p>
     <table  style="width: 90%"
     >
       <tr>
         <td><!--<img
-        alt="Equation F.6.6.2"
+        alt="Equation 6.2"
         src="images/implnote/arcs/image026.png" />-->
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -1700,7 +1593,7 @@ steps:</p>
 </math>
 </div>
         </td>
-        <td style="text-align: right">(F.6.6.2)</td>
+        <td style="text-align: right">(eq. 6.2)</td>
       </tr>
     </table>
     <p>If the result of the above equation is less than or equal to
@@ -1712,7 +1605,7 @@ steps:</p>
     >
       <tr>
         <td><!--<img
-        alt="Equation F.6.6.3"
+        alt="Equation 6.3"
         src="images/implnote/arcs/image028.png" />-->
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -1760,7 +1653,7 @@ steps:</p>
 </math>
 </div>
         </td>
-        <td style="text-align: right">(F.6.6.3)</td>
+        <td style="text-align: right">(eq. 6.3)</td>
       </tr>
     </table>
   </li>
@@ -1768,115 +1661,18 @@ steps:</p>
   <li>
     <p><em>Step 4: Proceed with computations</em></p>
     <p>Proceed with the remaining elliptical arc computations, such
-    as those in section F.6.5. Note: As a consequence of the
-    radii corrections in this section, equation (F.6.5.2) for the
+    as those in the <a href="#ArcConversionEndpointToCenter">Conversion from endpoint to center parameterization</a> algorithm.
+    Note: As a consequence of the
+    radii corrections in this section, the equation (5.2) for the
     center of the ellipse always has at least one solution (i.e.
     the radicand is never negative). In the case that the
-    radii are scaled up using equation (F.6.6.3), the radicand of
-    (F.6.5.2) is zero and there is exactly one solution for the
+    radii are scaled up using equation (eq. 6.3), the radicand of
+    (eq. 5.2) is zero and there is exactly one solution for the
     center of the ellipse.</p>
   </li>
 </ul>
 
 </div>
-
-<h2 id="TextSelectionImplementationNotes">Text selection implementation notes</h2>
-
-<p>The following implementation notes describe the algorithm
-for deciding which characters are selected during a <a
-href="text.html#TextSelection">text selection</a>
-operation.</p>
-
-<p>As the text selection operation occurs (e.g., while the user
-clicks and drags the mouse to identify the selection), the user
-agent determines a <em>start selection position</em> and an
-<em>end selection position</em>, each of which represents a
-position in the text string between two characters. After
-determining start selection position and end selection
-position, the user agent selects the appropriate characters,
-where the resulting text selection consists of either:</p>
-
-<ul>
-  <li>no selection or</li>
-
-  <li>a <em>start character</em>, an <em>end character</em>
-  (possibly the same character), and all of the characters
-  within the same <a>'text'</a> element whose position
-  in the DOM is logically between the start character and end
-  character.</li>
-</ul>
-
-<p>On systems with pointer devices, to determine the <em>start
-selection position</em>, the SVG user agent determines which
-boundary between characters corresponding to rendered glyphs is
-the best target (e.g., closest) based on the current pointer
-location at the time of the event that initiates the selection
-operation (e.g., the mouse down event). The user agent then
-tracks the completion of the selection operation (e.g., the
-mouse drag, followed ultimately by the mouse up). At the end of
-the selection operation, the user agent determines which
-boundary between characters is the best target (e.g., closest)
-for the <em>end selection position</em>.</p>
-
-<p>If no character reordering has occurred due to bidirectionality,
-then the selection consists of all characters between the
-<em>start selection position</em> and <em>end selection
-position</em>. For example, if a <a>'text'</a> element contains the
-string "abcdef" and the start selection position and end
-selection positions are 0 and 3 respectively (assuming the left
-side of the "a" is position zero), then the selection will
-consist of "abc".</p>
-
-<p>When the user agent is implementing selection of
-bidirectional text, and when the selection starts (or ends)
-between characters which are not contiguous in logical order,
-then there might be multiple potential combinations of
-characters that can be considered part of the selection. The
-algorithms to choose among the combinations of potential
-selection options shall choose the selection option which most
-closely matches the text string's visual rendering order.</p>
-<p>When multiple characters map inseparably to a given set of
-one or more glyphs, the user agent can either disallow the
-selection to start in the middle of the glyph set or can
-attempt to allocate portions of the area taken up by the glyph
-set to the characters that correspond to the glyph.</p>
-
-<p>For systems which support pointer devices such as a mouse,
-the user agent is required to provide a mechanism for selecting
-text even when the given text has associated event handlers or
-links, which might block text selection due to event processing
-precedence rules (see <a href="interact.html#PointerEvents">Pointer events</a>).
-One implementation option: For platforms which support a pointer
-device such as a mouse, the user agent may provide for a small
-additional region around character cells which initiates text
-selection operations but does not initiate event handlers or
-links.</p>
-
-<h2 id="PrintingImplementationNotes">Printing implementation notes</h2>
-
-<p>For user agents which support both zooming on display
-devices and printing, it is recommended that the default
-printing option produce printed output that reflects the
-display device's current view of the current SVG document
-fragment (assuming there is no media-specific styling), taking
-into account any zooming and panning done by the user, the
-current state of animation, and any document changes due to DOM
-and scripting. Thus, if the user zooms into a particular area
-of a map on the display device and then requests a hardcopy,
-the hardcopy should show the same view of the map as appears on
-the display device. If a user pauses an animation and prints,
-the hardcopy should show the same graphics as the currently
-paused picture on the display device. If scripting has added or
-removed elements from the document, then the hardcopy should
-reflect the same changes that would be reflected on the
-display.</p>
-
-<p>When an SVG document is rendered on a static-only device
-such as a printer which does not support SVG's animation and
-scripting and facilities, then the user agent shall ignore any
-animation and scripting elements in the document and render the
-remaining graphics elements according to the rules in this
-specification.</p>
 
 <h2 id="NumericPrecisionImplementationNotes">Notes on generating high-precision geometry</h2>
 
