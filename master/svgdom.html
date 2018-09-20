@@ -196,33 +196,62 @@ returned <a>SVGLengthList</a> object would be empty.</p>
 
 <h2 id="ElementsInTheSVGDOM">Elements in the SVG DOM</h2>
 
-<p>Every <a>Element</a> object that corresponds to an SVG element (that is,
+<p>Any SVG software that is required to support the SVG DOM
+must enhance the DOM elements created for <a>SVG document fragments</a>
+as follows:
+</p>
+
+<ul>
+<li>
+<p>Every <a>Element</a> object that corresponds to a supported SVG element (that is,
 an element with namespace URI "http://www.w3.org/2000/svg" and a
-local name that is one of the elements defined in this specification)
-must also implement the DOM interface identified in element definition.
-For example, in <a href="shapes.html#RectElement">The <span class="element-name">'rect'</span> element</a>,
+local name that is one of the elements defined in this specification
+or another specification implemented by the software)
+must also implement the DOM interface identified in the element definition.
+</p>
+</li>
+<li>
+<p>
+Elements in the SVG namespace whose local name does not match an element
+defined in any specification supported by the software
+should instead implement the <a>SVGUnknownElement</a> interface and
+must nonetheless implement the <a>SVGElement</a> interface.
+</p>
+</li>
+</ul>
+
+<p class="issue">The <a>SVGUnknownElement</a> interface is "at risk".</p>
+
+<p class="example">
+In <a href="shapes.html#RectElement">The <span class="element-name">'rect'</span> element</a>,
 the <a>SVGRectElement</a> interface is identified.  This means that every
 <a>Element</a> object whose namespace URI is "http://www.w3.org/2000/svg"
 and whose local name is "rect" must also implement <a>SVGRectElement</a>.</p>
 
 <h2 id="SVGDOMNamingConventions">Naming conventions</h2>
 
-<p>The SVG DOM follows similar naming conventions to the
-<a href="https://www.w3.org/TR/DOM-Level-1/">Document Object Model HTML</a>
-([<a href="refs.html#ref-dom-level-1">DOM-Level-1</a>], chapter 2).</p>
+<p>The SVG DOM follows similar naming conventions to HTML and DOM standards
+([<a href="refs.html#ref-html">HTML</a>], [<a href="refs.html#ref-dom">DOM</a>]).</p>
 
 <p>All names are defined as one or more English words
 concatenated together to form a single string. Property or
 method names start with the initial keyword in lowercase, and
 each subsequent word starts with a capital letter. For example,
 a property that returns document meta information such as the
-date the file was created might be named "fileDateCreated". In
-the ECMAScript binding, properties are exposed as properties of
-a given object.</p>
+date the file was created might be named "fileDateCreated".</p>
 
-<p>For attributes with the CDATA data type, the case of the
-return value is that given in the source document.</p>
+<p>Interface names defined in this specification nearly all start with "SVG".
+Interfaces that represent the DOM <a>Element</a> object
+for an SVG-namespaced element follow the format
+<code>SVG<i>ElementName</i>Element</code>, where <code><i>ElementName</i></code>
+is the element's tag name with the initial letter capitalized.
+So <a>SVGRadialGradientElement</a> is the interface for an <a>'radialGradient'</a> element.
+</p>
 
+<p class="note">
+An exception to this casing convention is <a>SVGSVGElement</a>,
+in which the entire tag name is capitalized.
+</p>
 
 <h2 id="RelationshipWithUIEVENTS">Relationship with UI Events</h2>
 
@@ -318,13 +347,20 @@ function <code>MyClickHandler</code>.</p>
 
 <h2 id="InvalidValues">Invalid values</h2>
 
-<p>If a script sets a DOM attribute to an <a>invalid value</a> (e.g.,
+<p>If a script sets a <a>reflected</a> DOM attribute
+to an <a>invalid value</a> for the content attribute (e.g.,
 a negative number for an attribute that requires a non-negative
 number or an out-of-range value for an enumeration), unless
 this specification indicates otherwise, no exception shall be
 raised on setting, but the given document fragment shall become
 technically <em>in error</em> as described in
 <a href="conform.html#ErrorProcessing">Error processing</a>.</p>
+
+<p class="issue">
+  Many browsers currently throw errors for out-of-range enumeration values,
+  or explicitly setting an enumeration to the UNKNOWN value.
+  See <a href="https://github.com/w3c/svgwg/issues/547">Should setting an enum IDL to an invalid value throw an error?</a> on GitHub for discussion.
+</p>
 
 </body>
 </html>
