@@ -110,42 +110,57 @@ as described in the Web IDL specification. [<a href="refs.html#ref-webidl">WebID
   </li>
 </ul>
 
-<p>All SVG DOM objects that directly correspond to an attribute, e.g.
+<p>Many SVG DOM properties <a>reflect</a> a content attribute
+on the corresponding element, e.g.
 the <a>SVGAnimatedLength</a> <a>SVGRectElement::ry</a> in an
-<a>SVGRectElement</a>, are live.
-This means that any changes made to the attribute are immediately
-reflected in the corresponding SVG DOM object.</p>
+<a>SVGRectElement</a>.
+This relationship is live, and values must be synchronized
+(following the rules in <a href="types.html#TermReflect">DOM interfaces for reflecting SVG attributes</a>)
+when either the attribute or its reflected property is modified.
+</p>
 
-<h3 id="SVGObjectInitialization">SVG DOM object initialization</h3>
-
-<p>The SVG DOM allows attributes to be accessed even though they haven't been
-specified explicitly in the document markup. When this happens an appropriate object
-is created, initialized and returned. This newly constructed object does not affect rendering until
+<p>
+If the attribute hasn't been specified explicitly in the document markup,
+the reflected object is nonetheless intialized upon access,
+to the attribute's inital value.
+If the attribute's initial value is <span class="attr-value">(none)</span>,
+the object is initialized as defined in
+<a href="#SVGObjectInitialization">Reflecting an empty initial value</a>.
+This newly constructed object does not generate an attribute on the element until
 it is modified for the first time. Modifications made to the corresponding
 attribute are immediately reflected in the object.</p>
 
-<p>For example, if <code>lineElement.x1.baseVal</code> is accessed
-and the <span class='attr-name'>'x1'</span> attribute was not specified in the document, the
-returned SVG DOM object would represent the value <span class="attr-value">0 user units</span>.</p>
+<p class="example">If <code>lineElement.x1.baseVal</code> is accessed
+(where <code>lineElement</code> is an instance of <a>SVGLineElement</a>)
+and the <a>'line/x1'</a> attribute was not specified in the document, the
+returned <a>SVGLength</a> object would represent the value <span class="attr-value">0 user units</span>,
+because the initial value for the attribute is <span class="attr-value">0</span>.</p>
 
-<p>For cases where an attribute has a default value the returned SVG DOM object that must reflect that value,
-and for all other cases the object is initialized as described below.
-If a particular SVG DOM interface is not listed below that means
+<h3 id="SVGObjectInitialization">Reflecting an empty initial value</h3>
+
+<p>
+When initializing an SVG DOM attribute that <a>reflects</a> a null or empty initial value,
+then the property must be initialized according to its data type,
+as defined in this section.
+This occurs only if there is no explicit value for the reflected content attribute,
+and the initial value in the attribute's definition table is <span class="attr-value">(none)</span>.
+</p>
+
+<p>
+If an interface is not listed below that means
 that the object initialization shall be done using the values for the
-objects that the interface contains, e.g <span class="DOMInterfaceName">DOMString</span> in the
-case of <a>SVGAnimatedString</a>.</p>
+objects that the interface contains, e.g.,
+an <a>SVGAnimatedString</a> consists of two <span class="DOMInterfaceName">DOMString</span> members,
+while a <a>DOMRect</a> consists of many <span class="DOMInterfaceName">double</span>s.</p>
 
 <dl id="SVGObjectInitValues">
-  <dt class="DOMInterfaceName"><a href="text.html#__svg__SVGTextContentElement__textLength">SVGTextContentElement.textLength</a></dt>
-  <dd>Initialized with the return-value of <a>SVGTextContentElement::getComputedTextLength</a>
-  on the same element.</dd>
-
   <dt class="DOMInterfaceName">DOMString</dt>
   <dd>Initialized as the empty string (<span class="attr-value">""</span>).</dd>
 
   <dt class="DOMInterfaceName">float</dt>
   <dt class="DOMInterfaceName">long</dt>
   <dt class="DOMInterfaceName">short</dt>
+  <dt>Any other <a href="https://heycam.github.io/webidl/#dfn-numeric-type">numeric type</a> defined in WebIDL</dt>
   <dd>Initialized as <span class="attr-value">0</span>.</dd>
 
   <dt class="DOMInterfaceName">boolean</dt>
@@ -173,6 +188,11 @@ case of <a>SVGAnimatedString</a>.</p>
   <dt class="DOMInterfaceName"><a>SVGPreserveAspectRatio</a></dt>
   <dd>Initialized as <span class="attr-value">'xMidYMid meet'</span>.</dd>
 </dl>
+
+<p class="example">If <code>textElement.dx.baseVal</code> is accessed
+(where <code>textElement</code> is an instance of <a>SVGTextElement</a>)
+and the <a>'text/dx'</a> attribute was not specified in the document, the
+returned <a>SVGLengthList</a> object would be empty.</p>
 
 <h2 id="ElementsInTheSVGDOM">Elements in the SVG DOM</h2>
 
