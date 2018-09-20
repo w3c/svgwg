@@ -88,8 +88,10 @@ as described in the Web IDL specification. [<a href="refs.html#ref-webidl">WebID
   [<a href="refs.html#ref-dom">DOM</a>]</li>
 
   <li>The SVG DOM requires support for relevant aspects of 
-  <a href="https://www.w3.org/TR/uievents/">UI Events</a> ([<a href="refs.html#ref-uievents">uievents</a>]).
-  (For the specific features from UI Events that are required, see
+  <a href="https://www.w3.org/TR/uievents/">UI Events</a> and
+  <a href="https://www.w3.org/TR/clipboard-apis/">Clipboard API and events</a>
+  ([<a href="refs.html#ref-uievents">uievents</a>], [<a href="refs.html#ref-clipboard-apis">clipboard-apis</a>]).
+  (For the specific features that are required, see
   see <a href="svgdom.html#RelationshipWithUIEVENTS">Relationship with UI Events</a>.)</li>
 
   <li>The SVG DOM requires, at a minimum, complete
@@ -255,54 +257,45 @@ in which the entire tag name is capitalized.
 
 <h2 id="RelationshipWithUIEVENTS">Relationship with UI Events</h2>
 
-<p>The SVG DOM supports select all interfaces defined in, and
+<p>The SVG DOM is compatible with all interfaces defined in, and
 all the event types from, 
-<a href="https://www.w3.org/TR/uievents/">UI Events</a>
-([<a href="refs.html#ref-uievents">uievents</a>]).</p>
+<a href="https://www.w3.org/TR/uievents/">UI Events</a>,
+and the event types defined in
+<a href="https://www.w3.org/TR/clipboard-apis/">Clipboard API and events</a>
+([<a href="refs.html#ref-uievents">uievents</a>], [<a href="refs.html#ref-clipboard-apis">clipboard-apis</a>]).
+</p>
 
-<ul>
-  <li>
-    The following event types are triggered due to state
-    changes in animations. (The definitions for these events
-    can be found in the description of the <a>TimeEvent</a> interface.)
+<p>
+All elements in the SVG namespace support
+<a>event attributes</a> for these events;
+matching IDL properties are included in the base <a>SVGElement</a> interface
+via the <a>GlobalEventHandlers</a> and
+<a>DocumentAndElementEventHandlers</a> mixins, respectively.
+</p>
+
+<p>
+As part of SVG DOM support, conforming SVG software
+must support all (non-deprecated, non-obsolete) event types
+defined in these specifications,
+if the relevant events could occur in the software's use.
+SVG software that does not support user <a>interaction</a>
+should nonetheless implement support for events that can fire without interaction,
+such as <code>load</code> and <code>error</code> events.
+</p>
+
+<p>SVG animation elements
+  (defined in the <a href="https://svgwg.org/specs/animations/">SVG Animations Level 2</a> specification)
+  support additional events and event attributes.
+  The following event types are triggered due to state
+  changes in animations.
+</p>
     <ul>
       <li><a href="interact.html#BeginEvent">beginEvent</a></li>
       <li><a href="interact.html#EndEvent">endEvent</a></li>
       <li><a href="interact.html#RepeatEvent">repeatEvent</a></li>
     </ul>
-  </li>
-</ul>
 
-<p id="EventListeners">While event listeners can be registered using an
-<code>addEventListener</code> call on any element in the DOM,
-the use of <a href="interact.html#EventAttributes">event attributes</a>
-on elements where those attributes are disallowed will not result in their
-being invoked if the relevant event is dispatched to the element.
-For example, if the <a>'onclick'</a> attribute were specified on
-a <a>'title'</a> element, its contents would never be run in
-response to a <span class='attr-value'>click</span> event:</p>
-
-<pre class='example'><![CDATA[
-<svg xmlns="http://www.w3.org/2000/svg">
-  <title onclick="alert('Hello')">Invalid event attribute</title>
-  <script>
-    // Find the 'title' element.
-    var title = document.getElementsByTagNameNS("http://www.w3.org/2000/svg", "title")[0];
-
-    // Create and initialize a 'click' event.
-    var event = document.createEvent("MouseEvent");
-    event.initMouseEvent("click", true, false, this, 1, 0, 0, 0, 0, false,
-                         false, false, false, 0, null);
-
-    // Dispatch the event to the 'title' element.  Since onclick="" is not
-    // allowed on 'title', the alert will not show.
-    title.dispatchEvent(event);
-  </script>
-</svg>
-]]></pre>
-
-<p>See the <a href='attindex.html'>Attribute Index</a> for details on
-which elements a given event attribute is allowed to be specified on.</p>
+<p>The <a>event attributes</a> for these animation events have no effect on other elements.</p>
 
 <p>Implementors may view the setting of event attributes as the
 creation and registration of an <a>EventListener</a> on the
@@ -319,6 +312,7 @@ specification is made as to the order in which event attributes
 will receive the event with regards to the other EventListeners
 on the <a>EventTarget</a>.</p>
 
+<div class="example">
 <p>In ECMAScript, one way to establish an event listener is to
 define a function and pass that function to the <code>addEventListener</code> method:</p>
 
@@ -344,6 +338,7 @@ parameter, and the name of the Event object is
 
 <p>which will pass the <a>Event</a> object <strong>evt</strong> into
 function <code>MyClickHandler</code>.</p>
+</div>
 
 <h2 id="InvalidValues">Invalid values</h2>
 
