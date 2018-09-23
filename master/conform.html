@@ -698,6 +698,50 @@ a conforming XML-compatible SVG DOM subtree.</p>
   </li>
 </ul>
 
+<h3 id="ErrorProcessing">Error processing</h3>
+
+<p>There are various scenarios where an SVG document fragment
+is technically <em>in error</em>:</p>
+
+<ul>
+  <li>The document or DOM subtree is not-conforming for its document type,
+  as described in the previous sections.
+  </li>
+
+  <li>Other situations that are described as being <em>in error</em> in this
+  specification, such as incorrect attribute values.</li>
+</ul>
+
+<p>A dynamic document can go in and out of error over time. For
+example, document changes from the <a href="types.html#SVGDOMOverview">SVG DOM</a>
+or from <a href="https://svgwg.org/specs/animations/">animation</a> can cause
+a document to become <em>in error</em> and a further change can
+cause the document to become correct again.</p>
+
+<p>User agents must use the following error processing rules whenever a document
+is in error,
+unless other sections of this specification define more specific rules for handling the particular error type:</p>
+
+<ul>
+  <li>
+    The document rendering shall continue after encountering element which has an error. The element or its part that is in error won't be rendered.
+  </li>
+
+  <li>If the user agent has access to an error reporting
+  capability such as status bar or console, it is recommended that the
+  user agent provide whatever additional detail it can to
+  enable the user or developer to quickly find the source of
+  the error. For example, the user agent might provide an error
+  message along with a line number and character number at
+  which the error was encountered.</li>
+</ul>
+
+<p>Because of situations where a block of scripting changes
+might cause a given SVG document fragment to go into and out of
+error, the user agent should only apply error processing at times when document
+presentation (e.g., rendering to the display device) is
+updated.</p>
+
 <h2 id="SoftwareConformanceClasses">Software Conformance Classes</h2>
 
 <p>For software, the requirements for conformance depend
@@ -1031,7 +1075,7 @@ definitions from the CSS 2.1 specification</a>
   headers are missing or specify a value that does not match the
   compression method that has been applied to the content, then
   the SVG viewer must not render the content and must treat the
-  document as being <a href="implnote.html#ErrorProcessing">in error</a>.</li>
+  document as being <a href="#ErrorProcessing">in error</a>.</li>
 
   <li>The viewer must use at least single-precision floating point for intermediate calculations on any numerical operations for conversion of coordinates. However, in order to prevent the rounding error on coordinate transformation, at least double-precision floating point computation must be used on <a>CTM</a> generation processing. Such minimum typical computation way is expressed with following formulas.
 
@@ -1355,6 +1399,34 @@ external resources can be used, such as in the HTML or XHTML
 <span class="element-name">'img'</span> element and in CSS
 properties that can refer to raster image resources (e.g.,
 <span class="property">'background-image'</span>).</p>
+
+<h4 id="PrintingImplementationNotes">Printing implementation notes</h4>
+
+<p>For user agents which support both zooming on display
+devices and printing, it is recommended that the default
+printing option produce printed output that reflects the
+display device's current view of the current SVG document
+fragment (assuming there is no media-specific styling), taking
+into account any zooming and panning done by the user, the
+current state of animation, and any document changes due to DOM
+and scripting.</p>
+
+<p>Thus, if the user zooms into a particular area
+of a map on the display device and then requests a hardcopy,
+the hardcopy should show the same view of the map as appears on
+the display device. If a user pauses an animation and prints,
+the hardcopy should show the same graphics as the currently
+paused picture on the display device. If scripting has added or
+removed elements from the document, then the hardcopy should
+reflect the same changes that would be reflected on the
+display.</p>
+
+<p>When an SVG document is rendered on a static-only device
+such as a printer which does not support SVG's animation and
+scripting and facilities, then the user agent shall ignore any
+animation and scripting elements in the document and render the
+remaining graphics elements according to the rules in this
+specification.</p>
 
 <h3 id="ConformingHighQualitySVGViewers">Conforming High-Quality SVG Viewer</h3>
 

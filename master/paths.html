@@ -52,9 +52,7 @@ interfaces for SVG paths. Various implementation notes for SVG
 paths can be found in <a
 href="paths.html#PathElementImplementationNotes"><span
 class="element-name">'path'</span> element implementation
-Notes</a> and <a
-href="implnote.html#ArcImplementationNotes">Elliptical arc
-implementation notes</a>.</p>
+Notes</a>.</p>
 
 <p>A path is defined in SVG using the <a>'path'</a> element.</p>
 
@@ -786,10 +784,16 @@ src="images/paths/arcs02.png" width="426" height="187" /></p>
 <p class="view-as-svg"><a href="images/paths/arcs02.svg">View
 this example as SVG (SVG-enabled browsers only)</a></p>
 
-<p>Refer to <a
-href="implnote.html#ArcImplementationNotes">Elliptical arc
-implementation notes</a> for detailed implementation notes for
+<p>Refer to the section on <a
+href="#ArcOutOfRangeParameters">Out-of-range elliptical arc parameters</a>
+for detailed implementation notes for
 the path data elliptical arc commands.</p>
+
+<p class="note">
+The <a href="implnote.html#ArcImplementationNotes">Implementation Notes appendix</a>
+has relevant formulae for software that needs to convert
+SVG arc notation to a format that uses center points and arc sweeps.
+</p>
 
 
 <h3 id="PathDataBNF">The grammar for path data</h3>
@@ -1006,77 +1010,137 @@ segment</dfn> is defined as follows:</p>
 
 <h2 id="PathElementImplementationNotes">Implementation notes</h2>
 
-<h3 id="PathDataErrorHandling">Error handling in path data</h3>
+<p>A conforming SVG user agent must implement features that use path data
+according to the following details:</p>
 
-<p>A conforming SVG user agent must implement path rendering as follows:</p>
+<h3 id="ArcOutOfRangeParameters">Out-of-range elliptical arc parameters</h3>
+
+<p>Arbitrary numerical values are permitted for all elliptical arc parameters
+(other than the boolean flags),
+but user agents must make the following adjustments for invalid values
+when rendering curves or calculating their geometry:</p>
 
 <ul>
   <li>
-    Error handling:
-    <ul>
-      <li>The general rule for error handling in path data is
-      that the SVG user agent shall render a <a>'path'</a> element up
-      to (but not including) the path command containing the
-      first error in the path data specification. This will
-      provide a visual clue to the user or developer about
-      where the error might be in the path data specification.
-      This rule will greatly discourage generation of invalid
-      SVG path data.</li>
-
-      <li>If a path data command contains an incorrect set of
-      parameters, then the given path data command is rendered
-      up to and including the last correctly defined <a>path segment</a>,
-      even if that <a>path segment</a> is a sub-component of
-      a compound path data command, such as a "lineto" with
-      several pairs of coordinates. For example, for the path
-      data string <span class='attr-value'>'M 10,10 L 20,20,30'</span>,
-      there is an odd number of parameters for the "L" command, which requires an even
-      number of parameters. The user agent is required to draw
-      the line from (10,10) to (20,20) and then perform error
-      reporting since <span class='attr-value'>'L 20 20'</span>
-      is the last correctly defined segment of the path data specification.</li>
-
-      <li>Wherever possible, all SVG user agents shall report
-      all errors to the user.</li>
-    </ul>
+    <p>If the endpoint (<strong>x</strong>, <strong>y</strong>) of the segment
+    is identical to the current point
+    (e.g., the endpoint of the previous segment),
+    then this is equivalent to omitting the elliptical arc segment entirely.</p>
   </li>
   <li>
-    Markers and zero-length <a>path segments</a>:
-    <ul>
-      <li>If markers are specified, then a marker is drawn on
-      every applicable vertex, even if the given vertex is the
-      end point of a zero-length <a>path segment</a> and even if
-      "moveto" commands follow each other.</li>
-
-      <li>As mentioned in <a href="painting.html#StrokeProperties">Stroke Properties</a>,
-      linecaps must be painted for zero length subpaths when
-      <a>'stroke-linecap'</a> has a value of
-      <span class='prop-value'>round</span> or
-      <span class='prop-value'>square</span>.</li>
-    </ul>
+    <p>If either <strong>rx</strong> or <strong>ry</strong> is 0,
+    then this arc is treated as a straight line segment
+    (a "lineto") joining the endpoints.</p>
   </li>
   <li>
-    The S/s commands indicate that the first control point of
-    the given cubic Bézier segment is calculated by
-    reflecting the previous <a>path segments</a> second control point
-    relative to the current point. The exact math is as
-    follows. If the current point is (<var>curx</var>, <var>cury</var>) and the
-    second control point of the previous <a>path segment</a> is
-    (<var>oldx2</var>, <var>oldy2</var>), then the reflected point (i.e., (<var>newx1</var>,
-    <var>newy1</var>), the first control point of the current <a>path
-    segment</a>) is:
+    <p>If either <strong>rx</strong> or <strong>ry</strong>
+    have negative signs, these are dropped;
+    the absolute value is used instead.</p>
+  </li>
+  <li>
+    <p>If <strong>rx</strong>, <strong>ry</strong> and <strong>x-axis-rotation</strong>
+    are such that there is no solution
+    (basically, the ellipse is not big enough to reach
+    from the current point to the new endpoint)
+    then the ellipse is scaled up
+    uniformly until there is exactly one solution (until the
+    ellipse is just big enough).</p>
+    <p class="note">See the appendix section
+    <a href="implnote.html#ArcCorrectionOutOfRangeRadii">Correction of out-of-range radii</a>
+    for mathematical formula for this scaling operation.</p>
+  </li>
+</ul>
+
+<div class="note">
+<p>This forgiving yet consistent treatment of out-of-range
+values ensures that:</p>
+
+<ul>
+  <li>The inevitable approximations arising from computer
+  arithmetic cannot cause a valid set of values written by one
+  SVG implementation to be treated as invalid when read by
+  another SVG implementation. This would otherwise be a
+  problem for common boundary cases such as a semicircular
+  arc.</li>
+
+  <li>Continuous animations that cause parameters to pass
+  through invalid values are not a problem. The motion
+  remains continuous.</li>
+</ul>
+</div>
+
+<h3 id="ReflectedControlPoints">Reflected control points</h3>
+
+<p>
+  The S/s and T/t commands indicate that the first control point of
+  the given cubic Bézier segment is calculated by
+  reflecting the previous path segment's final control point
+  relative to the current point. The exact math is as
+  follows.
+</p>
+<p>
+  If the current point is (<var>curx</var>, <var>cury</var>) and the
+  final control point of the previous <a>path segment</a> is
+  (<var>oldx2</var>, <var>oldy2</var>), then the reflected point (i.e., (<var>newx1</var>,
+  <var>newy1</var>), the first control point of the current <a>path
+  segment</a>) is:
+</p>
 <pre>
 (newx1, newy1) = (curx - (oldx2 - curx), cury - (oldy2 - cury))
                = (2*curx - oldx2, 2*cury - oldy2)
 </pre>
-  </li>
 
-  <li>A non-positive radius value is an error.</li>
+<h3 id="ZeroLengthSegments">Zero-length path segments</h3>
 
-  <li>Unrecognized contents within a path data stream (i.e.,
-  contents that are not part of the path data grammar) is an
-  error.</li>
+<p>Path segments with zero length are not invalid,
+and will affect rendering in the following cases:</p>
+
+<ul>
+  <li>If markers are specified, then a marker is drawn on
+  every applicable vertex, even if the given vertex is the
+  end point of a zero-length <a>path segment</a> and even if
+  "moveto" commands follow each other.</li>
+
+  <li>As mentioned in <a href="painting.html#StrokeProperties">Stroke Properties</a>,
+  linecaps must be painted for zero-length subpaths when
+  <a>'stroke-linecap'</a> has a value of
+  <span class='prop-value'>round</span> or
+  <span class='prop-value'>square</span>.</li>
 </ul>
+
+<h3 id="PathDataErrorHandling">Error handling in path data</h3>
+  
+  Unrecognized contents within a path data stream (i.e.,
+  contents that are not part of the path data grammar) is an
+  error.
+  In such a case, the following error-handling rules must be used:
+
+  <ul>
+    <li>The general rule for error handling in path data is
+    that the SVG user agent shall render a <a>'path'</a> element up
+    to (but not including) the path command containing the
+    first error in the path data specification. This will
+    provide a visual clue to the user or developer about
+    where the error might be in the path data specification.
+    This rule will greatly discourage generation of invalid
+    SVG path data.</li>
+
+    <li>If a path data command contains an incorrect set of
+    parameters, then the given path data command is rendered
+    up to and including the last correctly defined <a>path segment</a>,
+    even if that <a>path segment</a> is a sub-component of
+    a compound path data command, such as a "lineto" with
+    several pairs of coordinates. For example, for the path
+    data string <span class='attr-value'>'M 10,10 L 20,20,30'</span>,
+    there is an odd number of parameters for the "L" command, which requires an even
+    number of parameters. The user agent is required to draw
+    the line from (10,10) to (20,20) and then perform error
+    reporting since <span class='attr-value'>'L 20 20'</span>
+    is the last correctly defined segment of the path data specification.</li>
+
+    <li>Wherever possible, all SVG user agents shall report
+    all errors to the user.</li>
+  </ul>
 
 <h2 id="DistanceAlongAPath">Distance along a path</h2>
 

@@ -132,7 +132,7 @@ have been made.</p>
     move the corresponding definitions from the Document structure chapter to here.
   </li>
   <li>Move the non-normative section on suggested methods for generating
-    high-precision graphics to the Implementation Requirements appendix.
+    high-precision graphics to the Implementation Notes appendix.
   </li>
 </ul>
 
@@ -262,6 +262,14 @@ have been made.</p>
   <li>Made <a>SVGElement</a> include the <a>DocumentAndElementEventHandlers</a> interface from HTML.
     <a href="https://github.com/w3c/svgwg/issues/395">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/413">Edits</a></li>
+</ul>
+</div>
+<div class='changed-since-cr1 cr2'>
+<ul>
+  <li>Merged in content from the former normative <a href="#svgdom">SVG DOM appendix</a>
+    (after edits),
+    with sections on reflecting attributes re-arranged to fit.
+  </li>
 </ul>
 </div>
 
@@ -534,6 +542,11 @@ have been made.</p>
   <li>Clarified that percentage distances are not affected by zero <a>'pathLength'</a>.
     <a href="https://github.com/w3c/svgwg/issues/383">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/485">Edits</a></li>
+  <li>Reorganized the Implementation Notes section into logical subsections
+  (including the section on out-of-bounds arc parameters,
+  which was formerly in the Implementation Notes appendix).
+    <a href="https://github.com/w3c/svgwg/pull/">Edits</a>
+  </li>
 </ul>
 </div>
 
@@ -646,6 +659,14 @@ have been made.</p>
     <a href="https://github.com/w3c/svgwg/pull/476">Edits</a>
   </li>
 
+</ul>
+</div>
+
+<div class='changed-since-cr1 cr2'>
+<ul>
+  <li>Clarify the initial value for <a>'textLength'</a>,
+  and add note about its impact on the reflected IDL attribute.
+  </li>
 </ul>
 </div>
 
@@ -863,6 +884,13 @@ have been made.</p>
   </ul>
 </div>
 
+<div class='changed-since-cr1 cr2'>
+  <ul>
+    <li>Merged in content on events from the removed SVG DOM appendix.
+    </li>
+  </ul>
+</div>
+
 <h3 id="linking">Linking chapter</h3>
 
 <ul>
@@ -978,7 +1006,7 @@ have been made.</p>
   <li>Removed this appendix, as SVG 2 is not defined in terms of a DTD.</li>
 </ul>
 
-<h3 id="svgdom">SVG Document Object Model (DOM)</h3>
+<h3 id="svgdom">SVG Document Object Model (DOM)(SVG 1.1 Only)</h3>
 
 <ul>
   <li>Update core DOM support requirement to DOM4, DOM Level 2 Views, UI Events, and DOM Level 2 Style/CSS.</li>
@@ -988,6 +1016,46 @@ have been made.</p>
   <li>Interfaces and methods that relied on the 'CSSValue' type removed (they were already deprecated in SVG 1.1).</li>
 </ul>
 
+
+<div class="changed-since-cr1 cr2">
+  <ul>
+    <li>Dependencies on other DOM specifications updated as follows:
+      <ul>
+        <li>Make DOM 4 a minimum requirement, with DOM living standard a "should".</li>
+        <li>Remove requirement for support of obsolete DOM View spec.</li>
+        <li>Update the requirement on DOM Level 2 Style to
+            only include interfaces also defined in CSSOM,
+            with full support for CSSOM as a "should".
+            (And remove the "Relationship with DOM Level 2 CSS" section.)
+        </li>
+        <li>Add Geometry Interfaces Module Level 1 as a requirement.</li>
+        <li>Add Clipboard API and events as a normative requirement,
+        complementary to the UI Events requirement.</li>
+      </ul>
+    </li>
+    <li>Clarify that SVG DOM requirements extend to elements defined in other specifications.</li>
+    <li>Add a requirement for handling unknown elements in the SVG namespace:
+      "must" handle as browsers currently do (as SVGElement instances);
+      "should" implement SVGUnknownElement interface (though that is at risk).
+    </li>
+    <li>Remove the special rule for initializing <a>SVGTextContentElement::textLength</a>,
+      in favor of a clearer definition of the attribute's dynamic initial value.
+    </li>
+    <li>Clarify that rules about initializing objects
+      only apply when reflecting <code>(none)</code> initial values,
+      and also apply to interfaces defined in other specifications (e.g., Geometry).
+    </li>
+    <li>Update section "Relationship with UI Events"
+    to reflect that most event handler attributes are available on all elements,
+    that clipboard API events are available.
+    Wording is updated to clarify normative requirements on software.
+    </li>
+    <li>Merge the entire content of this appendix
+    into the Basic Data Types chapter,
+    except for the section "Relationship with UI Events",
+    which is merged into the Interactivity chapter.</li>
+  </ul>
+</div>
 
 <h3 id="idl">IDL Definitions appendix</h3>
 
@@ -1010,13 +1078,37 @@ have been made.</p>
   Web IDL.</li>
 </ul>
 
-<h3 id="impreqs"> Implementation Requirements appendix</h3>
+<h3 id="impreqs">Implementation Notes appendix (was Implementation Requirements in SVG 1.1)</h3>
 
+<div class="changed-since-cr1">
 <ul>
-  <li class="'changed-since-cr1'">Removed un-implemented out-of-range flag values note.
+  <li>Removed un-implemented out-of-range flag values note.
     <a href="https://github.com/w3c/svgwg/issues/324">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/516">Edits</a></li>
 </ul>
+</div>
+
+<div class="changed-since-cr1 cr2">
+  <ul>
+    <li>Moved normative sections into chapters,
+        and renamed appendix to Implementation Notes:
+      <ul>
+        <li>Error Processing is now in Conformance Criteria.</li>
+        <li>Clamping Values is now in Data Types and Interfaces,
+        and sections re colors and opacity have been removed
+        (clamping behavior of these properties is defined in CSS Color).
+        </li>
+        <li>The normative parts of the Elliptical Arc Implementation Notes
+        are now in the Paths chapter, with other implementation requirements for paths</li>
+        <li>Text selection implementation notes is now in Text,
+        with the main section on Text Selection.</li>
+        <li>Printing Implementation Notes is now in Conformance Criteria.</li>
+      </ul>
+      <a href="https://github.com/w3c/svgwg/issues/520">Issue discussion</a>
+      <a href="https://github.com/w3c/svgwg/pull/">Edits</a>
+    </li>
+  </ul>
+</div>
 
 <h3 id="access">Accessibility Support appendix</h3>
 
@@ -1065,6 +1157,18 @@ have been made.</p>
 
   <li>Added normative reference to Shadow DOM.</li>
 </ul>
+
+<div class="changed-since-cr1 cr2">
+  <ul>
+    <li>Removed normative reference to DOM Level 2 Views.</li>
+
+    <li>Added normative reference to Geometry Interfaces.</li>
+
+    <li>Added normative reference to CSSOM.</li>
+
+    <li>Added normative reference to Clipboard API and events.</li>
+  </ul>
+</div>
 
 <h3 id="other-appendix">Elmenent, Attribute, and Property index appendices</h3>
 

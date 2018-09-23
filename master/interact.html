@@ -54,9 +54,6 @@ the SVG language:</p>
 <ul>
   <li>hyperlinks are discussed in <a href="linking.html">Links</a></li>
 
-  <li>SVG's relationship to UI Events is discussed in
-  <a href="svgdom.html#RelationshipWithUIEVENTS">Relationship with UI Events</a></li>
-
   <li>animation is discussed in <a href="animate.html">Animating SVG Documents</a></li>
 </ul>
 
@@ -149,9 +146,9 @@ the SVG language:</p>
 <p>The following aspects of SVG are affected by events:</p>
 
 <ul>
-  <li>Using <a href="svgdom.html">SVG Document Object Model (DOM)</a>, a script can
+  <li>Using <a href="types.html#SVGDOMOverview">SVG Document Object Model (DOM)</a>, a script can
   <a href="https://www.w3.org/TR/dom/#dom-eventtarget-addeventlistener">add or remove DOM event listeners</a>
-  ([<a href="refs.html#ref-dom">DOM</a>], section 3.6 Interface EventTarget) so that
+  ([<a href="refs.html#ref-dom">DOM</a>]) so that
   script can be invoked or ignored when a given event occurs on an event target</li>
 
   <li>SVG's <a>animation elements</a> can be defined to begin or end based on
@@ -293,6 +290,48 @@ are described elsewhere in this specification.</p>
 used in <a>animation element</a> <a>'animate/begin'</a> and <a>'animate/end'</a>
 attributes are resolved to concrete times only in response to "bubbling" and
 "at target" phase events dispatched to the relevant element.</p>
+
+<h3 id="RelationshipWithUIEVENTS">Relationship with UI Events</h3>
+
+<p>The SVG DOM is compatible with all interfaces defined in, and
+all the event types from, 
+<a href="https://www.w3.org/TR/uievents/">UI Events</a>,
+and the event types defined in
+<a href="https://www.w3.org/TR/clipboard-apis/">Clipboard API and events</a>
+([<a href="refs.html#ref-uievents">uievents</a>], [<a href="refs.html#ref-clipboard-apis">clipboard-apis</a>]).
+</p>
+
+<p>
+All elements in the SVG namespace support
+<a>event attributes</a> for these events;
+matching IDL properties are included in the base <a>SVGElement</a> interface
+via the <a>GlobalEventHandlers</a> and
+<a>DocumentAndElementEventHandlers</a> mixins, respectively.
+</p>
+
+<p>
+As part of SVG DOM support, conforming SVG software
+must support all (non-deprecated, non-obsolete) event types
+defined in these specifications,
+if the relevant events could occur in the software's use.
+SVG software that does not support user <a>interaction</a>
+should nonetheless implement support for events that can fire without interaction,
+such as <code>load</code> and <code>error</code> events.
+</p>
+
+<p>SVG animation elements
+  (defined in the <a href="https://svgwg.org/specs/animations/">SVG Animations Level 2</a> specification)
+  support additional events and event attributes.
+  The following event types are triggered due to state
+  changes in animations.
+</p>
+    <ul>
+      <li><a href="interact.html#BeginEvent">beginEvent</a></li>
+      <li><a href="interact.html#EndEvent">endEvent</a></li>
+      <li><a href="interact.html#RepeatEvent">repeatEvent</a></li>
+    </ul>
+
+<p>The <a>event attributes</a> for these animation events have no effect on other elements.</p>
 
 <h2 id="UIEvents">User interface events</h2>
 
@@ -925,6 +964,49 @@ attribute.</p>
   [<a href="refs.html#ref-rfc2046">rfc2046</a>][<a href='refs.html#ref-rfc4329'>rfc4329</a>]</p>
 
   <p>Event attributes are not <a href="https://svgwg.org/specs/animations/#Animatable">animatable</a>.</p>
+
+  <p>Implementors may view the setting of event attributes as the
+  creation and registration of an <a>EventListener</a> on the
+  <a>EventTarget</a>.  Such event listeners are invoked only for
+  the "bubbling" and "at target" phases, as if false were specified
+  for the <code>useCapture</code> argument to <code>addEventListener</code>.
+  This <a>EventListener</a> behaves in the same manner as any other
+  which may be registered on the <a>EventTarget</a>.</p>
+
+  <p>If the attribute representing the event listener is changed,
+  this may be viewed as the removal of the previously registered
+  <a>EventListener</a> and the registration of a new one. Futhermore, no
+  specification is made as to the order in which event attributes
+  will receive the event with regards to the other EventListeners
+  on the <a>EventTarget</a>.</p>
+
+  <div class="example">
+  <p>In ECMAScript, one way to establish an event listener is to
+  define a function and pass that function to the <code>addEventListener</code> method:</p>
+
+<pre>
+function myAction1(evt) {
+  // process the event
+}
+// ... later ...
+myElement.addEventListener("click", myAction1, false)
+</pre>
+
+  <p>In ECMAScript, the character data content of an
+  <a href="interact.html">event attribute</a> becomes
+  the definition of the ECMAScript function which gets invoked in
+  response to the event. As with all registered ECMAScript event
+  listener functions, this function receives an <a>Event</a> object as a
+  parameter, and the name of the Event object is
+  <strong>evt</strong>. For example, it is possible to write:</p>
+
+<pre><![CDATA[
+<rect onclick="MyClickHandler(evt)" .../>
+]]></pre>
+
+  <p>which will pass the <a>Event</a> object <strong>evt</strong> into
+  function <code>MyClickHandler</code>.</p>
+  </div>
 
   <h3 id="AnimationEvents">Animation event attributes</h3>
 

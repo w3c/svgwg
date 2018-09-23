@@ -190,7 +190,7 @@ the attribute is assumed to have been specified as the given <a>initial value</a
 
 </div>
 
-<h2 id="Precision">Real number precision</h2>
+<h3 id="Precision">Real number precision</h3>
 
 <p>Unless stated otherwise, numeric values in SVG attributes and in
 properties that are defined to have an effect on SVG elements must
@@ -206,6 +206,477 @@ possible precision and to prevent round-off errors.</p>
 <p class="ready-for-wider-review"><a>Conforming SVG Viewers</a>
 are required to perform numerical computation in accordance with their
 conformance class, as described in <a href="conform.html">Conformance Criteria</a>.</p>
+
+<h3 id="RangeClamping">Clamping values which are restricted to a particular range</h3>
+
+<p>Some numeric attribute and property values have restricted ranges.
+Other values will be restricted by the capabilities of the device.
+If not otherwise specified,
+the user agent shall defer any out-of-range error checking until
+as late as possible in the rendering process.
+This is particularly important for device limitations,
+as compound operations
+might produce intermediate values which are out-of-range but
+final values which are within range.</p>
+
+<h2 id="SVGDOMOverview">SVG DOM overview</h2>
+
+<p>Conforming <a>SVG viewers</a> or <a>SVG interpreters</a>
+that support <a>script execution</a>
+must implement SVG DOM interfaces as defined throughout this specification,
+with the specific requirements and dependencies listed in this section.
+</p>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Improve the DOM.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-35-49">We will generally improve the SVG DOM for SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>Help authors use the SVG DOM by making it less Java-oriented.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3273">ACTION-3273</a>)</td>
+    </tr>
+    <tr>
+      <th>Note:</th>
+      <td>See <a href="http://www.w3.org/Graphics/SVG/WG/wiki/SVG_2_DOM">SVG 2 DOM</a> Wiki page.</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Improve the SVG path DOM APIs.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-23-23">We will improve the SVG path DOM APIs in SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>Clean up SVGPathSegList interface, and possibly share an API with Canvas.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (no action)</td>
+    </tr>
+  </table>
+</div>
+
+
+<h3 id="SVGDOMDependencies">Dependencies for SVG DOM support</h3>
+
+<p class="ready-for-wider-review">The SVG DOM is defined in terms of <a href="https://heycam.github.io/webidl/">Web IDL</a>
+interfaces. All IDL fragments in this specification must be interpreted as
+required for <a href="https://heycam.github.io/webidl/#dfn-conforming-set-of-idl-fragments">conforming IDL fragments</a>,
+as described in the Web IDL specification. [<a href="refs.html#ref-webidl">WebIDL</a>]</p>
+
+<p>The SVG DOM builds upon a number of DOM specifications.  In particular:</p>
+
+<ul>
+  <li>The SVG DOM requires, at a minimum, complete support for
+  <a href="https://www.w3.org/TR/dom/">DOM4</a>;
+  SVG software should implement
+  the <a href="https://dom.spec.whatwg.org/">latest DOM standard</a> 
+  wherever possible
+  [<a href="refs.html#ref-dom">DOM</a>]</li>
+
+  <li>The SVG DOM requires support for relevant aspects of 
+  <a href="https://www.w3.org/TR/uievents/">UI Events</a> and
+  <a href="https://www.w3.org/TR/clipboard-apis/">Clipboard API and events</a>
+  ([<a href="refs.html#ref-uievents">uievents</a>], [<a href="refs.html#ref-clipboard-apis">clipboard-apis</a>]).
+  (For the specific features that are required, see
+  see <a href="interact.html#RelationshipWithUIEVENTS">Relationship with UI Events</a>.)</li>
+
+  <li>The SVG DOM requires, at a minimum, complete
+  support for all interfaces from
+  <a href="https://www.w3.org/TR/DOM-Level-2-Style/Overview.html">DOM Level 2 Style</a>
+  ([<a href="refs.html#ref-dom-level-2-style">dom-level-2-style</a>])
+  that have not been dropped in the
+  <a href="https://drafts.csswg.org/cssom/">CSS Object Model (CSSOM)</a> specification.
+  SVG software should implement the latest version of
+  <a href="https://drafts.csswg.org/cssom/">CSS Object Model (CSSOM)</a>
+  wherever possible
+  ([<a href="refs.html#ref-cssom-1">cssom-1</a>])
+  </li>
+
+  <li>The SVG DOM requires complete support for
+  <a href="http://www.w3.org/TR/2014/CR-geometry-1-20141125/">Geometry Interfaces Module Level 1</a>
+  ([<a href="refs.html#ref-geometry-1">geometry-1</a>]).
+  </li>
+</ul>
+
+<h3 id="SVGDOMNamingConventions">Naming conventions</h3>
+
+<p>The SVG DOM follows similar naming conventions to HTML and DOM standards
+([<a href="refs.html#ref-html">HTML</a>], [<a href="refs.html#ref-dom">DOM</a>]).</p>
+
+<p>All names are defined as one or more English words
+concatenated together to form a single string. Property or
+method names start with the initial keyword in lowercase, and
+each subsequent word starts with a capital letter. For example,
+a property that returns document meta information such as the
+date the file was created might be named "fileDateCreated".</p>
+
+<p>Interface names defined in this specification nearly all start with "SVG".
+Interfaces that represent the DOM <a>Element</a> object
+for an SVG-namespaced element follow the format
+<code>SVG<i>ElementName</i>Element</code>, where <code><i>ElementName</i></code>
+is the element's tag name with the initial letter capitalized.
+So <a>SVGRadialGradientElement</a> is the interface for an <a>'radialGradient'</a> element.
+</p>
+
+<p class="note">
+An exception to this casing convention is <a>SVGSVGElement</a>,
+in which the entire tag name is capitalized.
+</p>
+
+<h3 id="ElementsInTheSVGDOM">Elements in the SVG DOM</h3>
+
+<p>Any SVG software that is required to support the SVG DOM
+must enhance the DOM elements created for <a>SVG document fragments</a>
+as follows:
+</p>
+
+<ul>
+<li>
+<p>Every <a>Element</a> object that corresponds to a supported SVG element (that is,
+an element with namespace URI "http://www.w3.org/2000/svg" and a
+local name that is one of the elements defined in this specification
+or another specification implemented by the software)
+must also implement the DOM interface identified in the element definition.
+</p>
+</li>
+<li>
+<p>
+Elements in the SVG namespace whose local name does not match an element
+defined in any specification supported by the software
+should instead implement the <a>SVGUnknownElement</a> interface and
+must nonetheless implement the <a>SVGElement</a> interface.
+</p>
+</li>
+</ul>
+
+<p class="issue">The <a>SVGUnknownElement</a> interface is "at risk".</p>
+
+<p class="example">
+In <a href="shapes.html#RectElement">The <span class="element-name">'rect'</span> element</a>,
+the <a>SVGRectElement</a> interface is identified.  This means that every
+<a>Element</a> object whose namespace URI is "http://www.w3.org/2000/svg"
+and whose local name is "rect" must also implement <a>SVGRectElement</a>.</p>
+
+
+<h3 id="ReflectingAttributes">Reflecting content attributes in the DOM</h3>
+
+<p>Many SVG DOM properties (IDL attributes)
+<dfn id="TermReflect" data-dfn-type="dfn">reflect</dfn> a content attribute or property
+on the corresponding element,
+meaning that content and IDL attributes represent the same underlying data.
+For example,
+the <a>SVGAnimatedLength</a> <a>SVGRectElement::ry</a> in an
+<a>SVGRectElement</a>
+reflects the <a>'ry'</a> presentation attribute on the associated <a>'rect'</a> element.
+</p>
+
+<p>The way this reflection is done depends on the type of the IDL attribute:</p>
+    <ul>
+      <li>If the type of the reflecting IDL attribute is a
+      <a href="http://heycam.github.io/webidl/#dfn-primitive-type">primitive type</a> (such as
+      <b>long</b>, as used by <a href="https://html.spec.whatwg.org/multipage/interaction.html#dom-tabindex">tabIndex</a>
+       on <a>SVGElement</a>) or <b>DOMString</b> (as used by
+      <a href="styling.html#__svg__SVGStyleElement__title">title</a> on <a>SVGStyleElement</a>),
+      then the rules for
+      <a href="https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#reflect">reflecting
+      content attributes in IDL attributes</a> in HTML are used.</li>
+    
+      <li>If the type of the reflecting IDL attribute is an <a>SVGAnimatedBoolean</a>,
+      <a>SVGAnimatedString</a>, <a>SVGAnimatedEnumeration</a>, <a>SVGAnimatedNumber</a>,
+      <a>SVGAnimatedNumberList</a>, <a>SVGAnimatedLength</a>, <a>SVGAnimatedLengthList</a>,
+      <a>SVGAnimatedAngle</a>, <a>SVGAnimatedRect</a> or <a>SVGAnimatedPreserveAspectRatio</a>,
+      then the rules in the corresponding
+      section defining the reflecting interface are used.
+
+      <p class="note">At a high level, the object's
+      <code>baseVal</code> is used to reflect the value of the content attribute.
+      For objects that reflect a CSS property, the <code>baseVal</code> is used
+      to reflect the presentation attribute.
+      </p>
+      </li>
+    </ul>
+
+<p>
+This relationship is live, and values must be synchronized
+(following the rules in <a href="#SynchronizingReflectedValues">Synchronizing reflected values</a>)
+when either the attribute or its reflected property is modified.
+</p>
+
+<p>
+If the attribute hasn't been specified explicitly in the document markup,
+the reflected object is nonetheless intialized upon access,
+to the attribute's inital value.
+If the attribute's initial value is <span class="attr-value">(none)</span>,
+the object is initialized as defined in
+<a href="#SVGObjectInitialization">Reflecting an empty initial value</a>.
+This newly constructed object does not generate an attribute on the element until
+it is modified for the first time. Modifications made to the corresponding
+attribute are immediately reflected in the object.</p>
+
+<p class="example">If <code>lineElement.x1.baseVal</code> is accessed
+(where <code>lineElement</code> is an instance of <a>SVGLineElement</a>)
+and the <a>'line/x1'</a> attribute was not specified in the document, the
+returned <a>SVGLength</a> object would represent the value <span class="attr-value">0 user units</span>,
+because the initial value for the attribute is <span class="attr-value">0</span>.</p>
+
+<h3 id="SynchronizingReflectedValues">Synchronizing reflected values</h3>
+
+<p>Whenever a reflected content attribute's base value changes,
+then the reflecting object must be <dfn id="TermSynchronize" data-dfn-type="dfn" data-export="">synchronized</dfn>,
+immediately after the value changed, by running the following steps:</p>
+
+<ol class='algorithm'>
+  <li>If the reflecting object is a <a>list interface</a> object,
+  then run the steps for <a href='#TermSynchronizeList'>synchronizing
+  a list interface object</a>.</li>
+  <li>Otherwise, update the object's value to be the base value of the reflected
+  content attribute (using the attribute's <a>initial value</a> if it is not
+  present or invalid).
+  <p class='note'>This will, for example, update the <a href="#LengthValue">value</a>
+  of an <a>SVGLength</a> object.</p></li>
+</ol>
+
+<p>When a <a>reflected</a> content attribute is to be
+<dfn id="TermReserialize" data-dfn-type="dfn" data-export="">reserialized</dfn>, optionally using a
+specific value, the following steps must be performed:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the specific value given, or
+  the value of the content attribute's reflecting IDL attribute
+  if a specific value was not provided.</li>
+
+  <li>Depending on <var>value</var>'s type:
+    <dl class="switch">
+      <dt><a>SVGAnimatedBoolean</a></dt>
+      <dt><a>SVGAnimatedNumber</a></dt>
+      <dt><a>SVGAnimatedLength</a></dt>
+      <dt><a>SVGAnimatedAngle</a></dt>
+      <dt><a>SVGAnimatedRect</a></dt>
+      <dt><a>SVGAnimatedString</a></dt>
+      <dt><a>SVGAnimatedNumberList</a></dt>
+      <dt><a>SVGAnimatedLengthList</a></dt>
+      <dt><a>SVGAnimatedTransformList</a></dt>
+      <dd><a href="#TermReserialize">Reserialize</a> the content attribute using
+      <var>value</var>'s baseVal member.</dd>
+
+      <dt><a>SVGAnimatedEnumeration</a></dt>
+      <dd>
+        <ol>
+          <li>Let <var>number</var> be the value of <var>value</var>'s
+          baseVal member.</li>
+          <li>Let <var>keyword</var> be the content attribute's keyword
+          value corresponding to <var>number</var>, or the empty string
+          if <var>number</var> is 0.
+          <p class="note">This means that if the enumeration value is
+          set to the "unknown" value, the content attribute will be
+          set to the empty string.</p></li>
+          <li>Set the content attribute to <var>keyword</var>.</li>
+        </ol>
+      </dd>
+
+      <dt>boolean</dt>
+      <dd>Set the content attribute to "true" if <var>value</var> is true,
+      and "false" otherwise.</dd>
+
+      <dt>float</dt>
+      <dt>double</dt>
+      <dd>Set the content attribute to an implementation specific string
+      that, if parsed as a <a>&lt;number&gt;</a> using CSS syntax,
+      would return the number value closest to <var>value</var>, given
+      the implementation's supported <a href="#Precision">real number precision</a>.</dd>
+
+      <dt><a>SVGLength</a></dt>
+      <dd>Set the content attribute to the value that would be returned
+      from getting <var>value</var>'s <a href="#__svg__SVGLength__valueAsString">valueAsString</a>
+      member.</dd>
+
+      <dt><a>SVGAngle</a></dt>
+      <dd>Set the content attribute to the value that would be returned
+      from getting <var>value</var>'s <a href="#__svg__SVGAngle__valueAsString">valueAsString</a>
+      member.</dd>
+
+      <dt><a>DOMRect</a></dt>
+      <dd>
+        <ol>
+          <li>Let <var>components</var> be a list of four values, being the values of the
+          <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-domrectreadonly-domrect-x">x</a>,
+          <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-domrectreadonly-domrect-y">y</a>,
+          <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-domrectreadonly-domrect-width">width</a> and
+          <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-domrectreadonly-domrect-height">height</a>
+          members of <var>value</var>.</li>
+
+          <li>Let <var>serialized components</var> be a list of four strings,
+          where each is an implementation specific string that, if parsed
+          as a <a>&lt;number&gt;</a> using CSS syntax, would return the number
+          value closest to the corresponding value in <var>components</var>, given
+          the implementation's supported <a href="#Precision">real number precision</a>.</li>
+
+          <li>Set the content attribute to a string consisting of the strings in
+          <var>serialized components</var> joined and separated by single
+          U+0020 SPACE characters.</li>
+        </ol>
+      </dd>
+
+      <dt>DOMString</dt>
+      <dd>Set the content attribute to <var>value</var>.</dd>
+
+      <dt><a>SVGNumberList</a></dt>
+      <dt><a>SVGLengthList</a></dt>
+      <dt><a>SVGPointList</a></dt>
+      <dt><a>SVGTransformList</a></dt>
+      <dt><a>SVGStringList</a></dt>
+      <dd>
+        <ol>
+          <li>Let <var>elements</var> be the list of values in <var>value</var>.
+            <p class="note">The values will be <a>SVGNumber</a>, <a>SVGLength</a>,
+            <a>DOMPoint</a> or <a>SVGTransform</a> objects, or <b>DOMString</b> values,
+            depending on <var>value</var>'s type.</p>
+          </li>
+
+          <li>Let <var>serialized elements</var> be a list of strings, where each
+          string is formed based on the corresponding value in <var>elements</var>
+          and its type:
+            <dl class="switch">
+              <dt>an <a>SVGNumber</a> object</dt>
+              <dd>The string is an implementation specific string that, if parsed
+              as a <a>&lt;number&gt;</a> using CSS syntax, would return the number
+              value closest to the <a>SVGNumber</a> object's
+              <a href="#__svg__SVGNumber__value">value</a> member, given
+              the implementation's supported <a href="#Precision">real number precision</a>.</dd>
+              <dt>an <a>SVGLength</a> object</dt>
+              <dd>The string is the value that would be returned
+              from getting the value's <a href="#__svg__SVGLength__valueAsString">valueAsString</a>
+              member.</dd>
+              <dt>a <a>DOMPoint</a> object</dt>
+              <dd>The string value is computed as follows:
+                <ol>
+                  <li>Let <var>string</var> be an empty string.</li>
+                  <li>Let <var>x</var> and <var>y</var> be the values of the
+                  <a>DOMPoint</a> object's x and y coordinates, respectively.</li>
+                  <li>Append to <var>string</var> an implementation specific string
+                  that, if parsed as <a>&lt;number&gt;</a> using CSS syntax, would return the number
+                  value closest to <var>x</var>, given
+                  the implementation's supported <a href="#Precision">real number precision</a>.</li>
+                  <li>Append a single U+002C COMMA character to <var>string</var>.</li>
+                  <li>Append to <var>string</var> an implementation specific string
+                  that, if parsed as <a>&lt;number&gt;</a> using CSS syntax, would return the number
+                  value closest to <var>y</var>, given
+                  the implementation's supported <a href="#Precision">real number precision</a>.</li>
+                  <li>The string is <var>string</var>.</li>
+                </ol>
+              </dd>
+              <dt>a <a>SVGTransform</a> object</dt>
+              <dd>The string is the <a href="https://drafts.csswg.org/css-transforms-1/#serialization-of-transform-functions">serialization</a>
+              of the <a>SVGTransform</a> object's <a href="coords.html#TransformMatrixObject">matrix object</a>.</dd>
+              <dt>a <b>DOMString</b></dt>
+              <dd>The string is the <b>DOMString</b>'s value itself.</dd>
+            </dl>
+          </li>
+
+          <li>Set the content attribute to a string consisting of the strings in
+          <var>serialized elements</var> joined and separated by single
+          U+0020 SPACE characters.</li>
+        </ol>
+      </dd>
+    </dl>
+  </li>
+</ol>
+    
+
+<h3 id="SVGObjectInitialization">Reflecting an empty initial value</h3>
+
+<p>
+When initializing an SVG DOM attribute that <a>reflects</a> a null or empty initial value,
+then the property must be initialized according to its data type,
+as defined in this section.
+This occurs only if there is no explicit value for the reflected content attribute,
+and the initial value in the attribute's definition table is <span class="attr-value">(none)</span>.
+</p>
+
+<p>
+If an interface is not listed below that means
+that the object initialization shall be done using the values for the
+objects that the interface contains, e.g.,
+an <a>SVGAnimatedString</a> consists of two <span class="DOMInterfaceName">DOMString</span> members,
+while a <a>DOMRect</a> consists of many <span class="DOMInterfaceName">double</span>s.</p>
+
+<dl id="SVGObjectInitValues">
+  <dt class="DOMInterfaceName">DOMString</dt>
+  <dd>Initialized as the empty string (<span class="attr-value">""</span>).</dd>
+
+  <dt class="DOMInterfaceName">float</dt>
+  <dt class="DOMInterfaceName">long</dt>
+  <dt class="DOMInterfaceName">short</dt>
+  <dt>Any other <a href="https://heycam.github.io/webidl/#dfn-numeric-type">numeric type</a> defined in WebIDL</dt>
+  <dd>Initialized as <span class="attr-value">0</span>.</dd>
+
+  <dt class="DOMInterfaceName">boolean</dt>
+  <dd>Initialized as <span class="attr-value">false</span>.</dd>
+
+  <dt class="DOMInterfaceName"><a>SVGLength</a></dt>
+  <dd>Initialized as <span class="attr-value">0 user units</span>
+  (<a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</a>).</dd>
+
+  <dt class="DOMInterfaceName"><a>SVGLengthList</a></dt>
+  <dt class="DOMInterfaceName"><a>SVGNumberList</a></dt>
+  <dt class="DOMInterfaceName"><a>SVGPointList</a></dt>
+  <dt class="DOMInterfaceName"><a>SVGStringList</a></dt>
+  <dt class="DOMInterfaceName"><a>SVGTransformList</a></dt>
+  <dd>Initialized as the empty list.</dd>
+
+  <dt class="DOMInterfaceName"><a>SVGAngle</a></dt>
+  <dd>Initialized as <span class="attr-value">0 in unspecified units</span>
+  (<a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNSPECIFIED">SVG_ANGLETYPE_UNSPECIFIED</a>).</dd>
+
+  <dt class="DOMInterfaceName"><a>SVGZoomAndPan</a></dt>
+  <dd>Initialized as <span class="attr-value">0</span>
+  (<a href="types.html#__svg__SVGZoomAndPan__SVG_ZOOMANDPAN_UNKNOWN">SVG_ZOOMANDPAN_UNKNOWN</a>).</dd>
+
+  <dt class="DOMInterfaceName"><a>SVGPreserveAspectRatio</a></dt>
+  <dd>Initialized as <span class="attr-value">'xMidYMid meet'</span>.</dd>
+</dl>
+
+<p class="example">If <code>textElement.dx.baseVal</code> is accessed
+(where <code>textElement</code> is an instance of <a>SVGTextElement</a>)
+and the <a>'text/dx'</a> attribute was not specified in the document, the
+returned <a>SVGLengthList</a> object would be empty.</p>
+
+<h3 id="InvalidValues">Invalid values</h3>
+
+<p>If a script sets a <a>reflected</a> DOM attribute
+to an <a>invalid value</a> for the content attribute (e.g.,
+a negative number for an attribute that requires a non-negative
+number or an out-of-range value for an enumeration), unless
+this specification indicates otherwise, no exception shall be
+raised on setting, but the given document fragment shall become
+technically <em>in error</em> as described in
+<a href="conform.html#ErrorProcessing">Error processing</a>.</p>
+
+<p class="issue">
+  Many browsers currently throw errors for out-of-range enumeration values,
+  or explicitly setting an enumeration to the UNKNOWN value.
+  See <a href="https://github.com/w3c/svgwg/issues/547">Should setting an enum IDL to an invalid value throw an error?</a> on GitHub for discussion.
+</p>
+
+
 
 <h2 id="DOMInterfacesForSVGElements">DOM interfaces for SVG elements</h2>
 
@@ -466,7 +937,6 @@ getPointAtLength(<var>distance</var>) is called, the following steps are run:</p
 
 <h2 id="DOMInterfacesForBasicDataTypes">DOM interfaces for basic data types</h2>
 
-<div class='ready-for-wider-review'>
 <h3 id="InterfaceSVGNumber">Interface SVGNumber</h3>
 
 <p>The <a>SVGNumber</a> interface is used primarily to represent a <a>&lt;number&gt;</a>
@@ -1592,208 +2062,49 @@ interface <b>SVGLengthList</b> {
 defined in the <a href="#ListInterfaces">List interfaces</a> section above.</p>
 
 
-<h2 id="DOMInterfacesForReflectingSVGAttributes">DOM interfaces for reflecting SVG attributes</h2>
+<h3 id="InterfaceSVGStringList">Interface SVGStringList</h3>
 
-<div class="ready-for-wider-review">
+<p>The <a>SVGStringList</a> interface is a <a>list interface</a> whose
+elements are <b>DOMString</b> values.  An <a>SVGStringList</a> object
+represents a list of strings.</p>
 
-<p class="note">
-In SVG 1.1 SE, the animVal attribute of the SVG DOM interfaces represented the
-current animated value of the reflected attribute. In this version of SVG,
-animVal no longer representes the current animated value and is instead an
-alias of baseVal.
+<pre class="idl">[Exposed=Window]
+interface <b>SVGStringList</b> {
+
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__length">length</a>;
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__numberOfItems">numberOfItems</a>;
+
+  void <a href="types.html#__svg__SVGNameList__clear">clear</a>();
+  DOMString <a href="types.html#__svg__SVGNameList__initialize">initialize</a>(DOMString newItem);
+  getter DOMString <a href="types.html#__svg__SVGNameList__getItem">getItem</a>(unsigned long index);
+  DOMString <a href="types.html#__svg__SVGNameList__insertItemBefore">insertItemBefore</a>(DOMString newItem, unsigned long index);
+  DOMString <a href="types.html#__svg__SVGNameList__replaceItem">replaceItem</a>(DOMString newItem, unsigned long index);
+  DOMString <a href="types.html#__svg__SVGNameList__removeItem">removeItem</a>(unsigned long index);
+  DOMString <a href="types.html#__svg__SVGNameList__appendItem">appendItem</a>(DOMString newItem);
+  <a href="#__svg__SVGNameList__setter">setter</a> void (unsigned long index, DOMString newItem);
+};</pre>
+
+<p>The behavior of all of the interface members of <a>SVGStringList</a> are
+defined in the <a href="#ListInterfaces">List interfaces</a> section above.</p>
+
+
+<h2 id="DOMInterfacesForReflectingSVGAttributes">DOM interfaces for reflecting animatable SVG attributes</h2>
+
+<p>
+  The following interfaces are used to represent the reflected value
+  of animatable content attributes.
+  They each consist of two component objects, representing the same data:
+  <code>baseVal</code> and <code>animVal</code>.
+  The <code>baseVal</code> (base value) object is modifiable,
+  to update the corresponding attribute value.
 </p>
-
-</div>
-
-<p>Some IDL attributes <dfn id="TermReflect" data-dfn-type="dfn">reflect</dfn> the value of a content attribute
-or a property.  The way this reflection is done depends on the type of the IDL attribute:</p>
-
-<ul>
-  <li>If the type of the reflecting IDL attribute is a
-  <a href="http://heycam.github.io/webidl/#dfn-primitive-type">primitive type</a> (such as
-  <b>long</b>, as used by <a href="https://html.spec.whatwg.org/multipage/interaction.html#dom-tabindex">tabIndex</a>
-   on <a>SVGElement</a>) or <b>DOMString</b> (as used by
-  <a href="styling.html#__svg__SVGStyleElement__title">title</a> on <a>SVGStyleElement</a>),
-  then the rules for
-  <a href="https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#reflect">reflecting
-  content attributes in IDL attributes</a> in HTML are used.</li>
-
-  <li>If the type of the reflecting IDL attribute is an <a>SVGAnimatedBoolean</a>,
-  <a>SVGAnimatedString</a>, <a>SVGAnimatedEnumeration</a>, <a>SVGAnimatedNumber</a>,
-  <a>SVGAnimatedNumberList</a>, <a>SVGAnimatedLength</a>, <a>SVGAnimatedLengthList</a>,
-  <a>SVGAnimatedAngle</a>, <a>SVGAnimatedRect</a> or <a>SVGAnimatedPreserveAspectRatio</a>,
-  then the rules in the corresponding
-  section defining the reflecting interface are used.
-
-  <p class='note'>At a high level, the object's
-  baseVal is used to reflect the value of the content attribute.
-  For objects that reflect a CSS property, the baseVal is used
-  to reflect the presentation attribute.  </p>
-  </li>
-</ul>
-
-<div class="ready-for-wider-review">
-<p>Whenever a reflected content attribute's base value changes,
-then the reflecting object must be <dfn id="TermSynchronize" data-dfn-type="dfn" data-export="">synchronized</dfn>,
-immediately after the value changed, by running the following steps:</p>
-</div>
-
-<ol class='algorithm'>
-  <li>If the reflecting object is a <a>list interface</a> object,
-  then run the steps for <a href='#TermSynchronizeList'>synchronizing
-  a list interface object</a>.</li>
-  <li>Otherwise, update the object's value to be the base value of the reflected
-  content attribute (using the attribute's <a>initial value</a> if it is not
-  present or invalid).
-  <p class='note'>This will, for example, update the <a href="#LengthValue">value</a>
-  of an <a>SVGLength</a> object.</p></li>
-</ol>
-
-<p>When a <a>reflected</a> content attribute is to be
-<dfn id="TermReserialize" data-dfn-type="dfn" data-export="">reserialized</dfn>, optionally using a
-specific value, the following steps must be performed:</p>
-
-<ol class="algorithm">
-  <li>Let <var>value</var> be the specific value given, or
-  the value of the content attribute's reflecting IDL attribute
-  if a specific value was not provided.</li>
-
-  <li>Depending on <var>value</var>'s type:
-    <dl class="switch">
-      <dt><a>SVGAnimatedBoolean</a></dt>
-      <dt><a>SVGAnimatedNumber</a></dt>
-      <dt><a>SVGAnimatedLength</a></dt>
-      <dt><a>SVGAnimatedAngle</a></dt>
-      <dt><a>SVGAnimatedRect</a></dt>
-      <dt><a>SVGAnimatedString</a></dt>
-      <dt><a>SVGAnimatedNumberList</a></dt>
-      <dt><a>SVGAnimatedLengthList</a></dt>
-      <dt><a>SVGAnimatedTransformList</a></dt>
-      <dd><a href="#TermReserialize">Reserialize</a> the content attribute using
-      <var>value</var>'s baseVal member.</dd>
-
-      <dt><a>SVGAnimatedEnumeration</a></dt>
-      <dd>
-        <ol>
-          <li>Let <var>number</var> be the value of <var>value</var>'s
-          baseVal member.</li>
-          <li>Let <var>keyword</var> be the content attribute's keyword
-          value corresponding to <var>number</var>, or the empty string
-          if <var>number</var> is 0.
-          <p class="note">This means that if the enumeration value is
-          set to the "unknown" value, the content attribute will be
-          set to the empty string.</p></li>
-          <li>Set the content attribute to <var>keyword</var>.</li>
-        </ol>
-      </dd>
-
-      <dt>boolean</dt>
-      <dd>Set the content attribute to "true" if <var>value</var> is true,
-      and "false" otherwise.</dd>
-
-      <dt>float</dt>
-      <dt>double</dt>
-      <dd>Set the content attribute to an implementation specific string
-      that, if parsed as a <a>&lt;number&gt;</a> using CSS syntax,
-      would return the number value closest to <var>value</var>, given
-      the implementation's supported <a href="#Precision">real number precision</a>.</dd>
-
-      <dt><a>SVGLength</a></dt>
-      <dd>Set the content attribute to the value that would be returned
-      from getting <var>value</var>'s <a href="#__svg__SVGLength__valueAsString">valueAsString</a>
-      member.</dd>
-
-      <dt><a>SVGAngle</a></dt>
-      <dd>Set the content attribute to the value that would be returned
-      from getting <var>value</var>'s <a href="#__svg__SVGAngle__valueAsString">valueAsString</a>
-      member.</dd>
-
-      <dt><a>DOMRect</a></dt>
-      <dd>
-        <ol>
-          <li>Let <var>components</var> be a list of four values, being the values of the
-          <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-domrectreadonly-domrect-x">x</a>,
-          <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-domrectreadonly-domrect-y">y</a>,
-          <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-domrectreadonly-domrect-width">width</a> and
-          <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-domrectreadonly-domrect-height">height</a>
-          members of <var>value</var>.</li>
-
-          <li>Let <var>serialized components</var> be a list of four strings,
-          where each is an implementation specific string that, if parsed
-          as a <a>&lt;number&gt;</a> using CSS syntax, would return the number
-          value closest to the corresponding value in <var>components</var>, given
-          the implementation's supported <a href="#Precision">real number precision</a>.</li>
-
-          <li>Set the content attribute to a string consisting of the strings in
-          <var>serialized components</var> joined and separated by single
-          U+0020 SPACE characters.</li>
-        </ol>
-      </dd>
-
-      <dt>DOMString</dt>
-      <dd>Set the content attribute to <var>value</var>.</dd>
-
-      <dt><a>SVGNumberList</a></dt>
-      <dt><a>SVGLengthList</a></dt>
-      <dt><a>SVGPointList</a></dt>
-      <dt><a>SVGTransformList</a></dt>
-      <dt><a>SVGStringList</a></dt>
-      <dd>
-        <ol>
-          <li>Let <var>elements</var> be the list of values in <var>value</var>.
-            <p class="note">The values will be <a>SVGNumber</a>, <a>SVGLength</a>,
-            <a>DOMPoint</a> or <a>SVGTransform</a> objects, or <b>DOMString</b> values,
-            depending on <var>value</var>'s type.</p>
-          </li>
-
-          <li>Let <var>serialized elements</var> be a list of strings, where each
-          string is formed based on the corresponding value in <var>elements</var>
-          and its type:
-            <dl class="switch">
-              <dt>an <a>SVGNumber</a> object</dt>
-              <dd>The string is an implementation specific string that, if parsed
-              as a <a>&lt;number&gt;</a> using CSS syntax, would return the number
-              value closest to the <a>SVGNumber</a> object's
-              <a href="#__svg__SVGNumber__value">value</a> member, given
-              the implementation's supported <a href="#Precision">real number precision</a>.</dd>
-              <dt>an <a>SVGLength</a> object</dt>
-              <dd>The string is the value that would be returned
-              from getting the value's <a href="#__svg__SVGLength__valueAsString">valueAsString</a>
-              member.</dd>
-              <dt>a <a>DOMPoint</a> object</dt>
-              <dd>The string value is computed as follows:
-                <ol>
-                  <li>Let <var>string</var> be an empty string.</li>
-                  <li>Let <var>x</var> and <var>y</var> be the values of the
-                  <a>DOMPoint</a> object's x and y coordinates, respectively.</li>
-                  <li>Append to <var>string</var> an implementation specific string
-                  that, if parsed as <a>&lt;number&gt;</a> using CSS syntax, would return the number
-                  value closest to <var>x</var>, given
-                  the implementation's supported <a href="#Precision">real number precision</a>.</li>
-                  <li>Append a single U+002C COMMA character to <var>string</var>.</li>
-                  <li>Append to <var>string</var> an implementation specific string
-                  that, if parsed as <a>&lt;number&gt;</a> using CSS syntax, would return the number
-                  value closest to <var>y</var>, given
-                  the implementation's supported <a href="#Precision">real number precision</a>.</li>
-                  <li>The string is <var>string</var>.</li>
-                </ol>
-              </dd>
-              <dt>a <a>SVGTransform</a> object</dt>
-              <dd>The string is the <a href="https://drafts.csswg.org/css-transforms-1/#serialization-of-transform-functions">serialization</a>
-              of the <a>SVGTransform</a> object's <a href="coords.html#TransformMatrixObject">matrix object</a>.</dd>
-              <dt>a <b>DOMString</b></dt>
-              <dd>The string is the <b>DOMString</b>'s value itself.</dd>
-            </dl>
-          </li>
-
-          <li>Set the content attribute to a string consisting of the strings in
-          <var>serialized elements</var> joined and separated by single
-          U+0020 SPACE characters.</li>
-        </ol>
-      </dd>
-    </dl>
-  </li>
-</ol>
+    
+<p class='note'>
+  In SVG 1.1, the <code>animVal</code> attribute of the SVG DOM interfaces represented the
+  current animated value of the reflected attribute. In this version of SVG,
+  <code>animVal</code> no longer representes the current animated value and is instead an
+  alias of <code>baseVal</code>.
+</p>
 
 
 <h3 id="InterfaceSVGAnimatedBoolean">Interface SVGAnimatedBoolean</h3>
@@ -2276,31 +2587,6 @@ On getting <a href="#__svg__SVGAnimatedLengthList__baseVal">baseVal</a> or
 an <a>SVGLengthList</a> object is returned that reflects the base value
 of the reflected attribute.</p>
 
-<h3 id="InterfaceSVGStringList">Interface SVGStringList</h3>
-
-<p>The <a>SVGStringList</a> interface is a <a>list interface</a> whose
-elements are <b>DOMString</b> values.  An <a>SVGStringList</a> object
-represents a list of strings.</p>
-
-<pre class="idl">[Exposed=Window]
-interface <b>SVGStringList</b> {
-
-  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__length">length</a>;
-  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__numberOfItems">numberOfItems</a>;
-
-  void <a href="types.html#__svg__SVGNameList__clear">clear</a>();
-  DOMString <a href="types.html#__svg__SVGNameList__initialize">initialize</a>(DOMString newItem);
-  getter DOMString <a href="types.html#__svg__SVGNameList__getItem">getItem</a>(unsigned long index);
-  DOMString <a href="types.html#__svg__SVGNameList__insertItemBefore">insertItemBefore</a>(DOMString newItem, unsigned long index);
-  DOMString <a href="types.html#__svg__SVGNameList__replaceItem">replaceItem</a>(DOMString newItem, unsigned long index);
-  DOMString <a href="types.html#__svg__SVGNameList__removeItem">removeItem</a>(unsigned long index);
-  DOMString <a href="types.html#__svg__SVGNameList__appendItem">appendItem</a>(DOMString newItem);
-  <a href="#__svg__SVGNameList__setter">setter</a> void (unsigned long index, DOMString newItem);
-};</pre>
-
-<p>The behavior of all of the interface members of <a>SVGStringList</a> are
-defined in the <a href="#ListInterfaces">List interfaces</a> section above.</p>
-
 
 <h2 id="OtherDOMInterfaces">Other DOM interfaces</h2>
 
@@ -2453,7 +2739,6 @@ reflect the <span class='attr-name'>'href'</span> attribute in all
 other circumstances. <a href="https://svgwg.org/specs/animations/">Animation elements</a>
 treat <span class='attr-value'>attributeName='xlink:href'</span>
 as being an alias for targetting the <span class='attr-name'>'href'</span> attribute.</p>
-</div>
 
 </body>
 </html>
