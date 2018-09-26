@@ -23,4 +23,5 @@ SVG-AAM is in the [ARIA repository](https://github.com/w3c/aria/tree/master/svg-
 
 The SVG working group welcomes contributions to their specifications.
 These can be made by filing a pull request.
-Please see [CONTRIBUTING.md](CONTRIBUTING.md) and [LICENSE.md](LICENSE.md).
+Please see [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSE.md](LICENSE.md) and [CODE_OF_CONDUCT.md
+](CODE_OF_CONDUCT.md).
