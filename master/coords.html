@@ -41,11 +41,11 @@ on which elements generate viewports.</p>
 
 <p>Each SVG viewport generates a
 <dfn id="TermViewportCoordinateSystem" data-dfn-type="dfn" data-export="">viewport coordinate system</dfn>
-and a <dfn id="TermLocalCoordinateSystem" data-dfn-type="dfn" data-export="">local coordinate system</dfn>, initially identical.
-Providing a <a>'viewBox'</a> on a viewport's element transforms the local coordinate system
+and a <dfn id="TermUserCoordinateSystem" data-dfn-type="dfn" data-export="">user coordinate system</dfn>, initially identical.
+Providing a <a>'viewBox'</a> on a viewport's element transforms the user coordinate system
 relative to the viewport coordinate system as described in
 The <a>'viewBox'</a> attribute. Child elements of a viewport can
-further modify the <a>local coordinate system</a>, for example by specifying
+further modify the <a>user coordinate system</a>, for example by specifying
 the <a>'transform'</a> property.</p>
 
 <p>SVG viewports can be nested. Percentage units are resolved with reference
@@ -63,7 +63,7 @@ description of this negotiation process.</p>
 <p>By default, a nested SVG viewport's <a>viewport coordinate system</a> is equivalent to the local
 coordinate system of the parent element, translated by the origin of the SVG viewport's
 element. However, a <a>'transform'</a> property on an SVG viewport's element will modify
-the <a>viewport coordinate system</a> relative to the parent element's local coordinate system.</p>
+the <a>viewport coordinate system</a> relative to the parent element's user coordinate system.</p>
 
 <p>Abstractly, all SVG viewports are embedded in the
 <dfn id="TermCanvas" data-dfn-type="dfn" data-export="">canvas</dfn>,
@@ -178,7 +178,7 @@ determine the size of the initial viewport:</p>
 
 <p>For the <a>outermost svg element</a>, the SVG user
 agent must determine an initial <a>viewport coordinate system</a> and an
-initial <a>local coordinate system</a> such that the
+initial <a>user coordinate system</a> such that the
 two coordinates systems are identical. The origin of both
 coordinate systems must be at the origin of the SVG viewport, and one
 unit in the initial coordinate system must equal one
@@ -299,7 +299,7 @@ SVG viewport.</p>
    attribute to automatically create an initial user coordinate
    system which causes the graphic to scale to fit into the
    SVG viewport no matter what size the SVG viewport is.&lt;/desc&gt;
-  &lt;!-- This rectangle goes from (0,0) to (1500,1000) in local coordinate system.
+  &lt;!-- This rectangle goes from (0,0) to (1500,1000) in user coordinate system.
        Because of the viewBox attribute above,
        the rectangle will end up filling the entire area
        reserved for the SVG content. --&gt;
@@ -347,7 +347,7 @@ this example as SVG (SVG-enabled browsers only)</a><br />
 <p>The effect of the <a>'viewBox'</a>
 attribute is that the user agent automatically supplies the
 appropriate transformation matrix to map the specified
-rectangle in local coordinate system to the bounds of a designated region
+rectangle in user coordinate system to the bounds of a designated region
 (often, the SVG viewport). To achieve the effect of the example on
 the left, with SVG viewport dimensions of 300 by 200 pixels, the
 user agent needs to automatically insert a transformation which
@@ -1482,34 +1482,34 @@ through this property.</p>
   <dt class="prop-value">non-scaling-stroke</dt>
   <dd>Please refer to <a href="painting.html#non-scaling-stroke">this description</a> of vector effect on painting.</dd>
   <dt class="prop-value">non-scaling-size</dt>
-  <dd>Specifies special <a>local coordinate system</a> toward this element
+  <dd>Specifies special <a>user coordinate system</a> toward this element
   and its descendant by constrained transformations with the following
-  characteristics. The scale of the <a>local coordinate system</a> do not
+  characteristics. The scale of the <a>user coordinate system</a> do not
   change in spite of change of <a>CTM</a>s from a host coordinate space.
   However, it does not specify the suppression of rotation and skew. Also,
-  it does not specify the fixation of placement of <a>local coordinate system</a>.
-  Since non-scaling-size suppresses scaling of <a>local coordinate system</a>,
+  it does not specify the fixation of placement of <a>user coordinate system</a>.
+  Since non-scaling-size suppresses scaling of <a>user coordinate system</a>,
   it also has the characteristic of non-scaling-stroke. The transformation
   formula and the example behavior are indicated to the following chapter.</dd>
   <dt class="prop-value">non-rotation</dt>
-  <dd>Specifies special <a>local coordinate system</a> toward this element
+  <dd>Specifies special <a>user coordinate system</a> toward this element
   and its descendant by constrained transformations with the following
-  characteristics. The rotation and skew of the <a>local coordinate system</a>
+  characteristics. The rotation and skew of the <a>user coordinate system</a>
   is suppressd in spite of change of <a>CTM</a>s from a host coordinate space.
   However, it does not specify the suppression of scaling. Also, it does not
-  specify the fixation of placement of <a>local coordinate system</a>.
+  specify the fixation of placement of <a>user coordinate system</a>.
   The transformation formula and the example behavior are indicated to the
   following chapter.</dd>
   <dt class="prop-value">fixed-position</dt>
-  <dd>Specifies special <a>local coordinate system</a> toward this element
+  <dd>Specifies special <a>user coordinate system</a> toward this element
   and its descendant by constrained transformations with the following
-  characteristics. The placement of <a>local coordinate system</a> is fixed
+  characteristics. The placement of <a>user coordinate system</a> is fixed
   in spite of change of <a>CTM</a>s from a host coordinate space. However,
   it does not specify the suppression of rotation, skew and scaling. When
   the element that has fixed-position effect and also has <a>'transform'</a>
   property, that property is consumed for this effect. The shift components
   <var>e</var> and <var>f</var> of matrix of <a>'transform'</a> property are
-  used to transfer the origin of fixed <a>local coordinate system</a>. The
+  used to transfer the origin of fixed <a>user coordinate system</a>. The
   transformation formula and the example behavior are indicated to the
   following chapter.</dd>
 </dl>
@@ -1559,7 +1559,7 @@ implications.</p>
 <p class='ready-for-wider-review'>The <a>'vector-effect'</a> property has no effect on transformations
 performed in a <a>3D rendering context</a>.</p>
 
-<p>The normal coordinate transformation formula from <a>local coordinate system</a>
+<p>The normal coordinate transformation formula from <a>user coordinate system</a>
 to <a>viewport coordinate system</a> is as follows.</p>
 
 <div role="math">
@@ -2692,7 +2692,7 @@ the determinants of <a>CTM</a>. When this value becomes 0 and
 coordinate systems without vector effects. <b>x<sub>viewport(UA)</sub></b> and
 <b>y<sub>viewport(UA)</sub></b> are coordinates which under the immediate
 control of <a>user agent</a>. <b>CTM<sub>this</sub></b> is <a>CTM</a> for the
-transformation matrix from <a>local coordinate system</a> of an target graphic
+transformation matrix from <a>user coordinate system</a> of an target graphic
 to <a>viewport coordinate system</a> to which it belongs.
 <b>CTM<sub>parent</sub></b> is <a>CTM</a> for the transformation matrix from
 aforementioned <a>viewport coordinate system</a> to <a>viewport coordinate system</a>
@@ -3000,11 +3000,11 @@ the preceding chapter, and the following formulas.</p>
 
   <rect x="-50" y="-50" width="500" height="500" stroke="orange" stroke-width="3" fill="none"/>
 
-  <!-- Nested local coordinate system is transformed by this transform attribute -->
+  <!-- Nested user coordinate system is transformed by this transform attribute -->
   <g transform="matrix(2.1169438081370817,0.3576047954311102,-0.3576047954311102,1.4700998667618626,0,0)
                 translate(-50,-50)">
     <svg viewBox="-50,-50,500,500" height="500" width="500">
-      <!-- Graph paper on the this svg's base local coordinate system -->
+      <!-- Graph paper on the this svg's base user coordinate system -->
       <g stroke="green" stroke-width="1" fill="none">
         <circle cx="0" cy="0" r="10"/>
         <circle cx="150" cy="150" r="7"/>
@@ -3029,7 +3029,7 @@ the preceding chapter, and the following formulas.</p>
 
       <!-- Figure having vector effect -->
       <!-- A thick red right arrow and small rectangle on this figure's nested
-           local coordinate system origin -->
+           user coordinate system origin -->
       <path id="ve" vector-effect="none"
             stroke="red" stroke-width="3" fill="none"
             transform="matrix(1,0,0,1,150,150)"
