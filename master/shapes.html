@@ -52,7 +52,7 @@ shapes.</p>
 <edit:with element='rect'>
 
 <p>The <a>'rect'</a> element defines a rectangle which is axis-aligned
-with the current <a>local coordinate system</a>. Rounded rectangles can be achieved by setting
+with the current <a>user coordinate system</a>. Rounded rectangles can be achieved by setting
 non-zero values for the <a>'rx'</a> and <a>'ry'</a> geometric properties.</p>
 
 <edit:elementsummary name='rect'/>
@@ -60,16 +60,16 @@ non-zero values for the <a>'rx'</a> and <a>'ry'</a> geometric properties.</p>
 <p>The <a>'x'</a> and <a>'y'</a> coordinates refer to the left and top edges of the rectangle,
 in the current user coordinate system.</p>
 
-<p>The <a>'width'</a> and <a>'height'</a> properties define the overall width and height of the rectangle.  
+<p>The <a>'width'</a> and <a>'height'</a> properties define the overall width and height of the rectangle.
 A negative value for either property is illegal and <a href="https://www.w3.org/TR/CSS21/syndata.html#parsing-errors">must be ignored as a parsing error</a>.
 A computed value of zero for either dimension disables rendering of the element.</p>
 
-<p>For rounded rectangles, 
+<p>For rounded rectangles,
 the computed values of the <a>'rx'</a> and <a>'ry'</a> properties define
 the x- and y-axis radii of elliptical arcs used to round off the corners of the rectangle.
 The arc are always symmetrical along both horizontal and vertical axis; to create a rectangle with uneven corner rounding, define the shape explicitly with a <a>'path'</a>.
 A negative value for either property is illegal and <a href="https://www.w3.org/TR/CSS21/syndata.html#parsing-errors">must be ignored as a parsing error</a>.
-A computed value of zero for either dimension, 
+A computed value of zero for either dimension,
 or a computed value of <code>auto</code> for <em>both</em> dimensions,
 results in a rectangle without corner rounding.
 </p>
@@ -77,39 +77,39 @@ results in a rectangle without corner rounding.
 <p>The used values for the x- and y-axis rounded corner radii
 may be determined implicitly from the other dimension (using the <code>auto</code> value),
 and are also subject to clamping so that the lengths of
-the straight segments of the rectangle are never negative.  
+the straight segments of the rectangle are never negative.
 The used values for <a>'rx'</a> and <a>'ry'</a> are determined
 from the computed values by following these steps in order:</p>
 
 <ol>
-  <li>If both <a>'rx'</a> and <a>'ry'</a> have a computed value of <code>auto</code> 
-  (since <code>auto</code> is the initial value for both properties, this will also occur if neither are specified by the author or if all author-supplied values are invalid), 
+  <li>If both <a>'rx'</a> and <a>'ry'</a> have a computed value of <code>auto</code>
+  (since <code>auto</code> is the initial value for both properties, this will also occur if neither are specified by the author or if all author-supplied values are invalid),
   then the used value of both <a>'rx'</a> and <a>'ry'</a> is 0.  (This will result in square corners.)</li>
  <li>Otherwise, convert specified values to absolute values as follows:
    <ol>
-  <li>If <a>'rx'</a> is set to a length value or a percentage, 
-  but <a>'ry'</a> is <code>auto</code>, 
+  <li>If <a>'rx'</a> is set to a length value or a percentage,
+  but <a>'ry'</a> is <code>auto</code>,
   calculate an absolute length equivalent for <a>'rx'</a>, resolving percentages against the used <a>'width'</a> of the rectangle;
   the absolute value for <a>'ry'</a> is the same.</li>
 
-  <li>If <a>'ry'</a> is set to a length value or a percentage, 
-  but <a>'rx'</a> is <code>auto</code>,  
+  <li>If <a>'ry'</a> is set to a length value or a percentage,
+  but <a>'rx'</a> is <code>auto</code>,
   calculate the absolute length equivalent for <a>'ry'</a>, resolving percentages against the used <a>'height'</a> of the rectangle;
   the absolute value for <a>'rx'</a> is the same.</li>
 
-  <li>If both <a>'rx'</a> and <a>'ry'</a> were set to lengths or percentages, 
-  absolute values are generated individually, 
+  <li>If both <a>'rx'</a> and <a>'ry'</a> were set to lengths or percentages,
+  absolute values are generated individually,
   resolving <a>'rx'</a> percentages against the used <a>'width'</a>,
   and resolving <a>'ry'</a> percentages against the used <a>'height'</a>.</li>
  </ol></li>
  <li>Finally, apply clamping to generate the used values:
    <ol>
-  <li>If the absolute <a>'rx'</a> (after the above steps) 
-  is greater than half of the used <a>'width'</a>, 
+  <li>If the absolute <a>'rx'</a> (after the above steps)
+  is greater than half of the used <a>'width'</a>,
   then the used value of <a>'rx'</a> is half of the used <a>'width'</a>.</li>
 
-  <li>If the absolute <a>'ry'</a> (after the above steps) 
-  is greater than half of the used <a>'height'</a>, 
+  <li>If the absolute <a>'ry'</a> (after the above steps)
+  is greater than half of the used <a>'height'</a>,
   then the used value of <a>'ry'</a> is half of the used <a>'height'</a>.</li>
 
   <li>Otherwise, the used values of <a>'rx'</a> and <a>'ry'</a> are the absolute values computed previously.</li>
@@ -117,11 +117,11 @@ from the computed values by following these steps in order:</p>
 </ol>
 
 <p>Mathematically, a <a>'rect'</a> element is mapped to an
-equivalent <a>'path'</a> element as follows, 
+equivalent <a>'path'</a> element as follows,
 after generating absolute used values
 <var>x</var>, <var>y</var>, <var>width</var>, <var>height</var>,
-<var>rx</var>, and <var>rx</var> 
-in user units for the local coordinate system,
+<var>rx</var>, and <var>rx</var>
+in user units for the user coordinate system,
 for each of the equivalent geometric properties
 following the rules specified above and in <a href="coords.html#Units">Units</a>: </p>
 
@@ -135,9 +135,9 @@ following the rules specified above and in <a href="coords.html#Units">Units</a>
 
   <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
   perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
-  operation to coordinate (<var>x+width</var>,<var>y+ry</var>), 
+  operation to coordinate (<var>x+width</var>,<var>y+ry</var>),
   where <var>rx</var> and <var>ry</var> are used as the equivalent parameters to
-  the <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a> command, 
+  the <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a> command,
   the <var>x-axis-rotation</var> and <var>large-arc-flag</var> are set to zero,
   the <var>sweep-flag</var> is set to one;</li>
 
@@ -200,7 +200,7 @@ radius.</p>
 </p>
 
 <p>
-  The <a>'r'</a> attribute defines the radius of the circle. 
+  The <a>'r'</a> attribute defines the radius of the circle.
   A negative value for either property is illegal and <a href="https://www.w3.org/TR/CSS21/syndata.html#parsing-errors">must be ignored as a parsing error</a>.
 </p>
 
@@ -212,11 +212,11 @@ radius.</p>
   begins at the "3 o'clock" point on the radius and proceeds in a
   clock-wise direction (before any transformations).
   The <var>rx</var> and <var>ry</var> parameters to the arc commands
-  are both equal to the used value of the <a>'r'</a> property, after conversion to local user units, 
-  while the <var>x-axis-rotation</var>, 
-  the <var>large-arc-flag</var>, 
+  are both equal to the used value of the <a>'r'</a> property, after conversion to local user units,
+  while the <var>x-axis-rotation</var>,
+  the <var>large-arc-flag</var>,
   and the <var>sweep-flag</var> are all set to zero.
-  The coordinates are computed as follows, 
+  The coordinates are computed as follows,
   where <var>cx</var>, <var>cy</var>, and <var>r</var> are the used values of the equivalent properties, converted to user units:
 </p>
 <ol>
@@ -247,7 +247,7 @@ with red and stroked with blue.</p>
 <edit:with element='ellipse'>
 
 <p>The <a>'ellipse'</a> element defines an ellipse which is axis-aligned
-with the current <a>local coordinate system</a> based on a center point and two radii.</p>
+with the current <a>user coordinate system</a> based on a center point and two radii.</p>
 
 <edit:elementsummary name='ellipse'/>
 <p>
@@ -256,9 +256,9 @@ with the current <a>local coordinate system</a> based on a center point and two 
 
 <p>
   The <a>'rx'</a> and <a>'ry'</a> properties define the x- and y-axis radii of the
-  ellipse. 
+  ellipse.
   A negative value for either property is illegal and <a href="https://www.w3.org/TR/CSS21/syndata.html#parsing-errors">must be ignored as a parsing error</a>.
-  A computed value of zero for either dimension, 
+  A computed value of zero for either dimension,
   or a computed value of <code>auto</code> for <em>both</em> dimensions,
   disables rendering of the element.
 </p>
@@ -275,9 +275,9 @@ with the current <a>local coordinate system</a> based on a center point and two 
   <li>a percentage of the coordinate system <b>width</b>; that is, a percentage value for <a><b>'rx'</b></a> and an <code>auto</code> value for <a>'ry'</a>.</li>
   <li>a percentage of the coordinate system <b>height</b>; that is, an <code>auto</code> value for <a>'rx'</a> and a percentage value for <a><b>'ry'</b></a>.</li>
 </ul>
-  
+
 <p class="note">
-  New in SVG 2. 
+  New in SVG 2.
   The <code>auto</code> value for <a>'rx'</a> and <a>'ry'</a> was added to allow consistent
   parsing of these properties for both ellipses and rectangles.
   Previously, if either <a>'rx'</a> or <a>'ry'</a> was unspecified,
@@ -292,12 +292,12 @@ with the current <a>local coordinate system</a> based on a center point and two 
   begins at the "3 o'clock" point on the radius and proceeds in a
   clock-wise direction (before any transformation).
   The <var>rx</var> and <var>ry</var> parameters to the arc commands
-  are the used values of the equivalent properties after conversion to local user units, 
-  while the <var>x-axis-rotation</var>, 
-  the <var>large-arc-flag</var>, 
+  are the used values of the equivalent properties after conversion to local user units,
+  while the <var>x-axis-rotation</var>,
+  the <var>large-arc-flag</var>,
   and the <var>sweep-flag</var> are all set to zero.
-  The coordinates are computed as follows, 
-  where <var>cx</var>, <var>cy</var>, <var>rx</var>, and <var>ry</var> 
+  The coordinates are computed as follows,
+  where <var>cx</var>, <var>cy</var>, <var>rx</var>, and <var>ry</var>
   are the used values of the equivalent properties, converted to user units:
 </p>
 <ol>
@@ -378,16 +378,16 @@ and ends at another.</p>
     The x- and y-axis coordinates of the end of the line.
   </dd>
 </dl>
-  
+
 <p class="note">
   A future specification may convert the <a>'x1'</a>, <a>'y1'</a>, <a>'x2'</a>, and <a>'y2'</a> attributes to geometric properties.
   Currently, they can only be specified via element attributes, and not CSS.
 </p>
 
 <p>Mathematically, a <a>'line'</a> element can be mapped to an
-equivalent <a>'path'</a> element as follows, 
-after converting coordinates into local coordinate system user units according
-to <a href="coords.html#Units">Units</a> 
+equivalent <a>'path'</a> element as follows,
+after converting coordinates into user coordinate system user units according
+to <a href="coords.html#Units">Units</a>
 to generate values <var>x1</var>, <var>y1</var>, <var>x2</var>, and <var>y2</var>:</p>
 
 <ul>
@@ -456,7 +456,7 @@ shapes.</p>
     is valid but does not render.</p>
   </dd>
 </dl>
-  
+
 <p class="note">
   A future specification may convert the <a>'points'</a> attribute to a geometric property.
   Currently, it can only be specified via an element attribute, and not CSS.
@@ -520,7 +520,7 @@ set of connected straight line segments.</p>
     is valid, but does not render.</p>
   </dd>
 </dl>
-  
+
 <p class="note">
   A future specification may convert the <a>'points'</a> attribute to a geometric property.
   Currently, it can only be specified via an element attribute, and not CSS.
