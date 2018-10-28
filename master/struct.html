@@ -292,79 +292,6 @@ within it, to an arbitrary depth.</p>
 
 <edit:elementsummary name='g'/>
 
-<h2 id="UnknownElement">Unknown elements</h2>
-
-<div class="annotation svg2-requirement">
-  <table>
-    <tr>
-      <th>SVG 2 Requirement:</th>
-      <td>Have unknown elements treated as <a>'g'</a> for the purpose of rendering.</td>
-    </tr>
-    <tr>
-      <th>Resolution:</th>
-      <td><ul><li>
-        <a href="http://www.w3.org/2012/01/13-svg-irc#T00-25-54">Accept having unknown elements treated as <span class='element-name'>'g'</span> for the purpose of rendering.</a></li>
-        <li><a href="https://www.w3.org/2016/06/30-svg-minutes.html">Treat unknown elements as tspan when inside text. Presentation and inherited style apply, but nothing text-specific.</a>
-        </li></ul></td>
-    </tr>
-    <tr>
-      <th>Purpose:</th>
-      <td>To allow fallbacks without the use of <a>'switch'</a>, and to align with the behavior of unknown elements in HTML.</td>
-    </tr>
-    <tr>
-      <th>Owner:</th>
-      <td>Nobody (no action)</td>
-    </tr>
-    <tr>
-      <th>Status:</th>
-      <td></td>
-    </tr>
-  </table>
-</div>
-
-<edit:elementsummary name='unknown'/>
-
-<p class="issue" data-issue="70">Treating unknown elements as a generic container element, resulting in the
-rendering of their child trees, and assigning the SVGUnknownElement interface to
-unknown elements are both at risk, with no known implementations.</p>
-
-<p>Unknown elements are all elements that are in the SVG namespace that are not
-defined by this specification or any SVG module. The <a>SVGUnknownElement</a>
-interface must be used for unknown elements.</p>
-
-<p>Unknown elements in the SVG namespace are <a>renderable elements</a> and <a>container elements</a>.
-They must render as if the unknown element
-were replaced with a <a>'g'</a> element or <a>'tspan'</a>, according to context.
-Any global attribute or property that is valid on any SVG graphics element
-is also valid on unknown elements, and must be processed as normal.
-This includes conditional processing attributes, ARIA attributes, data attributes,
-and the <a>'lang'</a>, <a>'id'</a>, <a>'class'</a>, <a>'tabindex'</a> and <a>'style attribute'</a>.
-Styles specified on unknown elements must be inherited by
-their child elements according to the normal rules for inheritance for each style property.
-</p>
-
-<p>Known and unknown elements in other namespaces that occur as a child of any
-SVG element except <a>'foreignObject'</a>, must not render unless
-explicitly stated otherwise in this specification.</p>
-
-<p>Known elements in the SVG namespace that occur in places where SVG's content
-model doesn't explicitly allow it must not render unless
-explicitly stated otherwise in this specification.</p>
-
-<p>Consequently, in the following example:</p>
-<ul>
-<li>the <a>'path'</a> element inside the unknown <span class="element-name">'mysteryElement'</span> must render</li>
-<li><span class="element-name">'hideElement'</span> and its contents must not render</li>
-<li>the <a>'text'</a> element must not render the string contained
-in the inner <a>'text'</a> element</li>
-<li>the <a>'path'</a> element inside of <span class="element-name">'gradientExtension'</span>
-must not render since the <a>'linearGradient'</a> element isn't directly rendered</li>
-<li>regardless of whether the user agent supports XHTML or not,
-the <span class="element-name">'div'</span> element and its contents must not render</li>
-</ul>
-
-<edit:example href='images/struct/unknownelms01.svg' image='no' link='yes'/>
-
 <h2 id="Head">Defining content for reuse, and the <span class='element-name'>'defs'</span> element</h2>
 
 <h3 id="Overview">Overview</h3>
@@ -710,9 +637,7 @@ The target element that results from URL processing is the <a>referenced element
 </p>
 
 <p>If the <a>referenced element</a> that results from resolving the URL
-  is neither an SVG element
-  nor an HTML-namespaced element
-  <a href="embedded.html#HTMLElements">that may be included as a child of an SVG container element</a>,
+  is not an SVG element,
   then the reference is <a>invalid</a> and the <a>'use'</a> element is in error.
 </p>
 <p>
@@ -761,8 +686,7 @@ In contrast, user agents that do <em>not</em> support
 the dynamic interactive processing mode
 may not need to implement all the details of the shadow DOM.
 However, all user agents must ensure that the <a href="#UseLayout">layout</a>
-and <a href="#UseStyleInheritance">style inheritance</a> for the re-used graphics,
-and any <a href="#UseMultimedia">multimedia</a>
+and <a href="#UseStyleInheritance">style inheritance</a> for the re-used graphics
 and <a href="#UseAnimations">declarative animations</a> if applicable,
 are rendered in the same way as if the shadow DOM was implemented.
 </p>
@@ -856,9 +780,7 @@ must throw a <code>NoModificationAllowedError</code>.
 
 <p>
 Within a <a>use-element shadow tree</a>,
-<a>'script'</a> elements are inert (do not execute);
-<a>'audio'</a> and <a>'video'</a> elements
-are subject to the limitations specified in the <a href="#UseMultimedia">Multimedia</a> section.
+<a>'script'</a> elements are inert (do not execute).
 </p>
 
 <p class="note">
@@ -1171,34 +1093,6 @@ svg:hover .dark, svg:focus .dark {
     specify explicit values (e.g., the pink noses and ears and the white tails).
   </p>
 </div>
-
-<h3 id="UseMultimedia">Multimedia in use-element shadow trees</h3>
-
-<p>
-  When a <a>use-element shadow tree</a> includes
-  <a>'audio'</a> or <a>'video'</a> elements,
-  the following behaviors must be enforced:
-</p>
-<ul>
-  <li>
-  The user agent must synchronize playback of the media
-  with the <a>corresponding element</a>
-  (if it is rendered as part of the same document)
-  and any other <a>instances</a> of the same <a>corresponding element</a>
-  in the document.
-  </li>
-  <li>
-  The <a>instance</a> must not play any audio
-  if the <a>'use'</a> element is not rendered.
-  </li>
-  <li>
-  If user-agent provided playback controls are included
-  for the <a>corresponding element</a>
-  (or would be included, if the element was rendered),
-  then they must be included for all instances in the document,
-  and a user action on any instance must control playback on them all.
-  </li>
-</ul>
 
 <h3 id="UseAnimations">Animations in use-element shadow trees</h3>
 
@@ -1966,13 +1860,9 @@ must include the unknown foreign-namespaced elements in the DOM
 but will ignore and exclude them for rendering purposes.
 </p>
 <p>
-The notable exceptions are described in the <a href="embedded.html">Embedded Content chapter</a>
-under <a href="embedded.html#HTMLElements">HTML elements in SVG subtrees</a>
-and <a href="embedded.html#ForeignObjectElement">Embedding Foreign Object
+The notable exceptions is described in the <a href="embedded.html">Embedded Content chapter</a>
+under <a href="embedded.html#ForeignObjectElement">Embedding Foreign Object
 Types</a>.
-Also see the handling of
-<a href="struct.html#UnknownElement">unknown elements</a>
-in the SVG namespace, which are treated differently.
 </p>
 
 <p>
@@ -2387,18 +2277,6 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
         <td>no restrictions</td>
     </tr>
     <tr>
-      <td><a>'audio'</a></td>
-      <td>platform-specific role mappings,
-        as defined in the <a href="https://w3c.github.io/html-aam/#x4-4-html-element-role-mappings">HTML Accessibility API Mappings</a> specification</td>
-      <td>If specified, role must be <code>application</code></td>
-    </tr>
-    <tr>
-      <td><a>'canvas'</a></td>
-      <td>platform-specific role mappings,
-        as defined in the <a href="https://w3c.github.io/html-aam/#x4-4-html-element-role-mappings">HTML Accessibility API Mappings</a> specification</td>
-      <td>no restrictions</td>
-    </tr>
-    <tr>
       <td><a>'circle'</a></td>
       <td><code>graphics-symbol</code> role
         if the element meets the <a>inclusion criteria</a>,
@@ -2572,12 +2450,6 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td><a>'iframe'</a></td>
-      <td>platform-specific role mappings,
-        as defined in the <a href="https://w3c.github.io/html-aam/#x4-4-html-element-role-mappings">HTML Accessibility API Mappings</a> specification</td>
-      <td>If Specified, role must be either <code title="attr-aria-role-application">application</code>, <code title="attr-aria-role-document">document</code>, or <code title="attr-aria-role-img">img</code> roles</td>
-    </tr>
-    <tr>
       <td><a>'image'</a></td>
       <td><code title="attr-aria-role-img">img</code> role</td>
       <td>no restrictions</td>
@@ -2717,12 +2589,6 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
         if the element meets the <a>inclusion criteria</a>,
         otherwise <code>none</code></td>
       <td>no restrictions</td>
-    </tr>
-    <tr>
-      <td><a>'video'</a></td>
-      <td>platform-specific role mappings,
-        as defined in the <a href="https://w3c.github.io/html-aam/#x4-4-html-element-role-mappings">HTML Accessibility API Mappings</a> specification</td>
-      <td>If specified, role must be <code>application</code></td>
     </tr>
     <tr>
       <td><a>'view'</a></td>
@@ -3142,19 +3008,6 @@ null if there is no such element.</p>
 
 <pre class="idl">[Exposed=Window]
 interface <b>SVGGElement</b> : <a>SVGGraphicsElement</a> {
-};</pre>
-
-</edit:with>
-
-
-<h3 id="InterfaceSVGUnknownElement">Interface SVGUnknownElement</h3>
-
-<edit:with element="unknown">
-
-<p>An <a>SVGUnknownElement</a> object represents an unknown element in the SVG namespace.</p>
-
-<pre class="idl">[Exposed=Window]
-interface <b>SVGUnknownElement</b> : <a>SVGGraphicsElement</a> {
 };</pre>
 
 </edit:with>
