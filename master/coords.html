@@ -52,7 +52,17 @@ the <a>'transform'</a> property.</p>
 to the width and height of the nearest ancestral SVG viewport. Hence, nesting
 SVG viewports provides an opportunity to redefine the meaning of percentage
 units and provide a new reference rectangle for "fitting" a graphic relative
-to a particular rectangular area.</p>
+to a particular rectangular area. The
+<dfn id="TermFurthestAncestorSVGViewport" data-dfn-type="dfn" data-export="">
+furthest ancestral SVG viewport</dfn> is the top most root SVG viewport with
+out leaving the <a>SVG context</a>. An ancestor SVG viewport might not be
+independent of the DOM tree order. E.g for <a>'linearGradient'</a>,
+<a>'radialGradient'</a>, <a>'pattern'</a>, <a>'mask element'</a>, <a>'clipPath'</a>
+<a>'symbol'</a> or <a>'use'</a> elements.</p>
+
+<p>An <dfn id="TermSVGContext" data-dfn-type="dfn" data-export="">SVG
+context</dfn> is a document fragment where all elements within the fragment
+have the <a>SVGElement</a> as prototype.</p>
 
 <p>The width, height and origin of SVG viewports is established by a negotiation
 process between the SVG document fragment generating the SVG viewport, and the
@@ -1442,7 +1452,7 @@ through this property.</p>
   </tr>
   <tr>
     <th>Value:</th>
-    <td>none | [ non-scaling-stroke | non-scaling-size | non-rotation | fixed-position ]+ [ viewport | screen ]?</td>
+    <td>none | non-scaling-stroke | non-scaling-size | non-rotation | fixed-position</td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -1485,7 +1495,7 @@ through this property.</p>
   <dd>Specifies special <a>user coordinate system</a> toward this element
   and its descendant by constrained transformations with the following
   characteristics. The scale of the <a>user coordinate system</a> do not
-  change in spite of change of <a>CTM</a>s from a host coordinate space.
+  change in spite of change of <a>CTM</a>s from a <var>host coordinate space</var>.
   However, it does not specify the suppression of rotation and skew. Also,
   it does not specify the fixation of placement of <a>user coordinate system</a>.
   Since non-scaling-size suppresses scaling of <a>user coordinate system</a>,
@@ -1495,7 +1505,7 @@ through this property.</p>
   <dd>Specifies special <a>user coordinate system</a> toward this element
   and its descendant by constrained transformations with the following
   characteristics. The rotation and skew of the <a>user coordinate system</a>
-  is suppressd in spite of change of <a>CTM</a>s from a host coordinate space.
+  is suppressd in spite of change of <a>CTM</a>s from a <var>host coordinate space</var>.
   However, it does not specify the suppression of scaling. Also, it does not
   specify the fixation of placement of <a>user coordinate system</a>.
   The transformation formula and the example behavior are indicated to the
@@ -1504,7 +1514,7 @@ through this property.</p>
   <dd>Specifies special <a>user coordinate system</a> toward this element
   and its descendant by constrained transformations with the following
   characteristics. The placement of <a>user coordinate system</a> is fixed
-  in spite of change of <a>CTM</a>s from a host coordinate space. However,
+  in spite of change of <a>CTM</a>s from a <var>host coordinate space</var>. However,
   it does not specify the suppression of rotation, skew and scaling. When
   the element that has fixed-position effect and also has <a>'transform'</a>
   property, that property is consumed for this effect. The shift components
@@ -1517,37 +1527,10 @@ through this property.</p>
 <p>These values can be enumerated. Thereby, the effect which has these
 characteristics simultaneously can be specified.</p>
 
-<p>The following two values assists the above-mentioned values. They show the
-host coordinate space of constrained transformations. Especially it has
-effective for the element belonging to nested viewport coordinate system such
-as nested contents or nested <a>'svg'</a> elements. An initial value in case
-it is not specified is <span class="prop-value">viewport</span>.</p>
+<p>The host coordinate space for <a>'vector-effect'</a> is the <a>viewport
+coordinate system</a> of the <a>furthest ancestral SVG viewport</a>.</p>
 
-<dl>
-  <dt class="prop-value">viewport</dt>
-  <dd>Specifies immediate <a>viewport coordinate system</a> as the host
-  coordinate space. When that element belongs to nested
-  <a>viewport coordinate system</a>, vector effects are applied toward
-  <a>viewport coordinate system</a> to which that element belongs directly.
-  That is, that vector effect is not effective for change of <a>CTM</a> on
-  ancestral <a>viewport coordinate system</a>.</dd>
-  <dt class="prop-value">screen</dt>
-  <dd>It specifies the coordinate system of content which under the immediate
-  control of <a>user agent</a>. So to speak, it is "scrren" which <a>user agent</a>
-  has. ("screen coordinate space" in SVGT1.2)  Even if that element belongs to
-  nested viewport coordinate system, that vector effect is always effective for
-  change of <a>CTM</a> of the any hierarchy. If the SVG implementation is part
-  of a <a>user agent</a> which supports CSS compatible px units, it is a
-  coordinate system on CSS pixel of rootmost content. Generally, the pixel (or
-  dot) of a device and pixel of CSS are not always equal by influences of the
-  zoom function which <a>user agent</a> itself has, and variation of dpi. (see
-  <a href="https://www.w3.org/TR/css3-values/#resolution">resolution</a>
-  [<a href="https://www.w3.org/TR/css3-values/">CSS Values and Units Module Level 3</a>])
-  Accordingly, this value does not specify constrained transformations toward
-  the such a device coordinate system.</dd>
-</dl>
-
-<p>Note: Future versions of SVG may allow ways to specify the device coordinate system.</p>
+<p class="note">Note: Future versions of SVG may allow ways to specify the device coordinate system.</p>
 
 <h3 id="VectorEffectsCalculation">Computing the vector effects</h3>
 
