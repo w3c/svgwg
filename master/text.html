@@ -172,12 +172,46 @@
       within an element with a value of <span class='prop-value'>none</span> for
       the <a>'display'</a> property.
 
-      Addressable characters are addressed by their index measured in UTF-16 code units
-      (thus, a single Unicode code point above U+FFFF will map to two addressable characters as
-      a UTF-16 code unit consists of 16 bits).
+      Addressable characters are addressed by their index. Indexes are
+      determined prior to applying any <a>'text-transform'</a>
+      conversions, as described for the methods in the
+      <a>SVGTextContentElement</a> interface.
 
-      Indexes are determined prior to applying any <a>'text-transform'</a> conversions,
-      as described for the methods in the <a>SVGTextContentElement</a> interface.
+      There are two methods to map an index to a character; the choice of
+      which to use depends on purpose:
+
+      <ol>
+        <li>
+          For the purposes of mapping text positioning attributes, the
+          index is measured in Unicode code points (thus a 'u'
+          followed by the combining diaeresis ' ̈' is counted as two
+          characters while the precomposed character 'ü' is counted as
+          one character).
+        </li>
+        <li>
+          For the purposes of SVG DOM text methods, the index is
+          measured in UTF-16 code units (thus, a single Unicode code
+          point above U+FFFF will map to two addressable characters as
+          a UTF-16 code unit consists of 16 bits).
+        </li>
+      </ol>
+
+      <p class="note">
+        The different methods are backwards compatible with SVG
+        1.1. The use of UTF-16 code units for SVG DOM text methods is
+        required from the definition of DOMString in the DOM 2
+        specification.
+      </p>
+
+      <p class="annotation">
+        The SVG working group is interested in implementer feedback on
+        the possibility of using grapheme clusters as defined by the
+        Unicode Standard Annex #29 to replace Unicode code points in
+        mapping text positioning attributes. Note, the use of the
+        CSS <a>typographic character</a> is not appropriate as what
+        constitutes a character can depend on context (line-breaking,
+        word-breaking, etc.).
+      </p>
 
       <p class="note">
         If support for CSS generated-content text is introduced in the future,
