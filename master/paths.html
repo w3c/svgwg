@@ -177,7 +177,7 @@ describe the syntax of a given path command:</p>
   </tr>
   <tr>
     <th>Value:</th>
-    <td>none | <a>&lt;string&gt;</a></td>
+    <td>none | path(<a>&lt;string&gt;</a>)</td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -231,6 +231,10 @@ the rules in the <a href="paths.html#PathDataErrorHandling">Path Data Error Hand
 If the path data string contains no valid commands, then the behavior
 is the same as the <span class='prop-value'>none</span> value.</p>
 
+<p>When <a>'d'</a> is parsed as an attribute, it is parsed according to the
+  <a href="#PathDataBNF">svg-path</a> <a href="types.html#syntax">EBNF
+  grammar</a>, instead of the CSS grammar given above.</p>
+
 <p>
   For animation, two <a>'d'</a> property values can only be
   interpolated smoothly when the path data strings contain have the
@@ -244,25 +248,50 @@ is the same as the <span class='prop-value'>none</span> value.</p>
   animation type.
 </p>
 <p>
+  Lowercase commands (with relative coordinates) are converted to equivalent uppercase commands
+  (with absolute coordinates) before determining if the path data strings have the same structure.
+</p>
+<p>
   If the list of path data commands have the same structure, then each
   parameter to each path data command must be
   <a href="https://drafts.csswg.org/web-animations/#animation-interpolation">interpolated</a>
   separately <a href="https://drafts.csswg.org/web-animations/#real-number-animation-type">as
   real numbers</a>.  Flags and booleans must be interpolated as
-  fractions between zero and one, with any non-zero value considered
-  to be a value of one/true.
-</p>
-
-<p class="annotation">
-  Resolved that "d will become a presentation attribute (no name
-  change) with path data string as value" at
-  <a href="https://www.w3.org/2016/04/21-svg-minutes.html">London
-  Editor's Meeting</a>.
+  integer values clamped between zero and one.
 </p>
 
 </div>
 
-<p>The following sections list the commands that canbe used
+<div class='ready-for-wider-review'>
+
+<h3 id="TheDAttribute">The <span class="attr-name">'d'</span> attribute</h3>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="TermD" data-dfn-type="element-attr" data-dfn-for="path" data-export="">d</dfn></td>
+        <td>"<span class="attr-value">path data</span>"</td>
+        <td>As if not specified.</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+</dl>
+
+<p>
+ The contents of the attribute must match the svg-path EBNF grammar defined below, and errors within the string are handled according to the rules in the Path Data Error Handling section. If the path data string contains no valid commands, then the behavior is the same as if the attribute was not specified.
+</p>
+
+<h3 id="PathData">Path data</h3>
+
+<p>The following sections list the commands that can be used
 in path data strings.  Those that
 draw straight line segments include the <a href="paths.html#PathDataLinetoCommands">lineto commands</a>
 (<strong>L</strong>, <strong>l</strong>,
