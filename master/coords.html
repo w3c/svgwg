@@ -3316,17 +3316,20 @@ setMatrix(<var>matrix</var>) is called, the following steps are run:</p>
 <ol class='algorithm'>
   <li>If the <a>SVGTransform</a> object is <a href='#ReadOnlyTransform'>read only</a>, then
   <a>throw</a> a <a>NoModificationAllowedError</a>.</li>
-  <li>If <a>DOMMatrixReadOnly</a>.fromMatrix(<var>matrix</var>).is2D() would return true from,
+  <li>Let <var>newMatrix</var> be the result of <code><a>DOMMatrixReadOnly</a>.fromMatrix(<var>matrix</var>)</code>,
+  including the <a href="https://drafts.fxtf.org/geometry/#dommatrixinit-dictionary">validate and fix-up</a> steps for missing values.
+  If that method throws an error, then re-throw that error and abort these steps.</li>
+  <li>If <var>newMatrix</var>.is2D() would return true,
   then set the <a>SVGTransform</a> object's
   <a href='#TransformValue'>value</a> to a <span class='prop-value'>matrix(…)</span>
-  value that represents the same matrix as <var>matrix</var>.</li>
+  value that represents the same matrix as <var>newMatrix</var>.</li>
   <li>Otherwise, set the <a>SVGTransform</a> object's
   <a href='#TransformValue'>value</a> to a <span class='prop-value'>matrix3d(…)</span>
-  value that represents the same matrix as <var>matrix</var>.</li>
-  <li>Copy the matrix component values from <var>matrix</var>
-  into the <a>SVGTransform</a> object's <a href="#TransformMatrixObject">matrix object</a>.</li>
+  value that represents the same matrix as <var>newMatrix</var>.</li>
+  <li>In either case, <a href="#TransformMatrixObject">matrix object</a> gets synchronized
+  to the <a>SVGTransform</a> object's <a href='#TransformValue'>value</a>.</li>
   <li>If the <a>SVGTransform</a> object
-  <a href="#TransformMode">reflects an element of a presentation attribute value</a>,
+  <a href="#TransformMode">reflects a presentation attribute value of an element</a>,
   then <a>reserialize</a> the reflected attribute.</li>
 </ol>
 
