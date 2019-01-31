@@ -424,7 +424,7 @@ when either the attribute or its reflected property is modified.
 
 <p>
 If the attribute hasn't been specified explicitly in the document markup,
-the reflected object is nonetheless intialized upon access,
+the reflected object is nonetheless initialized upon access,
 to the attribute's inital value.
 If the attribute's initial value is <span class="attr-value">(none)</span>,
 the object is initialized as defined in
@@ -488,8 +488,11 @@ specific value, the following steps must be performed:</p>
           value corresponding to <var>number</var>, or the empty string
           if <var>number</var> is 0.
           <p class="note">This means that if the enumeration value is
-          set to the "unknown" value, the content attribute will be
-          set to the empty string.</p></li>
+          somehow set to the "unknown" value, the content attribute will be
+          set to the empty string.
+          However, this unknown value can never be set directly on the <code>SVGAnimatedEnumeration</code> object;
+          it represents an unknown attribute value set in the markup.</p>
+          </li>
           <li>Set the content attribute to <var>keyword</var>.</li>
         </ol>
       </dd>
@@ -666,16 +669,19 @@ returned <a>SVGLengthList</a> object would be empty.</p>
 <p>If a script sets a <a>reflected</a> DOM attribute
 to an <a>invalid value</a> for the content attribute (e.g.,
 a negative number for an attribute that requires a non-negative
-number or an out-of-range value for an enumeration), unless
+number), unless
 this specification indicates otherwise, no exception shall be
 raised on setting, but the given document fragment shall become
 technically <em>in error</em> as described in
 <a href="conform.html#ErrorProcessing">Error processing</a>.</p>
 
-<p class="issue">
-  Many browsers currently throw errors for out-of-range enumeration values,
-  or explicitly setting an enumeration to the UNKNOWN value.
-  See <a href="https://github.com/w3c/svgwg/issues/547">Should setting an enum IDL to an invalid value throw an error?</a> on GitHub for discussion.
+<p class="note">
+DOM attributes that reflect enumerated values using integer constants are an exception:
+these throw a <a>TypeError</a> when set to an out-of-range integer,
+or to the constant (0) that represents an unknown attribute value.
+This is consistent with the
+<a href="https://heycam.github.io/webidl/#es-enumeration">behavior of the WebIDL enumeration type</a>
+[<a href="refs.html#ref-webidl">WebIDL</a>].
 </p>
 
 
@@ -2202,8 +2208,7 @@ the following steps are run:</p>
   <li>Let <var>value</var> be the value being assigned to
   <a href="types.html#__svg__SVGAnimatedEnumeration__baseVal">baseVal</a>.</li>
   <li>If <var>value</var> is 0 or is not the <a>numeric type value</a>
-  for any value of the reflected attribute, then set the reflected
-  attribute to the empty string.</li>
+  for any value of the reflected attribute, then throw a <a>TypeError</a>.</li>
   <li>Otherwise, if the reflecting IDL attribute is
   <a href='painting.html#__svg__SVGMarkerElement__orientType'>orientType</a>
   and <var>value</var> is <a href='painting.html#__svg__SVGMarkerElement__SVG_MARKER_ORIENT_ANGLE'>SVG_MARKER_ORIENT_ANGLE</a>,
