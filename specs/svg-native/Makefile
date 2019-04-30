@@ -1,9 +1,5 @@
 # Make the svgwg.org build machine prefer the online version of Bikeshed.
-ifeq ($(USER),svgwg)
-all : online
-else
-all : local
-endif
+all : $(if $(BUILD_MACHINE),online,local)
 
 local : index.bs
 	bikeshed -f spec index.bs
