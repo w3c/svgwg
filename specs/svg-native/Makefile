@@ -1,7 +1,17 @@
-all: index.html
+# Make the svgwg.org build machine prefer the online version of Bikeshed.
+ifeq ($(USER),svgwg)
+all : online
+else
+all : local
+endif
 
-index.html: index.bs
+local : index.bs
 	bikeshed -f spec index.bs
 
-online:
-	curl https://api.csswg.org/bikeshed/ -F file=@index.bs -F force=1 > index.html
+online : index.bs
+	curl -s https://api.csswg.org/bikeshed/ -F file=@index.bs -F force=1 > index.html
+
+clean :
+	rm -f index.html
+
+.PHONY : all local online clean
