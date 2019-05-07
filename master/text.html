@@ -172,12 +172,46 @@
       within an element with a value of <span class='prop-value'>none</span> for
       the <a>'display'</a> property.
 
-      Addressable characters are addressed by their index measured in UTF-16 code units
-      (thus, a single Unicode code point above U+FFFF will map to two addressable characters as
-      a UTF-16 code unit consists of 16 bits).
+      Addressable characters are addressed by their index. Indexes are
+      determined prior to applying any <a>'text-transform'</a>
+      conversions, as described for the methods in the
+      <a>SVGTextContentElement</a> interface.
 
-      Indexes are determined prior to applying any <a>'text-transform'</a> conversions,
-      as described for the methods in the <a>SVGTextContentElement</a> interface.
+      There are two methods to map an index to a character; the choice of
+      which to use depends on purpose:
+
+      <ol>
+        <li>
+          For the purposes of mapping text positioning attributes, the
+          index is measured in Unicode code points (thus a 'u'
+          followed by the combining diaeresis ' ̈' is counted as two
+          characters while the precomposed character 'ü' is counted as
+          one character).
+        </li>
+        <li>
+          For the purposes of SVG DOM text methods, the index is
+          measured in UTF-16 code units (thus, a single Unicode code
+          point above U+FFFF will map to two addressable characters as
+          a UTF-16 code unit consists of 16 bits).
+        </li>
+      </ol>
+
+      <p class="note">
+        The different methods are backwards compatible with SVG
+        1.1. The use of UTF-16 code units for SVG DOM text methods is
+        required from the definition of DOMString in the DOM 2
+        specification.
+      </p>
+
+      <p class="annotation">
+        The SVG working group is interested in implementer feedback on
+        the possibility of using grapheme clusters as defined by the
+        Unicode Standard Annex #29 to replace Unicode code points in
+        mapping text positioning attributes. Note, the use of the
+        CSS <a>typographic character</a> is not appropriate as what
+        constitutes a character can depend on context (line-breaking,
+        word-breaking, etc.).
+      </p>
 
       <p class="note">
         If support for CSS generated-content text is introduced in the future,
@@ -1994,11 +2028,11 @@
     </tr>
     <tr>
       <th>Value:</th>
-      <td><a>&lt;length-percentage&gt;</a></td>
+      <td>auto | <a>&lt;length-percentage&gt;</a></td>
     </tr>
     <tr>
       <th>Initial:</th>
-      <td>0</td>
+      <td>auto</td>
     </tr>
     <tr>
       <th>Applies to:</th>
@@ -2018,12 +2052,12 @@
       <td>visual</td>
     </tr>
     <tr>
-      <th>Computed&#160;value:</th>
-      <td>absolute length or percentage</td>
+      <th>Computed value:</th>
+      <td>an absolute length or percentage</td>
     </tr>
     <tr>
-      <th><a>Animatable</a>:</th>
-      <td>yes</td>
+      <th><a>Animation type</a>:</th>
+      <td>by computed value</td>
     </tr>
   </table>
 
@@ -2159,6 +2193,8 @@
     current <a>user coordinate system</a> and the <a>'viewBox'</a>.
   </p>
 
+  <p class="issue" data-issue="76">Do nor re-specify shape-inside but reference CSS Shapes.</p>
+
   <table class="propdef def">
     <tr>
       <th>Name:</th>
@@ -2189,12 +2225,12 @@
       <td>visual</td>
     </tr>
     <tr>
-      <th>Computed&#160;value:</th>
+      <th>Computed value:</th>
       <td>computed lengths for &lt;shape&gt;, the absolute URI for &lt;uri&gt;, otherwise as specified </td>
     </tr>
     <tr>
-      <th><a>Animatable</a>:</th>
-      <td>yes, see <a href="https://www.w3.org/TR/css-shapes/#basic-shape-interpolation">Interpolation of Basic Shapes</a></td>
+      <th><a>Animation type</a>:</th>
+      <td>See <a href="https://www.w3.org/TR/css-shapes/#basic-shape-interpolation">Interpolation of Basic Shapes</a></td>
     </tr>
   </table>
 
@@ -2371,12 +2407,12 @@
       <td>visual</td>
     </tr>
     <tr>
-      <th>Computed&#160;value:</th>
+      <th>Computed value:</th>
       <td>computed lengths for any &lt;basic-shape&gt;, the absolute URI for &lt;uri&gt;, otherwise as specified </td>
     </tr>
     <tr>
-      <th><a>Animatable</a>:</th>
-      <td>yes, see <a href="https://www.w3.org/TR/css-shapes/#basic-shape-interpolation">Interpolation of Basic Shapes</a></td>
+      <th><a>Animation type</a>:</th>
+      <td>See <a href="https://www.w3.org/TR/css-shapes/#basic-shape-interpolation">Interpolation of Basic Shapes</a></td>
     </tr>
   </table>
 
@@ -2472,6 +2508,8 @@
     the original shape. This property takes on positive values only.
   </p>
 
+  <p class="issue" data-issue="77">Do nor re-specify shape-margin but reference CSS Shapes.</p>
+
   <table class="propdef def">
     <tr>
       <th>Name:</th>
@@ -2502,12 +2540,12 @@
       <td>visual</td>
     </tr>
     <tr>
-      <th>Computed&#160;value:</th>
-      <td>the absolute length </td>
+      <th>Computed value:</th>
+      <td>an absolute length</td>
     </tr>
     <tr>
-      <th><a>Animatable</a>:</th>
-      <td>yes</td>
+      <th><a>Animation type</a>:</th>
+      <td>by computed value</td>
     </tr>
   </table>
 
@@ -5048,12 +5086,12 @@ the dash pattern at the same positions across different implementations.</p>
       <td>visual</td>
     </tr>
     <tr>
-      <th>Computed&#160;value:</th>
+      <th>Computed value:</th>
       <td>as specified</td>
     </tr>
     <tr>
-      <th><a>Animatable</a>:</th>
-      <td>yes</td>
+      <th><a>Animation type</a>:</th>
+      <td>discrete</td>
     </tr>
   </table>
 
@@ -5244,16 +5282,22 @@ the dash pattern at the same positions across different implementations.</p>
 
 <h4 id='FontVariantProperty'>The <span class="property">'font-variant'</span> property</h4>
 
+  <em>This section is not normative</em>
+
+  <p>The <a>'font-variant'</a> property gets defined by the CSS Font Module
+    ([<a href="refs.html#ref-css-fonts-3">css-font-3</a>]).
+</p>
+
   <p>
-    CSS Font Module Level 3 changes the meaning of the
-    <a href="https://www.w3.org/TR/css-fonts-3/#propdef-font-variant">'font-variant'</a>
+    CSS Font Module changes the meaning of the
+    <a>'font-variant'</a>
     property from that defined by CSS 2.1. It has been repurposed (and
     its functionality greatly expanded) as a shorthand for selecting font
     variants from within a single font.
   </p>
-  <p class="note">
-    SVG 2 requires all <a>'font-variant'</a> subproperties to be
-    implemented (e.g. <a>'font-variant-ligatures'</a>).
+
+  <p>
+    SVG 2 supports all <a>'font-variant'</a> longhand properties (e.g. <a>'font-variant-ligatures'</a>).
   </p>
 
   <h4 id='LineHeightProperty'>The <span class="property">'line-height'</span> property</h4>
@@ -5279,12 +5323,18 @@ the dash pattern at the same positions across different implementations.</p>
 
   <h4 id='WritingModeProperty'>The <span class="property">'writing-mode'</span> property</h4>
 
+  <em>This section is not normative.</em>
+
+  <p>The <a>'writing-mode'</a> property gets defined by the CSS Writing Modes Module
+        ([<a href="refs.html#ref-css-writing-modes-3">css-writing-modes-3</a>]).
+    </p>
+
   <p>
     This property sets the <a>block-flow direction</a>; or in-other-words,
     the direction in which lines of text are stacked. As a consequence it
     also determines if the text has a horizontal or vertical orientation.
   </p>
-  <p>
+  <p class="annotation">
     SVG 2 references
     <a href="https://www.w3.org/TR/css-writing-modes-3">CSS Writing
       Modes Level 3</a> for the definition of the
@@ -5293,21 +5343,8 @@ the dash pattern at the same positions across different implementations.</p>
     The SVG 1.1 values are obsolete but must still be supported by
     converting the specified values to computed values as follows:
   </p>
-  <ul>
-    <li>
-      <span class="prop-value">'lr'</span>,
-      <span class="prop-value">'lr-tb'</span>,
-      <span class="prop-value">'rl'</span>, and
-      <span class="prop-value">'rl-tb'</span> to
-      <span class="prop-value">'horizontal-tb'</span>;
-    </li>
-    <li>
-      <span class="prop-value">'tb'</span>, and
-      <span class="prop-value">'tb-rl'</span>, to
-      <span class="prop-value">'vertical-rl'</span>.
-    </li>
-  </ul>
-  <p class="note"><!-- This could be an annotation. -->
+
+  <p class="annotation"><!-- This could be an annotation. -->
     In SVG 1.0, this property could be interpreted as to also setting the
     <a>inline-base direction</a> leading to confusion about its role
     relative to the <a>'direction'</a> property. SVG 1.1 was a bit
@@ -5316,13 +5353,6 @@ the dash pattern at the same positions across different implementations.</p>
     the <a>'text-anchor'</a> property) but still was open to
     interpretation. The fact that neither SVG 1.0 nor SVG 1.1 allowed
     multi-line text added to the confusion.
-  </p>
-  <p class="note">
-    Except for the additional information provided here, the
-    <a href="https://www.w3.org/TR/css-writing-modes-3/#block-flow">normative
-      definition</a> of the <a>'writing-mode'</a> property is in CSS
-      Writing Modes Level 3
-      ([<a href="refs.html#ref-css-writing-modes-3">css-writing-modes-3</a>]).
   </p>
 
   <h4 id='DirectionProperty'>The <span class="property">'direction'</span> property</h4>
@@ -5463,12 +5493,6 @@ the dash pattern at the same positions across different implementations.</p>
     in new content.
   </p>
 
-  <p>
-    The SVG 1.1 initial value 'baseline' has been removed from SVG
-    2. User agents <em>may</em> support this value as computing to '0'
-    if necessary to support legacy SVG content.
-  </p>
-
   <p class="annotation">
     The 'baseline' value was removed with the conversion of
     'vertical-align' to a shorthand for 'alignment-baseline' and
@@ -5509,36 +5533,33 @@ the dash pattern at the same positions across different implementations.</p>
 
 <h4 id='LetterSpacingProperty'>The <span class="property">'letter-spacing'</span> property</h4>
 
-  <p>
-    SVG 2 removes percentage values from the <a>'letter-spacing'</a> property.
-  </p>
+
   <p class="note">
     Except as noted, see CSS Text Level 3 for the definition of the
     <a>'letter-spacing'</a>.([<a href="refs.html#ref-css-text-3">css-text-3</a>]).
   </p>
   <p class="annotation">
-    Percentage values based on the SVG viewport are not seen as
-    useful. This brings the definition of 'letter-spacing' in line with
+    SVG 1.1 allowed percentage values in the <a>'letter-spacing'</a> property. Percentage values based on the SVG viewport are not seen as
+    useful, so this was removed in SVG 2. This brings the definition of 'letter-spacing' in line with
     CSS.
   </p>
 
 <h4 id='WordSpacingProperty'>The <span class="property">'word-spacing'</span> property</h4>
 
-  <p>
-    SVG 2 changes the meaning of percentage values for the
-    <a>'word-spacing'</a> property. In SVG 1.1, percentages define
-    additional spacing as a percentage of the <a>SVG viewport</a>
-    size. In SVG 2, following CSS Text Level 3, percentages define
-    additional spacing as a percentage of the affected character's
-    width.
-  </p>
+
   <p class="note">
     Except as noted, see CSS Text Level 3 for the definition of the
     <a>'word-spacing'</a>.([<a href="refs.html#ref-css-text-3">css-text-3</a>]).
   </p>
   <p class="annotation">
-    Percentage values based on the SVG viewport are not seen as
-    useful. This brings the definition of 'word-spacing' in line with
+    SVG 2 changes the meaning of percentage values for the
+    <a>'word-spacing'</a> property. In SVG 1.1, percentages define
+    additional spacing as a percentage of the <a>SVG viewport</a>
+    size. Percentage values based on the SVG viewport are not seen as
+    useful. In SVG 2, following CSS Text Level 3, percentages define
+    additional spacing as a percentage of the affected character's
+    width.
+    This brings the definition of 'word-spacing' in line with
     CSS.
   </p>
 
@@ -5574,9 +5595,9 @@ the dash pattern at the same positions across different implementations.</p>
   </p>
 
   <p class="note">
-    See the CSS3 UI specification for the definition of
-    <a href="https://www.w3.org/TR/2015/CR-css-ui-3-20150707/#text-overflow">'text-overflow'</a>.
-    [<a href="refs.html#ref-css-ui-3">css-ui-3</a>]
+    See the CSS3 Overflow specification for the definition of
+    <a href="https://www.w3.org/TR/css-overflow-3/#text-overflow">'text-overflow'</a>.
+    [<a href="refs.html#ref-css-overflow-3">css-overflow-3</a>]
   </p>
 
   <p>
@@ -5942,21 +5963,12 @@ the dash pattern at the same positions across different implementations.</p>
     <a href="https://www.w3.org/TR/css-text-decor-3/">CSS Text
     Decoration Module Level 3</a>
     [(<a href="refs.html#ref-css-text-decor-3">css-text-decor-3</a>)]
-    specification. The fill and stroke of the decoration are given by
-    the <a>'text-decoration-fill'</a> and
-    <a>'text-decoration-stroke'</a> properties.  If a color value is
-    specified either by the <a>'text-decoration-color'</a> property or
-    by the <a>'text-decoration'</a> shorthand, and no
-    <a>'text-decoration-fill'</a> property is specified, it is
-    interpreted as if the <a>'text-decoration-fill'</a> property were
-    specified with that color value.
+    specification.
   </p>
 
   <p>
-    If the fill or stroke of the text decoration are not explicitly
-    specified (via <a>'text-decoration'</a>, <a>'text-decoration-color'</a>,
-    <a>'text-decoration-fill'</a>, or <a>'text-decoration-stroke'</a>),
-    they are given by the fill and stroke of the text at the point
+    The fill and stroke of the text decoration are
+    given by the fill and stroke of the text at the point
     where the text decoration is declared (see example below).
   </p>
 
@@ -5965,10 +5977,7 @@ the dash pattern at the same positions across different implementations.</p>
     <a>'text-decoration-style'</a> properties are new in SVG 2. The
     SVG 1.1/CSS 2.1 <a>'text-decoration'</a> property is transformed
     in a backwards compatible way to a short hand for these
-    properties. <a>'text-decoration-fill'</a> and
-    <a>'text-decoration-stroke'</a> are SVG specific properties which
-    may be added to a future level of the CSS Text Decoration
-    specification.
+    properties.
   </p>
 
   <p>
@@ -6009,98 +6018,6 @@ the dash pattern at the same positions across different implementations.</p>
 
   <edit:example href='images/text/textdecoration01.svg' name='textdecoration01' description="behavior of 'text-decoration' property" image='yes' link='yes'/>
 
-  <h3 id="TextDecorationFillStroke">The <span class="property">'text-decoration-fill'</span>
-    and <span class="property">'text-decoration-stroke'</span> properties</h3>
-
-  <p class="annotation">
-    The CSS working group agreed to the SVG specification of the
-    'text-decoration-fill' and 'text-decoration-stroke' properties at
-    the joint CSS/SVG 2014 TPAC meeting. They again endorsed the use
-    of these properties at the joint 2015 Sydney meeting. They
-    expressed their intention to extend CSS text decoration to include
-    these properties at the same time they allow 'fill' and 'stroke'
-    properties on text.
-  </p>
-
-  <table class="propdef def">
-    <tr>
-      <th>Name:</th>
-      <td><dfn id="TextDecorationFillProperty" data-dfn-type="property" data-export="">text-decoration-fill</dfn></td>
-    </tr>
-    <tr>
-      <th>Value:</th>
-      <td><a>&lt;paint&gt;</a></td>
-    </tr>
-    <tr>
-      <th>Initial:</th>
-      <td>See prose.</td>
-    </tr>
-    <tr>
-      <th>Applies to:</th>
-      <td><a>text content elements</a></td>
-    </tr>
-    <tr>
-      <th>Inherited:</th>
-      <td>See prose.</td>
-    </tr>
-    <tr>
-      <th>Percentages:</th>
-      <td>N/A</td>
-    </tr>
-    <tr>
-      <th>Media:</th>
-      <td>visual</td>
-    </tr>
-    <tr>
-      <th>Computed&#160;value:</th>
-      <td>as specified, but with <a>&lt;color&gt;</a> values computed and
-	<a>&lt;url&gt;</a> values made absolute.</td>
-    </tr>
-    <tr>
-      <th><a>Animatable</a>:</th>
-      <td>yes</td>
-    </tr>
-  </table>
-
-  <table class="propdef def">
-    <tr>
-      <th>Name:</th>
-      <td><dfn id="TextDecorationStrokeProperty" data-dfn-type="property" data-export="">text-decoration-stroke</dfn></td>
-    </tr>
-    <tr>
-      <th>Value:</th>
-      <td><a>&lt;paint&gt;</a></td>
-    </tr>
-    <tr>
-      <th>Initial:</th>
-      <td>See prose.</td>
-    </tr>
-    <tr>
-      <th>Applies to:</th>
-      <td><a>text content elements</a></td>
-    </tr>
-    <tr>
-      <th>Inherited:</th>
-      <td>See prose.</td>
-    </tr>
-    <tr>
-      <th>Percentages:</th>
-      <td>N/A</td>
-    </tr>
-    <tr>
-      <th>Media:</th>
-      <td>visual</td>
-    </tr>
-    <tr>
-      <th>Computed&#160;value:</th>
-      <td>as specified, but with <a>&lt;color&gt;</a> values computed and
-	<a>&lt;url&gt;</a> values made absolute.</td>
-    </tr>
-    <tr>
-      <th><a>Animatable</a>:</th>
-      <td>yes</td>
-    </tr>
-  </table>
 
 <h2 id="TextSelection">Text selection and clipboard operations</h2>
 

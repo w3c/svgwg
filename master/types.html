@@ -35,8 +35,7 @@
   or a <a>presentation attribute</a>, is one that is either not allowed according
   to the grammar defining the property's values, or is allowed by the grammar but
   subsequently disallowed in prose.  A CSS declaration with an invalid value is
-  ignored; see <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/syndata.html#declaration">Declarations
-  and properties</a> ([<a href="refs.html#ref-css2">CSS2</a>], section 4.1.8).</dd>
+  <a>ignored</a>.</dd>
 
 </dl>
 
@@ -368,6 +367,9 @@ must also implement the DOM interface identified in the element definition.
   </li>
 </ul>
 
+
+<p class="issue" data-issue="32">The <a>SVGUnknownElement</a> interface is "at risk".</p>
+
 <p class="example">
 In <a href="shapes.html#RectElement">The <span class="element-name">'rect'</span> element</a>,
 the <a>SVGRectElement</a> interface is identified.  This means that every
@@ -421,7 +423,7 @@ when either the attribute or its reflected property is modified.
 
 <p>
 If the attribute hasn't been specified explicitly in the document markup,
-the reflected object is nonetheless intialized upon access,
+the reflected object is nonetheless initialized upon access,
 to the attribute's inital value.
 If the attribute's initial value is <span class="attr-value">(none)</span>,
 the object is initialized as defined in
@@ -485,8 +487,11 @@ specific value, the following steps must be performed:</p>
           value corresponding to <var>number</var>, or the empty string
           if <var>number</var> is 0.
           <p class="note">This means that if the enumeration value is
-          set to the "unknown" value, the content attribute will be
-          set to the empty string.</p></li>
+          somehow set to the "unknown" value, the content attribute will be
+          set to the empty string.
+          However, this unknown value can never be set directly on the <code>SVGAnimatedEnumeration</code> object;
+          it represents an unknown attribute value set in the markup.</p>
+          </li>
           <li>Set the content attribute to <var>keyword</var>.</li>
         </ol>
       </dd>
@@ -663,16 +668,19 @@ returned <a>SVGLengthList</a> object would be empty.</p>
 <p>If a script sets a <a>reflected</a> DOM attribute
 to an <a>invalid value</a> for the content attribute (e.g.,
 a negative number for an attribute that requires a non-negative
-number or an out-of-range value for an enumeration), unless
+number), unless
 this specification indicates otherwise, no exception shall be
 raised on setting, but the given document fragment shall become
 technically <em>in error</em> as described in
 <a href="conform.html#ErrorProcessing">Error processing</a>.</p>
 
-<p class="issue">
-  Many browsers currently throw errors for out-of-range enumeration values,
-  or explicitly setting an enumeration to the UNKNOWN value.
-  See <a href="https://github.com/w3c/svgwg/issues/547">Should setting an enum IDL to an invalid value throw an error?</a> on GitHub for discussion.
+<p class="note">
+DOM attributes that reflect enumerated values using integer constants are an exception:
+these throw a <a>TypeError</a> when set to an out-of-range integer,
+or to the constant (0) that represents an unknown attribute value.
+This is consistent with the
+<a href="https://heycam.github.io/webidl/#es-enumeration">behavior of the WebIDL enumeration type</a>
+[<a href="refs.html#ref-webidl">WebIDL</a>].
 </p>
 
 
@@ -780,7 +788,10 @@ and <var>clipped</var> members of the <var>options</var> dictionary argument
 used to control which parts of the element are included in the bounding box,
 using the element's user coordinate system as the coordinate system to return the
 bounding box in.  A newly created <a>DOMRect</a> object that defines the
-computed bounding box is returned.</p>
+computed bounding box is returned. If <a
+href="types.html#__svg__SVGGraphicsElement__getBBox">getBBox</a> gets called on a <a>
+non-rendered element</a>, and the UA is not able to compute the geometry of the element, then
+throw an <a>InvalidStateError</a>.</p>
 
 <p>The <b id="__svg__SVGGraphicsElement__getCTM">getCTM</b> method is used to
 get the matrix that transforms the current element's coordinate system to
@@ -789,6 +800,8 @@ steps are run:</p>
 
 <ol class='algorithm'>
   <li>If the current element is not in the document, then return null.</li>
+  <li>If the current element is a <a>non-rendered element</a>, and the UA
+    is not able to resolve the style of the element, then return null.</li>
   <li>Let <var>ctm</var> be a matrix determined based on what the
   current element is:
     <dl class='switch'>
@@ -820,6 +833,8 @@ When getScreenCTM() is called, the following steps are run:</p>
 
 <ol class='algorithm'>
   <li>If the current element is not in the document, then return null.</li>
+  <li>If the current element is a <a>non-rendered element</a>, and the UA
+    is not able to resolve the style of the element, then return null.</li>
   <li>Let <var>ctm</var> be a matrix that transforms the coordinate
   space of the current element (including its <a>'transform'</a> property)
   to the coordinate space of the document's viewport.
@@ -877,7 +892,10 @@ Open subpaths must be implicitly closed when computing the area inside the path,
 the actual subpaths. Points on the path itself must be considered to be inside the path.
 The returned value is independent of any visual CSS property but <a>'fill-rule'</a>
 If either of the <var>x</var> or <var>y</var> properties on <var>point</var> are infinite or NaN,
-then the method must return false.</p>
+then the method must return false. If current element is a <a>
+non-rendered element</a>, and the UA is not able to compute the geometry of the element, then
+throw an <a>InvalidStateError</a>.
+</p>
 
 <p class="note"><a>isPointInFill</a> takes the winding
 rule indicated by the <a>'fill-rule'</a> property of an element even if the element is a child
@@ -892,14 +910,19 @@ when invoked, must return true if the point given by <var>point</var> passed to 
 in the coordinate space of an element, is in or on the outline path of an applied stroke on
 an element; and must return false otherwise.
 The outline path must take the stroke properties <a>'stroke-width'</a>,
-<a>'stroke-linecap'</a>, <a>'stroke-linejoin'</a>, <a>'stroke-miterlimit'</a>, <a>'stroke-dasharray'</a>
-and <a>'stroke-dashoffset'</a> of an element into account.
+<a>'stroke-linecap'</a>, <a>'stroke-linejoin'</a>, <a>'stroke-miterlimit'</a>, <a>'stroke-dasharray'</a>,
+<a>'stroke-dashoffset'</a> and <a>'vector-effect'</a> of an element into account. See sections
+<a href="https://svgwg.org/svg2-draft/painting.html#StrokeShape">Computing the shape of the stroke</a> and
+<a href="https://svgwg.org/svg2-draft/painting.html#PaintingVectorEffects">Vector effects</a> for details.
 The returned value is independent of any visual CSS property but the listed stroke properties.
 If either of the <var>x</var> or <var>y</var> properties on <var>point</var> are infinite or NaN,
-then the method must return false.</p>
+then the method must return false. If current element is a <a>
+non-rendered element</a>, and the UA is not able to compute the geometry of the element, then
+throw an <a>InvalidStateError</a>.
+</p>
 
 <p class="note"><a href="types.html#__svg__SVGGeometryElement__isPointInStroke">isPointInStroke</a> is aligned
-with the <a>isPointInPath</a> method on the <a>CanvasDrawPath</a> mixin as much as the SVG context
+with the <a>isPointInStroke</a> method on the <a>CanvasDrawPath</a> mixin as much as the SVG context
 allows it to be.</p>
 
 <p>The <b id="__svg__SVGGeometryElement__pathLength">pathLength</b> IDL attribute
@@ -908,7 +931,9 @@ allows it to be.</p>
 <p>The <b id="__svg__SVGGeometryElement__getTotalLength">getTotalLength</b> method
 is used to compute the length of the path.  When getTotalLength()
 is called, the user agent's computed value for the total length of the path,
-in user units, is returned.</p>
+in user units, is returned. If current element is a <a>
+non-rendered element</a>, and the UA is not able to compute the total length of the path, then
+throw an <a>InvalidStateError</a>.</p>
 
 <p class="note">The user agent's computed path length does not take the
 <a>'pathLength'</a> attribute into account.</p>
@@ -918,6 +943,8 @@ is used to return the point at a given distance along the path.  When
 getPointAtLength(<var>distance</var>) is called, the following steps are run:</p>
 
 <ol class='algorithm'>
+  <li>If current element is a <a>non-rendered element</a>, and the UA is not able to
+    compute the total length of the path, then throw an <a>InvalidStateError</a>.</li>
   <li>Let <var>length</var> be the user agent's computed value for the total
   length of the path, in user units.
     <p class="note">As with <a href="#__svg__SVGGeometryElement__getTotalLength">getTotalLength</a>,
@@ -2180,8 +2207,7 @@ the following steps are run:</p>
   <li>Let <var>value</var> be the value being assigned to
   <a href="types.html#__svg__SVGAnimatedEnumeration__baseVal">baseVal</a>.</li>
   <li>If <var>value</var> is 0 or is not the <a>numeric type value</a>
-  for any value of the reflected attribute, then set the reflected
-  attribute to the empty string.</li>
+  for any value of the reflected attribute, then throw a <a>TypeError</a>.</li>
   <li>Otherwise, if the reflecting IDL attribute is
   <a href='painting.html#__svg__SVGMarkerElement__orientType'>orientType</a>
   and <var>value</var> is <a href='painting.html#__svg__SVGMarkerElement__SVG_MARKER_ORIENT_ANGLE'>SVG_MARKER_ORIENT_ANGLE</a>,
