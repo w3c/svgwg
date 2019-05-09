@@ -419,8 +419,8 @@ function doCompleteIDL(conf, page, n) {
     utils.forEachNode(doc, function(n) {
       if (n.nodeType == n.ELEMENT_NODE &&
           n.localName == "pre" &&
-          /\bidl\b/.test(n.getAttribute("class")) ) {
-        if (n.svg_excludefromidl) {
+          /\bidl\b/.test(n.getAttribute("class")) ) {        
+        if (n.svg_excludefromidl||n.hasAttribute("edit:excludefromidl")) {
           delete n.svg_excludefromidl;
           return;
         }
