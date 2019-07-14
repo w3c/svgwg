@@ -845,17 +845,42 @@ type <code>"image/svg+xml"</code>.</p>
 Servers must indicate this with the appropriate header, according to what the
 protocol supports.  Specifically, for content compressed by the server
 immediately prior to transfer, the server must use the "Transfer-Encoding:&nbsp;gzip"
-or "Transfer-Encoding:&nbsp;deflate" headers as appropriate, and for content
-stored in a compressed format on the server (e.g. with the file extension "svgz"),
+or "Transfer-Encoding:&nbsp;deflate" headers as appropriate.
+For content stored in a compressed format on the server (e.g. with the file extension <i>.svgz</i>),
 the server must use the "Content-Encoding:&nbsp;gzip" or
 "Content-Encoding:&nbsp;deflate" headers as appropriate.</p>
 
-<p class="note">
-Compression of stored <em>content</em> (the "entity," in HTTP
-terms) is distinct from automatic compression of the <em>message body</em>, as
+<div class="note">
+<p>
+In HTTP, compression of stored <em>content</em> (the "entity") is distinct from automatic compression of the <em>message body</em>, as
 defined in HTTP/1.1 <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.39">TE</a>/
 <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.41">Transfer Encoding</a>
-([<a href="refs.html#ref-rfc2616">rfc2616</a>], sections 14.39 and 14.41).</p>
+([<a href="refs.html#ref-rfc2616">rfc2616</a>], sections 14.39 and 14.41).
+If this is poorly configured,
+and the compression specified in the HTTP headers does not match the used values,
+SVG user agents <a href="#user-agent-compression-requirements">are required to treat the document as being in error</a>.
+</p>
+<p>
+Configuring a server to handle both SVG and SVGZ files
+means that it must be able to assign the same media type to both types of files,
+but with different compression headers.
+Some commonly used servers do not support this configuration in an easy or efficent way,
+because compression behavior is configured based on media type.
+</p>
+<p>
+With most modern web servers, it is often easier to upload uncompressed SVG files instead of SVGZ files.
+Then, rely on the server to compress the file for transmission,
+and cache it for future request,
+using the same server instructions as for other text-based file formats such as HTML.
+This also allows the server to use newer compression methods,
+when they are supported by the user agent requesting the file.
+</p>
+<p>
+Alternatively, the web server may be able to correctly process pre-compressed SVGZ files
+if they are first renamed to use the <i>.svg.gz</i> compound file extension.
+The server would still need to be configured to support static gzip-compressed files.
+</p>
+</div>
 
 <h3 id="ConformingSVGInterpreters">Conforming SVG Interpreters</h3>
 
@@ -1032,7 +1057,7 @@ definitions from the CSS 2.1 specification</a>
   be accurate to within one sRGB color component value, where
   sRGB color component values range from 0 to 255.</li>
 
-  <li>SVG implementations must correctly support
+  <li id="user-agent-compression-requirements">SVG implementations must correctly support
   <a href="http://www.ietf.org/rfc/rfc1952.txt">gzip-encoded</a>
   [<a href="refs.html#ref-rfc1952">rfc1952</a>] and
   <a href="http://www.ietf.org/rfc/rfc1951.txt">deflate-encoded</a>
@@ -1049,7 +1074,7 @@ definitions from the CSS 2.1 specification</a>
   <a href="http://www.ietf.org/rfc/rfc1952.txt">gzip-encoded</a> and
   <a href="http://www.ietf.org/rfc/rfc1951.txt">deflate-encoded</a>
   data streams that are downloaded from the server. When an SVG
-  viewer retrieves compressed content (e.g., an .svgz file) over
+  viewer retrieves compressed content (e.g., an <i>.svgz</i> file) over
   HTTP, if the "Content-Encoding" and "Transfer-Encoding" response
   headers are missing or specify a value that does not match the
   compression method that has been applied to the content, then
