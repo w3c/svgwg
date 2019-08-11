@@ -32,22 +32,11 @@ the SVG language:</p>
   <span class="element-name">'a'</span> element</a>) by actions such
   as mouse clicks when the pointing device is positioned over
   particular graphics elements.</li>
-
-  <li>In many cases, depending on the value of the <a>'zoomAndPan'</a>
-  attribute on the <a>'svg'</a> element and on the
-  characteristics of the user agent, users are able to zoom
-  into and pan around SVG content.</li>
 </ul>
 
-<p>This chapter describes:</p>
-
-<ul>
-  <li>information about <a href="interact.html#SVGEvents">events</a>,
-  including under which circumstances events are triggered</li>
-
-  <li>how to indicate whether a given document can be
-  <a href="interact.html#EnableZoomAndPanControls">zoomed and panned</a></li>
-</ul>
+<p>This chapter describes scripting
+and DOM <a href="interact.html#SVGEvents">event</a> handling in interactive SVG,
+including under which circumstances events are triggered.</p>
 
 <p>Related information can be found in other chapters:</p>
 
@@ -426,8 +415,7 @@ a <a>outermost svg element</a> will never be the target of pointer events,
 though events can bubble to this element.
 If a pointer event does not result in a positive <a>hit-test</a> on a
 <a>graphics element</a>, then it should evoke any user-agent-specific window
-behavior, such as a presenting a context menu or controls to allow zooming
-and panning of an SVG document fragment.</p>
+behavior, such as a presenting a context menu.</p>
 
 <p>This specification does not define the behavior of pointer events on the
 <a>outermost svg element</a> for SVG images which are embedded by reference
@@ -485,8 +473,7 @@ DOM event, is as follows:</p>
   <li>If the event type is one which the user agent associates with the evocation
   of special user-interface controls (e.g., a right-click or command-click
   evoking a context menu), the user agent should evoke such user-agent-specific
-  behavior, such as presenting a context menu or controls to allow zooming and
-  panning of an SVG document fragment.</li>
+  behavior, such as presenting a context menu.</li>
 </ol>
 
 <h2 id="PointerEventsProp">The <span class="property">'pointer-events'</span> property</h2>
@@ -733,91 +720,6 @@ element to be target of hit-testing as well.</p>
 <a>'fill-opacity'</a>, <a>'stroke-opacity'</a>, <a>'fill'</a> and
 <a>'stroke'</a> do not affect event processing.</p>
 
-<h2 id="EnableZoomAndPanControls">Magnification and panning</h2>
-
-<div class="annotation svg2-requirement">
-  <table>
-    <tr>
-      <th>SVG 2 Requirement:</th>
-      <td>Support level of detail control.</td>
-    </tr>
-    <tr>
-      <th>Resolution:</th>
-      <td><a href="http://www.w3.org/2011/10/28-svg-irc#T00-20-33">We will support Level of Detail control in SVG 2.</a></td>
-    </tr>
-    <tr>
-      <th>Purpose:</th>
-      <td>Control visibility of elements based on zoom level (useful, for example, in mapping).</td>
-    </tr>
-    <tr>
-      <th>Owner:</th>
-      <td>Doug (no action)</td>
-    </tr>
-    <tr>
-      <th>Note:</th>
-      <td>See <a href="http://www.w3.org/Submission/2011/SUBM-SVGTL-20110607/#VisibilityControllingAccordingToZooming">Tiling and Layering Module for SVG 1.2 Tiny</a>.</td>
-    </tr>
-  </table>
-</div>
-
-<p>Magnification represents a complete, uniform
-transformation on an SVG document fragment, where the magnify operation scales
-all graphical elements by the same amount. A magnify operation
-has the effect of a supplemental scale and translate
-transformation placed at the outermost level on the SVG
-document fragment (i.e., outside the <a>outermost svg element</a>).</p>
-
-<p>Panning represents a translation (i.e., a shift)
-transformation on an SVG document fragment in response to a
-user interface action.</p>
-
-<p>SVG user agents that operate in interaction-capable user
-environments are required to support the ability to magnify and pan.</p>
-
-<p>The <a>outermost svg element</a>
-in an SVG document fragment has attribute <a>'svg/zoomAndPan'</a>, which takes the possible
-values of <em>disable</em> and <em>magnify</em>, with the
-default being <em>magnify</em>.</p>
-
-<p class="issue" data-issue="9">The zoomAndPan attribute is at risk, it has no known implementations
-and is unlikely to be implemented. See
-<a href="https://github.com/w3c/svgwg/issues/56">Github issue #56</a>.</p>
-
-<dl class="attrdef-list">
-  <dt>
-    <table class="attrdef def">
-      <tr>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Initial value</th>
-        <th>Animatable</th>
-      </tr>
-      <tr>
-        <td><dfn id="ZoomAndPanAttribute" data-dfn-type="element-attr" data-dfn-for="svg">zoomAndPan</dfn></td>
-        <td>[ disable | magnify ]</td>
-        <td>disable</td>
-        <td>no</td>
-      </tr>
-    </table>
-  </dt>
-  <dd>
-    <p>If <em>disable</em>, the user agent shall disable any
-    magnification and panning controls and not allow the user to
-    magnify or pan on the given document fragment.</p>
-
-    <p>If <em>magnify</em>, in environments that support user
-    interactivity, the user agent shall provide controls to allow
-    the user to perform a "magnify" operation on the document
-    fragment.</p>
-  </dd>
-</dl>
-
-
-<p>If a <a>'svg/zoomAndPan'</a> attribute is
-assigned to an inner <a>'svg'</a>
-element, the <a>'svg/zoomAndPan'</a> setting
-on the inner <a>'svg'</a> element
-will have no effect on the SVG user agent.</p>
 
 <div class='ready-for-wider-review'>
 <h2 id="Focus">Focus</h2>
@@ -852,7 +754,6 @@ will have no effect on the SVG user agent.</p>
 </p>
 <ul>
     <li>the document root element</li>
-    <li>an <a>'svg'</a> element which has <a href="#ZoomAndPanAttribute">zoom and pan</a> controls</li>
     <li>any element (such as within a <a>'foreignObject'</a>)
         that generates a scrollable region
     </li>

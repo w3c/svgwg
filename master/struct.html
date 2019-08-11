@@ -223,32 +223,6 @@ information, refer to the <a href="https://www.w3.org/TR/2006/REC-xml-names-2006
   is treated equivalent to <span class="prop-value">100%</span>.
 </p>
 
-<p><em>Attribute definitions:</em></p>
-
-<dl class="attrdef-list">
-  <dt>
-    <table class="attrdef def">
-      <tr>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Initial value</th>
-        <th>Animatable</th>
-      </tr>
-      <tr>
-        <td><dfn id="SVGElementZoomAndPanAttribute" data-dfn-type="element-attr" data-dfn-for="svg" data-export="">zoomAndPan</dfn></td>
-        <td>disable | magnify</td>
-        <td>magnify</td>
-        <td>no</td>
-      </tr>
-    </table>
-  </dt>
-  <dd>
-    <p>Specifies whether the user agent should supply a means to zoom
-    and pan the SVG content.  See the definition of <a>'zoomAndPan'</a>
-    for details.</p>
-  </dd>
-</dl>
-
 <p>If an SVG document is likely to be referenced as a component
 of another document, the author will often want to include a
 <a>'viewBox'</a> attribute on the <a>outermost svg element</a> of the
@@ -2694,7 +2668,6 @@ interface <b>SVGSVGElement</b> : <a>SVGGraphicsElement</a> {
 };
 
 <a>SVGSVGElement</a> includes <a>SVGFitToViewBox</a>;
-<a>SVGSVGElement</a> includes <a>SVGZoomAndPan</a>;
 <a>SVGSVGElement</a> includes <a>WindowEventHandlers</a>;</pre>
 
 <p>The
@@ -2708,16 +2681,35 @@ presentation attributes, respectively.</p>
 
 <p>The <b id="__svg__SVGSVGElement__currentScale">currentScale</b> and
 <b id="__svg__SVGSVGElement__currentTranslate">currentTranslate</b> IDL
-attributes represent the transform applied to the document in
-response to user magnification and panning operations, as described under
-<a href="interact.html#ZoomAndPanAttribute">Magnification and panning</a>.</p>
+attributes represent an additional transform applied to the SVG.
+They only have an effect on the <a>outermost svg element</a> of an <a>SVG document fragment</a>.</p>
 
-<p class="note">The document's magnification and panning
+<p>The document's magnification and panning
 transform is a 2x3 matrix of the form
-[currentScale 0 0 currentScale currentTranslate.x currentTranslate.y].
+<code>[currentScale 0 0 currentScale currentTranslate.x currentTranslate.y]</code>.
 The value of the <a>'transform'</a> property does not affect
 <a href="#__svg__SVGSVGElement__currentScale">currentScale</a> or
 <a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>.</p>
+
+<div class="note">
+<p>Previous versions of SVG recommended that user agents implement controls, by default,
+for the user to set the scale (zoom) and translate (pan) of the graphic.
+Transformations from these user actions <em>would</em> be reflected
+in the values of <code>currentScale</code> and <code>currentTranslate</code>.
+These user controls were not well implemented, and are no longer recommended.
+However, authors should be aware that the user agent may update these values.
+</p>
+<p>The obsolete attribute <code>zoomAndPan="disable"</code>, on the outermost SVG element,
+should disable any user agent manipulation of the values based on user action,
+but may have unwanted side effects in some user agents.</p>
+</div>
+
+<p class="issue" data-issue="360">
+The interaction of currentScale and currentTranslate
+with other ways of transforming the document root (transforms and SVG views)
+is poorly defined.
+See the <a href="https://github.com/w3c/svgwg/issues/360">GitHub issue</a> for more.
+</p>
 
 <p>On getting <a href="#__svg__SVGSVGElement__currentScale">currentScale</a>,
 the following steps are run:</p>
@@ -2782,13 +2774,6 @@ the document's magnification and panning transform.</p>
 <p>Whenever an <a>'svg'</a> element is no longer <a>outermost svg element</a>,
 the x and y components of its <a href="#CurrentTranslatePointObject">current
 translate point object</a> must be set to 0.</p>
-
-<p class="note">Note that the value of the <a>'zoomAndPan'</a> attribute
-on the <a>outermost svg element</a> only controls whether the document's
-magnification and panning transform can be updated through user interaction.
-Regardless of the value of that attribute, the current scale and translation
-can be changed by modifying <a href="#__svg__SVGSVGElement__currentScale">currentScale</a>
-and <a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>.</p>
 
 <p>The <b id="__svg__SVGSVGElement__suspendRedraw">suspendRedraw</b>,
 <b id="__svg__SVGSVGElement__unsuspendRedraw">unsuspendRedraw</b>,
