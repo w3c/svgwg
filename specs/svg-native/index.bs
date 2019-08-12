@@ -50,9 +50,13 @@ Basics {#basics}
 
 SVG Native is presented as a series of modifications of [[!SVG2]]. These modifications are applied as differences from that specification. Rather than being a strict line-by-line diff, this specification describes the differences directly.
 
-There are numerous differences between the SVG Native format and the [[!SVG2]] format. Currently, all differences are reductive; all functionality in SVG Native is also present in [[!SVG2]]. A conforming SVG Native document must only include functionality present in the SVG Native format. A conforming SVG Native renderer should ignore any functionality requested by a document that is not present in the SVG Native format. If a SVG Native renderer intentionally chooses to honor functionality beyond the SVG Native specification, it must do so in accordance with the [[!SVG2]] specification.
+If functionality present in [[!SVG2]] isn't present in the SVG Native specification, SVG Native includes that functionality.
+<!-- https://www.w3.org/2019/04/15-svg-minutes.html -->
+
+There are numerous differences between the SVG Native format and the [[!SVG2]] format. Currently, all differences are reductive; all functionality in SVG Native is also present in [[!SVG2]]. A conforming SVG Native document must only include functionality present in the SVG Native format. A conforming SVG Native renderer should ignore any functionality requested by a document that is not present in the SVG Native format. If a SVG Native renderer intentionally chooses to honor functionality beyond the SVG Native specification, it must do so in accordance with the [[!SVG2]] specification. There are a few exceptions to this throughout this specification below, where an SVG Native renderer must not include some functionality from [[!SVG2]].
 
 Note: If a document uses parts of SVG that aren't part of SVG Native, then it isn't a conformant SVG Native document. When an SVG Native renderer opens such a file, it should ignore all of those parts. Therefore, all SVG Native renderers should produce the same rendering for the same document. However, there may be renderers which intentionally decide to honor parts of SVG that aren't part of SVG Native. In order to make it more likely that a given document's rendering is predictable, even in these renderers, SVG Native authoring tools are recommended to always emit documents that conform to this specification. The SVG Working Group is considering producing a validator to determine whether a given document is conformant to the SVG Native format.
+<!-- https://www.w3.org/2019/05/06-svg-minutes.html -->
 
 ISSUE: The file type and mime type is being discussed in <a href="https://github.com/w3c/svgwg/issues/664">this GitHub issue</a>.
 
@@ -66,35 +70,24 @@ The file extension for SVG Native is <code>.svn</code>. The UTI for SVG Native i
 
 User agents may limit the reference depth of references to implementation-dependent maximas. However, this limit must be greater than or equal to 1 reference.
 
-XSL Processing is forbidden.
+XSL Processing is not supported by SVG Native.
 
 A valid SVG Native document must not contain any of the external or internal XML DTD subset.
-
-ISSUE: Is it worth mentioning the 'HTML dialect' of SVG?
-
-Concepts {#concepts}
-====================
-
-Chapter is unchanged.
-
-Rendering Model {#render}
-=========================
-
-Chapter is unchanged.
-
-Basic Data Types and Interfaces {#types}
-========================================
-
-Chapter is unchanged.
-
-Note: Because this specification removes some elements and attributes, not all of the syntax productions in this chapter are referenced by other sections of this specification. Therefore, not all of the productions in this chapter need to be implemented.
+<!-- https://www.w3.org/2019/04/29-svg-minutes.html -->
 
 Document Structure {#struct}
 ============================
 
-The root element must be an <{svg}> element, and all other <{svg}> elements are forbidden.
+The root element must be an <{svg}> element, and all other <{svg}> elements are not supported by SVG Native.
+<!-- https://www.w3.org/2019/07/15-svg-minutes.html -->
 
-Section 5.8 "Conditional Processing" is deleted.
+Conditional processesing attributes and elements are not supported in SVG Native. These include the <{switch}> element.
+
+<!-- There are too many things which are unobservable in SVG Native. Don't need to list them all out. -->
+
+The <{meta}> element is not supported in SVG Native.
+
+Elements in foreign namespaces, except the xlink (<code>http://www.w3.org/1999/xlink</code>) namespace, are not supported in SVG Native.
 
 <{image}> elements must only contain base64-encoded <code>data:</code> URLs of [[!JPEG]] or [[!PNG]] images. [[!APNG]] images must be rendered without animation, using standard backward-compatibility with static [[!PNG]] images. All other image formats must be ignored.
 
@@ -103,20 +96,29 @@ All external resource loading is forbidden.
 Styling {#styling}
 ==================
 
-The <{style}> element and the 'style' attribute are forbidden.
+The <{style}> element and the 'style' attribute is not supported in SVG Native.
+<!-- https://www.w3.org/2019/05/06-svg-minutes.html -->
 
-Using ''calc()'', ''env()'', or ''var()'' is forbidden.
+''calc()'' is not supported by SVG Native.
 
-Note: Other environments may relax these rules and allow these functions as necessary. For example, the [[!OPENTYPE]] spec might allow ''env()'' or ''var()'' in color fonts to support font color palettes.
+''env()'' and ''var()'' are supported by SVG Native.
+<!-- https://www.w3.org/2019/05/06-svg-minutes.html -->
+<!-- https://www.w3.org/2019/05/20-svg-minutes.html -->
 
-The CSS 'all' property is forbidden.
+The CSS 'all' property is not supported by SVG Native.
 
-All the global CSS keywords are forbidden. These include:
+All the global CSS keywords are not supported by SVG Native. These include:
 
 1. ''initial''
 2. ''inherit''
 3. ''unset''
 4. ''revert''
+
+Percentage length values are not supported by SVG Native.
+<!-- https://www.w3.org/2019/07/01-svg-minutes.html -->
+
+<a lt="relative length">Relative units</a> are not supported by SVG Native.
+<!-- https://www.w3.org/2019/07/01-svg-minutes.html -->
 
 Coordinate Systems, Transformations, and Units {#coords}
 ========================================================
