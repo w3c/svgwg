@@ -143,14 +143,15 @@ exports.addHeaderFooter = function(conf, page, doc) {
   var markup = '<div class="header {{side}}">';
 
   if (conf.toc)            markup += '<a href="Overview.html">Overview</a>';
-  if (previous)            markup += ' . <a href="{{previous}}.html">Previous</a>';
-  if (next)                markup += ' . <a href="{{next}}.html">Next</a>';
-  if (conf.elementIndex)   markup += ' . <a href="{{elementIndex}}">Elements</a>';
-  if (conf.attributeIndex) markup += ' . <a href="{{attributeIndex}}">Attributes</a>';
-  if (conf.propertyIndex)  markup += ' . <a href="{{propertyIndex}}">Properties</a>';
+  if (previous)            markup += ' · <a href="{{previous}}.html">Previous</a>';
+  if (next)                markup += ' · <a href="{{next}}.html">Next</a>';
+  if (conf.elementIndex)   markup += ' · <a href="{{elementIndex}}">Elements</a>';
+  if (conf.attributeIndex) markup += ' · <a href="{{attributeIndex}}">Attributes</a>';
+  if (conf.propertyIndex)  markup += ' · <a href="{{propertyIndex}}">Properties</a>';
+
   markup += "</div>";
 
-  function header(side) {
+  function header() {
     return utils.parse(markup, { shortTitle: conf.shortTitle,
                                  publicationDate: conf.publicationDate,
                                  index: conf.index,
@@ -159,8 +160,7 @@ exports.addHeaderFooter = function(conf, page, doc) {
                                  attributeIndex: conf.attributeIndex,
                                  propertyIndex: conf.propertyIndex,
                                  previous: previous,
-                                 next: next,
-                                 side: side });
+                                 next: next });
   }
 
   function getChildNodeById(parent, id) {
@@ -175,7 +175,7 @@ exports.addHeaderFooter = function(conf, page, doc) {
   if (conf.pages[page].type != 'index') {
     var toc = getChildNodeById(doc.body, 'toc');
     if (toc) {
-        toc.insertBefore(header("top"), toc.firstChild);
+      toc.insertBefore(header(), toc.firstChild);
     }
   }
 }
