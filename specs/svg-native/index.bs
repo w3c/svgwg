@@ -72,8 +72,33 @@ User agents may limit the reference depth of references to implementation-depend
 
 XSL Processing is not supported by SVG Native.
 
+No namespaces other than <a href="https://www.w3.org/TR/xlink11/">xlink</a> are supported inside an SVG Native document. From the xlink namespace, only 'href' is supported.
+
 A valid SVG Native document must not contain any of the external or internal XML DTD subset.
 <!-- https://www.w3.org/2019/04/29-svg-minutes.html -->
+
+Common Attributes {#commonattributes}
+-------------------------------------
+
+SVG 2.0 defines sets of common attributes wich might apply to multiple elements. These sets of attributes are not supported by SVG Native:
+- aria attributes
+- conditional processing attributes
+- all core attributes except for 'id'
+- global event attributes
+- document element event attributes
+- graphical event attributes
+- deprecated xlink attributes except for 'xlink:href'
+- 'crossorigin'
+
+SVG Modules {#modules}
+----------------------
+
+SVG Native is a subset of the content in the [[!SVG2]] specification, and some associated modules. They are:
+- <a href="https://www.w3.org/TR/2018/REC-css-color-3-20180619/">CSS Color</a>
+
+No other SVG modules are supported by SVG Native. This includes:
+- <a href="https://www.w3.org/TR/filter-effects-1/">CSS Filter Effects</a>
+- <a href="https://svgwg.org/specs/animations/">SVG Animations</a>
 
 Document Structure {#struct}
 ============================
@@ -85,7 +110,7 @@ Conditional processesing attributes and elements are not supported in SVG Native
 
 <!-- There are too many things which are unobservable in SVG Native. Don't need to list them all out. -->
 
-The <{meta}> element is not supported in SVG Native.
+The <{meta}> and <{metadata}> elements are not supported in SVG Native.
 
 Elements in foreign namespaces, except the xlink (<code>http://www.w3.org/1999/xlink</code>) namespace, are not supported in SVG Native.
 
@@ -168,41 +193,40 @@ The 'preserveAspectRatio' attribute is only supported by SVG Native on the follo
 Paths {#paths}
 ==============
 
-The 'pathLength' attribute on the <{path}> element is forbidden.
-
-Basic Shapes {#shapes}
-======================
-
-Chapter is unchanged.
+The 'pathLength' attribute on the <{path}> element is not supported by SVG Native.
 
 Text {#text}
 ============
 
-Entire chapter is deleted.
+All text and fonts facilities are not supported by SVG Native. This includes <{text}>, <{tspan}>, <{textPath}>, <{font}>, <{glyph}>, <{missingGlyph}>, <{hkern}>, <{vkern}>, <{font-face}>, <{font-face-src}>, <{font-face-uri}>, <{font-face-format}>, <{font-face-name}>, 'inline-size', 'shape-inside', 'shape-subtract', 'shape-image-threshold', 'shape-margin', 'shape-padding', 'text-anchor', 'glyph-orientation-horizontal', 'glyph-orientation-vertical', 'kerning', 'text-overflow', 'xml:space', 'text-decoration-fill', 'text-decoration-stroke', 'letter-spacing', 'text-align', 'text-align-last', 'text-indent', 'word-spacing', 'white-space', 'vertical-align', 'dominant-baseline', 'alignment-baseline', 'baseline-shift', 'direction', 'text-orientation', 'writing-mode', 'font', 'font-family', 'font-feature-settings', 'font-kerning', 'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant', the subproperties of 'font-variant', 'font-weight', 'text-decoration', 'text-decoration-line', 'text-decoration-style', 'text-decoration-color', and 'text-rendering'.
 
-Note: This means that all text facilities are forbidden in SVG Native.
+Embedded Content {#embedded}
+============================
+
+HTML elements in SVG subtrees are not supported by SVG Native.
+
+<{foreignObject}> is not supported by SVG Native.
 
 Painting: Filling, Stroking, and Marker Symbols {#painting}
 ===========================================================
 
-The 'display' attribute is forbidden. Hiding elements can be achieved with the 'visibility' attribute.
+The 'display' attribute is not supported by SVG Native.
 
-Delete section 11.6.2 The <{marker}> element.
+Note: Hiding elements can be achieved with the 'visibility' attribute.
 
-The 'color-interpolation' attribute is forbidden. All color interpolation occurs in the sRGB color space.
+The <{marker}> element is not supported by SVG Native, nor are the 'marker', 'marker-start', 'marker-mid', and 'marker-end' properties.
 
-Color {#color}
-==============
+The ''context-fill'' and ''context-stroke'' values are not supported by SVG Native.
 
-Delete section 12.2: The 'color' property.
+Note: Authors wishing to use a contextual color from the environment may use ''currentColor''.
 
-Note: In some environments, the ''currentColor'' keyword is used to provide surrounding context to the SVG graphic. For example, in a color font glyph, ''currentColor'' may represent the text color of the surrounding line. Therefore, support of ''currentColor'' is required, but support of the 'color' property to change ''currentColor'' is not supported.
+The <{color}> property is not supported by SVG Native.
 
-Delete section 12.3: Color profile descriptions.
+Note: The absence of <{color}> makes it impossible to change the value of ''currentColor'' from its initial value.
 
-Note: This specification will likely adopt [[!SVG2]]'s syntax for specifying colors outside of sRGB.
+The 'vector-effect', 'paint-order', 'color-interpolation', and 'will-change' attributs are not supported by SVG Native.
 
-ISSUE: What should we do about non-sRGB color spaces?
+All color interpolation occurs in the sRGB color space.
 
 Gradients and Patterns {#pservers}
 ==================================
@@ -230,63 +254,14 @@ Every <{clipPath}> element must have either exactly zero or exactly one child.
 
 The ''scroll'' and the ''auto'' values of the 'overflow' property are forbidden.
 
-Filter Effects {#filters}
-=========================
+Scripting and Interactivity {#interact}
+=======================================
 
-Entire chapter is deleted.
-
-Note: This means that all filter facilities are forbidden in SVG Native.
-
-Interactivity {#interact}
-==============================
-
-Entire chapter is deleted.
-
-Note: This means that all interactivity facilities are forbidden in SVG Native.
+All scripting and interactivity facilities are not supported by SVG Native. This includes the 'pointer-events' and 'zoomAndPan' attributes and the <{script}> element. No contents of the SVG Native document are focusable.
 
 Linking {#linking}
 ==================
 
-All external resource loading is forbidden.
+All external resource loading is forbidden. All URLs must either be a data URL or only consist of a fragment identifier.
 
-Delete section 17.2: Links out of SVG content: the <{a}> element.
-
-Delete section 17.3.3: Predefined views: the <{view}> element.
-
-Scripting {#script}
-===================
-
-Entire chapter is deleted.
-
-Note: This means that all scripting facilities are forbidden in SVG Native.
-
-Animation {#animate}
-====================
-
-Entire chapter is deleted.
-
-Note: This means that all animation facilities are forbidden in SVG Native.
-
-Fonts {#fonts}
-==============
-
-Entire chapter is deleted.
-
-Note: This means that all font facilities are forbidden in SVG Native.
-
-Metadata {#metadata}
-====================
-
-Entire chapter is deleted.
-
-Note: This means that all metadata facilities are forbidden in SVG Native. Because the engine must ignore document constructs that aren't included in this specification, it means metadata is ignored. This may be what the author intends.
-
-Backwards Compatibility {#backward}
-===================================
-
-Entire chapter is deleted.
-
-Extensibility {#extend}
-=======================
-
-Delete section 23.3: The <{foreignObject}> element.
+The <{a}> element and <{view}> elements are not supported by SVG Native.
