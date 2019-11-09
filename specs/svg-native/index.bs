@@ -95,10 +95,29 @@ SVG Modules {#modules}
 
 SVG Native is a subset of the content in the [[!SVG2]] specification, and some associated modules. They are:
 - <a href="https://www.w3.org/TR/2018/REC-css-color-3-20180619/">CSS Color</a>
+- <a href="https://www.w3.org/TR/css-values-3/">CSS Values and Units</a>
+- <a href="https://www.w3.org/TR/css-masking-1/">CSS Masking</a>
 
 No other SVG modules are supported by SVG Native. This includes:
 - <a href="https://www.w3.org/TR/filter-effects-1/">CSS Filter Effects</a>
 - <a href="https://svgwg.org/specs/animations/">SVG Animations</a>
+
+Rendering Model {#render}
+=========================
+
+SVG Native does not support masking.
+
+The following attributes are not supported by SVG Native:
+- 'clipPathUnits'
+- 'clip'
+
+The ''scroll'' value on the 'overflow' property behaves identically to 'hidden'.
+
+The 'clip-path' attribute is not supported on a <{clipPath}> element.
+
+Every <{clipPath}> element must have either exactly zero or exactly one child. Anything more than that is not supported by SVG Native.
+
+The ''scroll'' and the ''auto'' values of the 'overflow' property are not supported by SVG Native.
 
 Document Structure {#struct}
 ============================
@@ -117,6 +136,9 @@ Elements in foreign namespaces, except the xlink (<code>http://www.w3.org/1999/x
 <{image}> elements must only contain base64-encoded <code>data:</code> URLs of [[!JPEG]] or [[!PNG]] images. [[!APNG]] images must be rendered without animation, using standard backward-compatibility with static [[!PNG]] images. All other image formats must be ignored.
 
 All external resource loading is forbidden.
+
+The <{symbol}> element is not supported by SVG Native.
+<!-- https://www.w3.org/2019/07/15-svg-minutes.html -->
 
 Styling {#styling}
 ==================
@@ -215,12 +237,15 @@ The 'display' attribute is not supported by SVG Native.
 Note: Hiding elements can be achieved with the 'visibility' attribute.
 
 The <{marker}> element is not supported by SVG Native, nor are the 'marker', 'marker-start', 'marker-mid', and 'marker-end' properties.
+<!-- https://www.w3.org/2019/07/15-svg-minutes.html -->
 
 The ''context-fill'' and ''context-stroke'' values are not supported by SVG Native.
 
 Note: Authors wishing to use a contextual color from the environment may use ''currentColor''.
+<!-- https://www.w3.org/2019/06/17-svg-minutes.html -->
 
 The <{color}> property is not supported by SVG Native.
+<!-- https://www.w3.org/2019/06/17-svg-minutes.html -->
 
 Note: The absence of <{color}> makes it impossible to change the value of ''currentColor'' from its initial value.
 
@@ -231,28 +256,13 @@ All color interpolation occurs in the sRGB color space.
 Gradients and Patterns {#pservers}
 ==================================
 
-The following attributes are forbidden:
-- 'gradientUnits'
-- 'xlink:href' on <{linearGradient}> or <{radialGradient}>
+Only the ''userSpaceOnUse'' value of 'gradientUnits' is supported. According to [[!SVG2]], the default value of 'gradientUnits' is ''objectBoundingBox'', which isn't supported. This means that all <{gradient}> elements must include <code>gradientUnits="userSpaceOnUse"</code> to be valid.
+<!-- https://www.w3.org/2019/11/04-svg-minutes.html -->
 
-Delete section 13.3: Patterns.
+<!-- href is supported on gradients. https://www.w3.org/2019/07/15-svg-minutes.html -->
 
-Clipping, Masking, and Compositing {#masking}
-=============================================
-
-Delete section 14.4: Masking.
-
-The following attributes are forbidden:
-- 'clipPathUnits'
-- 'clip'
-
-The ''scroll'' value on the 'overflow' property behaves identically to 'hidden'.
-
-The 'clip-path' attribute must not be present on a <{clipPath}> element.
-
-Every <{clipPath}> element must have either exactly zero or exactly one child.
-
-The ''scroll'' and the ''auto'' values of the 'overflow' property are forbidden.
+The <{pattern}> element is not supported by SVG Native.
+<!-- https://www.w3.org/2019/07/15-svg-minutes.html -->
 
 Scripting and Interactivity {#interact}
 =======================================
