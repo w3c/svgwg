@@ -48,7 +48,7 @@ SVG Native is designed to fit a number of use cases.
 Basics {#basics}
 ----------------
 
-SVG Native is presented as a series of modifications of [[!SVG2]]. These modifications are applied as differences from that specification. Rather than being a strict line-by-line diff, this specification describes the differences directly.
+SVG Native is presented as a series of modifications of the <a href="https://svgwg.org/svg2-draft/conform.html#secure-static-mode">Secure Static Mode</a> of [[!SVG2]]. These modifications are applied as differences from that specification. Rather than being a strict line-by-line diff, this specification describes the differences directly.
 
 If functionality present in [[!SVG2]] isn't present in the SVG Native specification, SVG Native includes that functionality.
 <!-- https://www.w3.org/2019/04/15-svg-minutes.html -->
@@ -131,9 +131,9 @@ Conditional processesing attributes and elements are not supported in SVG Native
 
 The <{meta}> and <{metadata}> elements are not supported in SVG Native.
 
-Elements in foreign namespaces, except the xlink (<code>http://www.w3.org/1999/xlink</code>) namespace, are not supported in SVG Native.
+Elements in foreign namespaces are not supported in SVG Native. Attributes in foreign namespaces, except the xlink (<code>http://www.w3.org/1999/xlink</code>) namespace, are not supported in SVG Native.
 
-<{image}> elements must only contain base64-encoded <code>data:</code> URLs of [[!JPEG]] or [[!PNG]] images. [[!APNG]] images must be rendered without animation, using standard backward-compatibility with static [[!PNG]] images. All other image formats must be ignored.
+Because SVG Native is a subset of [[!SVG2]]'s Secure Static mode, only <{image}> elements which contain base64-encoded <code>data:</code> URLs of [[!JPEG]] or [[!PNG]] images are supported. [[!APNG]] images are be rendered without animation, using standard backward-compatibility with static [[!PNG]] images. No other image format is supported by SVG Native.
 
 All external resource loading is forbidden.
 
@@ -143,14 +143,18 @@ The <{symbol}> element is not supported by SVG Native.
 Styling {#styling}
 ==================
 
-The <{style}> element and the 'style' attribute is not supported in SVG Native.
+The <{style}> element and the 'style' attribute are not supported in SVG Native.
 <!-- https://www.w3.org/2019/05/06-svg-minutes.html -->
+
+Note: Style properties can be set by presentation attributes, which must be parsed and processed according to the SVG and CSS specifications, other than the specific restrictions outlined in this section.
 
 ''calc()'' is not supported by SVG Native.
 
 ''env()'' and ''var()'' are supported by SVG Native.
 <!-- https://www.w3.org/2019/05/06-svg-minutes.html -->
 <!-- https://www.w3.org/2019/05/20-svg-minutes.html -->
+
+Note: Because of the other restrictions on styling, there is no way to set new values to CSS custom properties inside an SVG Native document. However, some rendering environments (e.g., for SVG fonts) will expose custom property values from an external document, as if they were inherited by the root element of the SVG Native document; the `var()` function can therefore be used similar to the `env()` function, to access this value if it exists and set a fallback value if it doesn't.
 
 The CSS 'all' property is not supported by SVG Native.
 
@@ -170,13 +174,9 @@ Percentage length values are not supported by SVG Native.
 Geometry Properties {#geometryproperties}
 =========================================
 
-The grammar for the 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'width', and 'height' properties is:
+Keyword values, such as ''auto'', are not supported in the 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'width', and 'height' attributes.
 
-<code><<number>> | <<length>> | <<percentage>></code>
-
-A bare number behaves as if ''px'' is specified.
-
-Note: The ''auto'' value is not supported in the 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'width', and 'height' properties.
+Note: Raw numbers are supported by these attributes, in accordance with the [[!SVG2]] rules on parsing presentation attributes.
 
 Coordinate Systems, Transformations, and Units {#coords}
 ========================================================
