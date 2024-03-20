@@ -2116,8 +2116,9 @@ reflected <a>'marker/orient'</a> attribute.  On getting
 animatable attribute that takes a string value.  It can optionally
 be defined to additionally reflect a second, deprecated attribute.</p>
 
-<pre class="idl">interface <b>SVGAnimatedString</b> {
-           attribute DOMString <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>;
+<pre class="idl">[Exposed=Window]
+interface <b>SVGAnimatedString</b> {
+           attribute (DOMString or TrustedScriptURL) <a href="types.html#__svg__SVGAnimatedString__baseVal">baseVal</a>;
   readonly attribute DOMString <a href="types.html#__svg__SVGAnimatedString__animVal">animVal</a>;
 };</pre>
 
@@ -2153,12 +2154,21 @@ returned in all other cases.</p>
 the following steps are run:</p>
 
 <ol class='algorithm'>
+  <li>If the reflected attribute’s element is an <a>SVGScriptElement</a>, let <var>value</var> be the result of
+    executing the <a href="https://www.w3.org/TR/trusted-types/#get-trusted-type-compliant-string-algorithm">Get Trusted Type compliant string</a>
+    algorithm, with <a href="https://www.w3.org/TR/trusted-types/#trustedscripturl">TrustedScriptURL</a>,
+    reflected attribute’s Document's relevant global object, 'SVGScriptElement href', and 'script'.</li>
+  <li>Otherwise, let value be the specified value.</li>
   <li>If the reflected attribute is not present,
   the <a>SVGAnimatedString</a> object is defined to additionally reflect
   a second, deprecated attribute, and that deprecated attribute is present,
-  then set that deprecated attribute to the specified value.</li>
-  <li>Otherwise, set the reflected attribute to the specified value.</li>
+  then set that deprecated attribute to value.</li>
+  <li>Otherwise, set the reflected attribute to value.</li>
 </ol>
+
+<p class='note'> SVG does not have a complete script processing model <a href="https://github.com/w3c/svgwg/issues/196">yet</a>.
+<a href="https://www.w3.org/TR/trusted-types/">Trusted Types</a> assumes that the attribute and
+text body modification protections behave similarly to ones for HTML scripts.</p>
 
 <p class='note'>For the <a href='#__svg__SVGURIReference__href'>href</a>
 member on the <a>SVGURIReference</a> interface, this will result in
