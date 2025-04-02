@@ -101,7 +101,7 @@
   </head>
   <body>
     <section id='abstract'>
-    This document describes how to use SVG [[!SVG2]] content with standard streaming technologies such as file formats, streaming protocols or related JavaScript APIs and HTML 5 [[!HTML5]] elements. It defines the missing terms enabling the mapping of SVG concepts on streaming concepts for use in browsers or in standalone multimedia players, and provides guidelines for creating SVG content compatible with delivery using streaming technologies. 
+    This document describes how to use SVG [[!SVG2]] content with standard streaming technologies such as file formats, streaming protocols or related JavaScript APIs and HTML 5 [[!HTML5]] elements. It defines the missing terms enabling the mapping of SVG concepts on streaming concepts for use in browsers or in standalone multimedia players, and provides guidelines for creating SVG content compatible with delivery using streaming technologies.
     </section>
 
     <section class="informative">
@@ -175,7 +175,7 @@
 	  <div class="practice">
 	      <p><span id="sample-practice" class="practicelab"></span></p>
 		  <p class="practicedesc">
-			SVG documents SHOULD NOT use forward references.         
+			SVG documents SHOULD NOT use forward references.
 		  </p>
 	  </div>
 	  </section>
@@ -196,7 +196,7 @@
 	  <div class="practice">
 	      <p><span id="sample-practice" class="practicelab"></span></p>
 		  <p class="practicedesc">
-			The order of the elements in an SVG document SHOULD follow the time ordering, i.e. elements SHOULD be serialized according to their first rendering time.       
+			The order of the elements in an SVG document SHOULD follow the time ordering, i.e. elements SHOULD be serialized according to their first rendering time.
 		  </p>
 	  </div>
 	  <p>Non rendered elements (e.g. <code>defs</code> elements) MAY be placed at any place in the document provided that Guideline 1 is respected. Ideally, they SHOULD be placed just before the elements referencing them.</p>
@@ -241,14 +241,14 @@
 	  <h3>Definitions</h3>
 	  <section>
 	  <h4>SVG Stream and SVG Access Unit</h4>
-	  <p>Following guidelines 1 and 2, the progressive rendering of an SVG document will be consistent during the download. Additionally, with the second guideline, an SVG document can be viewed as an SVG stream defined as follows.</p> 
+	  <p>Following guidelines 1 and 2, the progressive rendering of an SVG document will be consistent during the download. Additionally, with the second guideline, an SVG document can be viewed as an SVG stream defined as follows.</p>
 	  <p>An <dfn id="dfn-svg-stream">SVG stream</dfn> is an SVG document physically divided into <a title="definition" href="#dfn-svg-access-units" class="internalDFN">SVG Access Units</a>.</p>
 	  <p>An <dfn id="dfn-svg-access-unit">SVG Access Unit</dfn> is a group of consecutive bytes, representing SVG content, containing entire XML tags, to which a timestamp greater than the previous Access Unit, corresponding to the first rendering time of the first element entirely contained in these bytes, can be assigned.</p>
-	  
+
       <div class="figure" title="Example of an SVG document and a corresponding SVG stream">
         <img src="svg-stream.png" width="100%"/>
       </div>
-	  
+
 	  <p>Delivering an <a title="definition" href="#dfn-svg-stream" class="internalDFN">SVG stream</a> and rendering it as expected faces typical real-time streaming constraints: each <a title="definition" href="#dfn-svg-access-units" class="internalDFN">SVG Access Unit</a> SHALL be delivered and parsed by the browser before the rendering deadline given by its timestamp. It is up to the browser to request them on time or to the server to send them on time, depending on the streaming protocol. An SVG element MAY be parsed by the browser before its start time (Ti), if the <a title="definition" href="#dfn-svg-access-units" class="internalDFN">SVG Access Unit</a> it belongs to is delivered to the browser too early. This only has impact on buffer and memory occupancy, not directly on rendering. However, if it is delivered and parsed too late, the rendering result will not be correct.</p>
 	  <p>The delivery of SVG streams using standard HTTP servers SHOULD respect these real-time constraints. However, storing SVG streams as SVG files, there is no easy way neither for the browser to know when to request a particular byte range of the SVG file nor for a simple HTTP server to know when to send it. An intelligent HTTP server could parse the SVG file to understand the delivery scheduling, but this is not an easy task. It is therefore desired to inform browsers and servers about the mapping between byte ranges in the SVG file and time ranges. In other words, browsers or servers need to know how the <a title="definition" href="#dfn-svg-stream" class="internalDFN">SVG stream</a> is made, where the byte boundaries and what the timestamps of <a title="definition" href="#dfn-svg-access-units" class="internalDFN"> Access Units</a> are. As for video streams, they need to know also some additional information about each <a title="definition" href="#dfn-svg-access-units" class="internalDFN">Access Unit</a>: whether it can be skipped or not without affecting subsequent AUs; whether it can be processed without having processed the previous one (i.e. if it is a <a title="definition" href="#dfn-svg-rap" class="internalDFN">Random Access Point</a>). In traditional video streaming solutions, this signaling information is provided by delivery formats or protocols. This section describes how the same delivery formats and protocols can be used to provide signaling information and to stream SVG content.</p>
 	  </section>
@@ -264,7 +264,7 @@
 	  <div class="practice">
 	      <p><span id="sample-practice" class="practicelab"></span></p>
 		  <p class="practicedesc">
-			Authors SHOULD place as much elements as possible in the SVG stream header provided that they do not break seek operations.      
+			Authors SHOULD place as much elements as possible in the SVG stream header provided that they do not break seek operations.
 		  </p>
 	  </div>
 	  </section>
@@ -272,29 +272,17 @@
 	  <h4>SVG Random Access Points</h4>
 	  <p>An <dfn id="dfn-svg-rap">SVG Random Access Point</dfn> is an <a title="definition" href="#dfn-svg-access-unit" class="internalDFN">SVG Access Unit</a> which contains sufficient information for a browser after reading it, and without reading previous <a title="definition" href="#dfn-svg-access-unit" class="internalDFN">SVG Access Units</a>, to be in the same state as if the <a title="definition" href="#dfn-svg-stream" class="internalDFN">SVG stream</a> had been read from the beginning or from the previous <a title="definition" href="#dfn-svg-stream" class="internalDFN">SVG Random Access Point</a>.</p>
 	  <p>Obviously, the first <a title="definition" href="#dfn-svg-access-unit" class="internalDFN">Access Unit</a> in an <a title="definition" href="#dfn-svg-stream" class="internalDFN">SVG stream</a> is an <a title="definition" href="#dfn-svg-rap" class="internalDFN">SVG Random Access Point</a>.
-	  <p>In SVG, the state of a browser when reading a document includes the DOM tree, the styles and the different JavaScript contexts. These contexts can be the global context or inner closure contexts. In many cases, even if the DOM tree is different or if some script context is different, if the rendered result on screen after reading a <a title="definition" href="#dfn-svg-rap" class="internalDFN">RAP</a> is the same as reading the previous <a title="definition" href="#dfn-svg-rap" class="internalDFN">RAP</a> and if it remains the same on, the point in the stream MAY still be considered by the author a <a title="definition" href="#dfn-svg-rap" class="internalDFN">RAP</a>. But, if the state of the browser needs to be strictly the same, some active state management is REQUIRED. In particular, some form of garbage collection MAY be performed. Elements read before a <a title="definition" href="#dfn-svg-rap" class="internalDFN">RAP</a> MAY need to be deleted from the DOM and JavaScript objects too. The SVG <code>discard</code> element MAY be used for that. Scoped style sheets MAY be also be used to scope the styles to an <a title="definition" href="#dfn-svg-access-unit" class="internalDFN">SVG Access Unit</a>.</p>
+	  <p>In SVG, the state of a browser when reading a document includes the DOM tree, the styles and the different JavaScript contexts. These contexts can be the global context or inner closure contexts. In many cases, even if the DOM tree is different or if some script context is different, if the rendered result on screen after reading a <a title="definition" href="#dfn-svg-rap" class="internalDFN">RAP</a> is the same as reading the previous <a title="definition" href="#dfn-svg-rap" class="internalDFN">RAP</a> and if it remains the same on, the point in the stream MAY still be considered by the author a <a title="definition" href="#dfn-svg-rap" class="internalDFN">RAP</a>. But, if the state of the browser needs to be strictly the same, some active state management is REQUIRED. In particular, some form of garbage collection MAY be performed. Elements read before a <a title="definition" href="#dfn-svg-rap" class="internalDFN">RAP</a> MAY need to be deleted from the DOM and JavaScript objects too. Scoped style sheets MAY be also be used to scope the styles to an <a title="definition" href="#dfn-svg-access-unit" class="internalDFN">SVG Access Unit</a>.</p>
 	  <p class="note">Authors SHOULD be aware that if some elements needed by all <a title="definition" href="#dfn-svg-stream" class="internalDFN">Random Access Points</a> are placed into the <a title="definition" href="#dfn-svg-stream-header" class="internalDFN">stream header</a>, these elements MAY also need to be discarded before <a title="definition" href="#dfn-svg-rap" class="internalDFN">Random Access Points</a> that do not need them to achieve strict state management.</p>
 	  <div class="practice">
 	      <p><span id="sample-practice" class="practicelab"></span></p>
 		  <p class="practicedesc">
-			If strict browser state needs to be maintained at <a title="definition" href="#dfn-svg-stream" class="internalDFN">Random Access Point</a>, authors SHOULD remove unnecessary objects as soon as possible and in particular before the next <a title="definition" href="#dfn-svg-stream" class="internalDFN">Random Access Points</a>, using the <code>discard</code> element, JavaScript delete operations or any other similar mechanism.     
+			If strict browser state needs to be maintained at <a title="definition" href="#dfn-svg-stream" class="internalDFN">Random Access Point</a>, authors SHOULD remove unnecessary objects as soon as possible and in particular before the next <a title="definition" href="#dfn-svg-stream" class="internalDFN">Random Access Points</a>, using JavaScript delete operations or any other similar mechanism.
 		  </p>
 	  </div>
-	  <p>One way to achieve follow Guideline 4 is to use self-discarding elements as follows:</p>
-	  <pre class="example xml" title="Use of the discard element to delete objects when they are not used">
-&lt;svg ...>
-  ...
-  &lt;g>
-    ...
-    &lt;animate attributeName="display" from="none" to="inline" begin="10s" dur="5s"/>
-    &lt;discard begin="15s"/>
-  &lt;/g>
-&lt;/svg>
-	  </pre>
-	  <p>In this example, the <code>g</code> element contains objects which will be displayed between time 10 and time 15. Assuming that after time 15 they will not be necessary anymore, the DOM tree can be reduced by removing them (and the <code>g</code> element) with the <code>discard</code> element.</p>
 	  </div>
 	  </section>
-	  </section>	  
+	  </section>
 	  <section>
 	  <h3>SVG Stream Processing</h3>
 	  <p>The processing of an <a title="definition" href="#dfn-svg-stream" class="internalDFN">SVG stream</a> relies on the standard processing of SVG documents for most situations. Only some pre-parsing operations MAY be needed when a seek operation requires loading new data.</p>
@@ -326,7 +314,7 @@
   &lt;source src="file.mp4" type="video/mp4" .../&gt;
 &lt;/video&gt;
 	  </pre>
-			
+
 			<p class="note">The same restrictions are applied when referencing an <a title="definition" href="#dfn-svg-stream" class="internalDFN">SVG stream</a> from a <code>video</code> or <code>source</code> element as for referencing an SVG document from an HTML <code>img</code> element, i.e. scripts and external references are not processed.</p>
 			<div class="issue">Should reference the <a href="https://svgwg.org/specs/integration/" SVG integration</a> spec for precise restrictions (probably the "Secure Animated Mode"). What about Cross-Origin Restrictions?</div>
 			<div class="issue">Different MIME types will probably be used when SVG streams are delivered as plain SVG or SVG embedded in some multimedia format (WebM, MP4). For instance: "video/mp4; codecs='svg '" ? To be clarified.</div>
@@ -366,7 +354,7 @@
 			</section>
 		</section>
     </section>
-	
+
     <section>
 		<h2>Storage and delivery formats and protocols for SVG streams</h2>
 		<p>This section defines the mapping of <a title="definition" href="#dfn-svg-stream" class="internalDFN">SVG streams</a> onto existing streaming delivery formats and protocols.</p>
@@ -396,7 +384,7 @@
 				<section>
 					<h5>Layout</h5>
 					<p>As indicated in the [[ISOBMFF]], if the SVG track is rendered outside of a web context (for instance when rendered by a standalone viewer) the layout information provided in the track SHALL be used to set the SVG viewport.</p>
-				</section>				
+				</section>
 			</section>
 			<section>
 				<h4>WebM</h4>
