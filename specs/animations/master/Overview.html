@@ -1905,209 +1905,6 @@ attributes and properties that can be animated</a>.</p>
 
 </edit:with>
 
-<h3 id="DiscardElement">The <span class='element-name'>'discard'</span> element</h3>
-
-<edit:with element='discard'>
-
-<div class="annotation svg2-requirement">
-  <table>
-    <tr>
-      <th>SVG 2 Requirement:</th>
-      <td>Have the <a>'discard'</a> element to declaratively discard elements from the document tree.</td>
-    </tr>
-    <tr>
-      <th>Resolution:</th>
-      <td><a href="http://www.w3.org/2012/03/29-svg-minutes.html">SVG 2 will support the discard element.</a></td>
-    </tr>
-    <tr>
-      <th>Purpose:</th>
-      <td>To conserve memory while displaying long-running documents.</td>
-    </tr>
-    <tr>
-      <th>Owner:</th>
-      <td>Cyril (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3319">ACTION-3319</a>)</td>
-    </tr>
-  </table>
-</div>
-
-<edit:elementsummary name='discard'/>
-
-<p>
-  The <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
-  element allows authors to specify the time at which particular elements are to
-  be discarded, thereby reducing the resources required by an <a>SVG user
-  agent</a>.
-  This is particularly useful to help SVG viewers conserve memory while
-  displaying long-running documents.  This element will not be processed by
-  static SVG viewers.
-</p>
-<p>
-  The <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
-  element may occur wherever the
-  <a href="https://svgwg.org/specs/animations/#AnimateElement"><span class="element-name">'animate'</span></a>
-  element may.
-</p>
-
-<p><em>Attribute definitions:</em></p>
-
-<dl class="attrdef-list">
-  <dt>
-    <table class="propdef attrdef">
-      <tr>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Initial value</th>
-        <th>Animatable</th>
-      </tr>
-      <tr>
-        <td><dfn id="DiscardElementHrefAttribute">href</dfn></td>
-        <td>URL <a href="[SVG2]/types.html#attribute-url" class="syntax">[URL]</a></td>
-        <td>(none)</td>
-        <td>no</td>
-      </tr>
-    </table>
-  </dt>
-  <dd>
-    <p>
-      An <a>URL reference</a>
-      that identifies the <a href="https://svgwg.org/specs/animations/#TargetElement">target element</a>
-      to discard.
-      See the definition of <a href="https://svgwg.org/specs/animations/#HrefAttribute"><span
-      class="attr-name">'href'</span></a> on <a>animation elements</a> for
-      details on identifying a target element.
-      Note, however, that unlike other <a>animation elements</a>, the
-      <a>'discard'</a> element does not support the deprecated
-      <a>'xlink:href'</a> attribute.
-    </p>
-    <p>
-      Note that if the target element is not part of the
-      <a>current SVG document fragment</a>
-      then whether the target element will be removed or not is defined by the
-      host language.
-    </p>
-    <p>
-      If the <a>'href'</a> attribute is not provided, then the target element
-      will be the immediate parent element of the discard element.
-    </p>
-  </dd>
-  <dt>
-    <table class="propdef attrdef">
-      <tr>
-        <th>Name</th>
-        <th>Value</th>
-        <th>Initial value</th>
-        <th>Animatable</th>
-      </tr>
-      <tr>
-        <td><dfn id="DiscardElementBeginAttribute">begin</dfn></td>
-        <td><a href="https://svgwg.org/specs/animations/#BeginValueListSyntax">&lt;begin-value-list&gt;</a></td>
-        <td>0s</td>
-        <td>no</td>
-      </tr>
-    </table>
-  </dt>
-  <dd>
-    <p class="issue" data-issue="19">Attribute syntax needs fixing.</p>
-    <p>
-      Indicates when the target element will be discarded.  See the definition
-      of <a href="https://svgwg.org/specs/animations/#BeginAttribute"><span class="attr-name">'begin'</span></a>
-      on <a>animation elements</a> for details.
-    </p>
-  </dd>
-</dl>
-
-<p>
-  The <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
-  element has an implicit
-  <a href="http://www.w3.org/TR/2008/REC-SMIL3-20081201/smil-timing.html#Timing-DefiningSimpleDur">simple duration</a>
-  of <span class="attr-value">"indefinite"</span>.  As soon as the element's
-  <a href="http://www.w3.org/TR/2008/REC-SMIL3-20081201/smil-timing.html#Timing-ComputingActiveDur">active duration</a>
-  starts, the <a>SVG user agent</a>
-  discards the element identified by the
-  <a href="#DiscardElementHrefAttribute"><span class="attr-name">'href'</span></a>
-  attribute ([<a href="#ref-SMIL">SMIL</a>], section 5.4.5).
-  The removal operation acts as if
-  <a href="http://www.w3.org/TR/2012/WD-dom-20120405/#dom-node-removechild"><code>removeChild</code></a>
-  were called on the parent of the target element with the target element as
-  parameter. [<a href="#ref-DOM4">DOM4</a>] The <a>SVG user agent</a>
-  must remove the target node as well as all of its attributes and descendants.
-</p>
-<p>
-  After removal of the <a href="https://svgwg.org/specs/animations/#TargetElement">target element</a>,
-  the <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
-  element is no longer useful. It must also be discarded following the
-  target element removal. If the
-  <a href="#DiscardElementHrefAttribute"><span class="attr-name">'href'</span></a>
-  attribute has an <a>invalid</a> URL reference
-  (the target element did not exist, for example),
-  the <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
-  element itself must still be removed following activation.
-</p>
-<p>
-  <a href="http://www.w3.org/TR/2008/REC-SMIL3-20081201/smil-timing.html#Timing-HyperlinksAndTiming">Seeking backwards</a>
-  in the timeline ([<a href="#ref-SMIL">SMIL</a>], section 5.4.5)
-  must not re-insert the discarded elements. Discarded elements are intended to
-  be completely removed from memory. So, authors are encouraged to set the
-  <a href="#SVGElementPlaybackorderAttribute"><span class="attr-name">'playbackorder'</span></a>
-  attribute to <span class="attr-value">"forwardonly"</span> when using the
-  <a href="#DiscardElement"><span class="element-name">'discard'</span></a> element.
-</p>
-<p>
-  The <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
-  element itself can be discarded prior to its activation, in which case it will
-  never trigger the removal of its own target element.
-  <a>SVG user agents</a>
-  must allow the <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
-  element to be the target of another
-  <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
-  element.
-</p>
-
-<p>
-  The following example demonstrates a simple usage of the
-  <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
-  element. The list below describes relevant behavior in the document timeline
-  of this example:
-</p>
-
-<dl>
-  <dt>At time = 0:</dt>
-  <dd>When the document timeline starts, the blue ellipse starts to move down the page.</dd>
-  <dt>At time = 1 second:</dt>
-  <dd>The red rectangle starts moving up the page.</dd>
-  <dt>At time = 2 seconds:</dt>
-  <dd>
-    The <a href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span class="element-name">'animateTransform'</span></a>
-    on the <a href="[SVG2]/shapes.html#EllipseElement"><span class="element-name">'ellipse'</span></a>
-    ends. The <a href="[SVG2]/shapes.html#EllipseElement"><span class="element-name">'ellipse'</span></a>
-    and its children are also discarded, as it is the
-    <a href="https://svgwg.org/specs/animations/#TargetElement">target element</a> of a
-    <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
-    with <span class="attr-value">begin="2"</span>. The green
-    <a href="[SVG2]/shapes.html#PolygonElement"><span class="element-name">'polygon'</span></a>
-    starts to move across the page.
-  </dd>
-  <dt>At time = 3 seconds:</dt>
-  <dd>
-    The animation on the red rectangle ends. The rectangle and its children are
-    discarded as it is the target of a
-    <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
-    element with <span class="attr-value">begin="3"</span>.
-  </dd>
-  <dt>At time = 4 seconds:</dt>
-  <dd>
-    The animation on the green triangle ends. The green
-    <a href="[SVG2]/shapes.html#PolygonElement"><span class="element-name">'polygon'</span></a>
-    and its children are discarded as it is the target of a
-    <a href="#DiscardElement"><span class="element-name">'discard'</span></a>
-    element with <span class="attr-value">begin="4".</span>
-  </dd>
-</dl>
-
-<edit:example href='examples/discard01.svg' name='discard01' link='yes' image='no'/>
-
-</edit:with>
-
 <h3 id="AnimateMotionElement">The <span class="element-name">'animateMotion'</span> element</h3>
 
 <edit:with element='animateMotion'>
@@ -3127,14 +2924,12 @@ This specification extends the definitions in SVG 2 [[SVG2]] in the following wa
       Indicates whether it is possible to seek backwards in the document. In
       earlier versions of SVG there was no need to put restrictions on the
       direction of seeking but with the newly introduced facilities for
-      long-running documents (e.g. the <a>'discard'</a> element) there is
-      sometimes a need to restrict this.
+      long-running documents there is sometimes a need to restrict this.
     </p>
     <p>
       If <span class="attr-name">'playbackorder'</span> is set to
       <span class="attr-value">'forwardonly'</span>, the content will likely
-      contain <a>'discard'</a>
-      elements or scripts that destroy resources, thus seeking back in the
+      contain scripts that destroy resources, thus seeking back in the
       document fragment's timeline may result in missing content.
       If <span class="attr-name">'playbackorder'</span> is
       <span class="attr-value">'forwardonly'</span>, the content should not
@@ -3633,22 +3428,6 @@ interface <b>SVGAnimateTransformElement</b> : <a>SVGAnimationElement</a> {
 
 </edit:with>
 
-<h3 id="InterfaceSVGDiscardElement">Interface SVGDiscardElement</h3>
-
-<edit:with element="discard">
-
-<p>The <a>SVGDiscardElement</a> interface corresponds to the <a>'discard'</a>
-element.</p>
-
-<p>Object-oriented access to the attributes of the <a>'discard'</a> element
-via the SVG DOM is not available.</p>
-
-<pre class="idl">[Exposed=Window]
-interface <b>SVGDiscardElement</b> : <a>SVGAnimationElement</a> {
-};</pre>
-
-</edit:with>
-
 <h3 id="InterfaceSVGSVGElement">Extensions to interface SVGSVGElement</h3>
 
 <edit:with element="svg">
@@ -3885,7 +3664,6 @@ SVG animations.  When getCurrentTime() is called, the following steps are run:</
       a value.</li>
   <li class='added-since-last-wd'>Allowed the <a>'mpath'</a> element to refer to
       a <a>shape</a> element.</li>
-  <li>Added the <a>'discard'</a> element</li>
   <li>Added the <a>'timelinebegin'</a> and <a>'playbackorder'</a> attributes on
       the <a>'svg'</a> element.</li>
 </ul>
