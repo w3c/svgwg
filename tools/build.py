@@ -231,7 +231,7 @@ if tobuild:
   toremove = tobuild
   os.chdir(master_dir)
   print "* building " + ", ".join(tobuild_names)
-  run(node + " \"" +
+  run(node + " --trace-uncaught \"" +
       native_path(join(tools_dir, join("publish","publish.js"))) +
       "\" --build " +
       " ".join(tobuild_names) +
