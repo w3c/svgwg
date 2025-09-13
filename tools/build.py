@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # -c == clean
 # -s == stabilize issues
@@ -13,7 +13,7 @@
 '''
 '''
 
-import commands, os, sys, signal, time
+import os, sys, signal, time
 from os.path import isfile, abspath, getmtime, exists, join, normpath
 from xml.dom import minidom
 import shutil
@@ -21,7 +21,7 @@ import shutil
 def exit(code, *message):
   if len(message):
     if code == 0:
-      print message[0]
+      print(message[0])
     else:
       sys.stderr.write(message[0] + '\n')
   sys.exit(code)
@@ -106,7 +106,7 @@ toremove = []
 def done():
   global toremove
   if toremove:
-    print "* error, removing " + " ".join(toremove)
+    print("* error, removing " + " ".join(toremove))
     for file in toremove:
       os.remove(file)
     return 1
@@ -219,7 +219,7 @@ if len(sys.argv) == 2 and sys.argv[1] == "-s":
   # stabilize issues
   if tobuild:
     os.chdir(master_dir)
-    print "* stabilizing issues in " + ", ".join(tobuild_names)
+    print("* stabilizing issues in " + ", ".join(tobuild_names))
     for page in tobuild_names:
       run("perl \"" + native_path(join(tools_dir, "stabilizer.pl")) + "\" " +
           page + ".html issue-state.txt")
@@ -230,7 +230,7 @@ if tobuild:
   # build chapters
   toremove = tobuild
   os.chdir(master_dir)
-  print "* building " + ", ".join(tobuild_names)
+  print("* building " + ", ".join(tobuild_names))
   run(node + " --trace-uncaught \"" +
       native_path(join(tools_dir, join("publish","publish.js"))) +
       "\" --build " +
@@ -256,7 +256,7 @@ if len(all) > 1 and not os.environ.get("SVG_BUILD_NO_SINGLE_PAGE"):
   
   if buildSinglePage:
     os.chdir(master_dir)
-    print "* building single page spec"
+    print("* building single page spec")
     run(node + " \"" +
         native_path(join(tools_dir, join("publish","publish.js"))) +
         "\" --build-single-page")
@@ -276,6 +276,6 @@ for f in resources:
 # Done:
 
 if not built_something:
-  print "* nothing to do"
+  print("* nothing to do")
 
 done()
