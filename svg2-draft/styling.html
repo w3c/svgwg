@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+<!--
+  Scalable Vector Graphics (SVG) 2
+  Chapter 6: Styling
+
+  Note: This document is generated from ../master/styling.html.
+  Run "make" from the root of the repository to regenerate it.
+  -->
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="UTF-8"/>
+  <title>Styling — SVG 2</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+  <!-- Style sheets for local dev. Will be standardized in processing.
+  Add attribute data-keep="" to any extra stylesheet link you do not want removed
+  (or use <style>), and include it before here. -->
+  
+  
+<link rel="stylesheet" title="Default" href="style/svg.css" type="text/css" media="screen"/><link rel="alternate stylesheet" title="Only annotations for publication" href="style/default_no_maturity.css" type="text/css" media="screen"/><link rel="alternate stylesheet" title="No issues/annotations" href="style/default_no_issues.css" type="text/css" media="screen"/><link rel="stylesheet" href="//www.w3.org/StyleSheets/TR/2016/W3C-ED" type="text/css" media="screen"/><script src="style/link-fixup.js"></script></head>
+<body class="ready-for-wider-review chapter-styling">
+
+<h1>Chapter 6: Styling</h1><nav id="toc"><div class="header {{side}}"><a href="./">Overview</a> · <a href="struct.html">Previous</a> · <a href="geometry.html">Next</a> · <a href="eltindex.html">Elements</a> · <a href="attindex.html">Attributes</a> · <a href="propidx.html">Properties</a></div><h2 id="Contents" class="contents">Contents</h2><ol class="toc"><li><ol class="toc"><li><a href="styling.html#StylingUsingCSS"><span class="secno">6.1.</span> Styling SVG content using CSS</a></li><li><a href="styling.html#StyleElement"><span class="secno">6.2.</span> Inline style sheets: the <span class="element-name">‘style’</span> element</a></li><li><a href="styling.html#LinkElement"><span class="secno">6.3.</span> External style sheets: the effect of the HTML <span class="element-name">‘link’</span> element</a></li><li><a href="styling.html#StyleSheetsInHTMLDocuments"><span class="secno">6.4.</span> Style sheets in HTML documents</a></li><li><a href="styling.html#ElementSpecificStyling"><span class="secno">6.5.</span> Element-specific styling: the <span class="attr-name">‘class’</span> and <span class="attr-name">‘style’</span> attributes</a></li><li><a href="styling.html#PresentationAttributes"><span class="secno">6.6.</span> Presentation attributes</a></li><li><a href="styling.html#RequiredProperties"><span class="secno">6.7.</span> Required properties</a></li><li><a href="styling.html#UAStyleSheet"><span class="secno">6.8.</span> User agent style sheet</a></li><li><a href="styling.html#RequiredCSSFeatures"><span class="secno">6.9.</span> Required CSS features</a></li><li><a href="styling.html#DOMInterfaces"><span class="secno">6.10.</span> DOM interfaces</a><ol class="toc"><li><a href="styling.html#InterfaceSVGStyleElement"><span class="secno">6.10.1.</span> Interface SVGStyleElement</a></li></ol></li></ol></li></ol></nav>
+
+<h2 id="StylingUsingCSS" class="heading">6.1. Styling SVG content using CSS<a class="self-link" href="#StylingUsingCSS"></a></h2>
+
+<p>Elements in an SVG document can be styled using CSS.
+Most visual characteristics and some aspects of element
+geometry are controlled using CSS <dfn id="TermProperty" data-dfn-type="dfn">properties</dfn>.
+For example, the <a class="property" href="painting.html#FillProperty">fill</a> property controls the paint used to
+fill the inside of a shape, and the <a class="property" href="geometry.html#Sizing">width</a> and
+<a class="property" href="geometry.html#Sizing">height</a> properties are used to control the size
+of a <span class="element-name">‘<a href="shapes.html#RectElement"><span>rect</span></a>’</span> element.</p>
+
+<p>SVG user agents must support all of the CSS styling
+mechanisms described in this chapter.</p>
+
+<p class="note">In SVG 1.1, support for inline style sheets
+using the <span class="element-name">‘<a href="styling.html#StyleElement"><span>style</span></a>’</span> element and
+<span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span> was not required.  In SVG 2,
+these are required.</p>
+
+
+<h2 id="StyleElement" class="heading">6.2. Inline style sheets: the <span class="element-name">‘style’</span> element<a class="self-link" href="#StyleElement"></a></h2>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Add HTML5 <span class="element-name">‘style’</span> element attributes to SVG's <span class="element-name">‘<a href="styling.html#StyleElement"><span>style</span></a>’</span> element.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/28-svg-irc#T18-45-45">SVG 2 <span class="element-name">‘style’</span> element shall be aligned with the HTML5 <span class="element-name">‘style’</span> element.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To not surprise authors with different behavior for the <span class="element-name">‘style’</span> element in HTML and SVG content.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3277">ACTION-3277</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<p>The <span class="element-name">‘<a href="styling.html#StyleElement"><span>style</span></a>’</span> element allows
+style sheets to be embedded directly within SVG content.
+SVG's <span class="element-name">‘<a href="styling.html#StyleElement"><span>style</span></a>’</span> element has the same
+attributes as the
+<a href="https://html.spec.whatwg.org/multipage/semantics.html#the-style-element">corresponding
+element in HTML</a>.</p>
+
+<div class="element-summary"><div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element" data-export="" id="elementdef-style">style</dfn>’</span></div><dl><dt>Categories:</dt><dd><a href="render.html#TermNeverRenderedElement">Never-rendered element</a></dd><dt>Content model:</dt><dd>Character data.</dd><dt>Attributes:</dt><dd><ul class="no-bullets"><li><a href="struct.html#TermCoreAttribute">core attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="struct.html#IDAttribute"><span>id</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#LangAttribute"><span>lang</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#ClassAttribute"><span>class</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span></span></li><li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclose</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncopy</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncuechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncut</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondblclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrag</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragexit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrop</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondurationchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onemptied</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onended</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onerror</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onfocus</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninput</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninvalid</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeydown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeypress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeyup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onload</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadeddata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadedmetadata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousedown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousemove</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseout</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpaste</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpause</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplaying</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onprogress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onratechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onreset</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onresize</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onscroll</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeked</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeking</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onselect</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onshow</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onstalled</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsubmit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsuspend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontimeupdate</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontoggle</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onvolumechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwaiting</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwheel</span></a>’</span></span></li><li><span class="attr-name">‘<a href="styling.html#StyleElementTypeAttribute"><span>type</span></a>’</span></li><li><span class="attr-name">‘<a href="styling.html#StyleElementMediaAttribute"><span>media</span></a>’</span></li><li><span class="attr-name">‘<a href="styling.html#StyleElementTitleAttribute"><span>title</span></a>’</span></li></ul></dd><dt>DOM Interfaces:</dt><dd><ul class="no-bullets"><li><a class="idlinterface" href="styling.html#InterfaceSVGStyleElement">SVGStyleElement</a></li></ul></dd></dl></div>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="StyleElementTypeAttribute" data-dfn-type="element-attr" data-dfn-for="style" data-export="">type</dfn></td>
+        <td>(see below)</td>
+        <td>text/css</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>This attribute specifies the style sheet language of
+    the element's contents, as a <a href="http://www.ietf.org/rfc/rfc2046.txt">media type</a>.
+    [<a href="refs.html#ref-rfc2046">rfc2046</a>].
+    If the attribute is not specified, then the
+    style sheet language is assumed to be CSS.</p>
+  </dd>
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="StyleElementMediaAttribute" data-dfn-type="element-attr" data-dfn-for="style" data-export="">media</dfn></td>
+        <td>(see below)</td>
+        <td>all</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>This attribute specifies a media query that must be
+    matched for the style sheet to apply.  Its value is parsed
+    as a <a href="https://www.w3.org/TR/css3-mediaqueries/#syntax">media_query_list</a>.
+    If not specified, the style sheet applies unconditionally.</p>
+  </dd>
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="StyleElementTitleAttribute" data-dfn-type="element-attr" data-dfn-for="style" data-export="">title</dfn></td>
+        <td>(see below)</td>
+        <td>(none)</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>This attribute specifies a title for the style sheet,
+    which is used when exposing and selecting between alternate
+    style sheets.  The attribute takes any value.</p>
+  </dd>
+</dl>
+
+<p>The semantics and processing of a <span class="element-name">‘<a href="styling.html#StyleElement"><span>style</span></a>’</span> and its
+attributes must be the same as is defined for the
+<a href="https://html.spec.whatwg.org/multipage/semantics.html#the-style-element">HTML
+<span class="element-name">‘style’</span> element</a>.</p>
+
+<p>The style sheet's text content is never directly rendered;
+the <a class="property" href="render.html#VisibilityControl">display</a> value for the <span class="element-name">‘<a href="styling.html#StyleElement"><span>style</span></a>’</span> element
+must always be set to <span class="prop-value">none</span>
+by the <a href="styling.html#UAStyleSheet">user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
+</p>
+
+
+<h2 id="LinkElement" class="heading">6.3. External style sheets: the effect of the HTML <span class="element-name">‘link’</span> element<a class="self-link" href="#LinkElement"></a></h2>
+
+<p>An <a href="https://html.spec.whatwg.org/multipage/semantics.html#the-link-element">HTML
+<span class="element-name">‘link’</span> element</a> in an SVG document (that is,
+an element in the HTML namespace with local name "link")
+with its <span class="attr-name">‘rel’</span>
+attribute set to <span class="attr-value">'stylesheet'</span> must be processed
+as defined in the HTML specification and cause external style sheets to be
+loaded and applied to the document.  Such elements in HTML documents outside
+of an inline SVG fragment must also apply to the SVG content.</p>
+
+<p class="note">Because the element is required to be in the HTML namespace, it
+is not possible for an <a href="https://html.spec.whatwg.org/multipage/semantics.html#the-link-element">HTML
+<span class="element-name">‘link’</span> element</a> to be parsed as
+part of an inline SVG fragment in a text/html document.  However, when
+parsing an SVG document using XML syntax, XML namespace declarations
+can be used to place the element in the HTML namespace.</p>
+
+<div class="note">
+  <p>Note that an alternative way to reference external style sheets
+  without using the <a href="https://html.spec.whatwg.org/multipage/semantics.html#the-link-element">HTML
+  <span class="element-name">‘link’</span> element</a> is to use an @import
+  rule in an inline style sheet.  For example:</p>
+
+  <pre>&lt;svg xmlns="http://www.w3.org/2000/svg">
+  &lt;style>
+    @import url(mystyles.css);
+  &lt;/style>
+  &lt;rect .../>
+&lt;/svg></pre>
+
+  <p>would behave similarly to:</p>
+
+  <pre>&lt;svg xmlns="http://www.w3.org/2000/svg">
+  &lt;link xmlns="http://www.w3.org/1999/xhtml" rel="stylesheet" href="mystyles.css" type="text/css"/>
+  &lt;rect .../>
+&lt;/svg></pre>
+
+  <p>Or, in XML documents, external CSS style sheets may be included using the
+  <a href="https://www.w3.org/TR/xml-stylesheet">&lt;?xml-stylesheet?></a>
+  processing instruction [<a href="refs.html#ref-xml-stylesheet">xml-stylesheet</a>].</p>
+</div>
+
+<h2 id="StyleSheetsInHTMLDocuments" class="heading">6.4. Style sheets in HTML documents<a class="self-link" href="#StyleSheetsInHTMLDocuments"></a></h2>
+
+<p>When an SVG <span class="element-name">‘<a href="styling.html#StyleElement"><span>style</span></a>’</span> or an HTML
+<span class="attr-name">‘style’</span> element is used in an HTML
+document, those style sheets must apply to all HTML and
+inline SVG content in the document.  Similarly, any HTML
+<span class="attr-name">‘style’</span> element used in an SVG
+document must also apply its style sheet to the document.</p>
+
+<h2 id="ElementSpecificStyling" class="heading">6.5. Element-specific styling: the <span class="attr-name">‘class’</span> and <span class="attr-name">‘style’</span> attributes<a class="self-link" href="#ElementSpecificStyling"></a></h2>
+
+<p>As with HTML, SVG supports the <span class="attr-name">‘<a href="styling.html#ClassAttribute"><span>class</span></a>’</span> and <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span>
+attributes on all elements to support element-specific styling.</p>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="ClassAttribute" data-dfn-for="core-attributes" data-dfn-type="element-attr">class</dfn></td>
+        <td><a href="https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#set-of-space-separated-tokens">set of space-separated tokens</a> <span class="syntax">[HTML]</span></td>
+        <td>(none)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>The <span class="attr-name">‘<a href="styling.html#ClassAttribute"><span>class</span></a>’</span> attribute assigns one or more class names to an element,
+    which can then be used for addressing by the styling language.</p>
+  </dd>
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="StyleAttribute" data-dfn-for="core-attributes" data-dfn-type="element-attr">style</dfn></td>
+        <td>(see below)</td>
+        <td>(none)</td>
+        <td>no</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>The <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span> attribute is used to supply a
+    CSS declaration of an element.  The attribute is
+    <a href="https://www.w3.org/TR/2013/REC-css-style-attr-20131107/#syntax">parsed as a declaration-list</a>.</p>
+  </dd>
+</dl>
+
+<p>Aside from the way that the <span class="attr-name">‘<a href="styling.html#ClassAttribute"><span>class</span></a>’</span> attribute is reflected in the
+SVG DOM (in the <a href="types.html#__svg__SVGElement__className">className</a>
+IDL attribute on <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a>), the semantics and behavior of the
+<span class="attr-name">‘<a href="styling.html#ClassAttribute"><span>class</span></a>’</span> and <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span> attributes must be the same
+as that for <a href="https://html.spec.whatwg.org/multipage/dom.html#global-attributes">the corresponding
+attributes in HTML</a>.</p>
+
+<div class="example">
+  <p>In the following example, the <span class="element-name">‘<a href="text.html#TextElement"><span>text</span></a>’</span> element is used in
+  conjunction with the <span class="attr-name">‘<a href="styling.html#ClassAttribute"><span>class</span></a>’</span>
+  attribute to markup document messages. Messages appear in both
+  English and French versions.</p>
+
+  <pre>
+&lt;!-- English messages -->
+&lt;text class="info" lang="en">Variable declared twice&lt;/text>
+&lt;text class="warning" lang="en">Undeclared variable&lt;/text>
+&lt;text class="error" lang="en">Bad syntax for variable name&lt;/text>
+&lt;!-- French messages -->
+&lt;text class="info" lang="fr">Variable déclarée deux fois&lt;/text>
+&lt;text class="warning" lang="fr">Variable indéfinie&lt;/text>
+&lt;text class="error" lang="fr">Erreur de syntaxe pour variable&lt;/text></pre>
+
+  <p>The following CSS style
+  rules would tell visual user agents to display informational
+  messages in green, warning messages in yellow, and error
+  messages in red:</p>
+
+  <pre>
+text.info    { fill: green; }
+text.warning { fill: yellow; }
+text.error   { fill: red; }</pre>
+</div>
+
+<div class="example">
+  <p>This example shows how the <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span> attribute can be
+  used to style <span class="element-name">‘<a href="text.html#TextElement"><span>text</span></a>’</span> elements similarly to the previous example:</p>
+
+  <pre>
+&lt;text style="fill: green;" lang="en">Variable declared twice&lt;/text>
+&lt;text style="fill: yellow;" lang="en">Undeclared variable&lt;/text>
+&lt;text style="fill: red;" lang="en">Bad syntax for variable name&lt;/text></pre>
+</div>
+
+
+<h2 id="PresentationAttributes" class="heading">6.6. Presentation attributes<a class="self-link" href="#PresentationAttributes"></a></h2>
+
+<p>Some styling properties can be specified not only in style sheets
+and <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span> attributes, but also in
+<dfn id="TermPresentationAttribute" data-dfn-type="dfn" data-export="">presentation attributes</dfn>.
+These are attributes whose name matches (or is similar to) a given CSS property
+and whose value is parsed as a value of that property. Presentation
+attributes contribute to the
+<a href="https://drafts.csswg.org/css-cascade-3/#preshint">author level</a>
+of the cascade, followed by all other author-level style sheets,
+and have specificity 0.</p>
+
+<p>Since presentation attributes are parsed as CSS values, not declarations, an
+<a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html#important-rules"><span class="prop-value">!important</span> declaration</a>
+within a presentation attribute will cause it to have an <a href="types.html#TermInvalidValue">invalid value</a>.
+See <a href="types.html#presentation-attribute-css-value">Attribute syntax</a>
+for details on how presentation attributes are parsed.</p>
+
+<p>Not all style properties that can affect SVG rendering have a corresponding
+presentation attribute.
+Other attributes (which happen to share the name of a style property) must not be parsed as a
+presentation attribute and must not affect CSS cascading and inheritance.
+Also, only elements in the SVG namespace support presentation attributes.
+Most SVG presentation attributes may be specified on any element in the SVG namespace
+where there is not a name clash with an existing attribute.
+However, the <a href="geometry.html#geometry-properties">geometry properties</a> only have equivalent presentation attributes
+on designated elements.
+Attributes of the same name on other elements must not affect CSS cascading and inheritance.
+</p>
+<p>
+Except as noted in the table for the <a class="property" href="coords.html#TransformProperty">transform</a> presentation attributes,
+the presentation attribute name is the same as the property name, in lower-case letters.
+</p>
+
+<table class="vert" style="font-size: 90%">
+  <tr>
+    <th style="width: 50%">Properties with a presentation attribute</th>
+    <th style="width: 50%">Elements that support the presentation attribute</th>
+  </tr>
+   <tr>
+    <td>
+      <a class="property" href="geometry.html#CxProperty">cx</a>,
+      <a class="property" href="geometry.html#CyProperty">cy</a>
+    </td>
+    <td>
+      <span class="element-name">‘<a href="shapes.html#CircleElement"><span>circle</span></a>’</span> and <span class="element-name">‘<a href="shapes.html#EllipseElement"><span>ellipse</span></a>’</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a class="property" href="geometry.html#Sizing">height</a>, <a class="property" href="geometry.html#Sizing">width</a>, <a class="property" href="geometry.html#XProperty">x</a>, <a class="property" href="geometry.html#YProperty">y</a>
+    </td>
+    <td>
+      <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span>,
+      <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span>,
+      <span class="element-name">‘<a href="shapes.html#RectElement"><span>rect</span></a>’</span>,
+      <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span>,
+      <span class="element-name">‘<a href="struct.html#SymbolElement"><span>symbol</span></a>’</span>, and
+      <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a class="property" href="geometry.html#RProperty">r</a>
+    </td>
+    <td>
+      <span class="element-name">‘<a href="shapes.html#CircleElement"><span>circle</span></a>’</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a class="property" href="geometry.html#RxProperty">rx</a>, <a class="property" href="geometry.html#RyProperty">ry</a>
+    </td>
+    <td>
+      <span class="element-name">‘<a href="shapes.html#EllipseElement"><span>ellipse</span></a>’</span> and <span class="element-name">‘<a href="shapes.html#RectElement"><span>rect</span></a>’</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a class="property" href="paths.html#DProperty">d</a>
+    </td>
+    <td>
+      <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a class="property" href="painting.html#FillProperty">fill</a>
+    </td>
+    <td>
+      Any element in the SVG namespace except for <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a>,
+      which have a different <span class="attr-name">‘<a href="https://svgwg.org/specs/animations/#FillAttribute"><span>fill</span></a>’</span> attribute.
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a class="property" href="coords.html#TransformProperty">transform</a>
+    </td>
+    <td>
+      For historical reasons, the <a class="property" href="coords.html#TransformProperty">transform</a> property gets represented by different presentation attributes depending on the SVG element it applies to:
+      <dl>
+        <dt><a class="property" href="coords.html#TransformProperty">transform</a></dt>
+        <dd>
+          Any element in the SVG namespace with the exception of the <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span>,
+          <span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span> and <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span> elements.
+        </dd>
+        <dt><span class="attr-name">‘<a href="pservers.html#PatternElementPatternTransformAttribute"><span>patternTransform</span></a>’</span></dt>
+        <dd>
+            <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span>. <span class="attr-name">‘<a href="pservers.html#PatternElementPatternTransformAttribute"><span>patternTransform</span></a>’</span> gets mapped to the
+            <a class="property" href="coords.html#TransformProperty">transform</a> CSS property
+            [<a href="refs.html#ref-css-transforms-1">css-transforms-1</a>].
+        </dd>
+        <dt><span class="attr-name">‘<a href="pservers.html#LinearGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span></dt>
+        <dd>
+            <span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span> and <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span> elements.
+            <span class="attr-name">‘<a href="pservers.html#LinearGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span> gets mapped to the <a class="property" href="coords.html#TransformProperty">transform</a>
+            CSS property [<a href="refs.html#ref-css-transforms-1">css-transforms-1</a>].
+        </dd>
+      </dl>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <a class="property" href="text.html#AlignmentBaselineProperty">alignment-baseline</a>,
+      <a class="property" href="text.html#BaselineShiftProperty">baseline-shift</a>,
+      <a class="property" href="https://drafts.fxtf.org/css-masking-1/#the-clip-path">clip-path</a>,
+      <a class="property" href="https://drafts.fxtf.org/css-masking-1/#the-clip-rule">clip-rule</a>,
+      <a class="property" href="painting.html#ColorProperty">color</a>,
+      <a class="property" href="painting.html#ColorInterpolationProperty">color-interpolation</a>,
+      <a class="property" href="https://drafts.fxtf.org/filter-effects/#ColorInterpolationFiltersProperty">color-interpolation-filters</a>,
+      <a class="property" href="https://www.w3.org/TR/css-ui-3/#cursor">cursor</a>,
+      <a class="property" href="text.html#DirectionProperty">direction</a>,
+      <a class="property" href="render.html#VisibilityControl">display</a>,
+      <a class="property" href="text.html#DominantBaselineProperty">dominant-baseline</a>,
+      <a class="property" href="painting.html#FillOpacityProperty">fill-opacity</a>,
+      <a class="property" href="painting.html#FillRuleProperty">fill-rule</a>,
+      <a class="property" href="https://drafts.fxtf.org/filter-effects/#FilterProperty">filter</a>,
+      <a class="property" href="https://drafts.fxtf.org/filter-effects/#FloodColorProperty">flood-color</a>,
+      <a class="property" href="https://drafts.fxtf.org/filter-effects/#FloodOpacityProperty">flood-opacity</a>,
+      <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-family-prop">font-family</a>,
+      <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-size-prop">font-size</a>,
+      <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-size-adjust-prop">font-size-adjust</a>,
+      <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-stretch-prop">font-stretch</a>,
+      <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-style-prop">font-style</a>,
+      <a class="property" href="https://www.w3.org/TR/css-fonts-3/#propdef-font-variant">font-variant</a>,
+      <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-weight-prop">font-weight</a>,
+      <a class="property" href="text.html#GlyphOrientationVerticalProperty">glyph-orientation-vertical</a>,
+      <a class="property" href="painting.html#ImageRenderingProperty">image-rendering</a>,
+      <a class="property" href="https://www.w3.org/TR/css-text-3/#letter-spacing-property">letter-spacing</a>,
+      <a class="property" href="https://drafts.fxtf.org/filter-effects/#LightingColorProperty">lighting-color</a>,
+      <a class="property" href="painting.html#MarkerEndProperty">marker-end</a>,
+      <a class="property" href="painting.html#MarkerMidProperty">marker-mid</a>,
+      <a class="property" href="painting.html#MarkerStartProperty">marker-start</a>,
+      <a class="property" href="https://drafts.fxtf.org/css-masking-1/#propdef-mask">mask</a>,
+      <a class="property" href="https://drafts.fxtf.org/css-masking-1/#propdef-mask-type">mask-type</a>,
+      <a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a>,
+      <a class="property" href="render.html#OverflowAndClipProperties">overflow</a>,
+      <a class="property" href="painting.html#PaintOrderProperty">paint-order</a>,
+      <a class="property" href="interact.html#PointerEventsProperty">pointer-events</a>,
+      <a class="property" href="painting.html#ShapeRenderingProperty">shape-rendering</a>,
+      <a class="property" href="pservers.html#StopColorProperty">stop-color</a>,
+      <a class="property" href="pservers.html#StopOpacityProperty">stop-opacity</a>,
+      <a class="property" href="painting.html#StrokeProperty">stroke</a>,
+      <a class="property" href="painting.html#StrokeDasharrayProperty">stroke-dasharray</a>,
+      <a class="property" href="painting.html#StrokeDashoffsetProperty">stroke-dashoffset</a>,
+      <a class="property" href="painting.html#StrokeLinecapProperty">stroke-linecap</a>,
+      <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a>,
+      <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a>,
+      <a class="property" href="painting.html#StrokeOpacityProperty">stroke-opacity</a>,
+      <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a>,
+      <a class="property" href="text.html#TextAnchorProperty">text-anchor</a>,
+      <a class="property" href="text.html#TextDecorationProperties">text-decoration</a>,
+      <a class="property" href="text.html#TextOverflowProperty">text-overflow</a>,
+      <a class="property" href="painting.html#TextRenderingProperty">text-rendering</a>,
+      <a class="property" href="https://drafts.csswg.org/css-transforms/#transform-origin-property">transform-origin</a>,
+      <a class="property" href="https://www.w3.org/TR/css-writing-modes-3/#unicode-bidi">unicode-bidi</a>,
+      <a class="property" href="coords.html#VectorEffectProperty">vector-effect</a>,
+      <a class="property" href="render.html#VisibilityControl">visibility</a>,
+      <a class="property" href="https://www.w3.org/TR/css-text-3/#white-space-property">white-space</a>,
+      <a class="property" href="https://www.w3.org/TR/css-text-3/#word-spacing-property">word-spacing</a>,
+      <a class="property" href="text.html#WritingModeProperty">writing-mode</a>
+    </td>
+    <td>
+      Any element in the SVG namespace.
+    </td>
+  </tr>
+</table>
+
+<p class="note">Note that
+<span class="attr-name">‘cx’</span>,
+<span class="attr-name">‘cy’</span>,
+<span class="attr-name">‘r’</span>,
+<span class="attr-name">‘x’</span>,
+<span class="attr-name">‘y’</span>,
+<span class="attr-name">‘width’</span> and
+<span class="attr-name">‘height’</span> attributes are not
+always presentation attributes.
+For example, the <span class="attr-name">‘<a href="text.html#TextElementXAttribute"><span>x</span></a>’</span> attribute on <span class="element-name">‘<a href="text.html#TextElement"><span>text</span></a>’</span> and <span class="element-name">‘<a href="text.html#TextElement"><span>tspan</span></a>’</span>
+is not a presentation attribute for the <a class="property" href="geometry.html#XProperty">x</a> property,
+and the <span class="attr-name">‘<a href="pservers.html#RadialGradientElementRAttribute"><span>r</span></a>’</span> attribute on a <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span>
+is not a presentation attribute for the <a class="property" href="geometry.html#RProperty">r</a> property.
+</p>
+
+<!--
+<p>The following table lists the presentation attributes whose
+names are different from their corresponding property.  All
+other presentation attributes have names that do match
+their property.</p>
+
+<table class='vert' style='font-size: 90%'>
+  <tr><th>Property</th><th>Element</th><th>Presentation attribute name</th></tr>
+  <tr><td><a>'transform'</a></td><td><a>'linearGradient'</a> and <a>'radialGradient'</a></td><td><span class='attr-name'>'gradientTransform'</span></td></tr>
+  <tr><td><a>'transform'</a></td><td><a>'pattern'</a></td><td><span class='attr-name'>'patternTransform'</span></td></tr>
+</table>
+-->
+
+<p class="note">In the future, any new properties that apply
+to SVG content will not gain presentation attributes.  Therefore,
+authors are suggested to use styling properties, either through
+inline <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span> properties or style sheets,
+rather than presentation attributes, for styling SVG content.</p>
+
+<p>Animation of presentation attributes is equivalent to
+animating the corresponding property.</p>
+
+<h2 id="RequiredProperties" class="heading">6.7. Required properties<a class="self-link" href="#RequiredProperties"></a></h2>
+
+<p>The following properties must be supported by all SVG user agents:</p>
+
+<ul>
+  <li>all properties defined in this specification</li>
+
+  <li>the <a class="property" href="render.html#VisibilityControl">display</a>, <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> and <a class="property" href="render.html#VisibilityControl">visibility</a> properties
+    [<a href="refs.html#ref-css2">CSS2</a>]</li>
+
+  <li>the <a class="property" href="https://www.w3.org/TR/css-ui-3/#cursor">cursor</a> and <a class="property" href="text.html#TextOverflowProperty">text-overflow</a> property
+    [<a href="refs.html#ref-css-overflow-3">css-overflow-3</a>]</li>
+
+  <li>the <a class="property" href="https://drafts.fxtf.org/css-masking-1/#the-clip-path">clip-path</a>, <a class="property" href="https://drafts.fxtf.org/css-masking-1/#the-clip-rule">clip-rule</a> and
+    <a class="property" href="https://drafts.fxtf.org/css-masking-1/#propdef-mask">mask</a> properties
+    [<a href="refs.html#ref-css-masking-1">css-masking-1</a>]</li>
+
+  <li>the <a class="property" href="painting.html#ColorProperty">color</a> and <a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a> properties
+    [<a href="refs.html#ref-css-color-3">css-color-3</a>]</li>
+
+  <li>the <a class="property" href="https://drafts.fxtf.org/filter-effects/#ColorInterpolationFiltersProperty">color-interpolation-filters</a>, <a class="property" href="https://drafts.fxtf.org/filter-effects/#FilterProperty">filter</a>,
+    <a class="property" href="https://drafts.fxtf.org/filter-effects/#FloodColorProperty">flood-color</a>, <a class="property" href="https://drafts.fxtf.org/filter-effects/#FloodOpacityProperty">flood-opacity</a>
+    and <a class="property" href="https://drafts.fxtf.org/filter-effects/#LightingColorProperty">lighting-color</a> properties
+    [<a href="refs.html#ref-filter-effects-1">filter-effects-1</a>]</li>
+
+  <li>the <a class="property" href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#isolation">isolation</a> property
+    [<a href="refs.html#ref-compositing-1">compositing-1</a>]</li>
+
+  <li>the <a class="property" href="coords.html#TransformProperty">transform</a>, <a class="property" href="https://drafts.csswg.org/css-transforms/#transform-box">transform-box</a> and <a class="property" href="https://drafts.csswg.org/css-transforms/#transform-origin-property">transform-origin</a> properties
+    [<a href="refs.html#ref-css-transforms-1">css-transforms-1</a>]</li>
+
+  <li>the <a class="property" href="https://www.w3.org/TR/css-text-3/#letter-spacing-property">letter-spacing</a>, <a class="property" href="https://www.w3.org/TR/css-text-3/#text-align-property">text-align</a>,
+    <a class="property" href="https://www.w3.org/TR/css-text-3/#text-align-last-property">text-align-last</a>, <a class="property" href="https://www.w3.org/TR/css-text-3/#text-indent-property">text-indent</a>
+    and <a class="property" href="https://www.w3.org/TR/css-text-3/#word-spacing-property">word-spacing</a> properties
+    [<a href="refs.html#ref-css-text-3">css-text-3</a>]</li>
+
+  <li>the <a class="property" href="https://www.w3.org/TR/css-text-3/#white-space-property">white-space</a> property
+    [<a href="refs.html#ref-css-text-4">css-text-4</a>]</li>
+
+  <li>the <a class="property" href="https://drafts.csswg.org/css-inline/#transverse-alignment">vertical-align</a>, <a class="property" href="text.html#DominantBaselineProperty">dominant-baseline</a>,
+    <a class="property" href="text.html#AlignmentBaselineProperty">alignment-baseline</a>, and <a class="property" href="text.html#BaselineShiftProperty">baseline-shift</a> properties
+    [<a href="refs.html#ref-css-inline-3">css-inline-3</a>]</li>
+
+  <li>the <a class="property" href="text.html#DirectionProperty">direction</a>, <a class="property" href="https://www.w3.org/TR/css3-writing-modes/#text-orientation">text-orientation</a> and
+    <a class="property" href="text.html#WritingModeProperty">writing-mode</a> properties
+    [<a href="refs.html#ref-css-writing-modes-3">css-writing-modes-3</a>]</li>
+
+  <li>the <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-prop">font</a>, <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-family-prop">font-family</a>, <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-feature-settings-prop">font-feature-settings</a>,
+    <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-kerning-prop">font-kerning</a>, <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-size-prop">font-size</a>, <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-size-adjust-prop">font-size-adjust</a>,
+    <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-stretch-prop">font-stretch</a>, <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-style-prop">font-style</a>, <a class="property" href="https://www.w3.org/TR/css-fonts-3/#propdef-font-variant">font-variant</a> (along with its subproperties)
+    and <a class="property" href="https://www.w3.org/TR/css-fonts-3/#font-weight-prop">font-weight</a> properties
+    [<a href="refs.html#ref-css-fonts-3">css-fonts-3</a>]</li>
+
+  <li>the <a class="property" href="text.html#TextDecorationProperties">text-decoration</a>, <a class="property" href="text.html#TextDecorationProperties">text-decoration-line</a>, <a class="property" href="text.html#TextDecorationProperties">text-decoration-style</a>
+    and <a class="property" href="text.html#TextDecorationProperties">text-decoration-color</a> properties
+    [<a href="refs.html#ref-css-text-decor-3">css-text-decor-3</a>]</li>
+
+</ul>
+
+
+<h2 id="UAStyleSheet" class="heading">6.8. User agent style sheet<a class="self-link" href="#UAStyleSheet"></a></h2>
+
+<p>The following <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html#cascade">user
+agent style sheet</a> must be applied in all SVG user agents.</p>
+
+<pre>
+@namespace url(http://www.w3.org/2000/svg);
+@namespace xml url(http://www.w3.org/XML/1998/namespace);
+
+svg:not(:root), image, marker, pattern, symbol { overflow: hidden; }
+
+*:not(svg),
+*:not(foreignObject) > svg {
+  transform-origin: 0 0;
+}
+
+*[xml|space=preserve] {
+  white-space-collapse: preserve-spaces;
+}
+
+defs,
+clipPath, mask, marker,
+desc, title, metadata,
+pattern, linearGradient, radialGradient,
+script, style,
+symbol {
+  display: none !important;
+}
+:host(use) > symbol {
+  display: inline !important;
+}
+:link, :visited {
+  cursor: pointer;
+}
+</pre>
+
+<p>
+  In addition,
+  all interactive user agents are required
+  to apply distinctive styles to
+  the <code>:focus</code> pseudo-class
+  (normally using the <code>outline</code> property)
+  and the <code>::selection</code> pseudo-element
+  (using an appropriate highlighting technique,
+    such as redrawing the selected glyphs with inverse colors).
+</p>
+
+<p class="note">
+An <code>!important</code> rule in a user agent stylesheet
+<a href="https://www.w3.org/TR/css-cascade-4/#importance">over-rides all user and author styles</a>
+[<a href="refs.html#ref-css-cascade-4">css-cascade-4</a>].
+The display value for <a href="render.html#TermNeverRenderedElement">never-rendered elements</a>
+and for <span class="element-name">‘<a href="struct.html#SymbolElement"><span>symbol</span></a>’</span> elements
+can therefore not be changed.
+A symbol must only be rendered if it is the direct child
+of a shadow root whose host is a <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> element
+(and must always be rendered if the host <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> element is rendered).
+The other elements, and their child content, are never rendered directly.
+</p>
+
+<p class="note">CSS Transforms defines that the initial value for
+<a class="property" href="https://drafts.csswg.org/css-transforms/#transform-origin-property">transform-origin</a> is <span class="prop-value" style="white-space: nowrap">50% 50%</span>.
+Since elements in SVG must, by default, transform around their origin at (0, 0),
+<a class="property" href="https://drafts.csswg.org/css-transforms/#transform-origin-property">transform-origin</a> is overridden and set to a default value of
+<span class="prop-value" style="white-space: nowrap">0 0</span> for all SVG elements
+(except for root <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span> elements and <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span> elements that are the child of a
+<span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span> element or an element in a non-SVG namespace; these elements
+must transform around their center).
+[<a href="refs.html#ref-css-transforms-1">css-transforms-1</a>]</p>
+
+<div class="note">
+  <p>The OpenType specification
+    <a href="https://www.microsoft.com/typography/otspec/svg.htm">requires an additional user agent style sheet</a>
+    to be applied when processing
+    [<a href="refs.html#ref-opentype">OPENTYPE</a>].
+    It is as follows:
+  </p>
+
+  <pre style="background-color: #eee; padding: 0.5em">@namespace svg url(http://www.w3.org/2000/svg);
+
+svg|text, svg|foreignObject {
+  display: none !important;
+}
+
+:root {
+  fill: context-fill;
+  fill-opacity: context-fill-opacity;
+  stroke: context-stroke;
+  stroke-opacity: context-stroke-opacity;
+  stroke-width: context-value;
+  stroke-dasharray: context-value;
+  stroke-dashoffset: context-value;
+}</pre>
+
+  <p>The <a href="painting.html#context-paint">context-fill</a> and <a href="painting.html#context-paint">context-stroke</a> keywords
+    are as defined in this specification,
+    where the <a href="painting.html#TermContextElement">context element</a> for a font glyph
+    is the corresponding <a href="text.html#TermTextContentElement">text content element</a>.
+    The other keywords are as defined in the OpenType specification,
+    and ensure that the style values from the <a href="text.html#TermTextContentElement">text content element</a>
+    are propagated to the font glyphs,
+    with appropriate adjustments for the change in the coordinate system
+    [<a href="refs.html#ref-opentype">OPENTYPE</a>].
+  </p>
+</div>
+
+<h2 id="RequiredCSSFeatures" class="heading">6.9. Required CSS features<a class="self-link" href="#RequiredCSSFeatures"></a></h2>
+
+<p>Besides the features described above, the following CSS features must be
+also supported in SVG user agents:</p>
+
+<ul>
+  <li>in XML documents, external CSS style sheets using the
+  <a href="https://www.w3.org/TR/xml-stylesheet">&lt;?xml-stylesheet?></a>
+  processing instruction [<a href="refs.html#ref-xml-stylesheet">xml-stylesheet</a>]</li>
+
+  <li><a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/media.html#at-media-rule">@media</a>,
+  <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html#at-import">@import</a>
+  and <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/syndata.html#charset">@charset</a>
+  rules within style sheets, as defined in CSS 2.1</li>
+
+  <li><a href="https://www.w3.org/TR/2011/WD-css3-fonts-20111004/#font-face-rule">@font-face</a> rules
+  within style sheets [<a href="refs.html#ref-css-fonts-3">css-fonts-3</a>]</li>
+
+  <li>all pseudo-classes defined in CSS 2.1 (including :hover, :link, :active, :visited, :focus, :first-child and :lang)</li>
+
+  <li>the ::first-letter and ::first-line pseudo-elements defined in CSS 2.1 (on <span class="element-name">‘<a href="text.html#TextElement"><span>text</span></a>’</span> elements)</li>
+</ul>
+
+
+
+<h2 id="DOMInterfaces" class="heading">6.10. DOM interfaces<a class="self-link" href="#DOMInterfaces"></a></h2>
+
+<h3 id="InterfaceSVGStyleElement" class="heading">6.10.1. Interface SVGStyleElement<a class="self-link" href="#InterfaceSVGStyleElement"></a></h3>
+
+
+
+<p>An <a class="idlinterface" href="styling.html#InterfaceSVGStyleElement">SVGStyleElement</a> object represents a <span class="element-name">‘<a href="styling.html#StyleElement"><span>style</span></a>’</span> element
+in the DOM.</p>
+
+<pre class="idl">[<a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=Window]
+interface <b>SVGStyleElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+  attribute DOMString <a href="styling.html#__svg__SVGStyleElement__type">type</a>;
+  attribute DOMString <a href="styling.html#__svg__SVGStyleElement__media">media</a>;
+  attribute DOMString <a href="styling.html#__svg__SVGStyleElement__title">title</a>;
+  attribute boolean <a href="styling.html#__svg__SVGStyleElement__disabled">disabled</a>;
+};
+
+<a class="idlinterface" href="styling.html#InterfaceSVGStyleElement">SVGStyleElement</a> includes <a class="idlinterface" href="https://www.w3.org/TR/cssom-1/#the-linkstyle-interface">LinkStyle</a>;</pre>
+
+<p>The <b id="__svg__SVGStyleElement__type">type</b>,
+<b id="__svg__SVGStyleElement__media">media</b> and
+<b id="__svg__SVGStyleElement__title">title</b> IDL attributes
+<a href="types.html#TermReflect">reflect</a> the <span class="attr-name">‘<a href="styling.html#StyleElementTypeAttribute"><span>type</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#StyleElementMediaAttribute"><span>media</span></a>’</span> and <span class="attr-name">‘<a href="styling.html#StyleElementTitleAttribute"><span>title</span></a>’</span>
+content attributes, respectively.</p>
+
+
+
+<script src="//www.w3.org/scripts/TR/2016/fixup.js"></script><script src="style/expanders.js" type="text/javascript"></script></body>
+</html>

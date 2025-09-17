@@ -1,0 +1,3685 @@
+<!DOCTYPE html>
+
+<!--
+  Scalable Vector Graphics (SVG) 2
+  Chapter 13: Painting: Filling, Stroking and Marker Symbols
+
+  Note: This document is generated from ../master/painting.html.
+  Run "make" from the root of the repository to regenerate it.
+  -->
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="UTF-8"/>
+  <title>Painting: Filling, Stroking and Marker Symbols — SVG 2</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+  <!-- Style sheets for local dev. Will be standardized in processing.
+  Add attribute data-keep="" to any extra stylesheet link you do not want removed
+  (or use <style>), and include it before here. -->
+  
+  
+<link rel="stylesheet" title="Default" href="style/svg.css" type="text/css" media="screen"/><link rel="alternate stylesheet" title="Only annotations for publication" href="style/default_no_maturity.css" type="text/css" media="screen"/><link rel="alternate stylesheet" title="No issues/annotations" href="style/default_no_issues.css" type="text/css" media="screen"/><link rel="stylesheet" href="//www.w3.org/StyleSheets/TR/2016/W3C-ED" type="text/css" media="screen"/><script src="style/link-fixup.js"></script><script data-script-mathjax="" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_SVG"></script></head>
+<body class="chapter-painting">
+
+<h1>Chapter 13: Painting: Filling, Stroking and Marker Symbols</h1><nav id="toc"><div class="header {{side}}"><a href="./">Overview</a> · <a href="embedded.html">Previous</a> · <a href="pservers.html">Next</a> · <a href="eltindex.html">Elements</a> · <a href="attindex.html">Attributes</a> · <a href="propidx.html">Properties</a></div><h2 id="Contents" class="contents">Contents</h2><ol class="toc"><li><ol class="toc"><li><a href="painting.html#Introduction"><span class="secno">13.1.</span> Introduction</a><ol class="toc"><li><a href="painting.html#Definitions"><span class="secno">13.1.1.</span> Definitions</a></li></ol></li><li><a href="painting.html#SpecifyingPaint"><span class="secno">13.2.</span> Specifying paint</a></li><li><a href="painting.html#ColorProperty"><span class="secno">13.3.</span> The effect of the ‘<span class="property">color</span>’ property</a></li><li><a href="painting.html#FillProperties"><span class="secno">13.4.</span> Fill properties</a><ol class="toc"><li><a href="painting.html#SpecifyingFillPaint"><span class="secno">13.4.1.</span> Specifying fill paint: the ‘<span class="property">fill</span>’ property</a></li><li><a href="painting.html#WindingRule"><span class="secno">13.4.2.</span> Winding rule: the ‘<span class="property">fill-rule</span>’
+property</a></li><li><a href="painting.html#FillOpacity"><span class="secno">13.4.3.</span> Fill paint opacity: the ‘<span class="property">fill-opacity</span>’
+property</a></li></ol></li><li><a href="painting.html#StrokeProperties"><span class="secno">13.5.</span> Stroke properties</a><ol class="toc"><li><a href="painting.html#SpecifyingStrokePaint"><span class="secno">13.5.1.</span> Specifying stroke paint: the ‘<span class="property">stroke</span>’
+property</a></li><li><a href="painting.html#StrokeOpacity"><span class="secno">13.5.2.</span> Stroke paint opacity: the ‘<span class="property">stroke-opacity</span>’
+property</a></li><li><a href="painting.html#StrokeWidth"><span class="secno">13.5.3.</span> Stroke width: the ‘<span class="property">stroke-width</span>’
+property</a></li><li><a href="painting.html#LineCaps"><span class="secno">13.5.4.</span> Drawing caps at the ends of strokes: the ‘<span class="property">stroke-linecap</span>’
+property</a></li><li><a href="painting.html#LineJoin"><span class="secno">13.5.5.</span> Controlling line joins: the ‘<span class="property">stroke-linejoin</span>’
+and ‘<span class="property">stroke-miterlimit</span>’ properties</a></li><li><a href="painting.html#StrokeDashing"><span class="secno">13.5.6.</span> Dashing strokes: the ‘<span class="property">stroke-dasharray</span>’ and
+‘<span class="property">stroke-dashoffset</span>’ properties</a></li><li><a href="painting.html#StrokeShape"><span class="secno">13.5.7.</span> Computing the shape of the stroke</a></li><li><a href="painting.html#CurvatureCalculation"><span class="secno">13.5.8.</span> Computing the circles for the <span class="prop-value">arcs</span>
+'stroke-linejoin'</a></li><li><a href="painting.html#ArcsLinejoinFallback"><span class="secno">13.5.9.</span> Adjusting the circles for the <span class="prop-value">arcs</span>
+'stroke-linejoin' when the initial circles do not intersect</a></li></ol></li><li><a href="painting.html#PaintingVectorEffects"><span class="secno">13.6.</span> Vector effects</a></li><li><a href="painting.html#Markers"><span class="secno">13.7.</span> Markers</a><ol class="toc"><li><a href="painting.html#MarkerElement"><span class="secno">13.7.1.</span> The <span class="element-name">‘marker’</span> element</a></li><li><a href="painting.html#VertexMarkerProperties"><span class="secno">13.7.2.</span> Vertex markers: the ‘<span class="property">marker-start</span>’,
+‘<span class="property">marker-mid</span>’ and ‘<span class="property">marker-end</span>’
+properties</a></li><li><a href="painting.html#MarkerShorthand"><span class="secno">13.7.3.</span> Marker shorthand: the ‘<span class="property">marker</span>’
+property</a></li><li><a href="painting.html#RenderingMarkers"><span class="secno">13.7.4.</span> Rendering markers</a></li></ol></li><li><a href="painting.html#PaintOrder"><span class="secno">13.8.</span> Controlling paint operation order: the
+‘<span class="property">paint-order</span>’ property</a></li><li><a href="painting.html#ColorInterpolation"><span class="secno">13.9.</span> Color space for interpolation: the
+‘<span class="property">color-interpolation</span>’ property</a></li><li><a href="painting.html#RenderingHints"><span class="secno">13.10.</span> Rendering hints</a><ol class="toc"><li><a href="painting.html#ShapeRendering"><span class="secno">13.10.1.</span> The ‘<span class="property">shape-rendering</span>’ property</a></li><li><a href="painting.html#TextRendering"><span class="secno">13.10.2.</span> The ‘<span class="property">text-rendering</span>’ property</a></li><li><a href="painting.html#ImageRendering"><span class="secno">13.10.3.</span> The ‘<span class="property">image-rendering</span>’ property</a></li></ol></li><li><a href="painting.html#WillChange"><span class="secno">13.11.</span> The effect of the
+‘<span class="property">will-change</span>’ property</a></li><li><a href="painting.html#DOMInterfaces"><span class="secno">13.12.</span> DOM interfaces</a><ol class="toc"><li><a href="painting.html#InterfaceSVGMarkerElement"><span class="secno">13.12.1.</span> Interface SVGMarkerElement</a></li></ol></li></ol></li></ol></nav>
+
+<div class="ready-for-wider-review">
+<h2 id="Introduction" class="heading">13.1. Introduction<a class="self-link" href="#Introduction"></a></h2>
+
+<h3 id="Definitions" class="heading">13.1.1. Definitions<a class="self-link" href="#Definitions"></a></h3>
+<dl class="definitions">
+
+  <dt><dfn id="TermFill" data-dfn-type="dfn" data-export="">fill</dfn></dt>
+  <dd>The operation of <a href="painting.html#TermPaint">painting</a> the interior of a
+  <a href="shapes.html#TermShapeElement">shape</a> or the interior of the
+  character glyphs in a text string.</dd>
+
+  <dt><dfn id="TermStroke" data-dfn-type="dfn" data-export="">stroke</dfn></dt>
+  <dd>The operation of <a href="painting.html#TermPaint">painting</a> the outline
+  of a <a href="shapes.html#TermShapeElement">shape</a> or the outline of
+  character glyphs in a text string.</dd>
+
+</dl>
+
+<p>Graphical elements that define a shape – <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> elements, <a href="shapes.html#TermBasicShapeElement">basic shapes</a>,
+and <a href="text.html#TermTextContentElement">text content elements</a> – are rendered by being <strong>filled</strong>,
+which is painting the interior of the object, and <strong>stroked</strong>, which is
+painting along the outline of the object.  Filling and stroking are both
+<strong>painting</strong> operations.  SVG 2 supports a number of
+different paints that the fill and stroke of a graphical element can be painted with:</p>
+
+<ul>
+  <li>a single color,</li>
+  <li>a gradient (linear or radial)</li>
+  <li>a pattern (vector or raster, possibly tiled),</li>
+  <li>other images as specified using CSS Image Value syntax [<a href="refs.html#ref-css-images-3">css-images-3</a>].</li>
+</ul>
+
+<p>The paint to use for filling and stroking an element is specified using the
+<a class="property" href="painting.html#FillProperty">fill</a> and <a class="property" href="painting.html#StrokeProperty">stroke</a> properties.  The following section describes
+the different values that can be used for these properties.</p>
+
+<p>Other properties, such as <a class="property" href="painting.html#FillOpacityProperty">fill-opacity</a> and <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a>,
+also have an effect on the way fill and stroke paint is applied to the
+canvas.  The <a href="#FillProperties">Fill properties</a> and <a href="#StrokeProperties">Stroke properties</a>
+sections below describe these properties.</p>
+
+<p>Some graphics elements – <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> elements and <a href="shapes.html#TermBasicShapeElement">basic shapes</a> – can also have <strong>marker symbols</strong>
+drawn at their vertices or at other positions along the path that
+they describe.  The <a href="#Markers">Markers</a> section below describes
+how markers can be defined and used.</p>
+
+<p class="annotation">SVG 2 adds markers on shapes. Resolved at
+<a href="http://www.w3.org/2013/06/03-svg-minutes.html#item03">Tokyo F2F</a>.</p>
+
+<!--
+<p>SVG uses the general notion of a <strong>paint server</strong>. Paint
+servers are specified using a <a href="linking.html#URLReference">URL reference</a>
+on a <a>'fill'</a> or <a>'stroke'</a> property.
+<a href="pservers.html">Gradients and patterns</a> are just specific types of
+paint servers.</p>
+-->
+
+<h2 id="SpecifyingPaint" class="heading">13.2. Specifying paint<a class="self-link" href="#SpecifyingPaint"></a></h2>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Add new paint values for referencing current fill paint, stroke paint, etc.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item02">We will add new paint values currentFillPaint, currentStrokePaint etc. to SVG 2</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>Among other things, to provide an easy way to match marker color to stroke color.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Chris (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3094">ACTION-3094</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Addition:</th>
+      <td>Allow multiple paints in fill and stroke.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2013/06/03-svg-minutes.html#item10">We will allow multiple paints in the fill and stroke properties in SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>Useful for creating cross hatchings, putting a partially transparent pattern on top of a solid fill, etc.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Tav (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3500">ACTION-3500</a>)</td>
+    </tr>
+    <tr>
+      <th>Deferred:</th>
+      <td>This was dropped for SVG 2, but will be added later in sync with
+        <a href="https://drafts.fxtf.org/paint/">CSS Fill and Stroke Level 3</a>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<p>The <a class="property" href="painting.html#FillProperty">fill</a> and <a class="property" href="painting.html#StrokeProperty">stroke</a> properties, defined below, are used to
+specify the <dfn id="TermPaint" data-dfn-type="dfn" data-export="">paint</dfn> used to render the interior of and the
+stroke around shapes and text. A paint specification describes a way of putting
+color values on to the canvas and is composed of one or more paint layers.
+Four types of paints within these paint layers are supported:
+<a href="https://www.w3.org/TR/css3-values/#colors">solid colors</a>,
+<a href="pservers.html#Gradients">gradients</a>, and
+<a href="pservers.html#Patterns">patterns</a>.</p>
+
+<p>A <a href="painting.html#SpecifyingPaint">&lt;paint></a> value is defined as follows:</p>
+<p class="definition prod">
+<dfn id="DataTypePaint" data-dfn-type="type" data-export="">&lt;paint></dfn>
+= none
+| <a href="https://www.w3.org/TR/css3-values/#colors">&lt;color></a>
+| <a href="https://www.w3.org/TR/css3-values/#url-value">&lt;url></a> [none | <a href="https://www.w3.org/TR/css3-values/#colors">&lt;color></a>]?
+| context-fill | context-stroke
+</p>
+
+<p>With the possible values:</p>
+<dl>
+  <dt>none</dt>
+  <dd>No paint is applied in this layer.</dd>
+
+  <dt><a href="https://www.w3.org/TR/css3-values/#url-value">&lt;url></a> [none | <a href="https://www.w3.org/TR/css3-values/#colors">&lt;color></a>]?</dt>
+  <dd>A URL reference to a <dfn id="TermPaintServerElement" data-dfn-type="dfn" data-export="">paint server element</dfn>,
+  which is an element that defines a <a href="pservers.html">paint server</a>:
+  <span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span>, <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> and <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span>, optionally followed by a fall-back
+  value that is used if the paint server reference cannot be resolved.</dd>
+
+  <dt><a href="https://www.w3.org/TR/css3-values/#colors">&lt;color></a></dt>
+  <dd>A solid color paint.</dd>
+
+  <dt>context-fill</dt>
+  <dd>Use the paint value of <a class="property" href="painting.html#FillProperty">fill</a> from a <a href="painting.html#TermContextElement">context element</a>.</dd>
+
+  <dt>context-stroke</dt>
+  <dd>Use the paint value of <a class="property" href="painting.html#StrokeProperty">stroke</a> from a <a href="painting.html#TermContextElement">context element</a>.</dd>
+</dl>
+
+<p>A <a href="painting.html#SpecifyingPaint">&lt;paint></a> allows a paint server reference, to be optionally followed
+by a <a href="https://www.w3.org/TR/css3-values/#colors">&lt;color></a> or the keyword <span class="prop-value">none</span>.
+When this optional value is given, the <a href="https://www.w3.org/TR/css3-values/#colors">&lt;color></a> value or the value
+<span class="prop-value">none</span> is a fallback value to use if the paint
+server reference in the layer is invalid (due to pointing to an element that
+does not exist or which is not a valid paint server).</p>
+
+<p class="note">Note that this is slightly different from CSS background syntax, where
+a background image and color specified in the final layer of a <a class="property" href="https://drafts.csswg.org/css-backgrounds-3/#background">background</a>
+value will result in both the image and color being rendered.</p>
+
+<p>If a paint server reference in a <a href="painting.html#SpecifyingPaint">&lt;paint></a> is invalid, and no
+fall-back value is given, no paint is rendered for that layer.</p>
+
+<p class="annotation">This is changed from SVG 1.1 behavior where the document
+is in error if a paint server reference is invalid and there is no fallback
+color specified.</p>
+
+<div class="example">
+  <pre>
+&lt;rect width="100" height="100" fill="url(#MyHatch) powderblue">
+  </pre>
+  <div class="figure">
+    <img alt="An example with a fallback solid paint fill." src="images/painting/fallback_paint.svg"/>
+    <p class="caption">The left rectangle shows the expected fill if MyHatch is defined.
+    The right rectangle shows the expected fill if MyHatch is missing.</p>
+  </div>
+</div>
+
+<p>For any <a href="https://www.w3.org/TR/css3-values/#colors">&lt;color></a> value, all color syntaxes
+defined in <a href="https://www.w3.org/TR/css-color-3/#colorunits">CSS Color Module Level 3</a>
+must be supported, including <span class="prop-value">rgb()</span>,
+<span class="prop-value">rgba()</span>,
+<span class="prop-value">hsl()</span>,
+<span class="prop-value">hsla()</span>,
+the <a href="https://www.w3.org/TR/css-color-3/#svg-color">extended color keywords</a> and
+the <span class="prop-value">currentColor</span> value.</p>
+
+<p id="context-paint">The <span class="prop-value">context-fill</span> and <span class="prop-value">context-stroke</span>
+values are a reference to the paint layers generated for the <a class="property" href="painting.html#FillProperty">fill</a> or <a class="property" href="painting.html#StrokeProperty">stroke</a>
+property, respectively, of the <dfn id="TermContextElement" data-dfn-type="dfn" data-export="">context element</dfn>
+of the element being painted.  The context element of an element is defined as follows:</p>
+
+<ul>
+  <li>If the element is within a <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span>, and
+  is being rendered as part of that marker due to being referenced
+  via a <a href="painting.html#TermMarkerProperties">marker property</a>, then the context element
+  is the element referencing that <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span>.</li>
+  <li>If the element is within a sub-tree that is instantiated
+  with a <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> element, then the context element is
+  that <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> element.</li>
+  <li>Otherwise, there is no context element.</li>
+</ul>
+
+<p>If there is no context element and these keywords are used, then no paint is
+applied.
+</p>
+<p>
+When the context paint layers include paint server references, then the
+coordinate space and the bounding box used
+to scale the paint server elements and content are
+those of the <a href="painting.html#TermContextElement">context element</a>.
+In other words, any gradients and patterns referenced with these keywords
+should be continuous from the main shape to the markers,
+or from one element within a <a href="struct.html#TermUseElementShadowTree">use-element shadow tree</a> to another.
+</p>
+
+<p>If the referenced value of <a class="property" href="painting.html#FillProperty">fill</a> or <a class="property" href="painting.html#StrokeProperty">stroke</a> is a
+<span class="prop-value">context-fill</span> and <span class="prop-value">context-stroke</span>
+value, then those contextual referencing is recursive.</p>
+
+<div class="example">
+  <pre>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  &lt;style>
+    path {
+      fill: none;
+      stroke-width: 4px;
+      marker: url(#diamond);
+    }
+  &lt;/style>
+  &lt;path d="M 10,50 v -20 h 40 v -20" stroke="red"/>
+  &lt;path d="M 30,70 v -20 h 40 v -20" stroke="green"/>
+  &lt;path d="M 50,90 v -20 h 40 v -20" stroke="blue"/>
+  &lt;marker id="diamond" markerWidth="12" markerHeight="12" refX="6" refY="6"
+          markerUnits="userSpaceOnUse">
+    &lt;circle cx="6" cy="6" r="3"
+            fill="white" stroke="context-stroke" stroke-width="2"/>
+  &lt;/marker>
+&lt;/svg></pre>
+  <div class="figure">
+    <img alt="An example of the content-stroke keyword used in a marker" src="images/painting/marker-context.svg11.svg" height="200"/>
+    <p class="caption">The marker is defined using a shape whose
+    <a class="property" href="painting.html#StrokeProperty">stroke</a> is set to <span class="prop-value">context-stroke</span>.
+    This causes the marker to take on the color of each <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span>
+    element that uses the marker.</p>
+  </div>
+</div>
+
+
+<h2 id="ColorProperty" class="heading">13.3. The effect of the ‘<span class="property">color</span>’ property<a class="self-link" href="#ColorProperty"></a></h2>
+
+<p class="note">See the CSS Color Module Level 3 specification for the
+definition of <a class="property" href="painting.html#ColorProperty">color</a>.
+[<a href="refs.html#ref-css-color-3">css-color-3</a>]</p>
+
+<p>The <a class="property" href="painting.html#ColorProperty">color</a> property is used to provide a potential indirect value,
+<span class="prop-value">currentColor</span>, for the <a class="property" href="painting.html#FillProperty">fill</a>,
+<a class="property" href="painting.html#StrokeProperty">stroke</a>, <a class="property" href="pservers.html#StopColorProperty">stop-color</a>, <a class="property" href="https://drafts.fxtf.org/filter-effects/#FloodColorProperty">flood-color</a> and
+<a class="property" href="https://drafts.fxtf.org/filter-effects/#LightingColorProperty">lighting-color</a> properties.  The property has no other effect
+on SVG elements.</p>
+
+<div class="example">
+  <p>The following example shows how the inherited value of the
+  <a class="property" href="painting.html#ColorProperty">color</a> property from an HTML document can be used to
+  set the color of SVG text in an inline SVG fragment.</p>
+
+  <pre>
+&lt;!DOCTYPE html>
+&lt;style>
+body { color: #468; font: 16px sans-serif }
+svg { border: 1px solid #888; background-color: #eee }
+&lt;/style>
+&lt;p>Please see the diagram below:&lt;/p>
+&lt;svg width="200" height="100">
+  &lt;g fill="currentColor">
+    &lt;text x="70" y="55" text-anchor="end">START&lt;/text>
+    &lt;text x="130" y="55">STOP&lt;/text>
+    &lt;path d="M 85,45 h 25 v -5 l 10,10 -10,10 v -5 h -25 z"/>
+  &lt;/g>
+&lt;/svg>
+</pre>
+
+  <div class="figure">
+    <div class="bordered" style="color: #468; font: 16px sans-serif; display: inline-block; text-align: left; padding: 32px 128px 32px 32px">
+      <p style="margin-top: 0; margin-bottom: 1em">Please see the diagram below:</p>
+      <svg xmlns="http://www.w3.org/2000/svg" width="200" height="100" style="border: 1px solid #888; background-color: #eee">
+        <g fill="currentColor">
+          <text x="70" y="55" text-anchor="end">START</text>
+          <text x="130" y="55">STOP</text>
+          <path d="M 85,45 h 25 v -5 l 10,10 -10,10 v -5 h -25 z"/>
+        </g>
+      </svg>
+    </div>
+    <p class="caption">The text and arrow in the SVG fragment are filled
+    with the same color as the inherited <a class="property" href="painting.html#ColorProperty">color</a> property.</p>
+  </div>
+</div>
+
+<h2 id="FillProperties" class="heading">13.4. Fill properties<a class="self-link" href="#FillProperties"></a></h2>
+
+<h3 id="SpecifyingFillPaint" class="heading">13.4.1. Specifying fill paint: the ‘<span class="property">fill</span>’ property<a class="self-link" href="#SpecifyingFillPaint"></a></h3>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="FillProperty" data-dfn-type="property" data-export="">fill</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a href="painting.html#SpecifyingPaint">&lt;paint></a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>black</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a> and <a href="text.html#TermTextContentElement">text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified, but with <a href="https://www.w3.org/TR/css3-values/#colors">&lt;color></a> values computed and
+    <a href="https://www.w3.org/TR/css3-values/#url-value">&lt;url></a> values made absolute</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p>The <a class="property" href="painting.html#FillProperty">fill</a> property paints the interior of the given graphical
+element. The area to be painted consists of any areas inside the outline
+of the shape. To determine the inside of the shape, all subpaths are
+considered, and the interior is determined according to the rules
+associated with the current value of the <a class="property" href="painting.html#FillRuleProperty">fill-rule</a> property.
+The zero-width geometric outline of a shape is included in the area to
+be painted.</p>
+
+<p>The fill operation fills <a href="paths.html#TermClosedSubpath">open subpaths</a> by performing the fill
+operation as if an additional "closepath" command were added to the
+path to connect the last point of the subpath with the first point of
+the subpath. Thus, fill operations apply to both <a href="paths.html#TermClosedSubpath">open subpaths</a> within
+<span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> elements (i.e., subpaths without a closepath command) and
+<span class="element-name">‘<a href="shapes.html#PolylineElement"><span>polyline</span></a>’</span> elements.</p>
+
+<h3 id="WindingRule" class="heading">13.4.2. Winding rule: the ‘<span class="property">fill-rule</span>’
+property<a class="self-link" href="#WindingRule"></a></h3>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="FillRuleProperty" data-dfn-type="property" data-export="">fill-rule</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>nonzero | evenodd</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>nonzero</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a> and <a href="text.html#TermTextContentElement">text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>discrete</td>
+  </tr>
+</table>
+
+<p>The <a class="property" href="painting.html#FillRuleProperty">fill-rule</a> property indicates the algorithm (or
+<em>winding rule</em>) which is to
+be used to determine what parts of the canvas are included inside the
+shape. For a simple, non-intersecting path, it is intuitively clear
+what region lies "inside"; however, for a more complex path, such as a
+path that intersects itself or where one subpath encloses another, the
+interpretation of "inside" is not so obvious.</p>
+
+<p>The <a class="property" href="painting.html#FillRuleProperty">fill-rule</a> property provides two options for how the
+inside of a shape is determined:</p>
+
+<dl>
+  <dt><span class="prop-value">nonzero</span></dt>
+  <dd>
+    <p>This rule determines the "insideness" of a point on the
+    canvas by drawing a ray from that point to infinity in any
+    direction and then examining the places where a segment of
+    the shape crosses the ray. Starting with a count of zero,
+    add one each time a path segment crosses the ray from left
+    to right and subtract one each time a path segment crosses
+    the ray from right to left. After counting the crossings,
+    if the result is zero then the point is <em>outside</em>
+    the path. Otherwise, it is <em>inside</em>. The following
+    drawing illustrates the <span class="prop-value">nonzero</span>
+    rule:</p>
+
+    <div class="figure">
+      <img class="bordered" src="images/painting/fillrule-nonzero.svg" alt="Image showing nonzero fill rule"/>
+      <p class="caption">The effect of a nonzero fill rule on paths with self-intersections
+      and enclosed subpaths.</p>
+    </div>
+  </dd>
+
+  <dt><span class="prop-value">evenodd</span></dt>
+  <dd>
+    <p>This rule determines the "insideness" of a point on the
+    canvas by drawing a ray from that point to infinity in any
+    direction and counting the number of path segments from the
+    given shape that the ray crosses. If this number is odd,
+    the point is inside; if even, the point is outside. The
+    following drawing illustrates the <span class="prop-value">evenodd</span>
+    rule:</p>
+
+    <div class="figure">
+      <img class="bordered" src="images/painting/fillrule-evenodd.svg" alt="Image showing evenodd fill rule"/>
+      <p class="caption">The effect of an evenodd fill rule on paths with self-intersections
+      and enclosed subpaths.</p>
+    </div>
+  </dd>
+</dl>
+
+<p class="note">The above descriptions do not specify what to do if a path
+segment coincides with or is tangent to the ray. Since any ray will do,
+one may simply choose a different ray that does not have such problem
+intersections.</p>
+
+<h3 id="FillOpacity" class="heading">13.4.3. Fill paint opacity: the ‘<span class="property">fill-opacity</span>’
+property<a class="self-link" href="#FillOpacity"></a></h3>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="FillOpacityProperty" data-dfn-type="property" data-export="">fill-opacity</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>&lt;‘<a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a>’></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>1</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a> and <a href="text.html#TermTextContentElement">text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>the specified value converted to a number, clamped to the range [0,1]</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p><a class="property" href="painting.html#FillOpacityProperty">fill-opacity</a> specifies the opacity of the painting operation used
+to paint the fill the current object. (See
+<a href="render.html#PaintingShapesAndText">Painting shapes and text</a>).</p>
+
+<dl>
+  <dt><span class="prop-value">&lt;number></span></dt>
+  <dd>
+    The opacity of the fill. Any values outside the
+    range 0 (fully transparent) to 1 (fully opaque) must be
+    clamped to this range.
+  </dd>
+  <dt><span class="prop-value">&lt;percentage></span></dt>
+  <dd>
+    The opacity of the fill expressed as a percentage
+    of the range 0 to 1.
+  </dd>
+</dl>
+
+<p class="note">See also the <a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a> property, which
+specifies group opacity.</p>
+
+<h2 id="StrokeProperties" class="heading">13.5. Stroke properties<a class="self-link" href="#StrokeProperties"></a></h2>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support non-scaling stroke.</td>
+    </tr>
+    <tr>
+      <th>Resolutions:</th>
+      <td><a href="http://www.w3.org/2011/10/28-svg-irc#T17-46-34">SVG 2 will include non-scaling stroke.</a><br/>
+          <a href="http://www.w3.org/2012/02/02-svg-minutes.html#item05">SVG 2 will have the ‘<span class="property">vector-effect</span>’ property.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To support strokes whose width does not change when zooming a page, as common for example in maps.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Chris or Erik (no action)</td>
+    </tr>
+    <tr>
+      <th>Note:</th>
+      <td>Note that this could be part of more generic non-scaling features.</td>
+    </tr>
+  </table>
+</div>
+
+<p>In this section, we define a number of properties that allow the
+author to control different aspects of a stroke, including its paint,
+thickness, use of dashing, and joining and capping of
+path segments.</p>
+
+<p>In all cases, all stroking properties which are affected by
+directionality, such as those having to do with dash patterns, must be
+rendered such that the stroke operation starts at the same point at
+which the graphics element starts. In particular, for <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span>
+elements, the start of the path is the first point of the initial
+"moveto" command.</p>
+
+<p>For stroking properties such as dash patterns whose computations
+are dependent on progress along the outline of the graphics element,
+distance calculations are required to utilize the SVG user agent's
+standard <a href="paths.html#DistanceAlongAPath">Distance along a path</a>
+algorithms.</p>
+
+<p>When stroking is performed using a complex paint server, such as a
+gradient or a pattern, the stroke operation must be identical to the
+result that would have occurred if the geometric shape defined by the
+geometry of the current graphics element and its associated stroking
+properties were converted to an equivalent <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> element and
+then filled using the given paint server.</p>
+
+<h3 id="SpecifyingStrokePaint" class="heading">13.5.1. Specifying stroke paint: the ‘<span class="property">stroke</span>’
+property<a class="self-link" href="#SpecifyingStrokePaint"></a></h3>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="StrokeProperty" data-dfn-type="property" data-export="">stroke</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a href="painting.html#SpecifyingPaint">&lt;paint></a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a> and <a href="text.html#TermTextContentElement">text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified, but with <a href="https://www.w3.org/TR/css3-values/#colors">&lt;color></a> values computed and
+    <a href="https://www.w3.org/TR/css3-values/#url-value">&lt;url></a> values made absolute</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p>The <a class="property" href="painting.html#StrokeProperty">stroke</a> property paints along the outline of the given
+graphical element.</p>
+
+<p class="note">Note that when stroking a <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> element,
+any subpath consisting of a <a href="paths.html#PathDataMovetoCommands">moveto</a>
+but no following line drawing command will not be stroked.
+Any other type of zero-length subpath, such as
+<span class="attr-value">'M 10,10 L 10,10'</span>
+or <span class="attr-value">'M 30,30 Z'</span>
+will also not be stroked if the <a class="property" href="painting.html#StrokeLinecapProperty">stroke-linecap</a> property has a value of
+<span class="prop-value">butt</span>.  See the definition of
+the <a href="painting.html#TermStrokeShape">stroke shape</a> below for the details of computing
+the stroke of a path.</p>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Include a way to specify stroke position.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/28-svg-irc#T18-09-48">SVG 2 shall include a way to specify stroke position.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow a stroke to be inside or outside the path.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3162">ACTION-3162</a>)</td>
+    </tr>
+    <tr>
+      <th>Note:</th>
+      <td>See <a href="http://www.w3.org/Graphics/SVG/WG/wiki/Proposals/Stroke_position">proposal page</a>.</td>
+    </tr>
+  </table>
+</div>
+
+<h3 id="StrokeOpacity" class="heading">13.5.2. Stroke paint opacity: the ‘<span class="property">stroke-opacity</span>’
+property<a class="self-link" href="#StrokeOpacity"></a></h3>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="StrokeOpacityProperty" data-dfn-type="property" data-export="">stroke-opacity</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>&lt;‘<a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a>’></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>1</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a> and <a href="text.html#TermTextContentElement">text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>the specified value converted to a number, clamped to the range [0,1]</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p>The <a class="property" href="painting.html#StrokeOpacityProperty">stroke-opacity</a> property specifies the opacity of the
+painting operation used to stroke the current object.  (See
+<a href="render.html#PaintingShapesAndText">Painting shapes and text</a>.)
+As with <a class="property" href="painting.html#FillOpacityProperty">fill-opacity</a>.</p>
+
+<dl>
+  <dt><span class="prop-value">&lt;number></span></dt>
+  <dd>
+    The opacity of the stroke. Any values outside the
+    range 0 (fully transparent) to 1 (fully opaque) must be
+    clamped to this range.
+  </dd>
+  <dt><span class="prop-value">&lt;percentage></span></dt>
+  <dd>
+    The opacity of the stroke expressed as a percentage
+    of the range 0 to 1.
+  </dd>
+</dl>
+
+<p class="note">See also the <a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a> property, which specifies
+group opacity.</p>
+
+<h3 id="StrokeWidth" class="heading">13.5.3. Stroke width: the ‘<span class="property">stroke-width</span>’
+property<a class="self-link" href="#StrokeWidth"></a></h3>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="StrokeWidthProperty" data-dfn-type="property" data-export="">stroke-width</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>1px</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a> and <a href="text.html#TermTextContentElement">text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>refer to the normalized diagonal of the current SVG viewport (see <a href="coords.html#Units">Units</a>)</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>an absolute length or percentage, numbers converted to absolute lengths first</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p>This property specifies the width of the stroke on the current object.
+A zero value causes no stroke to be painted. A negative value
+is <a href="types.html#TermInvalidValue">invalid</a>. A <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> value represents a value in <a href="coords.html#TermUserUnits">user units</a>.</p>
+
+<h3 id="LineCaps" class="heading">13.5.4. Drawing caps at the ends of strokes: the ‘<span class="property">stroke-linecap</span>’
+property<a class="self-link" href="#LineCaps"></a></h3>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="StrokeLinecapProperty" data-dfn-type="property" data-export="">stroke-linecap</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>butt | round | square</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>butt</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a> and <a href="text.html#TermTextContentElement">text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>discrete</td>
+  </tr>
+</table>
+
+<p><a class="property" href="painting.html#StrokeLinecapProperty">stroke-linecap</a> specifies the shape to be used at the end of
+<a href="paths.html#TermClosedSubpath">open subpaths</a> when they are stroked, <span class="ready-for-wider-review">
+and the shape to be drawn for zero length
+subpaths whether they are open or closed.</span>  The possible values are:</p>
+
+<dl>
+  <dt><span class="prop-value">butt</span></dt>
+  <dd>This value indicates that the stroke for each subpath does not
+  extend beyond its two endpoints.  A zero length subpath will therefore
+  not have any stroke.</dd>
+
+  <dt><span class="prop-value">round</span></dt>
+  <dd>
+    <p>This value indicates that at each end of each subpath, the shape
+    representing the stroke will be extended by a half circle with a diameter equal
+    to the stroke width.  If a subpath, <span class="ready-for-wider-review">whether open or closed,</span> has zero length,
+    then the resulting effect is that the stroke for that subpath consists solely
+    of a full circle centered at the subpath's point.</p>
+  </dd>
+
+  <dt><span class="prop-value">square</span></dt>
+  <dd>
+    <p>This value indicates that at the end of each subpath, the shape
+    representing the stroke will be extended by a rectangle with the
+    same width as the stroke width and whose length is half of the stroke width.
+    If a subpath, <span class="ready-for-wider-review">whether open or closed,</span> has zero length, then the resulting
+    effect is that the stroke for that subpath consists solely of a square with
+    side length equal to the stroke width, centered at the subpath's point, and
+    oriented such that two of its sides are parallel to the effective tangent
+    at that subpath's point.  See
+    <a href="paths.html#PathElementImplementationNotes"><span class="element-name">‘path’</span>
+    element implementation notes</a> for details on how to determine the tangent
+    at a zero-length subpath.</p>
+  </dd>
+</dl>
+
+<div class="figure">
+  <img class="bordered" src="images/painting/linecap.svg" alt="Image showing three paths, each with a different line cap."/>
+  <p class="caption">The three types of line caps.</p>
+</div>
+
+<p>See the definition of the <a href="painting.html#TermCapShape">cap shape</a> below for a more precise
+description of the shape a line cap will have.</p>
+
+<h3 id="LineJoin" class="heading">13.5.5. Controlling line joins: the ‘<span class="property">stroke-linejoin</span>’
+and ‘<span class="property">stroke-miterlimit</span>’ properties<a class="self-link" href="#LineJoin"></a></h3>
+
+<p class="issue" data-issue="592" id="issue592"><a class="self-link" href="#issue592"></a>
+    The values <span class="prop-value">miter-clip</span> and <span class="prop-value">arcs</span>
+    of the <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a> property are at risk. There are no known browser implementations.
+    See issue <a href="https://github.com/w3c/svgwg/issues/592">GitHub issue #592</a>.</p>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="StrokeLinejoinProperty" data-dfn-type="property" data-export="">stroke-linejoin</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>miter | miter-clip | round | bevel | arcs </td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>miter</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a> and <a href="text.html#TermTextContentElement">text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th>Animation Type:</th>
+    <td>discrete</td>
+  </tr>
+</table>
+
+<p><a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a> specifies the shape to be used at the
+corners of paths or basic shapes when they are stroked. For further details see
+the <a href="paths.html#PathElementImplementationNotes">path implementation notes</a>.</p>
+
+<dl>
+  <dt><span class="prop-value">miter</span></dt>
+  <dd>This value indicates that a sharp corner is to be used to join path segments.
+  The corner is formed by extending the outer edges of the stroke at the tangents
+  of the path segments until they intersect. If the <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a>
+  is exceeded, the line join falls back to <span class="prop-value">bevel</span>
+  (see below).</dd>
+
+  <dt><span class="prop-value">miter-clip</span></dt>
+  <dd>This value is the same as <span class="prop-value">miter</span> but if
+    the <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> is exceeded, the miter is clipped at a
+    distance equal to half the <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> value multiplied
+    by the stroke width from the intersection of the path segments
+    (see below).</dd>
+
+  <dt><span class="prop-value">round</span></dt>
+  <dd>This value indicates that a round corner is to be used to join path segments.
+  The corner is a circular sector centered on the join point.</dd>
+
+  <dt><span class="prop-value">bevel</span></dt>
+  <dd>This value indicates that a bevelled corner is to be used to join path segments.
+  The bevel shape is a triangle that fills the area between the two stroked segments.</dd>
+
+  <dt><span class="prop-value">arcs</span></dt>
+  <dd>This value indicates that an arcs corner is to be used to join
+    path segments. The arcs shape is formed by extending the outer
+    edges of the stroke at the join point with arcs that have the same
+    curvature as the outer edges at the join point.</dd>
+</dl>
+
+<p class="note">
+  The <span class="prop-value">miter-clip</span> and
+  <span class="prop-value">arcs</span> values are new in SVG 2.
+  The <span class="prop-value">miter-clip</span> value offers a more
+  consistent presentation for a path with multiple joins as well as
+  better behavior when a path is animated.
+  The <span class="prop-value">arcs</span> value provides a better
+  looking join when the path segments at the join are curved.
+</p>
+
+<p class="annotation">
+  Adding 'arcs' line join was resolved at the
+  <a href="http://www.w3.org/2012/09/19-svg-minutes.html#item08">Rigi
+  Kaltbad group meeting</a>.
+</p>
+
+<p class="annotation">
+  Adding 'miter-clip' line join was resolved at the
+  <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item03">Sydney
+  (2015) group meeting</a>.
+</p>
+
+<div class="figure">
+  <img class="bordered" src="images/painting/linejoin-four.svg" alt="Image showing four paths, each with a different line join."/>
+  <p class="caption">Four types of line joins.</p>
+</div>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="StrokeMiterlimitProperty" data-dfn-type="property" data-export="">stroke-miterlimit</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>4</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a> and <a href="text.html#TermTextContentElement">text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p>
+  When two line segments meet at a sharp angle and a value of
+  <span class="prop-value">miter</span>,
+  <span class="prop-value">miter-clip</span>, or
+  <span class="prop-value">arcs</span> has been specified for
+  <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a>, it is possible for the join to extend
+  far beyond the thickness of the line stroking the path. The
+  <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> imposes a limit on the extent of the
+  line join.
+</p>
+
+<dl>
+  <dt><span class="prop-value">&lt;number></span></dt>
+  <dd>
+    The limit on the extent of a
+    <span class="prop-value">miter</span>,
+    <span class="prop-value">miter-clip</span>, or
+    <span class="prop-value">arcs</span> line join as a multiple of
+    the <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a> value.
+    A negative value for <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> is <a href="types.html#TermInvalidValue">invalid</a> and must be <a href="https://drafts.csswg.org/css-syntax/#css-ignored">ignored</a>.
+  </dd>
+</dl>
+
+<p class="note">
+  Previous versions of the SVG specification
+  also stated that values between 0 and 1 were in error,
+  but this was not well implemented by user agent's CSS parsers.
+  In practice, any miter join will exceed a miter limit between 0 and 1.
+</p>
+
+<p>
+  For the <span class="prop-value">miter</span> or the
+  <span class="prop-value">miter-clip</span> values, given
+  the angle <var>θ</var> between the segments in user coordinate system,
+  the miter length is calculated by:
+</p>
+
+<div role="math" aria-describedby="math-miter-length">
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <mrow>
+      <mi>miter length</mi>
+      <mo>=</mo>
+      <mfrac>
+        <mi style="font-family: sans-serif">‘stroke-width’</mi>
+        <mrow>
+          <mi>sin</mi>
+          <mo>⁡</mo>
+          <mfrac>
+            <mi>θ</mi>
+            <mn>2</mn>
+          </mfrac>
+        </mrow>
+      </mfrac>
+    </mrow>
+  </math>
+  <pre id="math-miter-length">miter length = stroke-width / sin(theta / 2)</pre>
+</div>
+
+<div class="note">
+  <p>
+    Historically, the miter length is defined as the distance from the
+    inside stroke edge of the intersecting path segments to the tip of
+    the miter. In practice, this is followed only for straight path
+    segments. The above definition of miter length based on angles
+    depends only on the tangents to the path segments at the join and
+    thus gives consistent results independent of the curvature of the
+    path segments. To be consistent with this definition, the clipping
+    point of the
+    <span class="prop-value">miter-clip</span> and
+    <span class="prop-value">arcs</span> line joins is at a distance
+    or arc length equal to half the <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> times
+    the stroke width from the point the two path segments join.
+  </p>
+  <div class="figure">
+    <img class="bordered" src="images/painting/miter-limit-def.svg" alt="Image showing the definition of the stroke miter length
+	      and consistency of clipping between different shaped
+	      path segments."/>
+    <p class="caption">
+      Left: Historical definition of miter length.
+
+      Right: Two different paths with the same tangents to the path at
+      the point where the path segments join. The behavior of the
+      miter join (fallback to bevel or clipping position) is the same
+      for both paths. It does not depend on the position where the
+      inside stroked edges intersect.
+    </p>
+  </div>
+</div>
+
+<p>
+  If the miter length divided by the stroke width exceeds the
+  <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> then for the value:
+</p>
+<dl>
+  <dt><span class="prop-value">miter</span></dt>
+  <dd>
+    the join is converted to a bevel;
+  </dd>
+  <dt><span class="prop-value">miter-clip</span></dt>
+  <dd>
+    the miter is clipped by a line perpendicular to the line bisecting
+    the angle between the two path segments at a distance of half the value
+    of miter length from the intersection of the two path segments.
+  </dd>
+</dl>
+
+<div class="figure">
+  <img class="bordered" src="images/painting/miter-limit.svg" alt="Image showing resulting stroke when stroke miter limit is exceeded."/>
+  <p class="caption">
+    Effect on line join when <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> is
+    exceeded. The olive-green dashed lines shows the position of the
+    miter limit when the <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> value is 3. The
+    gray regions shows what the joins would look like without a miter
+    limit.
+  </p>
+</div>
+
+<p>
+  For the <span class="prop-value">arcs</span> value, the
+  <em>miter length</em> is calculated along a circular arc that is
+  tangent to the line bisecting the angle between the two segments at
+  the point the two segments intersect and passes through the end
+  point of the join. The line join is clipped, if necessary, by a line
+  perpendicular to this arc at an arc length from the intersection
+  point equal to half the value of the <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> value
+  multiplied by the stroke width.
+</p>
+
+<p class="annotation">
+  The effect of 'stroke-miterlimit' on an 'arcs' line join was resolved
+  at <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item12">Sydney
+  (2015) group meeting</a>.
+</p>
+
+<p>
+  See the definition of the <a href="painting.html#TermLineJoinShape">line join shape</a> below for a more
+  precise description of the shape a line join will have.
+</p>
+
+<h3 id="StrokeDashing" class="heading">13.5.6. Dashing strokes: the ‘<span class="property">stroke-dasharray</span>’ and
+‘<span class="property">stroke-dashoffset</span>’ properties<a class="self-link" href="#StrokeDashing"></a></h3>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="StrokeDasharrayProperty" data-dfn-type="property" data-export="">stroke-dasharray</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>none | <a href="painting.html#DataTypeDasharray">&lt;dasharray></a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a> and <a href="text.html#TermTextContentElement">text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>refer to the normalized diagonal of the current SVG viewport (see <a href="coords.html#Units">Units</a>)</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as comma separated list of absolute lengths or percentages, numbers converted to absolute lengths first, or keyword specified</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>See prose</td>
+  </tr>
+</table>
+
+<p>where:</p>
+
+<p class="definition prod"><dfn id="DataTypeDasharray" data-dfn-type="type" data-export="">&lt;dasharray></dfn> =
+[ [ <a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> ]+ ]#</p>
+
+<p>The <a class="property" href="painting.html#StrokeDasharrayProperty">stroke-dasharray</a> property controls
+the pattern of dashes and gaps used to form the shape of
+a path's stroke.</p>
+
+<dl>
+  <dt><span class="prop-value">none</span></dt>
+  <dd>Indicates that no dashing is used.</dd>
+
+  <dt><span class="prop-value">&lt;dasharray></span></dt>
+  <dd>
+    <p>Specifies a dashing pattern to use.  A <a href="painting.html#DataTypeDasharray">&lt;dasharray></a> is
+    a list of comma and/or white space separated <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> or
+    <a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> values.
+    A <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> value represents a value in <a href="coords.html#TermUserUnits">user units</a>.
+    Each value specifies a length along the path for which the stroke
+    is to be painted (a <em>dash</em>) and not painted (a <em>gap</em>).
+    The first value and every second value in the list after it specifies
+    the length of a dash, and every other value specifies the length of a gap
+    between the dashes.  If the list has an odd number of values, then it is
+    repeated to yield an even number of values.  (Thus, the rendering behavior
+    of <span class="prop-value">stroke-dasharray: 5,3,2</span>
+    is equivalent to <span class="prop-value">stroke-dasharray: 5,3,2,5,3,2</span>.)</p>
+
+    <p>The resulting even-length dashing pattern is repeated along each subpath.
+    The dashing pattern is reset and begins again at the start of each subpath.</p>
+
+    <p>If any value in the list is negative, the <a href="painting.html#DataTypeDasharray">&lt;dasharray></a> value is
+    <a href="types.html#TermInvalidValue">invalid</a>.  If all of the values in the list are zero,
+    then the stroke is rendered as a solid line without any dashing.</p>
+  </dd>
+</dl>
+
+<div class="figure">
+  <img class="bordered" src="images/painting/dashes.svg" alt="Image showing a thick, dashed stroke."/>
+  <p class="caption">A dashed stroke.  The dashing pattern is <span class="prop-value">20,10</span>.
+  The red line shows the actual path that is stroked.</p>
+</div>
+
+<p>The <span class="attr-name">‘<a href="paths.html#PathLengthAttribute"><span>pathLength</span></a>’</span> attribute on a <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> element affects
+<a class="property" href="painting.html#StrokeDasharrayProperty">stroke-dasharray</a>: each dash and gap length is interpreted relative
+to the author's path length as specified by <span class="attr-name">‘<a href="paths.html#PathLengthAttribute"><span>pathLength</span></a>’</span>.</p>
+
+<p id="interpolationDashPattern"><a class="property" href="painting.html#StrokeDasharrayProperty">stroke-dasharray</a> values are <a href="https://drafts.csswg.org/css-values-4/#not-additive">not additive</a>. For interpolation,
+<a class="property" href="painting.html#StrokeDasharrayProperty">stroke-dasharray</a> values are combined as follows:</p>
+<dl class="switch">
+  <dt>If either <var>start</var> or <var>end</var> compute to <span class="prop-value">none</span> or are invalid</dt>
+  <dd><var>start</var> or <var>end</var> are combined using the discrete animation type.</dd>
+  <dt>Otherwise</dt>
+  <dd>repeat both dash patterns of <var>start</var> and <var>end</var> value list until the length of elements in
+    both value lists match. Each item is then combined by computed value.</dd>
+</dl>
+
+<div class="example">
+The two <a class="property" href="painting.html#StrokeDasharrayProperty">stroke-dasharray</a> value lists in the following example have different number
+of elements:
+
+<pre><code>path {
+  stroke-dasharray: 20 40 10;
+}
+
+path:hover {
+  transition-property: stroke-dasharray;
+  transition-duration: 0.5s;
+  stroke-dasharray: 40 20;
+}
+</code></pre>
+
+To interpolate the two value lists the dash pattern gets repeated on both lists first:
+
+<pre><code>stroke-dasharray: 20 40 10 20 40 10;
+stroke-dasharray: 40 20 40 20 40 20;
+</code></pre>
+
+After that, each item is then combined by computed value.
+</div>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="StrokeDashoffsetProperty" data-dfn-type="property" data-export="">stroke-dashoffset</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>0</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a> and <a href="text.html#TermTextContentElement">text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>refer to the normalized diagonal of the current SVG viewport (see <a href="coords.html#Units">Units</a>)</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>an absolute length or percentage, numbers converted to absolute lengths first</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p>The <a class="property" href="painting.html#StrokeDashoffsetProperty">stroke-dashoffset</a> property specifies the distance into the repeated
+dash pattern to start the stroke dashing at the beginning of the path.  If the
+value is negative, then the effect is the same as dash offset <var>d</var>:</p>
+
+<div role="math" aria-describedby="math-dashoffset">
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <mrow>
+      <mi>d</mi>
+      <mo>=</mo>
+      <mi>s</mi>
+      <mo>-</mo>
+      <mfenced open="|" close="|">
+        <mi style="font-family: sans-serif">‘stroke-dashoffset’</mi>
+      </mfenced>
+      <mo>mod</mo>
+      <mi>s</mi>
+    </mrow>
+  </math>
+  <pre id="math-dashoffset">d = s - (abs(stroke-dashoffset) mod s)</pre>
+</div>
+
+<p>where <var>s</var> is the sum of the dash array values.</p>
+
+<div class="figure">
+  <img class="bordered" src="images/painting/dashoffset.svg" alt="Image showing a thick, dashed stroke with a non-zero dash offset."/>
+  <p class="caption">A dashed stroke with a non-zero dash offset.  The dashing
+  pattern is <span class="prop-value">20,10</span> and the dash offset is
+  <span class="prop-value">15</span>.  The red line shows the actual path that
+  is stroked.</p>
+</div>
+
+<p>Like <a class="property" href="painting.html#StrokeDasharrayProperty">stroke-dasharray</a>, <a class="property" href="painting.html#StrokeDashoffsetProperty">stroke-dashoffset</a> is interpreted
+relative to the author's path length as specified by the <span class="attr-name">‘<a href="paths.html#PathLengthAttribute"><span>pathLength</span></a>’</span>
+attribute on a <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> element.</p>
+
+<div class="example">
+  <p>The example below shows how a <span class="attr-name">‘<a href="paths.html#PathLengthAttribute"><span>pathLength</span></a>’</span> that is greatly
+  different from the actual path length can be used to control stroke
+  dashing more easily.</p>
+
+  <pre>&lt;svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="300" height="150">
+  &lt;defs>
+    &lt;path id="p" d="M -50,0 A 50,50 0 0 0 50,0 A 50,50 0 0 0 -50,0 z"
+          pathLength="80"/>
+    &lt;g id="chip" stroke-width="10">
+      &lt;circle cy="5" r="55" fill="#000" fill-opacity="0.15" stroke="none"/>
+      &lt;use xlink:href="#p"/>
+      &lt;use xlink:href="#p" fill="none" stroke="#eee" stroke-width="10"
+           stroke-dasharray="10 10" stroke-dashoffset="5"/>
+      &lt;g fill="none" stroke-width="5" stroke-dasharray="0 20" stroke-linecap="round">
+        &lt;use xlink:href="#p" stroke="#eee" stroke-dashoffset="10"/>
+        &lt;use xlink:href="#p" stroke-dashoffset="0"/>
+      &lt;/g>
+      &lt;circle r="40" fill="#000" fill-opacity="0.15"
+              stroke-width="2" stroke="white"/>
+    &lt;/g>
+  &lt;/defs>
+  &lt;rect width="100%" height="100%" fill="#063"/>
+  &lt;use xlink:href="#chip" x="140" y="75" fill="#00c" stroke="#00c"/>
+  &lt;use xlink:href="#chip" x="160" y="85" fill="#000" stroke="#000"/>
+  &lt;use xlink:href="#chip" x="170" y="65" fill="#c00" stroke="#c00"/>
+&lt;/svg></pre>
+
+  <div class="figure">
+    <img src="images/painting/dash-pathlength.svg" alt="Image of three casino chips, each of which has a patterned border
+              produced using stroke dashing."/>
+    <p class="caption">The four broad white dashes and the eight small circular
+    dashes around each chip are placed relative to an author specified
+    <span class="attr-name">‘<a href="paths.html#PathLengthAttribute"><span>pathLength</span></a>’</span> of <span class="attr-value">'80'</span>, which
+    makes the desired <a class="property" href="painting.html#StrokeDasharrayProperty">stroke-dasharray</a> and <a class="property" href="painting.html#StrokeDashoffsetProperty">stroke-dashoffset</a>
+    values easy to compute.</p>
+  </div>
+</div>
+
+<p>See the definition of <a href="painting.html#TermDashPositions">dash positions</a> below for a more precise
+description of positions along a path that dashes will be placed.</p>
+</div>
+
+<div class="ready-for-wider-review">
+<h3 id="StrokeShape" class="heading">13.5.7. Computing the shape of the stroke<a class="self-link" href="#StrokeShape"></a></h3>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Specify stroke dashing more precisely.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/28-svg-irc#T18-14-14">SVG 2 shall specify stroke dashing more precisely.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To define dash starting point on basic shapes and path segments.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (no action)</td>
+    </tr>
+  </table>
+</div>
+
+<div class="ready-for-wider-review">
+<p>The <dfn id="TermStrokeShape" data-dfn-type="dfn" data-export="">stroke shape</dfn> of an element is the
+shape that is filled by the <a class="property" href="painting.html#StrokeProperty">stroke</a> property.  Since <span class="element-name">‘<a href="text.html#TextElement"><span>text</span></a>’</span>
+elements can be rendered in multiple chunks, each chunk has its own
+<a href="painting.html#TermStrokeShape">stroke shape</a>.  The following algorithm describes the ideal stroke shape
+of a <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span>, <a href="shapes.html#TermBasicShapeElement">basic shape</a> or individual <span class="element-name">‘<a href="text.html#TextElement"><span>text</span></a>’</span> chunk is,
+taking into account the stroking properties above. The ideal stroke shape
+described defines a best case implementation, but implementations are given some
+leeway to deviate from this description for performance reasons.</p>
+
+<div class="note">
+Authors should be aware that the shape of a stroke may in some cases, such as
+at extremely tight curves, differ across platforms.
+<div class="figure">
+  <img class="bordered" src="images/painting/stroke-tight-corner-render-examples.png" alt="Image showing how stroke shape differs across platforms. One
+            example is as described by the algorithm in this specification, the
+            other is different and overall looks less correct. It is distinct in
+            that the geometry created to describe the left and right sides of
+            the stroke are distorted due to the proximity of the end of the
+            curve to the section of high curvature."/>
+  <p class="caption">An example of how the shape painted for stroke may differ
+  across platforms.</p>
+</div>
+The above example shows the possible rendered results for the following
+two SVG paths:
+<pre>&lt;svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+&lt;path d="M 1,3 C 8,2 8,6 7,6" stroke-width="4" fill="none" stroke="skyblue"/>
+&lt;path d="M 1,3 C 8,2 8,6 7,6" stroke-width="0.075" fill="none" stroke="black"/>
+&lt;/svg></pre>
+</div>
+</div> <!-- end of class="ready-for-wider-review" -->
+
+The ideal stroke shape is determined as follows:
+
+<ol class="algorithm">
+  <li>Let <var>shape</var> be an empty shape.</li>
+  <li class="ready-for-wider-review">If <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a> > 0, then:
+    <ol>
+      <li>Let <var>scale</var> be a scale factor for the dash pattern.  If we are
+      computing the stroke shape of a <span class="element-name">‘<a href="text.html#TextElement"><span>text</span></a>’</span> chunk,
+      or if the <span class="attr-name">‘<a href="paths.html#PathLengthAttribute"><span>pathLength</span></a>’</span> attribute is not present on the element,
+      then <var>scale</var> is 1.  Otherwise, it is determined as follows:
+        <ol>
+          <li>Let <var>length</var> be the user agent's computed length of the
+          <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> or <a href="paths.html#TermEquivalentPath">equivalent path</a> for a <a href="shapes.html#TermBasicShapeElement">basic shape</a>.</li>
+          <li>Let <var>authorlength</var> be the value of the <span class="attr-name">‘<a href="paths.html#PathLengthAttribute"><span>pathLength</span></a>’</span>
+          attribute on the <a href="shapes.html#TermShapeElement">shape</a>.</li>
+          <li><var>scale</var> is <var>authorlength</var> / <var>length</var>.</li>
+        </ol>
+      </li>
+      <li>Let <var>path</var> be the <a href="paths.html#TermEquivalentPath">equivalent path</a> of the element (or the individual
+      chunk of a <span class="element-name">‘<a href="text.html#TextElement"><span>text</span></a>’</span> element).</li>
+      <li>For each subpath of <var>path</var>:
+        <ol>
+          <li>Let <var>positions</var> be the <a href="painting.html#TermDashPositions">dash positions</a> for the subpath.</li>
+          <li>For each pair &lt;<var>start</var>, <var>end</var>> in <var>positions</var>:
+            <ol>
+              <li>Scale <var>start</var> and <var>end</var> by <var>scale</var>.</li>
+
+              <li>Let <var>dash</var> be the shape that includes, for all distances
+              between <var>start</var> and <var>end</var> along the subpath, all
+              points that lie on the line perpendicular to the subpath at that
+              distance and which are within distance <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a> of
+              the point on the subpath at that position.</li>
+
+              <li>Set <var>dash</var> to be the union of <var>dash</var> and the
+              starting <a href="painting.html#TermCapShape">cap shape</a> for the subpath at position <var>start</var>.</li>
+
+              <li>Set <var>dash</var> to be the union of <var>dash</var> and the
+              ending <a href="painting.html#TermCapShape">cap shape</a> for the subpath at position <var>end</var>.</li>
+
+              <li>
+                Let <var>index</var> and <var>last</var> be the indexes of the
+                path segments in the subpath at distance <var>start</var> and
+                <var>end</var> along the subpath.
+
+                <p class="note">It does not matter whether any zero length segments are
+                included when choosing <var>index</var> and <var>last</var>.</p>
+              </li>
+
+              <li>While <var>index</var> &lt; <var>last</var>:
+                <ol>
+                  <li>Set <var>dash</var> to be the union of <var>dash</var> and the
+                  <a href="painting.html#TermLineJoinShape">line join shape</a> for the subpath at segment index <var>index</var>.</li>
+
+                  <li>Set <var>index</var> to <var>index</var> + 1.</li>
+                </ol>
+              </li>
+
+              <li>Set <var>shape</var> to be the union of <var>shape</var> and
+              <var>stroke</var>.</li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+  <li>Return <var>shape</var>.</li>
+</ol>
+
+<p>The <dfn id="TermDashPositions" data-dfn-type="dfn" data-export="">dash positions</dfn> for a given subpath of
+the <a href="paths.html#TermEquivalentPath">equivalent path</a> of a <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> or <a href="shapes.html#TermBasicShapeElement">basic shape</a> is a
+sequence of pairs of values, which represent the starting and ending distance
+along the subpath for each of the dashes that form the subpath's stroke.  It is
+determined as follows:</p>
+
+<ol class="algorithm">
+  <li>Let <var>pathlength</var> be the length of the subpath.</li>
+
+  <li>Let <var>dashes</var> be the list of values of <a class="property" href="painting.html#StrokeDasharrayProperty">stroke-dasharray</a>
+  on the element, converted to user units, repeated if necessary so that it has
+  an even number of elements; if the property has the value
+  <span class="prop-value">none</span>, then the list has a single value 0.</li>
+
+  <li>Let <var>count</var> be the number of values in <var>dashes</var>.</li>
+  <li>Let <var>sum</var> be the sum of the values in <var>dashes</var>.</li>
+
+  <li>If <var>sum</var> = 0, then return a sequence with the single pair
+  &lt;0, <var>pathlength</var>>.</li>
+
+  <li>Let <var>positions</var> be an empty sequence.</li>
+
+  <li>Let <var>offset</var> be the value of the <a class="property" href="painting.html#StrokeDashoffsetProperty">stroke-dashoffset</a>
+  property on the element.</li>
+
+  <li>If <var>offset</var> is negative, then set <var>offset</var> to
+  <var>sum</var> − abs(<var>offset</var>).</li>
+
+  <li>Set <var>offset</var> to <var>offset</var> mod <var>sum</var>.</li>
+
+  <li>Let <var>index</var> be the smallest integer such that
+  sum(<var>dashes<sub>i</sub></var>, 0 ≤ <var>i</var> ≤ <var>index</var>) ≥ <var>offset</var>.</li>
+
+  <li>Let <var>dashlength</var> be
+  min(sum(<var>dashes<sub>i</sub></var>, 0 ≤ <var>i</var> ≤ <var>index</var>) − <var>offset</var>, <var>pathlength</var>).</li>
+
+  <li>If <var>index</var> mod 2 = 0, then append to <var>positions</var> the
+  pair &lt;0, <var>dashlength</var>>.</li>
+
+  <li>Let <var>position</var> be <var>dashlength</var>.</li>
+
+  <li>While <var>position</var> &lt; <var>pathlength</var>:
+    <ol>
+      <li>Set <var>index</var> to (<var>index</var> + 1) mod <var>count</var>.</li>
+
+      <li>Let <var>dashlength</var> be
+      min(<var>dashes</var><sub><var>index</var></sub>, <var>pathlength</var> − <var>position</var>).</li>
+
+      <li>If <var>index</var> mod 2 = 0, then append to <var>positions</var> the
+      pair &lt;<var>position</var>, <var>position</var> + <var>dashlength</var>>.</li>
+
+      <li>Set <var>position</var> to <var>position</var> + <var>dashlength</var>.</li>
+    </ol>
+  </li>
+
+  <li>Return <var>positions</var>.</li>
+</ol>
+
+<p>The starting and ending <dfn id="TermCapShape" data-dfn-type="dfn" data-export="">cap shapes</dfn> at a given
+<var>position</var> along a subpath are determined as follows:</p>
+
+<ol class="algorithm">
+  <li>If <a class="property" href="painting.html#StrokeLinecapProperty">stroke-linecap</a> is <span class="prop-value">butt</span>, then return an empty shape.</li>
+
+  <li>Otherwise, if <a class="property" href="painting.html#StrokeLinecapProperty">stroke-linecap</a> is <span class="prop-value">round</span>, then:
+    <ol>
+      <li>If this is a starting cap, then return a semicircle of diameter <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a> positioned such that:
+        <ul>
+          <li class="ready-for-wider-review">The subpath that the semicircle is relative to is the subpath starting
+          at distance <var>position</var>.</li>
+          <li>Its straight edge is parallel to the line perpendicular to the subpath at distance <var>position</var> along it.</li>
+          <li>The midpoint of its straight edge is at the point that is along the subpath at distance <var>position</var>.</li>
+          <li>The direction from the midpoint of its arc to the midpoint of its straight edge is the same as the direction of
+          the subpath at distance <var>position</var>.</li>
+        </ul>
+      </li>
+      <li>Otherwise, this is an ending cap.  Return a semicircle of diameter <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a> positioned such that:
+        <ul>
+          <li class="ready-for-wider-review">The subpath that the semicircle is relative to is the subpath ending
+          at distance <var>position</var>.</li>
+          <li>Its straight edge is parallel to the line perpendicular to the subpath at distance <var>position</var> along it.</li>
+          <li>The midpoint of its straight edge is at the point that is along the subpath at distance <var>position</var>.</li>
+          <li>The direction from the midpoint of its straight edge to the midpoint of its arc is the same as the
+          direction of the subpath.</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+
+  <li>Otherwise, <a class="property" href="painting.html#StrokeLinecapProperty">stroke-linecap</a> is <span class="prop-value">square</span>:
+    <ol>
+      <li>If this is a starting cap, then return a rectangle with side lengths <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a> and <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a> / 2 positioned such that:
+        <ul>
+          <li>Its longer edges, <var>A</var> and <var>B</var>, are parallel to the line perpendicular to the subpath at distance <var>position</var> along it.</li>
+          <li>The midpoint of <var>A</var> is at <var>start</var>.</li>
+          <li>The direction from the midpoint of <var>B</var> to the midpoint of <var>A</var> is the same as the direction of the subpath at distance <var>position</var> along it.</li>
+        </ul>
+      </li>
+      <li>Otherwise, this is an ending cap.  Return a rectangle with side lengths <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a> and <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a> / 2 positioned such that:
+        <ul>
+          <li>Its longer edges, <var>A</var> and <var>B</var>, are parallel to the line perpendicular to the subpath at distance <var>position</var> along it.</li>
+          <li>The midpoint of <var>A</var> is at <var>end</var>.</li>
+          <li>The direction from the midpoint of <var>A</var> to the midpoint of <var>B</var> is the same as the direction of the subpath at distance <var>position</var> along it.</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<div class="figure">
+  <img class="bordered" src="images/painting/linecap-construction.svg" alt="Image showing how to construct the three types of line caps"/>
+  <p class="caption">The three different <a class="property" href="painting.html#StrokeLinecapProperty">stroke-linecap</a> values used on
+  paths with a single, non-zero length subpath.  The white line is the path
+  itself and the thick gray area is the stroke.  On the top row, the green lines
+  indicate the perpendicular to the tangent at the path endpoints and the pink
+  areas are the caps.  The bottom row shows the stroke without the perpendicular
+  and cap highlighting.</p>
+</div>
+
+<p>The <dfn id="TermLineJoinShape" data-dfn-type="dfn" data-export="">line join shape</dfn> for a given segment of
+a subpath is determined as follows:</p>
+
+<ol class="algorithm">
+  <li>Let <var>P</var> be the point at the end of the segment.</li>
+
+  <li>If the unit tangent vector at the end of the segment and the unit tangent vector
+  at the start of the following segment are equal, then return an empty shape.
+  <p class="note">This means for example that <span class="attr-value">'M 100,100 h 100 h 100'</span>
+  would not produce a line join shape between the two straight line segment, but
+  <span class="attr-value">'M 100,100 h 100 h -100'</span> would.</p></li>
+
+  <li>Let <var>A</var> be the line parallel to the tangent at the end of the segment.</li>
+  <li>Let <var>B</var> be the line parallel to the tangent at the start of the following segment.</li>
+
+  <li>Let <var>A<sub>left</sub></var> and <var>A<sub>right</sub></var> be lines
+  parallel to <var>A</var> at a distance of <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a> / 2 to the
+  left and to the right of <var>A</var> relative to the subpath direction, respectively.</li>
+
+  <li>Let <var>B<sub>left</sub></var> and <var>B<sub>right</sub></var> be lines
+  parallel to <var>B</var> at a distance of <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a> / 2 to the
+  left and to the right of <var>B</var>, relative to the subpath direction, respectively.</li>
+
+  <li>
+    Let <var>P</var><sub>1</sub>, <var>P</var><sub>2</sub> and
+    <var>P</var><sub>3</sub> be points determined as follows:
+
+    <ol>
+      <li>If the smaller angle between <var>A</var> and <var>B</var> is on the
+      right of these lines, considering the direction of the subpath, then
+      <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> are the points on
+      <var>A<sub>left</sub></var> and <var>B<sub>left</sub></var> closest to
+      <var>P</var>, and <var>P</var><sub>3</sub> is the intersection of
+      <var>A<sub>left</sub></var> and <var>B<sub>left</sub></var>.</li>
+
+      <li>Otherwise, <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> are
+      the points on <var>A<sub>right</sub></var> and <var>B<sub>right</sub></var>
+      closest to <var>P</var>, and <var>P</var><sub>3</sub> is the intersection
+      of <var>A<sub>right</sub></var> and <var>B<sub>right</sub></var>.</li>
+    </ol>
+  </li>
+
+  <li>Let <var>bevel</var> be the triangle formed from the three points
+  <var>P</var>, <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub>.</li>
+
+  <li>If <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a> is <span class="prop-value">round</span>, then
+  return the union of <var>bevel</var> and a circular sector of diameter
+  <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a>, centered on <var>P</var>, and which has
+  <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> as the two endpoints of
+  the arc.</li>
+
+  <li>If <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a> is <span class="prop-value">arcs</span>,
+    then find the circles that are tangent to the stroke edges at
+    <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> with the
+    same curvature as the edges at those points (see below). If both
+    curvatures are zero fall through to <span class="prop-value">miter-clip</span>.
+    If either curvature is greater than 2/(stroke width), fallback to
+    <span class="prop-value">round</span>.
+
+    Extend the stroke edges using these circles (or a line, in the case
+    of zero curvature).
+
+    If the two circles (or circle and line) do not intersect, adjust
+    the radii of the two circles by an equal amount (or just the circle
+    in case of a circle and line) until they do intersect (see below).
+
+    The line join
+    region is defined by the lines that connect <var>P</var>
+    with <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> and the
+    arcs defined by the circles (or arc and line) between the closest
+    intersection point to <var>P</var>, and <var>P</var><sub>1</sub>
+    and <var>P</var><sub>2</sub>.
+
+    Next calculate the <em>miter limit</em> as defined in
+    the <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> section. Clip any part of the line
+    join region that extends past the miter limit. Return the
+    resulting region.
+
+    Note that the curvatures are calculated in user-space before any
+    transforms are applied.</li>
+
+  <li>
+    If <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a> is <span class="prop-value">miter</span> or
+    <span class="prop-value">miter-clip</span> then the line join
+    region is the union of <var>bevel</var> and the triangle formed
+    from the three points <var>P</var><sub>1</sub>,
+    <var>P</var><sub>2</sub> and <var>P</var><sub>3</sub>.
+  </li>
+
+  <li>
+    Let <var>θ</var> be the angle between <var>A</var> and <var>B</var>.
+    If 1 / sin(<var>θ</var> / 2) ≤ <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a>, then return
+    the line join region.
+  </li>
+
+  <li>
+    If <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a> is <span class="prop-value">miter-clip</span>,
+    then clip any part of the line join region that extends past the
+    miter limit and return this region.
+  </li>
+
+  <li>Return <var>bevel</var>.</li>
+</ol>
+
+<div class="figure">
+  <img class="bordered" src="images/painting/linejoin-construction.svg" alt="Image showing the lines and points computed to construct a round line join."/>
+  <p class="caption">Construction of a round line join shape, shown in pink.
+  The white line is the original path, which has two segments that come to a
+  point, and the gray region is the stroke.</p>
+</div>
+
+<div class="figure">
+  <img class="bordered" src="images/painting/linejoin-construction-arcs.svg" alt="Image showing the lines and points computed to construct an arcs line join."/>
+  <p class="caption">Construction of an arcs line join shape, shown in
+    pink. The white line is the original path, which has two segments
+    that come to a point, and the dark gray region is the stroke. The
+    dashed lines show circles that are tangent to and have the
+    curvature of the segments at the join.  The olive-green circles
+    (concentric with the dashed circles) define the join shape.</p>
+</div>
+
+<h3 id="CurvatureCalculation" class="heading">13.5.8. Computing the circles for the <span class="prop-value">arcs</span>
+'stroke-linejoin'<a class="self-link" href="#CurvatureCalculation"></a></h3>
+
+<p>The <span class="prop-value">arcs</span> <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a>
+  requires finding circles that are both tangent to and have the same
+  curvatures as the outer stroke edges at the ends of path
+  segments. To find one of these circles, first calculate the
+  curvature <var>κ</var> of the path segment at its end (see
+  below). Next, find the radius of a circle corresponding to this
+  curvature: <var>r</var> = 1/<var>κ</var>. Increase or
+  decrease the radius by one half of the stroke width to account for
+  the stroke: <var>r<sub>c</sub></var> = <var>r</var> ± ½
+  stroke-width. The center of the circle will be on a line normal to
+  the path end a distance of <var>r<sub>c</sub></var> away from the
+  outer stroke edge at the end.</p>
+
+<p>For a line: the curvature is zero. Extend the outer stroke edge by a line.</p>
+
+<p>For an elliptical arc:</p>
+
+  <div role="math" aria-describedby="math-curvature-of-ellipse">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+      <mi>κ<!-- κ --></mi>
+      <mo stretchy="false">(</mo>
+      <mi>t</mi>
+      <mo stretchy="false">)</mo>
+      <mo>=</mo>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mrow class="MJX-TeXAtom-ORD">
+            <msub>
+              <mi>r</mi>
+              <mi>x</mi>
+            </msub>
+            <msub>
+              <mi>r</mi>
+              <mi>y</mi>
+            </msub>
+	  </mrow>
+	  <mrow class="MJX-TeXAtom-ORD">
+            <mo stretchy="false">(</mo>
+            <msubsup>
+              <mi>r</mi>
+              <mi>x</mi>
+              <mn>2</mn>
+            </msubsup>
+            <msup>
+              <mi>sin</mi>
+              <mn>2</mn>
+            </msup>
+            <mo>⁡<!-- ⁡ --></mo>
+            <mi>t</mi>
+            <mo>+</mo>
+            <msubsup>
+              <mi>r</mi>
+              <mi>y</mi>
+              <mn>2</mn>
+            </msubsup>
+            <msup>
+              <mi>cos</mi>
+              <mn>2</mn>
+            </msup>
+            <mo>⁡<!-- ⁡ --></mo>
+            <mi>t</mi>
+            <msup>
+              <mo stretchy="false">)</mo>
+              <mrow class="MJX-TeXAtom-ORD">
+		<mn>3</mn>
+		<mrow class="MJX-TeXAtom-ORD">
+		  <mo>/</mo>
+		</mrow>
+		<mn>2</mn>
+              </mrow>
+            </msup>
+	  </mrow>
+	</mfrac>
+      </mrow>
+    </math>
+    <pre id="math-curvature-of-ellipse">$$\kappa(t) = {{r_x r_y}\over{(r_x^2 \sin^2 t + r_y^2 \cos^2 t)^{3/2}}}$$</pre>
+  </div>
+
+  <p>where:</p>
+
+  <div role="math" aria-describedby="math-curvature-t">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+      <mi>t</mi>
+      <mo>=</mo>
+      <mi>arctan</mi>
+      <mo>⁡<!-- ⁡ --></mo>
+      <mrow>
+        <mo>(</mo>
+        <mrow>
+          <mrow class="MJX-TeXAtom-ORD">
+	    <mfrac>
+	      <msub>
+                <mi>r</mi>
+                <mi>y</mi>
+	      </msub>
+	      <msub>
+                <mi>r</mi>
+                <mi>x</mi>
+	      </msub>
+	    </mfrac>
+          </mrow>
+          <mi>tan</mi>
+          <mo>⁡<!-- ⁡ --></mo>
+          <mi>θ<!-- θ --></mi>
+        </mrow>
+        <mo>)</mo>
+      </mrow>
+    </math>
+    <pre id="math-curvature-t">$$t = \arctan \left( {r_y \over r_x} \tan \theta \right)$$</pre>
+  </div>
+
+  <p>The parameter <var>θ</var> at the beginning or end of an
+    arc segment can be found by using the formulas in
+    the <a href="implnote.html#ArcImplementationNotes">Elliptical arc
+    implementation notes</a>. (Note, some renderers convert elliptical
+    arcs to cubic Béziers prior to rendering so the equations here may
+    not be needed.)</p>
+
+<p>For a quadratic Bézier:</p>
+
+  <div role="math" aria-describedby="math-quadratic-start">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+      <mi>κ<!-- κ --></mi>
+      <mo stretchy="false">(</mo>
+      <mn>0</mn>
+      <mo stretchy="false">)</mo>
+      <mo>=</mo>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mn>1</mn>
+	  <mn>2</mn>
+	</mfrac>
+      </mrow>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mrow>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>−<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>0</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+            <mo>×<!-- × --></mo>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <mo>−<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+	  </mrow>
+	  <mrow>
+            <mrow class="MJX-TeXAtom-ORD">
+              <mo stretchy="false">|</mo>
+            </mrow>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>−<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>0</mn>
+            </msub>
+            <msup>
+              <mrow class="MJX-TeXAtom-ORD">
+		<mo stretchy="false">|</mo>
+              </mrow>
+              <mn>3</mn>
+            </msup>
+	  </mrow>
+	</mfrac>
+      </mrow>
+    </math>
+    <pre id="math-quadratic-start">$$\kappa(0) = {2\over3}{(P_1-P_0)\times((P_0-P_1)+(P_2-P_1))\over|P_1-P_0|^3}$$</pre>
+  </div>
+
+  <div role="math" aria-describedby="math-quadratic-end">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+      <mi>κ<!-- κ --></mi>
+      <mo stretchy="false">(</mo>
+      <mn>1</mn>
+      <mo stretchy="false">)</mo>
+      <mo>=</mo>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mn>1</mn>
+	  <mn>2</mn>
+	</mfrac>
+      </mrow>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mrow>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <mo>−<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+            <mo>×<!-- × --></mo>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>0</mn>
+            </msub>
+            <mo>−<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+	  </mrow>
+	  <mrow>
+            <mrow class="MJX-TeXAtom-ORD">
+              <mo stretchy="false">|</mo>
+            </mrow>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <mo>−<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <msup>
+              <mrow class="MJX-TeXAtom-ORD">
+		<mo stretchy="false">|</mo>
+              </mrow>
+              <mn>3</mn>
+            </msup>
+	  </mrow>
+	</mfrac>
+      </mrow>
+    </math>
+    <pre id="math-quadratic-end">$$\kappa(0) = {2\over3}{(P_1-P_0)\times((P_0-P_1)+(P_2-P_1))\over|P_1-P_0|^3}$$</pre>
+  </div>
+
+  <p>Where <var>κ(0)</var> and <var>κ(1)</var> are the
+  signed curvatures at the start and end of the path segment
+  respectively, and the <var>P</var>'s are the three points that
+  define the quadratic Bézier.</p>
+
+<p>For a cubic Bézier:</p>
+
+  <div role="math" aria-describedby="math-cubic-start">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+      <mi>κ<!-- κ --></mi>
+      <mo stretchy="false">(</mo>
+      <mn>0</mn>
+      <mo stretchy="false">)</mo>
+      <mo>=</mo>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mn>2</mn>
+	  <mn>3</mn>
+	</mfrac>
+      </mrow>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mrow>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>−<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>0</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+            <mo>×<!-- × --></mo>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <mo>−<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+	  </mrow>
+	  <mrow>
+            <mrow class="MJX-TeXAtom-ORD">
+              <mo stretchy="false">|</mo>
+            </mrow>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>−<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>0</mn>
+            </msub>
+            <msup>
+              <mrow class="MJX-TeXAtom-ORD">
+		<mo stretchy="false">|</mo>
+              </mrow>
+              <mn>3</mn>
+            </msup>
+	  </mrow>
+	</mfrac>
+      </mrow>
+    </math>
+    <pre id="math-cubic-start">$$\kappa(0) = {2\over3}{(P_1-P_0)\times((P_0-P_1)+(P_2-P_1))\over|P_1-P_0|^3}$$</pre>
+  </div>
+
+  <div role="math" aria-describedby="math-cubic-end">
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+      <mi>κ<!-- κ --></mi>
+      <mo stretchy="false">(</mo>
+      <mn>1</mn>
+      <mo stretchy="false">)</mo>
+      <mo>=</mo>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mn>2</mn>
+	  <mn>3</mn>
+	</mfrac>
+      </mrow>
+      <mrow class="MJX-TeXAtom-ORD">
+	<mfrac>
+	  <mrow>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>3</mn>
+            </msub>
+            <mo>−<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+            <mo>×<!-- × --></mo>
+            <mo stretchy="false">(</mo>
+            <msub>
+              <mi>P</mi>
+              <mn>1</mn>
+            </msub>
+            <mo>−<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <mo stretchy="false">)</mo>
+	  </mrow>
+	  <mrow>
+            <mrow class="MJX-TeXAtom-ORD">
+              <mo stretchy="false">|</mo>
+            </mrow>
+            <msub>
+              <mi>P</mi>
+              <mn>3</mn>
+            </msub>
+            <mo>−<!-- − --></mo>
+            <msub>
+              <mi>P</mi>
+              <mn>2</mn>
+            </msub>
+            <msup>
+              <mrow class="MJX-TeXAtom-ORD">
+		<mo stretchy="false">|</mo>
+              </mrow>
+              <mn>3</mn>
+            </msup>
+	  </mrow>
+	</mfrac>
+      </mrow>
+    </math>
+    <pre id="math-cubic-end">$$\kappa(1) = {2\over3}{(P_3-P_2)\times((P_1-P_2)+(P_3-P_2))\over|P_3-P_2|^3}$$</pre>
+  </div>
+
+  <p>Where <var>κ(0)</var> and <var>κ(1)</var> are the
+  signed curvatures at the start and end of the path segment
+  respectively, and the <var>P</var>'s are the four points that define
+  the cubic Bézier. Note, if
+  <var>P<sub>0</sub></var> and <var>P<sub>1</sub></var>, or
+  <var>P<sub>2</sub></var> and <var>P<sub>3</sub></var> are degenerate, the
+  curvature will be infinite and a line should be used in constructing the join.</p>
+
+<h3 id="ArcsLinejoinFallback" class="heading">13.5.9. Adjusting the circles for the <span class="prop-value">arcs</span>
+'stroke-linejoin' when the initial circles do not intersect<a class="self-link" href="#ArcsLinejoinFallback"></a></h3>
+
+  <p class="annotation">
+    The fallback behavior was resolved at
+    the <a href="https://www.w3.org/2016/02/03-svg-minutes.html#item02">Sydney
+    2016 F2F</a>. It gives a smooth transition between the fallback
+    and non-fallback states.
+  </p>
+
+  <p>
+    When the initial circles calculated for the
+    <span class="prop-value">arcs</span> <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a> do
+    not intersect, they need to be adjusted by changing both radii by
+    the same magnitude (moving the circle centers to keep the circles
+    tangent to the offset paths) until the circles just touch. There
+    are two cases to consider. The first is when one circle encloses
+    the other circle. In this case the larger circle is reduced in
+    size while the smaller circle is increased in size:
+  </p>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/linejoin-construction-fallback.svg" alt="Image showing the lines and points computed to construct an arcs line join
+	      when the original offset circles do not intersect."/>
+    <p class="caption">Construction of an arcs line join shape, shown
+      in pink. The white line is the original path and the dark gray
+      region is the stroke. The dashed lines show circles that are
+      tangent to and have the curvature of the segments at the
+      join. Note the circles do not intersect. Two new circles are
+      constructed by adjusting the radii of the original circles by
+      the same magnitude with the larger circle being made smaller and
+      the smaller circle being made larger until the new circles just
+      touch as shown by the olive-green circles. These new circles
+      then define the join shape.
+    </p>
+  </div>
+
+  <p>
+    The second case is when there is no overlap between the circles.
+    In this case the radii of both circles are increased by the same
+    amount:
+  </p>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/linejoin-construction-fallback2.svg" alt="Image showing the lines and points computed to construct an arcs line join
+	      when the original offset circles do not intersect."/>
+    <p class="caption">Construction of an arcs line join shape, shown
+      in pink. The white line is the original path and the dark gray
+      region is the stroke. The dashed lines show circles that are
+      tangent to and have the curvature of the segments at the
+      join. Note they do not intersect. Two new circles are
+      constructed by increasing the radii of the original circles by
+      the same amount until the new circles just touch as shown by the
+      olive-green circles. These new circles then define the join
+      shape.
+    </p>
+  </div>
+
+  <p>
+    If in this latter case, the tangents of the offset paths at the
+    line join are parallel, the circles cannot be adjusted so that
+    they touch. The line join should then be constructed as a
+    rectangle whose width is the stroke width and whose length is the
+    stroke width times one half of the value of the
+    <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a>:
+  </p>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/linejoin-construction-fallback3.svg" alt="Image showing the lines and points computed to construct an arcs line join
+	      when the original offset circles do not intersect."/>
+    <p class="caption">Construction of an arcs line join shape, shown
+      in pink. The white line is the original path, which has two
+      segments that come to a point, and the dark gray region is the
+      stroke. The dashed lines show circles that are tangent to and
+      have the curvature of the segments at the join. Note they do not
+      intersect. Even if the radii of the circles are increased to infinity,
+      the circles will not intersect. The line join is then a rectangle
+      with the length determined by the miter limit (shown as a vertical
+      dashed line).
+    </p>
+  </div>
+
+  <p class="note">
+    There are a couple of ways to implement the fallback algorithm. The first
+    way is by recursive trial and error on the magnitude of the radius change.
+    The second is by an exact calculation utilizing the <em>touching circle
+      condition</em> and the constraints that the centers of the circles must
+    remain on lines normal to the path segments at the join. This leads to
+    a quadratic equation where one solution is the required radius change.
+  </p>
+
+</div>
+
+<h2 id="PaintingVectorEffects" class="heading">13.6. Vector effects<a class="self-link" href="#PaintingVectorEffects"></a></h2>
+
+<p>This chapter explains <a class="property" href="coords.html#VectorEffectProperty">vector-effect</a> related to Painting. Please refer to <a href="coords.html#VectorEffects">this</a> for the perspective of <a class="property" href="coords.html#VectorEffectProperty">vector-effect</a>. </p>
+
+<dl>
+  <dt class="prop-value" id="non-scaling-stroke">non-scaling-stroke</dt>
+  <dd>Modifies the way an object is stroked. Normally stroking involves calculating stroke
+  outline of the shape's path in current <a href="https://drafts.csswg.org/css-transforms/#user-coordinate-system">user coordinate system</a> and filling that outline with the
+  stroke paint (color or gradient). With the non-scaling-stroke vector effect, stroke outline
+  shall be calculated in the "host" coordinate space instead of <a href="https://drafts.csswg.org/css-transforms/#user-coordinate-system">user coordinate system</a>.
+  More precisely: the <a href="coords.html#TermViewportCoordinateSystem">viewport coordinate system</a> of the <a href="coords.html#TermFurthestAncestorSVGViewport">furthest ancestral SVG viewport</a>.
+  The stroke outline is calculated in the
+  following manner: first, the shape's path is transformed into the host coordinate space.
+  Stroke outline is calculated in the host coordinate space. The resulting outline is
+  transformed back to the <a href="https://drafts.csswg.org/css-transforms/#user-coordinate-system">user coordinate system</a>.
+  (Stroke outline is always filled with stroke paint in the current user coordinate system). The resulting visual effect of this
+  modification is that stroke width is not dependent on the transformations of the element
+  (including non-uniform scaling and shear transformations) and zoom level.</dd>
+</dl>
+
+
+
+
+<div class="ready-for-wider-review">
+<h2 id="Markers" class="heading">13.7. Markers<a class="self-link" href="#Markers"></a></h2>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Improve markers.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-12-30">We will improve markers for SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To solve the common problems authors have with SVG markers.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3286">ACTION-3286</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<p>A marker is a graphical object that is painted at particular positions along
+any <a href="shapes.html#TermShapeElement">shape</a> element.</p>
+
+<p>The <a class="property" href="painting.html#MarkerStartProperty">marker-start</a> and <a class="property" href="painting.html#MarkerEndProperty">marker-end</a> properties
+can be used to place markers at the first and last vertex of a
+<a href="shapes.html#TermShapeElement">shape</a>, and the <a class="property" href="painting.html#MarkerMidProperty">marker-mid</a> property can be used
+to place markers at all other vertices (aside from the first and last).
+The <a class="property" href="painting.html#MarkerStartProperty">marker-start</a> and <a class="property" href="painting.html#MarkerEndProperty">marker-end</a> can be used for example to
+add arrowheads to paths.  Markers placed using these properties are known as
+<dfn id="TermVertexMarker" data-dfn-type="dfn" data-export="">vertex markers</dfn>.</p>
+
+<p class="note">In SVG 2, vertex markers are the only kind of markers
+available.  Other specifications will add new types of markers.</p>
+
+<p>The graphics for a marker are defined by a <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> element.
+The <a class="property" href="painting.html#MarkerStartProperty">marker-start</a>, <a class="property" href="painting.html#MarkerEndProperty">marker-end</a> and <a class="property" href="painting.html#MarkerMidProperty">marker-mid</a> properties,
+together known as the <dfn id="TermMarkerProperties" data-dfn-type="dfn" data-export="">marker properties</dfn>, reference
+<span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> elements.</p>
+
+<p>Markers can be animated, and as with <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> elements, the animated
+effects will show on all current uses of the markers within the document.</p>
+
+<p>Markers on a given element are painted in the following order, from
+bottom to top:</p>
+
+<ul>
+  <li>any marker specified by <a class="property" href="painting.html#MarkerStartProperty">marker-start</a></li>
+
+  <li>the <a class="property" href="painting.html#MarkerMidProperty">marker-mid</a> markers, in order of their position along the path</li>
+
+  <li>any marker specified by <a class="property" href="painting.html#MarkerEndProperty">marker-end</a></li>
+</ul>
+
+
+<h3 id="MarkerElement" class="heading">13.7.1. The <span class="element-name">‘marker’</span> element<a class="self-link" href="#MarkerElement"></a></h3>
+
+<div class="element-summary"><div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element" data-export="" id="elementdef-marker">marker</dfn>’</span></div><dl><dt>Categories:</dt><dd><a href="struct.html#TermContainerElement">Container element</a>, <a href="render.html#TermNeverRenderedElement">never-rendered element</a></dd><dt>Content model:</dt><dd>Any number of the following elements, in any order:<ul class="no-bullets"><li><a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a><span class="expanding"> — <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#AnimateElement"><span>animate</span></a>’</span>, <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#AnimateMotionElement"><span>animateMotion</span></a>’</span>, <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>, <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li><li><a href="struct.html#TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span class="element-name">‘<a href="struct.html#DescElement"><span>desc</span></a>’</span>, <span class="element-name">‘<a href="struct.html#TitleElement"><span>title</span></a>’</span>, <span class="element-name">‘<a href="struct.html#MetadataElement"><span>metadata</span></a>’</span></span></li><li><a href="painting.html#TermPaintServerElement">paint server elements</a><span class="expanding"> — <span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span>, <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span>, <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span></span></li><li><a href="shapes.html#TermShapeElement">shape elements</a><span class="expanding"> — <span class="element-name">‘<a href="shapes.html#CircleElement"><span>circle</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#EllipseElement"><span>ellipse</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#LineElement"><span>line</span></a>’</span>, <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#PolygonElement"><span>polygon</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#PolylineElement"><span>polyline</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#RectElement"><span>rect</span></a>’</span></span></li><li><a href="struct.html#TermStructuralElement">structural elements</a><span class="expanding"> — <span class="element-name">‘<a href="struct.html#DefsElement"><span>defs</span></a>’</span>, <span class="element-name">‘<a href="struct.html#GElement"><span>g</span></a>’</span>, <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span>, <span class="element-name">‘<a href="struct.html#SymbolElement"><span>symbol</span></a>’</span>, <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span></span></li></ul><span class="element-name"><a href="linking.html#AElement"><span>a</span></a></span>, <span class="element-name"><a href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span class="element-name"><a href="https://drafts.fxtf.org/filter-effects/#FilterElement"><span>filter</span></a></span>, <span class="element-name"><a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a></span>, <span class="element-name"><a href="embedded.html#ImageElement"><span>image</span></a></span>, <span class="element-name"><a href="painting.html#MarkerElement"><span>marker</span></a></span>, <span class="element-name"><a href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span class="element-name"><a href="interact.html#ScriptElement"><span>script</span></a></span>, <span class="element-name"><a href="styling.html#StyleElement"><span>style</span></a></span>, <span class="element-name"><a href="struct.html#SwitchElement"><span>switch</span></a></span>, <span class="element-name"><a href="text.html#TextElement"><span>text</span></a></span>, <span class="element-name"><a href="linking.html#ViewElement"><span>view</span></a></span></dd><dt>Attributes:</dt><dd><ul class="no-bullets"><li><a href="struct.html#TermCoreAttribute">core attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="struct.html#IDAttribute"><span>id</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#LangAttribute"><span>lang</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#ClassAttribute"><span>class</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span></span></li><li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclose</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncopy</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncuechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncut</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondblclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrag</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragexit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrop</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondurationchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onemptied</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onended</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onerror</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onfocus</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninput</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninvalid</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeydown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeypress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeyup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onload</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadeddata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadedmetadata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousedown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousemove</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseout</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpaste</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpause</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplaying</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onprogress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onratechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onreset</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onresize</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onscroll</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeked</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeking</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onselect</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onshow</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onstalled</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsubmit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsuspend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontimeupdate</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontoggle</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onvolumechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwaiting</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwheel</span></a>’</span></span></li><li><a href="styling.html#TermPresentationAttribute">presentation attributes</a><span class="expanding"> — </span></li><li><span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span></li><li><span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span></li><li><span class="attr-name">‘<a href="painting.html#MarkerElementRefXAttribute"><span>refX</span></a>’</span></li><li><span class="attr-name">‘<a href="painting.html#MarkerElementRefYAttribute"><span>refY</span></a>’</span></li><li><span class="attr-name">‘<a href="painting.html#MarkerUnitsAttribute"><span>markerUnits</span></a>’</span></li><li><span class="attr-name">‘<a href="painting.html#MarkerWidthAttribute"><span>markerWidth</span></a>’</span></li><li><span class="attr-name">‘<a href="painting.html#MarkerHeightAttribute"><span>markerHeight</span></a>’</span></li><li><span class="attr-name">‘<a href="painting.html#OrientAttribute"><span>orient</span></a>’</span></li></ul></dd><dt>DOM Interfaces:</dt><dd><ul class="no-bullets"><li><a class="idlinterface" href="painting.html#InterfaceSVGMarkerElement">SVGMarkerElement</a></li></ul></dd></dl></div>
+
+<p>The <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> element defines the graphics that are to
+be used for drawing markers on a <a href="shapes.html#TermShapeElement">shape</a>.</p>
+
+<p id="MarkerAttributes"><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+
+<table class="attrdef def">
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Initial value</th>
+    <th>Animatable</th>
+  </tr>
+  <tr>
+    <td><dfn id="MarkerUnitsAttribute" data-dfn-type="element-attr" data-dfn-for="marker" data-export="">markerUnits</dfn></td>
+    <td>strokeWidth | userSpaceOnUse</td>
+    <td>strokeWidth</td>
+    <td>yes</td>
+  </tr>
+</table>
+
+</dt>
+<dd>
+
+<p>The <span class="attr-name">‘<a href="painting.html#MarkerUnitsAttribute"><span>markerUnits</span></a>’</span> attribute defines the coordinate system for
+attributes <span class="attr-name">‘<a href="painting.html#MarkerWidthAttribute"><span>markerWidth</span></a>’</span>, <span class="attr-name">‘<a href="painting.html#MarkerHeightAttribute"><span>markerHeight</span></a>’</span> and the
+contents of the <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span>.  Values have the
+following meanings:</p>
+
+<dl>
+  <dt><span class="attr-value">strokeWidth</span></dt>
+  <dd><span class="attr-name">‘<a href="painting.html#MarkerWidthAttribute"><span>markerWidth</span></a>’</span>, <span class="attr-name">‘<a href="painting.html#MarkerHeightAttribute"><span>markerHeight</span></a>’</span> and the contents
+  of the <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> have values in a coordinate system
+  which has a single unit equal to the size in user units of the
+  painted stroke width of the element referencing the marker.</dd>
+
+  <dt><span class="attr-value">userSpaceOnUse</span></dt>
+  <dd><span class="attr-name">‘<a href="painting.html#MarkerWidthAttribute"><span>markerWidth</span></a>’</span>, <span class="attr-name">‘<a href="painting.html#MarkerHeightAttribute"><span>markerHeight</span></a>’</span> and the contents
+  of the <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> have values in the current
+  user coordinate system in place for the element
+  referencing the marker.</dd>
+</dl>
+
+</dd>
+<dt>
+
+<p class="note">
+When <span class="attr-name">‘<a href="painting.html#MarkerUnitsAttribute"><span>markerUnits</span></a>’</span> has the value <span class="attr-value">strokeWidth</span>,
+the size of the marker is relative to the <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a> after it has
+had any transforms applied that affect the width of the stroke in the
+<a href="https://drafts.csswg.org/css-transforms/#user-coordinate-system">user coordinate system</a> for the stroke. This means that, for example,
+the <a class="property" href="coords.html#VectorEffectProperty">vector-effect</a> attribute with a value of
+<span class="attr-value">non-scaling-stroke</span> will result in the markers
+also being non scaling.</p>
+
+<table class="attrdef def">
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Initial value</th>
+    <th>Animatable</th>
+  </tr>
+  <tr>
+    <td><dfn id="MarkerWidthAttribute" data-dfn-type="element-attr" data-dfn-for="marker" data-export="">markerWidth</dfn>,
+    <dfn id="MarkerHeightAttribute" data-dfn-type="element-attr" data-dfn-for="marker" data-export="">markerHeight</dfn></td>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a></td>
+    <td>3</td>
+    <td>yes</td>
+  </tr>
+</table>
+
+</dt>
+<dd>
+
+<p>The <span class="attr-name">‘<a href="painting.html#MarkerWidthAttribute"><span>markerWidth</span></a>’</span> and <span class="attr-name">‘<a href="painting.html#MarkerHeightAttribute"><span>markerHeight</span></a>’</span> attributes
+represent the size of the SVG viewport into which the marker is to
+be fitted according to the <span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span> and <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span>
+attributes.  A value of zero for either
+attribute results in nothing being rendered for the marker.  A negative value
+for either attribute is an error (see
+<a href="conform.html#ErrorProcessing">Error processing</a>).</p>
+
+</dd>
+<dt>
+
+<table class="attrdef def">
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Initial value</th>
+    <th>Animatable</th>
+  </tr>
+  <tr>
+    <td><dfn id="MarkerElementRefXAttribute" data-dfn-type="element-attr" data-dfn-for="marker" data-export="">refX</dfn></td>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> | left | center | right</td>
+    <td>0</td>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <td><dfn id="MarkerElementRefYAttribute" data-dfn-type="element-attr" data-dfn-for="marker" data-export="">refY</dfn></td>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> | top | center | bottom</td>
+    <td>0</td>
+    <td>yes</td>
+  </tr>
+</table>
+
+</dt>
+<dd>
+
+    <p class="note">
+      New in SVG 2: geometric keywords (matches use in <span class="element-name">‘<a href="struct.html#SymbolElement"><span>symbol</span></a>’</span>).
+    </p>
+    <p class="annotation">
+      We will add top/center/bottom, left/center/right keywords to
+      refX/refY on marker/symbol. Resolved at
+      <a href="http://www.w3.org/2014/08/26-svg-minutes.html#item07">London
+      F2F</a>. Values inspired by
+      <a href="https://www.w3.org/TR/css3-background/#the-background-position">'background-position'</a>.
+    </p>
+
+<p>The <span class="attr-name">‘<a href="painting.html#MarkerElementRefXAttribute"><span>refX</span></a>’</span> and <span class="attr-name">‘<a href="painting.html#MarkerElementRefYAttribute"><span>refY</span></a>’</span> attributes define the reference
+point of the marker, which is to be placed exactly at the marker's
+position on the <a href="shapes.html#TermShapeElement">shape</a>.  Lengths and numbers must be interpreted
+as being in the coordinate system of the marker contents, after application of the
+<span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span> and <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> attributes. Percentage
+values must be interpreted as being a percentage of the <span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span>
+width for <span class="attr-name">‘<a href="painting.html#MarkerElementRefXAttribute"><span>refX</span></a>’</span> or a percentage of the <span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span> height for
+<span class="attr-name">‘<a href="painting.html#MarkerElementRefYAttribute"><span>refY</span></a>’</span>.</p>
+<p>The keyword values must evaluate to the following percentages:</p>
+<table class="data compact">
+<caption>Mapping of refX and refY keywords to percentages.</caption>
+<thead>
+<tr><th>keyword</th><th>percentage equivalent</th></tr>
+</thead>
+<tbody>
+<tr><td>left</td><td>0%</td></tr>
+<tr><td>center</td><td>50%</td></tr>
+<tr><td>right</td><td>100%</td></tr>
+<tr><td>top</td><td>0%</td></tr>
+<tr><td>bottom</td><td>100%</td></tr>
+</tbody>
+</table>
+
+</dd>
+<dt>
+
+<table class="attrdef def">
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Initial value</th>
+    <th>Animatable</th>
+  </tr>
+  <tr>
+    <td><dfn id="OrientAttribute" data-dfn-type="element-attr" data-dfn-for="marker" data-export="">orient</dfn></td>
+    <td>auto | auto-start-reverse | <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a></td>
+    <td>0</td>
+    <td>yes (non-additive)</td>
+  </tr>
+</table>
+
+</dt>
+<dd>
+
+<p>The <span class="attr-name">‘<a href="painting.html#OrientAttribute"><span>orient</span></a>’</span> attribute indicates how the marker
+is rotated when it is placed at its position on the <a href="shapes.html#TermShapeElement">shape</a>.
+Values have the following meanings:</p>
+
+<dl>
+  <dt><span class="attr-value">'auto'</span></dt>
+  <dd>
+    <p>The marker is oriented such that its positive x-axis
+    is pointing in a direction relative to the path
+    at the position the marker is placed (See
+    <a href="#RenderingMarkers">Rendering Markers</a>).</p>
+  </dd>
+</dl>
+
+<dl class="ready-for-wider-review">
+  <dt><span class="attr-value">'auto-start-reverse'</span></dt>
+  <dd>
+    <p>If placed by <a class="property" href="painting.html#MarkerStartProperty">marker-start</a>, the marker is oriented
+    180° different from the orientation that would be used if
+    <span class="attr-value">'auto'</span> where specified.  For
+    all other markers, <span class="attr-value">'auto-start-reverse'</span>
+    means the same as <span class="attr-value">'auto'</span>.</p>
+
+    <p class="note">This allows a single arrowhead marker to be defined
+    that can be used for both the start and end of a path, i.e. which points
+    outwards from both ends.</p>
+  </dd>
+</dl>
+
+<dl>
+  <dt><span class="attr-value"><a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a></span></dt>
+  <dt><span class="attr-value"><a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a></span></dt>
+  <dd>
+    <p>The marker is oriented such that the specified angle is
+    that measured between the <a href="shapes.html#TermShapeElement">shape</a>'s positive x-axis
+    and the marker's positive x-axis.  A <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> value
+    specifies an angle in degrees.</p>
+    <p class="note">For example, if a value of <span class="attr-value">'45'</span>
+    is given, then the marker's positive x-axis would be pointing down and right
+    in the <a href="shapes.html#TermShapeElement">shape</a>'s coordinate system.</p>
+  </dd>
+</dl>
+
+</dd>
+
+</dl>
+
+
+
+<h3 id="VertexMarkerProperties" class="heading">13.7.2. Vertex markers: the ‘<span class="property">marker-start</span>’,
+‘<span class="property">marker-mid</span>’ and ‘<span class="property">marker-end</span>’
+properties<a class="self-link" href="#VertexMarkerProperties"></a></h3>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="MarkerStartProperty" data-dfn-type="property" data-export="">marker-start</dfn>,
+        <dfn id="MarkerMidProperty" data-dfn-type="property" data-export="">marker-mid</dfn>,
+        <dfn id="MarkerEndProperty" data-dfn-type="property" data-export="">marker-end</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>none | <a href="painting.html#DataTypeMarkerRef">&lt;marker-ref></a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified, but with <a href="https://www.w3.org/TR/css3-values/#url-value">&lt;url></a> values (that are part of
+    a <a href="painting.html#DataTypeMarkerRef">&lt;marker-ref></a>) made absolute</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>discrete</td>
+  </tr>
+</table>
+
+<p>where:</p>
+
+<p class="definition prod"><dfn id="DataTypeMarkerRef" data-dfn-type="type" data-export="">&lt;marker-ref></dfn> = <a href="https://www.w3.org/TR/css3-values/#url-value">&lt;url></a></p>
+
+<p>The <a class="property" href="painting.html#MarkerStartProperty">marker-start</a> and <a class="property" href="painting.html#MarkerEndProperty">marker-end</a> properties are used
+to specify the marker that will be drawn at the first and last vertices
+of the given <a href="shapes.html#TermShapeElement">shape</a>, respectively.  <a class="property" href="painting.html#MarkerMidProperty">marker-mid</a>
+is used to specify the marker that will be drawn at all other vertices
+(i.e., every vertex except the first and last).
+Possible values for <a class="property" href="painting.html#MarkerStartProperty">marker-start</a>, <a class="property" href="painting.html#MarkerMidProperty">marker-mid</a> and
+<a class="property" href="painting.html#MarkerEndProperty">marker-end</a> are:</p>
+
+<dl>
+  <dt><span class="prop-value">none</span></dt>
+  <dd>Indicates that no marker symbol will be drawn at the given
+  vertex or vertices.</dd>
+
+  <dt><span class="prop-value">&lt;marker-ref></span></dt>
+  <dd>Indicates that the <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> element referenced
+  by the <a href="painting.html#DataTypeMarkerRef">&lt;marker-ref></a> value will be drawn at the given vertex or
+  vertices.
+  If the reference is not valid, then no marker will be drawn at the given
+  vertex or vertices.</dd>
+</dl>
+
+<p>For all <a href="shapes.html#TermShapeElement">shapes</a>, the path that must be used when calculating
+marker positions is the <a href="paths.html#TermEquivalentPath">equivalent path</a>.</p>
+
+<div class="ready-for-wider-review">
+<p>For all <a href="shapes.html#TermShapeElement">shape</a> elements, except <span class="element-name">‘<a href="shapes.html#PolylineElement"><span>polyline</span></a>’</span> and <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span>,
+the last vertex is the same as the first
+vertex. In this case, if the value of <a class="property" href="painting.html#MarkerStartProperty">marker-start</a> and <a class="property" href="painting.html#MarkerEndProperty">marker-end</a>
+are both not <span class="prop-value">none</span>, then two markers
+will be rendered on that final vertex.
+For <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> elements, for each <a href="paths.html#TermOpenSubpath">closed subpath</a>, the last vertex is
+the same as the first vertex. <a class="property" href="painting.html#MarkerStartProperty">marker-start</a> must only be rendered on
+the first vertex of the <a href="paths.html#PathData">path data</a>. <a class="property" href="painting.html#MarkerEndProperty">marker-end</a> must only be
+rendered on the final vertex of the <a href="paths.html#PathData">path data</a>.
+<a class="property" href="painting.html#MarkerMidProperty">marker-mid</a> must be rendered on every vertex other than the first
+vertex of the <a href="paths.html#PathData">path data</a> and the last vertex of the <a href="paths.html#PathData">path data</a>.
+</p>
+<div class="example">
+  <pre>&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30">
+  &lt;defs>
+    &lt;marker id="m1" viewBox="0 0 10 10" refX="5" refY="5"
+     markerWidth="8" markerHeight="8">
+      &lt;circle cx="5" cy="5" r="5" fill="green"/>
+    &lt;/marker>
+    &lt;marker id="m2" viewBox="0 0 10 10" refX="5" refY="5"
+     markerWidth="6.5" markerHeight="6.5">
+      &lt;circle cx="5" cy="5" r="5" fill="skyblue" opacity="0.9"/>
+    &lt;/marker>
+    &lt;marker id="m3" viewBox="0 0 10 10" refX="5" refY="5"
+     markerWidth="5" markerHeight="5">
+      &lt;circle cx="5" cy="5" r="5" fill="maroon" opacity="0.85"/>
+    &lt;/marker>    
+  &lt;/defs>
+  
+  &lt;path d="M10,10 h10 v10 z m20,0 h10 v10 z m20,0 h10 v10 z"
+  fill="none" stroke="black"
+  marker-start="url(#m1)"  
+  marker-mid="url(#m2)"
+  marker-end="url(#m3)"  
+  />
+&lt;/svg></pre>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/marker-doubled.svg" alt="Image showing that for closed subpaths, two markers are painted at the start of each subpath."/>
+    <p class="caption">For <a href="paths.html#PathData">path data</a> containing <a href="paths.html#TermOpenSubpath">closed subpaths</a>,
+    two markers are drawn at the first/last vertex of each <a href="paths.html#TermOpenSubpath">closed subpath</a>.
+    For the leftmost <a href="paths.html#TermOpenSubpath">closed subpath</a>, a <a class="property" href="painting.html#MarkerMidProperty">marker-mid</a> is drawn over
+    the <a class="property" href="painting.html#MarkerStartProperty">marker-start</a>. For the middle <a href="paths.html#TermOpenSubpath">closed subpath</a>, two
+    <a class="property" href="painting.html#MarkerMidProperty">marker-mid</a> are drawn on top of one another. For the rightmost
+    <a href="paths.html#TermOpenSubpath">closed subpath</a>, <a class="property" href="painting.html#MarkerEndProperty">marker-end</a> is drawn over <a class="property" href="painting.html#MarkerMidProperty">marker-mid</a>.
+    </p>
+  </div>
+</div>
+</div>
+
+<p class="note">Note that <a class="property" href="painting.html#MarkerStartProperty">marker-start</a> and <a class="property" href="painting.html#MarkerEndProperty">marker-end</a>
+refer to the first and last vertex of the entire path, not each subpath.</p>
+
+<div class="ready-for-wider-review">
+<div class="example">
+  <p>The following example shows a triangular marker symbol used as a
+  <a href="painting.html#TermVertexMarker">vertex marker</a> to form an arrowhead at the end of two paths.</p>
+
+  <pre>&lt;svg xmlns="http://www.w3.org/2000/svg"
+     width="275" height="200" viewBox="0 0 275 200">
+  &lt;defs>
+    &lt;marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5" 
+            markerUnits="strokeWidth" markerWidth="4" markerHeight="3"
+            orient="auto">
+      &lt;path d="M 0 0 L 10 5 L 0 10 z" fill="context-stroke"/>
+    &lt;/marker>
+  &lt;/defs>
+
+  &lt;g fill="none" stroke-width="10" marker-end="url(#Triangle)">
+    &lt;path stroke="crimson" d="M 100,75 C 125,50 150,50 175,75"/>
+    &lt;path stroke="olivedrab" d="M 175,125 C 150,150 125,150 100,125"/>
+  &lt;/g>
+&lt;/svg></pre>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/marker-rendering.svg" alt="Image showing the use of an automatically oriented marker."/>
+    <p class="caption">The triangle is placed at the end of the path and
+    oriented automatically so that it points in the right direction.
+    The use of <span class="prop-value">context-stroke</span> ensures
+    the fill of the triangle matches the stroke of each <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span>.</p>
+  </div>
+</div>
+</div>
+
+<h3 id="MarkerShorthand" class="heading">13.7.3. Marker shorthand: the ‘<span class="property">marker</span>’
+property<a class="self-link" href="#MarkerShorthand"></a></h3>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="MarkerProperty" data-dfn-type="property" data-export="">marker</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>none | <a href="painting.html#DataTypeMarkerRef">&lt;marker-ref></a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>not defined for shorthand properties</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>see individual properties</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>discrete</td>
+  </tr>
+</table>
+
+<p>The <a class="property" href="painting.html#MarkerProperty">marker</a> property sets values for the
+<a class="property" href="painting.html#MarkerStartProperty">marker-start</a>, <a class="property" href="painting.html#MarkerMidProperty">marker-mid</a> and <a class="property" href="painting.html#MarkerEndProperty">marker-end</a>
+properties.  The value of the <a class="property" href="painting.html#MarkerProperty">marker</a> is used
+directly for all three of the corresponding longhand properties.</p>
+
+
+<h3 id="RenderingMarkers" class="heading">13.7.4. Rendering markers<a class="self-link" href="#RenderingMarkers"></a></h3>
+
+<p>When orienting a marker automatically, due to specifying <span class="attr-name">‘<a href="painting.html#OrientAttribute"><span>orient</span></a>’</span>
+as <span class="attr-value">'auto'</span>, the following rules are used:</p>
+
+<ul>
+  <li>If the vertex is the start or end of an <a href="paths.html#TermClosedSubpath">open subpath</a>, then the marker is
+  oriented in the <a href="paths.html#TermPathDirection">path direction</a>.</li>
+
+  <li>Otherwise, the marker is oriented in a direction half way between the
+  <a href="paths.html#TermPathSegmentEndDirection">direction at the end of the
+  preceding segment</a> and the <a href="paths.html#TermPathSegmentStartDirection">direction
+  at the start of the following segment</a>.</li>
+</ul>
+
+<p>For each marker that is drawn, a temporary new user coordinate
+system is established so that the marker will be positioned and sized
+correctly, as follows:</p>
+
+<ul>
+  <li>The axes of the temporary new user coordinate system are aligned
+  according to the <span class="attr-name">‘<a href="painting.html#OrientAttribute"><span>orient</span></a>’</span> attribute on the
+  <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> element.</li>
+
+  <li>A temporary new coordinate system is established by attribute
+  <span class="attr-name">‘<a href="painting.html#MarkerUnitsAttribute"><span>markerUnits</span></a>’</span>. If <span class="attr-name">‘<a href="painting.html#MarkerUnitsAttribute"><span>markerUnits</span></a>’</span> equals
+  <span class="attr-value">'strokeWidth'</span>, then the temporary new
+  user coordinate system is the result of scaling the current
+  user coordinate system by the current value of property
+  <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a>. If <span class="attr-name">‘<a href="painting.html#MarkerUnitsAttribute"><span>markerUnits</span></a>’</span> equals
+  <span class="attr-value">'userSpaceOnUse'</span>, then no extra scale
+  transformation is applied.</li>
+
+  <li>An additional set of transformations might occur if the
+  <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> element includes a <span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span> attribute, in
+  which case additional transformations are set up to produce the necessary
+  result due to attributes <span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span> and <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span>.</li>
+
+  <li>If the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property on the <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> element
+  indicates that the marker needs to be clipped to its SVG viewport, then an
+  implicit clipping path is established at the bounds of the SVG viewport.</li>
+</ul>
+
+<p class="note">Note that the <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
+the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property for <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> elements to
+<span class="prop-value">hidden</span>, which causes a rectangular clipping
+path to be created at the bounds of marker's SVG viewport by default.</p>
+
+<p>Properties do not inherit from the element referencing the <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span>
+into the contents of the marker.  However, by using the
+<span class="prop-value">context-stroke</span> value for the <a class="property" href="painting.html#FillProperty">fill</a> or
+<a class="property" href="painting.html#StrokeProperty">stroke</a> on elements in its definition, a single marker can be designed
+to match the style of the element referencing the marker.</p>
+
+<p>Markers cannot be interacted with.  Events such as click or mouseover,
+for example, are not dispatched to a <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> or its children when
+the mouse is clicked or moved over a rendered marker.</p>
+
+<p>Markers are not rendered directly
+and must be referenced by one of the <a href="painting.html#TermMarkerProperties">marker properties</a>
+to be rendered.
+The <a class="property" href="render.html#VisibilityControl">display</a> value for the <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> element
+must always be set to <span class="prop-value">none</span>
+by the <a href="styling.html#UAStyleSheet">user agent style sheet</a>,
+and this declaration must have importance over any other CSS rule or presentation attribute.
+  <!--
+The <a>'display'</a> property does not apply to the
+<a>'marker element'</a> element; thus, <a>'marker element'</a> elements are not
+directly rendered even if the <a>'display'</a> property is
+set to a value other than <span class="prop-value">none</span>, and
+-->
+<span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> elements are available for referencing even when the
+<a class="property" href="render.html#VisibilityControl">display</a> property on the <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> element or any of its
+ancestors is set to <span class="prop-value">none</span>.</p>
+
+<p>The rendering effect of a marker is as if the contents of the
+referenced <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> element were deeply cloned
+into a separate non-exposed DOM tree for each instance of the
+marker. Because the cloned DOM tree is non-exposed, the SVG DOM
+does not show the cloned instance of the marker.</p>
+
+<p>The conceptual deep cloning of the referenced
+<span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> element into a non-exposed DOM tree also
+copies any property values resulting from
+<a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html">the CSS cascade</a>
+([<a href="refs.html#ref-css2">CSS2</a>], chapter 6) and
+property inheritance on the referenced element and its contents. CSS
+selectors can be applied to the original (i.e., referenced) elements
+because they are part of the formal document structure. CSS selectors
+cannot be applied to the (conceptually) cloned DOM tree because its
+contents are not part of the formal document structure.</p>
+
+<div class="example">
+<p>For illustrative purposes, we'll repeat the marker example shown earlier:</p>
+
+<pre>
+&lt;?xml version="1.0" standalone="no"?>
+&lt;svg width="4in" height="2in"
+     viewBox="0 0 4000 2000"
+     xmlns="http://www.w3.org/2000/svg">
+  &lt;defs>
+    &lt;marker id="Triangle"
+      viewBox="0 0 10 10" refX="0" refY="5"
+      markerUnits="strokeWidth"
+      markerWidth="4" markerHeight="3"
+      orient="auto">
+      &lt;path d="M 0 0 L 10 5 L 0 10 z" />
+    &lt;/marker>
+  &lt;/defs>
+  &lt;rect x="10" y="10" width="3980" height="1980"
+       fill="none" stroke="blue" stroke-width="10" />
+  &lt;desc>Placing an arrowhead at the end of a path.
+  &lt;/desc>
+  &lt;path d="M 1000 750 L 2000 750 L 2500 1250"
+        fill="none" stroke="black" stroke-width="100"
+        marker-end="url(#Triangle)"  />
+&lt;/svg>
+</pre>
+
+<p>The rendering effect of the above file will be visually identical to
+the following:</p>
+
+<pre>
+&lt;?xml version="1.0" standalone="no"?>
+&lt;svg width="4in" height="2in"
+     viewBox="0 0 4000 2000"
+     xmlns="http://www.w3.org/2000/svg">
+  &lt;desc>File which produces the same effect
+      as the marker example file, but without
+      using markers.
+  &lt;/desc>
+  &lt;rect x="10" y="10" width="3980" height="1980"
+       fill="none" stroke="blue" stroke-width="10" />
+  &lt;!-- The path draws as before, but without the marker properties -->
+  &lt;path d="M 1000 750 L 2000 750 L 2500 1250"
+        fill="none" stroke="black" stroke-width="100"  />
+  &lt;!-- The following logic simulates drawing a marker
+       at final vertex of the path. -->
+  &lt;!-- First off, move the origin of the user coordinate system
+       so that the origin is now aligned with the end point of the path. -->
+  <strong>&lt;g transform="translate(2500,1250)" ></strong>
+    &lt;!-- Rotate the coordinate system 45 degrees because
+         the marker specified orient="auto" and the final segment
+         of the path is going in the direction of 45 degrees. -->
+    <strong>&lt;g transform="rotate(45)" ></strong>
+      &lt;!-- Scale the coordinate system to match the coordinate system
+           indicated by the 'markerUnits' attributes, which in this case has
+           a value of 'strokeWidth'. Therefore, scale the coordinate system
+           by the current value of the 'stroke-width' property, which is 100. -->
+      <strong>&lt;g transform="scale(100)" ></strong>
+        &lt;!-- Translate the coordinate system by
+             (-refX*viewBoxToMarkerUnitsScaleX, -refY*viewBoxToMarkerUnitsScaleY)
+             in order that (refX,refY) within the marker will align with the vertex.
+             In this case, we use the default value for preserveAspectRatio
+             ('xMidYMid meet'), which means find a uniform scale factor
+             (i.e., viewBoxToMarkerUnitsScaleX=viewBoxToMarkerUnitsScaleY)
+             such that the viewBox fits entirely within the SVG viewport ('meet') and
+             is center-aligned ('xMidYMid'). In this case, the uniform scale factor
+             is markerHeight/viewBoxHeight=3/10=.3. Therefore, translate by
+             (-refX*.3,-refY*.3)=(0*.3,-5*.3)=(0,-1.5). -->
+        <strong>&lt;g transform="translate(0,-1.5)" ></strong>
+          &lt;!-- There is an implicit clipping path because the user agent style
+               sheet says that the 'overflow' property for markers has the value
+               'hidden'. To achieve this, create a clipping path at the bounds
+               of the SVG viewport. Note that in this case the SVG viewport extends
+               0.5 units to the left and right of the viewBox due to
+               a uniform scale factor, different ratios for markerWidth/viewBoxWidth
+               and markerHeight/viewBoxHeight, and 'xMidYMid' alignment -->
+          <strong>&lt;clipPath id="cp1" >
+            &lt;rect x="-0.5" y="0" width="4" height="3" />
+          &lt;/clipPath></strong>
+          <strong>&lt;g clip-path="url(#cp1)" ></strong>
+            &lt;!-- Scale the coordinate system by the uniform scale factor
+                 markerHeight/viewBoxHeight=3/10=.3 to set the coordinate
+                 system to viewBox units. -->
+            <strong>&lt;g transform="scale(.3)" ></strong>
+              &lt;!-- This 'g' element carries all property values that result from
+                   cascading and inheritance of properties on the original 'marker' element.
+                   In this example, neither fill nor stroke was specified on the 'marker'
+                   element or any ancestors of the 'marker', so the initial values of
+                   "black" and "none" are used, respectively. -->
+             <strong>&lt;g fill="black" stroke="none" ></strong>
+                &lt;!-- Expand out the contents of the 'marker' element. -->
+                <strong>&lt;path d="M 0 0 L 10 5 L 0 10 z" /></strong>
+              <strong>&lt;/g></strong>
+            <strong>&lt;/g></strong>
+          <strong>&lt;/g></strong>
+        <strong>&lt;/g></strong>
+      <strong>&lt;/g></strong>
+    <strong>&lt;/g></strong>
+  <strong>&lt;/g></strong>
+&lt;/svg>
+</pre>
+<p class="view-as-svg"><a href="images/painting/marker-simulated.svg">View this example as SVG (SVG-enabled browsers only)</a></p>
+</div>
+
+</div>
+
+
+
+<div class="ready-for-wider-review">
+<h2 id="PaintOrder" class="heading">13.8. Controlling paint operation order: the
+‘<span class="property">paint-order</span>’ property<a class="self-link" href="#PaintOrder"></a></h2>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support control of the order of filling, stroke and painting markers on shapes.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2012/05/07-svg-minutes#item03">SVG 2 will adopt the ‘<span class="property">paint-order</span>’ property proposal, though possibly with a different name.</a>
+      The property name is now resolved, see <a href="http://www.w3.org/2013/11/15-svg-minutes.html#item12">15 Nov 2013 minutes</a>.</td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To address the common desire to paint strokes below fills without having to duplicate an element.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3285">ACTION-3285</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="PaintOrderProperty" data-dfn-type="property" data-export="">paint-order</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>normal | [ fill || stroke || markers ]</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>normal</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a> and <a href="text.html#TermTextContentElement">text content elements</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>discrete</td>
+  </tr>
+</table>
+
+<p class="note">New in SVG 2.  Added primarily to allow painting the stroke
+of text below its fill without needing to duplicate the <span class="element-name">‘<a href="text.html#TextElement"><span>text</span></a>’</span> element.</p>
+
+<p>The <a class="property" href="painting.html#PaintOrderProperty">paint-order</a> property controls the order that the three
+paint operations that <a href="shapes.html#TermShapeElement">shapes</a> and text are rendered with:
+their fill, their stroke and any markers they might have.</p>
+
+<p>When the value of this property is <span class="prop-value">normal</span>,
+the element is painted with the standard order of painting operations:
+the fill is painted first, then its stroke and finally its markers.</p>
+
+<p>When any of the other keywords are used, the order of the paint
+operations for painting the element is as given, from left to right.  If any of
+the three keywords are omitted, they are painted last, in the order they
+would be painted with <span class="prop-value">paint-order: normal</span>.</p>
+
+<p class="note">This means that, for example,
+<span class="prop-value">paint-order: stroke</span>
+has the same rendering behavior as
+<span class="prop-value">paint-order: stroke fill markers</span>.</p>
+
+<div class="example">
+  <p>The following example shows how the <a class="property" href="painting.html#PaintOrderProperty">paint-order</a> property can
+  be used to render stroked text in a more aesthetically pleasing manner.</p>
+
+  <pre>
+&lt;svg xmlns="http://www.w3.org/2000/svg"
+     width="600" height="150" viewBox="0 0 600 150">
+
+  &lt;style>
+    text {
+      font: 80px bold sans-serif; stroke-linejoin: round;
+      text-anchor: middle; fill: peachpuff; stroke: crimson;
+    }
+  &lt;/style>
+
+  &lt;text x="150" y="100" style="stroke-width: 6px;">pizazz&lt;/text>
+  &lt;text x="450" y="100" style="stroke-width: 12px; paint-order: stroke;">pizazz&lt;/text>
+&lt;/svg>
+</pre>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/paintorder.svg" alt="Image showing the effect of paint-order."/>
+    <p class="caption">Text painted with its stroke below the fill.</p>
+  </div>
+</div>
+</div>
+
+<div class="ready-for-wider-review">
+<h2 id="ColorInterpolation" class="heading">13.9. Color space for interpolation: the
+‘<span class="property">color-interpolation</span>’ property<a class="self-link" href="#ColorInterpolation"></a></h2>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="ColorInterpolationProperty" data-dfn-type="property" data-export="">color-interpolation</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>auto | sRGB | linearRGB</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>sRGB</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="struct.html#TermContainerElement">container elements</a>, <a href="struct.html#TermGraphicsElement">graphics elements</a>,
+    <a href="pservers.html#TermGradientElement">gradient elements</a>, <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> and <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#AnimateElement"><span>animate</span></a>’</span></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>discrete</td>
+  </tr>
+</table>
+
+<p>The SVG user agent performs color interpolations and compositing
+at various points as it processes SVG content.  The <a class="property" href="painting.html#ColorInterpolationProperty">color-interpolation</a>
+property controls which color space is used for the following graphics operations:</p>
+
+<ul>
+  <li>interpolating between <a href="pservers.html#Gradients">gradient</a> stops,</li>
+
+  <li>interpolating color when performing color animations with
+  <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#AnimateElement"><span>animate</span></a>’</span>,</li>
+  <li>and <a href="render.html#PaintersModel">compositing and blending</a> of
+  <a href="struct.html#TermGraphicsElement">graphics elements</a> into the current background.</li>
+</ul>
+
+<p class="note">For <a href="https://www.w3.org/TR/filter-effects/">filter effects</a>, the
+<a class="property" href="https://drafts.fxtf.org/filter-effects/#ColorInterpolationFiltersProperty">color-interpolation-filters</a> property controls which color space is used.
+[<a href="refs.html#ref-filter-effects-1">filter-effects-1</a>]</p>
+</div>
+
+<div class="ready-for-wider-review">
+<p>The <a class="property" href="painting.html#ColorInterpolationProperty">color-interpolation</a> property chooses between color operations
+occurring in the sRGB color space or in a (light energy linear) linearized RGB
+color space. Having chosen the appropriate color space, component-wise linear
+interpolation is used.  Values for <a class="property" href="painting.html#ColorInterpolationProperty">color-interpolation</a> have the
+following meanings:</p>
+
+<dl>
+  <dt><span class="prop-value">auto</span></dt>
+  <dd>Indicates that the user agent can choose either the
+  <span class="prop-value">sRGB</span> or
+  <span class="prop-value">linearRGB</span> spaces for color interpolation.
+  This option indicates that the author doesn't require that color
+  interpolation occur in a particular color space.</dd>
+
+  <dt><span class="prop-value">sRGB</span></dt>
+  <dd>Indicates that color interpolation occurs in the sRGB
+  color space.</dd>
+
+  <dt><span class="prop-value">linearRGB</span></dt>
+  <dd>Indicates that color interpolation occurs in the
+  linearized RGB color space as described below.</dd>
+</dl>
+
+<p id="sRGBlinearRGBConversionFormulas">The conversion formulas between the
+sRGB color space (i.e., nonlinear with 2.2 gamma curve) and the linearized RGB
+color space (i.e., color values expressed as sRGB tristimulus values without a
+gamma curve) can be found in <a href="https://webstore.iec.ch/publication/6168">the sRGB specification</a>
+[<a href="refs.html#ref-srgb">SRGB</a>].
+For illustrative purposes, the following formula shows the conversion from
+sRGB to linearized RGB, where <var>C<sub>srgb</sub></var> is one of the
+three sRGB color components, <var>C<sub>linear</sub></var> is the corresponding
+linearized RGB color component, and all color values are between 0 and 1:</p>
+
+<div role="math" aria-describedby="math-linearRGB">
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <mrow>
+      <msub>
+        <mi>C</mi>
+        <mi>linear</mi>
+      </msub>
+      <mo>=</mo>
+      <mo>{</mo>
+      <mtable columnalign="left">
+        <mtr>
+          <mtd>
+            <mfrac>
+              <msub>
+                <mi>C</mi>
+                <mi>srgb</mi>
+              </msub>
+              <mn>12.92</mn>
+            </mfrac>
+          </mtd>
+          <mtd>
+            <mtext>if </mtext>
+            <msub>
+              <mi>C</mi>
+              <mi>srgb</mi>
+            </msub>
+            <mo>≤</mo>
+            <mn>0.04045</mn>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <msup>
+              <mfenced>
+                <mfrac>
+                  <mrow>
+                    <msub>
+                      <mi>C</mi>
+                      <mi>srgb</mi>
+                    </msub>
+                    <mo>+</mo>
+                    <mn>0.055</mn>
+                  </mrow>
+                  <mn>1.055</mn>
+                </mfrac>
+              </mfenced>
+              <mn>2.4</mn>
+            </msup>
+          </mtd>
+          <mtd>
+            <mtext>if </mtext>
+            <msub>
+              <mi>C</mi>
+              <mi>srgb</mi>
+            </msub>
+            <mo>></mo>
+            <mn>0.04045</mn>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mrow>
+  </math>
+  <pre id="math-linearRGB">
+if C_srgb &lt;= 0.04045
+  C_linear = C_srgb / 12.92
+else if c_srgb > 0.04045
+  C_linear = ((C_srgb + 0.055) / 1.055) ^ 2.4
+</pre>
+</div>
+
+<p>Out-of-range color values, if supported by the user agent, also are
+converted using the above formulas.</p>
+
+<p>When a child element is blended into a background, the value of the
+<a class="property" href="painting.html#ColorInterpolationProperty">color-interpolation</a> property on the child determines the type of
+blending, not the value of the <a class="property" href="painting.html#ColorInterpolationProperty">color-interpolation</a> on the parent.
+For <a href="pservers.html#Gradients">gradients</a> which make use of the
+<span class="attr-name">‘href’</span> attribute to reference another
+gradient, the gradient uses the <a class="property" href="painting.html#ColorInterpolationProperty">color-interpolation</a> property value
+from the gradient element which is directly referenced by the <a class="property" href="painting.html#FillProperty">fill</a> or
+<a class="property" href="painting.html#StrokeProperty">stroke</a> property. When animating colors, color interpolation is
+performed according to the value of the <a class="property" href="painting.html#ColorInterpolationProperty">color-interpolation</a> property
+on the element being animated.</p>
+
+
+<h2 id="RenderingHints" class="heading">13.10. Rendering hints<a class="self-link" href="#RenderingHints"></a></h2>
+
+<h3 id="ShapeRendering" class="heading">13.10.1. The ‘<span class="property">shape-rendering</span>’ property<a class="self-link" href="#ShapeRendering"></a></h3>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="ShapeRenderingProperty" data-dfn-type="property" data-export="">shape-rendering</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>auto | optimizeSpeed | crispEdges | geometricPrecision</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>auto</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a href="shapes.html#TermShapeElement">shapes</a></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>discrete</td>
+  </tr>
+</table>
+
+<p>The <a class="property" href="painting.html#ShapeRenderingProperty">shape-rendering</a> property provides a hint to the
+implementation about what tradeoffs to make as it renders vector graphics
+elements such as <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> elements and <a href="shapes.html">basic shapes</a>
+such as circles and rectangles.  Values have the following meanings:</p>
+
+<dl>
+  <dt><span class="prop-value">auto</span></dt>
+  <dd>Indicates that the user agent shall make appropriate
+  tradeoffs to balance speed, crisp edges and geometric
+  precision, but with geometric precision given more importance
+  than speed and crisp edges.</dd>
+
+  <dt><span class="prop-value">optimizeSpeed</span></dt>
+  <dd>Indicates that the user agent shall emphasize rendering
+  speed over geometric precision and crisp edges. This option
+  will sometimes cause the user agent to turn off shape
+  anti-aliasing.</dd>
+
+  <dt><span class="prop-value">crispEdges</span></dt>
+  <dd>Indicates that the user agent shall attempt to emphasize
+  the contrast between clean edges of artwork over rendering
+  speed and geometric precision. To achieve crisp edges, the
+  user agent might turn off anti-aliasing for all lines and
+  curves or possibly just for straight lines which are close to
+  vertical or horizontal. Also, the user agent might adjust
+  line positions and line widths to align edges with device
+  pixels.</dd>
+
+  <dt><span class="prop-value">geometricPrecision</span></dt>
+  <dd>Indicates that the user agent shall emphasize geometric
+  precision over speed and crisp edges.</dd>
+</dl>
+
+<h3 id="TextRendering" class="heading">13.10.2. The ‘<span class="property">text-rendering</span>’ property<a class="self-link" href="#TextRendering"></a></h3>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="TextRenderingProperty" data-dfn-type="property" data-export="">text-rendering</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>auto | optimizeSpeed | optimizeLegibility | geometricPrecision</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>auto</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><span class="element-name">‘<a href="text.html#TextElement"><span>text</span></a>’</span></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>discrete</td>
+  </tr>
+</table>
+
+<p>The <a class="property" href="painting.html#TextRenderingProperty">text-rendering</a> property provides a hint to the implementation
+about what tradeoffs to make as it renders text.  Values have the
+following meanings:</p>
+
+<dl>
+  <dt><span class="prop-value">auto</span></dt>
+  <dd>Indicates that the user agent shall make appropriate
+  tradeoffs to balance speed, legibility and geometric
+  precision, but with legibility given more importance than
+  speed and geometric precision.</dd>
+
+  <dt><span class="prop-value">optimizeSpeed</span></dt>
+  <dd>Indicates that the user agent shall emphasize rendering
+  speed over legibility and geometric precision. This option
+  will sometimes cause the user agent to turn off text
+  anti-aliasing.</dd>
+
+  <dt><span class="prop-value">optimizeLegibility</span></dt>
+  <dd>Indicates that the user agent shall emphasize legibility
+  over rendering speed and geometric precision. The user agent
+  will often choose whether to apply anti-aliasing techniques,
+  built-in font hinting or both to produce the most legible
+  text.</dd>
+
+  <dt><span class="prop-value">geometricPrecision</span></dt>
+  <dd>Indicates that the user agent shall emphasize geometric
+  precision over legibility and rendering speed. This option
+  will usually cause the user agent to suspend the use of
+  hinting so that glyph outlines are drawn with comparable
+  geometric precision to the rendering of path data.</dd>
+</dl>
+
+<h3 id="ImageRendering" class="heading">13.10.3. The ‘<span class="property">image-rendering</span>’ property<a class="self-link" href="#ImageRendering"></a></h3>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="ImageRenderingProperty" data-dfn-type="property" data-export="">image-rendering</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>auto | optimizeQuality | optimizeSpeed</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>auto</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td>images</td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>yes</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>discrete</td>
+  </tr>
+</table>
+
+<p class="note">The <a href="http://dev.w3.org/csswg/css-images/#the-image-rendering">CSS Image Values and Replacement Content Module Level 4</a> may in the future redefine this property. In particular it should allow the choice between smoothing and keeping a pixelated look when upscaling.</p>
+
+<p>The <a class="property" href="painting.html#ImageRenderingProperty">image-rendering</a> property provides a hint to the implementation
+about how to make speed vs. quality tradeoffs as it performs
+image processing.  Values have the following meanings:</p>
+
+<dl>
+  <dt><span class="prop-value">auto</span></dt>
+  <dd>Indicates that the user agent shall make appropriate
+  tradeoffs to balance speed and quality, but quality shall be
+  given more importance than speed. The user agent shall employ
+  a resampling algorithm at least as good as nearest neighbor
+  resampling, but bilinear resampling is strongly preferred.
+  For <a href="conform.html#ConformingSVGViewers">conforming high-quality SVG viewers</a>, the user agent shall employ a
+  resampling algorithm at least as good as bilinear
+  resampling.</dd>
+
+  <dt><span class="prop-value">optimizeQuality</span></dt>
+  <dd>Indicates that the user agent shall emphasize quality
+  over rendering speed. The user agent shall employ a
+  resampling algorithm at least as good as bilinear
+  resampling.</dd>
+
+  <dt><span class="prop-value">optimizeSpeed</span></dt>
+  <dd>Indicates that the user agent shall emphasize rendering
+  speed over quality. The user agent should use a resampling
+  algorithm which achieves the goal of fast rendering, with the
+  requirement that the resampling algorithm shall be at least
+  as good as nearest neighbor resampling. If performance goals
+  can be achieved with higher quality algorithms, then the user
+  agent should use the higher quality algorithms instead of
+  nearest neighbor resampling.</dd>
+</dl>
+
+<p>In all cases, resampling must be done in a truecolor (e.g.,
+24-bit) color space even if the original data and/or the target
+device is indexed color.  High quality SVG viewers should perform
+image resampling using a linear color space.</p>
+
+
+<h2 id="WillChange" class="heading">13.11. The effect of the
+‘<span class="property">will-change</span>’ property<a class="self-link" href="#WillChange"></a></h2>
+
+<p class="note">See the CSS Will Change Module Level 1 specification for the
+definition of <a class="property" href="https://drafts.csswg.org/css-will-change/#will-change">will-change</a>.</p>
+
+<p>The <a class="property" href="https://drafts.csswg.org/css-will-change/#will-change">will-change</a> property is used to provide a hint to the user
+agent as to the types of changes that will be made to content, giving
+the user agent a better chance at performing rendering optimizations
+for a given element.</p>
+
+<p>The <a class="property" href="https://drafts.csswg.org/css-will-change/#will-change">will-change</a> property applies to all SVG <a href="struct.html#TermGraphicsElement">graphics elements</a>,
+however since SVG elements do not support scrolling, the
+<span class="prop-value">scroll-position</span> value will have no effect
+on them.</p>
+
+<div class="example">
+  <p>The following example demonstrates how <a class="property" href="https://drafts.csswg.org/css-will-change/#will-change">will-change</a> can be used
+  to forewarn the user agent that an element will have its <a class="property" href="coords.html#TransformProperty">transform</a>
+  property changed, with the potential result of the user agent rendering the
+  element into its own GPU layer so that the scripted <a class="property" href="coords.html#TransformProperty">transform</a>
+  changes appear smooth.</p>
+
+  <pre>&lt;svg xmlns="http://www.w3.org/2000/svg">
+  &lt;style>
+    #background { fill: lemonchiffon; }
+    #star {
+      fill: cornflowerblue;
+      stroke: navy; stroke-width: 5px; stroke-linejoin: round;
+      paint-order: stroke fill;
+      will-change: transform;
+    }
+    text { font: 24px sans-serif; user-select: none; }
+  &lt;/style>
+  &lt;g onmousemove="drag(evt.clientX, evt.clientY);"
+     onmouseup="dragging = false;">
+    &lt;rect id="background" width="100%" height="100%"/>
+    &lt;text x="10" y="30">Drag the star!&lt;/text>
+    &lt;path id="star" transform="translate(200,150)"
+          d="M 0.00,-40.00 -11.76,-16.18 -38.04,-12.36 -19.02,6.18 -23.51,32.36
+               0.00,20.00 23.51,32.36 19.02,6.18 38.04,-12.36 11.76,-16.18 z"
+          onmousedown="dragging = true;"/>
+  &lt;/g>
+  &lt;script>
+    var dragging = false;
+    var star = document.getElementById("star");
+    function drag(x, y) {
+      if (dragging) {
+        star.setAttribute("transform", "translate(" + x + "," + y + ")");
+      }
+    }
+  &lt;/script>
+&lt;/svg></pre>
+
+  <div class="figure">
+    <img class="bordered" src="images/painting/will-change-image.svg" width="200" height="150" alt="A blue star with the text &quot;Drag the star!&quot; above."/>
+    <p class="caption">In a user agent that supports <a class="property" href="https://drafts.csswg.org/css-will-change/#will-change">will-change</a>
+    on SVG elements, the star might be rendered into a layer so that
+    it can be composited quickly when it is dragged around the canvas.
+    <a href="images/painting/will-change.svg">View interactive SVG document.</a></p>
+  </div>
+</div>
+
+<p class="note">The <a class="property" href="https://drafts.csswg.org/css-will-change/#will-change">will-change</a> property replaces the
+‘<span class="property">buffered-rendering</span>’ property defined in
+SVG Tiny 1.2.</p>
+</div>
+
+
+<div class="ready-for-wider-review">
+<h2 id="DOMInterfaces" class="heading">13.12. DOM interfaces<a class="self-link" href="#DOMInterfaces"></a></h2>
+
+<h3 id="InterfaceSVGMarkerElement" class="heading">13.12.1. Interface SVGMarkerElement<a class="self-link" href="#InterfaceSVGMarkerElement"></a></h3>
+
+
+
+<p>An <a class="idlinterface" href="painting.html#InterfaceSVGMarkerElement">SVGMarkerElement</a> object represents a <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span>
+element in the DOM.</p>
+
+<pre class="idl">[<a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=Window]
+interface <b>SVGMarkerElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+
+  // Marker Unit Types
+  const unsigned short <a href="painting.html#__svg__SVGMarkerElement__SVG_MARKERUNITS_UNKNOWN">SVG_MARKERUNITS_UNKNOWN</a> = 0;
+  const unsigned short <a href="painting.html#__svg__SVGMarkerElement__SVG_MARKERUNITS_USERSPACEONUSE">SVG_MARKERUNITS_USERSPACEONUSE</a> = 1;
+  const unsigned short <a href="painting.html#__svg__SVGMarkerElement__SVG_MARKERUNITS_STROKEWIDTH">SVG_MARKERUNITS_STROKEWIDTH</a> = 2;
+
+  // Marker Orientation Types
+  const unsigned short <a href="painting.html#__svg__SVGMarkerElement__SVG_MARKER_ORIENT_UNKNOWN">SVG_MARKER_ORIENT_UNKNOWN</a> = 0;
+  const unsigned short <a href="painting.html#__svg__SVGMarkerElement__SVG_MARKER_ORIENT_AUTO">SVG_MARKER_ORIENT_AUTO</a> = 1;
+  const unsigned short <a href="painting.html#__svg__SVGMarkerElement__SVG_MARKER_ORIENT_ANGLE">SVG_MARKER_ORIENT_ANGLE</a> = 2;
+  const unsigned short <a href="painting.html#__svg__SVGMarkerElement__SVG_MARKER_ORIENT_AUTO_START_REVERSE">SVG_MARKER_ORIENT_AUTO_START_REVERSE</a> = 3;
+
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="painting.html#__svg__SVGMarkerElement__refX">refX</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="painting.html#__svg__SVGMarkerElement__refY">refY</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="painting.html#__svg__SVGMarkerElement__markerUnits">markerUnits</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="painting.html#__svg__SVGMarkerElement__markerWidth">markerWidth</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="painting.html#__svg__SVGMarkerElement__markerHeight">markerHeight</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="painting.html#__svg__SVGMarkerElement__orientType">orientType</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedAngle">SVGAnimatedAngle</a> <a href="painting.html#__svg__SVGMarkerElement__orientAngle">orientAngle</a>;
+  attribute DOMString <a href="painting.html#__svg__SVGMarkerElement__orient">orient</a>;
+
+  undefined <a href="painting.html#__svg__SVGMarkerElement__setOrientToAuto">setOrientToAuto</a>();
+  undefined <a href="painting.html#__svg__SVGMarkerElement__setOrientToAngle">setOrientToAngle</a>(<a class="idlinterface" href="types.html#InterfaceSVGAngle">SVGAngle</a> angle);
+};
+
+<a class="idlinterface" href="painting.html#InterfaceSVGMarkerElement">SVGMarkerElement</a> includes <a class="idlinterface" href="types.html#InterfaceSVGFitToViewBox">SVGFitToViewBox</a>;</pre>
+
+<p>The numeric marker unit type constants defined on <a class="idlinterface" href="painting.html#InterfaceSVGMarkerElement">SVGMarkerElement</a>
+are used to represent the keyword values that the <span class="attr-name">‘<a href="painting.html#MarkerUnitsAttribute"><span>markerUnits</span></a>’</span>
+attribute can take.  Their meanings are as follows:</p>
+
+<table class="vert">
+  <tr><th>Constant</th><th>Meaning</th></tr>
+  <tr><td><b id="__svg__SVGMarkerElement__SVG_MARKERUNITS_USERSPACEONUSE">SVG_MARKERUNITS_USERSPACEONUSE</b></td><td>The <span class="attr-value">userSpaceOnUse</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGMarkerElement__SVG_MARKERUNITS_STROKEWIDTH">SVG_MARKERUNITS_STROKEWIDTH</b></td><td>The <span class="attr-value">strokeWidth</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGMarkerElement__SVG_MARKERUNITS_UNKNOWN">SVG_MARKERUNITS_UNKNOWN</b></td><td>Some other value.</td></tr>
+</table>
+
+<p>The numeric marker orientation type constants defined on <a class="idlinterface" href="painting.html#InterfaceSVGMarkerElement">SVGMarkerElement</a>
+are used to represent the types of values that the <span class="attr-name">‘<a href="painting.html#OrientAttribute"><span>orient</span></a>’</span>
+attribute can take.  Their meanings are as follows:</p>
+
+<table class="vert">
+  <tr><th>Constant</th><th>Meaning</th></tr>
+  <tr><td><b id="__svg__SVGMarkerElement__SVG_MARKER_ORIENT_AUTO">SVG_MARKER_ORIENT_AUTO</b></td><td>The <span class="attr-value">auto</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGMarkerElement__SVG_MARKER_ORIENT_AUTO_START_REVERSE">SVG_MARKER_ORIENT_AUTO_START_REVERSE</b></td><td>The <span class="attr-value">auto-start-reverse</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGMarkerElement__SVG_MARKER_ORIENT_ANGLE">SVG_MARKER_ORIENT_ANGLE</b></td><td>An <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> or <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> value indicating the orientation angle.</td></tr>
+  <tr><td><b id="__svg__SVGMarkerElement__SVG_MARKER_ORIENT_UNKNOWN">SVG_MARKER_ORIENT_UNKNOWN</b></td><td>Some other value.</td></tr>
+</table>
+
+<p>The <b id="__svg__SVGMarkerElement__markerUnits">markerUnits</b> IDL attribute
+<a href="types.html#TermReflect">reflects</a> the <span class="attr-name">‘<a href="painting.html#MarkerUnitsAttribute"><span>markerUnits</span></a>’</span> content attribute.  The
+<a href="types.html#TermNumericTypeValue">numeric type values</a> for <span class="attr-name">‘<a href="painting.html#MarkerUnitsAttribute"><span>markerUnits</span></a>’</span> are as
+described above in the numeric marker unit type constant table.</p>
+
+<p>The <b id="__svg__SVGMarkerElement__orientType">orientType</b>,
+<b id="__svg__SVGMarkerElement__orientAngle">orientAngle</b> and
+<b id="__svg__SVGMarkerElement__orient">orient</b> IDL attributes
+all reflect the <span class="attr-name">‘<a href="painting.html#OrientAttribute"><span>orient</span></a>’</span> content attribute.
+The <a href="types.html#TermNumericTypeValue">numeric type values</a> for <span class="attr-name">‘<a href="painting.html#OrientAttribute"><span>orient</span></a>’</span> are as follows:</p>
+
+<table class="vert">
+  <tr><th>Value</th><th>Numeric type value</th></tr>
+  <tr>
+    <td><span class="attr-value">auto</span></td>
+    <td><a href="painting.html#__svg__SVGMarkerElement__SVG_MARKER_ORIENT_AUTO">SVG_MARKER_ORIENT_AUTO</a></td>
+  </tr>
+  <tr>
+    <td><span class="attr-value">auto-start-reverse</span></td>
+    <td><a href="painting.html#__svg__SVGMarkerElement__SVG_MARKER_ORIENT_AUTO_START_REVERSE">SVG_MARKER_ORIENT_AUTO_START_REVERSE</a></td>
+  </tr>
+  <tr>
+    <td><a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a></td>
+    <td><a href="painting.html#__svg__SVGMarkerElement__SVG_MARKER_ORIENT_ANGLE">SVG_MARKER_ORIENT_ANGLE</a></td>
+  </tr>
+</table>
+
+<p>The <b id="__svg__SVGMarkerElement__refX">refX</b>,
+<b id="__svg__SVGMarkerElement__refY">refY</b>,
+<b id="__svg__SVGMarkerElement__markerWidth">markerWidth</b> and
+<b id="__svg__SVGMarkerElement__markerHeight">markerHeight</b> IDL attributes
+reflect the <span class="attr-name">‘<a href="painting.html#MarkerElementRefXAttribute"><span>refX</span></a>’</span>, <span class="attr-name">‘<a href="painting.html#MarkerElementRefYAttribute"><span>refY</span></a>’</span>, <span class="attr-name">‘<a href="painting.html#MarkerWidthAttribute"><span>markerWidth</span></a>’</span>
+and <span class="attr-name">‘<a href="painting.html#MarkerHeightAttribute"><span>markerHeight</span></a>’</span> content attributes, respectively.</p>
+
+<p>The <b id="__svg__SVGMarkerElement__setOrientToAuto">setOrientToAuto</b>
+method is used to set the value of the <span class="attr-name">‘<a href="painting.html#OrientAttribute"><span>orient</span></a>’</span> attribute
+to <span class="attr-value">'auto'</span>.  When setOrientToAuto() is
+called, the <span class="attr-name">‘<a href="painting.html#OrientAttribute"><span>orient</span></a>’</span> attribute is simply set to <span class="attr-value">'auto'</span>.</p>
+
+<p>The <b id="__svg__SVGMarkerElement__setOrientToAngle">setOrientToAngle</b>
+method is used to set the value of the <span class="attr-name">‘<a href="painting.html#OrientAttribute"><span>orient</span></a>’</span> attribute
+to a specific angle value.  When setOrientToAngle(<var>angle</var>) is
+called, the <span class="attr-name">‘<a href="painting.html#OrientAttribute"><span>orient</span></a>’</span> attribute is <a href="types.html#TermReserialize">reserialized</a> using
+<var>angle</var> as the value.</p>
+
+
+</div>
+
+<script src="//www.w3.org/scripts/TR/2016/fixup.js"></script><script src="style/expanders.js" type="text/javascript"></script></body>
+</html>

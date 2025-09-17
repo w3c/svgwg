@@ -1,1 +1,0 @@
-include ../../tools/spec.mk

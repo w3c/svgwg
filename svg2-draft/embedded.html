@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+
+<!--
+  Scalable Vector Graphics (SVG) 2
+  Chapter 12: Embedded Content
+
+  Note: This document is generated from ../master/embedded.html.
+  Run "make" from the root of the repository to regenerate it.
+  -->
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="UTF-8"/>
+  <title>Embedded Content — SVG 2</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+  <!-- Style sheets for local dev. Will be standardized in processing.
+  Add attribute data-keep="" to any extra stylesheet link you do not want removed
+  (or use <style>), and include it before here. -->
+  
+  
+<link rel="stylesheet" title="Default" href="style/svg.css" type="text/css" media="screen"/><link rel="alternate stylesheet" title="Only annotations for publication" href="style/default_no_maturity.css" type="text/css" media="screen"/><link rel="alternate stylesheet" title="No issues/annotations" href="style/default_no_issues.css" type="text/css" media="screen"/><link rel="stylesheet" href="//www.w3.org/StyleSheets/TR/2016/W3C-ED" type="text/css" media="screen"/><script src="style/link-fixup.js"></script></head>
+<body class="chapter-embedded">
+
+<h1>Chapter 12: Embedded Content</h1><nav id="toc"><div class="header {{side}}"><a href="./">Overview</a> · <a href="text.html">Previous</a> · <a href="painting.html">Next</a> · <a href="eltindex.html">Elements</a> · <a href="attindex.html">Attributes</a> · <a href="propidx.html">Properties</a></div><h2 id="Contents" class="contents">Contents</h2><ol class="toc"><li><ol class="toc"><li><a href="embedded.html#Overview"><span class="secno">12.1.</span> Overview</a></li><li><a href="embedded.html#Placement"><span class="secno">12.2.</span> Placement of the embedded content</a></li><li><a href="embedded.html#ImageElement"><span class="secno">12.3.</span> The <span class="element-name">‘image’</span> element</a></li><li><a href="embedded.html#ForeignObjectElement"><span class="secno">12.4.</span> The <span class="element-name">‘foreignObject’</span> element</a></li><li><a href="embedded.html#DOMInterfaces"><span class="secno">12.5.</span> DOM interfaces</a><ol class="toc"><li><a href="embedded.html#InterfaceSVGImageElement"><span class="secno">12.5.1.</span> Interface SVGImageElement</a></li><li><a href="embedded.html#InterfaceSVGForeignObjectElement"><span class="secno">12.5.2.</span> Interface SVGForeignObjectElement</a></li></ol></li></ol></li></ol></nav>
+
+<h2 id="Overview" class="heading">12.1. Overview<a class="self-link" href="#Overview"></a></h2>
+<p>Embedded content is content that imports another resource into the document, or content from another vocabulary that is inserted into the document.
+This is the same definition as <a href="https://html.spec.whatwg.org/multipage/">HTML's</a> <a href="https://html.spec.whatwg.org/multipage/embedded-content.html#embedded-content">embedded content</a>.</p>
+
+<p>SVG supports embedded content with the use of <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> and <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span> elements.</p>
+
+<p class="note">Content embedded with <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> is compatible with <a href="https://www.w3.org/TR/resource-hints/">Resource Hints</a> for prioritizing downloading of external resources. </p>
+
+<h2 id="Placement" class="heading">12.2. Placement of the embedded content<a class="self-link" href="#Placement"></a></h2>
+
+  <p>
+    The <a class="property" href="geometry.html#XProperty">x</a>, <a class="property" href="geometry.html#YProperty">y</a>, <a class="property" href="geometry.html#Sizing">width</a>, and <a class="property" href="geometry.html#Sizing">height</a> geometry properties specify the rectangular region into which the embedded content is positioned
+    (the <dfn id="TermPositioningRectangle" data-dfn-type="dfn" data-export="">positioning rectangle</dfn>).
+    The <a href="embedded.html#TermPositioningRectangle">positioning rectangle</a> is used as the bounding box of the element;
+    note, however, that graphics may overflow the positioning rectangle,
+    depending on the value of the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property.
+  </p>
+
+  <p>
+    When the embedded content consists of a single referenced resource
+    (e.g., an <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span>),
+    the dimensions of the <a href="embedded.html#TermPositioningRectangle">positioning rectangle</a>,
+    in the current coordinate system after applying all transforms,
+    define the <a href="https://www.w3.org/TR/css3-images#specified-size">specified size</a> for the embedded object.
+    A <a href="https://www.w3.org/TR/css3-images#concrete-object-size">concrete object size</a> and final position must be determined for the object using the
+    <a href="https://www.w3.org/TR/css3-images/#default-sizing-algorithm">Default Sizing Algorithm</a>
+    defined for replaced elements in CSS layout [<a href="refs.html#ref-css-images-3">css-images-3</a>].
+    The <a class="property" href="https://www.w3.org/TR/css3-images/#the-object-fit">object-fit</a> and <a class="property" href="https://www.w3.org/TR/css3-images/#the-object-position">object-position</a> affect the final
+    position and size of the object,
+    and may cause it to be extend beyond the <a href="embedded.html#TermPositioningRectangle">positioning rectangle</a>.
+    In that case, the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property determines whether
+    the rendered object should be clipped to its <a href="embedded.html#TermPositioningRectangle">positioning rectangle</a>.
+  </p>
+  <p>
+    When the embedded content consists of a document fragment
+    (e.g., a <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span>),
+    the <a href="embedded.html#TermPositioningRectangle">positioning rectangle</a> defines the bounds of a
+    <a href="https://www.w3.org/TR/CSS21/visuren.html#containing-block">containing block</a> for laying out the child content using CSS.
+    The scale of the containing block is defined in the current coordinate system,
+    including all explicit and implicit (e.g., <span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span>) transformations.
+    The <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span>, or other element that is positioned using SVG layout attributes,
+    is implicitly <a href="https://www.w3.org/TR/CSS21/visuren.html#propdef-position">absolutely-positioned</a> for the purposes of CSS layout.
+    As a result, any absolutely-positioned child elements
+    are positioned relative to this containing block.
+    Again, the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property determines
+    whether content that extends outside the <a href="embedded.html#TermPositioningRectangle">positioning rectangle</a> will be hidden.
+  </p>
+  <p>
+    A value of zero for either <a class="property" href="geometry.html#Sizing">width</a> or <a class="property" href="geometry.html#Sizing">height</a> disables rendering of the element and its embedded content.
+  </p>
+  <p>
+    The <span class="attr-value">'auto'</span> value for <a class="property" href="geometry.html#Sizing">width</a> or <a class="property" href="geometry.html#Sizing">height</a> is used to size the corresponding element automatically based on the <a href="https://www.w3.org/TR/css3-images#intrinsic-dimensions">intrinsic dimensions</a> or <a href="https://www.w3.org/TR/css3-images#intrinsic-aspect-ratio">intrinsic aspect ratio</a> of the referenced resource.
+    Computation of automatically-sized values follows the
+    <a href="https://www.w3.org/TR/css3-images/#default-sizing-algorithm">Default Sizing Algorithm</a>
+    defined for replaced elements in CSS layout [<a href="refs.html#ref-css-images-3">css-images-3</a>].
+    In particular, when the referenced resource does not have an intrinsic size
+    (such as image types with no defined dimensions),
+    it is assumed to have a width of 300px and a height of 150px.
+  </p>
+  <p>
+    CSS positioning properties (e.g. <span class="prop-name">top</span> and <span class="prop-name">margin</span>) have no effect when positioning the embedded content element in the SVG coordinate system.
+    They can, however, be used to position child elements of a <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span> or HTML embedding element.
+  </p>
+
+<h2 id="ImageElement" class="heading">12.3. The <span class="element-name">‘image’</span> element<a class="self-link" href="#ImageElement"></a></h2>
+
+
+
+<div class="element-summary"><div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element" data-export="" id="elementdef-image">image</dfn>’</span></div><dl><dt>Categories:</dt><dd><a href="struct.html#TermGraphicsElement">Graphics element</a>, <a href="struct.html#TermGraphicsReferencingElement">graphics referencing element</a>, <a href="render.html#TermRenderableElement">renderable element</a>, <a href="struct.html#TermStructurallyExternalElement">structurally external element</a></dd><dt>Content model:</dt><dd>Any number of the following elements, in any order:<ul class="no-bullets"><li><a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a><span class="expanding"> — <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#AnimateElement"><span>animate</span></a>’</span>, <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#AnimateMotionElement"><span>animateMotion</span></a>’</span>, <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>, <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li><li><a href="struct.html#TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span class="element-name">‘<a href="struct.html#DescElement"><span>desc</span></a>’</span>, <span class="element-name">‘<a href="struct.html#TitleElement"><span>title</span></a>’</span>, <span class="element-name">‘<a href="struct.html#MetadataElement"><span>metadata</span></a>’</span></span></li></ul><span class="element-name"><a href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span class="element-name"><a href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span class="element-name"><a href="interact.html#ScriptElement"><span>script</span></a></span>, <span class="element-name"><a href="styling.html#StyleElement"><span>style</span></a></span></dd><dt>Attributes:</dt><dd><ul class="no-bullets"><li><a href="struct.html#TermARIAAttribute">aria attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-atomic"><span>aria-atomic</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-autocomplete"><span>aria-autocomplete</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-busy"><span>aria-busy</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-checked"><span>aria-checked</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-colcount"><span>aria-colcount</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-colindex"><span>aria-colindex</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-colspan"><span>aria-colspan</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-controls"><span>aria-controls</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-current"><span>aria-current</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-describedby"><span>aria-describedby</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-details"><span>aria-details</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-disabled"><span>aria-disabled</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-dropeffect"><span>aria-dropeffect</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-errormessage"><span>aria-errormessage</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-expanded"><span>aria-expanded</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-flowto"><span>aria-flowto</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-grabbed"><span>aria-grabbed</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-haspopup"><span>aria-haspopup</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-hidden"><span>aria-hidden</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-invalid"><span>aria-invalid</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-keyshortcuts"><span>aria-keyshortcuts</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-label"><span>aria-label</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-labelledby"><span>aria-labelledby</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-level"><span>aria-level</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-live"><span>aria-live</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-modal"><span>aria-modal</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-multiline"><span>aria-multiline</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-multiselectable"><span>aria-multiselectable</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-orientation"><span>aria-orientation</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-owns"><span>aria-owns</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-placeholder"><span>aria-placeholder</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-posinset"><span>aria-posinset</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-pressed"><span>aria-pressed</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-readonly"><span>aria-readonly</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-relevant"><span>aria-relevant</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-required"><span>aria-required</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-roledescription"><span>aria-roledescription</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowcount"><span>aria-rowcount</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowindex"><span>aria-rowindex</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowspan"><span>aria-rowspan</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-selected"><span>aria-selected</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-setsize"><span>aria-setsize</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-sort"><span>aria-sort</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuemax"><span>aria-valuemax</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuemin"><span>aria-valuemin</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#RoleAttribute"><span>role</span></a>’</span></span></li><li><a href="struct.html#TermCoreAttribute">core attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="struct.html#IDAttribute"><span>id</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#LangAttribute"><span>lang</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#ClassAttribute"><span>class</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span></span></li><li><a href="struct.html#TermConditionalProcessingAttribute">conditional processing attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="struct.html#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li><li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclose</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncopy</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncuechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncut</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondblclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrag</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragexit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrop</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondurationchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onemptied</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onended</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onerror</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onfocus</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninput</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninvalid</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeydown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeypress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeyup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onload</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadeddata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadedmetadata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousedown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousemove</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseout</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpaste</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpause</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplaying</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onprogress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onratechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onreset</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onresize</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onscroll</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeked</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeking</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onselect</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onshow</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onstalled</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsubmit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsuspend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontimeupdate</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontoggle</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onvolumechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwaiting</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwheel</span></a>’</span></span></li><li><a href="linking.html#XLinkRefAttrs">deprecated xlink attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="linking.html#XLinkHrefAttribute"><span>xlink:href</span></a>’</span>, <span class="attr-name">‘<a href="linking.html#XLinkTitleAttribute"><span>xlink:title</span></a>’</span></span></li><li><a href="styling.html#TermPresentationAttribute">presentation attributes</a><span class="expanding"> — </span></li><li><span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span></li><li><span class="attr-name">‘<a href="embedded.html#ImageElementHrefAttribute"><span>href</span></a>’</span></li><li><span class="attr-name">‘<a href="embedded.html#ImageElementCrossoriginAttribute"><span>crossorigin</span></a>’</span></li></ul></dd><dt>Geometry properties:</dt><dd><ul class="no-bullets"><li><a class="property" href="geometry.html#XProperty">x</a></li><li><a class="property" href="geometry.html#YProperty">y</a></li><li><a class="property" href="geometry.html#Sizing">width</a></li><li><a class="property" href="geometry.html#Sizing">height</a></li></ul></dd><dt>DOM Interfaces:</dt><dd><ul class="no-bullets"><li><a class="idlinterface" href="embedded.html#InterfaceSVGImageElement">SVGImageElement</a></li></ul></dd></dl></div>
+
+<p>The <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> element
+indicates that the contents of a complete file are to be
+rendered into a given rectangle within the current user
+coordinate system. The <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> element can refer to raster
+image files such as PNG or JPEG or to files with MIME type of
+"image/svg+xml". <a href="conform.html#ConformingSVGViewers">Conforming SVG
+viewers</a> need to support at least PNG, JPEG and SVG format
+files.
+SVG files must be processed in <a href="conform.html#secure-animated-mode">secure animated mode</a>
+if the current document supports animation,
+or in <a href="conform.html#secure-static-mode">secure static mode</a> if the current document is static.
+</p>
+
+<p>The result of processing an <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> is always a four-channel
+RGBA result. When an <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span>
+element references an image (such as many PNG or JPEG
+files) which only has three channels (RGB), then the effect is
+as if the object were converted into a 4-channel RGBA image
+with the alpha channel uniformly set to 1. For a single-channel (grayscale)
+raster image, the effect is as if the object were converted
+into a 4-channel RGBA image, where the single channel from the
+referenced object is used to compute the three color channels
+and the alpha channel is uniformly set to 1.</p>
+
+<p>The <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> attribute
+determines how the referenced image is scaled and positioned to fit
+into the <a href="https://www.w3.org/TR/css3-images#concrete-object-size">concrete object size</a> determined from the
+<a href="embedded.html#TermPositioningRectangle">positioning rectangle</a> and the <a class="property" href="https://www.w3.org/TR/css3-images/#the-object-fit">object-fit</a> and <a class="property" href="https://www.w3.org/TR/css3-images/#the-object-position">object-position</a> properties.
+The result of applying this attribute defines an <dfn id="TermImageRenderingRectangle" data-dfn-type="dfn" data-export="">image-rendering rectangle</dfn>
+used for actual image rendering.
+When the referenced image is an SVG,
+the <a href="embedded.html#TermImageRenderingRectangle">image-rendering rectangle</a> defines
+the <a href="coords.html#TermSVGViewport">SVG viewport</a> used for rendering that SVG.
+</p>
+
+<p class="note">
+  The <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> calculations
+  are applied <em>after</em> determining the <a href="https://www.w3.org/TR/css3-images#concrete-object-size">concrete object size</a>,
+  and only have an effect if that size does not match the
+  <a href="https://www.w3.org/TR/css3-images#intrinsic-aspect-ratio">intrinsic aspect ratio</a> of the embedded image.
+  If a value of <a class="property" href="https://www.w3.org/TR/css3-images/#the-object-fit">object-fit</a> is used that
+  ensures that the concrete object size matches the intrinsic aspect ratio
+  (i.e., any value other than the default <span class="prop-value">fill</span>),
+  then the <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> value will have no effect;
+  the <a href="embedded.html#TermImageRenderingRectangle">image-rendering rectangle</a> will be that determined
+  when scaling and positioning the object with CSS.
+  The <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> attribute can therefore be safely used
+  as a fallback for most values of <a class="property" href="https://www.w3.org/TR/css3-images/#the-object-fit">object-fit</a> and <a class="property" href="https://www.w3.org/TR/css3-images/#the-object-position">object-position</a>;
+  it must be explicitly set to <span class="attr-value">none</span>
+  to turn off aspect ratio control, regardless of <a class="property" href="https://www.w3.org/TR/css3-images/#the-object-fit">object-fit</a> value.
+</p>
+
+<p>
+The aspect ratio to use when
+evaluating the <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> attribute is
+defined by the <a href="https://www.w3.org/TR/css3-images#intrinsic-aspect-ratio">intrinsic aspect ratio</a> of the referenced content.
+For an SVG file, the aspect ratio is defined
+in <a href="coords.html#SizingSVGInCSS">Intrinsic sizing properties of SVG content"</a>.
+For most raster content (PNG, JPEG) the pixel width and height of the image file
+define an intrinsic aspect ratio.
+Where the embedded image does not have an <a href="https://www.w3.org/TR/css3-images#intrinsic-aspect-ratio">intrinsic aspect ratio</a>
+(e.g. an SVG file with neither <span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span> attribute nor explicit dimensions for the
+<a href="struct.html#TermOutermostSVGElement">outermost svg element</a>) the <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> attribute is
+ignored;
+the embedded image is drawn to fill the <a href="embedded.html#TermPositioningRectangle">positioning rectangle</a> defined by the geometry properties
+on the <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> element.
+</p>
+
+<p>For example, if the image element referenced a PNG or JPEG
+and <span class="attr-value">preserveAspectRatio="xMinYMin
+meet"</span>, then the aspect ratio of the raster would be
+preserved (which means that the scale factor from image's
+coordinates to current user space coordinates would be the same
+for both X and Y), the raster would be sized as large as
+possible while ensuring that the entire raster fits within the
+viewport, and the top/left of the raster would be aligned with
+the top/left of the viewport as defined by the attributes <a class="property" href="geometry.html#XProperty">x</a>, <a class="property" href="geometry.html#YProperty">y</a>, <a class="property" href="geometry.html#Sizing">width</a> and <a class="property" href="geometry.html#Sizing">height</a> on the <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> element.  If the value
+of <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> was <span class="attr-value">'none'</span>
+then aspect ratio of the image would not be preserved. The
+image would be fit such that the top/left corner of the
+raster exactly aligns with coordinate (<a class="property" href="geometry.html#XProperty">x</a>, <a class="property" href="geometry.html#YProperty">y</a>) and the bottom/right corner of
+the raster exactly aligns with coordinate (<a class="property" href="geometry.html#XProperty">x</a>+<a class="property" href="geometry.html#Sizing">width</a>, <a class="property" href="geometry.html#YProperty">y</a>+<a class="property" href="geometry.html#Sizing">height</a>).</p>
+
+<p>
+For <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> elements embedding an SVG image,
+the <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> attribute on the root
+element in the referenced SVG image must be ignored,
+and instead treated as if it had a value of <span class="attr-value">none</span>.
+(see <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> for details).
+This ensures that the <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> attribute on
+the referencing <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> has its intended effect,
+even if it is <span class="attr-value">none</span>.
+</p>
+
+<p class="note">
+When the value of the <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> attribute on the <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span>
+is <em>not</em> <span class="attr-value">none</span>,
+the <a href="embedded.html#TermImageRenderingRectangle">image-rendering rectangle</a> determined
+from the properties of the <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> element
+will exactly match the embedded SVG's intrinsic aspect ratio.
+Ignoring the <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> attribute from the embedded SVG
+will therefore not usually have any effect.
+The exception is if the aspect ratio of that image
+is determined from absolute values for the <a class="property" href="geometry.html#Sizing">width</a> and <a class="property" href="geometry.html#Sizing">height</a> attributes
+which <em>do not</em> match its <span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span> aspect ratio.
+This is an unusual situation that authors are advised to avoid, for many reasons.
+</p>
+
+<p>
+The user agent stylesheet sets the value of the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property
+on <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> element to <span class="prop-value">hidden</span>.
+Unless over-ridden by the author, images will therefore be clipped to
+the <a href="embedded.html#TermPositioningRectangle">positioning rectangle</a> defined by the geometry properties.
+</p>
+
+<p>
+For <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> elements embedding an SVG image,
+two different <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> values apply.
+The value specified on the <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> element determines
+whether the <a href="embedded.html#TermImageRenderingRectangle">image-rendering rectangle</a> is clipped to the <a href="embedded.html#TermPositioningRectangle">positioning rectangle</a>.
+The value on the root element of the referenced SVG
+determines whether the graphics are clipped to the <a href="embedded.html#TermImageRenderingRectangle">image-rendering rectangle</a>.
+</p>
+
+<p class="note">
+New in SVG 2.
+Previous versions of SVG required that the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> (and also <a class="property" href="https://drafts.fxtf.org/css-masking-1/#propdef-clip">clip</a>)
+property on the embedded SVG be ignored.
+The new rules ensure that an overflowing <span class="attr-value">slice</span> layout
+can be safely used without compromising the overflow control from the referenced image.
+</p>
+
+<p>
+  To link into particular view of an embedded SVG image,
+  authors can use media fragments as defined in <a href="linking.html#LinksIntoSVG">Linking into SVG content</a>.
+  To crop to a specific section of a raster image,
+  authors can use <em>Basic media fragments identifiers</em> [<a href="refs.html#ref-media-frags">Media Fragments URI 1.0 (basic)</a>].
+  Either type of fragment may affect the <a href="https://www.w3.org/TR/css3-images#intrinsic-dimensions">intrinsic dimensions</a> and/or <a href="https://www.w3.org/TR/css3-images#intrinsic-aspect-ratio">intrinsic aspect ratio</a> of the image.
+</p>
+
+<p>The resource referenced by the <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> element represents a
+separate document which generates its own parse tree and
+document object model (if the resource is XML). Thus, there is
+no inheritance of properties into the image.</p>
+
+<p>Unlike <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span>, the <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> element cannot reference
+elements within an SVG file.</p>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support auto-sized images.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-52-24">We will allow auto-sized images in SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow raster images to use their own size without the need to set width and height.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3340">ACTION-3340</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support selecting part of an <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> for display.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-45-13">We will have a method for <span class="element-name">‘image’</span> to select a part of an image to display, maybe by allowing <span class="attr-name">‘viewBox’</span> on it.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow selection of part of an image without requiring the author to manually slice the image.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Nobody</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support the ‘<span class="property">object-fit</span>’ and ‘<span class="property">object-position</span>’ properties from css-images-3.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item08">SVG 2 will depend on CSS3 Image Values and CSS4 Image Values.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To align with the CSS way of specifying image fitting that <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> provides.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron or Erik (no action)</td>
+    </tr>
+  </table>
+</div>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="ImageElementCrossoriginAttribute" data-dfn-type="element-attr" data-dfn-for="image" data-export="">crossorigin</dfn></td>
+        <td>[ anonymous | use-credentials ]?</td>
+        <td>(see HTML definition of attribute)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>The crossorigin attribute is a <a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#cors-settings-attribute">CORS settings attribute</a>, and unless otherwise specified follows the same processing rules as in HTML [<a href="refs.html#ref-html">HTML</a>].</p>
+  </dd>
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="ImageElementHrefAttribute" data-dfn-type="element-attr" data-dfn-for="image" data-export="">href</dfn></td>
+        <td>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></td>
+        <td>(none)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>An <a href="linking.html#URLReference">URL reference</a>
+    identifying the image to render.
+    Refer to the common handling defined for <a href="linking.html#linkRefAttrs">URL reference attributes</a> and
+    <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.</p>
+    <p>
+        The URL is processed and the resource is fetched
+        <a href="linking.html#processingURL">as described in the Linking chapter</a>.
+    </p>
+  </dd>
+</dl>
+
+<div class="example">
+<pre>
+&lt;?xml version="1.0" standalone="no"?>
+&lt;svg width="4in" height="3in"
+     xmlns="http://www.w3.org/2000/svg">
+  &lt;desc>This graphic links to an external image
+  &lt;/desc>
+  &lt;image x="200" y="200" width="100px" height="100px"
+         href="myimage.png">
+    &lt;title>My image&lt;/title>
+  &lt;/image>
+&lt;/svg>
+</pre>
+</div>
+
+<p>
+  Since image references always refer to a complete document,
+  a target-only URL is treated as a link to the same file,
+  which is rendered again as an independent embedded image.
+  Since the embedded image is processed in a secure mode,
+  its own embedded references are not processed,
+  preventing infinite recursion.
+</p>
+
+  <div class="example"><pre class="xml">&lt;?xml version="1.0" standalone="no"?>
+&lt;svg width="5cm" height="3cm" viewBox="0 0 50 30" 
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+  &lt;title>Recursive SVG&lt;/title>
+  &lt;desc>An SVG with two recursive image reference to itself.
+    One reference uses the file name as a relative URL, 
+    the other uses a target fragment only.
+    When viewed in a processing mode that supports external file references,
+    the embedded images should be rendered;
+    however, the embedded image must be processed in secure mode,
+    so the recursion only happens once.
+    The appearance should be three nested red circles in a bulls-eye pattern;
+    the innermost circle has solid fill because of target styles.
+  &lt;/desc>
+  &lt;style type="text/css">
+    #target:target {
+      fill: red;
+    }
+  &lt;/style>
+  &lt;circle id="target" 
+          stroke="red" stroke-width="5" fill="none"
+          cx="50%" cy="50%" r="12" />
+  &lt;image xlink:href="recursive-image.svg"
+         x="25%" y="25%" width="50%" height="50%" />
+  &lt;image xlink:href="#target"
+         x="45%" y="45%" width="10%" height="10%" />
+&lt;/svg></pre><div class="figure"><img alt="Example recursive-image — an SVG that embeds itself, creating a bulls-eye pattern" src="images/embedded/recursive-image.png"/><p class="caption">Example recursive-image</p></div><p class="view-as-svg"><a href="images/embedded/recursive-image.svg">View this example as SVG (SVG-enabled browsers only)</a></p></div>
+
+
+
+<h2 id="ForeignObjectElement" class="heading">12.4. The <span class="element-name">‘foreignObject’</span> element<a class="self-link" href="#ForeignObjectElement"></a></h2>
+
+<div class="element-summary"><div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element" data-export="" id="elementdef-foreignObject">foreignObject</dfn>’</span></div><dl><dt>Categories:</dt><dd><a href="struct.html#TermGraphicsElement">Graphics element</a>, <a href="render.html#TermRenderableElement">renderable element</a>, <a href="struct.html#TermStructurallyExternalElement">structurally external element</a></dd><dt>Content model:</dt><dd>Any elements or character data.</dd><dt>Attributes:</dt><dd><ul class="no-bullets"><li><a href="struct.html#TermARIAAttribute">aria attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-atomic"><span>aria-atomic</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-autocomplete"><span>aria-autocomplete</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-busy"><span>aria-busy</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-checked"><span>aria-checked</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-colcount"><span>aria-colcount</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-colindex"><span>aria-colindex</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-colspan"><span>aria-colspan</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-controls"><span>aria-controls</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-current"><span>aria-current</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-describedby"><span>aria-describedby</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-details"><span>aria-details</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-disabled"><span>aria-disabled</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-dropeffect"><span>aria-dropeffect</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-errormessage"><span>aria-errormessage</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-expanded"><span>aria-expanded</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-flowto"><span>aria-flowto</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-grabbed"><span>aria-grabbed</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-haspopup"><span>aria-haspopup</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-hidden"><span>aria-hidden</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-invalid"><span>aria-invalid</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-keyshortcuts"><span>aria-keyshortcuts</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-label"><span>aria-label</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-labelledby"><span>aria-labelledby</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-level"><span>aria-level</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-live"><span>aria-live</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-modal"><span>aria-modal</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-multiline"><span>aria-multiline</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-multiselectable"><span>aria-multiselectable</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-orientation"><span>aria-orientation</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-owns"><span>aria-owns</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-placeholder"><span>aria-placeholder</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-posinset"><span>aria-posinset</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-pressed"><span>aria-pressed</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-readonly"><span>aria-readonly</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-relevant"><span>aria-relevant</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-required"><span>aria-required</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-roledescription"><span>aria-roledescription</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowcount"><span>aria-rowcount</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowindex"><span>aria-rowindex</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowspan"><span>aria-rowspan</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-selected"><span>aria-selected</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-setsize"><span>aria-setsize</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-sort"><span>aria-sort</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuemax"><span>aria-valuemax</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuemin"><span>aria-valuemin</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>, <span class="attr-name">‘<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#RoleAttribute"><span>role</span></a>’</span></span></li><li><a href="struct.html#TermCoreAttribute">core attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="struct.html#IDAttribute"><span>id</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#LangAttribute"><span>lang</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#ClassAttribute"><span>class</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span></span></li><li><a href="struct.html#TermConditionalProcessingAttribute">conditional processing attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="struct.html#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li><li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclose</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncopy</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncuechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncut</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondblclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrag</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragexit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrop</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondurationchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onemptied</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onended</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onerror</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onfocus</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninput</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninvalid</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeydown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeypress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeyup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onload</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadeddata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadedmetadata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousedown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousemove</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseout</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpaste</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpause</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplaying</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onprogress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onratechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onreset</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onresize</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onscroll</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeked</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeking</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onselect</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onshow</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onstalled</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsubmit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsuspend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontimeupdate</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontoggle</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onvolumechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwaiting</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwheel</span></a>’</span></span></li><li><a href="styling.html#TermPresentationAttribute">presentation attributes</a><span class="expanding"> — </span></li></ul></dd><dt>Geometry properties:</dt><dd><ul class="no-bullets"><li><a class="property" href="geometry.html#XProperty">x</a></li><li><a class="property" href="geometry.html#YProperty">y</a></li><li><a class="property" href="geometry.html#Sizing">width</a></li><li><a class="property" href="geometry.html#Sizing">height</a></li></ul></dd><dt>DOM Interfaces:</dt><dd><ul class="no-bullets"><li><a class="idlinterface" href="embedded.html#InterfaceSVGForeignObjectElement">SVGForeignObjectElement</a></li></ul></dd></dl></div>
+
+<p>SVG is designed to be compatible with other XML languages
+for describing and rendering other types of content.
+The <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span>
+element allows for inclusion of elements in a non-SVG namespace which
+is rendered within a region of the SVG graphic using other user agent processes. The
+included foreign graphical content is subject to SVG
+transformations, filters, clipping, masking and compositing.
+Examples include
+inserting a <a href="https://www.w3.org/TR/2003/REC-MathML2-20031021/">MathML</a> expression into
+an SVG drawing [<a href="refs.html#ref-mathml3">MathML3</a>],
+or adding a block of complex CSS-formatted HTML text or form inputs.
+</p>
+
+<p class="note">
+  The HTML parser treats elements inside the <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span>
+  equivalent to elements inside an HTML document fragment.
+  Any <code>svg</code> or <code>math</code> element,
+  and their descendents,
+  will be parsed as being in the SVG or MathML namespace, respectively;
+  all other tags will be parsed as being in the HTML namespace.
+</p>
+
+<p>
+SVG-namespaced elements within a <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span> will not be rendered,
+except in the situation where a properly defined SVG
+fragment, including a root <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span> element is
+defined as a descendent of the <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span>.</p>
+
+<p>A <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span>
+may be used in conjunction with the <span class="element-name">‘<a href="struct.html#SwitchElement"><span>switch</span></a>’</span> element and
+the <span class="attr-name">‘<a href="struct.html#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span> attribute to
+provide proper checking for user agent support and provide an
+alternate rendering in case user agent support is not
+available.</p>
+
+<p class="note">
+  This specification does not define how <span class="attr-name">‘<a href="struct.html#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>
+  values should be mapped to support for different XML languages;
+  a future specification may do so.
+</p>
+
+<p>It is not required that SVG user agents support the ability
+to invoke other arbitrary user agents to handle embedded
+foreign object types; however, all conforming SVG user agents
+would need to support the <span class="element-name">‘<a href="struct.html#SwitchElement"><span>switch</span></a>’</span> element and
+must be able to render valid SVG elements when they appear as
+one of the alternatives within a <span class="element-name">‘<a href="struct.html#SwitchElement"><span>switch</span></a>’</span>
+element.</p>
+
+<p>It is expected that commercial Web browsers will
+support the ability for SVG to embed
+CSS-formatted HTML and also MathML content,
+with the rendered content subject to transformations and compositing defined in the SVG fragment.
+At this time, such a capability is not a requirement.</p>
+
+<div class="example">
+
+<pre>
+&lt;?xml version="1.0" standalone="yes"?>
+&lt;svg width="4in" height="3in"
+ xmlns = 'http://www.w3.org/2000/svg'>
+  &lt;desc>This example uses the 'switch' element to provide a
+        fallback graphical representation of an paragraph, if
+        XMHTML is not supported.&lt;/desc>
+  &lt;!-- The 'switch' element will process the first child element
+       whose testing attributes evaluate to true.-->
+  &lt;switch>
+    &lt;!-- Process the embedded XHTML if the requiredExtensions attribute
+         evaluates to true (i.e., the user agent supports XHTML
+         embedded within SVG). -->
+    &lt;foreignObject width="100" height="50"
+                   requiredExtensions="http://example.com/SVGExtensions/EmbeddedXHTML">
+      &lt;!-- XHTML content goes here -->
+      &lt;body xmlns="http://www.w3.org/1999/xhtml">
+        &lt;p>Here is a paragraph that requires word wrap&lt;/p>
+      &lt;/body>
+    &lt;/foreignObject>
+    &lt;!-- Else, process the following alternate SVG.
+         Note that there are no testing attributes on the 'text' element.
+         If no testing attributes are provided, it is as if there
+         were testing attributes and they evaluated to true.-->
+    &lt;text font-size="10" font-family="Verdana">
+      &lt;tspan x="10" y="10">Here is a paragraph that&lt;/tspan>
+      &lt;tspan x="10" y="20">requires word wrap.&lt;/tspan>
+    &lt;/text>
+  &lt;/switch>
+&lt;/svg>
+</pre>
+</div>
+
+
+<div class="ready-for-wider-review">
+<h2 id="DOMInterfaces" class="heading">12.5. DOM interfaces<a class="self-link" href="#DOMInterfaces"></a></h2>
+
+<h3 id="InterfaceSVGImageElement" class="heading">12.5.1. Interface SVGImageElement<a class="self-link" href="#InterfaceSVGImageElement"></a></h3>
+
+
+
+<p>An <a class="idlinterface" href="embedded.html#InterfaceSVGImageElement">SVGImageElement</a> object represents an <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span> element in the DOM.</p>
+
+<pre class="idl">[<a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=Window]
+interface <b>SVGImageElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGGraphicsElement">SVGGraphicsElement</a> {
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__x">x</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__y">y</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__width">width</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__height">height</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedPreserveAspectRatio">SVGAnimatedPreserveAspectRatio</a> <a href="embedded.html#__svg__SVGImageElement__preserveAspectRatio">preserveAspectRatio</a>;
+  attribute DOMString? <a href="embedded.html#__svg__SVGImageElement__crossOrigin">crossOrigin</a>;
+};
+
+<a class="idlinterface" href="embedded.html#InterfaceSVGImageElement">SVGImageElement</a> includes <a class="idlinterface" href="types.html#InterfaceSVGURIReference">SVGURIReference</a>;</pre>
+
+<p>The
+<b id="__svg__SVGImageElement__x">x</b>,
+<b id="__svg__SVGImageElement__y">y</b>,
+<b id="__svg__SVGImageElement__width">width</b> and
+<b id="__svg__SVGImageElement__height">height</b> IDL attributes
+<a href="types.html#TermReflect">reflect</a> the computed values of the <a class="property" href="geometry.html#XProperty">x</a>, <a class="property" href="geometry.html#YProperty">y</a>, <a class="property" href="geometry.html#Sizing">width</a> and
+<a class="property" href="geometry.html#Sizing">height</a> properties and their corresponding
+presentation attributes, respectively.</p>
+
+<p>The <b id="__svg__SVGImageElement__preserveAspectRatio">preserveAspectRatio</b>
+IDL attribute <a href="types.html#TermReflect">reflects</a> the <span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span> content attribute.</p>
+
+<p>The <b id="__svg__SVGImageElement__crossOrigin">crossOrigin</b> IDL attribute
+<a href="types.html#TermReflect">reflects</a> the <span class="attr-name">‘<a href="embedded.html#ImageElementCrossoriginAttribute"><span>crossorigin</span></a>’</span> content attribute.</p>
+
+
+
+<h3 id="InterfaceSVGForeignObjectElement" class="heading">12.5.2. Interface SVGForeignObjectElement<a class="self-link" href="#InterfaceSVGForeignObjectElement"></a></h3>
+
+
+
+<p>An <a class="idlinterface" href="embedded.html#InterfaceSVGForeignObjectElement">SVGForeignObjectElement</a> object represents a <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span>
+in the DOM.</p>
+
+<pre class="idl">[<a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=Window]
+interface <b>SVGForeignObjectElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGGraphicsElement">SVGGraphicsElement</a> {
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGForeignObjectElement__x">x</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGForeignObjectElement__y">y</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGForeignObjectElement__width">width</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGForeignObjectElement__height">height</a>;
+};</pre>
+
+<p>The
+<b id="__svg__SVGForeignObjectElement__x">x</b>,
+<b id="__svg__SVGForeignObjectElement__y">y</b>,
+<b id="__svg__SVGForeignObjectElement__width">width</b> and
+<b id="__svg__SVGForeignObjectElement__height">height</b> IDL attributes
+<a href="types.html#TermReflect">reflect</a> the computed values of the <a class="property" href="geometry.html#XProperty">x</a>, <a class="property" href="geometry.html#YProperty">y</a>, <a class="property" href="geometry.html#Sizing">width</a> and
+<a class="property" href="geometry.html#Sizing">height</a> properties and their corresponding
+presentation attributes, respectively.</p>
+
+
+</div>
+
+<script src="//www.w3.org/scripts/TR/2016/fixup.js"></script><script src="style/expanders.js" type="text/javascript"></script></body>
+</html>

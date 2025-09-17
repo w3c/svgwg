@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+
+<!--
+  Scalable Vector Graphics (SVG) 2
+  Chapter 14: Paint Servers: Solid Colors, Gradients, and Patterns
+
+  Note: This document is generated from ../master/pservers.html.
+  Run "make" from the root of the repository to regenerate it.
+  -->
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head><meta charset="UTF-8"/>
+  <title>Paint Servers: Solid Colors, Gradients, and Patterns — SVG 2</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+  <!-- Style sheets for local dev. Will be standardized in processing.
+  Add attribute data-keep="" to any extra stylesheet link you do not want removed
+  (or use <style>), and include it before here. -->
+  
+  
+<link rel="stylesheet" title="Default" href="style/svg.css" type="text/css" media="screen"/><link rel="alternate stylesheet" title="Only annotations for publication" href="style/default_no_maturity.css" type="text/css" media="screen"/><link rel="alternate stylesheet" title="No issues/annotations" href="style/default_no_issues.css" type="text/css" media="screen"/><link rel="stylesheet" href="//www.w3.org/StyleSheets/TR/2016/W3C-ED" type="text/css" media="screen"/><script src="style/link-fixup.js"></script><script data-script-mathjax="" async="" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_SVG"></script></head>
+<body class="chapter-pservers">
+<h1>Chapter 14: Paint Servers: Gradients and Patterns</h1><nav id="toc"><div class="header {{side}}"><a href="./">Overview</a> · <a href="painting.html">Previous</a> · <a href="interact.html">Next</a> · <a href="eltindex.html">Elements</a> · <a href="attindex.html">Attributes</a> · <a href="propidx.html">Properties</a></div><h2 id="Contents" class="contents">Contents</h2><ol class="toc"><li><ol class="toc"><li><a href="pservers.html#Introduction"><span class="secno">14.1.</span> Introduction</a><ol class="toc"><li><a href="pservers.html#PaintServerTemplates"><span class="secno">14.1.1.</span> Using paint servers as templates</a></li></ol></li><li><a href="pservers.html#Gradients"><span class="secno">14.2.</span> Gradients</a><ol class="toc"><li><a href="pservers.html#Definitions"><span class="secno">14.2.1.</span> Definitions</a></li><li><a href="pservers.html#LinearGradients"><span class="secno">14.2.2.</span> Linear gradients</a><ol class="toc"><li><a href="pservers.html#LinearGradientAttributes"><span class="secno">14.2.2.1.</span> Attributes</a></li><li><a href="pservers.html#LinearGradientNotes"><span class="secno">14.2.2.2.</span> Notes on linear gradients</a></li></ol></li><li><a href="pservers.html#RadialGradients"><span class="secno">14.2.3.</span> Radial gradients</a><ol class="toc"><li><a href="pservers.html#RadialGradientAttributes"><span class="secno">14.2.3.1.</span> Attributes</a></li><li><a href="pservers.html#RadialGradientNotes"><span class="secno">14.2.3.2.</span> Notes on radial gradients</a></li></ol></li><li><a href="pservers.html#GradientStops"><span class="secno">14.2.4.</span> Gradient stops</a><ol class="toc"><li><a href="pservers.html#GradientStopAttributes"><span class="secno">14.2.4.1.</span> Attributes</a></li><li><a href="pservers.html#StopColorProperties"><span class="secno">14.2.4.2.</span> Properties</a></li><li><a href="pservers.html#StopNotes"><span class="secno">14.2.4.3.</span> Notes on gradient stops</a></li></ol></li></ol></li><li><a href="pservers.html#Patterns"><span class="secno">14.3.</span> Patterns</a><ol class="toc"><li><a href="pservers.html#PatternElementAttributes"><span class="secno">14.3.1.</span> Attributes</a></li><li><a href="pservers.html#PatternNotes"><span class="secno">14.3.2.</span> Notes on patterns</a></li></ol></li><li><a href="pservers.html#DOMInterfaces"><span class="secno">14.4.</span> DOM interfaces</a><ol class="toc"><li><a href="pservers.html#InterfaceSVGGradientElement"><span class="secno">14.4.1.</span> Interface SVGGradientElement</a></li><li><a href="pservers.html#InterfaceSVGLinearGradientElement"><span class="secno">14.4.2.</span> Interface SVGLinearGradientElement</a></li><li><a href="pservers.html#InterfaceSVGRadialGradientElement"><span class="secno">14.4.3.</span> Interface SVGRadialGradientElement</a></li><li><a href="pservers.html#InterfaceSVGStopElement"><span class="secno">14.4.4.</span> Interface SVGStopElement</a></li><li><a href="pservers.html#InterfaceSVGPatternElement"><span class="secno">14.4.5.</span> Interface SVGPatternElement</a></li></ol></li></ol></li></ol></nav>
+
+<h2 id="Introduction" class="heading">14.1. Introduction<a class="self-link" href="#Introduction"></a></h2>
+
+<p>
+  This section covers <strong>Paint Servers</strong>, a method which
+  allows the <a class="property" href="painting.html#FillProperty">fill</a> or <a class="property" href="painting.html#StrokeProperty">stroke</a> of an object to be defined
+  by a resource found elsewhere. It allows resources to be reused
+  throughout a document. See the section
+  <a href="painting.html">Painting: Filling and Stroking</a> for a
+  general discussion of filling and stroking objects.
+</p>
+
+<!-- Fill and stroke are already defined in painting.html. No need to
+redefine them here. -->
+
+<p>
+  SVG defines several types of paint servers:
+</p>
+
+<ul>
+  <li><a href="#Gradients">Gradients</a>,</li>
+  <li><a href="#Patterns">Patterns</a>.</li>
+</ul>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Arbitrary fills for shapes.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/28-svg-irc#T18-32-32">SVG 2 shall support filling and stroking from arbitrary elements.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow for example videos or images to be used as a fill source.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Alex? (no action)</td>
+    </tr>
+  </table>
+</div>
+
+<div class="figure">
+  <img alt="Image of two types of paint servers." src="images/pservers/pservers_example.svg"/>
+  <p class="caption">Two types of paint servers. From left to right:
+    A linear gradient.
+    A pattern.
+  </p>
+</div>
+
+<p>
+  Paint servers are used by including a <a href="linking.html#TermURLReference">URL reference</a> in
+  a <a class="property" href="painting.html#FillProperty">fill</a> or <a class="property" href="painting.html#StrokeProperty">stroke</a> property (i.e. fill="url(#MyLightPurple)").
+</p>
+
+<p>
+  <a href="styling.html#TermProperty">properties</a> inherit
+  into a paint-server element from its ancestors;
+  properties do <em>not</em> inherit from the element referencing
+  the paint server element.
+</p>
+
+<p>
+  Paint-server elements are never rendered directly; their only usage is
+  as something that can be referenced using
+  the <a class="property" href="painting.html#FillProperty">fill</a> and <a class="property" href="painting.html#StrokeProperty">stroke</a> properties.
+  The <a class="property" href="render.html#VisibilityControl">display</a> value for these elements
+  must always be set to <span class="prop-value">none</span>
+  by the <a href="styling.html#UAStyleSheet">user agent style sheet</a>,
+  and this declaration must have importance over any other CSS rule or presentation attribute.
+  <!--The
+  <a>'display'</a> property does not apply to a paint-server element;
+  thus, paint-server elements are not directly rendered even if
+  the <a>'display'</a> property is set to a value other
+  than <span class="prop-value">none</span>, and -->
+  Paint-server elements
+  are available for referencing even when the <a class="property" href="render.html#VisibilityControl">display</a>
+  property on the paint-server element or any of its ancestors is set
+  to <span class="prop-value">none</span>.
+</p>
+
+<h3 id="PaintServerTemplates" class="heading">14.1.1. Using paint servers as templates<a class="self-link" href="#PaintServerTemplates"></a></h3>
+
+<p>
+  Most paint server elements accept an <span class="attr-name">‘href’</span> attribute,
+  which can be used to define a compatible paint server element as a template.
+  Attributes defined for the template element
+  are used instead of the initial value
+  if corresponding attributes are not specified
+  on the current element.
+  Furthermore, if the current element does not have any
+  child content other than <a href="struct.html#TermDescriptiveElement">descriptive elements</a>,
+  than the child content of the template element is cloned to replace it.
+</p>
+
+<div class="note">
+  <p>
+  The exclusion of descriptive content is new in SVG 2 for <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span>,
+  consistent with the behavior of gradients,
+  and with changes to make descriptive content valid for any SVG element.
+  </p>
+  <p>
+  Also new: template cross-references may be to external file resources
+  (different chapters in SVG 1.1 had inconsistent guidance on this point),
+  and the "inheritance" of child elements is represented through a shadow tree.
+  </p>
+</div>
+
+<p>
+Templating can be indirect to an arbitrary level
+(subject to security limits on external file resources,
+which can make a reference invalid).
+Thus, if the referenced template element does not have relevant child content
+or does not define the specified attribute,
+then the attribute value or cloned content is derived
+from another element referenced by the template's own <span class="attr-name">‘href’</span> attribute.
+</p>
+
+<p>
+The description of each <span class="attr-name">‘href’</span> attribute in this chapter defines
+the limits of the templating process, as follows:
+</p>
+<ul>
+  <li>What type of element is a valid target for the reference</li>
+  <li>Which attributes are duplicated from the template</li>
+</ul>
+
+<p>
+  If any of the specified attributes are not
+  defined on the current element,
+  or if the current element has no child elements other than <a href="struct.html#TermDescriptiveElement">descriptive elements</a>,
+  the user agent must <a href="linking.html#processingURL">process the URL</a>
+  to identify the referenced resource.
+  If the URL reference is not <a href="types.html#TermInvalidValue">invalid</a>,
+  then the URL's target element is used as the template element, as follows:
+</p>
+<ul>
+  <li>
+    <p>
+      For any of the specified attributes not defined on the current element,
+      the user agent must determine the value of the attribute
+      for the template element
+      and use it as the value for the current element.
+      The template value is derived
+      from recursive cross-references if required.
+      The initial value for the attribute is only substituted
+      after all valid URL references are exhausted.
+    </p>
+  </li>
+  <li>
+    <p>
+      If the current element has no child elements other than <a href="struct.html#TermDescriptiveElement">descriptive elements</a>,
+      the user agent must generate a <a href="struct.html#TermShadowTree">shadow tree</a> for this element,
+      which must behave equivalently to a <a href="struct.html#TermUseElementShadowTree">use-element shadow tree</a>,
+      except that the host is the current paint server element.
+      The <a href="struct.html#TermCorrespondingElement">corresponding elements</a> for the <a href="struct.html#TermElementInstance">element instances</a>
+      cloned into the shadow tree are:
+    </p>
+    <ul>
+      <li>
+      the child content of the template element,
+      if it has child elements other than <a href="struct.html#TermDescriptiveElement">descriptive elements</a>,
+      </li>
+      <li>
+      the <a href="struct.html#TermCorrespondingElement">corresponding elements</a> that are used, or would be used, to generate
+      the template element's own shadow tree, otherwise.
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>
+When a paint-server element has a shadow tree,
+the <a href="struct.html#TermElementInstance">element instances</a> in that tree
+must be used in rendering the paint server effect,
+as if they were the paint server element's own children.
+</p>
+
+<p class="note">
+  The <a href="struct.html#TermUseElementShadowTree">use-element shadow tree</a> model for templating
+  allows cloned content to inherit different styles than the original.
+  This behavior is newly defined in SVG 2;
+  SVG 1.1 did not define how styles applied to inherited paint server content.
+</p>
+
+<h2 id="Gradients" class="heading">14.2. Gradients<a class="self-link" href="#Gradients"></a></h2>
+
+<p>Gradients consist of smooth color transitions between points on a
+drawing surface. SVG provides for two types of gradients:</p>
+
+<ul>
+  <li><a href="#LinearGradients">linear gradients</a>,</li>
+  <li><a href="#RadialGradients">radial gradients</a>.</li>
+</ul>
+
+<p>Once a gradient is defined, a <a href="struct.html#TermGraphicsElement">graphics element</a> can be
+filled or stroked with the gradient by setting the <a class="property" href="painting.html#FillProperty">fill</a>
+or <a class="property" href="painting.html#StrokeProperty">stroke</a> properties to reference the gradient.</p>
+
+<p>
+  Color transitions for linear and radial gradients are defined by a
+  series of color <a href="#GradientStops">stops</a> along a gradient
+  vector. A gradient normal defines how the colors in a vector are
+  painted to the surface. For a linear gradient, a normal is a line
+  perpendicular to the vector. For a radial gradient, a normal is a
+  circle intersecting the vector at a right angle. Each gradient
+  normal is painted with one color determined by the vector.
+</p>
+
+<div class="figure">
+  <img alt="Image of linear and radial gradients with vectors and normals indicated." src="images/pservers/gradient_vector_and_normal_alt.png"/>
+
+  <p class="caption">
+    Linear and radial gradients with the gradient vector
+    indicated. The vector consists of three stops shown by small
+    circles. One gradient normal is shown for each gradient.
+  </p>
+</div>
+
+<p class="ready-for-wider-review">
+  For linear and radial gradients, the color value between two stops along the
+  gradient vector is the linear interpolation, per channel, of the color for
+  each stop, weighted by the distance from each stop.
+</p>
+<div role="math" aria-describedby="math-gradient-linear-interpolation" class="ready-for-wider-review">
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <mi>V</mi>
+    <mo>=</mo>
+    <msub>
+      <mi>C</mi><mn>0</mn>
+    </msub>
+    <mo>+</mo>
+    <mo>(</mo>
+      <msub>
+        <mi>C</mi><mn>1</mn>
+      </msub>
+      <mo>-</mo>
+      <msub><mi>C</mi><mn>0</mn></msub>
+    <mo>)</mo>
+    <mo>(</mo>
+    <mfrac>
+      <mrow>
+          <mi>D</mi>
+          <mo>-</mo>
+          <msub><mi>O</mi><mn>0</mn></msub>
+      </mrow>
+      <mrow>
+          <msub><mi>O</mi><mn>1</mn></msub>
+          <mo>-</mo>
+          <msub><mi>O</mi><mn>0</mn></msub>
+      </mrow>
+    </mfrac>
+    <mo>)</mo>
+  </math>
+  <pre id="math-gradient-linear-interpolation">
+    $V = C0.rgba + (C1.rgba - C0.rgba) * ((D - C0.offset) / (C1.offset - C0.offset));
+  </pre>
+</div>
+<p class="ready-for-wider-review">
+Where, for each channel:
+</p>
+<ul class="ready-for-wider-review">
+<li>V is the interpolated result for that channel</li>
+<li>C<sub>0</sub> is the stop color for the stop with the lowest offset</li>
+<li>O<sub>0</sub> is the offset of C<sub>0</sub></li>
+<li>C<sub>1</sub> is the other stop color</li>
+<li>O<sub>1</sub> is the offset of C<sub>1</sub></li>
+<li>D is the distance along the gradient vector</li>
+</ul>
+<p>
+  When a <a href="struct.html#TermGraphicsElement">graphics element</a> references a gradient, conceptually the
+  <a href="struct.html#TermGraphicsElement">graphics element</a> should take a copy of the gradient vector
+  with gradient normals and treat it as part of its own geometry. Any
+  transformations applied to the <a href="struct.html#TermGraphicsElement">graphics element</a> geometry also
+  apply to the copied gradient vector and gradient normals. Any
+  gradient transforms that are specified on the reference gradient are
+  applied before any <a href="struct.html#TermGraphicsElement">graphics element</a> transformations are
+  applied to the gradient.
+</p>
+
+<h3 id="Definitions" class="heading">14.2.1. Definitions<a class="self-link" href="#Definitions"></a></h3>
+
+<dl class="definitions">
+  <dt><dfn id="TermGradientElement" data-dfn-type="dfn" data-export="">gradient element</dfn></dt>
+  <dd>A gradient element is one that defines a gradient paint server.
+    This specification defines the following gradient elements:
+    <span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span> and <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span>.
+  </dd>
+</dl>
+
+<h3 id="LinearGradients" class="heading">14.2.2. Linear gradients<a class="self-link" href="#LinearGradients"></a></h3>
+
+
+
+<p id="LinearGradientElement">Linear gradients are defined by a
+<span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span> element.</p>
+
+<div class="element-summary"><div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element" data-export="" id="elementdef-linearGradient">linearGradient</dfn>’</span></div><dl><dt>Categories:</dt><dd><a href="pservers.html#TermGradientElement">Gradient element</a>, <a href="render.html#TermNeverRenderedElement">never-rendered element</a>, <a href="painting.html#TermPaintServerElement">paint server element</a></dd><dt>Content model:</dt><dd>Any number of the following elements, in any order:<ul class="no-bullets"><li><a href="struct.html#TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span class="element-name">‘<a href="struct.html#DescElement"><span>desc</span></a>’</span>, <span class="element-name">‘<a href="struct.html#TitleElement"><span>title</span></a>’</span>, <span class="element-name">‘<a href="struct.html#MetadataElement"><span>metadata</span></a>’</span></span></li></ul><span class="element-name"><a href="https://svgwg.org/specs/animations/#AnimateElement"><span>animate</span></a></span>, <span class="element-name"><a href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a></span>, <span class="element-name"><a href="interact.html#ScriptElement"><span>script</span></a></span>, <span class="element-name"><a href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a></span>, <span class="element-name"><a href="pservers.html#StopElement"><span>stop</span></a></span>, <span class="element-name"><a href="styling.html#StyleElement"><span>style</span></a></span></dd><dt>Attributes:</dt><dd><ul class="no-bullets"><li><a href="struct.html#TermCoreAttribute">core attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="struct.html#IDAttribute"><span>id</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#LangAttribute"><span>lang</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#ClassAttribute"><span>class</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span></span></li><li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclose</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncopy</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncuechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncut</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondblclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrag</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragexit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrop</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondurationchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onemptied</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onended</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onerror</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onfocus</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninput</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninvalid</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeydown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeypress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeyup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onload</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadeddata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadedmetadata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousedown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousemove</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseout</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpaste</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpause</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplaying</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onprogress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onratechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onreset</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onresize</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onscroll</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeked</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeking</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onselect</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onshow</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onstalled</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsubmit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsuspend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontimeupdate</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontoggle</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onvolumechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwaiting</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwheel</span></a>’</span></span></li><li><a href="styling.html#TermPresentationAttribute">presentation attributes</a><span class="expanding"> — </span></li><li><a href="linking.html#XLinkRefAttrs">deprecated xlink attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="linking.html#XLinkHrefAttribute"><span>xlink:href</span></a>’</span>, <span class="attr-name">‘<a href="linking.html#XLinkTitleAttribute"><span>xlink:title</span></a>’</span></span></li><li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementX1Attribute"><span>x1</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementY1Attribute"><span>y1</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementX2Attribute"><span>x2</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementY2Attribute"><span>y2</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementGradientUnitsAttribute"><span>gradientUnits</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementSpreadMethodAttribute"><span>spreadMethod</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementHrefAttribute"><span>href</span></a>’</span></li></ul></dd><dt>DOM Interfaces:</dt><dd><ul class="no-bullets"><li><a class="idlinterface" href="pservers.html#InterfaceSVGLinearGradientElement">SVGLinearGradientElement</a></li></ul></dd></dl></div>
+
+<h4 id="LinearGradientAttributes" class="heading">14.2.2.1. Attributes<a class="self-link" href="#LinearGradientAttributes"></a></h4>
+
+  <p class="note">
+    Note that the <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX1Attribute"><span>x1</span></a>’</span>,<span class="attr-name">‘<a href="pservers.html#LinearGradientElementY1Attribute"><span>y1</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX2Attribute"><span>x2</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY2Attribute"><span>y2</span></a>’</span> attributes
+    on a <span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span> are not presentation attributes;
+    the used value is not affected by CSS styles.
+    The <span class="attr-name">‘<a href="pservers.html#LinearGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span> attribute is a presentation attribute
+    for the <a class="property" href="coords.html#TransformProperty">transform</a> property.
+  </p>
+
+  <dl class="attrdef-list-svg2">
+
+    <dt id="LinearGradientElementGradientUnitsAttribute"><span class="adef">gradientUnits</span></dt>
+    <dd>
+
+      <p>
+	Defines the coordinate system for attributes <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX1Attribute"><span>x1</span></a>’</span>,
+        <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY1Attribute"><span>y1</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX2Attribute"><span>x2</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY2Attribute"><span>y2</span></a>’</span>.
+      </p>
+
+      <dl class="attrdef-svg2">
+
+	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>objectBoundingBox</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+
+      </dl>
+
+      <dl class="attrdef-values">
+
+	<dt>userSpaceOnUse</dt>
+        <dd>
+	  <p>
+            If <span class="attr-value">gradientUnits="userSpaceOnUse"</span>,
+
+            <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX1Attribute"><span>x1</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY1Attribute"><span>y1</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX2Attribute"><span>x2</span></a>’</span>, and <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY2Attribute"><span>y2</span></a>’</span>
+
+            represent values in the coordinate system that results
+            from taking the current user coordinate system in place at
+            the time when the gradient element is referenced (i.e.,
+            the user coordinate system for the element referencing the
+            gradient element via a <a class="property" href="painting.html#FillProperty">fill</a> or <a class="property" href="painting.html#StrokeProperty">stroke</a>
+            property) and then applying the transform specified by
+            attribute <span class="attr-name">‘<a href="pservers.html#LinearGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span>. Percentages
+            represent values relative to the current SVG viewport.
+	  </p>
+	</dd>
+
+	<dt>objectBoundingBox</dt>
+	<dd>
+	  <p>
+            If <span class="attr-value">gradientUnits="objectBoundingBox"</span>,
+            the user coordinate system for attributes
+
+            <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX1Attribute"><span>x1</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY1Attribute"><span>y1</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX2Attribute"><span>x2</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY2Attribute"><span>y2</span></a>’</span>
+
+	    is established using the bounding box of the element to
+            which the gradient is applied
+            (see <a href="coords.html#ObjectBoundingBox">Object
+            bounding box units</a>) and then applying the transform
+            specified by attribute <span class="attr-name">‘<a href="pservers.html#LinearGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span>.
+            Percentages represent values relative to the bounding box
+            for the object.
+	  </p>
+	  <p>
+            When <span class="attr-value">gradientUnits="objectBoundingBox"</span>
+            and <span class="attr-name">‘<a href="pservers.html#LinearGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span> is the identity matrix, the
+            normal of the linear gradient is perpendicular to the
+            gradient vector in object bounding box space (i.e., the
+            abstract coordinate system where (0,0) is at the top/left
+            of the object bounding box and (1,1) is at the
+            bottom/right of the object bounding box). When the
+            object's bounding box is not square, the gradient normal
+            which is initially perpendicular to the gradient vector
+            within object bounding box space may render
+            non-perpendicular relative to the gradient vector in user
+            space. If the gradient vector is parallel to one of the
+            axes of the bounding box, the gradient normal will remain
+            perpendicular. This transformation is due to application
+            of the non-uniform scaling transformation from bounding
+            box space to user coordinate system.
+	  </p>
+	</dd>
+
+      </dl><!-- Attribute values -->
+
+    </dd>
+
+    <dt id="LinearGradientElementGradientTransformAttribute">
+      <span class="adef">gradientTransform</span>
+    </dt>
+    <dd>
+
+      <p>
+	Contains the definition of an optional additional
+        transformation from the gradient coordinate system onto the
+        target coordinate system
+
+        (i.e., <span class="attr-value">'userSpaceOnUse'</span> or
+        <span class="attr-value">'objectBoundingBox'</span>).
+
+	This allows for things such as skewing the gradient.
+
+	This additional transformation matrix is post-multiplied to
+        (i.e., inserted to the right of) any previously defined
+        transformations, including the implicit transformation
+        necessary to convert
+        from <a href="coords.html#ObjectBoundingBox">object bounding
+        box units</a> to user coordinate system.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a href="http://dev.w3.org/csswg/css-transforms/#typedef-transform-list">&lt;transform-list></a></dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>identity transform</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="LinearGradientElementX1Attribute"><span class="adef">x1</span></dt>
+    <dd>
+
+      <p>
+	<span class="attr-name">‘<a href="pservers.html#LinearGradientElementX1Attribute"><span>x1</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY1Attribute"><span>y1</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX2Attribute"><span>x2</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY2Attribute"><span>y2</span></a>’</span> define
+        a <em>gradient vector</em> for the linear
+        gradient. This <em>gradient vector</em> provides starting and
+        ending points onto which the <a href="#GradientStops">gradient
+        stops</a> are mapped. The values
+        of <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX1Attribute"><span>x1</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY1Attribute"><span>y1</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX2Attribute"><span>x2</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY2Attribute"><span>y2</span></a>’</span> can
+        be either numbers or percentages.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>0%</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="LinearGradientElementY1Attribute"><span class="adef">y1</span></dt>
+    <dd>
+
+      <p>
+	See <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX1Attribute"><span>x1</span></a>’</span>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>0%</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="LinearGradientElementX2Attribute"><span class="adef">x2</span></dt>
+    <dd>
+
+      <p>
+	See <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX1Attribute"><span>x1</span></a>’</span>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>100%</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+    </dd>
+
+    <dt id="LinearGradientElementY2Attribute"><span class="adef">y2</span></dt>
+    <dd>
+
+      <p>
+	See <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX1Attribute"><span>x1</span></a>’</span>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>0%</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+    </dd>
+
+    <dt id="LinearGradientElementSpreadMethodAttribute">
+      <span class="adef">spreadMethod</span>
+    </dt>
+    <dd>
+      <p>
+	Indicates what happens if the gradient starts or ends
+        inside the bounds of the <em>target rectangle</em>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd>pad | reflect | repeat</dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>pad</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+      <dl class="attrdef-values">
+
+	<dt>pad</dt>
+        <dd>
+	  Use the terminal colors of the gradient to fill the
+          remainder of the target region.
+	</dd>
+
+	<dt>reflect</dt>
+	<dd>
+	  Reflect the gradient pattern start-to-end, end-to-start,
+          start-to-end, etc. continuously until the <em>target
+          rectangle</em> is filled.
+	</dd>
+
+	<dt>repeat</dt>
+	<dd>
+          Repeat the gradient pattern start-to-end, start-to-end,
+          start-to-end, etc. continuously until the target region is
+          filled.
+	</dd>
+
+      </dl>
+
+      <div class="figure">
+	<img alt="Image of the three possible values for 'spreadMethod'." src="images/pservers/spread_method.png"/>
+	<p class="caption">
+	  Illustration of the three possible values for
+	  <span class="adef">spreadMethod</span>, from left to
+	  right: pad, reflect, repeat. The gradient vector spans
+	  from 40% to 60% of the bounding box width.
+	</p>
+      </div>
+    </dd>
+
+    <dt id="LinearGradientElementHrefAttribute">
+      <span class="adef">href</span>
+    </dt>
+    <dd>
+      <p>
+        A <a href="linking.html#TermURLReference">URL reference</a> to a template gradient element;
+        to be valid, the reference must be to a
+        different <span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span> or
+        a <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span> element.
+      </p>
+      <p>
+        Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
+        and to the common handling defined for <a href="linking.html#linkRefAttrs">URL reference attributes</a> and
+        <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
+      </p>
+      <p>
+        The specified attributes that will be copied from the template are:
+      </p>
+      <ul>
+        <li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementX1Attribute"><span>x1</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementY1Attribute"><span>y1</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementX2Attribute"><span>x2</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementY2Attribute"><span>y2</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementGradientUnitsAttribute"><span>gradientUnits</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#LinearGradientElementSpreadMethodAttribute"><span>spreadMethod</span></a>’</span></li>
+      </ul>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>empty</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+  </dl>
+
+<h4 id="LinearGradientNotes" class="heading">14.2.2.2. Notes on linear gradients<a class="self-link" href="#LinearGradientNotes"></a></h4>
+
+<p>If <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX1Attribute"><span>x1</span></a>’</span> = <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX2Attribute"><span>x2</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY1Attribute"><span>y1</span></a>’</span> =
+<span class="attr-name">‘<a href="pservers.html#LinearGradientElementY2Attribute"><span>y2</span></a>’</span>, then the area to be painted will be painted as a
+single color using the color and opacity of the last
+<a href="pservers.html#GradientStops">gradient stop</a>.</p>
+
+<p id="ExampleLinGrad01"><span class="example-ref">Example lingrad01</span>
+shows how to fill a rectangle by referencing a linear gradient paint server.</p>
+
+<div class="example"><pre class="xml">&lt;?xml version="1.0" standalone="no"?>
+&lt;svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1"
+     viewBox="0 0 300 200" >
+
+  &lt;title>Example lingrag01&lt;/title>
+  &lt;desc>Fill a rectangle using a linear-gradient paint server.&lt;/desc>
+
+  &lt;defs>
+    &lt;linearGradient id="MyGradient">
+      &lt;stop offset="5%" stop-color="#A8F" />
+      &lt;stop offset="95%" stop-color="#FDC" />
+    &lt;/linearGradient>
+  &lt;/defs>
+
+  &lt;!-- The rectangle is filled using a linear-gradient paint server -->
+  &lt;rect fill="url(#MyGradient)"
+	stroke="black"
+	stroke-width="2"
+	x="25" y="25" width="250" height="150"/>
+&lt;/svg></pre><div class="figure"><img alt="Example lingrad01 — Fill a rectangle by referencing a linear gradient paint server" src="images/pservers/lingrad01.png"/><p class="caption">Example lingrad01</p></div><p class="view-as-svg"><a href="images/pservers/lingrad01.svg">View this example as SVG (SVG-enabled browsers only)</a></p></div>
+
+
+
+<div class="ready-for-wider-review">
+<h3 id="RadialGradients" class="heading">14.2.3. Radial gradients<a class="self-link" href="#RadialGradients"></a></h3>
+
+
+
+<p id="RadialGradientElement">Radial gradients are defined by a
+<span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span> element.</p>
+
+<div class="element-summary"><div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element" data-export="" id="elementdef-radialGradient">radialGradient</dfn>’</span></div><dl><dt>Categories:</dt><dd><a href="pservers.html#TermGradientElement">Gradient element</a>, <a href="render.html#TermNeverRenderedElement">never-rendered element</a>, <a href="painting.html#TermPaintServerElement">paint server element</a></dd><dt>Content model:</dt><dd>Any number of the following elements, in any order:<ul class="no-bullets"><li><a href="struct.html#TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span class="element-name">‘<a href="struct.html#DescElement"><span>desc</span></a>’</span>, <span class="element-name">‘<a href="struct.html#TitleElement"><span>title</span></a>’</span>, <span class="element-name">‘<a href="struct.html#MetadataElement"><span>metadata</span></a>’</span></span></li></ul><span class="element-name"><a href="https://svgwg.org/specs/animations/#AnimateElement"><span>animate</span></a></span>, <span class="element-name"><a href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a></span>, <span class="element-name"><a href="interact.html#ScriptElement"><span>script</span></a></span>, <span class="element-name"><a href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a></span>, <span class="element-name"><a href="pservers.html#StopElement"><span>stop</span></a></span>, <span class="element-name"><a href="styling.html#StyleElement"><span>style</span></a></span></dd><dt>Attributes:</dt><dd><ul class="no-bullets"><li><a href="struct.html#TermCoreAttribute">core attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="struct.html#IDAttribute"><span>id</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#LangAttribute"><span>lang</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#ClassAttribute"><span>class</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span></span></li><li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclose</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncopy</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncuechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncut</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondblclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrag</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragexit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrop</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondurationchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onemptied</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onended</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onerror</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onfocus</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninput</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninvalid</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeydown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeypress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeyup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onload</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadeddata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadedmetadata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousedown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousemove</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseout</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpaste</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpause</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplaying</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onprogress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onratechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onreset</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onresize</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onscroll</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeked</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeking</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onselect</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onshow</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onstalled</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsubmit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsuspend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontimeupdate</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontoggle</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onvolumechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwaiting</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwheel</span></a>’</span></span></li><li><a href="styling.html#TermPresentationAttribute">presentation attributes</a><span class="expanding"> — </span></li><li><a href="linking.html#XLinkRefAttrs">deprecated xlink attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="linking.html#XLinkHrefAttribute"><span>xlink:href</span></a>’</span>, <span class="attr-name">‘<a href="linking.html#XLinkTitleAttribute"><span>xlink:title</span></a>’</span></span></li><li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementCYAttribute"><span>cy</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementRAttribute"><span>r</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementFXAttribute"><span>fx</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementFYAttribute"><span>fy</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementFRAttribute"><span>fr</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementGradientUnitsAttribute"><span>gradientUnits</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementSpreadMethodAttribute"><span>spreadMethod</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementHrefAttribute"><span>href</span></a>’</span></li></ul></dd><dt>DOM Interfaces:</dt><dd><ul class="no-bullets"><li><a class="idlinterface" href="pservers.html#InterfaceSVGRadialGradientElement">SVGRadialGradientElement</a></li></ul></dd></dl></div>
+
+<h4 id="RadialGradientAttributes" class="heading">14.2.3.1. Attributes<a class="self-link" href="#RadialGradientAttributes"></a></h4>
+
+  <p class="note">
+    Note that the <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span>,<span class="attr-name">‘<a href="pservers.html#RadialGradientElementCYAttribute"><span>cy</span></a>’</span>, and <span class="attr-name">‘<a href="pservers.html#RadialGradientElementRAttribute"><span>r</span></a>’</span> attributes
+    on a <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span> are not presentation attributes;
+    the used value is not affected by CSS styles.
+    The <span class="attr-name">‘<a href="pservers.html#RadialGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span> attribute is a presentation attribute
+    for the <a class="property" href="coords.html#TransformProperty">transform</a> property.
+  </p>
+
+  <dl class="attrdef-list-svg2">
+
+    <dt id="RadialGradientElementGradientUnitsAttribute">
+      <span class="adef">gradientUnits</span> =
+      "<span class="attr-value">userSpaceOnUse | objectBoundingBox</span>"
+    </dt>
+    <dd>
+
+      <p>
+	Defines the coordinate system for attributes
+        <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCYAttribute"><span>cy</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementRAttribute"><span>r</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFXAttribute"><span>fx</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFYAttribute"><span>fy</span></a>’</span>, and <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFRAttribute"><span>fr</span></a>’</span>.
+      </p>
+
+      <dl class="attrdef-svg2">
+
+	<!--
+	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
+	-->
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>objectBoundingBox</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+
+      </dl>
+
+      <dl class="attrdef-values">
+
+	<dt>userSpaceOnUse</dt>
+        <dd>
+	  <p>
+            If <span class="attr-value">gradientUnits="userSpaceOnUse"</span>,
+
+            <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCYAttribute"><span>cy</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementRAttribute"><span>r</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFXAttribute"><span>fx</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFYAttribute"><span>fy</span></a>’</span>,
+            and <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFRAttribute"><span>fr</span></a>’</span>
+
+	    represent values in the coordinate system that results
+            from taking the current user coordinate system in place at
+            the time when the gradient element is referenced (i.e.,
+            the user coordinate system for the element referencing the
+            gradient element via a <a class="property" href="painting.html#FillProperty">fill</a> or <a class="property" href="painting.html#StrokeProperty">stroke</a>
+            property) and then applying the transform specified by
+            attribute <span class="attr-name">‘<a href="pservers.html#RadialGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span>. Percentages
+            represent values relative to the current SVG viewport.
+	  </p>
+	</dd>
+
+	<dt>objectBoundingBox</dt>
+	<dd>
+	  <p>
+            If <span class="attr-value">gradientUnits="objectBoundingBox"</span>,
+            the user coordinate system for attributes
+
+            <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCYAttribute"><span>cy</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementRAttribute"><span>r</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFXAttribute"><span>fx</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFYAttribute"><span>fy</span></a>’</span>,
+            and <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFRAttribute"><span>fr</span></a>’</span>
+
+	    is established using the bounding box of the element to
+            which the gradient is applied
+            (see <a href="coords.html#ObjectBoundingBox">Object
+            bounding box units</a>) and then applying the transform
+            specified by attribute <span class="attr-name">‘<a href="pservers.html#RadialGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span>.
+            Percentages represent values relative to the bounding box
+            for the object.
+	  </p>
+	  <p>
+            When <span class="attr-value">gradientUnits="objectBoundingBox"</span>
+            and <span class="attr-name">‘<a href="pservers.html#RadialGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span> is the identity matrix,
+            then the rings of the radial gradient are circular with
+            respect to the object bounding box space (i.e., the
+            abstract coordinate system where (0,0) is at the top/left
+            of the object bounding box and (1,1) is at the
+            bottom/right of the object bounding box). When the
+            object's bounding box is not square, the rings that are
+            conceptually circular within object bounding box space
+            will render as elliptical due to application of the
+            non-uniform scaling transformation from bounding box space
+            to user coordinate system.
+	  </p>
+	</dd>
+
+      </dl><!-- Attribute values -->
+
+    </dd>
+
+    <dt id="RadialGradientElementGradientTransformAttribute">
+      <span class="adef">gradientTransform</span> =
+      "<span class="attr-value"><a href="http://dev.w3.org/csswg/css-transforms/#typedef-transform-list">&lt;transform-list></a></span>"
+    </dt>
+    <dd>
+
+      <p>
+	Contains the definition of an optional additional
+        transformation from the gradient coordinate system onto the
+        target coordinate system
+
+        (i.e., <span class="attr-value">'userSpaceOnUse'</span> or
+        <span class="attr-value">'objectBoundingBox'</span>).
+
+	This allows for things such as skewing the gradient.
+
+	This additional transformation matrix is post-multiplied to
+        (i.e., inserted to the right of) any previously defined
+        transformations, including the implicit transformation
+        necessary to convert
+        from <a href="coords.html#ObjectBoundingBox">object bounding
+        box units</a> to user coordinate system.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;transform-list&gt;</a></dd> -->
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>identity transform</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="RadialGradientElementCXAttribute">
+      <span class="adef">cx</span> =
+      "<span class="attr-value"><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></span>"
+    </dt>
+    <dd>
+
+      <p>
+	<span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCYAttribute"><span>cy</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#RadialGradientElementRAttribute"><span>r</span></a>’</span> define the end circle for the radial gradient. The
+        gradient will be drawn such that the
+        100% <a href="#GradientStops">gradient stop</a> is mapped
+        to the perimeter of this end circle.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>50%</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="RadialGradientElementCYAttribute">
+      <span class="adef">cy</span> =
+      "<span class="attr-value"><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></span>"
+    </dt>
+    <dd>
+
+      <p>
+	See <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span>.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>50%</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="RadialGradientElementRAttribute">
+      <span class="adef">r</span> =
+      "<span class="attr-value"><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></span>"
+    </dt>
+    <dd>
+
+      <p>
+	See <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span>.
+      </p>
+
+      <p>
+        A negative value is an error
+        (see <a href="conform.html#ErrorProcessing">Error
+        processing</a>).
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>50%</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="RadialGradientElementFXAttribute">
+      <span class="adef">fx</span> =
+      "<span class="attr-value"><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></span>"
+    </dt>
+    <dd>
+
+      <p>
+	<span class="attr-name">‘<a href="pservers.html#RadialGradientElementFXAttribute"><span>fx</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFYAttribute"><span>fy</span></a>’</span>, and <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFRAttribute"><span>fr</span></a>’</span> define the start
+	circle for the radial gradient. The
+        gradient will be drawn such that the
+        0% <a href="#GradientStops">gradient stop</a> is mapped
+        to the perimeter of this start circle.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>see below</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+      <p>
+        If attribute <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFXAttribute"><span>fx</span></a>’</span> is not specified, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFXAttribute"><span>fx</span></a>’</span> will coincide
+        with the presentational value of <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span> for the element whether the
+        value for 'cx' was inherited or not. If the element references an
+        element that specifies a value for 'fx', then the value of 'fx' is
+        inherited from the referenced element.
+      </p>
+
+      <div class="figure">
+	<img alt="Diagram of various radial gradient attributes." src="images/pservers/radial_gradient_dimensions.png"/>
+	<p class="caption">
+	  This diagram shows how the geometric attributes are defined
+	  for the case where <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFRAttribute"><span>fr</span></a>’</span> is 50% of <span class="attr-name">‘<a href="pservers.html#RadialGradientElementRAttribute"><span>r</span></a>’</span>. The
+	  small circle marks the center of the outermost circle
+	  (<span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span>,<span class="attr-name">‘<a href="pservers.html#RadialGradientElementCYAttribute"><span>cy</span></a>’</span>), while the cross marks the center
+	  of the innermost circle (<span class="attr-name">‘<a href="pservers.html#RadialGradientElementFXAttribute"><span>fx</span></a>’</span>,<span class="attr-name">‘<a href="pservers.html#RadialGradientElementFYAttribute"><span>fy</span></a>’</span>). The
+	  dashed lines show two gradient vectors. Vectors connect
+	  corresponding points on the inner and outer most circles.
+	  The region outside the outer circle is painted with the
+	  last <a class="property" href="pservers.html#StopColorProperty">stop-color</a> while the region inside the inner
+	  circle is painted with the first <a class="property" href="pservers.html#StopColorProperty">stop-color</a>.
+	</p>
+      </div>
+
+    </dd>
+
+    <dt id="RadialGradientElementFYAttribute">
+      <span class="adef">fy</span> =
+      "<span class="attr-value"><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></span>"
+    </dt>
+    <dd>
+
+      <p>
+	See <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFXAttribute"><span>fx</span></a>’</span>.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>see below</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+      <p>
+        If attribute <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFYAttribute"><span>fy</span></a>’</span> is not specified, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFYAttribute"><span>fy</span></a>’</span>
+        will coincide with the presentational value of <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCYAttribute"><span>cy</span></a>’</span>
+        for the element whether the value for 'cy' was inherited
+        or not. If the element references an element that
+        specifies a value for 'fy', then the value of 'fy' is
+        inherited from the referenced element.
+      </p>
+    </dd>
+
+    <dt id="RadialGradientElementFRAttribute">
+      <span class="adef">fr</span> =
+      "<span class="attr-value"><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></span>"
+    </dt>
+    <dd>
+
+      <p class="note">New in SVG 2. Added to align with Canvas.</p>
+
+      <p>
+	<span class="attr-name">‘<a href="pservers.html#RadialGradientElementFRAttribute"><span>fr</span></a>’</span> is the radius of the focal circle. See <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFXAttribute"><span>fx</span></a>’</span>.
+      </p>
+
+      <p>
+        A negative value is an error
+        (see <a href="conform.html#ErrorProcessing">Error
+        processing</a>).
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>0%, see below</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+      <p>
+        If the attribute is not specified, the effect is as if a
+	value of <span class="attr-value">'0%'</span> were
+	specified.  If the element references an element that
+	specifies a value for 'fr', then the value of 'fr' is
+	inherited from the referenced element.
+      </p>
+
+      <div class="annotation svg2-requirement">
+        <table>
+          <tr>
+            <th>SVG 2 Requirement:</th>
+            <td>Allow specifying focal circle radius in radial gradients.</td>
+          </tr>
+          <tr>
+            <th>Resolution:</th>
+            <td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item06">Add an <span class="attr-name">‘fr’</span> attribute to <span class="element-name">‘radialGradient’</span>> for SVG 2.</a></td>
+          </tr>
+          <tr>
+            <th>Purpose:</th>
+            <td>To align with Canvas.  The zero-offset stop would be along the circle
+            defined by the <span class="attr-name">‘fx’</span>, <span class="attr-name">‘fy’</span>
+            and <span class="attr-name">‘fr’</span> attributes.</td>
+          </tr>
+          <tr>
+            <th>Owner:</th>
+            <td>Erik (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3098">ACTION-3098</a>)</td>
+          </tr>
+        </table>
+      </div>
+    </dd>
+
+    <dt id="RadialGradientElementSpreadMethodAttribute">
+      <span class="adef">spreadMethod</span> = "pad | reflect | repeat"
+    </dt>
+    <dd>
+
+      <p>
+	Indicates what happens if the gradient starts or ends inside
+        the bounds of the object(s) being painted by the gradient. Has
+        the same values and meanings as the <span class="attr-name">‘<a href="pservers.html#LinearGradientElementSpreadMethodAttribute"><span>spreadMethod</span></a>’</span>
+        attribute on <span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span> element.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd>pad | reflect | repeat</dd> -->
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>pad</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+    </dd>
+
+    <dt id="RadialGradientElementHrefAttribute">
+      <span class="adef">href</span> =
+      <a href="types.html#attribute-url" class="syntax">[URL]</a>
+    </dt>
+    <dd>
+      <p>
+        A <a href="linking.html#TermURLReference">URL reference</a> to a template gradient element;
+        to be valid, the reference must be to a
+        <span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span> element or
+        a different <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span> element.
+      </p>
+      <p>
+        Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
+        and to the common handling defined for <a href="linking.html#linkRefAttrs">URL reference attributes</a> and
+        <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
+      </p>
+      <p>
+        The specified attributes that will be copied from the template are:
+      </p>
+      <ul>
+        <li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementCYAttribute"><span>cy</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementRAttribute"><span>r</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementFXAttribute"><span>fx</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementFYAttribute"><span>fy</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementFRAttribute"><span>fr</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementGradientTransformAttribute"><span>gradientTransform</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementGradientUnitsAttribute"><span>gradientUnits</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#RadialGradientElementSpreadMethodAttribute"><span>spreadMethod</span></a>’</span></li>
+      </ul>
+      <p>
+        Refer to the common handling defined for <a href="linking.html#linkRefAttrs">URL reference attributes</a> and
+        <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
+      </p>
+
+      <dl class="attrdef-svg2">
+<!--	<dt>Value</dt>                <dd><a>&lt;url&gt;</a></dd> -->
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>empty</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+  </dl>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Clarify radial gradients with focal point on the circle.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item05">When the focal point is on the circle edge, with repeat, then the distance between the first and last stop for the repeating colors is 0 and the paint should generate a color that is the average of all the gradient stops.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To improve interoperability of radial gradients.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Erik (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3097">ACTION-3097</a>)</td>
+    </tr>
+    <tr>
+      <th>Note:</th>
+      <td>SVG 1.1 does not define what to do when the focal point
+      is on the circle edge, with 'repeat'. The distance between the
+      first and last stop for the repeating colors is 0. It was
+      resolved that the paint should generate a color that is the
+      weighted average (by offset) of all the gradient stops.</td>
+    </tr>
+  </table>
+</div>
+
+<h4 id="RadialGradientNotes" class="heading">14.2.3.2. Notes on radial gradients<a class="self-link" href="#RadialGradientNotes"></a></h4>
+
+<p class="note">Changed in SVG 2. SVG 1.1 required that the focal
+point, if outside the end circle, be moved to be on the end
+circle. The change was made to align with Canvas.</p>
+
+<p class="annotation">Allowing the focal point to lie outside the end
+circle was resolved at the
+<a href="http://www.w3.org/2012/09/19-svg-minutes.html#item01">Rigi
+Kaltbad working group meeting</a>.</p>
+
+<p>If the start circle defined by <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFXAttribute"><span>fx</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFYAttribute"><span>fy</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFRAttribute"><span>fr</span></a>’</span> lies
+outside the end circle defined by <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCYAttribute"><span>cy</span></a>’</span>, and <span class="attr-name">‘<a href="pservers.html#RadialGradientElementRAttribute"><span>r</span></a>’</span>, effectively
+a cone is created, touched by the two circles. Areas outside the cone stay untouched by
+the gradient (transparent black).</p>
+
+<p>If the start circle fully overlaps with the end circle, no
+gradient is drawn. The area stays untouched (transparent black).</p>
+
+<div class="figure">
+  <img alt="Image of a radial gradient with the focal (start circle) outside
+	  the start circle." src="images/pservers/radial_gradient_focus_reflect.png"/>
+
+  <p class="caption">A radial gradient with the focal (start) circle
+    outside the end circle. The focal circle is the
+    smaller circle on the right. The gradient has
+    <span class="attr-value">spreadMethod="reflect"</span>.
+  </p>
+</div>
+
+<div class="figure">
+  <img alt="Image of two radial gradients, one with the focus just inside the circumference
+    and one with the focus on the circumference." src="images/pservers/radial_gradient_focus.png"/>
+
+  <p class="caption">Two radial gradients with
+  <span class="attr-value">spreadMethod="repeat"</span>. On the
+  left, the focal point is just inside the right side of the circle
+  defined by <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCYAttribute"><span>cy</span></a>’</span>, and <span class="attr-name">‘<a href="pservers.html#RadialGradientElementRAttribute"><span>r</span></a>’</span>. On the
+  right, the focal point is on the circle. In this case, the area
+  painted to the right of the circumference has a fill equal to
+  the weighted average of the colors in the gradient vector.</p>
+</div>
+
+<p class="note">The treatment of the area to the right of the gradient
+in the right-hand side of the above figure is different from that of
+Canvas where the area would be transparent black. The difference is to
+maintain compatibility with SVG 1.1.</p>
+
+<p class="annotation">The color space for the weighted average is the
+same as in which the gradient is interpolated. See
+<a href="http://www.w3.org/2012/09/19-svg-minutes.html#item01">Rigi
+Kaltbad working group meeting</a>.</p>
+
+<p id="ExampleRadGrad01"><span class="example-ref">Example radgrad01</span>
+shows how to fill a rectangle by referencing a radial gradient paint
+server.</p>
+
+<div class="example"><pre class="xml">&lt;?xml version="1.0" standalone="no"?>
+&lt;svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 300 200" >
+  &lt;title>Example radgrad01&lt;/title>
+  &lt;desc>Fill a rectangle by referencing a radial gradient paint server.&lt;/desc>
+
+  &lt;defs>
+    &lt;radialGradient id="MyGradient"
+		    gradientUnits="userSpaceOnUse"
+		    cx="150" cy="100"
+		    r="100">
+      &lt;stop offset="0%"   stop-color="#A8F" />
+      &lt;stop offset="50%"  stop-color="#FDC" />
+      &lt;stop offset="100%" stop-color="#A8F" />
+    &lt;/radialGradient>
+  &lt;/defs>
+
+  &lt;!-- The rectangle is filled using a radial gradient paint server -->
+  &lt;rect fill="url(#MyGradient)"
+	stroke="black"
+	stroke-width="2"
+	x="25" y="25" width="250" height="150"/>
+&lt;/svg></pre><div class="figure"><img alt="Example radgrad01 — Fill a rectangle by referencing a radial gradient paint server" src="images/pservers/radgrad01.png"/><p class="caption">Example radgrad01</p></div><p class="view-as-svg"><a href="images/pservers/radgrad01.svg">View this example as SVG (SVG-enabled browsers only)</a></p></div>
+
+
+</div>
+
+<h3 id="GradientStops" class="heading">14.2.4. Gradient stops<a class="self-link" href="#GradientStops"></a></h3>
+
+
+
+<p id="StopElement">The vector of colors to use in a gradient is
+defined by the <span class="element-name">‘<a href="pservers.html#StopElement"><span>stop</span></a>’</span> elements that are child elements to a
+<span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span>, or <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span>
+element.</p>
+
+<p class="annotation">In SVG 1.1, the above read: "The ramp of
+colors..." but "ramp" is used nowhere else in this section.</p>
+
+<div class="element-summary"><div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element" data-export="" id="elementdef-stop">stop</dfn>’</span></div><dl><dt>Categories:</dt><dd>None</dd><dt>Content model:</dt><dd>Any number of the following elements, in any order:<ul class="no-bullets"></ul><span class="element-name"><a href="https://svgwg.org/specs/animations/#AnimateElement"><span>animate</span></a></span>, <span class="element-name"><a href="interact.html#ScriptElement"><span>script</span></a></span>, <span class="element-name"><a href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a></span>, <span class="element-name"><a href="styling.html#StyleElement"><span>style</span></a></span></dd><dt>Attributes:</dt><dd><ul class="no-bullets"><li><a href="struct.html#TermCoreAttribute">core attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="struct.html#IDAttribute"><span>id</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#LangAttribute"><span>lang</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#ClassAttribute"><span>class</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span></span></li><li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclose</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncopy</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncuechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncut</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondblclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrag</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragexit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrop</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondurationchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onemptied</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onended</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onerror</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onfocus</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninput</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninvalid</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeydown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeypress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeyup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onload</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadeddata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadedmetadata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousedown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousemove</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseout</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpaste</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpause</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplaying</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onprogress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onratechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onreset</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onresize</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onscroll</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeked</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeking</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onselect</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onshow</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onstalled</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsubmit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsuspend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontimeupdate</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontoggle</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onvolumechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwaiting</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwheel</span></a>’</span></span></li><li><a href="styling.html#TermPresentationAttribute">presentation attributes</a><span class="expanding"> — </span></li><li><span class="attr-name">‘<a href="pservers.html#StopElementOffsetAttribute"><span>offset</span></a>’</span></li></ul></dd><dt>DOM Interfaces:</dt><dd><ul class="no-bullets"><li><a class="idlinterface" href="pservers.html#InterfaceSVGStopElement">SVGStopElement</a></li></ul></dd></dl></div>
+
+<h4 id="GradientStopAttributes" class="heading">14.2.4.1. Attributes<a class="self-link" href="#GradientStopAttributes"></a></h4>
+
+  <dl class="attrdef-list-svg2">
+
+    <dt id="StopElementOffsetAttribute">
+      <span class="adef">offset</span>
+    </dt>
+    <dd>
+
+      <p>
+	Indicates were the gradient stop is placed.  For linear
+	gradients, the <span class="attr-name">‘<a href="pservers.html#StopElementOffsetAttribute"><span>offset</span></a>’</span> attribute represents a location
+	along the <em>gradient vector</em>. For radial gradients, it
+	represents a fractional distance from the edge of the
+	innermost/smallest circle to the edge of the outermost/largest
+	circle.
+      </p>
+
+      <dl class="attrdef-svg2">
+
+	<dt>Value</dt>                <dd><a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> | <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a></dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>0</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+
+      </dl>
+
+      <dl class="attrdef-values">
+
+	<dt><a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a></dt>
+        <dd>A number usually ranging from 0 to 1.</dd>
+
+	<dt><a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a></dt>
+        <dd>A percentage usually ranging from 0% to 100%.</dd>
+
+      </dl>
+
+    </dd>
+  </dl>
+
+<h4 id="StopColorProperties" class="heading">14.2.4.2. Properties<a class="self-link" href="#StopColorProperties"></a></h4>
+
+  <dl class="propdef-list-svg2">
+    <dt id="StopColorProperty">‘<span class="propdef-title property">stop-color</span>’</dt>
+    <dd>
+      <p>
+      The <a class="property" href="pservers.html#StopColorProperty">stop-color</a> property indicates what color to use
+      at that gradient stop. The keyword
+      <span class="attr-value">currentColor</span> and other color syntaxes
+      can be specified in the same manner as within a
+      <a href="painting.html#SpecifyingPaint">&lt;paint></a>
+      specification for the <a class="property" href="painting.html#FillProperty">fill</a> and <a class="property" href="painting.html#StrokeProperty">stroke</a>
+      properties.
+      </p>
+      <p class="note">
+      With respect to gradients, SVG treats the 'transparent' keyword
+      differently than CSS. SVG does not calculate gradients in pre-multiplied
+      space, so 'transparent' really means transparent black. Specifying
+      a <a class="property" href="pservers.html#StopColorProperty">stop-color</a> with the value 'transparent' is equivalent to
+      specifying a <a class="property" href="pservers.html#StopColorProperty">stop-color</a> with the value 'black' and a
+      <a class="property" href="pservers.html#StopOpacityProperty">stop-opacity</a> with the value '0'.
+      </p>
+      <dl class="propdef-svg2">
+        <dt>Value</dt>              <dd>&lt;‘<a class="property" href="painting.html#ColorProperty">color</a>’></dd>
+        <dt>Initial</dt>            <dd>black</dd>
+        <dt>Applies to</dt>         <dd><span class="element-name">‘<a href="pservers.html#StopElement"><span>stop</span></a>’</span> elements</dd>
+        <dt>Inherited</dt>          <dd>no</dd>
+        <dt>Percentages</dt>        <dd>N/A</dd>
+        <dt>Media</dt>              <dd>visual</dd>
+        <dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>  <dd>yes</dd>
+      </dl>
+    </dd>
+    <dt id="StopOpacityProperty">‘<span class="propdef-title property">stop-opacity</span>’</dt>
+    <dd>
+      <p>
+      The <a class="property" href="pservers.html#StopOpacityProperty">stop-opacity</a> property defines the opacity of
+      a given gradient stop.
+      <span class="ready-for-wider-review">
+      The opacity value used for the gradient calculation is the product
+      of the value of <a class="property" href="pservers.html#StopOpacityProperty">stop-opacity</a> and the opacity of the value of
+      <a class="property" href="pservers.html#StopColorProperty">stop-color</a>. For <a class="property" href="pservers.html#StopColorProperty">stop-color</a> value types of that
+      don't include explicit opacity information, the opacity of that
+      component must be treated as 1.</span>
+      </p>
+      <dl class="propdef-svg2">
+        <dt>Value</dt>              <dd>&lt;‘<a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a>’></dd>
+        <dt>Initial</dt>            <dd>1</dd>
+        <dt>Applies to</dt>         <dd><span class="element-name">‘<a href="pservers.html#StopElement"><span>stop</span></a>’</span> elements</dd>
+        <dt>Inherited</dt>          <dd>no</dd>
+        <dt>Percentages</dt>        <dd>N/A</dd>
+        <dt>Media</dt>              <dd>visual</dd>
+        <dt>Computed value</dt>     <dd>the specified value converted to a number, clamped to the range [0,1]</dd>
+        <dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>  <dd>yes</dd>
+      </dl>
+      <dl class="propdef-values">
+        <dt>&lt;number></dt>
+        <dd>
+          The opacity of the <a class="property" href="pservers.html#StopColorProperty">stop-color</a>. Any values outside the
+          range 0.0 (fully transparent) to 1.0 (fully opaque) must be
+          clamped to this range.
+        </dd>
+        <dt>&lt;percentage></dt>
+        <dd>
+          The opacity of the <a class="property" href="pservers.html#StopColorProperty">stop-color</a> expressed as a percentage
+          of the range 0 to 1.
+        </dd>
+      </dl>
+    </dd>
+  </dl><!-- propdef-list -->
+
+<h4 id="StopNotes" class="heading">14.2.4.3. Notes on gradient stops<a class="self-link" href="#StopNotes"></a></h4>
+
+<ul>
+  <li>Gradient offset values less than 0 (or less than 0%) are
+  rounded up to 0%. Gradient offset values greater than 1 (or
+  greater than 100%) are rounded down to 100%.</li>
+
+  <li>It is necessary that at least two stops defined to have a
+  gradient effect. If no stops are defined, then painting shall
+  occur as if 'none' were specified as the paint style. If one
+  stop is defined, then paint with the solid color fill using
+  the color defined for that gradient stop.</li>
+
+  <li>Each gradient offset value is required to be equal to or
+  greater than the previous gradient stop's offset value. If a
+  given gradient stop's offset value is not equal to or greater
+  than all previous offset values, then the offset value is
+  adjusted to be equal to the largest of all previous offset
+  values.</li>
+
+  <li>
+    <p>If two gradient stops have the same offset value, then the
+    latter gradient stop controls the color value at the
+    overlap point. In particular:</p>
+
+    <pre>
+&lt;stop offset="0" stop-color="white"/>
+&lt;stop offset=".2" stop-color="red"/>
+&lt;stop offset=".2" stop-color="blue"/>
+&lt;stop offset="1" stop-color="black"/>
+</pre>
+
+    <p>will have approximately the same effect as:</p>
+
+    <pre>
+&lt;stop offset="0" stop-color="white"/>
+&lt;stop offset=".1999999999" stop-color="red"/>
+&lt;stop offset=".2" stop-color="blue"/>
+&lt;stop offset="1" stop-color="black"/>
+</pre>
+
+    <p>which is a gradient that goes smoothly from white to red,
+    then abruptly shifts from red to blue, and then goes
+    smoothly from blue to black.</p>
+  </li>
+</ul>
+
+
+
+<h2 id="Patterns" class="heading">14.3. Patterns<a class="self-link" href="#Patterns"></a></h2>
+
+
+
+<p id="PatternElement">A pattern is used to <a class="property" href="painting.html#FillProperty">fill</a> or <a class="property" href="painting.html#StrokeProperty">stroke</a>
+an object using a pre-defined graphic object which can be replicated
+("tiled") at fixed intervals in <em>x</em> and <em>y</em> to cover the
+areas to be painted. Patterns are defined using a <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span>
+element and then referenced by properties <a class="property" href="painting.html#FillProperty">fill</a> and
+<a class="property" href="painting.html#StrokeProperty">stroke</a> on a given <a href="struct.html#TermGraphicsElement">graphics element</a> to indicate that the
+given element shall be filled or stroked with the pattern.</p>
+
+<p>Attributes <span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementYAttribute"><span>y</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementWidthAttribute"><span>width</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementHeightAttribute"><span>height</span></a>’</span>
+and <span class="attr-name">‘<a href="pservers.html#PatternElementPatternUnitsAttribute"><span>patternUnits</span></a>’</span> define a reference rectangle somewhere
+on the infinite canvas. The reference rectangle has its top/left
+at (<var>x</var>, <var>y</var>) and its bottom/right at
+(<var>x</var> + <var>width</var>, <var>y</var> + <var>height</var>).
+The tiling theoretically extends a series of such rectangles to infinity in X
+and Y (positive and negative), with rectangles starting at
+(<var>x</var> + m*<var>width</var>, <var>y</var> + n*
+<var>height</var>) for each possible integer value for <em>m</em>
+and <em>n</em>.</p>
+
+<div class="element-summary"><div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element" data-export="" id="elementdef-pattern">pattern</dfn>’</span></div><dl><dt>Categories:</dt><dd><a href="struct.html#TermContainerElement">Container element</a>, <a href="render.html#TermNeverRenderedElement">never-rendered element</a>, <a href="painting.html#TermPaintServerElement">paint server element</a></dd><dt>Content model:</dt><dd>Any number of the following elements, in any order:<ul class="no-bullets"><li><a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a><span class="expanding"> — <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#AnimateElement"><span>animate</span></a>’</span>, <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#AnimateMotionElement"><span>animateMotion</span></a>’</span>, <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>, <span class="element-name">‘<a href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li><li><a href="struct.html#TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span class="element-name">‘<a href="struct.html#DescElement"><span>desc</span></a>’</span>, <span class="element-name">‘<a href="struct.html#TitleElement"><span>title</span></a>’</span>, <span class="element-name">‘<a href="struct.html#MetadataElement"><span>metadata</span></a>’</span></span></li><li><a href="painting.html#TermPaintServerElement">paint server elements</a><span class="expanding"> — <span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span>, <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span>, <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span></span></li><li><a href="shapes.html#TermShapeElement">shape elements</a><span class="expanding"> — <span class="element-name">‘<a href="shapes.html#CircleElement"><span>circle</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#EllipseElement"><span>ellipse</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#LineElement"><span>line</span></a>’</span>, <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#PolygonElement"><span>polygon</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#PolylineElement"><span>polyline</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#RectElement"><span>rect</span></a>’</span></span></li><li><a href="struct.html#TermStructuralElement">structural elements</a><span class="expanding"> — <span class="element-name">‘<a href="struct.html#DefsElement"><span>defs</span></a>’</span>, <span class="element-name">‘<a href="struct.html#GElement"><span>g</span></a>’</span>, <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span>, <span class="element-name">‘<a href="struct.html#SymbolElement"><span>symbol</span></a>’</span>, <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span></span></li></ul><span class="element-name"><a href="linking.html#AElement"><span>a</span></a></span>, <span class="element-name"><a href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span class="element-name"><a href="https://drafts.fxtf.org/filter-effects/#FilterElement"><span>filter</span></a></span>, <span class="element-name"><a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a></span>, <span class="element-name"><a href="embedded.html#ImageElement"><span>image</span></a></span>, <span class="element-name"><a href="painting.html#MarkerElement"><span>marker</span></a></span>, <span class="element-name"><a href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span class="element-name"><a href="interact.html#ScriptElement"><span>script</span></a></span>, <span class="element-name"><a href="styling.html#StyleElement"><span>style</span></a></span>, <span class="element-name"><a href="struct.html#SwitchElement"><span>switch</span></a></span>, <span class="element-name"><a href="text.html#TextElement"><span>text</span></a></span>, <span class="element-name"><a href="linking.html#ViewElement"><span>view</span></a></span></dd><dt>Attributes:</dt><dd><ul class="no-bullets"><li><a href="struct.html#TermCoreAttribute">core attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="struct.html#IDAttribute"><span>id</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#LangAttribute"><span>lang</span></a>’</span>, <span class="attr-name">‘<a href="struct.html#XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#ClassAttribute"><span>class</span></a>’</span>, <span class="attr-name">‘<a href="styling.html#StyleAttribute"><span>style</span></a>’</span></span></li><li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onclose</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncopy</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncuechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oncut</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondblclick</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrag</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragexit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondragstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondrop</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ondurationchange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onemptied</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onended</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onerror</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onfocus</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninput</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>oninvalid</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeydown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeypress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onkeyup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onload</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadeddata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadedmetadata</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onloadstart</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousedown</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseenter</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseleave</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmousemove</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseout</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseover</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onmouseup</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpaste</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onpause</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplay</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onplaying</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onprogress</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onratechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onreset</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onresize</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onscroll</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeked</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onseeking</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onselect</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onshow</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onstalled</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsubmit</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onsuspend</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontimeupdate</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>ontoggle</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onvolumechange</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwaiting</span></a>’</span>, <span class="attr-name">‘<a href="interact.html#EventAttributes"><span>onwheel</span></a>’</span></span></li><li><a href="styling.html#TermPresentationAttribute">presentation attributes</a><span class="expanding"> — </span></li><li><a href="linking.html#XLinkRefAttrs">deprecated xlink attributes</a><span class="expanding"> — <span class="attr-name">‘<a href="linking.html#XLinkHrefAttribute"><span>xlink:href</span></a>’</span>, <span class="attr-name">‘<a href="linking.html#XLinkTitleAttribute"><span>xlink:title</span></a>’</span></span></li><li><span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span></li><li><span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#PatternElementYAttribute"><span>y</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#PatternElementWidthAttribute"><span>width</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#PatternElementHeightAttribute"><span>height</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#PatternElementPatternUnitsAttribute"><span>patternUnits</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#PatternElementPatternContentUnitsAttribute"><span>patternContentUnits</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#PatternElementPatternTransformAttribute"><span>patternTransform</span></a>’</span></li><li><span class="attr-name">‘<a href="pservers.html#PatternElementHrefAttribute"><span>href</span></a>’</span></li></ul></dd><dt>DOM Interfaces:</dt><dd><ul class="no-bullets"><li><a class="idlinterface" href="pservers.html#InterfaceSVGPatternElement">SVGPatternElement</a></li></ul></dd></dl></div>
+
+<h3 id="PatternElementAttributes" class="heading">14.3.1. Attributes<a class="self-link" href="#PatternElementAttributes"></a></h3>
+
+  <p class="note">
+    Note that the <span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span>,<span class="attr-name">‘<a href="pservers.html#PatternElementYAttribute"><span>y</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementWidthAttribute"><span>width</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#PatternElementHeightAttribute"><span>height</span></a>’</span> attributes
+    on a <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> are not presentation attributes;
+    the used value is not affected by CSS styles.
+    The <span class="attr-name">‘<a href="pservers.html#PatternElementPatternTransformAttribute"><span>patternTransform</span></a>’</span> attribute is a presentation attribute for the <a class="property" href="coords.html#TransformProperty">transform</a> property.
+  </p>
+
+  <dl class="attrdef-list-svg2">
+
+    <dt id="PatternElementPatternUnitsAttribute"><span class="adef">patternUnits</span></dt>
+    <dd>
+
+      <p>
+	Defines the coordinate system for attributes
+	<span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementYAttribute"><span>y</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementWidthAttribute"><span>width</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#PatternElementHeightAttribute"><span>height</span></a>’</span>.
+      </p>
+
+      <dl class="attrdef-svg2">
+
+	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>objectBoundingBox</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+
+      </dl>
+
+      <dl class="attrdef-values">
+
+	<dt>userSpaceOnUse</dt>
+        <dd>
+	  <p>
+            If <span class="attr-value">patternUnits="userSpaceOnUse"</span>,
+
+            <span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementYAttribute"><span>y</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementWidthAttribute"><span>width</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#PatternElementHeightAttribute"><span>height</span></a>’</span>
+
+            represent values in the coordinate system that results
+            from taking the current user coordinate system in place at
+            the time when the <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> element is referenced
+            (i.e., the user coordinate system for the element
+            referencing the <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> element via a
+            <a class="property" href="painting.html#FillProperty">fill</a> or <a class="property" href="painting.html#StrokeProperty">stroke</a> property) and then
+            applying the transform specified by attribute
+            <span class="attr-name">‘<a href="pservers.html#PatternElementPatternTransformAttribute"><span>patternTransform</span></a>’</span>. Percentages
+            represent values relative to the current SVG viewport.
+	  </p>
+	</dd>
+
+	<dt>objectBoundingBox</dt>
+	<dd>
+	  <p>
+            If <span class="attr-value">patternUnits="objectBoundingBox"</span>,
+            the user coordinate system for attributes
+
+            <span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementYAttribute"><span>y</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementWidthAttribute"><span>width</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#PatternElementHeightAttribute"><span>height</span></a>’</span>
+
+            is established using the bounding box of the element to
+            which the pattern is applied
+            (see <a href="coords.html#ObjectBoundingBox">Object
+            bounding box units</a>) and then applying the transform
+            specified by attribute <span class="attr-name">‘<a href="pservers.html#PatternElementPatternTransformAttribute"><span>patternTransform</span></a>’</span>.
+            Percentages represent values relative to the bounding box
+            for the object.
+	  </p>
+	</dd>
+
+      </dl><!-- Attribute values -->
+
+    </dd>
+
+    <dt id="PatternElementPatternContentUnitsAttribute">
+      <span class="adef">patternContentUnits</span>
+    </dt>
+    <dd>
+
+      <p>
+	Defines the coordinate system for the contents of the
+	<span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span>. Note that this attribute has no effect if
+	attribute <span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span> is specified.
+      </p>
+
+      <dl class="attrdef-svg2">
+
+	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>userSpaceOnUse</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+
+      </dl>
+
+      <dl class="attrdef-values">
+
+	<dt>userSpaceOnUse</dt>
+        <dd>
+	  <p>
+	    If <span class="attr-value">patternContentUnits="userSpaceOnUse"</span>,
+	    the user coordinate system for the contents of the <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span>
+	    element is the coordinate system that results from taking
+	    the current user coordinate system in place at the time
+	    when the <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> element is referenced (i.e., the
+	    user coordinate system for the element referencing the
+	    <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> element via a <a class="property" href="painting.html#FillProperty">fill</a> or <a class="property" href="painting.html#StrokeProperty">stroke</a>
+	    property) and then applying the transform specified by attribute
+	    <span class="attr-name">‘<a href="pservers.html#PatternElementPatternTransformAttribute"><span>patternTransform</span></a>’</span>.
+	  </p>
+	</dd>
+
+	<dt>objectBoundingBox</dt>
+	<dd>
+	  <p>
+            If <span class="attr-value">patternContentUnits="objectBoundingBox"</span>,
+            the user coordinate system for the contents of
+            the <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> element is established using the
+            bounding box of the element to which the pattern is
+            applied
+            (see <a href="coords.html#ObjectBoundingBox">Object
+            bounding box units</a>) and then applying the transform
+            specified by attribute <span class="attr-name">‘<a href="pservers.html#PatternElementPatternTransformAttribute"><span>patternTransform</span></a>’</span>.
+	  </p>
+	</dd>
+
+      </dl><!-- Attribute values -->
+
+    </dd>
+
+    <dt id="PatternElementPatternTransformAttribute">
+      <span class="adef">patternTransform</span>
+    </dt>
+    <dd>
+
+      <p>
+	Contains the definition of an optional additional
+        transformation from the pattern coordinate system onto the
+        target coordinate system
+
+        (i.e., <span class="attr-value">'userSpaceOnUse'</span> or
+        <span class="attr-value">'objectBoundingBox'</span>).
+
+	This allows for things such as skewing the pattern tiles.
+
+	This additional transformation matrix is post-multiplied to
+        (i.e., inserted to the right of) any previously defined
+        transformations, including the implicit transformation
+        necessary to convert
+        from <a href="coords.html#ObjectBoundingBox">object bounding
+        box units</a> to user coordinate system.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a href="http://dev.w3.org/csswg/css-transforms/#typedef-transform-list">&lt;transform-list></a></dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>identity transform</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="PatternElementXAttribute"><span class="adef">x</span></dt>
+    <dd>
+      <p>
+	<span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementYAttribute"><span>y</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementWidthAttribute"><span>width</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#PatternElementHeightAttribute"><span>height</span></a>’</span>
+        indicate how the pattern tiles are placed and spaced. These
+        attributes represent coordinates and values in the coordinate
+        space specified by the combination of
+        attributes <span class="attr-name">‘<a href="pservers.html#PatternElementPatternUnitsAttribute"><span>patternUnits</span></a>’</span>
+        and <span class="attr-name">‘<a href="pservers.html#PatternElementPatternTransformAttribute"><span>patternTransform</span></a>’</span>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>0</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="PatternElementYAttribute"><span class="adef">y</span></dt>
+    <dd>
+
+      <p>
+	See <span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>0</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+
+    <dt id="PatternElementWidthAttribute"><span class="adef">width</span></dt>
+    <dd>
+
+      <p>
+	See <span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>0</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+      <p>
+        A negative value is an error
+        (see <a href="conform.html#ErrorProcessing">Error
+        processing</a>).  A value of zero disables rendering of the
+        element (i.e., no paint is applied).
+      </p>
+
+    </dd>
+
+    <dt id="PatternElementHeightAttribute"><span class="adef">height</span></dt>
+    <dd>
+
+      <p>
+	See <span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span>.
+      </p>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a></dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>0</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+      <p>
+        A negative value is an error (see <a href="conform.html#ErrorProcessing">Error processing</a>).
+        A value of zero disables rendering of the element (i.e., no
+        paint is applied).
+      </p>
+
+    </dd>
+
+    <dt id="PatternElementHrefAttribute"><span class="adef">href</span></dt>
+    <dd>
+      <p>
+        A <a href="linking.html#TermURLReference">URL reference</a> to a template element,
+        which must be a different <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> element to be valid.
+      </p>
+      <p>
+        Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
+        and to the common handling defined for <a href="linking.html#linkRefAttrs">URL reference attributes</a> and
+        <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
+      </p>
+      <p>
+        The specified attributes that will be copied from the template are:
+      </p>
+      <ul class="ready-for-wider-review">
+        <li><span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#PatternElementYAttribute"><span>y</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#PatternElementWidthAttribute"><span>width</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#PatternElementHeightAttribute"><span>height</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#PatternElementPatternTransformAttribute"><span>patternTransform</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#PatternElementPatternUnitsAttribute"><span>patternUnits</span></a>’</span></li>
+        <li><span class="attr-name">‘<a href="pservers.html#PatternElementPatternContentUnitsAttribute"><span>patternContentUnits</span></a>’</span></li>
+      </ul>
+
+      <dl class="attrdef-svg2">
+	<dt>Value</dt>                <dd>URL <a href="types.html#attribute-url" class="syntax">[URL]</a></dd>
+	<dt><a href="types.html#TermInitialValue">initial value</a></dt>  <dd>empty</dd>
+	<dt><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a></dt>    <dd>yes</dd>
+      </dl>
+
+    </dd>
+  </dl>
+
+<h3 id="PatternNotes" class="heading">14.3.2. Notes on patterns<a class="self-link" href="#PatternNotes"></a></h3>
+
+<p>SVG's <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
+the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property for <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> elements to
+<span class="prop-value">hidden</span>, which causes a rectangular clipping
+path to be created at the bounds of the pattern tile.  Unless the
+<a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property is overridden, any graphics within the pattern
+which goes outside of the pattern rectangle will be clipped.
+<a href="pservers.html#ExamplePattern01">Example pattern01</a> below shows the
+effect of clipping to the pattern tile.</p>
+
+<p class="note">
+  Note that if the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property is set to
+  <span class="prop-value">visible</span> the rendering behavior
+  for the pattern outside the bounds of the pattern is currently
+  undefined. A future version of SVG may require the overflow to be
+  shown. SVG implementers are encouraged to render the overflow as
+  this is the behavior expected by authors. If overflow is rendered,
+  the pattern tiles should be rendered left to right in rows and the
+  rows from top to bottom.
+</p>
+<p class="annotation">
+  See <a href="https://github.com/w3c/svgwg/issues/129">GitHub Issue 129</a>
+</p>
+
+<p>The contents of the <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> are relative to a new coordinate
+system. If there is a <span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span> attribute, then the new coordinate
+system is fitted into the region defined by the <span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementYAttribute"><span>y</span></a>’</span>,
+<span class="attr-name">‘<a href="pservers.html#PatternElementWidthAttribute"><span>width</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementHeightAttribute"><span>height</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#PatternElementPatternUnitsAttribute"><span>patternUnits</span></a>’</span> attributes on the
+<span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> element using the standard rules for <span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span> and
+<span class="attr-name">‘<a href="coords.html#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span>. If there is no <span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span> attribute, then
+the new coordinate system has its origin at (<var>x</var>, <var>y</var>),
+where <var>x</var> is established by the <span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span> attribute on the
+<span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> element, and <var>y</var> is established by the <span class="attr-name">‘<a href="pservers.html#PatternElementYAttribute"><span>y</span></a>’</span>
+attribute on the <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> element. Thus, in the following example:</p>
+
+<div class="example">
+<pre>
+&lt;pattern x="10" y="10" width="20" height="20">
+  &lt;rect x="5" y="5" width="10" height="10"/>
+&lt;/pattern>
+</pre>
+</div>
+
+<p>the rectangle has its top/left located 5 units to the right and 5
+units down from the origin of the pattern tile.</p>
+
+<p>The <span class="attr-name">‘<a href="coords.html#ViewBoxAttribute"><span>viewBox</span></a>’</span> attribute introduces a supplemental transformation
+which is applied on top of any transformations necessary to create a new
+pattern coordinate system due to attributes <span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementYAttribute"><span>y</span></a>’</span>,
+<span class="attr-name">‘<a href="pservers.html#PatternElementWidthAttribute"><span>width</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementHeightAttribute"><span>height</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#PatternElementPatternUnitsAttribute"><span>patternUnits</span></a>’</span>.</p>
+
+<p><a href="interact.html#EventAttributes">Event attributes and event listeners</a> attached
+to the contents of a <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> element are not processed;
+only the rendering aspects of <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> elements are
+processed.</p>
+
+<p id="ExamplePattern01"><span class="example-ref">Example pattern01</span>
+shows how to fill a rectangle by referencing a pattern paint
+server. Note how the blue stroke of each triangle has been
+slightly clipped at the top and the left. This is due to SVG's
+<a href="styling.html#UAStyleSheet">user agent style sheet</a> setting
+the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property for <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> elements to
+<span class="prop-value">hidden</span>, which causes the pattern to be clipped
+to the bounds of the pattern tile.</p>
+
+<div class="example"><pre class="xml">&lt;?xml version="1.0" standalone="no"?>
+&lt;svg xmlns="http://www.w3.org/2000/svg"
+     version="1.1"
+     viewBox="0 0 300 200" >
+
+  &lt;title>Example pattern01&lt;/title>
+  &lt;desc>Fill an ellipse using a pattern paint server.&lt;/desc>
+
+  &lt;defs>
+    &lt;pattern id="TrianglePattern"
+	     patternUnits="userSpaceOnUse"
+             x="0" y="0" width="50" height="50"
+             viewBox="0 0 10 10" >
+      &lt;path d="M 0 0 L 7 0 L 3.5 7 z"
+	    fill="plum"
+	    stroke="blue" />
+    &lt;/pattern> 
+  &lt;/defs>
+
+  &lt;!-- The ellipse is filled using a triangle pattern paint server -->
+  &lt;ellipse fill="url(#TrianglePattern)"
+	   stroke="black"
+	   stroke-width="2"
+           cx="150" cy="100" rx="125" ry="75" />
+&lt;/svg></pre><div class="figure"><img alt="Example pattern01 — fill a rectangle by referencing a pattern paint server" src="images/pservers/pattern01.png"/><p class="caption">Example pattern01</p></div><p class="view-as-svg"><a href="images/pservers/pattern01.svg">View this example as SVG (SVG-enabled browsers only)</a></p></div>
+
+
+
+<h2 id="DOMInterfaces" class="heading">14.4. DOM interfaces<a class="self-link" href="#DOMInterfaces"></a></h2>
+
+<h3 id="InterfaceSVGGradientElement" class="heading">14.4.1. Interface SVGGradientElement<a class="self-link" href="#InterfaceSVGGradientElement"></a></h3>
+
+<p>The <a class="idlinterface" href="pservers.html#InterfaceSVGGradientElement">SVGGradientElement</a> interface is used as a base interface
+for gradient paint server element interfaces.</p>
+
+<pre class="idl">[<a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=Window]
+interface <b>SVGGradientElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+
+  // Spread Method Types
+  const unsigned short <a href="pservers.html#__svg__SVGGradientElement__SVG_SPREADMETHOD_UNKNOWN">SVG_SPREADMETHOD_UNKNOWN</a> = 0;
+  const unsigned short <a href="pservers.html#__svg__SVGGradientElement__SVG_SPREADMETHOD_PAD">SVG_SPREADMETHOD_PAD</a> = 1;
+  const unsigned short <a href="pservers.html#__svg__SVGGradientElement__SVG_SPREADMETHOD_REFLECT">SVG_SPREADMETHOD_REFLECT</a> = 2;
+  const unsigned short <a href="pservers.html#__svg__SVGGradientElement__SVG_SPREADMETHOD_REPEAT">SVG_SPREADMETHOD_REPEAT</a> = 3;
+
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="pservers.html#__svg__SVGGradientElement__gradientUnits">gradientUnits</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedTransformList">SVGAnimatedTransformList</a> <a href="pservers.html#__svg__SVGGradientElement__gradientTransform">gradientTransform</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="pservers.html#__svg__SVGGradientElement__spreadMethod">spreadMethod</a>;
+};
+
+<a class="idlinterface" href="pservers.html#InterfaceSVGGradientElement">SVGGradientElement</a> includes <a class="idlinterface" href="types.html#InterfaceSVGURIReference">SVGURIReference</a>;
+</pre>
+
+<p>The numeric spread method type constants defined on <a class="idlinterface" href="pservers.html#InterfaceSVGGradientElement">SVGGradientElement</a>
+are used to represent the keyword values that the <span class="attr-name">‘spreadMethod’</span>
+attribute can take.  Their meanings are as follows:</p>
+
+<table class="vert">
+  <tr><th>Constant</th><th>Meaning</th></tr>
+  <tr><td><b id="__svg__SVGGradientElement__SVG_SPREADMETHOD_PAD">SVG_SPREADMETHOD_PAD</b></td><td>The <span class="attr-value">pad</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGGradientElement__SVG_SPREADMETHOD_REFLECT">SVG_SPREADMETHOD_REFLECT</b></td><td>The <span class="attr-value">reflect</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGGradientElement__SVG_SPREADMETHOD_REPEAT">SVG_SPREADMETHOD_REPEAT</b></td><td>The <span class="attr-value">repeat</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGGradientElement__SVG_SPREADMETHOD_UNKNOWN">SVG_SPREADMETHOD_UNKNOWN</b></td><td>Some other value.</td></tr>
+</table>
+
+<p>The <b id="__svg__SVGGradientElement__gradientUnits">gradientUnits</b> IDL attribute
+<a href="types.html#TermReflect">reflects</a> the <span class="attr-name">‘gradientUnits’</span> content attribute.
+The <a href="types.html#TermNumericTypeValue">numeric type values</a> for <span class="attr-name">‘gradientUnits’</span>
+attributes on gradient elements are as follows:</p>
+
+<table class="vert">
+  <tr><th>Value</th><th>Numeric type value</th></tr>
+  <tr>
+    <td><span class="attr-value">userSpaceOnUse</span></td>
+    <td><a href="types.html#__svg__SVGUnitTypes__SVG_UNIT_TYPE_USERSPACEONUSE">SVG_UNIT_TYPE_USERSPACEONUSE</a></td>
+  </tr>
+  <tr>
+    <td><span class="attr-value">objectBoundingBox</span></td>
+    <td><a href="types.html#__svg__SVGUnitTypes__SVG_UNIT_TYPE_OBJECTBOUNDINGBOX">SVG_UNIT_TYPE_OBJECTBOUNDINGBOX</a></td>
+  </tr>
+</table>
+
+<p>The <b id="__svg__SVGGradientElement__gradientTransform">gradientTransform</b> IDL
+attribute <a href="types.html#TermReflect">reflects</a> the computed value of the <a class="property" href="coords.html#TransformProperty">transform</a> property
+and  the <span class="gradientTransform">'gradientTransform'</span> presentation attribute
+for <span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span> and <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span> elements.</p>
+
+<p>The <b id="__svg__SVGGradientElement__spreadMethod">spreadMethod</b> IDL attribute
+<a href="types.html#TermReflect">reflects</a> the <span class="attr-name">‘spreadMethod’</span> content attribute.
+The <a href="types.html#TermNumericTypeValue">numeric type values</a> for <span class="attr-name">‘spreadMethod’</span>
+attributes on gradient elements are as described above in the
+numeric spread type constant table.</p>
+
+
+<h3 id="InterfaceSVGLinearGradientElement" class="heading">14.4.2. Interface SVGLinearGradientElement<a class="self-link" href="#InterfaceSVGLinearGradientElement"></a></h3>
+
+
+
+<p>An <a class="idlinterface" href="pservers.html#InterfaceSVGLinearGradientElement">SVGLinearGradientElement</a> object represents an <span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span>
+in the DOM.</p>
+
+<pre class="idl">[<a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=Window]
+interface <b>SVGLinearGradientElement</b> : <a class="idlinterface" href="pservers.html#InterfaceSVGGradientElement">SVGGradientElement</a> {
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGLinearGradientElement__x1">x1</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGLinearGradientElement__y1">y1</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGLinearGradientElement__x2">x2</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGLinearGradientElement__y2">y2</a>;
+};</pre>
+
+<p>The
+<b id="__svg__SVGLinearGradientElement__x1">x1</b>,
+<b id="__svg__SVGLinearGradientElement__y1">y1</b>,
+<b id="__svg__SVGLinearGradientElement__x2">x2</b> and
+<b id="__svg__SVGLinearGradientElement__y2">y2</b> IDL attributes
+<a href="types.html#TermReflect">reflect</a> the <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX1Attribute"><span>x1</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY1Attribute"><span>y1</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#LinearGradientElementX2Attribute"><span>x2</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#LinearGradientElementY2Attribute"><span>y2</span></a>’</span>
+content attributes, respectively</p>
+
+
+
+
+<h3 id="InterfaceSVGRadialGradientElement" class="heading">14.4.3. Interface SVGRadialGradientElement<a class="self-link" href="#InterfaceSVGRadialGradientElement"></a></h3>
+
+
+
+<p>An <a class="idlinterface" href="pservers.html#InterfaceSVGRadialGradientElement">SVGRadialGradientElement</a> object represents an <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span>
+in the DOM.</p>
+
+<pre class="idl">[<a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=Window]
+interface <b>SVGRadialGradientElement</b> : <a class="idlinterface" href="pservers.html#InterfaceSVGGradientElement">SVGGradientElement</a> {
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__cx">cx</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__cy">cy</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__r">r</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__fx">fx</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__fy">fy</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__fr">fr</a>;
+};</pre>
+
+<p>The
+<b id="__svg__SVGRadialGradientElement__cx">cx</b>,
+<b id="__svg__SVGRadialGradientElement__cy">cy</b>,
+<b id="__svg__SVGRadialGradientElement__r">r</b>,
+<b id="__svg__SVGRadialGradientElement__fx">fx</b>,
+<b id="__svg__SVGRadialGradientElement__fy">fy</b> and
+<b id="__svg__SVGRadialGradientElement__fr">fr</b> IDL attributes
+<a href="types.html#TermReflect">reflect</a> the <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCXAttribute"><span>cx</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementCYAttribute"><span>cy</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementRAttribute"><span>r</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFXAttribute"><span>fx</span></a>’</span>,
+<span class="attr-name">‘<a href="pservers.html#RadialGradientElementFYAttribute"><span>fy</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#RadialGradientElementFRAttribute"><span>fr</span></a>’</span> content attributes, respectively</p>
+
+
+
+<h3 id="InterfaceSVGStopElement" class="heading">14.4.4. Interface SVGStopElement<a class="self-link" href="#InterfaceSVGStopElement"></a></h3>
+
+
+
+<p>An <a class="idlinterface" href="pservers.html#InterfaceSVGStopElement">SVGStopElement</a> object represents a <span class="element-name">‘<a href="pservers.html#StopElement"><span>stop</span></a>’</span> element
+in the DOM.</p>
+
+<pre class="idl">[<a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=Window]
+interface <b>SVGStopElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedNumber">SVGAnimatedNumber</a> <a href="pservers.html#__svg__SVGStopElement__offset">offset</a>;
+};</pre>
+
+<p>The <b id="__svg__SVGStopElement__offset">offset</b> IDL attribute
+<a href="types.html#TermReflect">reflects</a> the <span class="attr-name">‘<a href="pservers.html#StopElementOffsetAttribute"><span>offset</span></a>’</span> content attribute.</p>
+
+<p class="note">Note that <a class="idlinterface" href="pservers.html#InterfaceSVGStopElement">SVGStopElement</a> does not have a
+<a href="types.html#TermReflect">reflecting</a> IDL attribute for its <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> attribute.</p>
+
+
+
+<h3 id="InterfaceSVGPatternElement" class="heading">14.4.5. Interface SVGPatternElement<a class="self-link" href="#InterfaceSVGPatternElement"></a></h3>
+
+
+
+<p>An <a class="idlinterface" href="pservers.html#InterfaceSVGPatternElement">SVGPatternElement</a> object represents a <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> element
+in the DOM.</p>
+
+<pre class="idl">[<a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=Window]
+interface <b>SVGPatternElement</b> : <a class="idlinterface" href="types.html#InterfaceSVGElement">SVGElement</a> {
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="pservers.html#__svg__SVGPatternElement__patternUnits">patternUnits</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedEnumeration">SVGAnimatedEnumeration</a> <a href="pservers.html#__svg__SVGPatternElement__patternContentUnits">patternContentUnits</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="coords.html#InterfaceSVGAnimatedTransformList">SVGAnimatedTransformList</a> <a href="pservers.html#__svg__SVGPatternElement__patternTransform">patternTransform</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGPatternElement__x">x</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGPatternElement__y">y</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGPatternElement__width">width</a>;
+  [<a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] readonly attribute <a class="idlinterface" href="types.html#InterfaceSVGAnimatedLength">SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGPatternElement__height">height</a>;
+};
+
+<a class="idlinterface" href="pservers.html#InterfaceSVGPatternElement">SVGPatternElement</a> includes <a class="idlinterface" href="types.html#InterfaceSVGFitToViewBox">SVGFitToViewBox</a>;
+<a class="idlinterface" href="pservers.html#InterfaceSVGPatternElement">SVGPatternElement</a> includes <a class="idlinterface" href="types.html#InterfaceSVGURIReference">SVGURIReference</a>;
+</pre>
+
+<p>The <b id="__svg__SVGPatternElement__patternUnits">patternUnits</b>
+and <b id="__svg__SVGPatternElement__patternContentUnits">patternContentUnits</b>
+IDL attributes <a href="types.html#TermReflect">reflect</a> the <span class="attr-name">‘<a href="pservers.html#PatternElementPatternUnitsAttribute"><span>patternUnits</span></a>’</span> and
+<span class="attr-name">‘<a href="pservers.html#PatternElementPatternContentUnitsAttribute"><span>patternContentUnits</span></a>’</span> content attributes, respectively.
+The <a href="types.html#TermNumericTypeValue">numeric type values</a> for <span class="attr-name">‘<a href="pservers.html#PatternElementPatternUnitsAttribute"><span>patternUnits</span></a>’</span> and
+<span class="attr-name">‘<a href="pservers.html#PatternElementPatternContentUnitsAttribute"><span>patternContentUnits</span></a>’</span> are as follows:</p>
+
+<table class="vert">
+  <tr><th>Value</th><th>Numeric type value</th></tr>
+  <tr>
+    <td><span class="attr-value">userSpaceOnUse</span></td>
+    <td><a href="types.html#__svg__SVGUnitTypes__SVG_UNIT_TYPE_USERSPACEONUSE">SVG_UNIT_TYPE_USERSPACEONUSE</a></td>
+  </tr>
+  <tr>
+    <td><span class="attr-value">objectBoundingBox</span></td>
+    <td><a href="types.html#__svg__SVGUnitTypes__SVG_UNIT_TYPE_OBJECTBOUNDINGBOX">SVG_UNIT_TYPE_OBJECTBOUNDINGBOX</a></td>
+  </tr>
+</table>
+
+<p>The <b id="__svg__SVGPatternElement__patternTransform">patternTransform</b> IDL
+attribute <a href="types.html#TermReflect">reflects</a> the computed value of the <a class="property" href="coords.html#TransformProperty">transform</a> property
+and the <span class="attr-name">‘patternTransform’</span> presentation attribute.</p>
+
+<p>The
+<b id="__svg__SVGPatternElement__x">x</b>,
+<b id="__svg__SVGPatternElement__y">y</b>,
+<b id="__svg__SVGPatternElement__width">width</b> and
+<b id="__svg__SVGPatternElement__height">height</b>
+IDL attributes <a href="types.html#TermReflect">reflect</a> the <span class="attr-name">‘<a href="pservers.html#PatternElementXAttribute"><span>x</span></a>’</span>, <span class="attr-name">‘<a href="pservers.html#PatternElementYAttribute"><span>y</span></a>’</span>,
+<span class="attr-name">‘<a href="pservers.html#PatternElementWidthAttribute"><span>width</span></a>’</span> and <span class="attr-name">‘<a href="pservers.html#PatternElementHeightAttribute"><span>height</span></a>’</span> content attributes, respectively.</p>
+
+
+<script src="//www.w3.org/scripts/TR/2016/fixup.js"></script><script src="style/expanders.js" type="text/javascript"></script></body>
+</html>
