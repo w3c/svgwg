@@ -138,12 +138,18 @@ exports.addHeaderFooter = function(conf, page, doc) {
 
   var index = conf.pageOrder.indexOf(page);
   var previous = conf.pageOrder[index - 1];
+  if (previous === 'Overview') {
+    previous = './';
+  }
+  else {
+    previous = previous + '.html';
+  }
   var next = conf.pageOrder[index + 1];
 
   var markup = '<div class="header {{side}}">';
 
-  if (conf.toc)            markup += '<a href="Overview.html">Overview</a>';
-  if (previous)            markup += ' · <a href="{{previous}}.html">Previous</a>';
+  if (conf.toc)            markup += '<a href="./">Overview</a>';
+  if (previous)            markup += ' · <a href="{{previous}}">Previous</a>';
   if (next)                markup += ' · <a href="{{next}}.html">Next</a>';
   if (conf.elementIndex)   markup += ' · <a href="{{elementIndex}}">Elements</a>';
   if (conf.attributeIndex) markup += ' · <a href="{{attributeIndex}}">Attributes</a>';

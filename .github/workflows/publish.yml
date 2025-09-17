@@ -1,0 +1,31 @@
+name: Build specs (and publish them when main branch is updated) 
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Build all specs
+        run: make all-specs
+
+      - name: Prepare deployment to GitHub Pages
+        run: ./tools/deploy.sh
+
+      # See doc at https://github.com/marketplace/actions/deploy-to-github-pages
+      - name: Deploy to GitHub Pages if pushing to main
+        if: ${{ github.event_name == 'push' }}
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: deploy
