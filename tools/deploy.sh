@@ -12,6 +12,8 @@
 #
 # Note: the script assumes it gets run from the root folder of the repository.
 
+set -e
+
 # Reset `deploy` folder
 rm -rf deploy
 mkdir deploy
