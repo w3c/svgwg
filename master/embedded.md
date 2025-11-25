@@ -1,0 +1,528 @@
+<h2>Embedded Content</h2>
+
+<h3 id="Overview">Overview</h3>
+<p>Embedded content is content that imports another resource into the document, or content from another vocabulary that is inserted into the document.
+This is the same definition as <a href="https://html.spec.whatwg.org/multipage/">HTML's</a> <a href="https://html.spec.whatwg.org/multipage/embedded-content.html#embedded-content">embedded content</a>.</p>
+
+<p>SVG supports embedded content with the use of {{image}} and {{foreignObject}} elements.</p>
+
+<p class="note">Content embedded with {{image}} is compatible with <a href="https://www.w3.org/TR/resource-hints/">Resource Hints</a> for prioritizing downloading of external resources. </p>
+
+<h3 id="Placement">Placement of the embedded content</h3>
+
+  <p>
+    The {{x}}, {{y}}, {{width}}, and {{height}} geometry properties specify the rectangular region into which the embedded content is positioned
+    (the <dfn id="TermPositioningRectangle"  data-dfn-type="dfn" data-export="">positioning rectangle</dfn>).
+    The <a>positioning rectangle</a> is used as the bounding box of the element;
+    note, however, that graphics may overflow the positioning rectangle,
+    depending on the value of the {{overflow}} property.
+  </p>
+
+  <p>
+    When the embedded content consists of a single referenced resource
+    (e.g., an {{image}}),
+    the dimensions of the <a>positioning rectangle</a>,
+    in the current coordinate system after applying all transforms,
+    define the <a>specified size</a> for the embedded object.
+    A <a>concrete object size</a> and final position must be determined for the object using the
+    <a>Default Sizing Algorithm</a>
+    defined for replaced elements in CSS layout [<a href="refs.html#ref-css-images-3">css-images-3</a>].
+    The {{object-fit}} and {{object-position}} affect the final
+    position and size of the object,
+    and may cause it to be extend beyond the <a>positioning rectangle</a>.
+    In that case, the {{overflow}} property determines whether
+    the rendered object should be clipped to its <a>positioning rectangle</a>.
+  </p>
+  <p>
+    When the embedded content consists of a document fragment
+    (e.g., a {{foreignObject}}),
+    the <a>positioning rectangle</a> defines the bounds of a
+    <a href="https://www.w3.org/TR/CSS21/visuren.html#containing-block">containing block</a> for laying out the child content using CSS.
+    The scale of the containing block is defined in the current coordinate system,
+    including all explicit and implicit (e.g., {{viewBox}}) transformations.
+    The {{foreignObject}}, or other element that is positioned using SVG layout attributes,
+    is implicitly <a href="https://www.w3.org/TR/CSS21/visuren.html#propdef-position">absolutely-positioned</a> for the purposes of CSS layout.
+    As a result, any absolutely-positioned child elements
+    are positioned relative to this containing block.
+    Again, the {{overflow}} property determines
+    whether content that extends outside the <a>positioning rectangle</a> will be hidden.
+  </p>
+  <p>
+    A value of zero for either {{width}} or {{height}} disables rendering of the element and its embedded content.
+  </p>
+  <p>
+    The <span class="attr-value">'auto'</span> value for {{width}} or {{height}} is used to size the corresponding element automatically based on the <a>intrinsic dimensions</a> or <a>intrinsic aspect ratio</a> of the referenced resource.
+    Computation of automatically-sized values follows the
+    <a>Default Sizing Algorithm</a>
+    defined for replaced elements in CSS layout [<a href="refs.html#ref-css-images-3">css-images-3</a>].
+    In particular, when the referenced resource does not have an intrinsic size
+    (such as image types with no defined dimensions),
+    it is assumed to have a width of 300px and a height of 150px.
+  </p>
+  <p>
+    CSS positioning properties (e.g. <span class="prop-name">top</span> and <span class="prop-name">margin</span>) have no effect when positioning the embedded content element in the SVG coordinate system.
+    They can, however, be used to position child elements of a {{foreignObject}} or HTML embedding element.
+  </p>
+
+<h3 id="ImageElement">The <span class="element-name">image</span> element</h3>
+
+
+
+@@elementsummary image@@
+
+<p>The {{image}} element
+indicates that the contents of a complete file are to be
+rendered into a given rectangle within the current user
+coordinate system. The {{image}} element can refer to raster
+image files such as PNG or JPEG or to files with MIME type of
+"image/svg+xml". <a
+href="conform.html#ConformingSVGViewers">Conforming SVG
+viewers</a> need to support at least PNG, JPEG and SVG format
+files.
+SVG files must be processed in <a>secure animated mode</a>
+if the current document supports animation,
+or in <a>secure static mode</a> if the current document is static.
+</p>
+
+<p>The result of processing an {{image}} is always a four-channel
+RGBA result. When an {{image}}
+element references an image (such as many PNG or JPEG
+files) which only has three channels (RGB), then the effect is
+as if the object were converted into a 4-channel RGBA image
+with the alpha channel uniformly set to 1. For a single-channel (grayscale)
+raster image, the effect is as if the object were converted
+into a 4-channel RGBA image, where the single channel from the
+referenced object is used to compute the three color channels
+and the alpha channel is uniformly set to 1.</p>
+
+<p>The {{preserveAspectRatio}} attribute
+determines how the referenced image is scaled and positioned to fit
+into the <a>concrete object size</a> determined from the
+<a>positioning rectangle</a> and the {{object-fit}} and {{object-position}} properties.
+The result of applying this attribute defines an <dfn id="TermImageRenderingRectangle"  data-dfn-type="dfn" data-export="">image-rendering rectangle</dfn>
+used for actual image rendering.
+When the referenced image is an SVG,
+the <a>image-rendering rectangle</a> defines
+the <a>SVG viewport</a> used for rendering that SVG.
+</p>
+
+<p class="note">
+  The {{preserveAspectRatio}} calculations
+  are applied <em>after</em> determining the <a>concrete object size</a>,
+  and only have an effect if that size does not match the
+  <a>intrinsic aspect ratio</a> of the embedded image.
+  If a value of {{object-fit}} is used that
+  ensures that the concrete object size matches the intrinsic aspect ratio
+  (i.e., any value other than the default <span class="prop-value">fill</span>),
+  then the {{preserveAspectRatio}} value will have no effect;
+  the <a>image-rendering rectangle</a> will be that determined
+  when scaling and positioning the object with CSS.
+  The {{preserveAspectRatio}} attribute can therefore be safely used
+  as a fallback for most values of {{object-fit}} and {{object-position}};
+  it must be explicitly set to <span class="attr-value">none</span>
+  to turn off aspect ratio control, regardless of {{object-fit}} value.
+</p>
+
+<p>
+The aspect ratio to use when
+evaluating the {{preserveAspectRatio}} attribute is
+defined by the <a>intrinsic aspect ratio</a> of the referenced content.
+For an SVG file, the aspect ratio is defined
+in <a href="coords.html#SizingSVGInCSS">Intrinsic sizing properties of SVG content"</a>.
+For most raster content (PNG, JPEG) the pixel width and height of the image file
+define an intrinsic aspect ratio.
+Where the embedded image does not have an <a>intrinsic aspect ratio</a>
+(e.g. an SVG file with neither {{viewBox}} attribute nor explicit dimensions for the
+<a>outermost svg element</a>) the {{preserveAspectRatio}} attribute is
+ignored;
+the embedded image is drawn to fill the <a>positioning rectangle</a> defined by the geometry properties
+on the {{image}} element.
+</p>
+
+<p>For example, if the image element referenced a PNG or JPEG
+and <span class="attr-value">preserveAspectRatio="xMinYMin
+meet"</span>, then the aspect ratio of the raster would be
+preserved (which means that the scale factor from image's
+coordinates to current user space coordinates would be the same
+for both X and Y), the raster would be sized as large as
+possible while ensuring that the entire raster fits within the
+viewport, and the top/left of the raster would be aligned with
+the top/left of the viewport as defined by the attributes {{x}}, {{y}}, {{width}} and {{height}} on the {{image}} element.  If the value
+of {{preserveAspectRatio}} was <span class='attr-value'>'none'</span>
+then aspect ratio of the image would not be preserved. The
+image would be fit such that the top/left corner of the
+raster exactly aligns with coordinate ({{x}}, {{y}}) and the bottom/right corner of
+the raster exactly aligns with coordinate ({{x}}+{{width}}, {{y}}+{{height}}).</p>
+
+<p>
+For {{image}} elements embedding an SVG image,
+the {{preserveAspectRatio}} attribute on the root
+element in the referenced SVG image must be ignored,
+and instead treated as if it had a value of <span class="attr-value">none</span>.
+(see {{preserveAspectRatio}} for details).
+This ensures that the {{preserveAspectRatio}} attribute on
+the referencing {{image}} has its intended effect,
+even if it is <span class="attr-value">none</span>.
+</p>
+
+<p class="note">
+When the value of the {{preserveAspectRatio}} attribute on the {{image}}
+is <em>not</em> <span class="attr-value">none</span>,
+the <a>image-rendering rectangle</a> determined
+from the properties of the {{image}} element
+will exactly match the embedded SVG's intrinsic aspect ratio.
+Ignoring the {{preserveAspectRatio}} attribute from the embedded SVG
+will therefore not usually have any effect.
+The exception is if the aspect ratio of that image
+is determined from absolute values for the {{width}} and {{height}} attributes
+which <em>do not</em> match its {{viewBox}} aspect ratio.
+This is an unusual situation that authors are advised to avoid, for many reasons.
+</p>
+
+<p>
+The user agent stylesheet sets the value of the {{overflow}} property
+on {{image}} element to <span class="prop-value">hidden</span>.
+Unless over-ridden by the author, images will therefore be clipped to
+the <a>positioning rectangle</a> defined by the geometry properties.
+</p>
+
+<p>
+For {{image}} elements embedding an SVG image,
+two different {{overflow}} values apply.
+The value specified on the {{image}} element determines
+whether the <a>image-rendering rectangle</a> is clipped to the <a>positioning rectangle</a>.
+The value on the root element of the referenced SVG
+determines whether the graphics are clipped to the <a>image-rendering rectangle</a>.
+</p>
+
+<p class="note">
+New in SVG 2.
+Previous versions of SVG required that the {{overflow}} (and also {{clip}})
+property on the embedded SVG be ignored.
+The new rules ensure that an overflowing <span class="attr-value">slice</span> layout
+can be safely used without compromising the overflow control from the referenced image.
+</p>
+
+<p>
+  To link into particular view of an embedded SVG image,
+  authors can use media fragments as defined in <a href="linking.html#LinksIntoSVG">Linking into SVG content</a>.
+  To crop to a specific section of a raster image,
+  authors can use <em>Basic media fragments identifiers</em> [<a href="refs.html#ref-media-frags">Media Fragments URI 1.0 (basic)</a>].
+  Either type of fragment may affect the <a>intrinsic dimensions</a> and/or <a>intrinsic aspect ratio</a> of the image.
+</p>
+
+<p>The resource referenced by the {{image}} element represents a
+separate document which generates its own parse tree and
+document object model (if the resource is XML). Thus, there is
+no inheritance of properties into the image.</p>
+
+<p>Unlike {{use}}, the {{image}} element cannot reference
+elements within an SVG file.</p>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support auto-sized images.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-52-24">We will allow auto-sized images in SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow raster images to use their own size without the need to set width and height.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3340">ACTION-3340</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support selecting part of an {{image}} for display.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-45-13">We will have a method for <span class="element-name">image</span> to select a part of an image to display, maybe by allowing <span class="attr-name">$1</span> on it.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To allow selection of part of an image without requiring the author to manually slice the image.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Nobody</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Support the <span class="property">object-fit</span> and <span class="property">object-position</span> properties from css-images-3.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/07/29-svg-minutes.html#item08">SVG 2 will depend on CSS3 Image Values and CSS4 Image Values.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To align with the CSS way of specifying image fitting that {{preserveAspectRatio}} provides.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron or Erik (no action)</td>
+    </tr>
+  </table>
+</div>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="ImageElementCrossoriginAttribute" data-dfn-type="element-attr" data-dfn-for="image" data-export="">crossorigin</dfn></td>
+        <td>[ anonymous | use-credentials ]?</td>
+        <td>(see HTML definition of attribute)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>The crossorigin attribute is a <a>CORS settings attribute</a>, and unless otherwise specified follows the same processing rules as in HTML [<a href="refs.html#ref-html">HTML</a>].</p>
+  </dd>
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="ImageElementHrefAttribute" data-dfn-type="element-attr" data-dfn-for="image" data-export="">href</dfn></td>
+        <td>URL <a href="types.html#attribute-url" class="syntax">&bs[;URL]</a></td>
+        <td>(none)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>An <a href="linking.html#URLReference">URL reference</a>
+    identifying the image to render.
+    Refer to the common handling defined for <a
+    href="linking.html#linkRefAttrs">URL reference attributes</a> and
+    <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.</p>
+    <p>
+        The URL is processed and the resource is fetched
+        <a href="linking.html#processingURL">as described in the Linking chapter</a>.
+    </p>
+  </dd>
+</dl>
+
+<div class="example">
+<pre>
+&lt;?xml version="1.0" standalone="no"?&gt;
+&lt;svg width="4in" height="3in"
+     xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;desc&gt;This graphic links to an external image
+  &lt;/desc&gt;
+  &lt;image x="200" y="200" width="100px" height="100px"
+         href="myimage.png"&gt;
+    &lt;title&gt;My image&lt;/title&gt;
+  &lt;/image&gt;
+&lt;/svg&gt;
+</pre>
+</div>
+
+<p>
+  Since image references always refer to a complete document,
+  a target-only URL is treated as a link to the same file,
+  which is rendered again as an independent embedded image.
+  Since the embedded image is processed in a secure mode,
+  its own embedded references are not processed,
+  preventing infinite recursion.
+</p>
+
+<pre class=include-raw>
+path: images/embedded/recursive-image.svg
+</pre>
+<pre class=include>
+path: images/embedded/recursive-image.svg
+</pre>
+
+
+
+<h3 id="ForeignObjectElement">The <span class="element-name">foreignObject</span> element</h3>
+
+@@elementsummary foreignObject@@
+
+<p>SVG is designed to be compatible with other XML languages
+for describing and rendering other types of content.
+The {{foreignObject}}
+element allows for inclusion of elements in a non-SVG namespace which
+is rendered within a region of the SVG graphic using other user agent processes. The
+included foreign graphical content is subject to SVG
+transformations, filters, clipping, masking and compositing.
+Examples include
+inserting a <a
+href="https://www.w3.org/TR/2003/REC-MathML2-20031021/">MathML</a> expression into
+an SVG drawing [<a href="refs.html#ref-mathml3">MathML3</a>],
+or adding a block of complex CSS-formatted HTML text or form inputs.
+</p>
+
+<p class="note">
+  The HTML parser treats elements inside the {{foreignObject}}
+  equivalent to elements inside an HTML document fragment.
+  Any <code>svg</code> or <code>math</code> element,
+  and their descendents,
+  will be parsed as being in the SVG or MathML namespace, respectively;
+  all other tags will be parsed as being in the HTML namespace.
+</p>
+
+<p>
+SVG-namespaced elements within a {{foreignObject}} will not be rendered,
+except in the situation where a properly defined SVG
+fragment, including a root {{svg}} element is
+defined as a descendent of the {{foreignObject}}.</p>
+
+<p>A {{foreignObject}}
+may be used in conjunction with the {{switch}} element and
+the {{requiredExtensions}} attribute to
+provide proper checking for user agent support and provide an
+alternate rendering in case user agent support is not
+available.</p>
+
+<p class="note">
+  This specification does not define how {{requiredExtensions}}
+  values should be mapped to support for different XML languages;
+  a future specification may do so.
+</p>
+
+<p>It is not required that SVG user agents support the ability
+to invoke other arbitrary user agents to handle embedded
+foreign object types; however, all conforming SVG user agents
+would need to support the {{switch}} element and
+must be able to render valid SVG elements when they appear as
+one of the alternatives within a {{switch}}
+element.</p>
+
+<p>It is expected that commercial Web browsers will
+support the ability for SVG to embed
+CSS-formatted HTML and also MathML content,
+with the rendered content subject to transformations and compositing defined in the SVG fragment.
+At this time, such a capability is not a requirement.</p>
+
+<div class="example">
+
+<xmp>
+<?xml version="1.0" standalone="yes"?>
+<svg width="4in" height="3in"
+ xmlns = 'http://www.w3.org/2000/svg'>
+  <desc>This example uses the 'switch' element to provide a
+        fallback graphical representation of an paragraph, if
+        XMHTML is not supported.</desc>
+  <!-- The 'switch' element will process the first child element
+       whose testing attributes evaluate to true.-->
+  <switch>
+    <!-- Process the embedded XHTML if the requiredExtensions attribute
+         evaluates to true (i.e., the user agent supports XHTML
+         embedded within SVG). -->
+    <foreignObject width="100" height="50"
+                   requiredExtensions="http://example.com/SVGExtensions/EmbeddedXHTML">
+      <!-- XHTML content goes here -->
+      <body xmlns="http://www.w3.org/1999/xhtml">
+        <p>Here is a paragraph that requires word wrap</p>
+      </body>
+    </foreignObject>
+    <!-- Else, process the following alternate SVG.
+         Note that there are no testing attributes on the 'text' element.
+         If no testing attributes are provided, it is as if there
+         were testing attributes and they evaluated to true.-->
+    <text font-size="10" font-family="Verdana">
+      <tspan x="10" y="10">Here is a paragraph that</tspan>
+      <tspan x="10" y="20">requires word wrap.</tspan>
+    </text>
+  </switch>
+</svg>
+</xmp>
+</div>
+
+
+<div class='ready-for-wider-review'>
+<h3 id="DOMInterfaces">DOM interfaces</h3>
+
+<h4 id="InterfaceSVGImageElement">Interface SVGImageElement</h4>
+
+
+
+<p>An <a>SVGImageElement</a> object represents an {{image}} element in the DOM.</p>
+
+<pre class="idl">[<a>Exposed</a>=Window]
+interface <b>SVGImageElement</b> : <a>SVGGraphicsElement</a> {
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__x">x</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__y">y</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__width">width</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__height">height</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedPreserveAspectRatio</a> <a href="embedded.html#__svg__SVGImageElement__preserveAspectRatio">preserveAspectRatio</a>;
+  attribute DOMString? <a href="embedded.html#__svg__SVGImageElement__crossOrigin">crossOrigin</a>;
+};
+
+<a>SVGImageElement</a> includes <a>SVGURIReference</a>;</pre>
+
+<p>The
+<b id="__svg__SVGImageElement__x">x</b>,
+<b id="__svg__SVGImageElement__y">y</b>,
+<b id="__svg__SVGImageElement__width">width</b> and
+<b id="__svg__SVGImageElement__height">height</b> IDL attributes
+<a>reflect</a> the computed values of the {{x}}, {{y}}, {{width}} and
+{{height}} properties and their corresponding
+presentation attributes, respectively.</p>
+
+<p>The <b id="__svg__SVGImageElement__preserveAspectRatio">preserveAspectRatio</b>
+IDL attribute <a>reflects</a> the {{preserveAspectRatio}} content attribute.</p>
+
+<p>The <b id="__svg__SVGImageElement__crossOrigin">crossOrigin</b> IDL attribute
+<a>reflects</a> the {{crossorigin}} content attribute.</p>
+
+
+
+<h4 id="InterfaceSVGForeignObjectElement">Interface SVGForeignObjectElement</h4>
+
+
+
+<p>An <a>SVGForeignObjectElement</a> object represents a {{foreignObject}}
+in the DOM.</p>
+
+<pre class="idl">[<a>Exposed</a>=Window]
+interface <b>SVGForeignObjectElement</b> : <a>SVGGraphicsElement</a> {
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGForeignObjectElement__x">x</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGForeignObjectElement__y">y</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGForeignObjectElement__width">width</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGForeignObjectElement__height">height</a>;
+};</pre>
+
+<p>The
+<b id="__svg__SVGForeignObjectElement__x">x</b>,
+<b id="__svg__SVGForeignObjectElement__y">y</b>,
+<b id="__svg__SVGForeignObjectElement__width">width</b> and
+<b id="__svg__SVGForeignObjectElement__height">height</b> IDL attributes
+<a>reflect</a> the computed values of the {{x}}, {{y}}, {{width}} and
+{{height}} properties and their corresponding
+presentation attributes, respectively.</p>
+
+
+</div>

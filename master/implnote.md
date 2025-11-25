@@ -1,0 +1,1738 @@
+<h2>Appendix B: Implementation Notes</h2>
+
+<h3 id="Introduction">Introduction</h3>
+
+<p>The following notes describe algorithms and other strategies
+which can be used by software developers when converting content
+to and from the formats required by features in the SVG language.</p>
+
+<h3 id="ArcImplementationNotes">Elliptical arc parameter conversion</h3>
+
+<p>
+To be consistent with other path segment notation,
+arcs in SVG paths are defined in terms of start and end points on the curve.
+</p>
+
+<p>
+This parameterization of elliptical arcs will be referred to
+as <em>endpoint parameterization</em>. One of the
+advantages of endpoint parameterization is that it permits a
+consistent path syntax in which all path commands end in the
+coordinates of the new "current point".
+</p>
+
+<p>
+However, this is not the only way of describing arc geometry
+used in software or mathematics.
+This section describes the alternative center parameterization,
+and how to convert it from and to SVG's endpoint parameterization.
+</p>
+
+<div class='math'>
+
+<h4 id="ArcSyntax">Elliptical arc endpoint syntax</h4>
+
+<p>An elliptical arc, as represented in the SVG path command,
+is described by the following parameters in order:</p>
+
+<p>(<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>) are the absolute coordinates of the
+current point on the path, obtained from the last two
+parameters of the previous path command.</p>
+
+<p><var>r<sub>x</sub></var>
+and <var>r<sub>y</sub></var>
+are the radii of the ellipse (also known as its semi-major and
+semi-minor axes).</p>
+
+<p><var>φ</var> is the angle from the x-axis of the current coordinate
+system to the x-axis of the ellipse.</p>
+
+<p><var>f<sub>A</sub></var> is
+the large arc flag, and is 0
+if an arc spanning less than or equal to 180 degrees is chosen, or 1
+if an arc spanning greater than 180 degrees is chosen.</p>
+
+<p><var>f<sub>S</sub></var> is
+the sweep flag, and is 0 if
+the line joining center to arc sweeps through decreasing
+angles, or 1 if it sweeps
+through increasing angles.</p>
+
+<p>(<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>) are the absolute coordinates of the
+final point of the arc.</p>
+
+<h4 id="ArcParameterizationAlternatives">Parameterization alternatives</h4>
+
+<p>An arbitrary point (<var>x</var>,&nbsp;<var>y</var>) on the elliptical
+arc can be described by the 2-dimensional matrix equation:</p>
+
+(eq. 3.1)
+<div role="math" aria-describedby="math-arbitrary-point-on-elliptical-arc">
+  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+    <mrow>
+      <mo>(</mo>
+      <mtable>
+        <mtr><mtd><mi>x</mi></mtd></mtr>
+        <mtr><mtd><mi>y</mi></mtd></mtr>
+      </mtable>
+      <mo>)</mo>
+      <mo>=</mo>
+      <mo>(</mo>
+      <mtable>
+        <mtr>
+          <mtd><mrow><mi>cos</mi><mo>&#x2061;</mo><mi>φ</mi></mrow></mtd>
+          <mtd><mrow><mo>-</mo><mi>sin</mi><mo>&#x2061;</mo><mi>φ</mi></mrow></mtd>
+        </mtr>
+        <mtr>
+          <mtd><mrow><mi>sin</mi><mo>&#x2061;</mo><mi>φ</mi></mrow></mtd>
+          <mtd><mrow><mi>cos</mi><mo>&#x2061;</mo><mi>φ</mi></mrow></mtd>
+        </mtr>
+      </mtable>
+      <mo>)</mo>
+      <mo>·</mo>
+      <mo>(</mo>
+      <mtable>
+        <mtr>
+          <mtd><mrow><msub><mi>r</mi><mi>x</mi></msub><mo>&#x2062;</mo><mi>cos</mi><mo>&#x2061;</mo><mi>θ</mi></mrow></mtd>
+        </mtr>
+        <mtr>
+          <mtd><mrow><msub><mi>r</mi><mi>y</mi></msub><mo>&#x2062;</mo><mi>sin</mi><mo>&#x2061;</mo><mi>θ</mi></mrow></mtd>
+        </mtr>
+      </mtable>
+      <mo>)</mo>
+      <mo>+</mo>
+      <mo>(</mo>
+      <mtable>
+        <mtr><mtd><msub><mi>c</mi><mi>x</mi></msub></mtd></mtr>
+        <mtr><mtd><msub><mi>c</mi><mi>y</mi></msub></mtd></mtr>
+      </mtable>
+      <mo>)</mo>
+    </mrow>
+  </math>
+  <pre id="math-arbitrary-point-on-elliptical-arc">
+    x = rx*cos(&#952;)*cos(&#966;) - ry*sin(&#952;)*sin(&#966;) + cx
+    y = rx*cos(&#952;)*sin(&#966;) + ry*sin(&#952;)*cos(&#966;) + cy
+  </pre>
+</div>
+
+<p>(<var>c<sub>x</sub></var>,&nbsp;<var>c<sub>y</sub></var>) are
+the coordinates of the center of the ellipse.</p>
+
+<p><var>r<sub>x</sub></var> and <var>r<sub>y</sub></var>
+are the radii of the ellipse (also known as its semi-major and
+semi-minor axes).</p>
+
+<div class="ready-for-wider-review">
+<p><var>φ</var> is the angle from the
+x-axis of the current coordinate system to the x-axis of the
+ellipse.</p>
+
+<p><var>θ</var> is the angle around the arc that the point
+(<var>x</var>,&nbsp;<var>y</var>) lies at, and ranges from:</p>
+
+<ul>
+  <li><var>θ</var><sub>1</sub> which is
+  the start angle of the elliptical arc prior to the stretch and
+  rotate operations.</li>
+
+  <li><var>θ</var><sub>2</sub> which is
+  the end angle of the elliptical arc prior to the stretch and
+  rotate operations.</li>
+
+  <li>Δ<var>θ</var> which is the difference between these
+  two angles.</li>
+</ul>
+</div>
+<p>If one thinks of an ellipse as a circle that has been
+stretched and then rotated, then <var>θ</var><sub>1</sub>,
+<var>θ</var><sub>2</sub> and Δ<var>θ</var>
+are the start angle, end angle and sweep angle, respectively
+of the arc prior to the stretch and rotate operations.
+This leads to an alternate parameterization which is common
+among graphics APIs, which will be referred to as <em>center
+parameterization</em>. In the next sections, formulas are
+given for mapping in both directions between center
+parameterization and endpoint parameterization.</p>
+
+<h4 id="ArcConversionCenterToEndpoint">Conversion from center to endpoint parameterization</h4>
+
+<p>Given the following variables:</p>
+
+<p class='indented separated'>
+  <var>c<sub>x</sub></var>
+  <var>c<sub>y</sub></var>
+  <var>r<sub>x</sub></var>
+  <var>r<sub>y</sub></var>
+  <var>φ</var>
+  <var>θ</var><sub>1</sub>
+  Δ<var>θ</var>
+</p>
+
+<p>the task is to find:</p>
+
+<p class='indented separated'>
+  <var>x</var><sub>1</sub>
+  <var>y</var><sub>1</sub>
+  <var>x</var><sub>2</sub>
+  <var>y</var><sub>2</sub>
+  <var>f<sub>A</sub></var>
+  <var>f<sub>S</sub></var>
+</p>
+
+<p>This can be achieved using the following formulas:</p>
+
+<table style="width: 90%">
+  <tr>
+    <td>
+    <!--<img
+    alt="Equation 4.1"
+    src="images/implnote/arcs/image004.png" />-->
+
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+      <mfenced open = '(' close = ')'>
+          <mtable rowalign='center'>
+              <mtr>
+                <mtd>
+                  <msub>
+                      <mi>x</mi>
+                      <mi>1</mi>
+                    </msub>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd>
+                    <msub>
+                      <mi>y</mi>
+                      <mi>1</mi>
+                    </msub>
+                </mtd>
+              </mtr>
+            </mtable>
+        </mfenced>
+    <mo>=</mo>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mn>cos</mn>
+              <mi mathvariant='italic'>&#966;</mi>
+            </mrow>
+          </mtd>
+          <mtd>
+            <mrow>
+              <mo lspace='2px' rspace='2px'>-</mo>
+              <mn>sin</mn>
+              <mi mathvariant='italic'>&#966;</mi>
+            </mrow>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mn>sin</mn>
+              <mi mathvariant='italic'>&#966;</mi>
+            </mrow>
+          </mtd>
+          <mtd>
+            <mrow>
+              <mn>cos</mn>
+              <mi mathvariant='italic'>&#966;</mi>
+            </mrow>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo lspace='2px' rspace='2px'>&#8901;</mo>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mrow>
+              <msub>
+                <mi>r</mi>
+                <mi>x</mi>
+              </msub>
+              <mi>&nbsp;</mi>
+              <mn>cos</mn>
+              <msub>
+                <mi mathvariant='italic'>&#952;</mi>
+                <mi mathvariant='italic'>1</mi>
+              </msub>
+            </mrow>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mrow>
+              <msub>
+                <mi>r</mi>
+                <mi>y</mi>
+              </msub>
+              <mi>&nbsp;</mi>
+              <mn>sin</mn>
+              <msub>
+                <mi mathvariant='italic'>&#952;</mi>
+                <mi mathvariant='italic'>1</mi>
+              </msub>
+            </mrow>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo lspace='2px' rspace='2px'>+</mo>
+      <mfenced open = '(' close = ')'>
+          <mtable rowalign='center'>
+              <mtr>
+                <mtd>
+                  <msub>
+                      <mi>c</mi>
+                      <mi>x</mi>
+                    </msub>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd>
+                    <msub>
+                      <mi>c</mi>
+                      <mi>y</mi>
+                    </msub>
+                </mtd>
+              </mtr>
+            </mtable>
+        </mfenced>
+  </mrow>
+</math>
+</div>
+
+    </td>
+    <td style="text-align: right">(eq. 4.1)</td>
+  </tr>
+  <tr>
+    <td>
+    <!--<img
+    alt="Equation 4.2"
+    src="images/implnote/arcs/image006.png" />-->
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>x</mi>
+              <mi mathvariant='italic'>2</mi>
+            </msub>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>y</mi>
+              <mi mathvariant='italic'>2</mi>
+            </msub>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo>=</mo>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mn>cos</mn>
+              <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#966;</mi>
+            </mrow>
+          </mtd>
+          <mtd>
+            <mrow>
+              <mo lspace='2px' rspace='2px'>-</mo>
+              <mn>sin</mn>
+              <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#966;</mi>
+            </mrow>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mn>sin</mn>
+              <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#966;</mi>
+            </mrow>
+          </mtd>
+          <mtd>
+            <mrow>
+              <mn>cos</mn>
+              <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#966;</mi>
+            </mrow>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo lspace='2px' rspace='2px'>&#8901;</mo>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mrow>
+              <msub>
+                <mi>r</mi>
+                <mi>x</mi>
+              </msub>
+              <mi>&nbsp;</mi>
+              <mn>cos</mn>
+              <mfenced open = '(' close = ')'>
+                <mrow>
+                  <msub>
+                    <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#952;</mi>
+                    <mi mathvariant='italic'>1</mi>
+                  </msub>
+                  <mo lspace='2px' rspace='2px'>+</mo>
+                  <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#916;</mi>
+                  <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#952;</mi>
+                </mrow>
+              </mfenced>
+            </mrow>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mrow>
+              <msub>
+                <mi>r</mi>
+                <mi>y</mi>
+              </msub>
+              <mi>&nbsp;</mi>
+              <mn>sin</mn>
+              <mfenced open = '(' close = ')'>
+                <mrow>
+                  <msub>
+                    <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#952;</mi>
+                    <mi mathvariant='italic'>1</mi>
+                  </msub>
+                  <mo lspace='2px' rspace='2px'>+</mo>
+                  <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#916;</mi>
+                  <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#952;</mi>
+                </mrow>
+              </mfenced>
+            </mrow>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo lspace='2px' rspace='2px'>+</mo>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>c</mi>
+              <mi>x</mi>
+            </msub>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>c</mi>
+              <mi>y</mi>
+            </msub>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+  </mrow>
+</math>
+</div>
+    </td>
+    <td style="text-align: right">(eq. 4.2)</td>
+  </tr>
+  <tr>
+    <td>
+    <!--<img
+    alt="Equation 4.3"
+    src="images/implnote/arcs/image008.png" />-->
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <msub>
+      <mi>f</mi>
+      <mi>A</mi>
+    </msub>
+    <mo>=</mo>
+    <mfenced open = '{' close = ''>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mn>1</mn>
+              <mi mathvariant='italic' >&nbsp;</mi>
+              <mi mathvariant='italic' >&nbsp;</mi>
+              <mtext>if</mtext>
+              <mi mathvariant='italic' >&nbsp;</mi>
+              <mi mathvariant='italic' >&nbsp;</mi>
+              <mfenced open = '&#124;' close = '&#124;'>
+                <mrow>
+                  <mi>&#916;</mi>
+                  <mi mathvariant='italic' >&#952;</mi>
+                </mrow>
+              </mfenced>
+              <mo mathvariant='italic' >&gt;</mo>
+              <mn>180</mn>
+              <mi mathvariant='normal' >&#176;</mi>
+            </mrow>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mtext>0</mtext>
+              <mi mathvariant='italic' >&nbsp;</mi>
+              <mi mathvariant='italic' >&nbsp;</mi>
+              <mtext>if</mtext>
+              <mi mathvariant='italic' >&nbsp;</mi>
+              <mi mathvariant='italic' >&nbsp;</mi>
+              <mfenced open = '&#124;' close = '&#124;'>
+                <mrow>
+                  <mi>&#916;</mi>
+                  <mi mathvariant='italic' >&#952;</mi>
+                </mrow>
+              </mfenced>
+              <mo lspace='3px' rspace='3px'>&#8804;</mo>
+              <mn>180</mn>
+              <mi mathvariant='normal' >&#176;</mi>
+            </mrow>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+  </mrow>
+</math>
+</div>
+
+    </td>
+    <td style="text-align: right">(eq. 4.3)</td>
+  </tr>
+  <tr>
+    <td>
+    <!--<img
+    alt="Equation 4.4"
+    src="images/implnote/arcs/image010.png" />-->
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <msub>
+      <mi>f</mi>
+      <mi>S</mi>
+    </msub>
+    <mo>=</mo>
+    <mfenced open = '{' close = ''>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mn>1</mn>
+              <mi mathvariant='italic' >&nbsp;&nbsp;</mi>
+              <mtext>if</mtext>
+              <mi mathvariant='italic' >&nbsp;&nbsp;</mi>
+              <mi>&#916;</mi>
+              <mi mathvariant='italic' >&#952;</mi>
+              <mn >&nbsp;</mn>
+              <mo  lspace='0px' rspace='0px'>&gt;</mo>
+              <mtext >&nbsp;</mtext>
+              <mn>0</mn>
+              <mi mathvariant='normal' >&#176;</mi>
+            </mrow>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mtext>0</mtext>
+              <mi mathvariant='italic' >&nbsp;&nbsp;</mi>
+              <mtext>if</mtext>
+              <mi mathvariant='italic' >&nbsp;&nbsp;</mi>
+              <mi>&#916;</mi>
+              <mi mathvariant='italic' >&#952;</mi>
+              <mn >&nbsp;</mn>
+              <mo  lspace='0px' rspace='0px'>&lt;</mo>
+              <mtext >&nbsp;</mtext>
+              <mn>0</mn>
+              <mi mathvariant='normal' >&#176;</mi>
+            </mrow>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+  </mrow>
+</math>
+</div>
+    </td>
+    <td style="text-align: right">(eq. 4.4)</td>
+  </tr>
+</table>
+
+<h4 id="ArcConversionEndpointToCenter">Conversion from endpoint to center parameterization</h4>
+
+<p>Given the following variables:</p>
+
+<p class='indented separated'>
+  <var>x</var><sub>1</sub>
+  <var>y</var><sub>1</sub>
+  <var>x</var><sub>2</sub>
+  <var>y</var><sub>2</sub>
+  <var>f<sub>A</sub></var>
+  <var>f<sub>S</sub></var>
+  <var>r<sub>x</sub></var>
+  <var>r<sub>y</sub></var>
+  <var>φ</var>
+</p>
+
+<p>the task is to find:</p>
+
+<p class='indented separated'>
+  <var>c<sub>x</sub></var>
+  <var>c<sub>y</sub></var>
+  <var>θ</var><sub>1</sub>
+  Δ<var>θ</var>
+</p>
+
+<p>The equations simplify after a translation which
+places the origin at the midpoint of the line joining
+(<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>) to
+(<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>), followed by
+a rotation to line up the coordinate axes with the axes of the ellipse.
+All transformed coordinates will be written with primes. They are
+computed as intermediate values on the way toward finding the required
+center parameterization variables. This procedure consists of the
+following steps:</p>
+
+<ul>
+  <li>
+    <p><em>Step 1: Compute</em> (<var>x</var><sub>1</sub>′,&nbsp;<var>y</var><sub>1</sub>′)</p>
+    <table  style="width: 90%"
+    >
+      <tr>
+        <td><!--<img
+        alt="Equation 5.1"
+        src="images/implnote/arcs/image012.png" />-->
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <msup>
+              <msub>
+                <mi>x</mi>
+                <mi mathvariant='italic'>1</mi>
+              </msub>
+              <mo mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#8242;</mo>
+            </msup>
+         </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <msup>
+              <msub>
+                <mi>y</mi>
+                <mi mathvariant='italic'>1</mi>
+             </msub>
+              <mo mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#8242;</mo>
+            </msup>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo>=</mo>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mn>cos</mn>
+              <mi mathvariant='italic'>&#966;</mi>
+            </mrow>
+          </mtd>
+          <mtd>
+            <mrow>
+              <mn>sin</mn>
+              <mi mathvariant='italic'>&#966;</mi>
+            </mrow>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mo>-</mo>
+              <mn>sin</mn>
+              <mi mathvariant='italic'>&#966;</mi>
+            </mrow>
+          </mtd>
+          <mtd>
+            <mrow>
+              <mn>cos</mn>
+              <mi mathvariant='italic'>&#966;</mi>
+            </mrow>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo lspace='2px' rspace='2px'>&#8901;</mo>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mfrac>
+              <mrow>
+                <msub>
+                  <mi>x</mi>
+                  <mi mathvariant='italic'>1</mi>
+                </msub>
+                <mo mathvariant='italic'>-</mo>
+                <msub>
+                  <mi>x</mi>
+                  <mi mathvariant='italic'>2</mi>
+                </msub>
+              </mrow>
+              <mi mathvariant='italic'>2</mi>
+            </mfrac>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mfrac>
+              <mrow>
+                <msub>
+                  <mi>y</mi>
+                  <mi mathvariant='italic'>1</mi>
+                </msub>
+                <mo mathvariant='italic'>-</mo>
+                <msub>
+                  <mi>y</mi>
+                  <mi mathvariant='italic'>2</mi>
+                </msub>
+              </mrow>
+              <mi mathvariant='italic'>2</mi>
+            </mfrac>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+  </mrow>
+</math>
+</div>
+        </td>
+        <td style="text-align: right">(eq. 5.1)</td>
+      </tr>
+    </table>
+  </li>
+
+  <li>
+    <p><em>Step 2: Compute</em> (<var>c<sub>x</sub></var>′,&nbsp;<var>c<sub>y</sub></var>′)</p>
+    <table  style="width: 90%"
+    >
+      <tr>
+        <td><!--<img
+        alt="Equation 5.2"
+        src="images/implnote/arcs/image014.png" />-->
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <msup>
+              <msub>
+                <mi>c</mi>
+                <mi>x</mi>
+              </msub>
+              <mo>&#8242;</mo>
+            </msup>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <msup>
+              <msub>
+                <mi>c</mi>
+                <mi>y</mi>
+              </msub>
+              <mo>&#8242;</mo>
+            </msup>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo>=</mo>
+    <mo lspace='2px' rspace='2px'>&#177;</mo>
+    <msqrt>
+        <mfrac>
+          <mrow>
+            <msup>
+              <msub>
+                <mi>r</mi>
+                <mi>x</mi>
+              </msub>
+              <mn>2</mn>
+            </msup>
+            <mtext>&nbsp;</mtext>
+            <msup>
+              <msub>
+                <mi>r</mi>
+                <mi>y</mi>
+              </msub>
+              <mn>2</mn>
+            </msup>
+            <mo>-</mo>
+            <msup>
+              <msub>
+                <mi>r</mi>
+                <mi>x</mi>
+              </msub>
+              <mn>2</mn>
+            </msup>
+            <msup>
+              <mfenced open = '(' close = ')'>
+                <msup>
+                  <msub>
+                    <mi>y</mi>
+                    <mn>1</mn>
+                  </msub>
+                  <mo>&#8242;</mo>
+                </msup>
+              </mfenced>
+              <mn>2</mn>
+            </msup>
+            <mo>-</mo>
+            <msup>
+              <msub>
+                <mi>r</mi>
+                <mi>y</mi>
+              </msub>
+              <mn>2</mn>
+            </msup>
+            <msup>
+              <mfenced open = '(' close = ')'>
+                <msup>
+                  <msub>
+                    <mi>x</mi>
+                    <mn>1</mn>
+                  </msub>
+                  <mo>&#8242;</mo>
+                </msup>
+              </mfenced>
+              <mn>2</mn>
+            </msup>
+          </mrow>
+          <mrow>
+            <msup>
+              <msub>
+                <mi>r</mi>
+                <mi>x</mi>
+              </msub>
+              <mn>2</mn>
+            </msup>
+            <msup>
+              <mfenced open = '(' close = ')'>
+                <msup>
+                  <msub>
+                    <mi>y</mi>
+                    <mn>1</mn>
+                  </msub>
+                  <mo>&#8242;</mo>
+                </msup>
+              </mfenced>
+              <mn>2</mn>
+            </msup>
+            <mo>+</mo>
+            <msup>
+              <msub>
+                <mi>r</mi>
+                <mi>y</mi>
+              </msub>
+              <mn>2</mn>
+            </msup>
+            <msup>
+              <mfenced open = '(' close = ')'>
+                <msup>
+                  <msub>
+                    <mi>x</mi>
+                    <mn>1</mn>
+                  </msub>
+                  <mo>&#8242;</mo>
+                </msup>
+              </mfenced>
+              <mn>2</mn>
+            </msup>
+          </mrow>
+        </mfrac>
+    </msqrt>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mfrac>
+              <mrow>
+                <msub>
+                  <mi>r</mi>
+                  <mi>x</mi>
+                </msub>
+                <mtext>&nbsp;</mtext>
+                <msup>
+                  <msub>
+                    <mi>y</mi>
+                    <mn>1</mn>
+                  </msub>
+                  <mo>&#8242;</mo>
+                </msup>
+              </mrow>
+              <msub>
+                <mi>r</mi>
+                <mi>y</mi>
+              </msub>
+            </mfrac>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mo>-</mo>
+              <mfrac>
+                <mrow>
+                  <msub>
+                    <mi>r</mi>
+                    <mi>y</mi>
+                  </msub>
+                  <mtext>&nbsp;</mtext>
+                  <msup>
+                    <msub>
+                      <mi>x</mi>
+                      <mn>1</mn>
+                    </msub>
+                    <mo>&#8242;</mo>
+                  </msup>
+                </mrow>
+                <msub>
+                  <mi>r</mi>
+                  <mi>x</mi>
+                </msub>
+              </mfrac>
+            </mrow>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+  </mrow>
+</math>
+</div>
+        </td>
+        <td style="text-align: right">(eq. 5.2)</td>
+      </tr>
+    </table>
+    <p>where the + sign is chosen if <var>f<sub>A</sub></var>&nbsp;≠&nbsp;<var>f<sub>S</sub></var>, and
+    the − sign is chosen if <var>f<sub>A</sub></var>&nbsp;=&nbsp;<var>f<sub>S</sub></var>.</p>
+  </li>
+
+  <li>
+    <p><em>Step 3: Compute</em> (<var>c<sub>x</sub></var>,&nbsp;<var>c<sub>y</sub></var>)
+    <em>from</em> (<var>c<sub>x</sub></var>′,&nbsp;<var>c<sub>y</sub></var>′)</p>
+    <table  style="width: 90%"
+    >
+      <tr>
+        <td><!--<img
+        alt="Equation 5.3"
+        src="images/implnote/arcs/image016.png" />-->
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>c</mi>
+              <mi>x</mi>
+            </msub>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>c</mi>
+              <mi>y</mi>
+            </msub>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo>=</mo>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mn>cos</mn>
+              <mi mathvariant='italic'>&#966;</mi>
+            </mrow>
+          </mtd>
+          <mtd>
+            <mrow>
+              <mo>-</mo>
+              <mn>sin</mn>
+              <mi mathvariant='italic'>&#966;</mi>
+            </mrow>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mrow>
+              <mn>sin</mn>
+              <mi mathvariant='italic'>&#966;</mi>
+            </mrow>
+          </mtd>
+          <mtd>
+            <mrow>
+              <mn>cos</mn>
+              <mi mathvariant='italic'>&#966;</mi>
+            </mrow>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo lspace='2px' rspace='2px'>&#8901;</mo>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <msup>
+              <msub>
+                <mi>c</mi>
+                <mi>x</mi>
+              </msub>
+              <mo lspace='0px' form='infix'>'</mo>
+            </msup>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <msup>
+              <msub>
+                <mi>c</mi>
+                <mi>y</mi>
+              </msub>
+              <mo lspace='0px' form='infix'>'</mo>
+            </msup>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo>+</mo>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mfrac>
+              <mrow>
+                <msub>
+                  <mi>x</mi>
+                  <mn>1</mn>
+                </msub>
+                <mo>+</mo>
+                <msub>
+                  <mi>x</mi>
+                  <mn>2</mn>
+                </msub>
+              </mrow>
+              <mn>2</mn>
+            </mfrac>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mfrac>
+              <mrow>
+                <msub>
+                  <mi>y</mi>
+                  <mn>1</mn>
+                </msub>
+                <mo>+</mo>
+                <msub>
+                  <mi>y</mi>
+                  <mn>2</mn>
+                </msub>
+              </mrow>
+              <mn>2</mn>
+            </mfrac>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+  </mrow>
+</math>
+</div>
+        </td>
+        <td style="text-align: right">(eq. 5.3)</td>
+      </tr>
+    </table>
+  </li>
+
+  <li>
+    <p><em>Step 4: Compute</em> <var>θ</var><sub>1</sub> and Δ<var>θ</var></p>
+    <p>In general, the angle between two vectors
+    (<var>u<sub>x</sub></var>,&nbsp;<var>u<sub>y</sub></var>)
+    and (<var>v<sub>x</sub></var>,&nbsp;<var>v<sub>y</sub></var>) can be computed as</p>
+    <table  style="width: 90%"
+    >
+      <tr>
+        <td><!--<img
+        alt="Equation 5.4"
+        src="images/implnote/arcs/image018.png" />-->
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mo lspace='3px' rspace='3px'>&#8736;</mo>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mover>
+              <mi>u</mi>
+              <mo>&#x21c0;</mo>
+            </mover>
+          </mtd>
+          <mtd>
+            <mn>,</mn>
+          </mtd>
+          <mtd>
+            <mover>
+              <mi>v</mi>
+              <mo>&#x21c0;</mo>
+            </mover>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo>=</mo>
+    <mo lspace='2px' rspace='2px'>&#177;</mo>
+    <mn>arccos</mn>
+    <mfenced open = '(' close = ')'>
+      <mfrac>
+        <mrow>
+          <mover>
+            <mi>u</mi>
+            <mo>&#x21c0;</mo>
+          </mover>
+          <mo lspace='6px' rspace='6px'>&#8901;</mo>
+          <mover>
+            <mi>v</mi>
+            <mo>&#x21c0;</mo>
+          </mover>
+        </mrow>
+        <mrow>
+          <mfenced open = '&#x2016;' close = '&#x2016;'>
+            <mover>
+              <mi>u</mi>
+              <mo>&#x21c0;</mo>
+            </mover>
+          </mfenced>
+          <mi>&nbsp;</mi>
+          <mfenced open = '&#x2016;' close = '&#x2016;'>
+            <mover>
+              <mi>v</mi>
+              <mo>&#x21c0;</mo>
+            </mover>
+          </mfenced>
+        </mrow>
+      </mfrac>
+    </mfenced>
+  </mrow>
+</math>
+</div>
+        </td>
+        <td style="text-align: right">(eq. 5.4)</td>
+      </tr>
+    </table>
+
+    <p>where the &#xb1; sign appearing here is the sign of
+    <var>u<sub>x</sub></var>&nbsp;<var>v<sub>y</sub></var>&nbsp;−&nbsp;<var>u<sub>y</sub></var>&nbsp;<var>v<sub>x</sub></var>.</p>
+
+    <p>This angle function can be used to express <var>θ</var><sub>1</sub> and
+    Δ<var>θ</var> as follows:</p>
+
+    <table  style="width: 90%"
+    >
+      <tr>
+        <td><!--<img
+        alt="Equation 5.5"
+        src="images/implnote/arcs/image020.png" />-->
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <msub>
+      <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#952;</mi>
+      <mi>1</mi>
+    </msub>
+    <mo>=</mo>
+    <mo lspace='3px' rspace='3px'>&#8736;</mo>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mfenced open = '(' close = ')'>
+              <mtable rowalign='center'>
+                <mtr>
+                  <mtd>
+                    <mn>1</mn>
+                  </mtd>
+                </mtr>
+                <mtr>
+                  <mtd>
+                    <mn>0</mn>
+                  </mtd>
+                </mtr>
+              </mtable>
+            </mfenced>
+          </mtd>
+          <mtd>
+            <mi mathvariant='italic'>,</mi>
+          </mtd>
+          <mtd>
+            <mfenced open = '(' close = ')'>
+              <mtable rowalign='center'>
+                <mtr>
+                  <mtd>
+                    <mfrac>
+                      <mrow>
+                        <msup>
+                          <msub>
+                            <mi>x</mi>
+                            <mi mathvariant='italic'>1</mi>
+                          </msub>
+                          <mo>&#8242;</mo>
+                        </msup>
+                        <mo>-</mo>
+                        <msup>
+                          <msub>
+                            <mi>c</mi>
+                            <mi>x</mi>
+                          </msub>
+                          <mo>&#8242;</mo>
+                        </msup>
+                      </mrow>
+                      <msub>
+                        <mi>r</mi>
+                        <mi>x</mi>
+                      </msub>
+                    </mfrac>
+                  </mtd>
+                </mtr>
+                <mtr>
+                  <mtd>
+                    <mfrac>
+                      <mrow>
+                        <msup>
+                          <msub>
+                            <mi>y</mi>
+                            <mi mathvariant='italic'>1</mi>
+                          </msub>
+                          <mo>&#8242;</mo>
+                        </msup>
+                        <mo>-</mo>
+                        <msup>
+                          <msub>
+                            <mi>c</mi>
+                            <mi>y</mi>
+                          </msub>
+                          <mo>&#8242;</mo>
+                        </msup>
+                      </mrow>
+                      <msub>
+                        <mi>r</mi>
+                        <mi>y</mi>
+                      </msub>
+                    </mfrac>
+                  </mtd>
+                </mtr>
+              </mtable>
+            </mfenced>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+  </mrow>
+</math>
+</div>
+        </td>
+        <td style="text-align: right">(eq. 5.5)</td>
+      </tr>
+      <tr>
+        <td><!--<img
+        alt="Equation 5.6"
+        src="images/implnote/arcs/image022.png" />-->
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mi>&#916;</mi>
+    <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#952;</mi>
+    <mo lspace='3px' rspace='3px'>&#8801;</mo>
+    <mo lspace='3px' rspace='3px'>&#8736;</mo>
+    <mfenced open = '(' close = ')'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <mfenced open = '(' close = ')'>
+              <mtable rowalign='center'>
+                <mtr>
+                  <mtd>
+                    <mfrac>
+                      <mrow>
+                        <msup>
+                          <msub>
+                            <mi>x</mi>
+                            <mi mathvariant='italic'>1</mi>
+                          </msub>
+                          <mo>&#8242;</mo>
+                        </msup>
+                        <mo>-</mo>
+                        <msup>
+                          <msub>
+                            <mi>c</mi>
+                            <mi>x</mi>
+                          </msub>
+                          <mo>&#8242;</mo>
+                        </msup>
+                      </mrow>
+                      <msub>
+                        <mi>r</mi>
+                        <mi>x</mi>
+                      </msub>
+                    </mfrac>
+                  </mtd>
+                </mtr>
+                <mtr>
+                  <mtd>
+                    <mfrac>
+                      <mrow>
+                        <msup>
+                          <msub>
+                            <mi>y</mi>
+                            <mi mathvariant='italic'>1</mi>
+                          </msub>
+                          <mo>&#8242;</mo>
+                        </msup>
+                        <mo>-</mo>
+                        <msup>
+                          <msub>
+                            <mi>c</mi>
+                            <mi>y</mi>
+                          </msub>
+                          <mo>&#8242;</mo>
+                        </msup>
+                      </mrow>
+                      <msub>
+                        <mi>r</mi>
+                        <mi>y</mi>
+                      </msub>
+                    </mfrac>
+                  </mtd>
+                </mtr>
+              </mtable>
+            </mfenced>
+          </mtd>
+          <mtd>
+            <mi mathvariant='italic'>,</mi>
+          </mtd>
+          <mtd>
+            <mfenced open = '(' close = ')'>
+              <mtable rowalign='center'>
+                <mtr>
+                  <mtd>
+                    <mfrac>
+                      <mrow>
+                        <msup>
+                          <mrow>
+                            <mo>-</mo>
+                            <msub>
+                              <mi>x</mi>
+                              <mi mathvariant='italic'>1</mi>
+                            </msub>
+                          </mrow>
+                          <mo>&#8242;</mo>
+                        </msup>
+                        <mo>-</mo>
+                        <msup>
+                          <msub>
+                            <mi>c</mi>
+                            <mi>x</mi>
+                          </msub>
+                          <mo>&#8242;</mo>
+                        </msup>
+                      </mrow>
+                      <msub>
+                        <mi>r</mi>
+                        <mi>x</mi>
+                      </msub>
+                    </mfrac>
+                  </mtd>
+                </mtr>
+                <mtr>
+                  <mtd>
+                    <mfrac>
+                      <mrow>
+                        <msup>
+                          <mrow>
+                            <mo>-</mo>
+                            <msub>
+                              <mi>y</mi>
+                              <mi mathvariant='italic'>1</mi>
+                            </msub>
+                          </mrow>
+                          <mo>&#8242;</mo>
+                        </msup>
+                        <mo>-</mo>
+                        <msup>
+                          <msub>
+                            <mi>c</mi>
+                            <mi>y</mi>
+                          </msub>
+                          <mo>&#8242;</mo>
+                        </msup>
+                      </mrow>
+                      <msub>
+                        <mi>r</mi>
+                        <mi>y</mi>
+                      </msub>
+                    </mfrac>
+                  </mtd>
+                </mtr>
+              </mtable>
+            </mfenced>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mi mathvariant='italic'>&nbsp;</mi>
+    <mn>mod 360</mn>
+    <mi>&#176;</mi>
+  </mrow>
+</math>
+</div>
+        </td>
+        <td style="text-align: right">(eq. 5.6)</td>
+      </tr>
+    </table>
+
+    <p>where Δ<var>θ</var> is fixed in the range
+    −360°&nbsp;&lt;&nbsp;Δ<var>θ</var>&nbsp;&lt;&nbsp;360° such that:</p>
+
+    <p class='indented'>if <var>f<sub>S</sub></var>&nbsp;=&nbsp;0, then Δ<var>θ</var>&nbsp;&lt;&nbsp;0,</p>
+    <p class='indented'>else if <var>f<sub>S</sub></var>&nbsp;=&nbsp;1, then Δ<var>θ</var>&nbsp;&gt;&nbsp;0.</p>
+
+    <p>In other words, if <var>f<sub>S</sub></var>&nbsp;=&nbsp;0 and the
+    right side of (eq. 5.6) is greater than 0, then subtract 360°,
+    whereas if <var>f<sub>S</sub></var>&nbsp;=&nbsp;1 and the right
+    side of (eq. 5.6) is less than 0, then add 360°. In all other cases
+    leave it as is.</p>
+  </li>
+</ul>
+
+<h4 id="ArcCorrectionOutOfRangeRadii">Correction of out-of-range radii</h4>
+
+<p>This section describes the mathematical adjustments required for out-of-range <var>r<sub>x</sub></var> and <var>r<sub>y</sub></var>,
+as described in the <a href="paths.html#ArcOutOfRangeParameters">Path implementation notes</a>.
+Algorithmically these adjustments consist of the following
+steps:</p>
+
+<ul>
+  <li>
+    <p><em>Step 1: Ensure radii are non-zero</em></p>
+    <p>If <var>r<sub>x</sub></var>&nbsp;=&nbsp;0 or
+    <var>r<sub>y</sub></var>&nbsp;=&nbsp;0, then treat
+    this as a straight line from (<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>)
+    to (<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>) and stop. Otherwise,</p>
+  </li>
+
+  <li>
+    <p><em>Step 2: Ensure radii are positive</em></p>
+    <p>Take the absolute value of <var>r<sub>x</sub></var> and
+    <var>r<sub>y</sub></var>:</p>
+    <table  style="width: 90%"
+    >
+      <tr>
+        <td><!--<img
+        alt="Equation 6.1"
+        src="images/implnote/arcs/image024.png" />-->
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mtable columnalign='left'>
+    <mtr>
+      <mtd>
+        <msub>
+          <mi>r</mi>
+          <mi>x</mi>
+        </msub>
+        <mo lspace='3px' rspace='3px'>&#8592;</mo>
+        <mfenced open = '&#124;' close = '&#124;'>
+          <msub>
+            <mi>r</mi>
+            <mi>x</mi>
+          </msub>
+        </mfenced>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow></mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <msub>
+          <mi>r</mi>
+          <mi>y</mi>
+        </msub>
+        <mo lspace='3px' rspace='3px'>&#8592;</mo>
+        <mfenced open = '&#124;' close = '&#124;'>
+          <msub>
+            <mi>r</mi>
+            <mi>y</mi>
+          </msub>
+        </mfenced>
+      </mtd>
+    </mtr>
+  </mtable>
+</math>
+</div>
+        </td>
+        <td style="text-align: right">(eq. 6.1)</td>
+      </tr>
+    </table>
+  </li>
+
+  <li>
+    <p><em>Step 3: Ensure radii are large enough</em></p>
+    <p>Using the primed coordinate values of equation (eq. 5.1),
+    compute</p>
+    <table  style="width: 90%"
+    >
+      <tr>
+        <td><!--<img
+        alt="Equation 6.2"
+        src="images/implnote/arcs/image026.png" />-->
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mi mathvariant='italic' >&#923;</mi>
+    <mo>=</mo>
+    <mfrac>
+      <msup>
+        <mfenced open = '(' close = ')'>
+          <msup>
+            <msub>
+              <mi>x</mi>
+              <mi mathvariant='italic' >1</mi>
+            </msub>
+            <mo fontfamily='Lucida Sans Unicode'>&#8242;</mo>
+          </msup>
+        </mfenced>
+        <mi mathvariant='italic' >2</mi>
+      </msup>
+      <msup>
+        <msub>
+          <mi>r</mi>
+          <mi>x</mi>
+        </msub>
+        <mi mathvariant='italic' >2</mi>
+      </msup>
+    </mfrac>
+    <mo>+</mo>
+    <mfrac>
+      <msup>
+        <mfenced open = '(' close = ')'>
+          <msup>
+            <msub>
+              <mi>y</mi>
+              <mi mathvariant='italic' >1</mi>
+            </msub>
+            <mo fontfamily='Lucida Sans Unicode'>&#8242;</mo>
+          </msup>
+        </mfenced>
+        <mi mathvariant='italic' >2</mi>
+      </msup>
+      <msup>
+        <msub>
+          <mi>r</mi>
+          <mi>y</mi>
+        </msub>
+        <mi mathvariant='italic' >2</mi>
+      </msup>
+    </mfrac>
+  </mrow>
+</math>
+</div>
+        </td>
+        <td style="text-align: right">(eq. 6.2)</td>
+      </tr>
+    </table>
+    <p>If the result of the above equation is less than or equal to
+    1, then no further change need be made to <var>r<sub>x</sub></var>
+    and <var>r<sub>y</sub></var>. If
+    the result of the above equation is greater than 1, then make
+    the replacements</p>
+    <table  style="width: 90%"
+    >
+      <tr>
+        <td><!--<img
+        alt="Equation 6.3"
+        src="images/implnote/arcs/image028.png" />-->
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mtable columnalign='left'>
+    <mtr>
+      <mtd>
+        <msub>
+          <mi>r</mi>
+          <mi>x</mi>
+        </msub>
+        <mo lspace='3px' rspace='3px'>&#8592;</mo>
+        <msqrt>
+          <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#923;</mi>
+        </msqrt>
+        <mi mathvariant='italic'>&nbsp;</mi>
+        <msub>
+          <mi>r</mi>
+          <mi>x</mi>
+        </msub>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mrow></mrow>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <msub>
+          <mi>r</mi>
+          <mi>y</mi>
+        </msub>
+        <mo lspace='3px' rspace='3px'>&#8592;</mo>
+        <msqrt>
+          <mi mathvariant='italic' fontfamily='Lucida Sans Unicode'>&#923;</mi>
+        </msqrt>
+        <mi mathvariant='italic'>&nbsp;</mi>
+        <msub>
+          <mi>r</mi>
+          <mi>y</mi>
+        </msub>
+      </mtd>
+    </mtr>
+  </mtable>
+</math>
+</div>
+        </td>
+        <td style="text-align: right">(eq. 6.3)</td>
+      </tr>
+    </table>
+  </li>
+
+  <li>
+    <p><em>Step 4: Proceed with computations</em></p>
+    <p>Proceed with the remaining elliptical arc computations, such
+    as those in the <a href="#ArcConversionEndpointToCenter">Conversion from endpoint to center parameterization</a> algorithm.
+    Note: As a consequence of the
+    radii corrections in this section, the equation (5.2) for the
+    center of the ellipse always has at least one solution (i.e.
+    the radicand is never negative). In the case that the
+    radii are scaled up using equation (eq. 6.3), the radicand of
+    (eq. 5.2) is zero and there is exactly one solution for the
+    center of the ellipse.</p>
+  </li>
+</ul>
+
+</div>
+
+<h3 id="NumericPrecisionImplementationNotes">Notes on generating high-precision geometry</h3>
+
+<p class="normativity">This section is informative.</p>
+
+<p>The <a href="types.html#Precision">real number precision</a> of SVG is
+single-precision.
+<a>Conforming SVG generators</a> handling technical data
+where expression of information exceeding single precision is desired,
+such as maps and technical drawings,
+are encouraged to follow the process outlined in this section
+to ensure consistent display in <a>conforming SVG viewers</a>.
+</p>
+
+<p>
+Presentation with an effective precision higher than
+single-precision may be obtained by taking advantage
+of the fact that at least double-precision floating point must be used
+when generating a CTM (See CTM generation processing in the
+<a href="conform.html#ConformingSVGViewers">Conforming SVG Viewers</a> section).
+The steps for generating content that takes advantage of this are:
+</p>
+<ol>
+  <li>Split content into tiles such that the number of significant digits
+  required to position and size each object within a tile is within the
+  range of single precision floats. Besides, in this description,
+  the coordinate system which the original content has originally will be called source space. </li>
+  <li>Generate a coordinate transformation matrix per tile to transform from
+  source space to tile space, where tile space is a coordinate system with origin
+  <var>(0,0)</var> at the top left of the tile. Each element of the
+  transformation matrix must be within the range of single precision.</li>
+  <li>Transform the contents of each tile from source space to tile space using
+  the generated coordinate transformation matrix. The result is that the parameters of each object can now be
+  expressed with significant digits within the range of single precision floats.</li>
+  <li>For each tile, generate an inverse transformation matrix for the
+  conversion of tile space to source space. This is used as a {{transform}} attribute of the element for the tile of the next step. </li>
+  <li>Arrange each tile as a separate user coordinate system in SVG. For example,
+  the tiles may be expressed a {{g}} elements
+  with an {{transform}} attribute having the transformation matrix generated by the previous step.
+  And the split graphics generated by the third step will be placed as children of it. </li>
+
+</ol>
+
+<table>
+  <caption>
+    Example Splitting vector graphics bigger than a tile
+  </caption>
+  <tr>
+    <th>Before Splitting</th>
+    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+    <th>After Splitting</th>
+  </tr>
+  <tr>
+    <td><img alt="Example Before splitting"
+    src="images/conform/betterPrecisionTiling3.png" width="200"></td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td><img alt="Example After Splitting"
+    src="images/conform/betterPrecisionTiling4.png" width="200"></td>
+  </tr>
+</table>
+
+<table >
+  <caption>
+    Example Improving Significant Digits
+  </caption>
+  <tr>
+    <th>Step 1 : Splitting content</th>
+    <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+    <th>Step 5 : Arranging tiles with smaller effective digits and appropriate translate</th>
+  </tr>
+  <tr>
+    <td><img alt="Example Split content into tiles"
+    src="images/conform/betterPrecisionTiling1.png" width="400"></td>
+    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td><img alt="Example Translate and assign split contents"
+    src="images/conform/betterPrecisionTiling2.png" width="400"></td>
+  </tr>
+  <tr><td colspan="3">This example provides the significant figure of eight digits using tiles with the user coordinate system of seven digits.</td></tr>
+</table>
