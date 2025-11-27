@@ -916,6 +916,12 @@ or frame to be replaced by the W3C home page.</p>
 </dl>
 
 
+    Note: The SVG Working Group is waiting on the HTML specification 
+    to clarify the processing model and algorithms for these 
+    attributes. The attributes should follow the definitions and algorithms <a href="https://html.spec.whatwg.org/multipage/links.html#following-hyperlinks-2">as specified in the HTML 
+    specification</a>. For more details on the ongoing clarification effort, see the <a href="https://github.com/whatwg/html/issues/11936">HTML specification issue on processing model and algorithms
+    for the HTML A element</a>.
+
 
 <h3 id="LinksIntoSVG">Linking into SVG content: URL fragments and SVG views</h3>
 
