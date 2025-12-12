@@ -1,0 +1,3690 @@
+<h2>Coordinate Systems, Transformations and Units</h2>
+
+<h3 id="Introduction">Introduction</h3>
+<div class="ready-for-wider-review">
+
+<p>All SVG content is drawn inside
+<dfn id="TermSVGViewport" data-dfn-type="dfn" data-export="">SVG viewports</dfn>.
+Every SVG viewport defines a drawing region characterized by a size
+(width, height), and an origin, measured in abstract
+<dfn id="TermUserUnits" data-dfn-type="dfn" data-export="">user units</dfn>.</p>
+
+<p class="note">Note that the term SVG viewport is distinct from the
+<a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#viewport">"viewport"</a>
+term used in CSS.</p>
+
+<p>The <dfn id="TermInitialViewport" data-dfn-type="dfn" data-export="">initial viewport</dfn> is a top-level
+SVG viewport that establishes a mapping between the coordinate system used
+by the containing environment (for example, CSS pixels in web browsers)
+and <a>user units</a>. Establishing an initial viewport is described in more
+detail in <a href="#ViewportSpace">The initial viewport</a>.</p>
+
+<p>SVG viewports are only established by elements. See
+<a href="#EstablishingANewSVGViewport">Establishing a new SVG viewport</a> for information
+on which elements generate viewports.</p>
+
+<p>Each SVG viewport generates a
+<dfn id="TermViewportCoordinateSystem" data-dfn-type="dfn" data-export="">viewport coordinate system</dfn>
+and a <dfn id="TermUserCoordinateSystem" data-dfn-type="dfn" data-export="">user coordinate system</dfn>, initially identical.
+Providing a {{viewBox}} on a viewport's element transforms the user coordinate system
+relative to the viewport coordinate system as described in
+The {{viewBox}} attribute. Child elements of a viewport can
+further modify the <a>user coordinate system</a>, for example by specifying
+the {{transform}} property.</p>
+
+<p>SVG viewports can be nested. Percentage units are resolved with reference
+to the user coordinate system of the nearest ancestral viewport-defining element,
+as defined in <a href="#Units">the section on Units</a>.
+Hence, nesting
+SVG viewports provides an opportunity to redefine the meaning of percentage
+units and provide a new reference rectangle for "fitting" a graphic relative
+to a particular rectangular area. The
+<dfn id="TermFurthestAncestorSVGViewport" data-dfn-type="dfn" data-export="">
+furthest ancestral SVG viewport</dfn> is the top most root SVG viewport with
+out leaving the <a>SVG context</a>. An ancestor SVG viewport might not be
+independent of the DOM tree order. E.g. for {{linearGradient}},
+{{radialGradient}}, {{pattern}}, {{mask element}}, {{clipPath}}
+{{symbol}} or {{use}} elements.</p>
+
+<p>An <dfn id="TermSVGContext" data-dfn-type="dfn" data-export="">SVG
+context</dfn> is a document fragment where all elements within the fragment
+have the <a>SVGElement</a> as prototype.</p>
+
+<p>The width, height and origin of SVG viewports is established by a negotiation
+process between the SVG document fragment generating the SVG viewport, and the
+parent of that fragment (whether real or implicit). See
+<a href="#EstablishingANewSVGViewport">Establishing a new SVG viewport</a> for a
+description of this negotiation process.</p>
+
+<p>By default, a nested SVG viewport's <a>viewport coordinate system</a> is equivalent to the local
+coordinate system of the parent element, translated by the origin of the SVG viewport's
+element. However, a {{transform}} property on an SVG viewport's element will modify
+the <a>viewport coordinate system</a> relative to the parent element's user coordinate system.</p>
+
+<p>Abstractly, all SVG viewports are embedded in the
+<dfn id="TermCanvas" data-dfn-type="dfn" data-export="">canvas</dfn>,
+a drawing region that is infinitely large in all relevant dimensions.</p>
+
+<h3 id="ComputingAViewportsTransform">Computing the equivalent transform of an SVG viewport</h3>
+
+<p>This process converts the min-x, min-y, width and height values of a viewBox attribute,
+the position and size of the element on which the viewBox attribute is defined,
+and the value of the preserveAspectRatio attribute on that element into a translation and
+a scale that is applied to content contained by the element.</p>
+
+<ol class='algorithm'>
+  <li>Let <var>vb-x</var>, <var>vb-y</var>, <var>vb-width</var>, <var>vb-height</var> be
+  the min-x, min-y, width and height values of the viewBox attribute respectively.</li>
+  <li>Let <var>e-x</var>, <var>e-y</var>, <var>e-width</var>, <var>e-height</var> be
+  the position and size of the element respectively.</li>
+  <li>Let <var>align</var> be the align value of preserveAspectRatio, or 'xMidYMid' if
+  preserveAspectRatio is not defined.</li>
+  <li>Let <var>meetOrSlice</var> be the meetOrSlice value of preserveAspectRatio, or 'meet'
+  if preserveAspectRatio is not defined or if meetOrSlice is missing from this value.</li>
+  <li>Initialize <var>scale-x</var> to <var>e-width</var>/<var>vb-width</var>.</li>
+  <li>Initialize <var>scale-y</var> to <var>e-height</var>/<var>vb-height</var>.</li>
+  <li>If <var>align</var> is not 'none' and <var>meetOrSlice</var> is 'meet', set
+  the larger of <var>scale-x</var> and <var>scale-y</var> to the smaller.</li>
+  <li>Otherwise, if <var>align</var> is not 'none' and <var>meetOrSlice</var> is 'slice',
+  set the smaller of <var>scale-x</var> and <var>scale-y</var> to the larger.</li>
+  <li>Initialize <var>translate-x</var> to <var>e-x</var> - (<var>vb-x</var> * scale-x).</li>
+  <li>Initialize <var>translate-y</var> to <var>e-y</var> - (<var>vb-y</var> * scale-y)</li>
+  <li>If <var>align</var> contains 'xMid', add
+  (<var>e-width</var> - <var>vb-width</var> * <var>scale-x</var>) / 2 to <var>translate-x</var>.</li>
+  <li>If <var>align</var> contains 'xMax', add
+  (<var>e-width</var> - <var>vb-width</var> * <var>scale-x</var>) to <var>translate-x</var>.</li>
+  <li>If <var>align</var> contains 'yMid', add
+  (<var>e-height</var> - <var>vb-height</var> * <var>scale-y</var>) / 2 to <var>translate-y</var>.</li>
+  <li>If <var>align</var> contains 'yMax', add
+  (<var>e-height</var> - <var>vb-height</var> * <var>scale-y</var>) to <var>translate-y.</var></li>
+</ol>
+
+<p>The transform applied to content contained by the element is given by
+translate(<var>translate-x</var>, <var>translate-y</var>) scale(<var>scale-x</var>, <var>scale-y</var>).</p>
+
+</div>
+
+<h3 id="ViewportSpace">The initial viewport</h3>
+
+<p>The initial viewport's width, must be the value of the {{width}}
+presentation attribute on the <a>outermost svg element</a>, unless the
+following conditions are met:</p>
+
+<ul>
+  <li>the SVG content is a separately stored resource that is
+  embedded by reference (such as the <span
+  class="element-name">object</span> element in HTML), or the SVG
+  content is embedded inline within a containing document;</li>
+
+  <li>and the referencing element or containing document is
+  styled using CSS [<a href="refs.html#ref-css2">CSS2</a>];</li>
+
+  <li>and there are <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#positioning-scheme">CSS-compatible positioning properties</a>
+  ([<a href="refs.html#ref-css2">CSS2</a>], section 9.3)
+   specified on the referencing element (e.g.,
+  the <span class="element-name">object</span> element) or on
+  the containing document's <a>outermost svg element</a> that are sufficient
+  to establish the width of the viewport.</li>
+</ul>
+
+<p>Under these conditions, the viewport's width must be established via the
+positioning properties.</p>
+
+<p>Similarly, if there are
+<a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/visuren.html#positioning-scheme">positioning properties</a>
+specified on the referencing element or on the
+<a>outermost svg element</a> that are
+sufficient to establish the height of the viewport, then these
+positioning properties must establish the viewport's height;
+otherwise, the initial viewport's height must be the value of the {{height}}
+presentation attribute on the <a>outermost svg element</a>.</p>
+
+<p>If the {{width}} or {{height}}
+presentation attributes on the <a>outermost svg element</a>
+are in <a>user units</a> (i.e., no unit
+identifier has been provided), then the value is assumed to be
+equivalent to the same number of "px" units (see <a
+href="coords.html#Units">Units</a>).</p>
+
+<div class="example">
+<p>In the following example, an SVG graphic is embedded inline
+within a parent XML document which is formatted using CSS
+layout rules. Since CSS positioning properties are not provided
+on the <a>outermost svg element</a>,
+the <span class="attr-value">width="100px"</span> and
+<span class="attr-value">height="200px"</span> attributes
+determine the size of the initial viewport:</p>
+
+<pre>
+&lt;?xml version="1.0" standalone="yes"?&gt;
+&lt;parent xmlns="http://some.url"&gt;
+
+   &lt;!-- SVG graphic --&gt;
+   &lt;svg xmlns='http://www.w3.org/2000/svg'
+      width="100px" height="200px"&gt;
+      &lt;path d="M100,100 Q200,400,300,100"/&gt;
+      &lt;!-- rest of SVG graphic would go here --&gt;
+   &lt;/svg&gt;
+
+&lt;/parent&gt;
+</pre>
+</div>
+
+<h3 id="InitialCoordinateSystem">The initial coordinate system</h3>
+
+<p>For the <a>outermost svg element</a>, the SVG user
+agent must determine an initial <a>viewport coordinate system</a> and an
+initial <a>user coordinate system</a> such that the
+two coordinates systems are identical. The origin of both
+coordinate systems must be at the origin of the SVG viewport, and one
+unit in the initial coordinate system must equal one
+<a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/syndata.html#length-units">CSS 2.1 px</a>
+([<a href="refs.html#ref-css2">CSS2</a>], section 4.3.2)
+in the SVG viewport.
+
+In stand-alone SVG documents and in SVG document fragments embedded
+(by reference or inline) within parent documents where the parent's
+layout is determined by CSS [<a href="refs.html#ref-css2">CSS2</a>],
+the initial viewport
+coordinate system (and therefore the initial user coordinate
+system) must have its origin at the top/left of the viewport, with
+the positive x-axis pointing towards the right, the positive
+y-axis pointing down, and text rendered with an "upright"
+orientation, which means glyphs are oriented such that Roman
+characters and full-size ideographic characters for Asian
+scripts have the top edge of the corresponding glyphs oriented
+upwards and the right edge of the corresponding glyphs oriented
+to the right.</p>
+
+<p>If the SVG implementation is part of a user agent which
+supports styling documents using CSS 2.1 compatible
+<em>px</em> units, then the SVG user agent should set its
+initial value for the size of a <em>px</em> unit in real world
+units to match the value used for other styling operations;
+otherwise, if the user agent can determine the size of a
+<em>px</em> unit from its environment, it should use that
+value; otherwise, it should choose an appropriate size for one
+<em>px</em> unit. In all cases, the size of a <em>px</em> must
+be in conformance with <a href="https://www.w3.org/TR/CSS2/syndata.html#length-units">the rules described in CSS 2.1</a>
+([<a href="refs.html#ref-css2">CSS2</a>], section 4.3.2).</p>
+
+<p id="ExampleInitialCoords"><span class="example-ref">Example InitialCoords</span> below
+shows that the initial coordinate system has the origin at the
+top/left with the x-axis pointing to the right and the y-axis
+pointing down. The initial user coordinate system has one user
+unit equal to the parent (implicit or explicit) user agent's
+"pixel".</p>
+
+<pre class=include-raw>
+path: images/coords/InitialCoords.svg
+</pre>
+<pre class=include>
+path: images/coords/InitialCoords.svg
+</pre>
+
+<div class="ready-for-wider-review">
+
+<h3 id="TransformProperty">The <span class="property">transform</span> property</h3>
+
+<p>
+User agents must support the {{transform}} property and presentation attribute
+as defined in [<a href="refs.html#ref-css-transforms-1">css-transforms-1</a>].</p>
+
+<h3 id="ViewBoxAttribute">The <span class="attr-name">$1</span> attribute</h3>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="TermViewBox" data-dfn-type="element-attr" data-dfn-for="svg" data-export="">viewBox</dfn></td>
+        <td>[<span class="attr-value">&lt;min-x&gt;</span>,?
+            <span class="attr-value">&lt;min-y&gt;</span>,?
+            <span class="attr-value">&lt;width&gt;</span>,?
+            <span class="attr-value">&lt;height&gt;</span>]</td>
+        <td>As if not specified.</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <pre>&lt;min-x&gt;, &lt;min-y&gt;, &lt;width&gt;, &lt;height&gt; = <a>&lt;number&gt;</a></pre>
+  </dd>
+</dl>
+
+<p class="annotation">Transform on the {{svg}} element is a bit special due to the {{viewBox}} attribute. The transform should be applied as if the {{svg}} had a parent element with that transform set.
+<br><br><a href="http://www.w3.org/2015/01/08-svg-minutes.html">RESOLUTION: transform property applies conceptually to the outside of the `svg` element and there is no difference between
+presentation attribute and style property</a> (in terms of the visual result).</p>
+
+<p class="note">The {{viewBox}} attribute, in conjunction with the
+{{preserveAspectRatio}} attribute, provides the capability to
+stretch an SVG viewport to fit a particular container element.</p>
+
+<p>The value of the {{viewBox}} attribute is a list of four
+numbers <span class="attr-value">&lt;min-x&gt;</span>, <span
+class="attr-value">&lt;min-y&gt;</span>, <span
+class="attr-value">&lt;width&gt;</span> and <span
+class="attr-value">&lt;height&gt;</span>, separated by
+whitespace and/or a comma, that specify a rectangle in user
+space that should be mapped to the bounds of the SVG viewport
+established by the given element, taking into account the
+{{preserveAspectRatio}} attribute.
+The presence of the {{viewBox}} attribute results in a transformation
+being applied to the viewport coordinate system as described in
+<a href="#ComputingAViewportsTransform">Computing the equivalent transform of an SVG viewport</a>.
+</p>
+
+<p>A negative value for <span class="attr-value">&lt;width&gt;</span> or
+<span class="attr-value">&lt;height&gt;</span> is an error and invalidates
+the {{viewBox}} attribute. A value of zero disables rendering of the
+element.</p>
+
+<div class="example">
+<p id="ExampleViewBox"><span class="example-ref">Example ViewBox</span> illustrates
+the use of the {{viewBox}} attribute
+on the <a>outermost svg element</a> to specify that
+the SVG content should stretch to fit bounds of the
+SVG viewport.</p>
+
+<pre>
+&lt;?xml version="1.0" standalone="no"?&gt;
+&lt;svg width="300px" height="200px"
+     viewBox="0 0 1500 1000" preserveAspectRatio="none"
+     xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;desc&gt;Example ViewBox - uses the viewBox
+   attribute to automatically create an initial user coordinate
+   system which causes the graphic to scale to fit into the
+   SVG viewport no matter what size the SVG viewport is.&lt;/desc&gt;
+  &lt;!-- This rectangle goes from (0,0) to (1500,1000) in user coordinate system.
+       Because of the viewBox attribute above,
+       the rectangle will end up filling the entire area
+       reserved for the SVG content. --&gt;
+  &lt;rect x="0" y="0" width="1500" height="1000"
+        fill="yellow" stroke="blue" stroke-width="12"  /&gt;
+  &lt;!-- A large, red triangle --&gt;
+  &lt;path fill="red"  d="M 750,100 L 250,900 L 1250,900 z"/&gt;
+  &lt;!-- A text string that spans most of the SVG viewport --&gt;
+  &lt;text x="100" y="600" font-size="200" font-family="Verdana" &gt;
+    Stretch to fit
+  &lt;/text&gt;
+&lt;/svg&gt;
+</pre>
+
+<table >
+  <caption>
+    Example ViewBox
+  </caption>
+  <tr>
+    <th>Rendered into
+     SVG viewport with
+     width=300px,
+     height=200px
+    <th>Rendered into
+     SVG viewport with
+     width=150px,
+     height=200px
+  </tr>
+  <tr>
+    <td><img alt="Example ViewBox - stretch to fit 300 by 200"
+    src="images/coords/ViewBox.png" width="300"
+    height="200"></td>
+    <td><img alt="Example ViewBox - stretch to fit 150 by 200"
+    src="images/coords/ViewBox-Width150.png" width="150"
+    height="200"></td>
+  </tr>
+</table>
+
+<p class="view-as-svg"><a href="images/coords/ViewBox.svg">View
+this example as SVG (SVG-enabled browsers only)</a><br>
+ &nbsp;</p>
+
+<p>The effect of the {{viewBox}}
+attribute is that the user agent automatically supplies the
+appropriate transformation matrix to map the specified
+rectangle in user coordinate system to the bounds of a designated region
+(often, the SVG viewport). To achieve the effect of the example on
+the left, with SVG viewport dimensions of 300 by 200 pixels, the
+user agent needs to automatically insert a transformation which
+scales both X and Y by 0.2. The effect is equivalent to having
+an SVG viewport of size 300px by 200px and the following
+supplemental transformation in the document, as follows:</p>
+
+<pre>
+&lt;?xml version="1.0" standalone="no"?&gt;
+&lt;svg width="300px" height="200px"
+     xmlns="http://www.w3.org/2000/svg"&gt;
+  <strong>&lt;g transform="scale(0.2)"&gt;</strong>
+    &lt;!-- Rest of document goes here --&gt;
+  <strong>&lt;/g&gt;</strong>
+&lt;/svg&gt;
+</pre>
+
+<p>To achieve the effect of the example on the right, with
+SVG viewport dimensions of 150 by 200 pixels, the user agent needs
+to automatically insert a transformation which scales X by 0.1
+and Y by 0.2. The effect is equivalent to having an SVG viewport of
+size 150px by 200px and the following supplemental
+transformation in the document, as follows:</p>
+
+<pre>
+&lt;?xml version="1.0" standalone="no"?&gt;
+&lt;svg width="150px" height="200px"
+     xmlns="http://www.w3.org/2000/svg"&gt;
+  <strong>&lt;g transform="scale(0.1 0.2)"&gt;</strong>
+    &lt;!-- Rest of document goes here --&gt;
+  <strong>&lt;/g&gt;</strong>
+&lt;/svg&gt;
+</pre>
+</div>
+
+<div class="note">
+<p>Note that in some cases the user agent will need to supply a
+<strong>translate</strong> transformation in addition to a
+<strong>scale</strong> transformation. For example, on an
+<a>outermost svg element</a>, a
+<strong>translate</strong> transformation will be needed if the
+{{viewBox}} attributes specifies
+values other than zero for <span
+class="attr-value">&lt;min-x&gt;</span> or <span
+class="attr-value">&lt;min-y&gt;</span>.</p>
+</div>
+
+<p>If both {{transform}} (or {{pattern/patternTransform}})
+and {{viewBox}} are applied to an element two new coordinate
+systems are established. {{transform}} establishes the first new
+coordinate system for the element. {{viewBox}}
+establishes a second coordinate system for all descendants of
+the element. The first coordinate system is post-multiplied by the
+second coordinate system.</p>
+
+<p id="ViewBoxAttributeEffectOnSiblingAttributes">Unlike the
+{{transform}} property,
+the automatic transformation that is created
+due to a {{viewBox}} does not affect
+the <span class="attr-name">x</span>, <span
+class="attr-name">y</span>, <span
+class="attr-name">width</span> and <span
+class="attr-name">height</span> attributes (or in the case of
+the {{marker element}} element, the
+{{marker/markerWidth}} and {{marker/markerHeight}} attributes) on the
+element with the {{viewBox}}
+attribute. Thus, in the example above which shows an
+{{svg}} element which has
+{{width}} and {{height}} presentation attributes
+and a {{viewBox}} attribute,
+the {{width}} and {{height}}
+represent values in the coordinate system that exists <em>before</em> the
+{{viewBox}} transformation is applied. On
+the other hand, like the {{transform}} property, it does
+establish a new coordinate system for all other attributes and
+for descendant elements.</p>
+
+<h3 id="PreserveAspectRatioAttribute">The <span class="attr-name">preserveAspectRatio</span> attribute</h3>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="TermPreserveAspectRatio" data-dfn-type="element-attr" data-dfn-for="svg" data-export="">preserveAspectRatio</dfn></td>
+        <td><span class="attr-value">&lt;align&gt;</span> <span class="attr-value">&lt;meetOrSlice&gt;</span>?</td>
+        <td>xMidYMid meet</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <pre>&lt;align&gt; =
+    none
+    | xMinYMin | xMidYMin | xMaxYMin
+    | xMinYMid | xMidYMid | xMaxYMid
+    | xMinYMax | xMidYMax | xMaxYMax</pre>
+    <pre>&lt;meetOrSlice&gt; = meet | slice</pre>
+    <p>Indicates whether or not to force uniform scaling. Applies to all
+    elements that establish a new SVG viewport (see <a
+    href="coords.html#ElementsThatEstablishViewports">elements that
+    establish SVG viewports</a>), plus the
+    {{image}},
+    {{marker element}},
+    {{pattern}} and
+    {{view}} elements</p>
+  </dd>
+</dl>
+
+<p>In some cases, typically when using the
+{{viewBox}} attribute, it is desirable that the graphics stretch to
+fit non-uniformly to take up the
+entire SVG viewport. In other cases, it is desirable that uniform
+scaling be used for the purposes of preserving the aspect ratio
+of the graphics.</p>
+
+<p>For elements that establish a new SVG viewport (see <a
+href="coords.html#ElementsThatEstablishViewports">elements that
+establish SVG viewports</a>), plus the
+{{marker element}},
+{{pattern}} and
+{{view}} elements,
+{{preserveAspectRatio}} only applies when
+a value has been provided for {{viewBox}}
+on the same element. For these elements, if attribute
+{{viewBox}} is not provided, then
+{{preserveAspectRatio}} is ignored.</p>
+
+<p>For {{image}} elements,
+{{preserveAspectRatio}} indicates how
+referenced images should be fitted with respect to the
+reference rectangle and whether the aspect ratio of the
+referenced image should be preserved with respect to the
+current user coordinate system.</p>
+
+<p id="DataTypeAlign">The <span class="attr-value">&lt;align&gt;</span> parameter
+indicates whether to force uniform scaling and, if so, the
+alignment method to use in case the aspect ratio of the {{viewBox}}
+ doesn't match the aspect ratio of the SVG viewport. The <span
+class="attr-value">&lt;align&gt;</span> parameter must be one
+of the following strings:</p>
+
+<ul>
+  <li><span class="attr-value">none</span> - Do not force
+  uniform scaling. Scale the graphic content of the given
+  element non-uniformly if necessary such that the element's
+  bounding box exactly matches the SVG viewport rectangle.<br>
+   (Note: if <span class="attr-value">&lt;align&gt;</span> is
+  <span class="attr-value">none</span>, then the optional <span
+  class="attr-value">&lt;meetOrSlice&gt;</span> value is
+  ignored.)</li>
+
+  <li><span class="attr-value">xMinYMin</span> - Force uniform
+  scaling.<br>
+   Align the <span class="attr-value">&lt;min-x&gt;</span> of
+  the element's {{viewBox}} with the smallest X
+  value of the SVG viewport.<br>
+   Align the <span class="attr-value">&lt;min-y&gt;</span> of
+  the element's {{viewBox}} with the smallest Y
+  value of the SVG viewport.</li>
+
+  <li><span class="attr-value">xMidYMin</span> - Force uniform
+  scaling.<br>
+   Align the midpoint X value of the element's
+   {{viewBox}} with the midpoint X value of the SVG viewport.<br>
+   Align the <span class="attr-value">&lt;min-y&gt;</span> of
+  the element's {{viewBox}} with the smallest Y
+  value of the SVG viewport.</li>
+
+  <li><span class="attr-value">xMaxYMin</span> - Force uniform
+  scaling.<br>
+   Align the <span
+  class="attr-value">&lt;min-x&gt;+&lt;width&gt;</span> of the
+  element's {{viewBox}} with the maximum X value
+  of the SVG viewport.<br>
+   Align the <span class="attr-value">&lt;min-y&gt;</span> of
+  the element's {{viewBox}} with the smallest Y
+  value of the SVG viewport.</li>
+
+  <li><span class="attr-value">xMinYMid</span> - Force uniform
+  scaling.<br>
+   Align the <span class="attr-value">&lt;min-x&gt;</span> of
+  the element's {{viewBox}} with the smallest X
+  value of the SVG viewport.<br>
+   Align the midpoint Y value of the element's {{viewBox}}
+   with the midpoint Y
+  value of the SVG viewport.</li>
+
+  <li><span class="attr-value">xMidYMid</span> (the <a>initial value</a>) -
+  Force uniform scaling.<br>
+   Align the midpoint X value of the element's {{viewBox}}
+   with the midpoint X value of the SVG viewport.<br>
+   Align the midpoint Y value of the element's {{viewBox}}
+   with the midpoint Y value of the SVG viewport.</li>
+
+  <li><span class="attr-value">xMaxYMid</span> - Force uniform
+  scaling.<br>
+   Align the <span
+  class="attr-value">&lt;min-x&gt;+&lt;width&gt;</span> of the
+  element's {{viewBox}}
+   with the maximum X value of the SVG viewport.<br>
+   Align the midpoint Y value of the element's {{viewBox}}
+   with the midpoint Y
+  value of the SVG viewport.</li>
+
+  <li><span class="attr-value">xMinYMax</span> - Force uniform
+  scaling.<br>
+   Align the <span class="attr-value">&lt;min-x&gt;</span> of
+  the element's {{viewBox}} with the smallest X
+  value of the SVG viewport.<br>
+   Align the <span
+  class="attr-value">&lt;min-y&gt;+&lt;height&gt;</span> of the
+  element's {{viewBox}} with the maximum Y value
+  of the SVG viewport.</li>
+
+  <li><span class="attr-value">xMidYMax</span> - Force uniform
+  scaling.<br>
+   Align the midpoint X value of the element's {{viewBox}}
+   with the midpoint X value of the SVG viewport.<br>
+   Align the <span
+  class="attr-value">&lt;min-y&gt;+&lt;height&gt;</span> of the
+  element's {{viewBox}} with the maximum Y value
+  of the SVG viewport.</li>
+
+  <li><span class="attr-value">xMaxYMax</span> - Force uniform
+  scaling.<br>
+   Align the <span
+  class="attr-value">&lt;min-x&gt;+&lt;width&gt;</span> of the
+  element's {{viewBox}} with the maximum X value
+  of the SVG viewport.<br>
+   Align the <span
+  class="attr-value">&lt;min-y&gt;+&lt;height&gt;</span> of the
+  element's {{viewBox}} with the maximum Y value
+  of the SVG viewport.</li>
+</ul>
+
+<p>The <span class="attr-value">&lt;meetOrSlice&gt;</span>
+parameter is optional and, if provided, is separated from the
+<span class="attr-value">&lt;align&gt;</span> value by one or
+more spaces and then must be one of the following strings:</p>
+
+<ul>
+  <li>
+    <p><span class="attr-value">meet</span> (the default) - Scale
+    the graphic such that:</p>
+
+    <ul>
+      <li>aspect ratio is preserved</li>
+      <li>the entire {{viewBox}} is visible within
+      the SVG viewport</li>
+      <li>the {{viewBox}} is scaled up as much
+      as possible, while still meeting the other criteria</li>
+    </ul>
+
+    <p>In this case, if the aspect ratio of the graphic does not
+    match the SVG viewport, some of the SVG viewport will extend beyond
+    the bounds of the {{viewBox}} (i.e., the area into
+    which the {{viewBox}} will draw will be
+    smaller than the SVG viewport).</p>
+  </li>
+
+  <li>
+    <p><span class="attr-value">slice</span> - Scale the graphic
+    such that:</p>
+
+    <ul>
+      <li>aspect ratio is preserved</li>
+      <li>the entire SVG viewport is covered by the {{viewBox}}</li>
+      <li>the {{viewBox}} is scaled down as
+      much as possible, while still meeting the other
+      criteria</li>
+    </ul>
+
+    <p>In this case, if the aspect ratio of the {{viewBox}} does not match the
+    SVG viewport, some of the {{viewBox}} will extend beyond the
+    bounds of the SVG viewport (i.e., the area into which the {{viewBox}} will draw is larger
+    than the SVG viewport).</p>
+  </li>
+</ul>
+
+<div class="example">
+<p id="ExamplePreserveAspectRatio"><span class="example-ref">Example PreserveAspectRatio</span>
+illustrates the various options on {{preserveAspectRatio}}.
+The example creates several new SVG viewports by
+including {{svg}} sub-elements embedded
+inside the <a>outermost svg element</a> (see <a
+href="coords.html#EstablishingANewSVGViewport">Establishing a new
+SVG viewport</a>).</p>
+
+<pre class=include-raw>
+path: images/coords/PreserveAspectRatio.svg
+</pre>
+<pre class=include>
+path: images/coords/PreserveAspectRatio.svg
+</pre>
+
+<div class="figure">
+<img alt="Example PreserveAspectRatio — demonstrate available options" src="images/coords/PreserveAspectRatio.png">
+<p class="caption">Example PreserveAspectRatio</p></div>
+</div>
+
+<h3 id="EstablishingANewSVGViewport">Establishing a new SVG viewport</h3>
+
+<p>Including an {{svg}} element inside SVG content
+creates a new SVG viewport into which all contained
+graphics are drawn; this implicitly establishes both
+a new viewport coordinate system and a new user coordinate system.
+Additionally, there is a new meaning for percentage units therein,
+because a new SVG viewport has been established
+(see <a href="coords.html#Units">Units</a>).</p>
+
+<p>The bounds of the new SVG viewport are defined by the <span
+class="attr-name">x</span>, <span class="attr-name">y</span>,
+<span class="attr-name">width</span> and <span
+class="attr-name">height</span> attributes on the element
+establishing the new SVG viewport, such as an {{svg}} element. Both the new
+viewport coordinate system and the new user coordinate system
+have their origins at (<span class="attr-name">x</span>, <span
+class="attr-name">y</span>), where <span
+class="attr-name">x</span> and <span class="attr-name">y</span>
+represent the value of the corresponding attributes on the
+element establishing the SVG viewport. The orientation of the new
+viewport coordinate system and the new user coordinate system
+correspond to the orientation of the current user coordinate
+system for the element establishing the SVG viewport. A single unit
+in the new viewport coordinate system and the new user
+coordinate system are the same size as a single unit in the
+current user coordinate system for the element establishing the SVG
+viewport.</p>
+
+<div class="example">
+<p>Here is an example:</p>
+
+<pre>
+&lt;?xml version="1.0" standalone="no"?&gt;
+&lt;svg width="4in" height="3in"
+     xmlns="http://www.w3.org/2000/svg"&gt;
+  &lt;desc&gt;This SVG drawing embeds another one,
+    thus establishing a new SVG viewport
+  &lt;/desc&gt;
+  &lt;!-- The following statement establishing a new SVG viewport
+       and renders SVG drawing B into that SVG viewport --&gt;
+  &lt;svg x="25%" y="25%" width="50%" height="50%"&gt;
+     &lt;!-- drawing B goes here --&gt;
+  &lt;/svg&gt;
+&lt;/svg&gt;
+</pre>
+
+<p>For an extensive example of creating new SVG viewports, see <a
+href="coords.html#ExamplePreserveAspectRatio">Example
+PreserveAspectRatio</a>.</p>
+</div>
+
+<p id="ElementsThatEstablishViewports">The following elements establish new SVG viewports:</p>
+
+<ul>
+  <li>The {{svg}} element</li>
+
+  <li>A {{symbol}} element
+    that is instanced by a {{use}} element.</li>
+</ul>
+
+<p class="note">
+  For historical reasons,
+  the {{pattern}} and {{marker element}} elements
+  do not create a new viewport,
+  despite accepting a {{viewBox}} attribute.
+  Neither do the {{clipPath}} or {{mask element}} elements.
+  Percentage lengths within the content of these elements
+  are not proportional to the dimensions of the graphical effect region.
+</p>
+
+<p>
+  The {{foreignObject}} element establishes a new
+  <a href="https://www.w3.org/TR/css-position-3/#def-cb">CSS containing block</a>
+  for its child content.
+  This has some effects similar to a new viewport,
+  resetting the scope of layout for child content.
+  However, in order to render SVG elements that are descendents of {{foreignObject}},
+  a new {{svg}} element must establish an SVG document fragment and SVG viewport.
+</p>
+<p>
+  An {{image}} creates a new
+  <a href="https://www.w3.org/TR/css-position-3/#vp">document viewport</a>
+  for the referenced document.
+  If the referenced document is a SVG file, it will of course establish its own SVG viewport.
+</p>
+
+<p>Whether a new SVG viewport also establishes a new additional
+clipping path is determined by the value of the {{overflow}} property on the element
+that establishes the new SVG viewport.</p>
+
+<h3 id="Units">Units</h3>
+
+<p>SVG follows the description and definition of common values and
+units from the CSS Values and Units Module
+[<a href="refs.html#ref-css-values-3">css-values</a>] for attributes,
+presentation attributes and CSS properties. Each attribute and property
+must specify the used component value type. Subsequent or extending
+specifications published by the CSS WG or SVG WG may extend basic data
+types or add new data types.</p>
+
+<p>For <a>&lt;percentage&gt;</a> values that are defined to be relative
+to the size of SVG viewport:</p>
+
+<ul class='ready-for-wider-review'>
+  <li>For any x-coordinate value or width value expressed as a percentage of the
+  <a>SVG viewport</a>, the value to use must be the percentage, in user
+  units, of the width parameter of the {{viewBox}} applied to that viewport.
+  If no {{viewBox}} is specified, then the value to use must be the percentage, in
+  user units, of the width of the <a>SVG viewport</a>.</li>
+  <li>For any y-coordinate value or height value expressed as a percentage of the
+  <a>SVG viewport</a>, the value to use must be the percentage, in user
+  units, of the height parameter of the {{viewBox}} applied to that viewport.
+  If no {{viewBox}} is specified, then the value to use must be the percentage, in
+  user units, of the height of the <a>SVG viewport</a>.</li>
+  <li id="Units_viewport_percentage">For any other length value expressed as a
+  percentage of the <a>SVG viewport</a>, the percentage must be calculated as a
+  percentage of the normalized diagonal of the {{viewBox}} applied to that viewport.
+  If no {{viewBox}} is specified, then the normalized diagonal of the <a>SVG viewport</a>
+  must be used. The normalized diagonal length must be calculated with
+  <code>sqrt((<em>width</em>)**2 + (<em>height</em>)**2)/sqrt(2)</code>.</li>
+</ul>
+
+<div class="example">
+<p id="ExampleUnits"><span class="example-ref">Example Units</span> below
+illustrates some of the processing rules for different types of
+units.</p>
+
+<pre class=include-raw>
+path: images/coords/Units.svg
+</pre>
+<pre class=include>
+path: images/coords/Units.svg
+</pre>
+
+<div class="figure"><img alt="Example Units — demonstrate available options" src="images/coords/Units.png"><p class="caption">Example Units</p></div>
+
+<p>The three rectangles on the left demonstrate the use of one
+of the absolute unit identifiers, the "in" unit (inch). CSS defines 1
+inch to be equal to 96 pixels. Therefore, the topmost rectangle, which is
+specified in inches, is exactly the same size as the middle
+rectangle, which is specified in user units such that there are
+96 user units for each corresponding inch in the topmost
+rectangle. The bottom rectangle of the group illustrates
+what happens when values specified in inches are scaled.</p>
+
+<p>The three rectangles in the middle demonstrate the use of
+one of the relative unit identifiers, the "em" unit. Because
+the {{font-size}} property has been set
+to <span class="prop-value">150</span> on the outermost {{g}} element, each "em" unit is
+equal to 150 user units. The topmost rectangle, which is
+specified in "em" units, is exactly the same size as the middle
+rectangle, which is specified in user units such that there are
+150 user units for each corresponding "em" unit in the topmost
+rectangle. The bottom rectangle of the group illustrates what
+happens when values specified in "em" units are scaled.</p>
+
+<p>The three rectangles on the right demonstrate the use of
+percentages. Note that the width and height of the SVG viewport in
+the user coordinate system for the SVG viewport element (in this
+case, the <a>outermost svg element</a>) are 4000 and
+2000, respectively, because processing the {{viewBox}} attribute results in a
+transformed user coordinate system. The topmost rectangle,
+which is specified in percentage units, is exactly the same
+size as the middle rectangle, which is specified in equivalent
+user units. In particular, note that the {{stroke-width}} property in the
+middle rectangle is set to 1% of the
+<code>sqrt((<em>actual-width</em>)**2 +
+(<em>actual-height</em>)**2) / sqrt(2)</code>, which in this
+case is .01*sqrt(4000*4000+2000*2000)/sqrt(2), or 31.62. The
+bottom rectangle of the group illustrates what happens when
+values specified in percentage units are scaled.</p>
+</div>
+
+<h3 id="BoundingBoxes">Bounding boxes</h3>
+
+<dl class='definitions' data-dfn-type="dfn" data-export="">
+
+  <dt id="TermBoundingBox"><dfn id="bounding-box" data-dfn-type="dfn" data-export="">bounding box</dfn></dt>
+  <dd>
+      <p>The bounding box (or "bbox") of an element is the tightest fitting rectangle
+      aligned with the axes of that element's user coordinate system that entirely
+      encloses it and its descendants.</p>
+  </dd>
+</dl>
+
+<p>Three kinds of bounding boxes can be computed for an element:</p>
+
+<ol>
+  <li>The <dfn id="TermObjectBoundingBox" data-dfn-type="dfn" data-export="">object bounding box</dfn> is the bounding box that contains only
+  an element's geometric shape.  For <a>basic shapes</a>, this is the area
+  that is filled.  Unless otherwise specified, this is what is meant by the
+  unqualified term "bounding box".</li>
+
+  <li>The <dfn id="TermStrokeBoundingBox" data-dfn-type="dfn" data-export="">stroke bounding box</dfn> is the bounding box that contains
+  an element's geometric shape and its <a>stroke shape</a>.</li>
+
+  <li>The <dfn id="TermDecoratedBoundingBox" data-dfn-type="dfn" data-export="">decorated bounding box</dfn> is the bounding box that contains
+  an element's geometric shape, its <a>stroke shape</a> and its <a>markers</a>.</li>
+</ol>
+
+<p class='note'>Note that the values of the {{opacity}}, {{visibility}}, {{fill}},
+{{fill-opacity}}, {{fill-rule}}, {{stroke-dasharray}}
+and {{stroke-dashoffset}} properties on an element have no effect on the
+bounding box of an element.</p>
+
+<p>For curved shapes, the bounding box must enclose all portions of the shape
+along the edge, not just end points. Note that control points for a curve which
+are not defined as lying along the line of the resulting curve (e.g., the second
+coordinate pair of a Cubic Bézier command) must not contribute to the dimensions
+of the bounding box (though those points may fall within the area of the
+bounding box, if they lie within the shape itself, or along or close to the
+curve). For example, control points of a curve that are at a further distance
+than the curve edge, from the non-enclosing side of the curve edge, must be
+excluded from the bounding box.</p>
+
+<div class="figure">
+  <img src="images/coords/bbox01.svg"
+       alt="Image showing the object bounding box of a quadratic Bézier curve.">
+  <p class="caption">The path <span class='attr-value'>'M20,50 L35,100 H120 V50 Q70,10 20,50'</span>
+  is shown in light blue.  On the left, a correct object bounding box of the path is
+  shown.  Note that it does not include the top-most control point of the curve, but
+  it does include all of the blue shape, even the parts that lie outside of the convex hull
+  of the control points.</p>
+</div>
+
+<p>Even if an element is not in the <a>rendering tree</a> – due to it being
+<span class='prop-value'>'display: none'</span>, within a {{defs}}
+element, not usually rendered like a {{symbol}} element or not
+currently present in the document tree – it still has a bounding box.
+A call to <a href="types.html#__svg__SVGGraphicsElement__getBBox">getBBox</a>
+on the element will return the same rectangle as if the element were
+rendered.  However, an element that is not in the <a>rendering tree</a>
+does not contribute to the bounding box of any ancestor element.</p>
+
+<div class='example'>
+  <p>The following example defines a number of elements.  The expected
+  <a>object bounding box</a> for each element with an ID is shown below.</p>
+
+<pre class=include>
+path: images/coords/bbox-calc.svg
+</pre>
+
+  <table class='vert'>
+    <thead>
+      <tr>
+        <th>Element ID</th>
+        <th>Bounding Box Result</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>"<code>defs-1</code>"</td>
+        <td>{0, 0, 0, 0}</td>
+      </tr>
+      <tr>
+        <td>"<code>rect-1</code>"</td>
+        <td>{20, 20, 40, 40}</td>
+      </tr>
+      <tr>
+        <td>"<code>group-1</code>"</td>
+        <td>{30, 30, 40, 40}</td>
+      </tr>
+      <tr>
+        <td>"<code>use-1</code>"</td>
+        <td>{30, 30, 40, 40}</td>
+      </tr>
+      <tr>
+        <td>"<code>group-2</code>"</td>
+        <td>{10, 10, 100, 100}</td>
+      </tr>
+      <tr>
+        <td>"<code>rect-2</code>"</td>
+        <td>{10, 10, 100, 100}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>For <a>text content elements</a>, for the purposes of the bounding box
+calculation, each glyph must be treated as a separate graphics element.
+The calculations must assume that all glyphs occupy the <a>full glyph cell</a>.
+<span class='ready-for-wider-review'>
+The <dfn id="TermFullGlyphCell" data-dfn-type="dfn" data-export="">full glyph cell</dfn> must have width
+equal to the horizontal advance and height equal to the EM box for horizontal
+text. For vertical text that is typeset sideways, the <a>full glyph cell</a> must
+have width equal to the EM box and height equal to the horizontal advance.
+For other vertical text, the <a>full glyph cell</a> must have width equal to the
+EM box and height equal to the vertical advance, or height equal to the height
+of the EM box if no vertical advance is defined in the font.
+</span>
+For example, for horizontal text, the calculations must assume that each glyph
+extends vertically to the full ascent and descent values for the font.  </p>
+<p>Because declarative or scripted animation can change the shape, size, and
+position of an element, the bounding box is mutable. Thus, the bounding box
+for an element shall reflect the current values for the element at the snapshot
+in time at which the bounding box is requested, whether through a script call
+or as part of a declarative or linking syntax.</p>
+
+<p>An element which has zero width, zero height, or both (such as a
+vertical or horizontal line, or a {{rect}} element with a zero
+{{width}} or {{height}}) still has a bounding box, with a
+positive value for the positive dimension, or with <span class='attr-value'>'0'</span>
+for both the width and height if no positive dimension is specified. Similarly,
+subpaths segments of a {{path}} element with zero width and height must be
+included in that element's geometry for the sake of the bounding box.</p>
+
+<p class="ready-for-wider-review">An element with no position specified (such as a
+{{path}} element with a value of <span class='prop-value'>none</span> for the {{d}} property) is positioned at the
+point (0,0) for the purposes of calculating a bounding box.</p>
+
+<p>Note that elements whose DOM object does not derive from <a>SVGGraphicsElement</a>
+(such as gradient elements) do not have a bounding box, and thus have no
+interface to request a bounding box.</p>
+
+<p>Elements in the <a>rendering tree</a> which reference unresolved resources shall
+still have a bounding box, defined by the position and dimensions specified in
+their attributes, or by the <a>initial value</a> for those attributes if no
+values are supplied. For example, the element <code>&lt;use href="#bad" x="10" y="10"/&gt;</code>
+would have a bounding box with an x and y of 10 and a width and height of 0.</p>
+
+<p>The following algorithm defines how to compute a bounding box for a given
+element.  The inputs to the algorithm are:</p>
+
+<ul>
+  <li><var>element</var>, the element we are computing a bounding box for;</li>
+  <li><var>space</var>, a coordinate space in which the bounding box will be computed;</li>
+  <li><var>fill</var>, a boolean indicating whether the bounding box includes the geometry of the element and its descendants;</li>
+  <li><var>stroke</var>, a boolean indicating whether the bounding box includes the stroke of the element and its descendants;</li>
+  <li><var>markers</var>, a boolean indicating whether the bounding box includes the markers of the element and its descendants; and</li>
+  <li><var>clipped</var>, a boolean indicating whether the bounding box is affected by any clipping paths applied to the element and its descendants.</li>
+</ul>
+
+<p>The algorithm to compute the bounding box is as follows, depending on the type of <var>element</var>:</p>
+
+<dl class="switch">
+  <dt>a <a>shape</a></dt>
+  <dt>a <a>text content element</a></dt>
+  <dt>an {{a}} element within a <a>text content element</a></dt>
+  <dd>
+    <ol class="algorithm">
+      <li>Let <var>box</var> be a rectangle initialized to (0, 0, 0, 0).</li>
+      <li>Let <var>fill-shape</var> be the <a>equivalent path</a> of <var>element</var>
+      if it is a <a>shape</a>, or a shape that includes each of the glyph cells corresponding
+      to the text within the elements otherwise.</li>
+      <li>If <var>fill</var> is true, then set <var>box</var> to the tightest rectangle
+      in the coordinate system <var>space</var> that contains <var>fill-shape</var>.
+      <p class='note'>The values of the {{fill}}, {{fill-opacity}} and {{fill-rule}}
+      properties do not affect <var>fill-shape</var>.</p></li>
+      <li>If <var>stroke</var> is true and the element's {{stroke}} is anything other than
+      <span class='prop-value'>none</span>, then set <var>box</var> to be the union of <var>box</var> and the
+      tightest rectangle in coordinate system <var>space</var> that contains the <a href="painting.html#StrokeShape">stroke shape</a> of the
+      element, with the assumption that the element has no dash pattern.
+      <p class='note'>The values of the {{stroke-opacity}}, {{stroke-dasharray}}
+      and {{stroke-dashoffset}} do not affect the calculation of the stroke shape.</p></li>
+      <li>If <var>markers</var> is true, then for each marker <var>marker</var> rendered on the element:
+        <ol>
+          <li>For each descendant <a>graphics element</a> <var>child</var> of the {{marker element}} element
+          that defines <var>marker</var>'s content:
+            <ol>
+              <li>If <var>child</var> has an ancestor element within the {{marker element}} that is
+              <span class='prop-value'>'display: none'</span>, has a failing <a>conditional processing attribute</a>,
+              or is not an {{a}}, {{g}}, {{svg}} or {{switch}} element, then
+              continue to the next descendant <a>graphics element</a>.</li>
+              <li>Otherwise, set <var>box</var> to be the union of <var>box</var> and the result of invoking the
+              algorithm to compute a bounding box with <var>child</var> as the element,
+              <var>space</var> as the target coordinate space, true for <var>fill</var>,
+              <var>stroke</var> and <var>markers</var>, and <var>clipped</var> for <var>clipped</var>.
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+      <li>If <var>clipped</var> is true and the value of {{clip-path}} on <var>element</var> is not
+      <span class='prop-value'>none</span>, then set <var>box</var> to be the tightest rectangle
+      in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
+      <li>Return <var>box</var>.</li>
+    </ol>
+  </dd>
+  <dt id="ContainerElementBoudingBoxComputation">a <a>container element</a></dt>
+  <dt>{{use}}</dt>
+  <dd>
+    <ol class="algorithm">
+      <li>Let <var>box</var> be a rectangle initialized to (0, 0, 0, 0).</li>
+      <li>Let <var>parent</var> be the <a>container element</a> if it is one, or the
+      root of the {{use}} element's shadow tree otherwise.</li>
+      <li>For each descendant <a>graphics element</a> <var>child</var> of <var>parent</var>:
+        <ol>
+          <li>If <var>child</var> is <a>not rendered</a> then
+          continue to the next descendant <a>graphics element</a>.</li>
+          <li>Otherwise, set <var>box</var> to be the union of <var>box</var> and the result of invoking the
+          algorithm to compute a bounding box with <var>child</var> as the element
+          and the same values for <var>space</var>, <var>fill</var>, <var>stroke</var>,
+          <var>markers</var> and <var>clipped</var> as the corresponding algorithm input values.</li>
+        </ol>
+      </li>
+      <li>If <var>clipped</var> is true:
+        <ul>
+          <li>If the value of {{clip-path}} on <var>element</var> is not
+          <span class='prop-value'>none</span>,
+          then set <var>box</var> to be the tightest rectangle
+          in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
+          <li>If the {{overflow}} property applies to the <var>element</var>
+          and does not have a value of <span class='prop-value'>visible</span>,
+          then set <var>box</var> to be the tightest rectangle
+          in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the element's overflow bounds.</li>
+          <li>If the {{clip}} property applies to the <var>element</var>
+          and does not have a value of <span class='prop-value'>auto</span>,
+          then set <var>box</var> to be the tightest rectangle
+          in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the rectangle specified by {{clip}}.</li>
+        </ul>
+      </li>
+      <li>Return <var>box</var>.</li>
+    </ol>
+  </dd>
+  <dt>{{foreignObject}}</dt>
+  <dt>{{image}}</dt>
+  <dd>
+    <ol class="algorithm">
+      <li>Let <var>box</var> be the tightest rectangle in coordinate space <var>space</var> that
+      contains the <a>positioning rectangle</a> defined by the
+      <span class="attr-name">x</span>,
+      <span class="attr-name">y</span>,
+      <span class="attr-name">width</span> and
+      <span class="attr-name">height</span> geometric properties of the element.
+      <p class='note'>The <var>fill</var>, <var>stroke</var> and <var>markers</var>
+      input arguments to this algorithm do not affect the bounding box returned
+      for these elements.</p>
+      </li>
+      <li>If <var>clipped</var> is true and the value of {{clip-path}} on <var>element</var> is not
+      <span class='prop-value'>none</span>, then set <var>box</var> to be the tightest rectangle
+      in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
+      <!--
+      <li>If <var>clipped</var> is true and the value of {{overflow}} on <var>element</var> is not
+      <span class='prop-value'>visible</span>, then set <var>box</var> to be the tightest rectangle
+      in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the element's <a>positioning rectangle</a>.</li>
+      -->
+      <li>Return <var>box</var>.</li>
+    </ol>
+  </dd>
+</dl>
+
+<p>The union <var>box</var> with a value of (0, 0, 0, 0) and an empty shape
+is <var>box</var>.</p>
+
+<p>The <a>object bounding box</a>, <a>stroke bounding box</a> or <a>decorated bounding box</a>
+of an element is the result of invoking the bounding box computation algorithm
+above with the following arguments:
+<var>element</var> is the element itself;
+<var>space</var> is the element's user coordinate system;
+<var>fill</var> is true;
+<var>stroke</var> is true if we are computing the <a>stroke bounding box</a> or <a>decorated bounding box</a>, and false otherwise;
+<var>markers</var> is true if we are computing the <a>decorated bounding box</a>, and false otherwise; and
+<var>clipped</var> is false.</p>
+
+<h3 id="ObjectBoundingBoxUnits">Object bounding box units</h3>
+
+<p id="ObjectBoundingBox">The following elements offer the option of expressing
+coordinate values and lengths as fractions (and, in some cases,
+percentages) of the <a>object bounding box</a>,
+by setting a specified attribute to <span class="attr-value">'objectBoundingBox'</span>
+on the given element:</p>
+
+<table class='vert'>
+  <tr>
+    <th>Element</th>
+    <th>Attribute</th>
+    <th>Effect</th>
+  </tr>
+  <tr>
+      <td>{{linearGradient}}</td>
+      <td>{{gradientUnits}}</td>
+      <td>Indicates that the attributes which specify the
+      gradient vector ({{x1}}, {{y1}}, {{x2}}, {{y2}}) represent fractions or
+      percentages of the bounding box of the element to which the
+      gradient is applied.</td>
+  </tr>
+  <tr>
+      <td>{{radialGradient}}</td>
+      <td>{{gradientUnits}}</td>
+      <td>Indicates that the attributes which specify the center
+      ({{cx}}, {{cy}}), the radius ({{r}}) and focus
+      ({{fx}}, {{fy}}) represent fractions or
+      percentages of the bounding box of the element to which the
+      gradient is applied.</td>
+  </tr>
+    <tr>
+      <td>{{pattern}}</td>
+      <td>{{patternUnits}}</td>
+      <td>Indicates that the attributes which define how to tile the pattern
+      ({{x}}, {{y}}, {{width}}, {{height}}) are
+      established using the bounding box of the element to which the pattern
+      is applied.</td>
+    </tr>
+    <tr>
+      <td>{{pattern}}</td>
+      <td>{{patternContentUnits}}</td>
+      <td>Indicates that the user coordinate system for the
+      contents of the pattern is established using the bounding
+      box of the element to which the pattern is applied.</td>
+    </tr>
+  <tr>
+    <td>{{clipPath}}</td>
+    <td>{{clipPath/clipPathUnits}}</td>
+    <td>Indicates that the user coordinate system for the contents of the
+    {{clipPath}} element is established using the bounding box of the
+    element to which the clipping path is applied.</td>
+  </tr>
+    <tr>
+      <td>{{mask element}}</td>
+      <td>{{maskUnits}}</td>
+      <td>Indicates that the attributes which define the masking region
+      ({{x}}, {{y}}, {{width}}, {{height}}) is
+      established using the bounding box of the element to which the mask
+      is applied.</td>
+    </tr>
+    <tr>
+      <td>{{mask element}}</td>
+      <td>{{maskContentUnits}}</td>
+      <td>Indicates that the user coordinate system for the contents of
+      the {{mask element}} element are established using the bounding box of
+      the element to which the mask is applied.</td>
+    </tr>
+    <tr>
+      <td>{{filter element}}</td>
+      <td>{{filterUnits}}</td>
+      <td>Indicates that the attributes which define the
+      <a>filter effects region</a>
+      ({{x}}, {{y}}, {{width}}, {{height}}) represent
+      fractions or percentages of the bounding box of the element to which
+      the filter is applied.</td>
+    </tr>
+    <tr>
+      <td>{{filter element}}</td>
+      <td>{{primitiveUnits}}</td>
+      <td>Indicates that the various length values within the filter
+      primitives represent fractions or percentages of the bounding box of
+      the element to which the filter is applied.</td>
+    </tr>
+</table>
+
+<p>In the discussion that follows, the term <em>applicable element</em>
+is the element to which the given effect applies. For gradients and
+patterns, the applicable element is the <a>graphics element</a>
+which has its {{fill}} or {{stroke}} property referencing the
+given gradient or pattern. (For special rules concerning <a
+href="text.html">text elements</a>, see the discussion of <a
+href="text.html#ObjectBoundingBoxUnitsTextObjects">object
+bounding box units and text elements</a>.) For clipping paths,
+masks and filters, the applicable element can be either a
+<a>container element</a> or a <a>graphics element</a>.</p>
+
+<p>When keyword <span
+class="attr-value">objectBoundingBox</span> is used, then the
+effect is as if a supplemental transformation matrix were
+inserted into the list of nested transformation matrices to
+create a new user coordinate system.</p>
+
+<p>First, the (<strong>minx</strong>,<strong>miny</strong>) and
+(<strong>maxx</strong>,<strong>maxy</strong>) coordinates are
+determined by the extends of the <a>object bounding box</a> of
+the applicable element.</p>
+
+<p>Then, coordinate (0,0) in the new user coordinate system is
+mapped to the (minx,miny) corner of the tight bounding box
+within the user coordinate system of the applicable element and
+coordinate (1,1) in the new user coordinate system is mapped to
+the (maxx,maxy) corner of the tight bounding box of the
+applicable element. In most situations, the following
+transformation matrix produces the correct effect:</p>
+
+<pre>
+[ (maxx-minx) 0 0 (maxy-miny) minx miny ]
+</pre>
+
+<p>When percentages are used with attributes that define the
+gradient vector, the pattern tile, the filter region or the
+masking region, a percentage represents the same value as the
+corresponding decimal value (e.g., 50% means the same as 0.5).
+If percentages are used within the content of a {{pattern}},
+{{clipPath}}, {{mask element}} or {{filter element}} element, these values
+are treated according to the processing rules for percentages
+as defined in <a href="coords.html#Units">Units</a>.</p>
+
+<p>Any numeric value can be specified for values expressed as a
+fraction or percentage of object bounding box units. In
+particular, fractions less than zero or greater than one and
+percentages less than 0% or greater than 100% can be
+specified.</p>
+
+<p>Keyword <span class="attr-value">objectBoundingBox</span>
+should not be used when the geometry of the applicable element
+has no width or no height, such as the case of a horizontal or
+vertical line, even when the line has actual thickness when
+viewed due to having a non-zero stroke width since stroke width
+is ignored for bounding box calculations. When the geometry of
+the applicable element has no width or height and <span
+class="attr-value">objectBoundingBox</span> is specified, then
+the given effect (e.g., a gradient or a filter) will be
+ignored.</p>
+
+</div>
+
+<div class='ready-for-wider-review'>
+<h3 id="SizingSVGInCSS">Intrinsic sizing properties of SVG content</h3>
+<p>To enable inclusion of SVG in host documents formatted with CSS, a <a>concrete
+object size</a> must be calculated.
+The <a>concrete object size</a> must be calculated using the
+<a>Default Sizing Algorithm</a>
+defined in CSS Images 3 [<a href="refs.html#ref-css-images-3">css-images-3</a>],
+with the following inputs:</p>
+
+<p>The <a>specified size</a> must be determined from the used values for the
+{{width}} and {{height}} sizing properties of the {{svg}}
+element.</p>
+
+<p>The <a>intrinsic dimensions</a> must also be determined from the {{width}}
+and {{height}} sizing properties. If either {{width}} or {{height}} are
+not specified, the used value is the initial value <span class="attr-value">'auto'</span>.
+<span class="attr-value">'auto'</span> and percentage lengths must not be used to
+determine an <a>intrinsic width</a> or <a>intrinsic height</a>.</p>
+
+<p class='note'>
+With bitmap image formats, the <a>intrinsic dimensions</a> are fixed in
+the image file, and the specified size is defined in the host document as needed
+to scale the image.
+SVG, being inherently scalable, adapts the <a>intrinsic width</a> and
+<a>intrinsic height</a> to be the width and height of the <a>specified size</a>.
+Therefore, when specified as a length, the {{width}} and
+{{height}} sizing properties of the {{svg}} element control the
+<a>intrinsic dimensions</a> of the SVG image and the <a>specified size</a> that
+is used when placing the SVG image in a host document.</p>
+
+<p> The <a>intrinsic aspect ratio</a> must be calculated using the following
+algorithm. If the algorithm returns null, then there is no intrinsic aspect ratio.</p>
+
+<ol class='algorithm'>
+<li>If the {{width}} and {{height}} sizing properties on the
+    {{svg}} element are both absolute values:
+    <ol>
+        <li>return width / height</li>
+    </ol>
+</li>
+<li>If an <a href="linking.html#LinksIntoSVG">SVG View</a> is active:
+    <ol>
+        <li>let <var>viewbox</var> be the viewbox defined by the active SVG View</li>
+        <li>return <var>viewbox</var>.width / <var>viewbox</var>.height</li>
+    </ol>
+</li>
+<li>If the {{viewBox}} on the {{svg}} element is correctly specified:
+    <ol>
+        <li>let <var>viewbox</var> be the viewbox defined by the {{viewBox}}
+            attribute on the {{svg}} element</li>
+        <li>return <var>viewbox</var>.width / <var>viewbox</var>.height</li>
+    </ol>
+</li>
+<li>return null</li>
+</ol>
+
+<p>The behaviour defined in this section is specific to CSS, but may be adapted
+to other host contexts. In all host contexts, the <a>intrinsic aspect ratio</a>,
+where available, must be respected when sizing the SVG viewport.</p>
+</div>
+
+<p>Examples:</p>
+
+<div class="example">
+<div class="exampleheader">
+<strong>Example:</strong> Intrinsic Aspect Ratio 1
+</div>
+
+<div class="examplesource">
+<xmp>
+  <svg xmlns="http://www.w3.org/2000/svg"
+     width="10cm" height="5cm">
+  ...
+  </svg>
+</xmp>
+
+</div>
+</div>
+
+<p>In this example the intrinsic aspect ratio of the <a>SVG viewport</a> is 2:1. The
+intrinsic width is 10cm and the intrinsic height is 5cm.</p>
+
+<div class="example">
+<div class="exampleheader">
+<strong>Example:</strong> Intrinsic Aspect Ratio 2
+</div>
+
+<div class="examplesource">
+
+<xmp>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="100%" height="50%" viewBox="0 0 200 200">
+  ...
+</svg>
+</xmp>
+
+</div>
+</div>
+
+<p>In this example the intrinsic aspect ratio of the outermost <a>SVG viewport</a> is
+1:1. An aspect ratio calculation in this case allows embedding in an
+object within a containing block that is only constrained in one direction.</p>
+
+<div class="example">
+<div class="exampleheader">
+<strong>Example:</strong> Intrinsic Aspect Ratio 3
+</div>
+
+<div class="examplesource">
+<xmp>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="10cm" viewBox="0 0 200 200">
+  ...
+</svg>
+</xmp>
+</div>
+</div>
+
+<p>In this case the intrinsic aspect ratio is 1:1.</p>
+
+<div class="example">
+<div class="exampleheader">
+<strong>Example:</strong> Intrinsic Aspect Ratio 4
+</div>
+
+<div class="examplesource">
+
+<xmp>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="75%" height="10cm" viewBox="0 0 200 200">
+  ...
+</svg>
+</xmp>
+</div>
+</div>
+
+<p>In this example, the intrinsic aspect ratio is 1:1.</p>
+
+<p class="issue" data-issue="19">Add more examples for the new auto value? E.g. some of the
+<a href="https://docs.google.com/presentation/d/1POUiroOBbLmXYlQKf0pIR8zVkHWH9jRVN-w8A4aNsIk/">examples</a>
+provided by David Vest.</p>
+
+<h3 id="VectorEffects">Vector effects</h3>
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td><a href="http://www.w3.org/Graphics/SVG/WG/wiki/SVG2_Requirements_Input#Constrained_Transformations">SVG 2 will have constrained transformations based on SVG 1.2 Tiny.</a></td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2014/04/09-svg-minutes.html#item06">Add vector effects extension proposal to SVG 2 specification.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To include non-scaling features (non-scaling part of the object, and non-scaling entire object</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Satoru Takagi (<a href="https://www.w3.org/Graphics/SVG/WG/track/actions/3619">ACTION-3619</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<p>Sometimes it is of interest to let the outline of an object keep its
+original width or to let the position of an object fix no matter which
+transforms are applied to it. For example, in a map with a 2px wide line
+representing roads it is of interest to keep the roads 2px wide even when the
+user zooms into the map, or introductory notes on the graphic chart in which
+panning is possible. </p>
+
+<p>To offer such effects regarding special coordinate transformations and
+graphic drawings, SVG Tiny 1.2 introduced the {{vector-effect}} property.
+Although SVG Tiny 1.2 introduced only non-scaling stroke behavior, this version
+introduces a number of additional effects. Furthermore, since these effects
+can be specified in combination, they show more various effects. And, future
+versions of the SVG language will allow for more powerful vector effects
+through this property.</p>
+
+<p class="issue" data-issue="31">
+  Values of {{vector-effect}} other than
+  <span class="prop-value">non-scaling-stroke</span> and <span class="prop-value">none</span>
+  are at risk of being dropped from SVG 2 due to a lack of implementations.
+  Feedback from implementers is requested,
+  regarding the practicality of implementing them as currently specified,
+  during the implementation period.
+</p>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="VectorEffectProperty" data-dfn-type="property" data-export="">vector-effect</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>none | non-scaling-stroke | non-scaling-size | non-rotation | fixed-position</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><a>graphics elements</a> and {{use}}</td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th><a>Animation type</a>:</th>
+    <td>discrete</td>
+  </tr>
+</table>
+
+<dl>
+  <dt class="prop-value">none</dt>
+  <dd>Specifies that no vector effect shall be applied, i.e. the default rendering behaviour
+  from SVG 1.1 is used which is to first fill the geometry of a shape with a specified
+  paint, then stroke the outline with a specified paint.</dd>
+  <dt class="prop-value">non-scaling-stroke</dt>
+  <dd>Please refer to <a href="painting.html#non-scaling-stroke">this description</a> of vector effect on painting.</dd>
+  <dt class="prop-value">non-scaling-size</dt>
+  <dd>Specifies special <a>user coordinate system</a> toward this element
+  and its descendant by constrained transformations with the following
+  characteristics. The scale of the <a>user coordinate system</a> do not
+  change in spite of change of <a>CTM</a>s from a <var>host coordinate space</var>.
+  However, it does not specify the suppression of rotation and skew. Also,
+  it does not specify the fixation of placement of <a>user coordinate system</a>.
+  Since non-scaling-size suppresses scaling of <a>user coordinate system</a>,
+  it also has the characteristic of non-scaling-stroke. The transformation
+  formula and the example behavior are indicated to the following chapter.</dd>
+  <dt class="prop-value">non-rotation</dt>
+  <dd>Specifies special <a>user coordinate system</a> toward this element
+  and its descendant by constrained transformations with the following
+  characteristics. The rotation and skew of the <a>user coordinate system</a>
+  is suppressed in spite of change of <a>CTM</a>s from a <var>host coordinate space</var>.
+  However, it does not specify the suppression of scaling. Also, it does not
+  specify the fixation of placement of <a>user coordinate system</a>.
+  The transformation formula and the example behavior are indicated to the
+  following chapter.</dd>
+  <dt class="prop-value">fixed-position</dt>
+  <dd>Specifies special <a>user coordinate system</a> toward this element
+  and its descendant by constrained transformations with the following
+  characteristics. The placement of <a>user coordinate system</a> is fixed
+  in spite of change of <a>CTM</a>s from a <var>host coordinate space</var>. However,
+  it does not specify the suppression of rotation, skew and scaling. When
+  the element that has fixed-position effect and also has {{transform}}
+  property, that property is consumed for this effect. The shift components
+  <var>e</var> and <var>f</var> of matrix of {{transform}} property are
+  used to transfer the origin of fixed <a>user coordinate system</a>. The
+  transformation formula and the example behavior are indicated to the
+  following chapter.</dd>
+</dl>
+
+<p>These values can be enumerated. Thereby, the effect which has these
+characteristics simultaneously can be specified.</p>
+
+<p>The host coordinate space for {{vector-effect}} is the <a>viewport
+coordinate system</a> of the <a>furthest ancestral SVG viewport</a>.</p>
+
+<p class="note">Note: Future versions of SVG may allow ways to specify the device coordinate system.</p>
+
+<h4 id="VectorEffectsCalculation">Computing the vector effects</h4>
+
+<p>This section shows the list of transformation formulas regarding
+combinations of the values for clarification of the behavior of vector effects
+excluding <span class="prop-value">non-scaling-stroke</span> which has clear
+implications.</p>
+
+<p class='ready-for-wider-review'>The {{vector-effect}} property has no effect on transformations
+performed in a <a>3D rendering context</a>.</p>
+
+<p>The normal coordinate transformation formula from <a>user coordinate system</a>
+to <a>viewport coordinate system</a> is as follows.</p>
+
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mtable columnalign='left'>
+  <mtr>
+  <mtd>
+    <mfenced open = '[' close = ']'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>x</mi>
+              <mi>viewport</mi>
+            </msub>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>y</mi>
+              <mi>viewport</mi>
+            </msub>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mn>1</mn>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo>=</mo>
+      <mtext mathsize='big'>CTM</mtext>
+    <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+    <mfenced open = '[' close = ']'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>x</mi>
+              <mi>userspace</mi>
+            </msub>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>y</mi>
+              <mi>userspace</mi>
+            </msub>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mn>1</mn>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+  </mtd>
+  </mtr>
+  <mtr>
+  <mtd>
+    <mtext mathsize='big'>CTM</mtext>
+    <mo>=</mo>
+    <mfenced open = '[' close = ']'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>a</mi>
+              <mi>ctm</mi>
+            </msub>
+          </mtd>
+          <mtd>
+            <msub>
+              <mi>c</mi>
+              <mi>ctm</mi>
+            </msub>
+          </mtd>
+          <mtd>
+            <msub>
+              <mi>e</mi>
+              <mi>ctm</mi>
+            </msub>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>b</mi>
+              <mi>ctm</mi>
+            </msub>
+          </mtd>
+          <mtd>
+            <msub>
+              <mi>d</mi>
+              <mi>ctm</mi>
+            </msub>
+          </mtd>
+          <mtd>
+            <msub>
+              <mi>f</mi>
+              <mi>ctm</mi>
+            </msub>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mn>0</mn>
+          </mtd>
+          <mtd>
+            <mn>0</mn>
+          </mtd>
+          <mtd>
+            <mn>1</mn>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+  </mtd>
+  </mtr>
+  </mtable>
+</math>
+</div>
+
+<!--
+<p>Here, &bs[;DPR] is <a href="http://dev.w3.org/csswg/cssom-view/#dom-window-devicepixelratio">Device Pixel Ratio</a> (in scalar). And &bs[;BCM] presupposes that it is a matrix synthesizing the coordinate transformation by Browser Chrome's built-in zooming panning functions. Hereafter, x(<a href="intro.html#TermUserSpace">userspace</a>), y(<a href="intro.html#TermUserSpace">userspace</a>) is abbreviated as x, y.
+</p>
+-->
+
+<pre class='xml'>
+&lt;circle vector-effect="<var>veValue</var>" transform="translate(<var>x<sub>o</sub></var> <var>y<sub>o</sub></var>)" cx="<var>x<sub>f</sub></var>" cy="<var>y<sub>f</sub></var>" r=".."/&gt;
+</pre>
+
+<p>When the {{vector-effect}} is added to an element like the above, the
+transformation formula for user coordinate to the device coordinate changes as
+follows. Here, <var>x<sub>f</sub></var> and <var>y<sub>f</sub></var> are user
+coordinate of the corresponding element and its descendant. And,
+<var>x<sub>o</sub></var> and <var>y<sub>o</sub></var> are matrix element
+<var>e</var> and <var>f</var> of the transform attribute which the
+corresponding element has. In addition, <b>|det(CTM)|</b> is absolute value of
+the determinants of <a>CTM</a>. When this value becomes 0 and
+<span class="prop-value">non-scaling-size</span> is appointed,
+{{vector-effect}} becomes invalidity namely <span class="prop-value">none</span>.</p>
+
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+      <mrow>
+        <mtext>det</mtext>
+        <mfenced open = '(' close = ')'>
+	      <mtext mathsize='big'>CTM</mtext>
+        </mfenced>
+      </mrow>
+    <mo>=</mo>
+        <msub>
+          <mi>a</mi>
+          <mi>ctm</mi>
+        </msub>
+      <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+        <msub>
+          <mi>d</mi>
+          <mi>ctm</mi>
+        </msub>
+      <mo lspace='2px' rspace='2px'>-</mo>
+        <msub>
+          <mi>b</mi>
+          <mi>ctm</mi>
+        </msub>
+      <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+        <msub>
+          <mi>c</mi>
+          <mi>ctm</mi>
+        </msub>
+  </mrow>
+</math>
+</div>
+
+
+<table class="attrdef def">
+  <tr>
+    <th>veValue</th>
+    <th>Formula</th>
+  </tr>
+  <tr>
+    <td><span class="prop-value">non-scaling-size</span></td>
+    <td>
+		<div role="math">
+		<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+		  <mrow>
+		    <mfenced open = '[' close = ']'>
+		      <mtable rowalign='center'>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>x</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>y</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <mn>1</mn>
+		          </mtd>
+		        </mtr>
+		      </mtable>
+		    </mfenced>
+		    <mo>=</mo>
+		      <mrow>
+		        <mtext mathsize='big'>CTM</mtext>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <mtext>0</mtext>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mtext>0</mtext>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		        <mo lspace='2px' rspace='2px'>+</mo>
+		        <mfrac>
+		          <mtext mathsize='big'>CTM</mtext>
+		          <msqrt>
+		            <mfenced open = '|' close = '|'>
+		              <mrow>
+		                <mtext>det</mtext>
+		                <mfenced open = '(' close = ')'>
+		                  <mtext mathsize='big'>CTM</mtext>
+		                </mfenced>
+		              </mrow>
+		            </mfenced>
+		          </msqrt>
+		        </mfrac>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>x</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>y</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		      </mrow>
+		  </mrow>
+		</math>
+		</div>
+    </td>
+  </tr>
+  <tr>
+    <td><span class="prop-value">non-rotation</span></td>
+    <td>
+		<div role="math">
+		<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+		  <mrow>
+		    <mfenced open = '[' close = ']'>
+		      <mtable rowalign='center'>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>x</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>y</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <mn>1</mn>
+		          </mtd>
+		        </mtr>
+		      </mtable>
+		    </mfenced>
+		    <mo>=</mo>
+		      <mrow>
+		        <mtext mathsize='big'>CTM</mtext>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <mtext>0</mtext>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mtext>0</mtext>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		        <mo lspace='2px' rspace='2px'>+</mo>
+		        <msqrt>
+		          <mfenced open = '|' close = '|'>
+		            <mrow>
+		              <mtext>det</mtext>
+		              <mfenced open = '(' close = ')'>
+		                <mtext mathsize='big'>CTM</mtext>
+		              </mfenced>
+		            </mrow>
+		          </mfenced>
+		        </msqrt>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>x</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>y</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		      </mrow>
+		  </mrow>
+		</math>
+		</div>
+    </td>
+  </tr>
+  <tr>
+    <td><span class="prop-value">non-scaling-size</span> <span class="prop-value">non-rotation</span></td>
+    <td>
+		<div role="math">
+		<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+		  <mrow>
+		    <mfenced open = '[' close = ']'>
+		      <mtable rowalign='center'>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>x</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>y</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <mn>1</mn>
+		          </mtd>
+		        </mtr>
+		      </mtable>
+		    </mfenced>
+		    <mo>=</mo>
+		      <mrow>
+		        <mtext mathsize='big'>CTM</mtext>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <mtext>0</mtext>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mtext>0</mtext>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		        <mo lspace='2px' rspace='2px'>+</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>x</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>y</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		      </mrow>
+		  </mrow>
+		</math>
+		</div>
+    </td>
+  </tr>
+  <tr>
+    <td><span class="prop-value">fixed-position</span></td>
+    <td>
+		<div role="math">
+		<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+		  <mrow>
+		    <mfenced open = '[' close = ']'>
+		      <mtable rowalign='center'>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>x</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>y</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <mn>1</mn>
+		          </mtd>
+		        </mtr>
+		      </mtable>
+		    </mfenced>
+		    <mo>=</mo>
+		      <mrow>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>x</mi>
+		                  <mi>o</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>y</mi>
+		                  <mi>o</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		        <mo>+</mo>
+		        <mtext mathsize='big'>CTM</mtext>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>x</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>y</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		      </mrow>
+		  </mrow>
+		</math>
+		</div>
+    </td>
+  </tr>
+  <tr>
+    <td><span class="prop-value">fixed-position</span> <span class="prop-value">non-scaling-size</span></td>
+    <td>
+		<div role="math">
+		<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+		  <mrow>
+		    <mfenced open = '[' close = ']'>
+		      <mtable rowalign='center'>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>x</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>y</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <mn>1</mn>
+		          </mtd>
+		        </mtr>
+		      </mtable>
+		    </mfenced>
+		    <mo>=</mo>
+		      <mrow>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>x</mi>
+		                  <mi>o</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>y</mi>
+		                  <mi>o</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		        <mo>+</mo>
+		        <mfrac>
+		          <mtext mathsize='big'>CTM</mtext>
+		          <msqrt>
+		            <mfenced open = '|' close = '|'>
+		              <mrow>
+		                <mtext>det</mtext>
+		                <mfenced open = '(' close = ')'>
+		                  <mtext mathsize='big'>CTM</mtext>
+		                </mfenced>
+		              </mrow>
+		            </mfenced>
+		          </msqrt>
+		        </mfrac>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>x</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>y</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		      </mrow>
+		  </mrow>
+		</math>
+		</div>
+    </td>
+  </tr>
+  <tr>
+    <td><span class="prop-value">fixed-position</span> <span class="prop-value">non-rotation</span></td>
+    <td>
+		<div role="math">
+		<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+		  <mrow>
+		    <mfenced open = '[' close = ']'>
+		      <mtable rowalign='center'>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>x</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>y</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <mn>1</mn>
+		          </mtd>
+		        </mtr>
+		      </mtable>
+		    </mfenced>
+		    <mo>=</mo>
+		      <mrow>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>x</mi>
+		                  <mi>o</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>y</mi>
+		                  <mi>o</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		        <mo>+</mo>
+		        <msqrt>
+		          <mfenced open = '|' close = '|'>
+		            <mrow>
+		              <mtext>det</mtext>
+		              <mfenced open = '(' close = ')'>
+		                <mtext mathsize='big'>CTM</mtext>
+		              </mfenced>
+		            </mrow>
+		          </mfenced>
+		        </msqrt>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>x</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>y</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		      </mrow>
+		  </mrow>
+		</math>
+		</div>
+    </td>
+  </tr>
+  <tr>
+    <td><span class="prop-value">fixed-position</span> <span class="prop-value">non-scaling-size</span> <span class="prop-value">non-rotation</span></td>
+    <td>
+		<div role="math">
+		<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+		  <mrow>
+		    <mfenced open = '[' close = ']'>
+		      <mtable rowalign='center'>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>x</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <msub>
+		              <mi>y</mi>
+		              <mi>viewport</mi>
+		            </msub>
+		          </mtd>
+		        </mtr>
+		        <mtr>
+		          <mtd>
+		            <mn>1</mn>
+		          </mtd>
+		        </mtr>
+		      </mtable>
+		    </mfenced>
+		    <mo>=</mo>
+		      <mrow>
+		        <mrow>
+		          <mfenced open = '[' close = ']'>
+		            <mtable rowalign='center'>
+		              <mtr>
+		                <mtd>
+		                  <msub>
+		                    <mi>x</mi>
+		                    <mi>o</mi>
+		                  </msub>
+		                </mtd>
+		              </mtr>
+		              <mtr>
+		                <mtd>
+		                  <msub>
+		                    <mi>y</mi>
+		                    <mi>o</mi>
+		                  </msub>
+		                </mtd>
+		              </mtr>
+		              <mtr>
+		                <mtd>
+		                  <mn>1</mn>
+		                </mtd>
+		              </mtr>
+		            </mtable>
+		          </mfenced>
+		        </mrow>
+		        <mo>+</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		              <mtd>
+		                <mn>0</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+		        <mfenced open = '[' close = ']'>
+		          <mtable rowalign='center'>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>x</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <msub>
+		                  <mi>y</mi>
+		                  <mi>f</mi>
+		                </msub>
+		              </mtd>
+		            </mtr>
+		            <mtr>
+		              <mtd>
+		                <mn>1</mn>
+		              </mtd>
+		            </mtr>
+		          </mtable>
+		        </mfenced>
+		      </mrow>
+		  </mrow>
+		</math>
+		</div>
+    </td>
+  </tr>
+</table>
+
+<h4 id="NestedVectorEffectsCalculation">Computing the vector effects for nested viewport coordinate systems</h4>
+
+<p>Below is normal coordinate transformation formula for nested viewport
+coordinate systems without vector effects. <b>x<sub>viewport(UA)</sub></b> and
+<b>y<sub>viewport(UA)</sub></b> are coordinates which under the immediate
+control of <a>user agent</a>. <b>CTM<sub>this</sub></b> is <a>CTM</a> for the
+transformation matrix from <a>user coordinate system</a> of an target graphic
+to <a>viewport coordinate system</a> to which it belongs.
+<b>CTM<sub>parent</sub></b> is <a>CTM</a> for the transformation matrix from
+aforementioned <a>viewport coordinate system</a> to <a>viewport coordinate system</a>
+of the parent of that. And, <b>CTM<sub>root</sub></b> is <a>CTM</a> for
+rootmost viewport coordinate system (UA).</p>
+
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mrow>
+    <mfenced open = '[' close = ']'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>x</mi>
+              <mi>viewport(UA)</mi>
+            </msub>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>y</mi>
+              <mi>viewport(UA)</mi>
+            </msub>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mn>1</mn>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+    <mo>=</mo>
+    <msub>
+      <mtext mathsize='big'>CTM</mtext>
+      <mi>root</mi>
+    </msub>
+    <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+    <mtext>...</mtext>
+    <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+    <msub>
+      <mtext mathsize='big'>CTM</mtext>
+      <mi>parent</mi>
+    </msub>
+    <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+    <msub>
+      <mtext mathsize='big'>CTM</mtext>
+      <mi>this</mi>
+    </msub>
+    <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+    <mfenced open = '[' close = ']'>
+      <mtable rowalign='center'>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>x</mi>
+              <mi>userspace</mi>
+            </msub>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <msub>
+              <mi>y</mi>
+              <mi>userspace</mi>
+            </msub>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd>
+            <mn>1</mn>
+          </mtd>
+        </mtr>
+      </mtable>
+    </mfenced>
+  </mrow>
+</math>
+</div>
+
+<p>When applying seven formulas of the preceding section to nested viewport
+coordinate systems, the application way of those formulas changes as follows
+by whether <span class="prop-value">viewport</span> or
+<span class="prop-value">screen</span> is specified as the additional value of
+<a><span class="prop-name">vector-effect</span></a>.</p>
+
+<p>When <span class="prop-value">viewport</span> value is specified,
+<a>user agent</a> computes coordinates combining either of seven formulas of
+the preceding chapter, and the following formulas.</p>
+
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mtable columnalign='left'>
+    <mtr>
+      <mtd>
+        <mfenced open = '[' close = ']'>
+          <mtable rowalign='center'>
+            <mtr>
+              <mtd>
+                <msub>
+                  <mi>x</mi>
+                  <mrow>
+                    <mi>viewport</mi>
+                    <mo stretchy='false'>(</mo>
+                    <mi>UA</mi>
+                    <mo stretchy='false'>)</mo>
+                  </mrow>
+                </msub>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <msub>
+                  <mi>y</mi>
+                  <mrow>
+                    <mi>viewport</mi>
+                    <mo stretchy='false'>(</mo>
+                    <mi>UA</mi>
+                    <mo stretchy='false'>)</mo>
+                  </mrow>
+                </msub>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <mn>1</mn>
+              </mtd>
+            </mtr>
+          </mtable>
+        </mfenced>
+        <mo>=</mo>
+        <msub>
+          <mtext mathsize='big'>CTM</mtext>
+          <mtext>root</mtext>
+        </msub>
+        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+        <mtext>...</mtext>
+        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+        <msub>
+          <mtext mathsize='big'>CTM</mtext>
+          <mtext>parent</mtext>
+        </msub>
+        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+        <mfenced open = '[' close = ']'>
+          <mtable rowalign='center'>
+            <mtr>
+              <mtd>
+                <msub>
+                  <mi>x</mi>
+                  <mi>viewport</mi>
+                </msub>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <msub>
+                  <mi>y</mi>
+                  <mi>viewport</mi>
+                </msub>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <mn>1</mn>
+              </mtd>
+            </mtr>
+          </mtable>
+        </mfenced>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mtext mathsize='big'>CTM</mtext>
+        <mo>=</mo>
+        <msub>
+          <mtext mathsize='big'>CTM</mtext>
+          <mtext>this</mtext>
+        </msub>
+      </mtd>
+    </mtr>
+  </mtable>
+</math>
+</div>
+
+<p>When <span class="prop-value">screen</span> value is specified,
+<a>user agent</a> computes coordinates combining either of seven formulas of
+the preceding chapter, and the following formulas.</p>
+
+<div role="math">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+  <mtable columnalign='left'>
+    <mtr>
+      <mtd>
+        <mfenced open = '[' close = ']'>
+          <mtable rowalign='center'>
+            <mtr>
+              <mtd>
+                <msub>
+                  <mi>x</mi>
+                  <mrow>
+                    <mi>viewport</mi>
+                    <mo stretchy='false'>(</mo>
+                    <mi>UA</mi>
+                    <mo stretchy='false'>)</mo>
+                  </mrow>
+                </msub>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <msub>
+                  <mi>y</mi>
+                  <mrow>
+                    <mi>viewport</mi>
+                    <mo stretchy='false'>(</mo>
+                    <mi>UA</mi>
+                    <mo stretchy='false'>)</mo>
+                  </mrow>
+                </msub>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <mn>1</mn>
+              </mtd>
+            </mtr>
+          </mtable>
+        </mfenced>
+        <mo>=</mo>
+        <mfenced open = '[' close = ']'>
+          <mtable rowalign='center'>
+            <mtr>
+              <mtd>
+                <msub>
+                  <mi>x</mi>
+                  <mi>viewport</mi>
+                </msub>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <msub>
+                  <mi>y</mi>
+                  <mi>viewport</mi>
+                </msub>
+              </mtd>
+            </mtr>
+            <mtr>
+              <mtd>
+                <mn>1</mn>
+              </mtd>
+            </mtr>
+          </mtable>
+        </mfenced>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <mtext mathsize='big'>CTM</mtext>
+        <mo>=</mo>
+        <msub>
+          <mtext mathsize='big'>CTM</mtext>
+          <mtext>root</mtext>
+        </msub>
+        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+        <mtext>...</mtext>
+        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+        <msub>
+          <mtext mathsize='big'>CTM</mtext>
+          <mtext>parent</mtext>
+        </msub>
+        <mo lspace='2px' rspace='2px'>&#x22c5;</mo>
+        <msub>
+          <mtext mathsize='big'>CTM</mtext>
+          <mtext>this</mtext>
+        </msub>
+      </mtd>
+    </mtr>
+  </mtable>
+</math>
+</div>
+
+<h4 id="VectorEffectsExamples">Examples of vector effects</h4>
+
+<div class="example">
+  <p>Below is an example of the <span class="prop-value">non-scaling-stroke</span> <a><span class="prop-name">vector-effect</span></a>.</p>
+
+<pre class=include-raw>
+path: images/painting/non-scaling-stroke.svg
+</pre>
+<pre class=include>
+path: images/painting/non-scaling-stroke.svg
+</pre>
+</div>
+
+<div class="example">
+  <p>Below is an example of the <span class="prop-value">none</span> <a><span class="prop-name">vector-effect</span></a> (no vector effect).</p>
+  <table>
+    <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
+    <tr>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing none vector effect"></td>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-none.svg" alt="Image showing none vector effect"></td>
+    </tr>
+  </table>
+
+  <p>Source code </p>
+  <xmp>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50,-50,500,500" height="500" width="500">
+
+  <rect x="-50" y="-50" width="500" height="500" stroke="orange" stroke-width="3" fill="none"/>
+
+  <!-- Nested user coordinate system is transformed by this transform attribute -->
+  <g transform="matrix(2.1169438081370817,0.3576047954311102,-0.3576047954311102,1.4700998667618626,0,0)
+                translate(-50,-50)">
+    <svg viewBox="-50,-50,500,500" height="500" width="500">
+      <!-- Graph paper on the this svg's base user coordinate system -->
+      <g stroke="green" stroke-width="1" fill="none">
+        <circle cx="0" cy="0" r="10"/>
+        <circle cx="150" cy="150" r="7"/>
+        <path fill="green" stroke="none" d="M0,-3 L30,-3 25,-10 50,0 25,10 30,3 0,3z"/>
+
+        <line x1="-100" y1="-100" x2="600" y2="-100" stroke-dasharray="5,5"/>
+        <line x1="-100" y1="000" x2="600" y2="000"/>
+        <line x1="-100" y1="100" x2="600" y2="100" stroke-dasharray="5,5"/>
+        <line x1="-100" y1="200" x2="600" y2="200" stroke-dasharray="5,5"/>
+        <line x1="-100" y1="300" x2="600" y2="300" stroke-dasharray="5,5"/>
+        <line x1="-100" y1="400" x2="600" y2="400" stroke-dasharray="5,5"/>
+        <line x1="-100" y1="500" x2="600" y2="500" stroke-dasharray="5,5"/>
+
+        <line y1="-100" x1="-100" y2="600" x2="-100" stroke-dasharray="5,5"/>
+        <line y1="-100" x1="000" y2="600" x2="000"/>
+        <line y1="-100" x1="100" y2="600" x2="100" stroke-dasharray="5,5"/>
+        <line y1="-100" x1="200" y2="600" x2="200" stroke-dasharray="5,5"/>
+        <line y1="-100" x1="300" y2="600" x2="300" stroke-dasharray="5,5"/>
+        <line y1="-100" x1="400" y2="600" x2="400" stroke-dasharray="5,5"/>
+        <line y1="-100" x1="500" y2="600" x2="500" stroke-dasharray="5,5"/>
+      </g>
+
+      <!-- Figure having vector effect -->
+      <!-- A thick red right arrow and small rectangle on this figure's nested
+           user coordinate system origin -->
+      <path id="ve" vector-effect="none"
+            stroke="red" stroke-width="3" fill="none"
+            transform="matrix(1,0,0,1,150,150)"
+            d="M-50,-50 L50,-50 50,-100 150,0 50,100 50,50 -50,50 -50,-50z M5 0 L0 -5 -5 0 0 5z"/>
+    </svg>
+  </g>
+</svg>
+</xmp>
+</div>
+
+<div class="example">
+  <p>Below is an example of the <span class="prop-value">non-scaling-size</span>.</p>
+  <table>
+    <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
+    <tr>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-nonScalingSize.svg" alt="Image showing non-scaling-size vector effect"></td>
+    </tr>
+  </table>
+
+  <xmp>
+<path id="ve" vector-effect="non-scaling-size"
+      stroke="red" stroke-width="3" fill="none"
+      transform="matrix(1,0,0,1,150,150)"
+      d="M-50,-50 L50,-50 50,-100 150,0 50,100 50,50 -50,50 -50,-50z M5 0 L0 -5 -5 0 0 5z"/>
+  </xmp>
+</div>
+
+<div class="example">
+  <p>Below is an example of the <span class="prop-value">non-rotation</span>.</p>
+  <table>
+    <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
+    <tr>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-nonRotation.svg" alt="Image showing non-rotation vector effect"></td>
+    </tr>
+  </table>
+
+  <xmp>
+<path id="ve" vector-effect="non-rotation"
+      stroke="red" stroke-width="3" fill="none"
+      transform="matrix(1,0,0,1,150,150)"
+      d="M-50,-50 L50,-50 50,-100 150,0 50,100 50,50 -50,50 -50,-50z M5 0 L0 -5 -5 0 0 5z"/></xmp>
+</div>
+
+<div class="example">
+  <p>Below is an example of the <span class="prop-value">non-scaling-size</span> <span class="prop-value">non-rotation</span>.</p>
+  <table>
+    <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
+    <tr>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-nonScalingSize-nonRotation.svg" alt="Image showing non-scaling-size non-rotation vector effect"></td>
+    </tr>
+  </table>
+
+  <xmp>
+<path id="ve" vector-effect="non-scaling-size non-rotation"
+      stroke="red" stroke-width="3" fill="none"
+      transform="matrix(1,0,0,1,150,150)"
+      d="M-50,-50 L50,-50 50,-100 150,0 50,100 50,50 -50,50 -50,-50z M5 0 L0 -5 -5 0 0 5z"/></xmp>
+</div>
+
+<div class="example">
+  <p>Below is an example of the <span class="prop-value">fixed-position</span>.</p>
+  <table>
+    <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
+    <tr>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-fixedPosition.svg" alt="Image showing fixed-position vector effect"></td>
+    </tr>
+  </table>
+
+  <xmp>
+<path id="ve" vector-effect="fixed-position"
+      stroke="red" stroke-width="3" fill="none"
+      transform="matrix(1,0,0,1,150,150)"
+      d="M-50,-50 L50,-50 50,-100 150,0 50,100 50,50 -50,50 -50,-50z M5 0 L0 -5 -5 0 0 5z"/>
+  </xmp>
+</div>
+
+<div class="example">
+  <p>Below is an example of the <span class="prop-value">non-scaling-size</span> <span class="prop-value">fixed-position</span>.</p>
+  <table>
+    <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
+    <tr>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-nonScalingSize-fixedPosition.svg" alt="Image showing non-scaling-size fixed-position vector effect"></td>
+    </tr>
+  </table>
+
+  <xmp>
+<path id="ve" vector-effect="non-scaling-size fixed-position"
+      stroke="red" stroke-width="3" fill="none"
+      transform="matrix(1,0,0,1,150,150)"
+      d="M-50,-50 L50,-50 50,-100 150,0 50,100 50,50 -50,50 -50,-50z M5 0 L0 -5 -5 0 0 5z"></xmp>
+</div>
+
+<div class="example">
+  <p>Below is an example of the <span class="prop-value">non-rotation</span> <span class="prop-value">fixed-position</span>.</p>
+  <table>
+    <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
+    <tr>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-nonRotation-fixedPosition.svg" alt="Image showing non-rotation fixed-position vector effect"></td>
+    </tr>
+  </table>
+
+  <xmp>
+<path id="ve" vector-effect="non-rotation fixed-position"
+      stroke="red" stroke-width="3" fill="none"
+      transform="matrix(1,0,0,1,150,150)"
+      d="M-50,-50 L50,-50 50,-100 150,0 50,100 50,50 -50,50 -50,-50z M5 0 L0 -5 -5 0 0 5z"/></xmp>
+</div>
+
+<div class="example">
+  <p>Below is an example of the <span class="prop-value">non-scaling-size</span> <span class="prop-value">non-rotation</span> <span class="prop-value">fixed-position</span>.</p>
+  <table>
+    <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
+    <tr>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img class="bordered" src="images/painting/vectorEffects/ve-nonScalingSize-nonRotation-fixedPosition.svg" alt="Image showing non-scaling-size non-rotation fixed-position vector effect"></td>
+    </tr>
+  </table>
+
+  <xmp>
+<path id="ve" vector-effect="non-scaling-size non-rotation fixed-position"
+      stroke="red" stroke-width="3" fill="none"
+      transform="matrix(1,0,0,1,150,150)"
+      d="M-50,-50 L50,-50 50,-100 150,0 50,100 50,50 -50,50 -50,-50z M5 0 L0 -5 -5 0 0 5z"/></xmp>
+</div>
+
+<div class='ready-for-wider-review'>
+<h3 id="DOMInterfaces">DOM interfaces</h3>
+
+<h4 id="InterfaceSVGTransform">Interface SVGTransform</h4>
+
+<p>The <a>SVGTransform</a> interface is used to represent
+<a href='https://drafts.csswg.org/css-transforms-1/#typedef-transform-function'>&lt;transform-function&gt;</a>
+values that appear in the {{transform}} property
+and its presentation attributes <span class="attr-name">transform</span>,
+{{linearGradient/gradientTransform}} and
+{{pattern/patternTransform}}.  An <a>SVGTransform</a>
+represents a single component in a transform list,
+such as a single <span class="prop-value">scale(…)</span>
+or <span class="prop-value">matrix(…)</span> value.</p>
+
+<p id="ReadOnlyTransform">An <a>SVGTransform</a> object can be designated as <em>read only</em>,
+which means that attempts to modify the object will result in an exception
+being thrown, as described below.</p>
+
+<p id="TransformAssociatedElement">An <a>SVGTransform</a> object can be <em>associated</em>
+with a particular element.  The associated element is used to
+determine which element's <span class="attr-name">transform</span>
+presentation attribute to update if the object <a>reflects</a>
+that attribute.  Unless otherwise described, an <a>SVGTransform</a> object is
+not associated with any element.</p>
+
+<div class='ready-for-wider-review'>
+<p id="TransformMode">Every <a>SVGTransform</a> object operates in one of
+two modes.  It can:</p>
+
+<ol>
+  <li><em>reflect an element of a presentation attribute value</em>
+  (being exposed through the methods on the
+  <a href="#__svg__SVGAnimatedTransformList__baseVal">baseVal</a> member of
+  an <a>SVGAnimatedTransformList</a>),</li>
+  <li><em>be detached</em>, which is the case for <a>SVGTransform</a> objects created
+  with <a href='struct.html#__svg__SVGSVGElement__createSVGTransform'>createSVGTransform</a>
+  and <a href='struct.html#__svg__SVGSVGElement__createSVGTransformFromMatrix'>createSVGTransformFromMatrix</a>.</li>
+</ol>
+</div>
+
+<p>An <a>SVGTransform</a> object maintains an internal
+<a href='https://drafts.csswg.org/css-transforms-1/#typedef-transform-function'>&lt;transform-function&gt;</a>
+value, which is called its <dfn for=TransformValue>value</dfn>.
+It also maintains a <a>DOMMatrix</a> object,
+which is called its <dfn id="TransformMatrixObject" data-dfn-type="dfn" data-export="">matrix object</dfn>,
+which is the object returned from the <a href="#__svg__SVGTransform__matrix">matrix</a>
+IDL attribute.  An <a>SVGTransform</a> object's
+<a href="#TransformMatrixObject">matrix object</a>
+is always kept synchronized with its {{TransformValue/value}}.</p>
+
+<pre class="idl">[<a>Exposed</a>=Window]
+interface <b>SVGTransform</b> {
+
+  // Transform Types
+  const unsigned short <a href="coords.html#__svg__SVGTransform__SVG_TRANSFORM_UNKNOWN">SVG_TRANSFORM_UNKNOWN</a> = 0;
+  const unsigned short <a href="coords.html#__svg__SVGTransform__SVG_TRANSFORM_MATRIX">SVG_TRANSFORM_MATRIX</a> = 1;
+  const unsigned short <a href="coords.html#__svg__SVGTransform__SVG_TRANSFORM_TRANSLATE">SVG_TRANSFORM_TRANSLATE</a> = 2;
+  const unsigned short <a href="coords.html#__svg__SVGTransform__SVG_TRANSFORM_SCALE">SVG_TRANSFORM_SCALE</a> = 3;
+  const unsigned short <a href="coords.html#__svg__SVGTransform__SVG_TRANSFORM_ROTATE">SVG_TRANSFORM_ROTATE</a> = 4;
+  const unsigned short <a href="coords.html#__svg__SVGTransform__SVG_TRANSFORM_SKEWX">SVG_TRANSFORM_SKEWX</a> = 5;
+  const unsigned short <a href="coords.html#__svg__SVGTransform__SVG_TRANSFORM_SKEWY">SVG_TRANSFORM_SKEWY</a> = 6;
+
+  readonly attribute unsigned short <a href="coords.html#__svg__SVGTransform__type">type</a>;
+  [<a>SameObject</a>] readonly attribute <a>DOMMatrix</a> <a href="coords.html#__svg__SVGTransform__matrix">matrix</a>;
+  readonly attribute float <a href="coords.html#__svg__SVGTransform__angle">angle</a>;
+
+  undefined <a href="coords.html#__svg__SVGTransform__setMatrix">setMatrix</a>(optional <a>DOMMatrix2DInit</a> matrix = {});
+  undefined <a href="coords.html#__svg__SVGTransform__setTranslate">setTranslate</a>(float tx, float ty);
+  undefined <a href="coords.html#__svg__SVGTransform__setScale">setScale</a>(float sx, float sy);
+  undefined <a href="coords.html#__svg__SVGTransform__setRotate">setRotate</a>(float angle, float cx, float cy);
+  undefined <a href="coords.html#__svg__SVGTransform__setSkewX">setSkewX</a>(float angle);
+  undefined <a href="coords.html#__svg__SVGTransform__setSkewY">setSkewY</a>(float angle);
+};</pre>
+
+<p>The numeric transform type constants defined on <a>SVGTransform</a> are used
+to represent the type of an <a>SVGTransform</a>'s {TransformValue/value}}.
+Their meanings are as follows:</p>
+
+<table class='vert'>
+  <tr><th>Constant</th><th>Meaning</th></tr>
+  <tr><td><b id="__svg__SVGTransform__SVG_TRANSFORM_MATRIX">SVG_TRANSFORM_MATRIX</b></td><td>A <span class='prop-value'>matrix(…)</span> value.</td></tr>
+  <tr><td><b id="__svg__SVGTransform__SVG_TRANSFORM_TRANSLATE">SVG_TRANSFORM_TRANSLATE</b></td><td>A <span class='prop-value'>translate(…)</span> value.</td></tr>
+  <tr><td><b id="__svg__SVGTransform__SVG_TRANSFORM_SCALE">SVG_TRANSFORM_SCALE</b></td><td>A <span class='prop-value'>scale(…)</span> value.</td></tr>
+  <tr><td><b id="__svg__SVGTransform__SVG_TRANSFORM_ROTATE">SVG_TRANSFORM_ROTATE</b></td><td>A <span class='prop-value'>rotate(…)</span> value.</td></tr>
+  <tr><td><b id="__svg__SVGTransform__SVG_TRANSFORM_SKEWX">SVG_TRANSFORM_SKEWX</b></td><td>A <span class='prop-value'>skewX(…)</span> value.</td></tr>
+  <tr><td><b id="__svg__SVGTransform__SVG_TRANSFORM_SKEWY">SVG_TRANSFORM_SKEWY</b></td><td>A <span class='prop-value'>skewY(…)</span> value.</td></tr>
+  <tr><td><b id="__svg__SVGTransform__SVG_TRANSFORM_UNKNOWN">SVG_TRANSFORM_UNKNOWN</b></td><td>Some other type of value.</td></tr>
+</table>
+
+<p class="note">The use of numeric transform type constants is an anti-pattern and
+new constant values will not be introduced for any transform types supported by
+<a>SVGTransform</a>.  If other types of transforms are supported and used, the <a>SVGTransform</a>
+uses the <a href="#__svg__SVGTransform__SVG_TRANSFORM_UNKNOWN">SVG_TRANSFORM_UNKNOWN</a>
+type.  See below for details on how the other properties of an <a>SVGTransform</a>
+operate with these types of transforms.</p>
+
+<p>The <b id="__svg__SVGTransform__type">type</b> IDL attribute represents
+the type of transform item that the <a>SVGTransform</a>'s {{TransformValue/value}} is.
+On getting <a href='#__svg__SVGTransform__type'>type</a>, the following steps
+are run:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>SVGTransform</a>'s {{TransformValue/value}}
+  is a
+  <span class='prop-value'>matrix(…)</span>,
+  <span class='prop-value'>translate(…)</span>,
+  <span class='prop-value'>scale(…)</span>,
+  <span class='prop-value'>rotate(…)</span>,
+  <span class='prop-value'>skewX(…)</span> or
+  <span class='prop-value'>skewY(…)</span> function,
+  then return the corresponding constant
+  value from the transform type table above.</li>
+  <li>Otherwise, return <a href="#__svg__SVGTransform__SVG_TRANSFORM_UNKNOWN">SVG_TRANSFORM_UNKNOWN</a>.
+    <p class='note'>For example, for a <span class='prop-value'>scaleX(…)</span>
+    or <span class='prop-value'>translate3d(…)</span> transform,
+    <a href="#__svg__SVGTransform__SVG_TRANSFORM_UNKNOWN">SVG_TRANSFORM_UNKNOWN</a>
+    would be returned.</p>
+  </li>
+</ol>
+
+<p>The <b id="__svg__SVGTransform__matrix">matrix</b> IDL attribute
+represents the transform as a 4x4 homogeneous matrix, and on getting
+returns the <a>SVGTransform</a>'s <a href="#TransformMatrixObject">matrix object</a>.
+When the <a href="#TransformMatrixObject">matrix object</a> is first created, its
+values are set to match the <a>SVGTransform</a>'s transform
+function {{TransformValue/value}}, and is set to
+<a href="#MatrixMode">reflects the SVGTransform</a>.</p>
+
+<p class="note">See the
+<a href="https://drafts.csswg.org/css-transforms-1/#mathematical-description">CSS Transforms</a>
+specification for a description of how the different transform function types
+correspond to particular matrix values.</p>
+
+<p>The <b id="__svg__SVGTransform__angle">angle</b> IDL attribute
+represents the angle parameter of a
+<span class="prop-value">rotate(…)</span>,
+<span class="prop-value">skewX(…)</span> or
+<span class="prop-value">skewY(…)</span> transform function.
+On getting, the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>SVGTransform</a> object's {{TransformValue/value}}
+  is a <span class="prop-value">rotate(…)</span>,
+  <span class="prop-value">skewX(…)</span> or
+  <span class="prop-value">skewY(…)</span> function,
+  return its angle argument in degrees.</li>
+  <li>Otherwise, return 0.</li>
+</ol>
+
+<p>The <b id="__svg__SVGTransform__setMatrix">setMatrix</b> method is used
+to set the <a>SVGTransform</a> to a given matrix value.  When
+setMatrix(<var>matrix</var>) is called, the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>SVGTransform</a> object is <a href='#ReadOnlyTransform'>read only</a>, then
+  <a>throw</a> a <a>NoModificationAllowedError</a>.</li>
+  <li>Let <var>newMatrix</var> be the result of <code><a>DOMMatrixReadOnly</a>.fromMatrix(<var>matrix</var>)</code>,
+  including the <a href="https://drafts.fxtf.org/geometry/#dommatrixinit-dictionary">validate and fix-up</a> steps for missing values.
+  If that method throws an error, then re-throw that error and abort these steps.</li>
+  <li>If <var>newMatrix</var>.is2D() would return true,
+  then set the <a>SVGTransform</a> object's
+  {{TransformValue/value}} to a <span class='prop-value'>matrix(…)</span>
+  value that represents the same matrix as <var>newMatrix</var>.</li>
+  <li>Otherwise, set the <a>SVGTransform</a> object's
+  {{TransformValue/value}} to a <span class='prop-value'>matrix3d(…)</span>
+  value that represents the same matrix as <var>newMatrix</var>.</li>
+  <li>In either case, <a href="#TransformMatrixObject">matrix object</a> gets synchronized
+  to the <a>SVGTransform</a> object's {{TransformValue/value}}.</li>
+  <li>If the <a>SVGTransform</a> object
+  <a href="#TransformMode">reflects a presentation attribute value of an element</a>,
+  then <a>reserialize</a> the reflected attribute.</li>
+</ol>
+
+<p>The
+<b id="__svg__SVGTransform__setTranslate">setTranslate</b>,
+<b id="__svg__SVGTransform__setScale">setScale</b>,
+<b id="__svg__SVGTransform__setRotate">setRotate</b>,
+<b id="__svg__SVGTransform__setSkewX">setSkewX</b> and
+<b id="__svg__SVGTransform__setSkewY">setSkewY</b> methods are used
+to set the <a>SVGTransform</a> to a new transform function
+value.  When one of these methods is called,
+the following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>SVGTransform</a> object is <a href='#ReadOnlyTransform'>read only</a>, then
+  <a>throw</a> a <a>NoModificationAllowedError</a>.</li>
+  <li>Set the <a>SVGTransform</a> object's
+  {{TransformValue/value}} to a new transform function
+  value, depending on which method was called:
+    <dl class='switch'>
+      <dt>setTranslate(<var>tx</var>, <var>ty</var>)</dt>
+      <dd>the new transform function value is <span class='prop-value'>translate(<var>tx</var>, <var>ty</var>)</span></dd>
+      <dt>setScale(<var>sx</var>, <var>sy</var>)</dt>
+      <dd>the new transform function value is <span class='prop-value'>scale(<var>sx</var>, <var>sy</var>)</span></dd>
+      <dt>setRotate(<var>angle</var>, <var>cx</var>, <var>cy</var>)</dt>
+      <dd>the new transform function value is <span class='prop-value'>rotate(<var>angle</var>, <var>cx</var>, <var>cy</var>)</span></dd>
+      <dt>setSkewX(<var>angle</var>)</dt>
+      <dd>the new transform function value is <span class='prop-value'>skewX(<var>angle</var>)</span></dd>
+      <dt>setSkewY(<var>angle</var>)</dt>
+      <dd>the new transform function value is <span class='prop-value'>skewY(<var>angle</var>)</span></dd>
+    </dl>
+  </li>
+  <li>Set the components of the <a>SVGTransform</a> object's
+  <a href="#TransformMatrixObject">matrix object</a> to
+  match the new transform function {{TransformValue/value}}.</li>
+  <li>If the <a>SVGTransform</a> object
+  <a href="#TransformMode">reflects an element of a
+  presentation attribute value</a>, then <a>reserialize</a> the
+  reflected attribute.</li>
+</ol>
+
+<p>This specification imposes additional requirements on the behavior of <a>DOMMatrix</a>
+objects beyond those described in the
+<a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/">Geometry Interfaces</a>
+specification, so that they can be used to reflect presentation attributes
+that take transform values.</p>
+
+<p id="MatrixMode">Every <a>DOMMatrix</a> object operates in one of two modes.
+It can:</p>
+
+<ol>
+  <li><em>reflect an <a>SVGTransform</a></em> (being exposed through the
+  <a href="#__svg__SVGTransform__matrix">matrix</a> IDL attribute on
+  an <a>SVGTransform</a>), or</li>
+  <li><em>be detached</em>, which is the case for <a>DOMMatrix</a> objects
+  created using their constructor or with
+  <a href="struct.html#__svg__SVGSVGElement__createSVGMatrix">createSVGMatrix</a>.</li>
+</ol>
+
+<p id="ReadOnlyMatrix">A <a>DOMMatrix</a> can be designated as <em>read only</em>,
+which means that attempts to modify the object will result in an exception
+being thrown.  When assigning to any of a read only <a>DOMMatrix</a>'s
+IDL attributes, or when invoking any of its mutable transform methods,
+a <a>NoModificationAllowedError</a> exception will be <a>thrown</a>
+instead of updating the internal value.</p>
+
+<p class='note'>Note that this applies only to the read-write <a>DOMMatrix</a>
+interface; the <a>DOMMatrixReadOnly</a> interface, which is not used for reflecting
+{{transform}}, will already throw an exception if an attempt is made to modify it.</p>
+
+<p>When assigning to any of a writable <a>DOMMatrix</a>'s
+IDL attributes, or when invoking any of its mutable transform methods,
+the following steps are run after updating the internal matrix value:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>DOMMatrix</a> <a href='#MatrixMode'>reflects an SVGTransform</a>,
+  then:
+    <ol>
+      <li>If the <a>DOMMatrix</a> would return true from its
+      <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dommatrixreadonly-is2d">is2d</a>
+      method, then set the <a>SVGTransform</a> object's
+      {{TransformValue/value}} to a <span class='prop-value'>matrix(…)</span>
+      value that represents the same matrix as the <a>DOMMatrix</a>.</li>
+      <li>Otherwise, set the <a>SVGTransform</a> object's
+      {{TransformValue/value}} to a <span class='prop-value'>matrix3d(…)</span>
+      value that represents the same matrix as the <a>DOMMatrix</a>.</li>
+      <li>If the <a>SVGTransform</a> object
+      <a href="#TransformMode">reflects an element of a
+      presentation attribute value</a>, then <a>reserialize</a> the
+      reflected attribute.</li>
+    </ol>
+  </li>
+</ol>
+
+<h4 id="InterfaceSVGTransformList">Interface SVGTransformList</h4>
+
+<p>The <a>SVGTransformList</a> interface is a <a>list interface</a>
+whose elements are <a>SVGTransform</a> objects.  An <a>SVGTransformList</a>
+represents a value that the {{transform}} property can take, namely
+either a <a href="https://drafts.csswg.org/css-transforms-1/#typedef-transform-list">&lt;transform-list&gt;</a>
+or the keyword <span class='prop-value'>none</span>.</p>
+
+<pre class="idl">[<a>Exposed</a>=Window]
+interface <b>SVGTransformList</b> {
+
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__length">length</a>;
+  readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__numberOfItems">numberOfItems</a>;
+
+  undefined <a href="types.html#__svg__SVGNameList__clear">clear</a>();
+  <a>SVGTransform</a> <a href="types.html#__svg__SVGNameList__initialize">initialize</a>(<a>SVGTransform</a> newItem);
+  getter <a>SVGTransform</a> <a href="types.html#__svg__SVGNameList__getItem">getItem</a>(unsigned long index);
+  <a>SVGTransform</a> <a href="types.html#__svg__SVGNameList__insertItemBefore">insertItemBefore</a>(<a>SVGTransform</a> newItem, unsigned long index);
+  <a>SVGTransform</a> <a href="types.html#__svg__SVGNameList__replaceItem">replaceItem</a>(<a>SVGTransform</a> newItem, unsigned long index);
+  <a>SVGTransform</a> <a href="types.html#__svg__SVGNameList__removeItem">removeItem</a>(unsigned long index);
+  <a>SVGTransform</a> <a href="types.html#__svg__SVGNameList__appendItem">appendItem</a>(<a>SVGTransform</a> newItem);
+  <a href="types.html#__svg__SVGNameList__setter">setter</a> undefined (unsigned long index, <a>SVGTransform</a> newItem);
+
+  <span class='comment'>// Additional methods not common to other list interfaces.</span>
+  <a>SVGTransform</a> <a href="coords.html#__svg__SVGTransformList__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>(optional <a>DOMMatrix2DInit</a> matrix = {});
+  <a>SVGTransform</a>? <a href="coords.html#__svg__SVGTransformList__consolidate">consolidate</a>();
+};</pre>
+
+<p>The <b id="__svg__SVGTransformList__createSVGTransformFromMatrix">createSVGTransformFromMatrix</b>
+method is used to create a new <a>SVGTransform</a> object from a matrix object.
+When the createSVGTransformFromMatrix(<var>matrix</var>) method is called,
+the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>transform</var> be a newly created <a>SVGTransform</a> object
+  that is <a href="#TransformMode">detached</a>.</li>
+  <li>Follow the steps that would be run if the <a href="#__svg__SVGTransform__setMatrix">setMatrix</a>
+  method on <var>transform</var> were called, passing <var>matrix</var>
+  as its argument.</li>
+  <li>Return <var>transform</var>.</li>
+</ol>
+
+<p>The <b id="__svg__SVGTransformList__consolidate">consolidate</b>
+method is used to convert the transform list into an equivalent
+transformation using a single transform function.  When the
+consolidate() method is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the <a>SVGTransformList</a> object is <a href="types.html#ReadOnlyList">read only</a>,
+  then <a>throw</a> a <a>NoModificationAllowedError</a>.</li>
+  <li>If the list is empty, return null.</li>
+  <li><a>Detach</a> and then remove all elements in the list.</li>
+  <li>Let <var>transform</var> be a newly created <a>SVGTransform</a>
+  object.</li>
+  <li>Let <var>matrix</var> be the matrix value obtained by beginning
+  with an identity matrix, and then post-multiplying the
+  value of the <a href="#TransformMatrixObject">matrix object</a> for each
+  <a>SVGTransform</a> in the list, in order.</li>
+  <li>Set the components of <var>transform</var>'s
+  <a href="#TransformMatrixObject">matrix object</a> to the component values in
+  <var>matrix</var>.</li>
+  <li>If <var>transform</var>'s
+  <a href="#TransformMatrixObject">matrix object</a> would return true from its
+  <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dommatrixreadonly-is2d">is2d</a>
+  method, then set <var>transform</var>'s
+  {{TransformValue/value}} to a <span class='prop-value'>matrix(…)</span>
+  value that represents the same matrix as the <a href="#TransformMatrixObject">matrix object</a>.</li>
+  <li>Otherwise, set <var>transform</var>'s
+  {{TransformValue/value}} to a <span class='prop-value'>matrix3d(…)</span>
+  value that represents the same matrix as the <a href="#TransformMatrixObject">matrix object</a>.</li>
+  <li><a>Attach</a> <var>transform</var> to this <a>SVGTransformList</a>.</li>
+  <li>Append <var>transform</var> to this list.</li>
+  <li>If the list <a>reflects</a> a presentation attribute, then
+  <a>reserialize</a> the reflected attribute.</li>
+  <li>Return <var>transform</var>.</li>
+</ol>
+
+<p>The behavior of all other interface members of <a>SVGLengthList</a> are
+defined in <a href="types.html#ListInterfaces">List interfaces</a>.</p>
+
+
+<h4 id="InterfaceSVGAnimatedTransformList">Interface SVGAnimatedTransformList</h4>
+
+<p>An <a>SVGAnimatedTransformList</a> object is used to <a>reflect</a> the
+{{transform}} property and its corresponding presentation attribute
+(which, depending on the element, is <span class="attr-name">transform</span>,
+{{linearGradient/gradientTransform}} or
+{{pattern/patternTransform}}).</p>
+
+<pre class="idl">[<a>Exposed</a>=Window]
+interface <b>SVGAnimatedTransformList</b> {
+  [<a>SameObject</a>] readonly attribute <a>SVGTransformList</a> <a href="coords.html#__svg__SVGAnimatedTransformList__baseVal">baseVal</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGTransformList</a> <a href="coords.html#__svg__SVGAnimatedTransformList__animVal">animVal</a>;
+};</pre>
+
+<p class='ready-for-wider-review'>The <b id="__svg__SVGAnimatedTransformList__baseVal">baseVal</b> and
+<b id="__svg__SVGAnimatedTransformList__animVal">animVal</b> IDL attributes
+represent the value of the reflected presentation attribute.
+On getting <a href="#__svg__SVGAnimatedTransformList__baseVal">baseVal</a> or
+<a href="#__svg__SVGAnimatedTransformList__animVal">animVal</a>, an
+<a>SVGTransformList</a> object is returned that reflects the given
+presentation attribute.</p>
+
+<h4 id="InterfaceSVGPreserveAspectRatio">Interface SVGPreserveAspectRatio</h4>
+
+<p>The <a>SVGPreserveAspectRatio</a> interface is used to represent
+values for the {{preserveAspectRatio}} attribute.</p>
+
+<p id="ReadOnlyPreserveAspectRatio">An <a>SVGPreserveAspectRatio</a> object can be designated as <em>read only</em>,
+which means that attempts to modify the object will result in an exception
+being thrown, as described below.</p>
+
+<p id="PreserveAspectRatioMode" class='ready-for-wider-review'>Every <a>SVGPreserveAspectRatio</a> object
+<em>reflects the base value</em> of a <a>reflected</a> {{preserveAspectRatio}}
+attribute (being exposed through the methods on the
+<a href="#__svg__SVGAnimatedPreserveAspectRatio__baseVal">baseVal</a> or
+<a href="#__svg__SVGAnimatedPreserveAspectRatio__animVal">animVal</a> member of
+an <a>SVGAnimatedPreserveAspectRatio</a>).</p>
+
+<pre class="idl">[<a>Exposed</a>=Window]
+interface <b>SVGPreserveAspectRatio</b> {
+
+  // Alignment Types
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_UNKNOWN">SVG_PRESERVEASPECTRATIO_UNKNOWN</a> = 0;
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_NONE">SVG_PRESERVEASPECTRATIO_NONE</a> = 1;
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMINYMIN">SVG_PRESERVEASPECTRATIO_XMINYMIN</a> = 2;
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMIDYMIN">SVG_PRESERVEASPECTRATIO_XMIDYMIN</a> = 3;
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMAXYMIN">SVG_PRESERVEASPECTRATIO_XMAXYMIN</a> = 4;
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMINYMID">SVG_PRESERVEASPECTRATIO_XMINYMID</a> = 5;
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMIDYMID">SVG_PRESERVEASPECTRATIO_XMIDYMID</a> = 6;
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMAXYMID">SVG_PRESERVEASPECTRATIO_XMAXYMID</a> = 7;
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMINYMAX">SVG_PRESERVEASPECTRATIO_XMINYMAX</a> = 8;
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMIDYMAX">SVG_PRESERVEASPECTRATIO_XMIDYMAX</a> = 9;
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMAXYMAX">SVG_PRESERVEASPECTRATIO_XMAXYMAX</a> = 10;
+
+  // Meet-or-slice Types
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_MEETORSLICE_UNKNOWN">SVG_MEETORSLICE_UNKNOWN</a> = 0;
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_MEETORSLICE_MEET">SVG_MEETORSLICE_MEET</a> = 1;
+  const unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__SVG_MEETORSLICE_SLICE">SVG_MEETORSLICE_SLICE</a> = 2;
+
+  attribute unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__align">align</a>;
+  attribute unsigned short <a href="coords.html#__svg__SVGPreserveAspectRatio__meetOrSlice">meetOrSlice</a>;
+};</pre>
+
+<p>The numeric alignment type constants defined on <a>SVGPreserveAspectRatio</a>
+are used to represent the alignment keyword values that {{preserveAspectRatio}}
+can take.  Their meanings are as follows:</p>
+
+<table class='vert'>
+  <tr><th>Constant</th><th>Meaning</th></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_NONE">SVG_PRESERVEASPECTRATIO_NONE</b></td><td>The <span class='attr-value'>none</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMINYMIN">SVG_PRESERVEASPECTRATIO_XMINYMIN</b></td><td>The <span class='attr-value'>xMinYMin</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMIDYMIN">SVG_PRESERVEASPECTRATIO_XMIDYMIN</b></td><td>The <span class='attr-value'>xMidYMin</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMAXYMIN">SVG_PRESERVEASPECTRATIO_XMAXYMIN</b></td><td>The <span class='attr-value'>xMaxYMin</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMINYMID">SVG_PRESERVEASPECTRATIO_XMINYMID</b></td><td>The <span class='attr-value'>xMinYMid</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMIDYMID">SVG_PRESERVEASPECTRATIO_XMIDYMID</b></td><td>The <span class='attr-value'>xMidYMid</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMAXYMID">SVG_PRESERVEASPECTRATIO_XMAXYMID</b></td><td>The <span class='attr-value'>xMaxYMid</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMINYMAX">SVG_PRESERVEASPECTRATIO_XMINYMAX</b></td><td>The <span class='attr-value'>xMinYMax</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMIDYMAX">SVG_PRESERVEASPECTRATIO_XMIDYMAX</b></td><td>The <span class='attr-value'>xMidYMax</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_XMAXYMAX">SVG_PRESERVEASPECTRATIO_XMAXYMAX</b></td><td>The <span class='attr-value'>xMaxYMax</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_UNKNOWN">SVG_PRESERVEASPECTRATIO_UNKNOWN</b></td><td>Some other type of value.</td></tr>
+</table>
+
+<p>Similarly, the numeric meet-or-slice type constants defined on
+<a>SVGPreserveAspectRatio</a> are used to represent the meet-or-slice
+keyword values that {{preserveAspectRatio}} can take.  Their
+meanings are as follows:</p>
+
+<table class='vert'>
+  <tr><th>Constant</th><th>Meaning</th></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_MEETORSLICE_MEET">SVG_MEETORSLICE_MEET</b></td><td>The <span class='attr-value'>meet</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_MEETORSLICE_SLICE">SVG_MEETORSLICE_SLICE</b></td><td>The <span class='attr-value'>slice</span> keyword.</td></tr>
+  <tr><td><b id="__svg__SVGPreserveAspectRatio__SVG_MEETORSLICE_UNKNOWN">SVG_MEETORSLICE_UNKNOWN</b></td><td>Some other type of value.</td></tr>
+</table>
+
+<p>The <b id="__svg__SVGPreserveAspectRatio__align">align</b> IDL attribute
+represents the alignment keyword part of the {{preserveAspectRatio}}
+value.  On getting, the following steps are run:</p>
+
+<div class='ready-for-wider-review'>
+<ol class='algorithm'>
+  <li>Let <var>value</var>
+  <a href='#PreserveAspectRatioMode'>reflect the base value</a>
+  of a {{preserveAspectRatio}} attribute.
+  <var>value</var> is the current non-animated value of the attribute
+  (using the attribute's <a>initial value</a> if it is not present or invalid).
+  </li>
+  <li>Return the constant value as specified in the alignment
+  constant table above for the alignment keyword in <var>value</var>.</li>
+</ol>
+</div>
+
+<p>On setting <a href="#__svg__SVGPreserveAspectRatio__align">align</a>, the
+following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>SVGPreserveAspectRatio</a> is <a href="#ReadOnlyPreserveAspectRatio">read only</a>, then <a>throw</a> a <a>NoModificationAllowedError</a>.</li>
+  <li>If <var>value</var> is
+  <a href="#__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_UNKNOWN">SVG_PRESERVEASPECTRATIO_UNKNOWN</a>
+  or does not have a corresponding entry in the
+  alignment keyword table above, then throw a <a>TypeError</a>.</li>
+  <li>Let <var>string</var> be the corresponding keyword
+  in the alignment keyword table above for <var>value</var>.</li>
+  <li>Append a single U+0020 SPACE character to <var>string</var>.</li>
+  <li>Let <var>meet or slice</var> be the value that would be
+  returned from the
+  <a href="#__svg__SVGPreserveAspectRatio__meetOrSlice">meetOrSlice</a>
+  member on this <a>SVGPreserveAspectRatio</a>.</li>
+  <li>Append to <var>string</var> the corresponding keyword
+  in the meet-or-slice keyword table above for <var>meet or slice</var>.</li>
+  <li>Set the reflected {{preserveAspectRatio}} attribute to <var>string</var>.</li>
+</ol>
+
+<p>The <b id="__svg__SVGPreserveAspectRatio__meetOrSlice">meetOrSlice</b> IDL attribute
+represents the alignment keyword part of the {{preserveAspectRatio}}
+value.  On getting, the following steps are run:</p>
+
+<div class='ready-for-wider-review'>
+<ol class='algorithm'>
+  <li>Let <var>value</var> be a {{preserveAspectRatio}} value that
+  <a href='#PreserveAspectRatioMode'>reflects the base value</a> of a {{preserveAspectRatio}}
+  attribute <var>value</var> is the current non-animated value of the attribute.
+  </li>
+  <li>If the meet-or-slice value is not present in <var>value</var>,
+  then return <a href="#__svg__SVGPreserveAspectRatio__SVG_MEETORSLICE_MEET">SVG_MEETORSLICE_MEET</a>.</li>
+  <li>Otherwise, the meet-or-slice value is present.  Return the constant
+  value as specified in the meet-or-slice constant table above for the meet-or-slice
+  keyword in <var>value</var>.</li>
+</ol>
+</div>
+
+<p>On setting <a href="#__svg__SVGPreserveAspectRatio__meetOrSlice">meetOrSlice</a>, the
+following steps are run:</p>
+
+<ol class='algorithm'>
+  <li>If the <a>SVGPreserveAspectRatio</a> is <a href="#ReadOnlyPreserveAspectRatio">read only</a>, then <a>throw</a> a <a>NoModificationAllowedError</a>.</li>
+  <li>If <var>value</var> is
+  <a href="#__svg__SVGPreserveAspectRatio__SVG_MEETORSLICE_UNKNOWN">SVG_MEETORSLICE_UNKNOWN</a>
+  or does not have a corresponding entry in the
+  meet-or-slice keyword table above, then throw a <a>TypeError</a>.</li>
+  <li>Let <var>align</var> be the value that would be
+  returned from the
+  <a href="#__svg__SVGPreserveAspectRatio__align">align</a>
+  member on this <a>SVGPreserveAspectRatio</a>.</li>
+  <li>Let <var>string</var> be the corresponding keyword
+  in the alignment keyword table above for <var>align</var>.</li>
+  <li>Append a single U+0020 SPACE character to <var>string</var>.</li>
+  <li>Append to <var>string</var> the corresponding keyword
+  in the meet-or-slice keyword table above for <var>value</var>.</li>
+  <li>Set the reflected {{preserveAspectRatio}} attribute to <var>string</var>.</li>
+</ol>
+
+
+<h4 id="InterfaceSVGAnimatedPreserveAspectRatio">Interface SVGAnimatedPreserveAspectRatio</h4>
+
+<p>An <a>SVGAnimatedPreserveAspectRatio</a> object is used to <a>reflect</a>
+the {{preserveAspectRatio}} attribute.</p>
+
+<pre class="idl">[<a>Exposed</a>=Window]
+interface <b>SVGAnimatedPreserveAspectRatio</b> {
+  [<a>SameObject</a>] readonly attribute <a>SVGPreserveAspectRatio</a> <a href="coords.html#__svg__SVGAnimatedPreserveAspectRatio__baseVal">baseVal</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGPreserveAspectRatio</a> <a href="coords.html#__svg__SVGAnimatedPreserveAspectRatio__animVal">animVal</a>;
+};</pre>
+
+<p class='ready-for-wider-review'>The <b id="__svg__SVGAnimatedPreserveAspectRatio__baseVal">baseVal</b> and
+<b id="__svg__SVGAnimatedPreserveAspectRatio__animVal">animVal</b> IDL
+attributes represent the current non-animated value of the reflected {{preserveAspectRatio}}
+attribute.  On getting <a href="#__svg__SVGAnimatedPreserveAspectRatio__baseVal">baseVal</a>
+or <a href="#__svg__SVGAnimatedPreserveAspectRatio__animVal">animVal</a>,
+an <a>SVGPreserveAspectRatio</a> object is returned that
+<a href="#PreserveAspectRatioMode">reflects the base value</a> of the {{preserveAspectRatio}}
+attribute on the SVG element that the object with the reflecting IDL attribute
+of type <a>SVGAnimatedPreserveAspectRatio</a> was obtained from.</p>
+
+</div>
