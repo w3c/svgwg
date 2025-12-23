@@ -1,4 +1,5 @@
-<h2>Styling</h2>
+<h2 id="styling">
+Styling</h2>
 
 <h3 id="StylingUsingCSS">Styling SVG content using CSS</h3>
 

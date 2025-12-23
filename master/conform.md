@@ -309,7 +309,7 @@ would likely use static mode.
       This is consistent with <a href="https://html.spec.whatwg.org/multipage/embedded-content.html#the-img-element">HTML's requirement</a>
       that image sources must reference
       "a non-interactive, optionally animated, image resource that is neither paged nor scripted"
-      [<a href="refs.html#ref-html">HTML</a>]</p>
+      [[!HTML]]</p>
     </dd>
 
 
@@ -492,7 +492,7 @@ would likely use static mode.
   conformance with this specification is defined by whether
   the content is or can generate a conforming DOM.
   Additional conformance classes depend on whether the content
-  is also valid and well-formed XML [<a href="refs.html#ref-xml">xml</a>].
+  is also valid and well-formed XML [[!xml]].
 </p>
 
 <h4 id="ConformingSVGDOMSubtrees">Conforming SVG DOM Subtrees</h4>
@@ -581,13 +581,13 @@ if it:</p>
 
 <ul>
   <li>meets all <a href="https://www.w3.org/TR/2008/REC-xml-20081126/#sec-well-formed">XML well-formedness constraints</a>
-  ([<a href="refs.html#ref-xml">xml</a>]),</li>
+  ([[!xml]]),</li>
 
   <li>conforms to the <a href="https://www.w3.org/TR/xml-names"><cite>Namespaces in XML</cite></a>
   specification [<a href="refs.html#ref-xml-names">xml-names</a>],</li>
 
   <li>all {{id}} attributes are <a href="https://www.w3.org/TR/xml/#sec-attribute-types">valid XML IDs</a>
-  ([<a href="refs.html#ref-xml">xml</a>], section 3.3.1), and </li>
+  ([[!xml]], section 3.3.1), and </li>
 
   <li>any <code>&lt;?xml-stylesheet?&gt;</code> processing instruction conforms to
   <a href="https://www.w3.org/TR/xml-stylesheet"><cite>Associating stylesheets with XML documents</cite></a>
@@ -841,7 +841,7 @@ a viewer, and thus viewer conformance criteria also apply.
 
 <p>A <dfn>conforming SVG interpreter</dfn> must be able to parse and process all
 XML constructs defined in <a href="https://www.w3.org/TR/2008/REC-xml-20081126/">XML 1.0</a>
-[<a href="refs.html#ref-xml">xml</a>] and
+[[!xml]] and
 <a href="https://www.w3.org/TR/2006/REC-xml-names-20060816/"><cite>Namespaces in XML</cite></a>
 [<a href="refs.html#ref-xml-names">xml-names</a>].</p>
 

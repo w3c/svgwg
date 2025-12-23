@@ -103,7 +103,7 @@
   <dt id="ref-graphics-aria-1.0" class="normref">[<a href="https://www.w3.org/TR/graphics-aria-1.0/">graphics-aria-1.0</a>]</dt>
   <dd><div>Amelia Bellamy-Royds; Fred Esch; Richard Schwerdtfeger; Léonie Watson. <a href="https://www.w3.org/TR/graphics-aria-1.0/"><cite>WAI-<strong class="highlight">ARIA Graphics</strong> Module</cite></a>. 26 June 2018. W3C Proposed Recommendation . URL:&nbsp;<a href="https://www.w3.org/TR/graphics-aria-1.0/">https://www.w3.org/TR/graphics-aria-1.0/</a> ED:&nbsp;<a href="https://w3c.github.io/graphics-aria/">https://w3c.github.io/graphics-aria/</a></div></dd>
 
-  <dt id="ref-html" class="normref">[<a href="https://html.spec.whatwg.org/multipage/">HTML</a>]</dt>
+  <dt id="ref-html" class="normref">[[[!HTML]]]</dt>
   <dd><div>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/"><cite>HTML Standard</cite></a>. Living Standard. URL:&nbsp;<a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a></div></dd>
 
   <dt id="ref-jpeg" class="normref">[<a href="https://www.w3.org/Graphics/JPEG/jfif3.pdf">JPEG</a>]</dt>

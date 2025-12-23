@@ -92,7 +92,7 @@
 
 <p>
   The characters to be drawn are expressed as
-  <a href="https://www.w3.org/TR/2008/REC-xml-20081126/#syntax">character data</a> ([<a href="refs.html#ref-xml">xml</a>],
+  <a href="https://www.w3.org/TR/2008/REC-xml-20081126/#syntax">character data</a> ([[!xml]],
   section 2.4) inside the {{text}} element. As a result:
 </p>
 
@@ -1882,7 +1882,7 @@ d="M 50,50 C 100,0 200,100 250,50"/>
   SVG's text layout options are designed to cover most general use
   cases. If more complex layout is required (bulleted lists, tables,
   etc.), text can be rendered in another XML namespace such as XHTML
-  [<a href="refs.html#ref-html">HTML</a>] embedded inline within a
+  [[!HTML]] embedded inline within a
   {{foreignObject}} element.
 </p>
 

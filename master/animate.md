@@ -1,4 +1,4 @@
-<h2>Appendix D: Animating SVG Documents</h2>
+<h2 id="animation">Appendix D: Animating SVG Documents</h2>
 
 
 <p>SVG supports the ability to change vector graphics over time,
@@ -35,7 +35,7 @@ SVG content can be animated in the following ways:</p>
   DOM interfaces to support efficient animation via scripting.
   Ideally, user agents that support scripting will also implement
   the <a href="https://html.spec.whatwg.org/multipage/imagebitmap-and-animations.html#animation-frames">animation frames</a> APIs
-  defined in HTML [<a href="refs.html#ref-html">HTML</a>].</li>
+  defined in HTML [[!HTML]].</li>
 
   <li>Using the <a href="https://www.w3.org/TR/web-animations-1/">Web Animations API</a>
   [<a href="refs.html#ref-web-animations-1">web-animations-1</a>].

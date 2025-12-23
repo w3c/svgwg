@@ -1,4 +1,4 @@
-<h2>Scripting and Interactivity</h2>
+<h2 id="scripting-interactivity">Scripting and Interactivity</h2>
 
 <h3 id="Introduction">Introduction</h3>
 
@@ -842,7 +842,7 @@ attribute.</p>
   </dl>
 
   <p>For every <a>event type</a> that the <a>user agent</a> supports, SVG supports that as an event attribute,
-    following the same requirements as for <a>event handler content attributes</a> [<a href="refs.html#ref-html">HTML</a>].
+    following the same requirements as for <a>event handler content attributes</a> [[!HTML]].
     The <a>event attributes</a> are available on all <a>SVG elements</a>.
   </p>
 
@@ -1073,7 +1073,7 @@ myElement.addEventListener("click", myAction1, false)
       </table>
     </dt>
     <dd>
-      <p>The crossorigin attribute is a <a>CORS settings attribute</a>, and unless otherwise specified follows the same processing rules as in html [<a href="refs.html#ref-html">HTML</a>].</p>
+      <p>The crossorigin attribute is a <a>CORS settings attribute</a>, and unless otherwise specified follows the same processing rules as in html [[!HTML]].</p>
     </dd>
     <dt>
       <table class="attrdef def">

@@ -56,7 +56,7 @@ six methods for describing an attribute's syntax:</p>
 
   <li>By reference to an
   <a href="https://www.w3.org/TR/REC-xml/#sec-notation">EBNF symbol</a> defined
-  in this or another specification [<a href="refs.html#ref-xml">xml</a>].
+  in this or another specification [[!xml]].
   For external definitions, this is indicated by <span class="syntax">&bs[;EBNF]</span>
   appearing in the Value column.</li>
 
@@ -71,7 +71,7 @@ six methods for describing an attribute's syntax:</p>
   <span class="syntax">&bs[;URL]</span> appearing in the Value column.</li>
 
   <li>As a type as defined by the <a href="https://html.spec.whatwg.org/">HTML
-  Standard</a> [<a href="refs.html#ref-html">HTML</a>].  This is indicated by
+  Standard</a> [[!HTML]].  This is indicated by
   <span class="syntax">&bs[;HTML]</span> appearing in the Value column.</li>
 
   <li>In prose, below the attribute definition table.  This is indicated by the
@@ -304,7 +304,7 @@ as described in the Web IDL specification. [<a href="refs.html#ref-webidl">WebID
 <h4 id="SVGDOMNamingConventions">Naming conventions</h4>
 
 <p>The SVG DOM follows similar naming conventions to HTML and DOM standards
-([<a href="refs.html#ref-html">HTML</a>], [<a href="refs.html#ref-dom">DOM</a>]).</p>
+([[!HTML]], [<a href="refs.html#ref-dom">DOM</a>]).</p>
 
 <p>All names are defined as one or more English words
 concatenated together to form a single string. Property or

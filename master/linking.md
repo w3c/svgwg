@@ -4,26 +4,28 @@
 <h3 id="URLReference">References</h3>
 <h4 id="HeadOverview">Overview</h4>
 
-<p>On the Internet, resources are identified using <a>URLs</a>
-(Internationalized Resource Identifiers). For
-example, an SVG file called someDrawing.svg located at
-http://example.com might have the following <a>URL</a>:</p>
+    On the Web, resources are identified using <a>URLs</a>
+    (Internationalized Resource Identifiers). For
+    example, an SVG file called <code>someDrawing.svg</code> located 
+    at <code>http://example.com</code> might have the following 
+    <a>URL</a>:
 
-<pre>
-http://example.com/someDrawing.svg
-</pre>
+    <pre>
+    http://example.com/someDrawing.svg
+    </pre>
 
-<p>An <a>URL</a> can also address a particular element within an XML
-document by including an <a>URL</a> fragment
-identifier as part of the <a>URL</a>. An <a>URL</a> which includes an
-<a>URL</a> fragment identifier consists of an optional base <a>URL</a>, followed by a "#" character,
-followed by the <a>URL</a> fragment identifier. For example, the
-following <a>URL</a> can be used to specify the element whose ID is
-"Lamppost" within file someDrawing.svg:</p>
+    An <a>URL</a> can also address a particular element within an XML
+    document by including an <a>URL</a> fragment identifier as part of
+    the <a>URL</a>. An <a>URL</a> which includes an <a>URL</a> 
+    fragment identifier consists of an optional base <a>URL</a>, 
+    followed by a "<code>#</code>" character, followed by the 
+    <a>URL</a> fragment identifier. For example, the following 
+    <a>URL</a> can be used to specify the element whose 
+    <code>ID</code> is "<code>Lamppost</code>" within file <code>someDrawing.svg</code>:
 
-<pre>
-http://example.com/someDrawing.svg#Lamppost
-</pre>
+    <pre>
+    http://example.com/someDrawing.svg#Lamppost
+    </pre>
 
 <!-- from 1.2T - add this too?
 
@@ -353,7 +355,7 @@ XLink attributes. For example:</p>
   </li>
   <li>For source URLs on embedded HTML media elements,
     as required based on source selection rules
-    <a href="https://html.spec.whatwg.org/multipage/media.html#media-elements">in the HTML specification</a> [<a href="refs.html#ref-html">HTML</a>].
+    <a href="https://html.spec.whatwg.org/multipage/media.html#media-elements">in the HTML specification</a> [[!HTML]].
   </li>
   <li>For all presentation attributes and style properties,
     at the time the property is required for rendering an element.
@@ -409,7 +411,7 @@ The absolute URL should be generated using one of the following methods:
   <li>
     as described in the <a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#resolving-urls">HTML specification</a>
     if the reference occurs in a non-presentation attribute
-    in an HTML document that is not an XML document [<a href="refs.html#ref-html">HTML</a>]
+    in an HTML document that is not an XML document [[!HTML]]
   </li>
 </ul>
 
@@ -432,7 +434,7 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
     <p>
       If the URL is being processed following the activation of a link,
       the user agent must follow the <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#browsing-the-web">algorithm for navigating to a URL</a>
-      described in the HTML specification [<a href="refs.html#ref-html">HTML</a>].
+      described in the HTML specification [[!HTML]].
       The outcome of this algorithm varies depending on the
       {{a/target}} browsing context and security restrictions between browsing contexts,
       and on whether the link is to the same document as is currently contained in that browsing context
@@ -524,7 +526,7 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
 <p>
   When fetching external resources from the Internet,
   user agents must use a <a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#create-a-potential-cors-request">potentially CORS-enabled request</a>
-  as defined in HTML [<a href="refs.html#ref-html">HTML</a>]
+  as defined in HTML [[!HTML]]
   with the <em>corsAttributeState</em> as follows:
 </p>
 <ul>
@@ -833,7 +835,7 @@ or frame to be replaced by the W3C home page.</p>
     </dl>
     <p> The normative definitions for browsing contexts and security
         restrictions on navigation actions between browsing contexts
-        is HTML [<a href="refs.html#ref-html">HTML</a>], specifically
+        is HTML [[!HTML]], specifically
         <a href="https://html.spec.whatwg.org/multipage/browsers.html#browsers">the chapter on
             loading web pages</a>.
     </p>
@@ -918,8 +920,12 @@ or frame to be replaced by the W3C home page.</p>
 
     Note: The SVG Working Group is waiting on the HTML specification 
     to clarify the processing model and algorithms for these 
-    attributes. The attributes should follow the definitions and algorithms <a href="https://html.spec.whatwg.org/multipage/links.html#following-hyperlinks-2">as specified in the HTML 
-    specification</a>. For more details on the ongoing clarification effort, see the <a href="https://github.com/whatwg/html/issues/11936">HTML specification issue on processing model and algorithms
+    attributes. The attributes should follow the definitions and 
+    algorithms <a href="https://html.spec.whatwg.org/multipage/links.html#following-hyperlinks-2">as 
+    specified in the HTML specification</a>. For more details on the
+    ongoing clarification effort, see the 
+    <a href="https://github.com/whatwg/html/issues/11936">HTML 
+    specification issue on processing model and algorithms
     for the HTML A element</a>.
 
 
@@ -1051,7 +1057,7 @@ formed <em>SVGViewSpec</em>.</p>
 
 <p>When a source document performs a link into an SVG document, for example
 via an <a href="https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-a-element">HTML anchor element</a>
-([<a href="refs.html#ref-html">HTML</a>]; i.e.,
+([[!HTML]]; i.e.,
 <span class="attr-value">&lt;a href=...&gt;</span> element in HTML) or an
 XLink specification [<a href="refs.html#ref-xlink">xlink</a>], then
 the SVG fragment identifier specifies the initial view into the SVG document,

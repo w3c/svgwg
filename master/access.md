@@ -1,4 +1,4 @@
-<h2>Appendix C: Accessibility Support</h2>
+<h2 id="accessibility">Appendix C: Accessibility Support</h2>
 
 <p class="normativity"><em>This appendix is informative, not normative.</em></p>
 

@@ -1387,7 +1387,7 @@ other elements (such as via a {{use}}).</p>
 
 @@elementsummary switch@@
 
-<p>The {{switch}} element evaluates
+<p>The <dfn dfn>switch</dfn> element evaluates
 the {{requiredExtensions}} and
 {{systemLanguage}} attributes on its direct child elements in
 order, and then processes and renders the first child for which these
@@ -1942,7 +1942,7 @@ this case) upon reading it back in:
       Additional requirements apply in order for
       the {{id}} attribute to be valid in XML documents,
       as defined in the specification for the relevant version of XML.
-      A stand-alone SVG document uses XML 1.0 syntax [<a href="refs.html#ref-xml">xml</a>],
+      A stand-alone SVG document uses XML 1.0 syntax [[!xml]],
       which specifies that valid {{id}} values are <a href="https://www.w3.org/TR/xml/#NT-Name">XML name tokens</a>.
       Valid XML 1.0 names only include designated characters (letters, digits, and a few punctuation marks),
       and do not start with a digit, a full stop (.) character, or a hyphen-minus (-) character.
@@ -1964,7 +1964,7 @@ this case) upon reading it back in:
 <p>The <span class="attr-name">lang</span> attribute (in no namespace) specifies the primary language for the element's contents and
 for any of the element's attributes that contain text.
 </p>
-<p>The <span class="attr-name">lang</span> attribute in the XML namespace is defined in XML [<a href="refs.html#ref-xml">xml</a>].</p>
+<p>The <span class="attr-name">lang</span> attribute in the XML namespace is defined in XML [[!xml]].</p>
 <p>If these attributes are omitted from an element, then the language of this element is the same as the language of its parent element, if any.</p>
 <p>The <span class="attr-name">lang</span> attribute in the XML namespace may be used on SVG elements in XML documents.
 If both the <span class="attr-name">lang</span> attribute in no namespace and the <span class="attr-name">lang</span> attribute
@@ -2052,7 +2052,7 @@ or the empty string. Setting the attribute to the empty string indicates that th
     are the strings <span class='attr-value'>'default'</span> and <span class='attr-value'>'preserve'</span>, without
     white space.  Refer to the
     <a href="https://www.w3.org/TR/2008/REC-xml-20081126/"><cite>Extensible Markup Language (XML) 1.0</cite></a>
-    Recommendation [<a href="refs.html#ref-xml">xml</a>] and to the
+    Recommendation [[!xml]] and to the
     discussion <a href="text.html#WhiteSpace">white space
     handling</a> in SVG.</p>
     <p>New content should use the {{white-space}} property instead.</p>

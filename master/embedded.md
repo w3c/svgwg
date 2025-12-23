@@ -302,7 +302,7 @@ elements within an SVG file.</p>
     </table>
   </dt>
   <dd>
-    <p>The crossorigin attribute is a <a>CORS settings attribute</a>, and unless otherwise specified follows the same processing rules as in HTML [<a href="refs.html#ref-html">HTML</a>].</p>
+    <p>The crossorigin attribute is a <a>CORS settings attribute</a>, and unless otherwise specified follows the same processing rules as in HTML [[!HTML]].</p>
   </dd>
   <dt>
     <table class="attrdef def">
