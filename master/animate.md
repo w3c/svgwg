@@ -3,7 +3,7 @@
 
 <p>SVG supports the ability to change vector graphics over time,
 to create animated effects.
-SVG content can be animated in the following ways:</p>
+SVG content can be animated in the following ways:
 
 <ul>
   <li>Using SVG's <a href="https://svgwg.org/specs/animations/">animation elements</a>
@@ -27,7 +27,7 @@ SVG content can be animated in the following ways:</p>
   that changes to values of CSS properties occur
   progressively over a specified duration.</li>
 
-  <li>Using the <a href="types.html#SVGDOMOverview">SVG DOM</a>.
+  <li>Using the [[#SVGDOMOverview|SVG DOM]].
   The SVG DOM is defined as an extension of the DOM4 specification
   [<a href="refs.html#ref-dom">dom</a>].
   Every attribute and style sheet setting is
@@ -49,7 +49,7 @@ SVG content can be animated in the following ways:</p>
 However, user agents that do support them are expected to support them for SVG documents
 and SVG fragments in other documents.
 User agents that support declarative or scripted animation are required to conform
-to the restrictions based on <a>processing mode</a>
+to the restrictions based on [=processing mode=]
 as defined in the <a href="conform.html">Conformance</a> chapter,
 and to the special requirements for <a href="struct.html#UseAnimations">animations in use-element shadow trees</a>.
-</p>
+

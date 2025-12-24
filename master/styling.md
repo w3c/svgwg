@@ -9,15 +9,15 @@ geometry are controlled using CSS <dfn id="TermProperty" data-dfn-type="dfn">pro
 For example, the {{fill}} property controls the paint used to
 fill the inside of a shape, and the {{width}} and
 {{height}} properties are used to control the size
-of a {{rect}} element.</p>
+of a {{rect}} element.
 
 <p>SVG user agents must support all of the CSS styling
-mechanisms described in this chapter.</p>
+mechanisms described in this chapter.
 
-<p class="note">In SVG 1.1, support for inline style sheets
+Note: In SVG 1.1, support for inline style sheets
 using the {{style element}} element and
 {{style attribute}} was not required.  In SVG 2,
-these are required.</p>
+these are required.
 
 
 <h3 id="StyleElement">Inline style sheets: the <span class='element-name'>style</span> element</h3>
@@ -48,10 +48,10 @@ style sheets to be embedded directly within SVG content.
 SVG's {{style element}} element has the same
 attributes as the
 <a href="https://html.spec.whatwg.org/multipage/semantics.html#the-style-element">corresponding
-element in HTML</a>.</p>
+element in HTML</a>.
 
 
-<p><em>Attribute definitions:</em></p>
+<p><em>Attribute definitions:</em>
 
 <dl class="attrdef-list">
   <dt>
@@ -75,7 +75,7 @@ element in HTML</a>.</p>
     the element's contents, as a <a href="http://www.ietf.org/rfc/rfc2046.txt">media type</a>.
     [<a href="refs.html#ref-rfc2046">rfc2046</a>].
     If the attribute is not specified, then the
-    style sheet language is assumed to be CSS.</p>
+    style sheet language is assumed to be CSS.
   </dd>
   <dt>
     <table class="attrdef def">
@@ -97,7 +97,7 @@ element in HTML</a>.</p>
     <p>This attribute specifies a media query that must be
     matched for the style sheet to apply.  Its value is parsed
     as a <a href="https://www.w3.org/TR/css3-mediaqueries/#syntax">media_query_list</a>.
-    If not specified, the style sheet applies unconditionally.</p>
+    If not specified, the style sheet applies unconditionally.
   </dd>
   <dt>
     <table class="attrdef def">
@@ -118,21 +118,21 @@ element in HTML</a>.</p>
   <dd>
     <p>This attribute specifies a title for the style sheet,
     which is used when exposing and selecting between alternate
-    style sheets.  The attribute takes any value.</p>
+    style sheets.  The attribute takes any value.
   </dd>
 </dl>
 
 <p>The semantics and processing of a {{style element}} and its
 attributes must be the same as is defined for the
 <a href="https://html.spec.whatwg.org/multipage/semantics.html#the-style-element">HTML
-<span class='element-name'>style</span> element</a>.</p>
+<span class='element-name'>style</span> element</a>.
 
 <p>The style sheet's text content is never directly rendered;
 the {{display}} value for the {{style element}} element
 must always be set to <span class="prop-value">none</span>
-by the <a>user agent style sheet</a>,
+by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
-</p>
+
 
 
 <h3 id="LinkElement">External style sheets: the effect of the HTML <span class='element-name'>link</span> element</h3>
@@ -144,20 +144,20 @@ with its <span class="attr-name">rel</span>
 attribute set to <span class='attr-value'>'stylesheet'</span> must be processed
 as defined in the HTML specification and cause external style sheets to be
 loaded and applied to the document.  Such elements in HTML documents outside
-of an inline SVG fragment must also apply to the SVG content.</p>
+of an inline SVG fragment must also apply to the SVG content.
 
 <p class='note'>Because the element is required to be in the HTML namespace, it
 is not possible for an <a href="https://html.spec.whatwg.org/multipage/semantics.html#the-link-element">HTML
 <span class='element-name'>link</span> element</a> to be parsed as
 part of an inline SVG fragment in a text/html document.  However, when
 parsing an SVG document using XML syntax, XML namespace declarations
-can be used to place the element in the HTML namespace.</p>
+can be used to place the element in the HTML namespace.
 
 <div class='note'>
   <p>Note that an alternative way to reference external style sheets
   without using the <a href="https://html.spec.whatwg.org/multipage/semantics.html#the-link-element">HTML
   <span class='element-name'>link</span> element</a> is to use an @import
-  rule in an inline style sheet.  For example:</p>
+  rule in an inline style sheet.  For example:
 
 <xmp>
 <svg xmlns="http://www.w3.org/2000/svg">
@@ -168,7 +168,7 @@ can be used to place the element in the HTML namespace.</p>
 </svg>
 </xmp>
 
-  <p>would behave similarly to:</p>
+  <p>would behave similarly to:
 
 <xmp>
 <svg xmlns="http://www.w3.org/2000/svg">
@@ -179,7 +179,7 @@ can be used to place the element in the HTML namespace.</p>
 
   <p>Or, in XML documents, external CSS style sheets may be included using the
   <a href="https://www.w3.org/TR/xml-stylesheet">&lt;?xml-stylesheet?&gt;</a>
-  processing instruction [<a href='refs.html#ref-xml-stylesheet'>xml-stylesheet</a>].</p>
+  processing instruction [<a href='refs.html#ref-xml-stylesheet'>xml-stylesheet</a>].
 </div>
 
 <h3 id="StyleSheetsInHTMLDocuments">Style sheets in HTML documents</h3>
@@ -189,14 +189,14 @@ can be used to place the element in the HTML namespace.</p>
 document, those style sheets must apply to all HTML and
 inline SVG content in the document.  Similarly, any HTML
 <span class="attr-name">style</span> element used in an SVG
-document must also apply its style sheet to the document.</p>
+document must also apply its style sheet to the document.
 
 <h3 id="ElementSpecificStyling">Element-specific styling: the <span class="attr-name">class</span> and <span class="attr-name">style</span> attributes</h3>
 
 <p>As with HTML, SVG supports the {{class}} and {{style attribute}}
-attributes on all elements to support element-specific styling.</p>
+attributes on all elements to support element-specific styling.
 
-<p><em>Attribute definitions:</em></p>
+<p><em>Attribute definitions:</em>
 
 <dl class='attrdef-list'>
   <dt>
@@ -209,7 +209,7 @@ attributes on all elements to support element-specific styling.</p>
       </tr>
       <tr>
         <td><dfn id="ClassAttribute" data-dfn-for="core-attributes" data-dfn-type="element-attr">class</dfn></td>
-        <td><a>set of space-separated tokens</a> <span class="syntax">&bs[;HTML]</span></td>
+        <td>[=set of space-separated tokens=] <span class="syntax">&bs[;HTML]</span></td>
         <td>(none)</td>
         <td>yes</td>
       </tr>
@@ -217,7 +217,7 @@ attributes on all elements to support element-specific styling.</p>
   </dt>
   <dd>
     <p>The {{class}} attribute assigns one or more class names to an element,
-    which can then be used for addressing by the styling language.</p>
+    which can then be used for addressing by the styling language.
   </dd>
   <dt>
     <table class="attrdef def">
@@ -238,22 +238,22 @@ attributes on all elements to support element-specific styling.</p>
   <dd>
     <p>The {{style attribute}} attribute is used to supply a
     CSS declaration of an element.  The attribute is
-    <a href="https://www.w3.org/TR/2013/REC-css-style-attr-20131107/#syntax">parsed as a declaration-list</a>.</p>
+    <a href="https://www.w3.org/TR/2013/REC-css-style-attr-20131107/#syntax">parsed as a declaration-list</a>.
   </dd>
 </dl>
 
 <p>Aside from the way that the {{class}} attribute is reflected in the
 SVG DOM (in the <a href="types.html#__svg__SVGElement__className">className</a>
-IDL attribute on <a>SVGElement</a>), the semantics and behavior of the
+IDL attribute on [=SVGElement=]), the semantics and behavior of the
 {{class}} and {{style attribute}} attributes must be the same
 as that for <a href="https://html.spec.whatwg.org/multipage/dom.html#global-attributes">the corresponding
-attributes in HTML</a>.</p>
+attributes in HTML</a>.
 
 <div class='example'>
   <p>In the following example, the {{text}} element is used in
   conjunction with the {{class}}
   attribute to markup document messages. Messages appear in both
-  English and French versions.</p>
+  English and French versions.
 
   <pre>
 &lt;!-- English messages --&gt;
@@ -268,7 +268,7 @@ attributes in HTML</a>.</p>
   <p>The following CSS style
   rules would tell visual user agents to display informational
   messages in green, warning messages in yellow, and error
-  messages in red:</p>
+  messages in red:
 
   <pre>
 text.info    { fill: green; }
@@ -278,7 +278,7 @@ text.error   { fill: red; }</pre>
 
 <div class='example'>
   <p>This example shows how the {{style attribute}} attribute can be
-  used to style {{text}} elements similarly to the previous example:</p>
+  used to style {{text}} elements similarly to the previous example:
 
   <pre>
 &lt;text style="fill: green;" lang="en"&gt;Variable declared twice&lt;/text&gt;
@@ -297,13 +297,13 @@ and whose value is parsed as a value of that property. Presentation
 attributes contribute to the
 <a href="https://drafts.csswg.org/css-cascade-3/#preshint">author level</a>
 of the cascade, followed by all other author-level style sheets,
-and have specificity 0.</p>
+and have specificity 0.
 
 <p>Since presentation attributes are parsed as CSS values, not declarations, an
 <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html#important-rules"><span class="prop-value">!important</span> declaration</a>
-within a presentation attribute will cause it to have an <a>invalid value</a>.
+within a presentation attribute will cause it to have an [=invalid value=].
 See <a href="types.html#presentation-attribute-css-value">Attribute syntax</a>
-for details on how presentation attributes are parsed.</p>
+for details on how presentation attributes are parsed.
 
 <p>Not all style properties that can affect SVG rendering have a corresponding
 presentation attribute.
@@ -312,14 +312,14 @@ presentation attribute and must not affect CSS cascading and inheritance.
 Also, only elements in the SVG namespace support presentation attributes.
 Most SVG presentation attributes may be specified on any element in the SVG namespace
 where there is not a name clash with an existing attribute.
-However, the <a>geometry properties</a> only have equivalent presentation attributes
+However, the [=geometry properties=] only have equivalent presentation attributes
 on designated elements.
 Attributes of the same name on other elements must not affect CSS cascading and inheritance.
-</p>
+
 <p>
 Except as noted in the table for the {{transform}} presentation attributes,
 the presentation attribute name is the same as the property name, in lower-case letters.
-</p>
+
 
 <table class="vert" style="font-size: 90%">
   <tr>
@@ -340,7 +340,7 @@ the presentation attribute name is the same as the property name, in lower-case 
       {{height}}, {{width}}, {{x}}, {{y}}
     </td>
     <td>
-      {{foreignObject}},
+      <{foreignObject}>,
       {{image}},
       {{rect}},
       {{svg}},
@@ -377,7 +377,7 @@ the presentation attribute name is the same as the property name, in lower-case 
       {{fill}}
     </td>
     <td>
-      Any element in the SVG namespace except for <a>animation elements</a>,
+      Any element in the SVG namespace except for [=animation elements=],
       which have a different {{animate/fill}} attribute.
     </td>
   </tr>
@@ -434,7 +434,7 @@ the presentation attribute name is the same as the property name, in lower-case 
       {{font-variant}},
       {{font-weight}},
       {{glyph-orientation-vertical}},
-      {{image-rendering}},
+      [[SVG2#ImageRendering|image-rendering]],
       {{letter-spacing}},
       {{lighting-color}},
       {{marker-end}},
@@ -488,13 +488,13 @@ For example, the {{tspan/x}} attribute on {{text}} and {{tspan}}
 is not a presentation attribute for the {{x}} property,
 and the {{radialGradient/r}} attribute on a {{radialGradient}}
 is not a presentation attribute for the {{r}} property.
-</p>
+
 
 <!--
 <p>The following table lists the presentation attributes whose
 names are different from their corresponding property.  All
 other presentation attributes have names that do match
-their property.</p>
+their property.
 
 <table class='vert' style='font-size: 90%'>
   <tr><th>Property</th><th>Element</th><th>Presentation attribute name</th></tr>
@@ -507,14 +507,14 @@ their property.</p>
 to SVG content will not gain presentation attributes.  Therefore,
 authors are suggested to use styling properties, either through
 inline {{style attribute}} properties or style sheets,
-rather than presentation attributes, for styling SVG content.</p>
+rather than presentation attributes, for styling SVG content.
 
 <p>Animation of presentation attributes is equivalent to
-animating the corresponding property.</p>
+animating the corresponding property.
 
 <h3 id="RequiredProperties">Required properties</h3>
 
-<p>The following properties must be supported by all SVG user agents:</p>
+<p>The following properties must be supported by all SVG user agents:
 
 <ul>
   <li>all properties defined in this specification</li>
@@ -575,7 +575,7 @@ animating the corresponding property.</p>
 <h3 id="UAStyleSheet">User agent style sheet</h3>
 
 <p>The following <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html#cascade">user
-agent style sheet</a> must be applied in all SVG user agents.</p>
+agent style sheet</a> must be applied in all SVG user agents.
 
 <pre>
 @namespace url(http://www.w3.org/2000/svg);
@@ -617,30 +617,30 @@ symbol {
   and the <code>::selection</code> pseudo-element
   (using an appropriate highlighting technique,
     such as redrawing the selected glyphs with inverse colors).
-</p>
 
-<p class="note">
+
+Note: 
 An <code>!important</code> rule in a user agent stylesheet
 <a href="https://www.w3.org/TR/css-cascade-4/#importance">over-rides all user and author styles</a>
 [<a href="refs.html#ref-css-cascade-4">css-cascade-4</a>].
-The display value for <a>never-rendered elements</a>
+The display value for [=never-rendered elements=]
 and for {{symbol}} elements
 can therefore not be changed.
 A symbol must only be rendered if it is the direct child
 of a shadow root whose host is a {{use}} element
 (and must always be rendered if the host {{use}} element is rendered).
 The other elements, and their child content, are never rendered directly.
-</p>
+
 
 <p class='note'>CSS Transforms defines that the initial value for
 {{transform-origin}} is <span class='prop-value' style='white-space: nowrap'>50% 50%</span>.
 Since elements in SVG must, by default, transform around their origin at (0, 0),
 {{transform-origin}} is overridden and set to a default value of
 <span class='prop-value' style='white-space: nowrap'>0 0</span> for all SVG elements
-(except for root {{svg}} elements and {{svg}} elements that are the child of a
-{{foreignObject}} element or an element in a non-SVG namespace; these elements
+(except for root <{svg}> elements and <{svg}> elements that are the child of a
+<{foreignObject}> element or an element in a non-SVG namespace; these elements
 must transform around their center).
-[<a href="refs.html#ref-css-transforms-1">css-transforms-1</a>]</p>
+[<a href="refs.html#ref-css-transforms-1">css-transforms-1</a>]
 
 <div class="note">
   <p>The OpenType specification
@@ -648,7 +648,7 @@ must transform around their center).
     to be applied when processing
     [<a href="refs.html#ref-opentype">OPENTYPE</a>].
     It is as follows:
-  </p>
+  
 
   <pre style="background-color: #eee; padding: 0.5em">@namespace svg url(http://www.w3.org/2000/svg);
 
@@ -666,22 +666,22 @@ svg|text, svg|foreignObject {
   stroke-dashoffset: context-value;
 }</pre>
 
-  <p>The <a>context-fill</a> and <a>context-stroke</a> keywords
+  <p>The [=context-fill=] and [=context-stroke=] keywords
     are as defined in this specification,
-    where the <a>context element</a> for a font glyph
-    is the corresponding <a>text content element</a>.
+    where the [=context element=] for a font glyph
+    is the corresponding [=text content element=].
     The other keywords are as defined in the OpenType specification,
-    and ensure that the style values from the <a>text content element</a>
+    and ensure that the style values from the [=text content element=]
     are propagated to the font glyphs,
     with appropriate adjustments for the change in the coordinate system
     [<a href="refs.html#ref-opentype">OPENTYPE</a>].
-  </p>
+  
 </div>
 
 <h3 id="RequiredCSSFeatures">Required CSS features</h3>
 
 <p>Besides the features described above, the following CSS features must be
-also supported in SVG user agents:</p>
+also supported in SVG user agents:
 
 <ul>
   <li>in XML documents, external CSS style sheets using the
@@ -709,8 +709,8 @@ also supported in SVG user agents:</p>
 
 
 
-<p>An <a>SVGStyleElement</a> object represents a {{style element}} element
-in the DOM.</p>
+<p>An [=SVGStyleElement=] object represents a {{style element}} element
+in the DOM.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGStyleElement</b> : <a>SVGElement</a> {
@@ -725,5 +725,5 @@ interface <b>SVGStyleElement</b> : <a>SVGElement</a> {
 <p>The <b id="__svg__SVGStyleElement__type">type</b>,
 <b id="__svg__SVGStyleElement__media">media</b> and
 <b id="__svg__SVGStyleElement__title">title</b> IDL attributes
-<a>reflect</a> the {{type}}, {{media}} and {{title}}
-content attributes, respectively.</p>
+[=reflect=] the {{type}}, {{media}} and {{title}}
+content attributes, respectively.

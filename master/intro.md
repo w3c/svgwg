@@ -26,12 +26,12 @@ About SVG</h3>
     animation elements in SVG content) or via scripting.
 
     Sophisticated applications of SVG are possible by use of a
-    supplemental scripting language which accesses SVG Document Object 
-    Model ([[#SVGDOMOverview]]), which provides complete access to all 
-    elements, attributes and properties. A rich set of event handlers 
-    ([[#SVGEvents]]) can be assigned to any SVG graphical object.
-    Within a web page, the same scripts can work on both HTML and SVG 
-    elements ([[#scripting-interactivity]]).
+    supplemental scripting language which accesses 
+    [[#SVGDOMOverview|SVG Document Object Model]], which provides 
+    complete access to all  elements, attributes and properties. A 
+    rich set of event handlers  ([[#SVGEvents]]) can be assigned to 
+    any SVG graphical object. Within a web page, the same scripts can 
+    work on both HTML and SVG elements ([[#scripting-interactivity]]).
 
     SVG is useful for rich graphical presentation of information, 
     including a number of accessibility features ([[#accessibility]])

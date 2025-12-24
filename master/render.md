@@ -3,16 +3,16 @@
 <div class="annotation">
   <p>
     The SVG 2 rendering model will follow the rules defined by the <a href="https://www.w3.org/TR/compositing/">Compositing and Blending specification</a>.
-  </p>
+  
   <p>
     Resolution: <a href="http://www.w3.org/2012/07/24-svg-minutes.html#item09">Seattle/Paris 2012 F2F day 3</a>.
-  </p>
+  
   <p>
     Owner: Nikos (Action 3332).
-  </p>
+  
   <p>
     Status: Done.
-  </p>
+  
 </div>
 
 <h3 id="Introduction">Introduction</h3>
@@ -26,7 +26,7 @@ In practice variability is allowed based on limitations of the output device
 limitations in implementing a precise mathematical model (e.g. for realistic
 performance curves are approximated by straight lines, the approximation need
 only be sufficiently precise to match the conformance requirements).
-</p>
+
 
 <p>The appendix on <a href="conform.html">conformance
 requirements</a> describes the extent to which an actual
@@ -38,7 +38,7 @@ colors might be supported) and because of practical limitations
 in implementing a precise mathematical model (e.g. for
 realistic performance curves are approximated by straight
 lines, the approximation need only be sufficiently precise to
-match the conformance requirements).</p>
+match the conformance requirements).
 
 
 <div class='ready-for-wider-review'>
@@ -50,7 +50,7 @@ match the conformance requirements).</p>
     The appearance of the graphic instead reflects a parallel structure,
     the rendering tree,
     in which some elements are excluded and others are repeated.
-</p>
+
 
 <p> Many elements in the SVG namespace do not directly represent
     a component of the graphical document.
@@ -60,14 +60,14 @@ match the conformance requirements).</p>
     In dynamic documents, certain components of the graphic
     may be rendered or not, depending on interaction or animation.
     These non-rendered elements are not directly included
-    in the <a>rendering tree</a>.
-</p>
+    in the [=rendering tree=].
+
 <p>
     Because SVG supports the reuse of graphical sub-components,
     some elements are rendered multiple times.
     The individual renderings may have context-dependent styling
     and may be rasterized at different scales or transformations.
-</p>
+
 
 <h4 id="Definitions">Definitions</h4>
 
@@ -76,37 +76,37 @@ match the conformance requirements).</p>
     <dd>
     <p>
         The rendering tree is the set of elements being rendered
-        in an <a>SVG document fragment</a>.
+        in an [=SVG document fragment=].
         It is generated from the document tree
-        by excluding <a>non-rendered elements</a>
-        and inserting additional fragments for <a>re-used graphics</a>.
+        by excluding [=non-rendered elements=]
+        and inserting additional fragments for [=re-used graphics=].
         Graphics are painted and composited in rendering-tree order,
         subject to re-ordering based on the
         {{paint-order}} property.
         Note that elements that have no visual paint may still be in the rendering tree.
-    </p>
+    
   </dd>
   <dt><dfn id="TermRenderedElement" data-dfn-type="dfn" data-export="">rendered element</dfn></dt>
   <dd>
     <p>
         An element that has a direct representation in the
-        <a>rendering tree</a> for the current document.
-        Includes a rendered <a>instance</a> of an element in a <a>use-element shadow tree</a>.
+        [=rendering tree=] for the current document.
+        Includes a rendered [=instance=] of an element in a [=use-element shadow tree=].
         Does not include elements that affect rendering
         as the source definition of re-used graphics
         but are not directly rendered themselves.
         See <a href="#Rendered-vs-NonRendered">Rendered versus non-rendered elements</a>
-    </p>
+    
   </dd>
   <dt><dfn id="TermNonRenderedElement" data-dfn-type="dfn" data-export="">non-rendered element</dfn></dt>
   <dd>
     <p>
         An element that does not have a direct representation in the
-        <a>rendering tree</a> for the current document.
+        [=rendering tree=] for the current document.
         It may nonetheless affect the rendering tree as re-used graphics
         or graphical effects.
         See <a href="#Rendered-vs-NonRendered">Rendered versus non-rendered elements</a>.
-    </p>
+    
   </dd>
   <dt><dfn id="TermReusedGraphics" data-dfn-type="dfn" data-export="">re-used graphics</dfn></dt>
   <dd>
@@ -118,7 +118,7 @@ match the conformance requirements).</p>
         (as in graphics re-used with a {{use}} element),
         or as image fragments generated as part of a graphical effect
         (as in patterns or masks).
-    </p>
+    
   </dd>
 
   <dt><dfn id="TermNeverRenderedElement" data-dfn-type="dfn" data-export="">never-rendered element</dfn></dt>
@@ -129,23 +129,23 @@ match the conformance requirements).</p>
           It includes the following elements:
           @@never-rendered@@;
           it also includes a {{symbol}} element that is not
-          the <a>instance root</a> of a <a>use-element shadow tree</a>.
-      </p>
+          the [=instance root=] of a [=use-element shadow tree=].
+      
   </dd>
   <dt><dfn id="TermRenderableElement" data-dfn-type="dfn" data-export="">renderable element</dfn></dt>
   <dd>
     <p>
         Any element type that <em>can</em> have a direct representation
-        in the <a>rendering tree</a>,
+        in the [=rendering tree=],
         as a graphic, container, text, audio, or animation.
         It includes the following elements:
         @@renderable@@;
         it also includes a {{symbol}} element that <em>is</em>
-        the <a>instance root</a> of a <a>use-element shadow tree</a>.
-    </p>
+        the [=instance root=] of a [=use-element shadow tree=].
+    
     <p> A renderable element may or may not be rendered
         in a given document or point in time.
-    </p>
+    
   </dd>
 
 </dl>
@@ -153,19 +153,19 @@ match the conformance requirements).</p>
 <h4 id="Rendered-vs-NonRendered">Rendered versus non-rendered elements</h4>
 
 <p> At any given time, every SVG element
-    (or <a>element instance</a> in a <a>use-element shadow tree</a>)
+    (or [=element instance=] in a [=use-element shadow tree=])
     is either rendered or non-rendered.
     Whether an element is currently rendered or not affects
     not only its visual display but also interactivity
     and geometric calculations.
-</p>
+
 
 <p>
     An element is <em>not rendered</em> in any of these five situations:
-</p>
+
 <ul>
-    <li><a>never-rendered element</a> types</li>
-    <li>elements excluded because of <a>conditional processing attributes</a>
+    <li>[=never-rendered element=] types</li>
+    <li>elements excluded because of [=conditional processing attributes=]
         or {{switch}} structures
     </li>
     <li>elements with a computed style value of <code>none</code>
@@ -177,20 +177,20 @@ match the conformance requirements).</p>
 </ul>
 
 <p> Non-rendered elements:
-</p>
+
 <ul>
   <li>have no visual effect on the graphic,
       except when they are used in the rendering of another element
       that references them.</li>
 
   <li>do not contribute to the net geometry of
-      <a>clipping paths</a> or <a>masks</a>
+      [=clipping paths=] or [=masks=]
       when they are descendants of a
       {{clipPath}} or {{mask element}} </li>
 
   <li>are not sensitive to <a href="interact.html#UIEvents">pointer events</a></li>
 
-  <li>cannot receive <a>focus</a></li>
+  <li>cannot receive [=focus=]</li>
 
   <li>do not contribute to <a href="coords.html#ObjectBoundingBox">bounding box
   calculations</a></li>
@@ -201,7 +201,7 @@ match the conformance requirements).</p>
 <p> Non-rendered elements are not represented in the document accessibility tree.
     Nonetheless, they remain part of the document model, and
     participate in <a href="styling.html">style inheritance and cascade</a>.
-</p>
+
 
 
 <h4 id="VisibilityControl">Controlling visibility: the effect of the <span class="property">'display'</span> and <span class="property">visibility</span> properties</h4>
@@ -212,35 +212,35 @@ match the conformance requirements).</p>
     {{display}} and {{visibility}}.
     Although they have a similar visible effect in static documents,
     they are conceptually distinct.
-</p>
 
-<p class="note">See the CSS 2.1 specification for the definitions
+
+Note: See the CSS 2.1 specification for the definitions
 of {{display}} and {{visibility}}.
-[<a href="refs.html#ref-css2">CSS2</a>]</p>
+[[CSS2]]
 
 <p>
     Setting  {{display}} to <span class="prop-value">none</span>
     results in the element not being rendered.
     When applied to
-    <a>graphics elements</a>,
-    <a>text content elements</a>,
-    and <a>container elements</a> that are normally rendered,
+    [=graphics elements=],
+    [=text content elements=],
+    and [=container elements=] that are normally rendered,
     setting {{display}} to <span class="prop-value">none</span>
     results in the element (and all its descendents)
-    not becoming part of the <a>rendering tree</a>.
+    not becoming part of the [=rendering tree=].
     Note that {{display}} is not an inherited property.
-</p>
+
 <p>
     Elements that have any other {{display}} value than
 <span class="prop-value">none</span> are rendered as normal.
-</p>
+
 <p>
-    The {{display}} property only applies to <a>renderable elements</a>.
+    The {{display}} property only applies to [=renderable elements=].
     Setting <code>display: none</code> on an element
-    that is <a>never directly rendered</a>
-    or <a>not rendered</a> based on conditional processing
+    that is [=never directly rendered=]
+    or [=not rendered=] based on conditional processing
     has no effect.
-</p>
+
 
 <p>
     The {{display}} property affects the direct processing
@@ -252,29 +252,29 @@ of {{display}} and {{visibility}}.
     canvas, but the {{path}} element can still be referenced by a
     {{textPath}} element and its geometry will be used
     in text-on-a-path processing.
-</p>
+
 
 <p>
-    When applied to a <a>graphics element</a> or {{use}} element,
+    When applied to a [=graphics element=] or {{use}} element,
     setting {{visibility}} to <span class="prop-value">hidden</span>
     or <span class="prop-value">collapse</span>
     results in the element not being painted.
-    It is, however, still part of the <a>rendering tree</a>.
+    It is, however, still part of the [=rendering tree=].
     It may be sensitive to pointer events
     (depending on the value of {{pointer-events}}),
     may receive focus (depending on the value of {{tabindex}}),
     contributes to bounding box calculations and clipping paths,
     and does affect text layout.
-</p>
+
 
 <p>
     The {{visibility}} property only directly affects the rendering of
-    <a>graphics elements</a>, <a>text content elements</a>, and the
-    {{a}} element when it is a child of <a>text content element</a>.
+    [=graphics elements=], [=text content elements=], and the
+    {{a}} element when it is a child of [=text content element=].
     Since {{visibility}} is an inherited property, however,
-    although it has no effect on a {{use}} element or <a>container element</a> itself,
+    although it has no effect on a {{use}} element or [=container element=] itself,
     its inherited value can affect descendant elements.
-</p>
+
 
 <h4 id="ReusedGraphics">Re-used graphics</h4>
 
@@ -282,7 +282,7 @@ of {{display}} and {{visibility}}.
     (or in another document)
     may be used to render other elements.
     There are two types of re-used graphics from a rendering perspective:
-</p>
+
 <ul>
   <li>
     shadow DOM elements,
@@ -292,7 +292,7 @@ of {{display}} and {{visibility}}.
   <li>
     content re-used as part of a graphical effect on another element,
     including the child content of
-    <a>markers</a>, <a>paint server elements</a>,
+    [=markers=], [=paint server elements=],
     {{clipPath}}, and {{mask element}}.
   </li>
 </ul>
@@ -302,27 +302,27 @@ of {{display}} and {{visibility}}.
   as if the host element (e.g., the {{use}} element)
   was a container and the shadow content was its descendents.
   Style and geometry properties on the shadow DOM elements
-  are resolved independently from those on their <a>corresponding element</a>
+  are resolved independently from those on their [=corresponding element=]
   in the source document.
   The {{display}} property has its normal effect on shadow elements,
   except for special rules that apply to the {{symbol}} element.
-</p>
+
 <p>
-  For blending purposes, the {{use}} element forms a <a>non-isolated group</a>.
-</p>
+  For blending purposes, the {{use}} element forms a [=non-isolated group=].
+
 
 <p>
   In contrast,
   graphical effects elements generate a self-contained SVG fragment
-  which is rendered independently as a <a>stacking context</a>
-  and an <a>isolated group</a>.
+  which is rendered independently as a [=stacking context=]
+  and an [=isolated group=].
   The canvas for this fragment is scaled
 
   The graphical effect element's child content
   is rendered and composited into this canvas.
   The flattened canvas as a whole is treated as a vector image
   when compositing and blending with other paint layers
-</p>
+
 <p>
   The {{display}} property on any child content of a graphical effects element
   has its normal effect when set to <code>none</code>,
@@ -330,14 +330,14 @@ of {{display}} and {{visibility}}.
   However, the graphical effect is not altered
   by a value of <code>display: none</code>
   on the graphical effect element or an ancestor.
-</p>
+
 </div>
 
 <div class="ready-for-wider-review">
 
 <h3 id="PaintersModel">The painters model</h3>
 
-<p>SVG uses a "painters model" of rendering. <a>Paint</a>
+<p>SVG uses a "painters model" of rendering. [=Paint=]
 is applied in successive operations to the output device such
 that each operation paints onto some area of the output device,
 possibly obscuring paint that has previously been laid down.
@@ -349,28 +349,28 @@ SVG 2 supports advanced blending modes and compositing operations that
 control how each painting operation interacts with the background.
 The rules governing these painting operations are outlined in the
 <a href="https://www.w3.org/TR/compositing/">Compositing and Blending Specification</a>.
-</p>
+
 
 <h3 id="RenderingOrder">Rendering order</h3>
 <p>Elements in SVG are positioned in three dimensions. In addition to their
-position on the x and y axis of the <a>SVG viewport</a>, SVG elements are also
+position on the x and y axis of the [=SVG viewport=], SVG elements are also
 positioned on the z axis. The position on the z-axis defines the order that
-they are painted.</p>
+they are painted.
 
-<p>Along the z axis, elements are grouped into <dfn id="TermStackingContext" data-dfn-type="dfn" data-export="">stacking contexts</dfn>.</p>
+<p>Along the z axis, elements are grouped into <dfn id="TermStackingContext" data-dfn-type="dfn" data-export="">stacking contexts</dfn>.
 </div>
 
 <h4 id="EstablishingStackingContex">Establishing a stacking context in SVG</h4>
-<p>A new stacking context must be established at an SVG element for its descendants if:</p>
+<p>A new stacking context must be established at an SVG element for its descendants if:
 
 <ul>
   <li>it is the root element</li>
 
-  <li>the element is an <a>outermost svg element</a>, or a {{foreignObject}},
+  <li>the element is an [=outermost svg element=], or a <{foreignObject}>,
   {{image}}, {{marker element}}, {{mask element}}, {{pattern}},
   {{symbol}} or {{use}} element</li>
 
-  <li>the element is an inner {{svg}} element and the computed value of its
+  <li>the element is an inner <{svg}> element and the computed value of its
   {{overflow}} property is a value other than <span class='prop-value'>visible</span></li>
 
   <li>the element is subject to explicit clipping:
@@ -402,17 +402,17 @@ document is rendered, and for determining which element is highest when
 determining the target of a pointer event. Stacking contexts do
 not affect the position of elements in the DOM tree, and their presence or
 absence does not affect an element's position, size or orientation in the
-canvas' X-Y plane - only the order in which it is painted.</p>
+canvas' X-Y plane - only the order in which it is painted.
 
 <p>Stacking contexts can contain further stacking contexts. A stacking context is
 atomic from the point of view of its parent stacking context; elements in
-ancestor stacking contexts may not come between any of its elements.</p>
+ancestor stacking contexts may not come between any of its elements.
 
 <p>Each element belongs to one stacking context. Elements in a stacking context
-must be stacked according to document order.</p>
+must be stacked according to document order.
 
-<p>With the exception of the {{foreignObject}} element, the back to front
-stacking order for a stacking context created by an SVG element is:</p>
+<p>With the exception of the <{foreignObject}> element, the back to front
+stacking order for a stacking context created by an SVG element is:
 
 <ol>
   <li>the background and borders of the element forming the stacking
@@ -421,18 +421,18 @@ stacking order for a stacking context created by an SVG element is:</p>
   <li>descendants, in tree order</li>
 </ol>
 
-<p>Since the {{foreignObject}} element creates a "fixed position containing block" in
+<p>Since the <{foreignObject}> element creates a "fixed position containing block" in
 CSS terms, the normative rules for the stacking order of the stacking context
-created by {{foreignObject}} elements are the rules in Appendix E of CSS 2.1.</p>
+created by <{foreignObject}> elements are the rules in Appendix E of CSS 2.1.
 
 <h3 id="Elements">How elements are rendered</h3>
 <div class="ready-for-wider-review">
 <p>
-Individual <a>graphics elements</a> are treated as if they are a <a>non-isolated group</a>,
+Individual [=graphics elements=] are treated as if they are a [=non-isolated group=],
 the components (fill, stroke, etc) that make up a graphic element
 (See  <a href="#PaintingShapesAndText">Painting shapes and text</a>) being
 members of that group. See <a href="#Grouping">How groups are rendered</a>.
-</p>
+
 </div>
 
 <h3 id="Grouping">How groups are rendered</h3>
@@ -440,53 +440,53 @@ members of that group. See <a href="#Grouping">How groups are rendered</a>.
 </div>
 <div class="ready-for-wider-review">
 <p>
-Grouping elements, such as the {{g}} element (see <a>container elements</a>
-) create a <a>compositing group</a>.
+Grouping elements, such as the {{g}} element (see [=container elements=]
+) create a [=compositing group=].
 Similarly, a {{use}} element creates a compositing group for its shadow content.
-The <a>Compositing and Blending</a>
-specification normatively describes how to render <a>compositing groups</a>.
+The [=Compositing and Blending=]
+specification normatively describes how to render [=compositing groups=].
 In SVG, effects may be applied to a group. For example, opacity, filters
 or masking. These effects are applied to the rendered result of the group
 immediately before any transforms on the group are applied, which are applied
 immediately before the group is blended and composited with the
-<a>group backdrop</a>. Applying any such effects to a group makes that
+[=group backdrop=]. Applying any such effects to a group makes that
 group isolated.
 <br/><br/>
-Thus, rendering a <a>compositing group</a> follows the following steps:<br/>
+Thus, rendering a [=compositing group=] follows the following steps:<br/>
 If the group is isolated:
-</p>
+
 <ol>
-<li>The <a>initial backdrop</a> is set to a new buffer initialised with
+<li>The [=initial backdrop=] is set to a new buffer initialised with
 rgba(0,0,0,0)</li>
-<li>The contents of the group that are <a>graphics elements</a> or
+<li>The contents of the group that are [=graphics elements=] or
 {{g element}} elements are rendered
 <a href="#RenderingOrder">in order</a>, onto the
-<a>initial backdrop</a></li>
+[=initial backdrop=]</li>
 <li>filters and other effects that modify the group canvas are applied
 <div class="note">
 <p class='ready-for-wider-review'>To provide for high quality rendering, filter
 primitives and other bitmap effects must be applied in the
-<a>operating coordinate space</a>.</p>
+[=operating coordinate space=].
 </div>
 </li>
 <li>Group transforms are applied</li>
-<li>The group canvas is blended and composited with the <a>group backdrop</a></li>
+<li>The group canvas is blended and composited with the [=group backdrop=]</li>
 </ol>
 else (the group is not isolated):
 <ol>
-<li>The <a>initial backdrop</a> is set to the <a>group backdrop</a></li>
-<li>The contents of the group that are <a>graphics elements</a> or
+<li>The [=initial backdrop=] is set to the [=group backdrop=]</li>
+<li>The contents of the group that are [=graphics elements=] or
 {{g element}} elements are rendered
 <a href="#RenderingOrder">in order</a>, onto the
-<a>initial backdrop</a>. The group transforms are applied to each element
+[=initial backdrop=]. The group transforms are applied to each element
 as they are rendered.</li>
 </ol>
 </div>
 
 <h4 id="ObjectAndGroupOpacityProperties">Object and group opacity: the effect of the <span class="property">opacity</span> property</h4>
 
-<p class="note">See the CSS Color Module Level 3 for the definition
-of {{opacity}}. [<a href="refs.html#ref-css-color-3">css-color-3</a>]</p>
+Note: See the CSS Color Module Level 3 for the definition
+of {{opacity}}. [<a href="refs.html#ref-css-color-3">css-color-3</a>]
 
 <p>The {{opacity}} property specifies how opaque a given
 graphical element or container element will be when it is
@@ -494,9 +494,9 @@ painted to the canvas.  When applied to a container element,
 this is known as <em>group opacity</em>, and when applied to
 an individual rendering element, it is known as <em>object
 opacity</em>.  The principle for these two operations however
-is the same.</p>
+is the same.
 
-<p>There are several other opacity-related properties in SVG:</p>
+<p>There are several other opacity-related properties in SVG:
 
 <ul>
 <li>{{fill-opacity}}, which specifies the opacity of a fill
@@ -516,17 +516,17 @@ into the canvas with the specified {{opacity}} value used uniformly
 across the offscreen image.
 <span class="ready-for-wider-review">
 Thus, the presence of {{opacity property}} causes the group to be
-<a>isolated</a>.
+[=isolated=].
 </span>
-</p>
+
 
 <p>The {{opacity}} property applies to the following SVG elements:
 {{svg}}, {{g}}, {{symbol}}, {{marker element}},
-{{a}}, {{switch}}, {{use}} and <a>graphics elements</a>.</p>
+{{a}}, {{switch}}, {{use}} and [=graphics elements=].
 
 <div class="example">
 <p>The following example illustrates various usage of the {{opacity}}
-property on objects and groups.</p>
+property on objects and groups.
 
 <pre class=include>
 path: images/masking/opacity01.svg
@@ -536,12 +536,12 @@ path: images/masking/opacity01.svg
 <img class='bordered' src='images/masking/opacity01.svg' alt='Image showing different groups of circles blended into the background.'>
 <p class='caption'>Each group of red and green circles is first rendered
 to an offscreen image before being blended with the background
-blue rectangle as a whole, with the given {{opacity}} values.</p>
+blue rectangle as a whole, with the given {{opacity}} values.
 </div>
 
 <p>In the example, the top row of circles have differing opacities,
 ranging from 1.0 to 0.2. The bottom row illustrates five {{g}} elements,
-each of which contains overlapping red and green circles, as follows:</p>
+each of which contains overlapping red and green circles, as follows:
 
 <ul>
 <li>The first group shows the opaque case for reference. The group has
@@ -570,11 +570,11 @@ red and 75% blue.</li>
 
 <h3 id="TypesOfGraphicsElements">Types of graphics elements</h3>
 
-<p>SVG supports three fundamental types of <a>graphics elements</a>
-that can be rendered onto the canvas:</p>
+<p>SVG supports three fundamental types of [=graphics elements=]
+that can be rendered onto the canvas:
 
 <ul>
-<li><a>Shapes</a>, which represent some combination of straight line
+<li>[=Shapes=], which represent some combination of straight line
 and curves</li>
 <li>Text, which represents some combination of character glyphs</li>
 <li>Raster images, which represent an array of values that
@@ -586,9 +586,9 @@ for specified raster image formats under
 
 <h4 id="PaintingShapesAndText">Painting shapes and text</h4>
 
-<p>Shapes and text can be <a>filled</a> (i.e., apply paint to the
-interior of the shape) and <a>stroked</a> (i.e., apply paint
-along the outline of the shape).</p>
+<p>Shapes and text can be [=filled=] (i.e., apply paint to the
+interior of the shape) and [=stroked=] (i.e., apply paint
+along the outline of the shape).
 
 <p>For certain types of shapes, <a href="painting.html#Markers">marker
 symbols</a> (which themselves can consist of any combination of shapes,
@@ -598,21 +598,21 @@ is painted as if its graphical content were expanded into the
 SVG document tree just after the shape object which is using
 the given marker symbol. The graphical contents of a marker
 symbol are rendered using the same methods as graphics
-elements. Marker symbols are not applicable to text.</p>
+elements. Marker symbols are not applicable to text.
 
 <p>The order in which fill, stroke and markers are painted is determined
 by the {{paint-order}} property. The default is that
 fill is painted first, then the stroke, and then the
 marker symbols. The marker symbols are rendered in order along
 the outline of the shape, from the start of the shape to the
-end of the shape.</p>
+end of the shape.
 
 <p>The fill and stroke operations are entirely independent;
-for instance, each fill or stroke operation has its own opacity setting.</p>
+for instance, each fill or stroke operation has its own opacity setting.
 
 <p>SVG supports numerous built-in types of paint which can
 be used in fill and stroke operations. These are described in
-<a href="pservers.html">Paint Servers</a>.</p>
+<a href="pservers.html">Paint Servers</a>.
 
 <h4 id="PaintingRasterImages">Painting raster images</h4>
 
@@ -620,77 +620,77 @@ be used in fill and stroke operations. These are described in
 "resampled" using standard algorithms to produce samples at the
 positions required on the output device. Resampling
 requirements are discussed under
-<a href="conform.html">conformance requirements</a>.</p>
+<a href="conform.html">conformance requirements</a>.
 <p class="ready-for-wider-review">
 As in HTML [<a href="refs.html#ref-html">HTML</a>, 10.4.2],
 all animated images with the same absolute URL and the same image
 data are expected to be rendered synchronised to the same timeline as a group,
 with the timeline starting at the time of the least recent addition to the
 group.
-</p>
+
 <p class="ready-for-wider-review">
 When a user agent is to restart the animation for an img element showing an
 animated image, all animated images with the same absolute URL and the same
 image data in that img element's node document are expected to restart their
 animation from the beginning.
-</p>
+
 
 <h3 id="FilteringPaintRegions">Filtering painted regions</h3>
 <p>SVG allows any painting operation to be filtered. (See
-<a href="https://www.w3.org/TR/filter-effects/">Filter Effects</a>.)</p>
+<a href="https://www.w3.org/TR/filter-effects/">Filter Effects</a>.)
 
 <p>In this case the result must be as though the paint
 operations had been applied to an intermediate canvas
 initialized to transparent black, of a size determined by the
 rules given in <a href="https://www.w3.org/TR/filter-effects/">Filter Effects</a> then
 filtered by the processes defined in
-<a href="https://www.w3.org/TR/filter-effects/">Filter Effects</a>.</p>
+<a href="https://www.w3.org/TR/filter-effects/">Filter Effects</a>.
 
 <div class="ready-for-wider-review">
 <h3 id="ClippingAndMasking">Clipping and masking</h3>
 
-<p>SVG supports the following clipping/masking features:</p>
+<p>SVG supports the following clipping/masking features:
 
 <ul>
 <li>clipping paths, which either uses
 any combination of {{path}}, {{text}} and
-<a>basic shapes</a> or basic shapes to serve as
+[=basic shapes=] or basic shapes to serve as
 the outline of a (in the absence of anti-aliasing) 1-bit
 mask, where everything on the "inside" of the outline is
 allowed to show through but everything on the outside is
 masked out</li>
 
 <li>masks, which are
-<a>container elements</a>
-which can contain <a>graphics elements</a>
+[=container elements=]
+which can contain [=graphics elements=]
 or other container elements which define a set of graphics
 that is to be used as a semi-transparent mask for compositing
 foreground objects into the current background.</li>
 </ul>
 
 <p>Both, clipping and masking, are specified in the module CSS Masking
-[<a href="refs.html#ref-css-masking-1">css-masking-1</a>].</p>
+[<a href="refs.html#ref-css-masking-1">css-masking-1</a>].
 </div>
 
 <h3 id="ParentCompositing">Parent compositing</h3>
-<p>SVG document fragments can be semi-opaque.</p>
+<p>SVG document fragments can be semi-opaque.
 <p class="ready-for-wider-review">
-In accordance with the <a>Compositing and Blending</a> specification,
-the {{svg}} element always creates an <a>isolated</a> group.
+In accordance with the [=Compositing and Blending=] specification,
+the <{svg}> element always creates an [=isolated=] group.
 When an SVG document is a top-level document,
 meaning it is not embedded in another document,
-the root {{svg}} element
-is considered to be the <a>Page Group</a> and is composited with
+the root <{svg}> element
+is considered to be the [=Page Group=] and is composited with
 a backdrop of white with 100% opacity.
 In all other cases, the SVG document or document fragment is composited into the parent
 document with opacity preserved.
-</p>
+
 
 <h3 id="OverflowAndClipProperties">The effect of the <span class="property">overflow</span> property</h3>
 
-<p class="note">See the Cascading Style Sheets Level 2 Revision 1 (CSS 2.1)
-Specification [<a href="refs.html#ref-css2">CSS2</a>] for the definition of
-{{overflow}}.</p>
+Note: See the Cascading Style Sheets Level 2 Revision 1 (CSS 2.1)
+Specification [[CSS2]] for the definition of
+{{overflow}}.
 <div class="ready-for-wider-review">
 <table class="data compact">
 <caption>A summary of the behavior of the {{overflow}} property in SVG.
@@ -736,8 +736,8 @@ Specification [<a href="refs.html#ref-css2">CSS2</a>] for the definition of
 
 <p>The {{overflow}} property has the same parameter values and has the
 same meaning <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/visufx.html#propdef-overflow">as defined in CSS 2.1</a>
-([<a href="refs.html#ref-css2">CSS2</a>], section 11.1.1);
-however, the following additional points apply:</p>
+([[CSS2]], section 11.1.1);
+however, the following additional points apply:
 
 <ul>
   <li>
@@ -753,7 +753,7 @@ however, the following additional points apply:</p>
 
   <li>
   When <span class='prop-value'>scroll</span> is specified on an
-  {{svg}} element and if the user agent uses a scrolling mechanism that
+  <{svg}> element and if the user agent uses a scrolling mechanism that
   is visible on the screen (such as a scroll bar or a panner), that mechanism
   should be displayed for the SVG viewport whether or not any of its content is clipped.
   </li>
@@ -776,7 +776,7 @@ however, the following additional points apply:</p>
 
 <div class="note">
 Although the initial value for {{overflow}} is auto. In the User Agent style sheet,
-overflow is overridden for the {{svg}} element when it is not the root
+overflow is overridden for the <{svg}> element when it is not the root
 element of a stand-alone document, the {{pattern}} element, and the {{marker element}} element to be hidden by default.
 </div>
 </div> <!-- ready-for-wider-review -->

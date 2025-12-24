@@ -9,14 +9,14 @@
   throughout a document. See the section
   <a href="painting.html">Painting: Filling and Stroking</a> for a
   general discussion of filling and stroking objects.
-</p>
+
 
 <!-- Fill and stroke are already defined in painting.html. No need to
 redefine them here. -->
 
 <p>
   SVG defines several types of paint servers:
-</p>
+
 
 <ul>
   <li><a href="#Gradients">Gradients</a>,</li>
@@ -51,20 +51,20 @@ redefine them here. -->
   <p class="caption">Two types of paint servers. From left to right:
     A linear gradient.
     A pattern.
-  </p>
+  
 </div>
 
 <p>
-  Paint servers are used by including a <a>URL reference</a> in
+  Paint servers are used by including a [=URL reference=] in
   a {{fill}} or {{stroke}} property (i.e. fill="url(#MyLightPurple)").
-</p>
+
 
 <p>
-  <a>Properties</a> inherit
+  [=Properties=] inherit
   into a paint-server element from its ancestors;
   properties do <em>not</em> inherit from the element referencing
   the paint server element.
-</p>
+
 
 <p>
   Paint-server elements are never rendered directly; their only usage is
@@ -72,7 +72,7 @@ redefine them here. -->
   the {{fill}} and {{stroke}} properties.
   The {{display}} value for these elements
   must always be set to <span class="prop-value">none</span>
-  by the <a>user agent style sheet</a>,
+  by the [=user agent style sheet=],
   and this declaration must have importance over any other CSS rule or presentation attribute.
   <!--The
   {{display}} property does not apply to a paint-server element;
@@ -83,7 +83,7 @@ redefine them here. -->
   are available for referencing even when the {{display}}
   property on the paint-server element or any of its ancestors is set
   to <span class="prop-value">none</span>.
-</p>
+
 
 <h4 id="PaintServerTemplates">Using paint servers as templates</h4>
 
@@ -95,21 +95,21 @@ redefine them here. -->
   if corresponding attributes are not specified
   on the current element.
   Furthermore, if the current element does not have any
-  child content other than <a>descriptive elements</a>,
+  child content other than [=descriptive elements=],
   than the child content of the template element is cloned to replace it.
-</p>
+
 
 <div class="note">
   <p>
   The exclusion of descriptive content is new in SVG 2 for {{pattern}},
   consistent with the behavior of gradients,
   and with changes to make descriptive content valid for any SVG element.
-  </p>
+  
   <p>
   Also new: template cross-references may be to external file resources
   (different chapters in SVG 1.1 had inconsistent guidance on this point),
   and the "inheritance" of child elements is represented through a shadow tree.
-  </p>
+  
 </div>
 
 <p>
@@ -120,12 +120,12 @@ Thus, if the referenced template element does not have relevant child content
 or does not define the specified attribute,
 then the attribute value or cloned content is derived
 from another element referenced by the template's own <span class="attr-name">‘href’</span> attribute.
-</p>
+
 
 <p>
 The description of each <span class="attr-name">‘href’</span> attribute in this chapter defines
 the limits of the templating process, as follows:
-</p>
+
 <ul>
   <li>What type of element is a valid target for the reference</li>
   <li>Which attributes are duplicated from the template</li>
@@ -134,12 +134,12 @@ the limits of the templating process, as follows:
 <p>
   If any of the specified attributes are not
   defined on the current element,
-  or if the current element has no child elements other than <a>descriptive elements</a>,
+  or if the current element has no child elements other than [=descriptive elements=],
   the user agent must <a href="linking.html#processingURL">process the URL</a>
   to identify the referenced resource.
-  If the URL reference is not <a>invalid</a>,
+  If the URL reference is not [=invalid=],
   then the URL's target element is used as the template element, as follows:
-</p>
+
 <ul>
   <li>
     <p>
@@ -151,24 +151,24 @@ the limits of the templating process, as follows:
       from recursive cross-references if required.
       The initial value for the attribute is only substituted
       after all valid URL references are exhausted.
-    </p>
+    
   </li>
   <li>
     <p>
-      If the current element has no child elements other than <a>descriptive elements</a>,
-      the user agent must generate a <a>shadow tree</a> for this element,
-      which must behave equivalently to a <a>use-element shadow tree</a>,
+      If the current element has no child elements other than [=descriptive elements=],
+      the user agent must generate a [=shadow tree=] for this element,
+      which must behave equivalently to a [=use-element shadow tree=],
       except that the host is the current paint server element.
-      The <a>corresponding elements</a> for the <a>element instances</a>
+      The [=corresponding elements=] for the [=element instances=]
       cloned into the shadow tree are:
-    </p>
+    
     <ul>
       <li>
       the child content of the template element,
-      if it has child elements other than <a>descriptive elements</a>,
+      if it has child elements other than [=descriptive elements=],
       </li>
       <li>
-      the <a>corresponding elements</a> that are used, or would be used, to generate
+      the [=corresponding elements=] that are used, or would be used, to generate
       the template element's own shadow tree, otherwise.
       </li>
     </ul>
@@ -177,31 +177,31 @@ the limits of the templating process, as follows:
 
 <p>
 When a paint-server element has a shadow tree,
-the <a>element instances</a> in that tree
+the [=element instances=] in that tree
 must be used in rendering the paint server effect,
 as if they were the paint server element's own children.
-</p>
 
-<p class="note">
-  The <a>use-element shadow tree</a> model for templating
+
+Note: 
+  The [=use-element shadow tree=] model for templating
   allows cloned content to inherit different styles than the original.
   This behavior is newly defined in SVG 2;
   SVG 1.1 did not define how styles applied to inherited paint server content.
-</p>
+
 
 <h3 id="Gradients">Gradients</h3>
 
 <p>Gradients consist of smooth color transitions between points on a
-drawing surface. SVG provides for two types of gradients:</p>
+drawing surface. SVG provides for two types of gradients:
 
 <ul>
   <li><a href="#LinearGradients">linear gradients</a>,</li>
   <li><a href="#RadialGradients">radial gradients</a>.</li>
 </ul>
 
-<p>Once a gradient is defined, a <a>graphics element</a> can be
+<p>Once a gradient is defined, a [=graphics element=] can be
 filled or stroked with the gradient by setting the {{fill}}
-or {{stroke}} properties to reference the gradient.</p>
+or {{stroke}} properties to reference the gradient.
 
 <p>
   Color transitions for linear and radial gradients are defined by a
@@ -211,7 +211,7 @@ or {{stroke}} properties to reference the gradient.</p>
   perpendicular to the vector. For a radial gradient, a normal is a
   circle intersecting the vector at a right angle. Each gradient
   normal is painted with one color determined by the vector.
-</p>
+
 
 <div class="figure">
   <img
@@ -222,14 +222,14 @@ or {{stroke}} properties to reference the gradient.</p>
     Linear and radial gradients with the gradient vector
     indicated. The vector consists of three stops shown by small
     circles. One gradient normal is shown for each gradient.
-  </p>
+  
 </div>
 
 <p class='ready-for-wider-review'>
   For linear and radial gradients, the color value between two stops along the
   gradient vector is the linear interpolation, per channel, of the color for
   each stop, weighted by the distance from each stop.
-</p>
+
 <div role="math" aria-describedby="math-gradient-linear-interpolation" class='ready-for-wider-review'>
   <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
     <mi>V</mi>
@@ -266,7 +266,7 @@ or {{stroke}} properties to reference the gradient.</p>
 </div>
 <p class='ready-for-wider-review'>
 Where, for each channel:
-</p>
+
 <ul class='ready-for-wider-review'>
 <li>V is the interpolated result for that channel</li>
 <li>C<sub>0</sub> is the stop color for the stop with the lowest offset</li>
@@ -276,15 +276,15 @@ Where, for each channel:
 <li>D is the distance along the gradient vector</li>
 </ul>
 <p>
-  When a <a>graphics element</a> references a gradient, conceptually the
-  <a>graphics element</a> should take a copy of the gradient vector
+  When a [=graphics element=] references a gradient, conceptually the
+  [=graphics element=] should take a copy of the gradient vector
   with gradient normals and treat it as part of its own geometry. Any
-  transformations applied to the <a>graphics element</a> geometry also
+  transformations applied to the [=graphics element=] geometry also
   apply to the copied gradient vector and gradient normals. Any
   gradient transforms that are specified on the reference gradient are
-  applied before any <a>graphics element</a> transformations are
+  applied before any [=graphics element=] transformations are
   applied to the gradient.
-</p>
+
 
 <h4 id="Definitions">Definitions</h4>
 
@@ -301,19 +301,19 @@ Where, for each channel:
 
 
 <p id="LinearGradientElement">Linear gradients are defined by a
-{{linearGradient}} element.</p>
+{{linearGradient}} element.
 
 @@elementsummary linearGradient@@
 
 <h5 id="LinearGradientAttributes">Attributes</h5>
 
-  <p class="note">
+  Note: 
     Note that the {{x1}},{{y1}}, {{x2}} and {{y2}} attributes
     on a {{linearGradient}} are not presentation attributes;
     the used value is not affected by CSS styles.
     The {{gradientTransform}} attribute is a presentation attribute
     for the {{transform}} property.
-  </p>
+  
 
   <dl class="attrdef-list-svg2">
 
@@ -323,13 +323,13 @@ Where, for each channel:
       <p>
 	Defines the coordinate system for attributes {{x1}},
         {{y1}}, {{x2}} and {{y2}}.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 
 	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
-	<dt><a>Initial value</a></dt>  <dd>objectBoundingBox</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>objectBoundingBox</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
 
       </dl>
 
@@ -350,7 +350,7 @@ Where, for each channel:
             property) and then applying the transform specified by
             attribute {{gradientTransform}}. Percentages
             represent values relative to the current SVG viewport.
-	  </p>
+	  
 	</dd>
 
 	<dt>objectBoundingBox</dt>
@@ -368,7 +368,7 @@ Where, for each channel:
             specified by attribute {{gradientTransform}}.
             Percentages represent values relative to the bounding box
             for the object.
-	  </p>
+	  
 	  <p>
             When <span class="attr-value">gradientUnits="objectBoundingBox"</span>
             and {{gradientTransform}} is the identity matrix, the
@@ -386,7 +386,7 @@ Where, for each channel:
             perpendicular. This transformation is due to application
             of the non-uniform scaling transformation from bounding
             box space to user coordinate system.
-	  </p>
+	  
 	</dd>
 
       </dl><!-- Attribute values -->
@@ -414,12 +414,12 @@ Where, for each channel:
         necessary to convert
         from <a href="coords.html#ObjectBoundingBox">object bounding
         box units</a> to user coordinate system.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd><a>&lt;transform-list&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>identity transform</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>identity transform</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
     </dd>
@@ -435,12 +435,12 @@ Where, for each channel:
         stops</a> are mapped. The values
         of {{x1}}, {{y1}}, {{x2}} and {{y2}} can
         be either numbers or percentages.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>0%</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>0%</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
     </dd>
@@ -450,12 +450,12 @@ Where, for each channel:
 
       <p>
 	See {{x1}}.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>0%</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>0%</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
     </dd>
@@ -465,12 +465,12 @@ Where, for each channel:
 
       <p>
 	See {{x1}}.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>100%</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>100%</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
     </dd>
 
@@ -479,12 +479,12 @@ Where, for each channel:
 
       <p>
 	See {{x1}}.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>0%</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>0%</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
     </dd>
 
@@ -495,12 +495,12 @@ Where, for each channel:
       <p>
 	Indicates what happens if the gradient starts or ends
         inside the bounds of the <em>target rectangle</em>.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd>pad | reflect | repeat</dd>
-	<dt><a>Initial value</a></dt>  <dd>pad</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>pad</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
       <dl class="attrdef-values">
@@ -536,7 +536,7 @@ Where, for each channel:
 	  <span class="adef">spreadMethod</span>, from left to
 	  right: pad, reflect, repeat. The gradient vector spans
 	  from 40% to 60% of the bounding box width.
-	</p>
+	
       </div>
     </dd>
 
@@ -545,20 +545,20 @@ Where, for each channel:
     </dt>
     <dd>
       <p>
-        A <a>URL reference</a> to a template gradient element;
+        A [=URL reference=] to a template gradient element;
         to be valid, the reference must be to a
         different {{linearGradient}} or
         a {{radialGradient}} element.
-      </p>
+      
       <p>
         Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
         and to the common handling defined for <a
         href="linking.html#linkRefAttrs">URL reference attributes</a> and
         <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
-      </p>
+      
       <p>
         The specified attributes that will be copied from the template are:
-      </p>
+      
       <ul>
         <li>{{x1}}</li>
         <li>{{y1}}</li>
@@ -571,8 +571,8 @@ Where, for each channel:
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd>URL <a href="types.html#attribute-url" class="syntax">&bs[;URL]</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>empty</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>empty</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
     </dd>
@@ -583,18 +583,20 @@ Where, for each channel:
 <p>If {{x1}} = {{x2}} and {{y1}} =
 {{y2}}, then the area to be painted will be painted as a
 single color using the color and opacity of the last
-<a href="pservers.html#GradientStops">gradient stop</a>.</p>
+<a href="pservers.html#GradientStops">gradient stop</a>.
 
 <p id="ExampleLinGrad01"><span class="example-ref">Example lingrad01</span>
-shows how to fill a rectangle by referencing a linear gradient paint server.</p>
+shows how to fill a rectangle by referencing a linear gradient paint server.
 
 <pre class=include-raw>
 path: images/pservers/lingrad01.svg
 </pre>
+<!--
+@@fix
 <pre class=include>
 path: images/pservers/lingrad01.svg
 </pre>
-
+-->
 
 
 <div class="ready-for-wider-review">
@@ -603,19 +605,19 @@ path: images/pservers/lingrad01.svg
 
 
 <p id="RadialGradientElement">Radial gradients are defined by a
-{{radialGradient}} element.</p>
+{{radialGradient}} element.
 
 @@elementsummary radialGradient@@
 
 <h5 id="RadialGradientAttributes">Attributes</h5>
 
-  <p class="note">
+  Note: 
     Note that the {{cx}},{{cy}}, and {{r}} attributes
     on a {{radialGradient}} are not presentation attributes;
     the used value is not affected by CSS styles.
     The {{gradientTransform}} attribute is a presentation attribute
     for the {{transform}} property.
-  </p>
+  
 
   <dl class="attrdef-list-svg2">
 
@@ -628,15 +630,15 @@ path: images/pservers/lingrad01.svg
       <p>
 	Defines the coordinate system for attributes
         {{cx}}, {{cy}}, {{r}}, {{fx}}, {{fy}}, and {{fr}}.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 
 	<!--
 	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
 	-->
-	<dt><a>Initial value</a></dt>  <dd>objectBoundingBox</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>objectBoundingBox</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
 
       </dl>
 
@@ -658,7 +660,7 @@ path: images/pservers/lingrad01.svg
             property) and then applying the transform specified by
             attribute {{gradientTransform}}. Percentages
             represent values relative to the current SVG viewport.
-	  </p>
+	  
 	</dd>
 
 	<dt>objectBoundingBox</dt>
@@ -677,7 +679,7 @@ path: images/pservers/lingrad01.svg
             specified by attribute {{gradientTransform}}.
             Percentages represent values relative to the bounding box
             for the object.
-	  </p>
+	  
 	  <p>
             When <span class="attr-value">gradientUnits="objectBoundingBox"</span>
             and {{gradientTransform}} is the identity matrix,
@@ -691,7 +693,7 @@ path: images/pservers/lingrad01.svg
             will render as elliptical due to application of the
             non-uniform scaling transformation from bounding box space
             to user coordinate system.
-	  </p>
+	  
 	</dd>
 
       </dl><!-- Attribute values -->
@@ -720,12 +722,12 @@ path: images/pservers/lingrad01.svg
         necessary to convert
         from <a href="coords.html#ObjectBoundingBox">object bounding
         box units</a> to user coordinate system.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 <!--	<dt>Value</dt>                <dd><a>&lt;transform-list&gt;</a></dd> -->
-	<dt><a>Initial value</a></dt>  <dd>identity transform</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>identity transform</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
     </dd>
@@ -741,12 +743,12 @@ path: images/pservers/lingrad01.svg
         gradient will be drawn such that the
         100% <a href="#GradientStops">gradient stop</a> is mapped
         to the perimeter of this end circle.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 <!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
-	<dt><a>Initial value</a></dt>  <dd>50%</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>50%</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
     </dd>
@@ -759,12 +761,12 @@ path: images/pservers/lingrad01.svg
 
       <p>
 	See {{cx}}.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 <!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
-	<dt><a>Initial value</a></dt>  <dd>50%</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>50%</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
     </dd>
@@ -777,18 +779,18 @@ path: images/pservers/lingrad01.svg
 
       <p>
 	See {{cx}}.
-      </p>
+      
 
       <p>
         A negative value is an error
         (see <a href="conform.html#ErrorProcessing">Error
         processing</a>).
-      </p>
+      
 
       <dl class="attrdef-svg2">
 <!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
-	<dt><a>Initial value</a></dt>  <dd>50%</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>50%</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
     </dd>
@@ -805,12 +807,12 @@ path: images/pservers/lingrad01.svg
         gradient will be drawn such that the
         0% <a href="#GradientStops">gradient stop</a> is mapped
         to the perimeter of this start circle.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 <!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
-	<dt><a>Initial value</a></dt>  <dd>see below</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>see below</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
       <p>
@@ -819,7 +821,7 @@ path: images/pservers/lingrad01.svg
         value for 'cx' was inherited or not. If the element references an
         element that specifies a value for 'fx', then the value of 'fx' is
         inherited from the referenced element.
-      </p>
+      
 
       <div class="figure">
 	<img
@@ -836,7 +838,7 @@ path: images/pservers/lingrad01.svg
 	  The region outside the outer circle is painted with the
 	  last {{stop-color}} while the region inside the inner
 	  circle is painted with the first {{stop-color}}.
-	</p>
+	
       </div>
 
     </dd>
@@ -849,12 +851,12 @@ path: images/pservers/lingrad01.svg
 
       <p>
 	See {{fx}}.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 <!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
-	<dt><a>Initial value</a></dt>  <dd>see below</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>see below</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
       <p>
@@ -864,7 +866,7 @@ path: images/pservers/lingrad01.svg
         or not. If the element references an element that
         specifies a value for 'fy', then the value of 'fy' is
         inherited from the referenced element.
-      </p>
+      
     </dd>
 
     <dt id="RadialGradientElementFRAttribute">
@@ -873,22 +875,22 @@ path: images/pservers/lingrad01.svg
     </dt>
     <dd>
 
-      <p class="note">New in SVG 2. Added to align with Canvas.</p>
+      Note: New in SVG 2. Added to align with Canvas.
 
       <p>
 	{{fr}} is the radius of the focal circle. See {{fx}}.
-      </p>
+      
 
       <p>
         A negative value is an error
         (see <a href="conform.html#ErrorProcessing">Error
         processing</a>).
-      </p>
+      
 
       <dl class="attrdef-svg2">
 <!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
-	<dt><a>Initial value</a></dt>  <dd>0%, see below</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>0%, see below</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
       <p>
@@ -897,7 +899,7 @@ path: images/pservers/lingrad01.svg
 	specified.  If the element references an element that
 	specifies a value for 'fr', then the value of 'fr' is
 	inherited from the referenced element.
-      </p>
+      
 
       <div class="annotation svg2-requirement">
         <table>
@@ -933,12 +935,12 @@ path: images/pservers/lingrad01.svg
         the bounds of the object(s) being painted by the gradient. Has
         the same values and meanings as the {{linearGradient/spreadMethod}}
         attribute on {{linearGradient}} element.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 <!--	<dt>Value</dt>                <dd>pad | reflect | repeat</dd> -->
-	<dt><a>Initial value</a></dt>  <dd>pad</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>pad</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
     </dd>
 
@@ -948,20 +950,20 @@ path: images/pservers/lingrad01.svg
     </dt>
     <dd>
       <p>
-        A <a>URL reference</a> to a template gradient element;
+        A [=URL reference=] to a template gradient element;
         to be valid, the reference must be to a
         {{linearGradient}} element or
         a different {{radialGradient}} element.
-      </p>
+      
       <p>
         Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
         and to the common handling defined for <a
         href="linking.html#linkRefAttrs">URL reference attributes</a> and
         <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
-      </p>
+      
       <p>
         The specified attributes that will be copied from the template are:
-      </p>
+      
       <ul>
         <li>{{cx}}</li>
         <li>{{cy}}</li>
@@ -977,12 +979,12 @@ path: images/pservers/lingrad01.svg
         Refer to the common handling defined for <a
         href="linking.html#linkRefAttrs">URL reference attributes</a> and
         <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 <!--	<dt>Value</dt>                <dd><a>&lt;url&gt;</a></dd> -->
-	<dt><a>Initial value</a></dt>  <dd>empty</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>empty</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
     </dd>
@@ -1019,22 +1021,22 @@ path: images/pservers/lingrad01.svg
 
 <h5 id="RadialGradientNotes">Notes on radial gradients</h5>
 
-<p class="note">Changed in SVG 2. SVG 1.1 required that the focal
+Note: Changed in SVG 2. SVG 1.1 required that the focal
 point, if outside the end circle, be moved to be on the end
-circle. The change was made to align with Canvas.</p>
+circle. The change was made to align with Canvas.
 
 <p class="annotation">Allowing the focal point to lie outside the end
 circle was resolved at the
 <a href="http://www.w3.org/2012/09/19-svg-minutes.html#item01">Rigi
-Kaltbad working group meeting</a>.</p>
+Kaltbad working group meeting</a>.
 
 <p>If the start circle defined by {{fx}}, {{fy}} and {{fr}} lies
 outside the end circle defined by {{cx}}, {{cy}}, and {{r}}, effectively
 a cone is created, touched by the two circles. Areas outside the cone stay untouched by
-the gradient (transparent black).</p>
+the gradient (transparent black).
 
 <p>If the start circle fully overlaps with the end circle, no
-gradient is drawn. The area stays untouched (transparent black).</p>
+gradient is drawn. The area stays untouched (transparent black).
 
 <div class="figure">
   <img
@@ -1046,7 +1048,7 @@ gradient is drawn. The area stays untouched (transparent black).</p>
     outside the end circle. The focal circle is the
     smaller circle on the right. The gradient has
     <span class="attr-value">spreadMethod="reflect"</span>.
-  </p>
+  
 </div>
 
 <div class="figure">
@@ -1061,31 +1063,33 @@ gradient is drawn. The area stays untouched (transparent black).</p>
   defined by {{cx}}, {{cy}}, and {{r}}. On the
   right, the focal point is on the circle. In this case, the area
   painted to the right of the circumference has a fill equal to
-  the weighted average of the colors in the gradient vector.</p>
+  the weighted average of the colors in the gradient vector.
 </div>
 
-<p class="note">The treatment of the area to the right of the gradient
+Note: The treatment of the area to the right of the gradient
 in the right-hand side of the above figure is different from that of
 Canvas where the area would be transparent black. The difference is to
-maintain compatibility with SVG 1.1.</p>
+maintain compatibility with SVG 1.1.
 
 <p class="annotation">The color space for the weighted average is the
 same as in which the gradient is interpolated. See
 <a href="http://www.w3.org/2012/09/19-svg-minutes.html#item01">Rigi
-Kaltbad working group meeting</a>.</p>
+Kaltbad working group meeting</a>.
 
 <p id="ExampleRadGrad01"><span class="example-ref">Example radgrad01</span>
 shows how to fill a rectangle by referencing a radial gradient paint
-server.</p>
+server.
 
 
 <pre class=include-raw>
 path: images/pservers/radgrad01.svg
 </pre>
+<!--
+@@fix
 <pre class=include>
 path: images/pservers/radgrad01.svg
 </pre>
-
+-->
 </div>
 
 <h4 id="GradientStops">Gradient stops</h4>
@@ -1095,10 +1099,10 @@ path: images/pservers/radgrad01.svg
 <p id="StopElement">The vector of colors to use in a gradient is
 defined by the {{stop}} elements that are child elements to a
 {{linearGradient}}, or {{radialGradient}}
-element.</p>
+element.
 
 <p class="annotation">In SVG 1.1, the above read: "The ramp of
-colors..." but "ramp" is used nowhere else in this section.</p>
+colors..." but "ramp" is used nowhere else in this section.
 
 @@elementsummary stop@@
 
@@ -1118,13 +1122,13 @@ colors..." but "ramp" is used nowhere else in this section.</p>
 	represents a fractional distance from the edge of the
 	innermost/smallest circle to the edge of the outermost/largest
 	circle.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 
 	<dt>Value</dt>                <dd><a>&lt;number&gt;</a> | <a>&lt;percentage&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>0</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>0</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
 
       </dl>
 
@@ -1154,15 +1158,15 @@ colors..." but "ramp" is used nowhere else in this section.</p>
       <a href="painting.html#SpecifyingPaint">&lt;paint&gt;</a>
       specification for the {{fill}} and {{stroke}}
       properties.
-      </p>
-      <p class="note">
+      
+      Note: 
       With respect to gradients, SVG treats the 'transparent' keyword
       differently than CSS. SVG does not calculate gradients in pre-multiplied
       space, so 'transparent' really means transparent black. Specifying
       a {{stop-color}} with the value 'transparent' is equivalent to
       specifying a {{stop-color}} with the value 'black' and a
       {{stop-opacity}} with the value '0'.
-      </p>
+      
       <dl class="propdef-svg2">
         <dt>Value</dt>              <dd>&lt;‘{{color}}’&gt;</dd>
         <dt>Initial</dt>            <dd>black</dd>
@@ -1170,7 +1174,7 @@ colors..." but "ramp" is used nowhere else in this section.</p>
         <dt>Inherited</dt>          <dd>no</dd>
         <dt>Percentages</dt>        <dd>N/A</dd>
         <dt>Media</dt>              <dd>visual</dd>
-        <dt><a>Animatable</a></dt>  <dd>yes</dd>
+        <dt>[=Animatable=]</dt>  <dd>yes</dd>
       </dl>
     </dd>
     <dt id="StopOpacityProperty"><span class="propdef-title property">'stop-opacity'</span></dt>
@@ -1184,7 +1188,7 @@ colors..." but "ramp" is used nowhere else in this section.</p>
       {{stop-color}}. For {{stop-color}} value types of that
       don't include explicit opacity information, the opacity of that
       component must be treated as 1.</span>
-      </p>
+      
       <dl class="propdef-svg2">
         <dt>Value</dt>              <dd>&lt;‘{{opacity}}’&gt;</dd>
         <dt>Initial</dt>            <dd>1</dd>
@@ -1193,7 +1197,7 @@ colors..." but "ramp" is used nowhere else in this section.</p>
         <dt>Percentages</dt>        <dd>N/A</dd>
         <dt>Media</dt>              <dd>visual</dd>
         <dt>Computed value</dt>     <dd>the specified value converted to a number, clamped to the range [0,1]</dd>
-        <dt><a>Animatable</a></dt>  <dd>yes</dd>
+        <dt>[=Animatable=]</dt>  <dd>yes</dd>
       </dl>
       <dl class="propdef-values">
         <dt>&lt;number&gt;</dt>
@@ -1234,7 +1238,7 @@ colors..." but "ramp" is used nowhere else in this section.</p>
   <li>
     <p>If two gradient stops have the same offset value, then the
     latter gradient stop controls the color value at the
-    overlap point. In particular:</p>
+    overlap point. In particular:
 
     <xmp>
 <stop offset="0" stop-color="white"/>
@@ -1243,7 +1247,7 @@ colors..." but "ramp" is used nowhere else in this section.</p>
 <stop offset="1" stop-color="black"/>
 </xmp>
 
-    <p>will have approximately the same effect as:</p>
+    <p>will have approximately the same effect as:
 
     <xmp>
 <stop offset="0" stop-color="white"/>
@@ -1254,7 +1258,7 @@ colors..." but "ramp" is used nowhere else in this section.</p>
 
     <p>which is a gradient that goes smoothly from white to red,
     then abruptly shifts from red to blue, and then goes
-    smoothly from blue to black.</p>
+    smoothly from blue to black.
   </li>
 </ul>
 
@@ -1269,8 +1273,8 @@ an object using a pre-defined graphic object which can be replicated
 ("tiled") at fixed intervals in <em>x</em> and <em>y</em> to cover the
 areas to be painted. Patterns are defined using a {{pattern}}
 element and then referenced by properties {{fill}} and
-{{stroke}} on a given <a>graphics element</a> to indicate that the
-given element shall be filled or stroked with the pattern.</p>
+{{stroke}} on a given [=graphics element=] to indicate that the
+given element shall be filled or stroked with the pattern.
 
 <p>Attributes {{x}}, {{y}}, {{width}}, {{height}}
 and {{patternUnits}} define a reference rectangle somewhere
@@ -1281,18 +1285,18 @@ The tiling theoretically extends a series of such rectangles to infinity in X
 and Y (positive and negative), with rectangles starting at
 (<var>x</var>&nbsp;+&nbsp;m*<var>width</var>,&nbsp;<var>y</var>&nbsp;+&nbsp;n*
 <var>height</var>) for each possible integer value for <em>m</em>
-and <em>n</em>.</p>
+and <em>n</em>.
 
 @@elementsummary pattern@@
 
 <h4 id="PatternElementAttributes">Attributes</h4>
 
-  <p class="note">
+  Note: 
     Note that the {{x}},{{y}}, {{width}} and {{height}} attributes
     on a {{pattern}} are not presentation attributes;
     the used value is not affected by CSS styles.
     The {{patternTransform}} attribute is a presentation attribute for the {{transform}} property.
-  </p>
+  
 
   <dl class="attrdef-list-svg2">
 
@@ -1302,13 +1306,13 @@ and <em>n</em>.</p>
       <p>
 	Defines the coordinate system for attributes
 	{{x}}, {{y}}, {{width}} and {{height}}.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 
 	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
-	<dt><a>Initial value</a></dt>  <dd>objectBoundingBox</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>objectBoundingBox</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
 
       </dl>
 
@@ -1330,7 +1334,7 @@ and <em>n</em>.</p>
             applying the transform specified by attribute
             {{patternTransform}}. Percentages
             represent values relative to the current SVG viewport.
-	  </p>
+	  
 	</dd>
 
 	<dt>objectBoundingBox</dt>
@@ -1348,7 +1352,7 @@ and <em>n</em>.</p>
             specified by attribute {{patternTransform}}.
             Percentages represent values relative to the bounding box
             for the object.
-	  </p>
+	  
 	</dd>
 
       </dl><!-- Attribute values -->
@@ -1364,13 +1368,13 @@ and <em>n</em>.</p>
 	Defines the coordinate system for the contents of the
 	{{pattern}}. Note that this attribute has no effect if
 	attribute {{viewBox}} is specified.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 
 	<dt>Value</dt>                <dd>userSpaceOnUse | objectBoundingBox</dd>
-	<dt><a>Initial value</a></dt>  <dd>userSpaceOnUse</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>userSpaceOnUse</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
 
       </dl>
 
@@ -1388,7 +1392,7 @@ and <em>n</em>.</p>
 	    {{pattern}} element via a {{fill}} or {{stroke}}
 	    property) and then applying the transform specified by attribute
 	    {{patternTransform}}.
-	  </p>
+	  
 	</dd>
 
 	<dt>objectBoundingBox</dt>
@@ -1402,7 +1406,7 @@ and <em>n</em>.</p>
             (see <a href="coords.html#ObjectBoundingBox">Object
             bounding box units</a>) and then applying the transform
             specified by attribute {{patternTransform}}.
-	  </p>
+	  
 	</dd>
 
       </dl><!-- Attribute values -->
@@ -1430,12 +1434,12 @@ and <em>n</em>.</p>
         necessary to convert
         from <a href="coords.html#ObjectBoundingBox">object bounding
         box units</a> to user coordinate system.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd><a>&lt;transform-list&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>identity transform</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>identity transform</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
     </dd>
@@ -1449,12 +1453,12 @@ and <em>n</em>.</p>
         space specified by the combination of
         attributes {{patternUnits}}
         and {{patternTransform}}.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>0</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>0</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
     </dd>
@@ -1464,12 +1468,12 @@ and <em>n</em>.</p>
 
       <p>
 	See {{x}}.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>0</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>0</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
     </dd>
@@ -1479,12 +1483,12 @@ and <em>n</em>.</p>
 
       <p>
 	See {{x}}.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>0</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>0</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
       <p>
@@ -1492,7 +1496,7 @@ and <em>n</em>.</p>
         (see <a href="conform.html#ErrorProcessing">Error
         processing</a>).  A value of zero disables rendering of the
         element (i.e., no paint is applied).
-      </p>
+      
 
     </dd>
 
@@ -1501,37 +1505,37 @@ and <em>n</em>.</p>
 
       <p>
 	See {{x}}.
-      </p>
+      
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>0</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>0</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
       <p>
         A negative value is an error (see <a href="conform.html#ErrorProcessing">Error processing</a>).
         A value of zero disables rendering of the element (i.e., no
         paint is applied).
-      </p>
+      
 
     </dd>
 
     <dt id="PatternElementHrefAttribute"><span class="adef">href</span></dt>
     <dd>
       <p>
-        A <a>URL reference</a> to a template element,
+        A [=URL reference=] to a template element,
         which must be a different {{pattern}} element to be valid.
-      </p>
+      
       <p>
         Refer to the process for <a href="#PaintServerTemplates">using paint servers as templates</a>,
         and to the common handling defined for <a
         href="linking.html#linkRefAttrs">URL reference attributes</a> and
         <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
-      </p>
+      
       <p>
         The specified attributes that will be copied from the template are:
-      </p>
+      
       <ul class='ready-for-wider-review'>
         <li>{{x}}</li>
         <li>{{y}}</li>
@@ -1546,8 +1550,8 @@ and <em>n</em>.</p>
 
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                <dd>URL <a href="types.html#attribute-url" class="syntax">&bs[;URL]</a></dd>
-	<dt><a>Initial value</a></dt>  <dd>empty</dd>
-	<dt><a>Animatable</a></dt>    <dd>yes</dd>
+	<dt>[=Initial value=]</dt>  <dd>empty</dd>
+	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
     </dd>
@@ -1562,9 +1566,9 @@ path to be created at the bounds of the pattern tile.  Unless the
 {{overflow}} property is overridden, any graphics within the pattern
 which goes outside of the pattern rectangle will be clipped.
 <a href="pservers.html#ExamplePattern01">Example pattern01</a> below shows the
-effect of clipping to the pattern tile.</p>
+effect of clipping to the pattern tile.
 
-<p class="note">
+Note: 
   Note that if the {{overflow}} property is set to
   <span class="prop-value">visible</span> the rendering behavior
   for the pattern outside the bounds of the pattern is currently
@@ -1573,10 +1577,10 @@ effect of clipping to the pattern tile.</p>
   this is the behavior expected by authors. If overflow is rendered,
   the pattern tiles should be rendered left to right in rows and the
   rows from top to bottom.
-</p>
+
 <p class="annotation">
   See <a href="https://github.com/w3c/svgwg/issues/129">GitHub Issue 129</a>
-</p>
+
 
 <p>The contents of the {{pattern}} are relative to a new coordinate
 system. If there is a {{viewBox}} attribute, then the new coordinate
@@ -1587,7 +1591,7 @@ system is fitted into the region defined by the {{x}}, {{y}},
 the new coordinate system has its origin at (<var>x</var>,&nbsp;<var>y</var>),
 where <var>x</var> is established by the {{x}} attribute on the
 {{pattern}} element, and <var>y</var> is established by the {{y}}
-attribute on the {{pattern}} element. Thus, in the following example:</p>
+attribute on the {{pattern}} element. Thus, in the following example:
 
 <div class="example">
 <xmp>
@@ -1598,17 +1602,17 @@ attribute on the {{pattern}} element. Thus, in the following example:</p>
 </div>
 
 <p>the rectangle has its top/left located 5 units to the right and 5
-units down from the origin of the pattern tile.</p>
+units down from the origin of the pattern tile.
 
 <p>The {{viewBox}} attribute introduces a supplemental transformation
 which is applied on top of any transformations necessary to create a new
 pattern coordinate system due to attributes {{x}}, {{y}},
-{{width}}, {{height}} and {{patternUnits}}.</p>
+{{width}}, {{height}} and {{patternUnits}}.
 
 <p><a href="interact.html#EventAttributes">Event attributes and event listeners</a> attached
 to the contents of a {{pattern}} element are not processed;
 only the rendering aspects of {{pattern}} elements are
-processed.</p>
+processed.
 
 <p id="ExamplePattern01"><span class="example-ref">Example pattern01</span>
 shows how to fill a rectangle by referencing a pattern paint
@@ -1617,23 +1621,25 @@ slightly clipped at the top and the left. This is due to SVG's
 <a href="styling.html#UAStyleSheet">user agent style sheet</a> setting
 the {{overflow}} property for {{pattern}} elements to
 <span class="prop-value">hidden</span>, which causes the pattern to be clipped
-to the bounds of the pattern tile.</p>
+to the bounds of the pattern tile.
 
 <pre class=include-raw>
 path: images/pservers/pattern01.svg
 </pre>
+<!--
+@@fix
 <pre class=include>
 path: images/pservers/pattern01.svg
 </pre>
-
+-->
 
 
 <h3 id="DOMInterfaces">DOM interfaces</h3>
 
 <h4 id="InterfaceSVGGradientElement">Interface SVGGradientElement</h4>
 
-<p>The <a>SVGGradientElement</a> interface is used as a base interface
-for gradient paint server element interfaces.</p>
+<p>The [=SVGGradientElement=] interface is used as a base interface
+for gradient paint server element interfaces.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGGradientElement</b> : <a>SVGElement</a> {
@@ -1652,9 +1658,9 @@ interface <b>SVGGradientElement</b> : <a>SVGElement</a> {
 <a>SVGGradientElement</a> includes <a>SVGURIReference</a>;
 </pre>
 
-<p>The numeric spread method type constants defined on <a>SVGGradientElement</a>
+<p>The numeric spread method type constants defined on [=SVGGradientElement=]
 are used to represent the keyword values that the <span class="attr-name">spreadMethod</span>
-attribute can take.  Their meanings are as follows:</p>
+attribute can take.  Their meanings are as follows:
 
 <table class='vert'>
   <tr><th>Constant</th><th>Meaning</th></tr>
@@ -1665,9 +1671,9 @@ attribute can take.  Their meanings are as follows:</p>
 </table>
 
 <p>The <b id="__svg__SVGGradientElement__gradientUnits">gradientUnits</b> IDL attribute
-<a>reflects</a> the <span class="attr-name">gradientUnits</span> content attribute.
-The <a>numeric type values</a> for <span class="attr-name">gradientUnits</span>
-attributes on gradient elements are as follows:</p>
+[=reflects=] the <span class="attr-name">gradientUnits</span> content attribute.
+The [=numeric type values=] for <span class="attr-name">gradientUnits</span>
+attributes on gradient elements are as follows:
 
 <table class="vert">
   <tr><th>Value</th><th>Numeric type value</th></tr>
@@ -1682,23 +1688,23 @@ attributes on gradient elements are as follows:</p>
 </table>
 
 <p>The <b id="__svg__SVGGradientElement__gradientTransform">gradientTransform</b> IDL
-attribute <a>reflects</a> the computed value of the {{transform}} property
+attribute [=reflects=] the computed value of the {{transform}} property
 and  the <span class='gradientTransform'>'gradientTransform'</span> presentation attribute
-for {{linearGradient}} and {{radialGradient}} elements.</p>
+for {{linearGradient}} and {{radialGradient}} elements.
 
 <p>The <b id="__svg__SVGGradientElement__spreadMethod">spreadMethod</b> IDL attribute
-<a>reflects</a> the <span class="attr-name">spreadMethod</span> content attribute.
-The <a>numeric type values</a> for <span class="attr-name">spreadMethod</span>
+[=reflects=] the <span class="attr-name">spreadMethod</span> content attribute.
+The [=numeric type values=] for <span class="attr-name">spreadMethod</span>
 attributes on gradient elements are as described above in the
-numeric spread type constant table.</p>
+numeric spread type constant table.
 
 
 <h4 id="InterfaceSVGLinearGradientElement">Interface SVGLinearGradientElement</h4>
 
 
 
-<p>An <a>SVGLinearGradientElement</a> object represents an {{linearGradient}}
-in the DOM.</p>
+<p>An [=SVGLinearGradientElement=] object represents an {{linearGradient}}
+in the DOM.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGLinearGradientElement</b> : <a>SVGGradientElement</a> {
@@ -1713,8 +1719,8 @@ interface <b>SVGLinearGradientElement</b> : <a>SVGGradientElement</a> {
 <b id="__svg__SVGLinearGradientElement__y1">y1</b>,
 <b id="__svg__SVGLinearGradientElement__x2">x2</b> and
 <b id="__svg__SVGLinearGradientElement__y2">y2</b> IDL attributes
-<a>reflect</a> the {{x1}}, {{y1}}, {{x2}} and {{y2}}
-content attributes, respectively</p>
+[=reflect=] the {{x1}}, {{y1}}, {{x2}} and {{y2}}
+content attributes, respectively
 
 
 
@@ -1723,8 +1729,8 @@ content attributes, respectively</p>
 
 
 
-<p>An <a>SVGRadialGradientElement</a> object represents an {{radialGradient}}
-in the DOM.</p>
+<p>An [=SVGRadialGradientElement=] object represents an {{radialGradient}}
+in the DOM.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGRadialGradientElement</b> : <a>SVGGradientElement</a> {
@@ -1743,8 +1749,8 @@ interface <b>SVGRadialGradientElement</b> : <a>SVGGradientElement</a> {
 <b id="__svg__SVGRadialGradientElement__fx">fx</b>,
 <b id="__svg__SVGRadialGradientElement__fy">fy</b> and
 <b id="__svg__SVGRadialGradientElement__fr">fr</b> IDL attributes
-<a>reflect</a> the {{cx}}, {{cy}}, {{r}}, {{fx}},
-{{fy}} and {{fr}} content attributes, respectively</p>
+[=reflect=] the {{cx}}, {{cy}}, {{r}}, {{fx}},
+{{fy}} and {{fr}} content attributes, respectively
 
 
 
@@ -1752,8 +1758,8 @@ interface <b>SVGRadialGradientElement</b> : <a>SVGGradientElement</a> {
 
 
 
-<p>An <a>SVGStopElement</a> object represents a {{stop}} element
-in the DOM.</p>
+<p>An [=SVGStopElement=] object represents a {{stop}} element
+in the DOM.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGStopElement</b> : <a>SVGElement</a> {
@@ -1761,10 +1767,10 @@ interface <b>SVGStopElement</b> : <a>SVGElement</a> {
 };</pre>
 
 <p>The <b id="__svg__SVGStopElement__offset">offset</b> IDL attribute
-<a>reflects</a> the {{offset}} content attribute.</p>
+[=reflects=] the {{offset}} content attribute.
 
-<p class="note">Note that <a>SVGStopElement</a> does not have a
-<a>reflecting</a> IDL attribute for its {{path}} attribute.</p>
+Note: Note that [=SVGStopElement=] does not have a
+[=reflecting=] IDL attribute for its {{path}} attribute.
 
 
 
@@ -1772,8 +1778,8 @@ interface <b>SVGStopElement</b> : <a>SVGElement</a> {
 
 
 
-<p>An <a>SVGPatternElement</a> object represents a {{pattern}} element
-in the DOM.</p>
+<p>An [=SVGPatternElement=] object represents a {{pattern}} element
+in the DOM.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGPatternElement</b> : <a>SVGElement</a> {
@@ -1792,10 +1798,10 @@ interface <b>SVGPatternElement</b> : <a>SVGElement</a> {
 
 <p>The <b id="__svg__SVGPatternElement__patternUnits">patternUnits</b>
 and <b id="__svg__SVGPatternElement__patternContentUnits">patternContentUnits</b>
-IDL attributes <a>reflect</a> the {{patternUnits}} and
+IDL attributes [=reflect=] the {{patternUnits}} and
 {{patternContentUnits}} content attributes, respectively.
-The <a>numeric type values</a> for {{patternUnits}} and
-{{patternContentUnits}} are as follows:</p>
+The [=numeric type values=] for {{patternUnits}} and
+{{patternContentUnits}} are as follows:
 
 <table class="vert">
   <tr><th>Value</th><th>Numeric type value</th></tr>
@@ -1810,13 +1816,13 @@ The <a>numeric type values</a> for {{patternUnits}} and
 </table>
 
 <p>The <b id="__svg__SVGPatternElement__patternTransform">patternTransform</b> IDL
-attribute <a>reflects</a> the computed value of the {{transform}} property
-and the <span class="attr-name">patternTransform</span> presentation attribute.</p>
+attribute [=reflects=] the computed value of the {{transform}} property
+and the <span class="attr-name">patternTransform</span> presentation attribute.
 
 <p>The
 <b id="__svg__SVGPatternElement__x">x</b>,
 <b id="__svg__SVGPatternElement__y">y</b>,
 <b id="__svg__SVGPatternElement__width">width</b> and
 <b id="__svg__SVGPatternElement__height">height</b>
-IDL attributes <a>reflect</a> the {{x}}, {{y}},
-{{width}} and {{height}} content attributes, respectively.</p>
+IDL attributes [=reflect=] the {{x}}, {{y}},
+{{width}} and {{height}} content attributes, respectively.

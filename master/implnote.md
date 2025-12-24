@@ -4,14 +4,14 @@
 
 <p>The following notes describe algorithms and other strategies
 which can be used by software developers when converting content
-to and from the formats required by features in the SVG language.</p>
+to and from the formats required by features in the SVG language.
 
 <h3 id="ArcImplementationNotes">Elliptical arc parameter conversion</h3>
 
 <p>
 To be consistent with other path segment notation,
 arcs in SVG paths are defined in terms of start and end points on the curve.
-</p>
+
 
 <p>
 This parameterization of elliptical arcs will be referred to
@@ -19,52 +19,52 @@ as <em>endpoint parameterization</em>. One of the
 advantages of endpoint parameterization is that it permits a
 consistent path syntax in which all path commands end in the
 coordinates of the new "current point".
-</p>
+
 
 <p>
 However, this is not the only way of describing arc geometry
 used in software or mathematics.
 This section describes the alternative center parameterization,
 and how to convert it from and to SVG's endpoint parameterization.
-</p>
+
 
 <div class='math'>
 
 <h4 id="ArcSyntax">Elliptical arc endpoint syntax</h4>
 
 <p>An elliptical arc, as represented in the SVG path command,
-is described by the following parameters in order:</p>
+is described by the following parameters in order:
 
 <p>(<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>) are the absolute coordinates of the
 current point on the path, obtained from the last two
-parameters of the previous path command.</p>
+parameters of the previous path command.
 
 <p><var>r<sub>x</sub></var>
 and <var>r<sub>y</sub></var>
 are the radii of the ellipse (also known as its semi-major and
-semi-minor axes).</p>
+semi-minor axes).
 
 <p><var>φ</var> is the angle from the x-axis of the current coordinate
-system to the x-axis of the ellipse.</p>
+system to the x-axis of the ellipse.
 
 <p><var>f<sub>A</sub></var> is
 the large arc flag, and is 0
 if an arc spanning less than or equal to 180 degrees is chosen, or 1
-if an arc spanning greater than 180 degrees is chosen.</p>
+if an arc spanning greater than 180 degrees is chosen.
 
 <p><var>f<sub>S</sub></var> is
 the sweep flag, and is 0 if
 the line joining center to arc sweeps through decreasing
 angles, or 1 if it sweeps
-through increasing angles.</p>
+through increasing angles.
 
 <p>(<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>) are the absolute coordinates of the
-final point of the arc.</p>
+final point of the arc.
 
 <h4 id="ArcParameterizationAlternatives">Parameterization alternatives</h4>
 
 <p>An arbitrary point (<var>x</var>,&nbsp;<var>y</var>) on the elliptical
-arc can be described by the 2-dimensional matrix equation:</p>
+arc can be described by the 2-dimensional matrix equation:
 
 (eq. 3.1)
 <div role="math" aria-describedby="math-arbitrary-point-on-elliptical-arc">
@@ -116,19 +116,19 @@ arc can be described by the 2-dimensional matrix equation:</p>
 </div>
 
 <p>(<var>c<sub>x</sub></var>,&nbsp;<var>c<sub>y</sub></var>) are
-the coordinates of the center of the ellipse.</p>
+the coordinates of the center of the ellipse.
 
 <p><var>r<sub>x</sub></var> and <var>r<sub>y</sub></var>
 are the radii of the ellipse (also known as its semi-major and
-semi-minor axes).</p>
+semi-minor axes).
 
 <div class="ready-for-wider-review">
 <p><var>φ</var> is the angle from the
 x-axis of the current coordinate system to the x-axis of the
-ellipse.</p>
+ellipse.
 
 <p><var>θ</var> is the angle around the arc that the point
-(<var>x</var>,&nbsp;<var>y</var>) lies at, and ranges from:</p>
+(<var>x</var>,&nbsp;<var>y</var>) lies at, and ranges from:
 
 <ul>
   <li><var>θ</var><sub>1</sub> which is
@@ -152,11 +152,11 @@ This leads to an alternate parameterization which is common
 among graphics APIs, which will be referred to as <em>center
 parameterization</em>. In the next sections, formulas are
 given for mapping in both directions between center
-parameterization and endpoint parameterization.</p>
+parameterization and endpoint parameterization.
 
 <h4 id="ArcConversionCenterToEndpoint">Conversion from center to endpoint parameterization</h4>
 
-<p>Given the following variables:</p>
+<p>Given the following variables:
 
 <p class='indented separated'>
   <var>c<sub>x</sub></var>
@@ -166,9 +166,9 @@ parameterization and endpoint parameterization.</p>
   <var>φ</var>
   <var>θ</var><sub>1</sub>
   Δ<var>θ</var>
-</p>
 
-<p>the task is to find:</p>
+
+<p>the task is to find:
 
 <p class='indented separated'>
   <var>x</var><sub>1</sub>
@@ -177,9 +177,9 @@ parameterization and endpoint parameterization.</p>
   <var>y</var><sub>2</sub>
   <var>f<sub>A</sub></var>
   <var>f<sub>S</sub></var>
-</p>
 
-<p>This can be achieved using the following formulas:</p>
+
+<p>This can be achieved using the following formulas:
 
 <table style="width: 90%">
   <tr>
@@ -577,7 +577,7 @@ parameterization and endpoint parameterization.</p>
 
 <h4 id="ArcConversionEndpointToCenter">Conversion from endpoint to center parameterization</h4>
 
-<p>Given the following variables:</p>
+<p>Given the following variables:
 
 <p class='indented separated'>
   <var>x</var><sub>1</sub>
@@ -589,16 +589,16 @@ parameterization and endpoint parameterization.</p>
   <var>r<sub>x</sub></var>
   <var>r<sub>y</sub></var>
   <var>φ</var>
-</p>
 
-<p>the task is to find:</p>
+
+<p>the task is to find:
 
 <p class='indented separated'>
   <var>c<sub>x</sub></var>
   <var>c<sub>y</sub></var>
   <var>θ</var><sub>1</sub>
   Δ<var>θ</var>
-</p>
+
 
 <p>The equations simplify after a translation which
 places the origin at the midpoint of the line joining
@@ -608,11 +608,11 @@ a rotation to line up the coordinate axes with the axes of the ellipse.
 All transformed coordinates will be written with primes. They are
 computed as intermediate values on the way toward finding the required
 center parameterization variables. This procedure consists of the
-following steps:</p>
+following steps:
 
 <ul>
   <li>
-    <p><em>Step 1: Compute</em> (<var>x</var><sub>1</sub>′,&nbsp;<var>y</var><sub>1</sub>′)</p>
+    <p><em>Step 1: Compute</em> (<var>x</var><sub>1</sub>′,&nbsp;<var>y</var><sub>1</sub>′)
     <table  style="width: 90%"
     >
       <tr>
@@ -733,7 +733,7 @@ following steps:</p>
   </li>
 
   <li>
-    <p><em>Step 2: Compute</em> (<var>c<sub>x</sub></var>′,&nbsp;<var>c<sub>y</sub></var>′)</p>
+    <p><em>Step 2: Compute</em> (<var>c<sub>x</sub></var>′,&nbsp;<var>c<sub>y</sub></var>′)
     <table  style="width: 90%"
     >
       <tr>
@@ -936,12 +936,12 @@ following steps:</p>
       </tr>
     </table>
     <p>where the + sign is chosen if <var>f<sub>A</sub></var>&nbsp;≠&nbsp;<var>f<sub>S</sub></var>, and
-    the − sign is chosen if <var>f<sub>A</sub></var>&nbsp;=&nbsp;<var>f<sub>S</sub></var>.</p>
+    the − sign is chosen if <var>f<sub>A</sub></var>&nbsp;=&nbsp;<var>f<sub>S</sub></var>.
   </li>
 
   <li>
     <p><em>Step 3: Compute</em> (<var>c<sub>x</sub></var>,&nbsp;<var>c<sub>y</sub></var>)
-    <em>from</em> (<var>c<sub>x</sub></var>′,&nbsp;<var>c<sub>y</sub></var>′)</p>
+    <em>from</em> (<var>c<sub>x</sub></var>′,&nbsp;<var>c<sub>y</sub></var>′)
     <table  style="width: 90%"
     >
       <tr>
@@ -1083,10 +1083,10 @@ following steps:</p>
   </li>
 
   <li>
-    <p><em>Step 4: Compute</em> <var>θ</var><sub>1</sub> and Δ<var>θ</var></p>
+    <p><em>Step 4: Compute</em> <var>θ</var><sub>1</sub> and Δ<var>θ</var>
     <p>In general, the angle between two vectors
     (<var>u<sub>x</sub></var>,&nbsp;<var>u<sub>y</sub></var>)
-    and (<var>v<sub>x</sub></var>,&nbsp;<var>v<sub>y</sub></var>) can be computed as</p>
+    and (<var>v<sub>x</sub></var>,&nbsp;<var>v<sub>y</sub></var>) can be computed as
     <table  style="width: 90%"
     >
       <tr>
@@ -1160,10 +1160,10 @@ following steps:</p>
     </table>
 
     <p>where the &#xb1; sign appearing here is the sign of
-    <var>u<sub>x</sub></var>&nbsp;<var>v<sub>y</sub></var>&nbsp;−&nbsp;<var>u<sub>y</sub></var>&nbsp;<var>v<sub>x</sub></var>.</p>
+    <var>u<sub>x</sub></var>&nbsp;<var>v<sub>y</sub></var>&nbsp;−&nbsp;<var>u<sub>y</sub></var>&nbsp;<var>v<sub>x</sub></var>.
 
     <p>This angle function can be used to express <var>θ</var><sub>1</sub> and
-    Δ<var>θ</var> as follows:</p>
+    Δ<var>θ</var> as follows:
 
     <table  style="width: 90%"
     >
@@ -1429,16 +1429,16 @@ following steps:</p>
     </table>
 
     <p>where Δ<var>θ</var> is fixed in the range
-    −360°&nbsp;&lt;&nbsp;Δ<var>θ</var>&nbsp;&lt;&nbsp;360° such that:</p>
+    −360°&nbsp;&lt;&nbsp;Δ<var>θ</var>&nbsp;&lt;&nbsp;360° such that:
 
-    <p class='indented'>if <var>f<sub>S</sub></var>&nbsp;=&nbsp;0, then Δ<var>θ</var>&nbsp;&lt;&nbsp;0,</p>
-    <p class='indented'>else if <var>f<sub>S</sub></var>&nbsp;=&nbsp;1, then Δ<var>θ</var>&nbsp;&gt;&nbsp;0.</p>
+    <p class='indented'>if <var>f<sub>S</sub></var>&nbsp;=&nbsp;0, then Δ<var>θ</var>&nbsp;&lt;&nbsp;0,
+    <p class='indented'>else if <var>f<sub>S</sub></var>&nbsp;=&nbsp;1, then Δ<var>θ</var>&nbsp;&gt;&nbsp;0.
 
     <p>In other words, if <var>f<sub>S</sub></var>&nbsp;=&nbsp;0 and the
     right side of (eq. 5.6) is greater than 0, then subtract 360°,
     whereas if <var>f<sub>S</sub></var>&nbsp;=&nbsp;1 and the right
     side of (eq. 5.6) is less than 0, then add 360°. In all other cases
-    leave it as is.</p>
+    leave it as is.
   </li>
 </ul>
 
@@ -1447,21 +1447,21 @@ following steps:</p>
 <p>This section describes the mathematical adjustments required for out-of-range <var>r<sub>x</sub></var> and <var>r<sub>y</sub></var>,
 as described in the <a href="paths.html#ArcOutOfRangeParameters">Path implementation notes</a>.
 Algorithmically these adjustments consist of the following
-steps:</p>
+steps:
 
 <ul>
   <li>
-    <p><em>Step 1: Ensure radii are non-zero</em></p>
+    <p><em>Step 1: Ensure radii are non-zero</em>
     <p>If <var>r<sub>x</sub></var>&nbsp;=&nbsp;0 or
     <var>r<sub>y</sub></var>&nbsp;=&nbsp;0, then treat
     this as a straight line from (<var>x</var><sub>1</sub>,&nbsp;<var>y</var><sub>1</sub>)
-    to (<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>) and stop. Otherwise,</p>
+    to (<var>x</var><sub>2</sub>,&nbsp;<var>y</var><sub>2</sub>) and stop. Otherwise,
   </li>
 
   <li>
-    <p><em>Step 2: Ensure radii are positive</em></p>
+    <p><em>Step 2: Ensure radii are positive</em>
     <p>Take the absolute value of <var>r<sub>x</sub></var> and
-    <var>r<sub>y</sub></var>:</p>
+    <var>r<sub>y</sub></var>:
     <table  style="width: 90%"
     >
       <tr>
@@ -1516,9 +1516,9 @@ steps:</p>
   </li>
 
   <li>
-    <p><em>Step 3: Ensure radii are large enough</em></p>
+    <p><em>Step 3: Ensure radii are large enough</em>
     <p>Using the primed coordinate values of equation (eq. 5.1),
-    compute</p>
+    compute
     <table  style="width: 90%"
     >
       <tr>
@@ -1584,7 +1584,7 @@ steps:</p>
     1, then no further change need be made to <var>r<sub>x</sub></var>
     and <var>r<sub>y</sub></var>. If
     the result of the above equation is greater than 1, then make
-    the replacements</p>
+    the replacements
     <table  style="width: 90%"
     >
       <tr>
@@ -1643,7 +1643,7 @@ steps:</p>
   </li>
 
   <li>
-    <p><em>Step 4: Proceed with computations</em></p>
+    <p><em>Step 4: Proceed with computations</em>
     <p>Proceed with the remaining elliptical arc computations, such
     as those in the <a href="#ArcConversionEndpointToCenter">Conversion from endpoint to center parameterization</a> algorithm.
     Note: As a consequence of the
@@ -1652,7 +1652,7 @@ steps:</p>
     the radicand is never negative). In the case that the
     radii are scaled up using equation (eq. 6.3), the radicand of
     (eq. 5.2) is zero and there is exactly one solution for the
-    center of the ellipse.</p>
+    center of the ellipse.
   </li>
 </ul>
 
@@ -1660,16 +1660,16 @@ steps:</p>
 
 <h3 id="NumericPrecisionImplementationNotes">Notes on generating high-precision geometry</h3>
 
-<p class="normativity">This section is informative.</p>
+<p class="normativity">This section is informative.
 
 <p>The <a href="types.html#Precision">real number precision</a> of SVG is
 single-precision.
-<a>Conforming SVG generators</a> handling technical data
+[=Conforming SVG generators=] handling technical data
 where expression of information exceeding single precision is desired,
 such as maps and technical drawings,
 are encouraged to follow the process outlined in this section
-to ensure consistent display in <a>conforming SVG viewers</a>.
-</p>
+to ensure consistent display in [=conforming SVG viewers=].
+
 
 <p>
 Presentation with an effective precision higher than
@@ -1678,7 +1678,7 @@ of the fact that at least double-precision floating point must be used
 when generating a CTM (See CTM generation processing in the
 <a href="conform.html#ConformingSVGViewers">Conforming SVG Viewers</a> section).
 The steps for generating content that takes advantage of this are:
-</p>
+
 <ol>
   <li>Split content into tiles such that the number of significant digits
   required to position and size each object within a tile is within the

@@ -1,4 +1,4 @@
-<h2>Text</h2>
+<h2 id="text">Text</h2>
 
 <h3 id="Introduction">Introduction</h3>
 
@@ -6,10 +6,10 @@
   Text that is to be rendered as part of an SVG document fragment is
   specified using the {{text}} element. The text within a
   {{text}} element can be rendered:
-</p>
+
 <ul>
   <li>pre-formatted (with limited line wrapping),</li>
-  <li>auto-wrapped (if a <a>content area</a> is provided),</li>
+  <li>auto-wrapped (if a [=content area=] is provided),</li>
   <li>on a path (if a {{textPath}} element is provided).</li>
 </ul>
 
@@ -18,15 +18,15 @@
   introduction to text layout. It is followed by sections covering
   <a href="text.html#TextLayoutContentArea">content areas</a> and
   the <a href="text.html#TextLayoutAlgorithm">algorithm</a> for
-  laying out text within a <a>content area</a>.
+  laying out text within a [=content area=].
   The specialized layout rules corresponding to text that is
   <a href="text.html#TextLayoutPre">pre-formatted</a>,
   <a href="text.html#TextLayoutAuto">auto-wrapped</a>, and
   <a href="text.html#TextLayoutPath">on a path</a>
   are then addressed in individual sections.
-</p>
 
-<p class="note">
+
+Note: 
   Rules for text layout in SVG 1.1 are mostly defined within the SVG
   1.1 specification. The rules mirror to a large extent those found
   in CSS. In SVG 2, the dependence on CSS is more explicit. In
@@ -35,7 +35,7 @@
   while making it more obvious that rendering agents can use the
   same code to render both text in HTML and in SVG. In particular,
   SVG 2 auto-wrapped text is based on CSS text layout.
-</p>
+
 
 <p>
   SVG's {{text}} elements are rendered like other graphics
@@ -44,13 +44,13 @@
   <a href="render.html#ClippingAndMasking">clipping</a> and
   <a href="render.html#ClippingAndMasking">masking</a> features apply to
   {{text}} elements in the same way as they apply to
-  <a>shapes</a> such as
+  [=shapes=] such as
   <a href="paths.html">paths</a> and <a href="shapes.html#RectElement">rectangles</a>.
-</p>
+
 
 <p>
   SVG text supports advanced typographic features including:
-</p>
+
 <ul>
   <li>choice of typeface,</li>
 
@@ -61,7 +61,7 @@
 
 <p>
   SVG text supports international text processing needs such as:
-</p>
+
 <ul>
   <li>horizontal and vertical orientation of text,</li>
 
@@ -88,13 +88,13 @@
   Multi-language SVG content is possible by
   <a href="struct.html#SwitchElement">substituting different
   text strings based on the user's preferred language</a>.
-</p>
+
 
 <p>
   The characters to be drawn are expressed as
   <a href="https://www.w3.org/TR/2008/REC-xml-20081126/#syntax">character data</a> ([[!xml]],
   section 2.4) inside the {{text}} element. As a result:
-</p>
+
 
 <ul>
   <li>
@@ -127,7 +127,7 @@
   an {{aria-labelledby}} attribute on the relevant group or path element.
   See <a href="access.html">SVG
   accessibility guidelines</a> for more information.
-</p>
+
 
 <h4 id="Definitions">Definitions</h4>
 
@@ -137,17 +137,17 @@
   <dd>
     A character is an atomic unit of text as defined in XML
     [<a href="https://www.w3.org/TR/2008/REC-xml-20081126/">XML</a>].
-    <p class="note">
+    Note: 
     Essentially, a Unicode code point.
   A character may be a control instruction (such as a tab, carriage return, or line feed),
     a renderable mark (letter, digit, punctuation or other symbol),
     or a modifier (such as a combining accent).
-    </p>
+    
   </dd>
 
   <dt><dfn id="TermAddressableCharacter" data-dfn-type="dfn" data-export="">addressable character</dfn></dt>
   <dd>
-    A <a>character</a> that is addressable by text positioning
+    A [=character=] that is addressable by text positioning
     attributes and SVG DOM text methods.
 
     Characters discarded during layout such as
@@ -159,7 +159,7 @@
     Addressable characters are addressed by their index. Indexes are
     determined prior to applying any {{text-transform}}
     conversions, as described for the methods in the
-    <a>SVGTextContentElement</a> interface.
+    [=SVGTextContentElement=] interface.
 
     There are two methods to map an index to a character; the choice of
     which to use depends on purpose:
@@ -180,27 +180,27 @@
       </li>
     </ol>
 
-    <p class="note">
+    Note: 
       The different methods are backwards compatible with SVG
       1.1. The use of UTF-16 code units for SVG DOM text methods is
       required from the definition of DOMString in the DOM 2
       specification.
-    </p>
+    
 
     <p class="annotation">
       The SVG working group is interested in implementer feedback on
       the possibility of using grapheme clusters as defined by the
       Unicode Standard Annex #29 to replace Unicode code points in
       mapping text positioning attributes. Note, the use of the
-      CSS <a>typographic character</a> is not appropriate as what
+      CSS [=typographic character=] is not appropriate as what
       constitutes a character can depend on context (line-breaking,
       word-breaking, etc.).
-    </p>
+    
 
-    <p class="note">
+    Note: 
       If support for CSS generated-content text is introduced in the future,
       it would be included in the array of addressable characters.
-    </p>
+    
   </dd>
 
   <dt><dfn id="TermTypographicCharacterUnit">typographic character</dfn></dt>
@@ -219,7 +219,7 @@ Text Module Level 3</a>,
 
   <dt><dfn id="TermFont">font</dfn></dt>
   <dd>
-    A font represents an organized collection of <a>glyphs</a> in
+    A font represents an organized collection of [=glyphs=] in
     which the various glyph representations will share a particular
     appearance or styling.
   </dd>
@@ -227,13 +227,13 @@ Text Module Level 3</a>,
   <dt><dfn id="TermGlyph">glyph</dfn></dt>
   <dd>
     A glyph represents a unit of rendered content within a
-    <a>font</a>. Often, there is a one-to-one correspondence between
+    [=font=]. Often, there is a one-to-one correspondence between
     characters to be drawn and corresponding glyphs (e.g., usually
     the character "A" is rendered using a single glyph), but other
     times multiple glyphs are used to render a single character
     (e.g., characters with accents) or a single glyph can be used to render
     multiple characters (e.g., ligatures). Typically, a glyph is
-    defined by one or more <a>shapes</a> such as
+    defined by one or more [=shapes=] such as
     a <a href="paths.html">path</a>, possibly with additional
     information such as rendering hints that help a font engine to
     produce legible text in small sizes.
@@ -249,7 +249,7 @@ Text Module Level 3</a>,
 
   <dt><dfn id="TermTextContentChildElement">text content child element</dfn></dt>
   <dd>
-    A text content child element is a <a>text content element</a>
+    A text content child element is a [=text content element=]
     that is allowed as a descendant of another <a>text content
     element</a>. In SVG the text content child elements are:
     @@elementcategory text content child@@.
@@ -257,7 +257,7 @@ Text Module Level 3</a>,
 
   <dt><dfn id="TermTextContentBlockElement">text content block element</dfn></dt>
   <dd>
-    A text content block element is a <a>text content element</a>
+    A text content block element is a [=text content element=]
     that serves as a standalone element for a unit of text, and
     which may optionally contain certain child <a>text content
     elements</a> (e.g.
@@ -269,17 +269,16 @@ and
     SVG 2 defines a single text content block element: {{text}}.
   </dd>
 
-  <dt><dfn for=TermContentArea>content area</dfn></dt>
+  <dt><dfn>content area</dfn></dt>
   <dd>
     The area in which the text is normally laid out. This is
-    equivalent to the
-    <a href="https://www.w3.org/TR/css3-exclusions/#content-area">CSS
-    content area</a>. The actual region where text layout occurs may
+    equivalent to the [[CSS22#box-content-area|CSS
+    content area]]. The actual region where text layout occurs may
     be smaller due to padding and/or exclusions.
     <!-- CSS 2 reference: href="https://www.w3.org/TR/CSS2/box.html#box-dimensions" -->
   </dd>
 
-  <dt><dfn for=TermWrappingContext>wrapping context</dfn></dt>
+  <dt><dfn>wrapping context</dfn></dt>
   <dd>
     One or more regions (shapes) to be excluded from the content
     area during text layout. This is the same as the
@@ -290,7 +289,7 @@ CSS wrapping context</a>.
   <dt><dfn for=TermWrappingArea>wrapping area</dfn></dt>
   <dd>
     The area in which the text is laid out after subtracting any
-    padding or exclude areas (<a>wrapping context</a>). This is the
+    padding or exclude areas ([=wrapping context=]). This is the
     same as the
     <a href="https://www.w3.org/TR/css3-exclusions/#wrapping-area">
 CSS wrapping area</a>.
@@ -306,7 +305,7 @@ Although various CSS 3 text layout specs use the term,
   none current establish a formal definition.
   The link is therefore to CSS 2.1,
   and <a href="https://github.com/w3c/csswg-drafts/issues/363">an issue has been filed with CSS WG</a>.
-    </p>
+    
   </dd>
 
   <!-- The following two terms are taken from CSS Writing Modes 3, simplified for SVG.-->
@@ -324,16 +323,16 @@ Although various CSS 3 text layout specs use the term,
 
   <dt><dfn id="TermBlockFlowDirection">block-flow direction</dfn></dt>
   <dd>
-    The direction in which <a>line boxes</a> are stacked. It is
+    The direction in which [=line boxes=] are stacked. It is
     determined by the {{writing-mode}} property.
   </dd>
 
   <dt><dfn id="TermAlignmentPoint">alignment point</dfn></dt>
   <dd>
     The point on a typographic character that should be aligned with
-    the <a>current text position</a>. It is determined by the glyph
+    the [=current text position=]. It is determined by the glyph
     cell metrics and may depend on the script and
-    <a>inline-base direction</a>.
+    [=inline-base direction=].
   </dd>
 
   <dt><dfn id="TermCurrentTextPosition">current text position</dfn></dt>
@@ -348,9 +347,9 @@ should be placed.
     An independent block of text in which all characters are
     positioned together. Each new absolute positioning adjustment
     (due to an {{tspan/x}} or {{tspan/y}} attribute, or
-    forced line break) creates a new <a>text chunk</a>. Ligature
+    forced line break) creates a new [=text chunk=]. Ligature
     substitution and bidi-reordering only occur within a <a>text
-    chunk</a>. <a>Text chunks</a> are only relevant to pre-formatted
+    chunk</a>. [=Text chunks=] are only relevant to pre-formatted
     text.
   </dd>
 
@@ -373,7 +372,7 @@ should be placed.
   glyphs to present characters on some visual medium. The
   combination of the collection of glyphs and the font tables is
   called the <em>font data</em>.
-</p>
+
 
 <p>
   A font may supply substitution and positioning tables that
@@ -384,20 +383,20 @@ should be placed.
   re-ordering, multiple consonants and vowel glyphs. The tables may
   be language dependent, allowing the use of language appropriate
   letter forms.
-</p>
+
 
 <p>
   When a glyph, simple or composite, represents an indivisible unit
   for typesetting purposes, it is know as a <a>typographic
   character</a>.
-</p>
+
 
 <p>
   Ligatures are an important feature of advance text layout. Some
   ligatures are discretionary while others (e.g. in Arabic) are
   required. The following explicit rules apply to ligature
   formation:
-</p>
+
 
 <ul>
   <li>
@@ -405,13 +404,13 @@ should be placed.
     Ligature formation should not be enabled when characters are
     in different DOM text nodes;
     thus, characters separated by markup should not use ligatures.
-    </p>
+    
   </li>
   <li>
     <p>
     Ligature formation should not be enabled when characters are
-    in different <a>text chunks</a>.
-    </p>
+    in different [=text chunks=].
+    
   </li>
   <li>
     <p>
@@ -425,20 +424,20 @@ should be placed.
     <a href="https://www.w3.org/TR/css-text-3/#letter-spacing-property">CSS
 Text Module Level 3</a>,
     ([<a href="refs.html#ref-css-text-3">css-text-3</a>]).
-    </p>
+    
     <p>
     SVG attributes such as {{tspan/dx}}, {{textLength}},
     and {{textPath/spacing}} (in {{textPath}}) that may
-    reposition <a>typographic characters</a> do not break discretionary
+    reposition [=typographic characters=] do not break discretionary
     ligatures.
     If discretionary ligatures are not desired they can be turned
     off by using the {{font-variant-ligatures}} property.
-    </p>
+    
     <p>
     For OpenType fonts, discretionary ligatures include those enabled
     by the liga, clig, dlig, hlig, and cala features; required ligatures
     are found in the rlig feature.
-    </p>
+    
   </li>
 </ul>
 
@@ -477,16 +476,16 @@ Text Module Level 3</a>,
   <a href="https://www.w3.org/TR/css-fonts-3/">CSS Fonts
   Module</a>. In particular, support for the Web Open Font Format
   [<a href="refs.html#ref-woff">WOFF</a>] is required.
-</p>
 
-<p class="note">
+
+Note: 
   New in SVG 2, WOFF allows authors to provide the fonts needed to
   properly render their content. This includes ensuring that the
   fonts have the proper OpenType tables to support complex scripts,
   discretionary ligatures, swashes, old-style numbers, and so
   on. WOFF also allows the fonts to be compressed, subsetted, and
   include licensing information.
-</p>
+
 
 <h4 id="GlyphsMetrics">Glyph metrics and layout</h4>
 
@@ -495,7 +494,7 @@ Text Module Level 3</a>,
   the rules of CSS. In some cases, however, the final layout of text
   in SVG requires knowledge of the geometry properties of individual
   glyphs.
-</p>
+
 
 <p>
   The geometric font characteristics are expressed in a coordinate
@@ -504,27 +503,27 @@ Text Module Level 3</a>,
   wide is called the <em>design space</em>. This space is given a
   geometric coordinates by sub-dividing the EM into a number
   of <em>units per em</em>.
-</p>
 
-<p class="note">
+
+Note: 
   Units per em is a font characteristic. A typical value
   for units per em is 1000 or 2048.
-</p>
+
 
 <p>
   The coordinate space of the EM box is called the <em>design space
   coordinate system</em>. For scalable fonts, the curves and lines
   that are used to draw a glyph are represented using this
   coordinate system.
-</p>
 
-<p class="note">
+
+Note: 
   Most often, the (0,0) point in this coordinate system is
   positioned on the left edge of the EM box, but not at the bottom
   left corner. The Y coordinate of the bottom of a roman capital
   letter is usually zero. The descenders on lowercase roman
   letters have negative coordinate values.
-</p>
+
 
 <div class="figure">
   <img class="bordered" src="images/text/font_embox.svg"
@@ -534,7 +533,7 @@ Text Module Level 3</a>,
     An 'M' inside an Em box (blue square). The 'M' sits on the
     baseline (blue line). The origin of the coordinate system is
     shown by the small black circle.
-  </p>
+  
 </div>
 
 <p>
@@ -544,9 +543,9 @@ Text Module Level 3</a>,
   box from the (0,0) point of the font; the descent is the distance
   to the bottom of the EM box from the (0.0) point of the font. The
   baseline-table is explained below.
-</p>
 
-<p class="note">
+
+Note: 
   Within an OpenType font ([<a href="refs.html#ref-opentype">OPENTYPE</a>]),
   for horizontal writing-modes,
   the ascent and descent are given by the sTypoAscender and
@@ -556,29 +555,29 @@ Text Module Level 3</a>,
   the left edge. The ascent for vertical writing-modes is either 1 em or
   is specified by the ideographic top baseline value in the OpenType
   Base table for vertical writing-modes.
-</p>
+
 
 <p>
   Glyphs are positioned relative to a particular point on each glyph
-  known as the <a>alignment point</a>. For horizontal
-  writing-modes, the glyphs' <a>alignment points</a> are vertically
+  known as the [=alignment point=]. For horizontal
+  writing-modes, the glyphs' [=alignment points=] are vertically
   aligned while for vertical writing-modes, they are horizontally
-  aligned. The position of the <a>alignment point</a> depends on the
+  aligned. The position of the [=alignment point=] depends on the
   script. For example, Western glyphs are aligned at the bottom of
   capital letters, northern Indic glyphs are aligned at the top
   of a horizontal stroke near the top of the glyphs, and far-eastern
   glyphs are aligned either at the bottom or center of the glyph.
-</p>
+
 
 <p>
   Within a script and within a line of text having a single
   font-size, the sequence of alignment points defines, in the
-  <a>inline-base direction</a>, a geometric line called a
+  [=inline-base direction=], a geometric line called a
   <dfn id="TermBaseline" data-dfn-type="dfn" data-export="">baseline</dfn>. Western and most other alphabetic and
   syllabic glyphs are aligned to an "alphabetic" baseline, the
   northern Indic glyphs are aligned to a "hanging" baseline and the
   far-eastern glyphs are aligned to an "ideographic" baseline.
-</p>
+
 
 <div class="figure">
   <img class="bordered" src="images/text/font_baseline.svg"
@@ -587,15 +586,15 @@ Text Module Level 3</a>,
     Example baselines (red lines) in three different scripts. From
     left to right: alphabetic, hanging, ideographic. The EM box is
     shown in blue for the ideographic script.
-  </p>
+  
 </div>
 
 <p>
   As glyphs are sequentially placed along a baseline, the
-  <a>alignment point</a> of a glyph is typically positioned at the
-  <a>current text position</a> (some properties such as
+  [=alignment point=] of a glyph is typically positioned at the
+  [=current text position=] (some properties such as
   {{vertical-align}} may alter the positioning). After each
-  glyph is placed, the <a>current text position</a> is advanced by
+  glyph is placed, the [=current text position=] is advanced by
   the glyph's <em>advance</em> value (typically the width for
   horizontal text or height for vertical text) with any correction
   for kerning or other spacing adjustment as well as for new lines
@@ -603,7 +602,7 @@ Text Module Level 3</a>,
   current text positions are used for alignment (e.g. when
   the {{text-anchor}} value is either 'middle' or 'end'). The
   glyph's advance is needed when placing text along a path.
-</p>
+
 
 <div class="figure">
   <img class="bordered" src="images/text/font_metrics.svg"
@@ -611,12 +610,12 @@ Text Module Level 3</a>,
   <p class="caption">
     Example of font metrics. The blue boxes show the geometric
     boxes for the three glyphs. The labeled small circles show the
-    <a>current text position</a> before glyph placement. The
-    small square shows the final <a>current text position</a>
+    [=current text position=] before glyph placement. The
+    small square shows the final [=current text position=]
     after placing the last glyph. Note that the left side of
     the 'a' glyph's box is not aligned with the right side of
     the 'V' glyph's box due to kerning.
-  </p>
+  
 </div>
 
 <p>
@@ -624,18 +623,18 @@ Text Module Level 3</a>,
   to the current glyph orientation, then an appropriate
   approximation should be used. For vertical text, a suggested
   approximation is the <em>em</em> size.
-</p>
+
 
 <p>
-  The initial <a>current text position</a> is established by the
+  The initial [=current text position=] is established by the
   {{text/x}} and {{text/y}} attributes on the
   {{text}} element or first rendered {{tspan}} element for
   pre-formatted text, or auto-wrapped text when the <a>content
   area</a> is determined by the {{inline-size}} property. For
-  other auto-wrapped text, the initial <a>current text position</a>
+  other auto-wrapped text, the initial [=current text position=]
   is determined by the position of the first rendered glyph after
   applying the CSS line wrapping algorithm.
-</p>
+
 
 <p>
   A <dfn id="TermBaselineTable" data-dfn-type="dfn" data-export="">baseline-table</dfn> specifies the position of one or more
@@ -649,15 +648,15 @@ Text Module Level 3</a>,
   modes. Therefore, the font may have a set of baseline tables:
   typically, one or more for horizontal writing-modes and zero or
   more for vertical writing-modes.
-</p>
 
-<p class="note">
+
+Note: 
   Some fonts may not have values for the baseline tables. Heuristics
   are suggested for approximating the baseline tables in
   <a href="https://www.w3.org/TR/css-inline-3/#baseline-synthesis-fonts">CSS
     Inline Layout Module Level 3</a> [css-inline-3]
   when a given font does not supply baseline tables.
-</p>
+
 
 <p>
   When a different font (or change in font size) is specified in the
@@ -666,7 +665,7 @@ Text Module Level 3</a>,
   size) to those in the previous font. The
   {{dominant-baseline}} property is used to set the dominant
   baseline.
-</p>
+
 
 <p>
   Alignment between an object relative to its parent is determined
@@ -674,7 +673,7 @@ Text Module Level 3</a>,
   baseline as the dominant baseline but by using the shorthand
   {{vertical-align}} property (preferred) or the longhand
   {{alignment-baseline}} another baseline can be chosen.
-</p>
+
 
 <p>
   The dominant baseline can be temporarily shifted (as needed
@@ -682,7 +681,7 @@ Text Module Level 3</a>,
   {{vertical-align}} property (preferred) or the longhand
   {{baseline-shift}} property. Note that shifts can be
   nested, each shift added to the previous shift.
-</p>
+
 
 <div class="figure">
   <img class="bordered" src="images/text/vertical_align.svg"
@@ -698,7 +697,7 @@ Text Module Level 3</a>,
     Right: 'vertical-align:super' ('baseline-shift:super') applied
     to the {{tspan}} containing '2'.  The light-blue lines
     indicate the shift in baseline.
-  </p>
+  
 </div>
 
 <p>
@@ -707,9 +706,9 @@ Text Module Level 3</a>,
   alignment points, one each for horizontal writing-modes and the
   other for vertical writing-modes. (Even though it is specified as
   a width, for vertical writing-modes the width is used in the
-  vertical direction.) The <a>inline-base direction</a>
+  vertical direction.) The [=inline-base direction=]
   position of the alignment point is on the start-edge of the glyph.
-</p>
+
 
 <p>
   Additional information on baselines can be found in the
@@ -719,7 +718,7 @@ Text Module Level 3</a>,
   (Also see: <a href="https://www.w3.org/TR/css3-writing-modes/#intro-baselines">CSS
     Writing Modes Level 3</a> specification.
   [<a href="refs.html#ref-css-writing-modes-3">css-writing-modes-3</a>])
-</p>
+
 
 <div class="annotation svg2-requirement">
   <table>
@@ -747,22 +746,22 @@ Text Module Level 3</a>,
 </div>
 
 <p>
-  A single line of text is laid out inside a <a>line box</a>.
+  A single line of text is laid out inside a [=line box=].
   Multi-line text is produced by stacking these boxes. The height of
-  a <a>line box</a> is determined by finding the maximum ascent and
+  a [=line box=] is determined by finding the maximum ascent and
   the maximum descent of all the glyphs in a line of text after
   applying the effect of the {{line-height}} property.  The
-  width of a <a>line box</a> is normally the width of the containing
+  width of a [=line box=] is normally the width of the containing
   text block. In SVG, when the containing text block does not have a
-  fixed geometry (as with pre-formatted text), the <a>line box</a>
+  fixed geometry (as with pre-formatted text), the [=line box=]
   tightly wraps the glyph boxes within the box.
-</p>
+
 
 <div class="figure">
   <img class="bordered" src="images/text/line_box.svg"
         alt="The sentence 'A big word.' where 'big' is in a larger font.">
   <p class="caption">
-    Example of determining the height of a <a>line box</a>.
+    Example of determining the height of a [=line box=].
 
     First each glyph box (small light-blue boxes) is extended
     vertically above and below according to the {{line-height}}
@@ -772,25 +771,25 @@ Text Module Level 3</a>,
     evenly divided above and below resulting in the red boxes.  (For
     clarity, all glyphs in the same inline element have been grouped
     together).
-    The final <a>line box</a> (large light-blue box) is then found
+    The final [=line box=] (large light-blue box) is then found
     using the maximum extents of the red boxes above and below the
     baseline.
-  </p>
+  
 </div>
 
 <p>
   In order to support various international writing systems, <a>line
   boxes</a> may be orientated in a horizontal or vertical direction.
-  Text within a vertical <a>line box</a> flows from top to bottom.
-  Text within a horizontal <a>line box</a> may flow left-to-right
+  Text within a vertical [=line box=] flows from top to bottom.
+  Text within a horizontal [=line box=] may flow left-to-right
   (e.g., modern Latin scripts), right-to-left (e.g., Hebrew or
   Arabic), or a mixture of left-to-right and right-to-left
   (bidirectional text).
-</p>
+
 
 <p>
   The processing model for bidirectional text is as follows:
-</p>
+
 <ul>
   <li>
   The
@@ -808,7 +807,7 @@ Text Module Level 3</a>,
   the Unicode bidirectional algorithm.
     <ul>
       <li>
-        Each <a>text chunk</a> represents an independent block of text.
+        Each [=text chunk=] represents an independent block of text.
       </li>
       <li>
   Any change in glyph
@@ -838,20 +837,20 @@ Text Module Level 3</a>,
   font-specific, the preferred model is that kerning and ligature
   processing occurs between combinations of characters or glyphs
   after the characters have been re-ordered.
-</p>
+
 
 <p>
-  The orientation of <a>line boxes</a> as well as the direction in
-  which they are stacked (<a>block-flow direction</a>) is determined
+  The orientation of [=line boxes=] as well as the direction in
+  which they are stacked ([=block-flow direction=]) is determined
   by the {{writing-mode}} property. For horizontal text
   ({{writing-mode}} value
-  <span class="prop-value">horizontal-tb</span>) <a>line boxes</a>
-  are stacked from top to bottom. For vertical text, <a>line boxes</a>
+  <span class="prop-value">horizontal-tb</span>) [=line boxes=]
+  are stacked from top to bottom. For vertical text, [=line boxes=]
   are stacked from right-to-left ({{writing-mode}} value
   <span class="prop-value">vertical-rl</span>) or left-to-right
   ({{writing-mode}} value
   <span class="prop-value">vertical-lr</span>).
-</p>
+
 
 <h3 id="TextElement">The <span class="element-name">text</span> and <span class="element-name">tspan</span> elements</h3>
 
@@ -861,7 +860,7 @@ Text Module Level 3</a>,
   {{tspan}} element, allows one to switch the style and/or
   adjust the position of the rendered text inside the {{tspan}}
   element relative to the parent element.
-</p>
+
 
 <p>
   The character data within the {{text}} and {{tspan}}
@@ -873,30 +872,30 @@ Text Module Level 3</a>,
   attributes which describe how exactly to render the
   characters. Subsequent sections of this chapter describe the
   relevant text-specific attributes and properties.
-</p>
+
 
 <p>
   Since {{text}} and {{tspan}} elements are rendered using
   the same rendering methods as other graphics elements, all of the
   same
   <a href="painting.html">painting</a> features that apply to
-  <a>shapes</a> such as <a href="paths.html">paths</a> and
+  [=shapes=] such as <a href="paths.html">paths</a> and
   <a href="shapes.html#RectElement">rectangles</a> also apply to
   {{text}} and {{tspan}} elements,
-  except for <a>markers</a>.
+  except for [=markers=].
   In addition,
   <a href="coords.html">coordinate system transformations</a>,
   <a href="render.html#ClippingAndMasking">clipping</a>, and
   <a href="render.html#ClippingAndMasking">masking</a> can be applied
   to the {{text}} element as a whole.
-</p>
 
-<p class="note">
+
+Note: 
   In CSS terms, the {{text}} element acts as a block
   element. The {{tspan}}, {{textPath}}, and {{a}}
-  elements that are descended from <a>text content elements</a> act as
+  elements that are descended from [=text content elements=] act as
   inline elements.
-</p>
+
 
 <p id="ObjectBoundingBoxUnitsTextObjects">
   It is possible to apply a gradient, pattern, clipping path, mask
@@ -909,16 +908,16 @@ Text Module Level 3</a>,
   relative to the entire {{text}} element in all cases, even
   when different effects are applied to different {{tspan}} or {{textPath}}
   elements within the same {{text}} element.
-</p>
+
 
 <p>
   The {{text}} element renders its first glyph (after
   bidirectionality
-  reordering) at the initial <a>current text position</a> (with
+  reordering) at the initial [=current text position=] (with
   possible adjustments due to the value of the
   {{text-anchor}} property or the {{text-align}} property).
   For pre-formatted text and for auto-wrapped text where the
-  <a>content area</a> is determined by the {{inline-size}}
+  [=content area=] is determined by the {{inline-size}}
   property, the initial <a>current text
   position</a> is determined by the {{tspan/x}} and
   {{tspan/y}} values of the {{text}} or {{tspan}}
@@ -937,14 +936,14 @@ Text Module Level 3</a>,
   (horizontal or vertical). See
   <a href="text.html#TextLayoutAlgorithm">text layout</a> for a description
   of glyph placement and glyph advance.
-</p>
+
 
 <div class="example">
   <p>
     The text string <q>Hello, out there!</q> is rendered onto the
     canvas using the Verdana font family with the glyphs filled
     with the color blue.
-  </p>
+  
 
 <pre class=include-raw>
 path: images/text/text01.svg
@@ -959,7 +958,7 @@ path: images/text/text01.svg
 <div class="example">
   <p>
     A {{tspan}} is used to change the styling of the word <q>not</q>.
-  </p>
+  
 <pre class=include-raw>
 path: images/text/tspan01.svg
 </pre>
@@ -979,7 +978,7 @@ path: images/text/tspan01.svg
     the text and copy it to the system clipboard in user agents that
     support <a href="text.html#TextSelection">text selection and
     clipboard operations</a>.
-  </p>
+  
 <pre class=include-raw>
 path: images/text/tspan02.svg
 </pre>
@@ -1021,7 +1020,7 @@ path: images/text/tspan02.svg
 210</a>. CSS/HTML does not allow transforms on inline elements
 and no renderer supports transforms on the {{a}} element
 when inline (in both SVG and HTML).
-  </p>
+  
 </div>
 
 @@elementsummary tspan@@
@@ -1051,28 +1050,28 @@ when inline (in both SVG and HTML).
 If a single
 <a>&lt;length&gt;</a> is
       provided, then the value represents the new absolute X (Y)
-      coordinate for the <a>current text position</a> for rendering
+      coordinate for the [=current text position=] for rendering
       the glyphs that correspond to the first character within this
       element or any of its descendants.
-    </p>
+    
     <p>
 If a comma- or space-separated list of <var>n</var>
 <a>&lt;length&gt;</a>s is provided, then the values represent
       new absolute X (Y) coordinates for the <a>current text
       position</a> for rendering the glyphs corresponding to each of
-      the first <var>n</var> <a>addressable characters</a> within this element or any
+      the first <var>n</var> [=addressable characters=] within this element or any
       of its descendants.
-    </p>
+    
     <p>
 If more <a>&lt;length&gt;</a>s are provided than characters,
       then the extra <a>&lt;length&gt;</a>s will have no effect on
       glyph positioning.
-    </p>
+    
     <p>
 If more characters exist than <a>&lt;length&gt;</a>s,
   or if the attribute is not specified on a {{tspan}},
   then for each additional character:
-    </p>
+    
     <ol style="list-style-type: lower-alpha">
       <li>if an ancestor {{text}} or {{tspan}} element
       specifies an absolute X (Y) coordinate for the given character
@@ -1085,16 +1084,16 @@ If more characters exist than <a>&lt;length&gt;</a>s,
       <li>
     the starting X (Y) coordinate for rendering the glyphs
       corresponding to the given character is the X (Y) coordinate
-      of the resulting <a>current text position</a> from the most
+      of the resulting [=current text position=] from the most
       recently rendered glyph for the current {{text}} element.
       </li>
     </ol>
-    <p class="note">
+    Note: 
 In SVG 2, the {{text}} and {{tspan}} {{text/x}}
 and {{text/y}} attributes are not presentation attributes
 and cannot be set via CSS. This may change in a future version
 of SVG.
-    </p>
+    
   </dd>
 
   <dt>
@@ -1119,34 +1118,34 @@ If a single <a>&lt;length&gt;</a> is provided, this value
       represents the new relative X (Y) coordinate for the <a>current
       text position</a> for rendering the glyphs corresponding to
       the first character within this element or any of its
-      descendants. The <a>current text position</a> is shifted along
+      descendants. The [=current text position=] is shifted along
       the x-axis (y-axis) of the current user coordinate system
       by <a>&lt;length&gt;</a> before the first character's glyphs
       are rendered.
-    </p>
+    
     <p>
       If a comma- or space-separated list of <var>n</var>
 <a>&lt;length&gt;</a>s is provided, then the values represent
       incremental shifts along the x-axis (y-axis) for
-      the <a>current text position</a> before rendering the glyphs
-      corresponding to the first <var>n</var> <a>addressable characters</a> within this
+      the [=current text position=] before rendering the glyphs
+      corresponding to the first <var>n</var> [=addressable characters=] within this
       element or any of its descendants. Thus, before the glyphs are
       rendered corresponding to each character, the <a >current text
       position</a> resulting from drawing the glyphs for the
       previous character within the current {{text}} element is
       shifted along the x-axis (y-axis) of the current user
       coordinate system by <a>&lt;length&gt;</a>.
-    </p>
+    
     <p>
       If more <a>&lt;length&gt;</a>s are provided than characters,
       then any extra <a>&lt;length&gt;</a>s will have no effect on
       glyph positioning.
-    </p>
+    
     <p>
 If more characters exist than <a>&lt;length&gt;</a>s,
       or if the attribute is not specified,
       then for each additional character:
-    </p>
+    
     <ol style="list-style-type: lower-alpha">
       <li>
         if an ancestor {{text}} or {{tspan}} element
@@ -1184,7 +1183,7 @@ If more characters exist than <a>&lt;length&gt;</a>s,
       The supplemental rotation, in degrees, about the <a>current text
       position</a> that will be applied to all of the glyphs
       corresponding to each character within this element.
-    </p>
+    
     <p>
       If a comma- or space-separated list of <a>&lt;number&gt;</a>s
       is provided, then the first <a>&lt;number&gt;</a> represents
@@ -1193,17 +1192,17 @@ If more characters exist than <a>&lt;length&gt;</a>s,
       the second <a>&lt;number&gt;</a> represents the supplemental
       rotation for the glyphs that correspond to the second
       character, and so on.
-    </p>
+    
     <p>
 If more <a>&lt;number&gt;</a>s are provided than there are
       characters, then the extra <a>&lt;number&gt;</a>s will be
       ignored.
-    </p>
+    
     <p>
 If more characters are provided than <a>&lt;number&gt;</a>s,
       then for each of these extra characters the rotation value
       specified by the last number must be used.
-    </p>
+    
     <p>
       If the attribute is not specified and if an ancestor of a
       {{tspan}} element specifies a supplemental rotation for a
@@ -1215,16 +1214,16 @@ If more characters are provided than <a>&lt;number&gt;</a>s,
       ancestor's {{rotate}} attribute, then for each of these
       extra characters the rotation value specified by the last
       number must be used.
-    </p>
+    
     <p>
       This supplemental rotation has no impact on the rules by
-      which <a>current text position</a> is modified as glyphs get
+      which [=current text position=] is modified as glyphs get
       rendered and is supplemental to any rotation due to
       <a href="text.html#TextLayoutPath">text on a path</a> and
       to {{text-orientation}},
       {{glyph-orientation-horizontal}},
       or {{glyph-orientation-vertical}}.
-    </p>
+    
   </dd>
 
   <dt>
@@ -1254,7 +1253,7 @@ The author's computation of the total sum of all of the
       or {{tspan}} element or any descendants. This value is
       used to calibrate the user agent's own calculations with that
       of the author.
-    </p>
+    
     <p>
       The purpose of this attribute is to allow the author to
       achieve exact alignment, in visual rendering order after
@@ -1268,7 +1267,7 @@ The author's computation of the total sum of all of the
       the user agent determines the appropriate amount to
       expand/compress the text string to fit within a length of
       {{textLength}}.
-    </p>
+    
     <p>
       If attribute {{textLength}} is specified on a given
       element and also specified on an ancestor, the adjustments on
@@ -1281,16 +1280,16 @@ The author's computation of the total sum of all of the
       values for the other content within that ancestor is the
       difference between the advance value on that ancestor and the
       advance value for this element.
-    </p>
-    <p class="note">
+    
+    Note: 
 This attribute is not intended for use to obtain effects such
 as shrinking or expanding text.
-    </p>
+    
     <p>
 A negative value is an error
       (see <a href="conform.html#ErrorProcessing">Error
       processing</a>).
-    </p>
+    
     <p>
 The {{textLength}} attribute is only applied when the <a>wrapping
 area</a> is not defined by the {{shape-inside}} or
@@ -1299,16 +1298,16 @@ any {{text}} or {{tspan}} element that has forced line breaks
 (due to a {{white-space}} value of
 <span class="prop-value">pre</span> or
 <span class="prop-value">pre-line</span>).
-    </p>
+    
     <p>
 If the attribute is not specified anywhere within a
       {{text}} element, the effect is as if the author's
       computation exactly matched the value calculated by the user
       agent; thus, no advance adjustments are made.
-      For the purpose of <a>reflecting</a> the attribute in the DOM,
-      the <a>initial value</a> is the current user-agent calculated length,
-      expressed in implicit <a>user units</a>.
-    </p>
+      For the purpose of [=reflecting=] the attribute in the DOM,
+      the [=initial value=] is the current user-agent calculated length,
+      expressed in implicit [=user units=].
+    
   </dd>
 
   <dt>
@@ -1340,7 +1339,7 @@ If the attribute is not specified anywhere within a
 <dd>
   Indicates that the advance values are adjusted and the
         glyphs themselves stretched or compressed in one axis (i.e.,
-        a direction parallel to the <a>inline-base direction</a>).
+        a direction parallel to the [=inline-base direction=]).
 </dd>
     </dl>
 
@@ -1351,7 +1350,7 @@ If the attribute is not specified anywhere within a
       might employ advanced algorithms to stretch or compress text
       strings in order to balance correct start and end positioning
       with optimal typography.
-    </p>
+    
     <p>
       Note that, for a text string that contains <var>n</var>
       characters, the adjustments to the advance values often occur
@@ -1359,7 +1358,7 @@ If the attribute is not specified anywhere within a
       attribute {{textLength}}), whereas stretching or
       compressing of the glyphs will be applied to all <var>n</var>
       characters.
-    </p>
+    
   </dd>
 
 </dl>
@@ -1378,15 +1377,15 @@ If the attribute is not specified anywhere within a
   SVG 1.1). Note that the {{x}}, {{y}}, {{dx}},
   {{dy}}, and {{rotate}} attributes are
   ignored for auto-wrapped text (except for the initial <a>current
-  text position</a> when the <a>content area</a> is specified by
+  text position</a> when the [=content area=] is specified by
   the {{inline-size}} property).
-</p>
+
 
 <p class="annotation" data-issue="2">
   It was decided at the 2015 Sydney F2F that 'dx', 'dy', and 'rotate'
   would be ignored for auto-wrapped text. (Technically, it is not
   difficult to apply them but it was not seen as being really useful.)
-</p>
+
 
 <p>
   In situations where micro-level positioning adjustment are
@@ -1403,12 +1402,12 @@ If the attribute is not specified anywhere within a
   particular font processed by a particular set of viewing software
   and either of these requirements is not met, then the text might
   display with poor quality.
-</p>
+
 <p>
   The following additional rules apply to attributes {{x}},
   {{y}}, {{dx}}, {{dy}}, and {{rotate}} when they
   contain a list of numbers:
-</p>
+
 
 <ul>
   <li>
@@ -1425,7 +1424,7 @@ If the attribute is not specified anywhere within a
     an accent glyph is placed on top of a base glyph) – In this
     case, the <var>n</var>-th value for
     the {{x}}, {{y}}, {{dx}}, and {{dy}} values
-    are applied (i.e., the <a>current text position</a> is adjusted)
+    are applied (i.e., the [=current text position=] is adjusted)
     before rendering the first glyph.  The rotation transformation
     corresponding to the
     <var>n</var>-th {{rotate}}
@@ -1452,7 +1451,7 @@ If the attribute is not specified anywhere within a
     the {{dx}} and {{dy}} are applied to the subsequent
     character (i.e., the
     (<var>n</var>+2)-th character), if one
-    exists, by translating the <a>current text position</a> by the
+    exists, by translating the [=current text position=] by the
     given amounts before rendering the first glyph associated with
     that character.
   </li>
@@ -1523,15 +1522,17 @@ If the attribute is not specified anywhere within a
   this case the last value specified in the {{rotate}}
   attribute of the {{tspan}} must be applied to the remaining
   characters in the string.
-</p>
+
 
 <pre class=include-raw>
 path: images/text/tspan04.svg
 </pre>
+<!--
+@@fix
 <pre class=include>
 path: images/text/tspan04.svg
 </pre>
-
+-->
 
 <p>
   <span class="example-ref">Example tspan05</span> specifies the
@@ -1539,19 +1540,21 @@ path: images/text/tspan04.svg
   but one of the child {{tspan}} elements to rotate the glyphs
   to be rendered. The example demonstrates the propagation of the
   {{rotate}} attribute.
-</p>
+
 
 <pre class=include-raw>
 path: images/text/tspan05.svg
 </pre>
+<!--
+@@fix
 <pre class=include>
 path: images/text/tspan05.svg
 </pre>
-
+-->
 
 <p>
   Rotation of red text inside the {{text}} element:
-</p>
+
 
 <ul>
   <li>
@@ -1584,7 +1587,7 @@ path: images/text/tspan05.svg
 
 <p>
   Rotation of the orange text inside the "child1" {{tspan}} element:
-</p>
+
 
 <ul>
   <li>
@@ -1619,7 +1622,7 @@ path: images/text/tspan05.svg
 
 <p>
   Rotation of the yellow text inside the "child2" {{tspan}} element:
-</p>
+
 
 <ul>
   <li>
@@ -1643,7 +1646,7 @@ path: images/text/tspan05.svg
   </li>
 </ul>
 
-<p>Rotation of the blue text inside the "child5" {{tspan}} element:</p>
+<p>Rotation of the blue text inside the "child5" {{tspan}} element:
 
 <ul>
   <li>
@@ -1659,7 +1662,7 @@ path: images/text/tspan05.svg
 <p>
   The following diagram illustrates how the rotation values propagate to
   {{tspan}} elements nested withing a {{text}} element:
-</p>
+
 
 <img alt="Image that shows propagation of rotation values" src="images/text/tspan05-diagram.png" width="528" height="918">
 
@@ -1713,31 +1716,31 @@ path: images/text/tspan05.svg
   This section gives a short overview of SVG text layout. It is
   followed by sections that cover different aspects of text layout
   in more detail.
-</p>
+
 
 <p>
   Text layout in SVG is a multi-stage process that takes as input
   a {{text}} element subtree and its property values and
   produces a sequence of glyphs to render and their positions in
-  each <a>text content element</a>'s coordinate system.
-</p>
+  each [=text content element=]'s coordinate system.
+
 
 <p>
   First, a {{text}} element and its descendants are laid out
-  inside a <a>content area</a> or <a>wrapping area</a> according to
+  inside a [=content area=] or [=wrapping area=] according to
   CSS, as if the {{text}} were a block element and any
   {{tspan}}, {{textPath}}, and {{a}} descendants were
   inline elements. This layout takes into account all paragraph
   level and font related CSS properties described in this chapter.
-</p>
+
 
 <p>
-  The <a>content area</a> may be explicitly declared by setting the
+  The [=content area=] may be explicitly declared by setting the
   {{inline-size}} property, or by setting
   the {{shape-inside}} property that defines or references an
-  SVG <a>shape</a>. If a <a>content area</a> is not declared, it
+  SVG [=shape=]. If a [=content area=] is not declared, it
   defaults to a rectangle of infinite width and height.
-</p>
+
 
 <p>
   Second, any positioning given by {{tspan/x}}, {{tspan/y}},
@@ -1745,26 +1748,26 @@ path: images/text/tspan05.svg
   the resulting glyph positions from the CSS layout process.
 
   The rules for which transforms are allowed depend on if
-  the <a>content area</a> was explicitly declared or not. If not
+  the [=content area=] was explicitly declared or not. If not
   explicitly declared, the rules define the layout of
   <em>pre-formatted</em> text. If declared, the rules define the
   layout of <em>auto-wrapped</em> text.
-</p>
+
 
 <p>
   Third, the effect of the {{text-anchor}} property is applied
   if necessary.
-</p>
+
 
 <p>
   Finally, layout of glyphs for any {{textPath}} elements is
   performed, converting <em>pre-formatted</em> text
   to <em>text-on-a-path</em>.
-</p>
+
 
 <p>
   Examples of the different types of text layout:
-</p>
+
 
 <dl>
   <dt>Pre-formatted:</dt>
@@ -1772,7 +1775,7 @@ path: images/text/tspan05.svg
     placement of glyphs is required (e.g. hand-kerned titles).
 
     <div class="example">
-<p>An example of multi-line pre-formatted text.</p>
+<p>An example of multi-line pre-formatted text.
 
 <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -1790,7 +1793,7 @@ path: images/text/tspan05.svg
   <img class="bordered" src="images/text/text-preformatted.svg"
               alt="Image showing two lines of pre-formatted text.">
   <p class="caption">Pre-formatted text where a {{tspan}} element has
-    been used to create multi-line text.</p>
+    been used to create multi-line text.
 </div>
     </div>
 
@@ -1800,7 +1803,7 @@ path: images/text/tspan05.svg
   <dd>For long strings of text where automatic text wrapping is
     required.
     <div class="example">
-<p>An example of auto-wrapped text.</p>
+<p>An example of auto-wrapped text.
 
 <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -1817,7 +1820,7 @@ path: images/text/tspan05.svg
               alt="Image showing auto-wrapped text on two lines.">
   <p class="caption">Auto-wrapped text. The {{inline-size}}
     property defines a rectangular content area of infinite height
-    (shown in light blue).</p>
+    (shown in light blue).
 </div>
     </div>
 
@@ -1826,7 +1829,7 @@ path: images/text/tspan05.svg
   <dt>Text on path:</dt>
   <dd>For text that follows a specified path.
     <div class="example">
-<p>An example of text on a path.</p>
+<p>An example of text on a path.
 
 <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -1847,25 +1850,25 @@ d="M 50,50 C 100,0 200,100 250,50"/>
               alt="Image showing text following a path.">
   <p class="caption">Text on a path. The {{textPath}}
     element references a {{path element}} element (shown in light
-    blue).</p>
+    blue).
 </div>
     </div>
 
   </dd>
 </dl>
 
-<p class="note">
+Note: 
   SVG 2 introduces the ability to automatically wrap text inside a
-  rectangle or other shape by specifying a <a>content area</a>. The
+  rectangle or other shape by specifying a [=content area=]. The
   design of SVG wrapped text is motivated by the desire that SVG
   text wrapping be as compatible as possible with text wrapping in
   CSS in order that renderers that support CSS text wrapping can
   implement SVG text wrapping easily (but without requiring non-HTML
   compatible SVG renderers to implement HTML). There are several
   differences between SVG and CSS text wrapping. The most important
-  is that in SVG, a <a>content area</a> must be explicitly provided
+  is that in SVG, a [=content area=] must be explicitly provided
   as SVG does not have an automatic finite (or semi-finite)
-  <a>content area</a> (provided in CSS by the box model). Another
+  [=content area=] (provided in CSS by the box model). Another
   difference is that SVG does not have the &lt;p&gt;&lt;/p&gt; and
   &lt;br/&gt; elements which create line breaks. Instead, SVG relies
   on the <span class="prop-value">pre</span> and
@@ -1876,55 +1879,55 @@ d="M 50,50 C 100,0 200,100 250,50"/>
   {{text/x}} and {{text/y}} attributes in the {{text}} and
   {{tspan}} elements, which are ignored by SVG 2 renderers for
   auto-wrapped text).
-</p>
 
-<p class="note">
+
+Note: 
   SVG's text layout options are designed to cover most general use
   cases. If more complex layout is required (bulleted lists, tables,
   etc.), text can be rendered in another XML namespace such as XHTML
   [[!HTML]] embedded inline within a
-  {{foreignObject}} element.
-</p>
+  <{foreignObject}> element.
+
 
 <h3 id="TextLayoutContentArea">Text layout – Content Area</h3>
 
 <p>
-  A <dfn>content area</dfn> is defined by specifying in
+  A content area is defined by specifying in
   a {{text}} element an {{inline-size}} property,
   or a {{shape-inside}} property that defines
-  or references an SVG <a>shape</a>. If no <a>content area</a> is
-  provided, the <a>content area</a> defaults to a rectangle of
+  or references an SVG [=shape=]. If no [=content area=] is
+  provided, the [=content area=] defaults to a rectangle of
   infinite width and height (see the
   <a href="text.html#TextLayoutPre">pre-formatted text</a> section).
   If both an {{inline-size}} property and a
   {{shape-inside}} property with value other than 'none' are
   given, the {{shape-inside}} property is used.
-</p>
+
 
 <p id="TextLayoutWrappingArea">
   Wrapped text is laid out in a <dfn>wrapping area</dfn>. The
-  <a>wrapping area</a> is normally the same as the <a>content
-  area</a>. When the <a>content area</a> is defined using
-  the {{shape-inside}} property, the <a>wrapping area</a>
+  [=wrapping area=] is normally the same as the <a>content
+  area</a>. When the [=content area=] is defined using
+  the {{shape-inside}} property, the [=wrapping area=]
   may be smaller due to the presence of a {{shape-subtract}}
   property and/or a {{shape-padding}} property. The
   {{shape-subtract}} property (along with the
-  {{shape-margin}} property) defines a <dfn>wrapping
-  context</dfn>. The <a>wrapping area</a> is found by
-  insetting the <a>content area</a> by the {{shape-padding}} distance,
-  and then subtracting the <a>wrapping context</a>.
-</p>
+  {{shape-margin}} property) defines a [=wrapping
+  context=]. The [=wrapping area=] is found by
+  insetting the [=content area=] by the {{shape-padding}} distance,
+  and then subtracting the [=wrapping context=].
+
 <p>
-  Once a <a>wrapping area</a> is defined, the text is laid out
-  inside the <a>wrapping area</a> according to the rules of CSS
+  Once a [=wrapping area=] is defined, the text is laid out
+  inside the [=wrapping area=] according to the rules of CSS
   (respecting any special rules given in this section).
-</p>
+
 
 <div class="note">
   <p>
     Constructing equivalent wrapping areas in SVG and HTML. The text
     inside the wrapping areas is rendered the same in both cases.
-  </p>
+  
   <div class="figure">
     <img class="bordered" src="images/text/text-layout-svg.svg"
           alt="Image showing the creation of an hour glass shape
@@ -1933,17 +1936,17 @@ d="M 50,50 C 100,0 200,100 250,50"/>
           the left and right semicircles exclude part of the
           circle.">
     <p class="caption">
-Defining a <a>wrapping area</a> in SVG.
+Defining a [=wrapping area=] in SVG.
 
 The {{text}} element has both a {{shape-inside}}
 property and a {{shape-subtract}} property.
 The {{shape-inside}} property references a circle that
-defines a <a>content area</a> (dotted purple line). The
+defines a [=content area=] (dotted purple line). The
 {{shape-subtract}} property referencing two semicircles
-defines a <a>wrapping context</a> (dotted green line) which when
-subtracted from the <a>content area</a> results in
-the <a>wrapping area</a> (light blue line).
-    </p>
+defines a [=wrapping context=] (dotted green line) which when
+subtracted from the [=content area=] results in
+the [=wrapping area=] (light blue line).
+    
   </div>
   <div class="figure">
     <img class="bordered" src="images/text/text-layout-html.svg"
@@ -1953,21 +1956,21 @@ the <a>wrapping area</a> (light blue line).
           the left and right semicircles exclude part of the
           circle.">
     <p class="caption">
-Defining a <a>wrapping area</a> in HTML.
+Defining a [=wrapping area=] in HTML.
 
 A <q>wrapper</q> &lt;div&gt; contains two <q>float</q>
 &lt;div&gt;s. The wrapper &lt;div&gt; defines a rectangular
 region (solid purple line). Its {{shape-inside}} property
-defines a <a>content area</a> within the &lt;div&gt; (dotted
+defines a [=content area=] within the &lt;div&gt; (dotted
 purple line). The two other &lt;div&gt;s define two floats,
 one on the left (solid green line) and the right (solid pink
 line). The floats are rectangular in shape. Each float has a
 {{shape-outside}} property which defines the
-<a>wrapping context</a> for each float (dotted green and pink
-  lines). The combined <a>wrapping context</a> is subtracted
-  from the <a>content area</a> to defined the
-<a>wrapping area</a> (light blue line).
-    </p>
+[=wrapping context=] for each float (dotted green and pink
+  lines). The combined [=wrapping context=] is subtracted
+  from the [=content area=] to defined the
+[=wrapping area=] (light blue line).
+    
   </div>
 
 </div>
@@ -1982,40 +1985,40 @@ line). The floats are rectangular in shape. Each float has a
   Replaced by 'inline-size' presentation attribute per resolution from
   <a href="http://www.w3.org/2015/06/11-svg-minutes.html#item09">Linkoping
     F2F, June 11, 2015</a>.
-</p>
+
 
 <p>
   The {{inline-size}} property allows one to set the
-  <a>wrapping area</a> to a rectangular shape. The computed value of
+  [=wrapping area=] to a rectangular shape. The computed value of
   the property sets the width of the rectangle for horizontal text
   and the height of the rectangle for vertical text. The other
   dimension (height for horizontal text, width for vertical text) is
   of infinite length. A value of zero disables the creation of a
-  <a>wrapping area</a>.
-</p>
+  [=wrapping area=].
+
 
 <p>
-  The initial <a>current text position</a> is taken from the
+  The initial [=current text position=] is taken from the
   {{text/x}} and {{text/y}} attributes of the
   {{text}} element (or first child {{tspan}} element
   if the attributes are not given on the {{text}} element).
 
-  For left-to-right text, the initial <a>current text position</a>
+  For left-to-right text, the initial [=current text position=]
   is at the left of the rectangle. For right-to-left text it is at
   the right of the rectangle.
 
-  For vertical text, the initial <a>current text position</a> is at
+  For vertical text, the initial [=current text position=] is at
   the top of the rectangle.
-</p>
+
 
 <p>
-  The rectangle (<a>wrapping area</a>) is then anchored according to
+  The rectangle ([=wrapping area=]) is then anchored according to
   the {{text-anchor}} property using the edges of the
-  <a>wrapping area</a> to determine the start, middle, and end
+  [=wrapping area=] to determine the start, middle, and end
   positions.
-</p>
 
-<p class="note">
+
+Note: 
   The {{inline-size}} property method to wrap text is an
   extension to pre-formatted SVG text where the author simply gives
   a limit to the width or height of the block of text; thus the use
@@ -2023,8 +2026,8 @@ line). The floats are rectangular in shape. Each float has a
   the {{direction}} and {{text-anchor}} properties to
   position the first line of text. If full justification is needed,
   the {{shape-inside}} property should be used to create
-  the <a>wrapping area</a>.
-</p>
+  the [=wrapping area=].
+
 
 <table class="propdef def">
   <tr>
@@ -2061,13 +2064,13 @@ line). The floats are rectangular in shape. Each float has a
     <td>an absolute length or percentage</td>
   </tr>
   <tr>
-    <th><a>Animation type</a>:</th>
+    <th>[=Animation type=]:</th>
     <td>by computed value</td>
   </tr>
 </table>
 
 <div class="example">
-  <p>An example of using {{inline-size}} for wrapping horizontal text.</p>
+  <p>An example of using {{inline-size}} for wrapping horizontal text.
 
   <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -2085,15 +2088,15 @@ line). The floats are rectangular in shape. Each float has a
           alt="Image showing English text wrapped into two lines.">
     <p class="caption">
 Horizontal text wrapping. The light-blue lines indicate the
-limits of the <a>content area</a>. Note that the content
+limits of the [=content area=]. Note that the content
 area is of infinite height. The red dot shows the initial
-<a>current text position</a>.
-    </p>
+[=current text position=].
+    
   </div>
 </div>
 
 <div class="example">
-  <p>An example of using {{inline-size}} for wrapping right to left horizontal text.</p>
+  <p>An example of using {{inline-size}} for wrapping right to left horizontal text.
 
   <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -2112,20 +2115,20 @@ style="font: 20px PakType Naqsh; inline-size: 200px; direction: rtl;">
     <p class="caption">
 Horizontal text wrapping for right to left text.
 The light-blue lines indicate the
-limits of the <a>content area</a>. Note that the content
+limits of the [=content area=]. Note that the content
 area is of infinite height. The red dot shows the initial
 <a>current text
   position</a>.
-    </p>
+    
   </div>
   <p class="annotation">Some browser may not render this
     SVG 1.1 figure correctly. Batik and Firefox seems to get it
     right. Bug filed against Chrome.
-  </p>
+  
 </div>
 
 <div class="example">
-  <p>An example of using {{inline-size}} for wrapping vertical text.</p>
+  <p>An example of using {{inline-size}} for wrapping vertical text.
 
   <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -2143,21 +2146,21 @@ style="font: 25px IPAMincho; inline-size: 200px; writing-mode: vertical-rl;">
           alt="Image showing vertical Japanese text wrapped into two columns.">
     <p class="caption">
 Vertical text wrapping. The light-blue lines indicate the
-limits of the <a>content area</a>. Note that the content
+limits of the [=content area=]. Note that the content
 area is of infinite width. The red dot shows the initial
 <a>current text
   position</a>.
-    </p>
+    
   </div>
   <p class="annotation">This SVG 1.1 image doesn't work in
     Firefox, even nightly. Firefox does not support the presentation
     attribute 'writing-mode'. Bug filed against Firefox.
-  </p>
+  
 </div>
 
 
 <div class="example">
-  <p>An example of using {{inline-size}} for wrapping horizontal text, anchored in the middle.</p>
+  <p>An example of using {{inline-size}} for wrapping horizontal text, anchored in the middle.
 
   <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -2175,10 +2178,10 @@ area is of infinite width. The red dot shows the initial
           alt="Image showing English text wrapped into two lines, anchored in the center.">
     <p class="caption">
 Horizontal text wrapping. The light-blue lines indicate the
-limits of the <a>content area</a>. The text is anchored in
+limits of the [=content area=]. The text is anchored in
 the middle. The red dot shows the initial
-<a>current text position</a>.
-    </p>
+[=current text position=].
+    
   </div>
 </div>
 
@@ -2186,19 +2189,19 @@ the middle. The red dot shows the initial
 
 <p>
   The {{shape-inside}} property allows one to set the
-  <a>content area</a> to a <a>CSS basic shape</a> or to an
-  SVG <a>shape</a>.
-</p>
-<p class="note">
+  [=content area=] to a [=CSS basic shape=] or to an
+  SVG [=shape=].
+
+Note: 
   In CSS/HTML {{shape-inside}} applies to block-level elements
   and absolute and percentage values are defined relative to the
   block-level element.
 
   In SVG absolute and percentage values are defined relative to the
-  current <a>user coordinate system</a> and the {{viewBox}}.
-</p>
+  current [=user coordinate system=] and the {{viewBox}}.
 
-<p class="issue" data-issue="76">Do nor re-specify shape-inside but reference CSS Shapes.</p>
+
+<p class="issue" data-issue="76">Do nor re-specify shape-inside but reference CSS Shapes.
 
 <table class="propdef def">
   <tr>
@@ -2234,7 +2237,7 @@ the middle. The red dot shows the initial
     <td>computed lengths for &lt;shape&gt;, the absolute URI for &lt;uri&gt;, otherwise as specified </td>
   </tr>
   <tr>
-    <th><a>Animation type</a>:</th>
+    <th>[=Animation type=]:</th>
     <td>See <a href="https://www.w3.org/TR/css-shapes/#basic-shape-interpolation">Interpolation of Basic Shapes</a></td>
   </tr>
 </table>
@@ -2256,7 +2259,7 @@ the middle. The red dot shows the initial
     <div class="example">
 <p>
   An example of using a CSS basic-shape for wrapping horizontal text.
-</p>
+
 
 <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -2276,8 +2279,8 @@ the middle. The red dot shows the initial
   <p class="caption">
     Horizontal text wrapping inside a CSS circle shape.
     The light-blue circle indicates the limit of the
-    <a>content area</a>.
-  </p>
+    [=content area=].
+  
 </div>
     </div>
 
@@ -2285,7 +2288,7 @@ the middle. The red dot shows the initial
 
   <dt><span class="attr-value">&lt;uri&gt;</span></dt>
   <dd>
-    If the &lt;uri&gt; references an SVG <a>shape</a> element,
+    If the &lt;uri&gt; references an SVG [=shape=] element,
     that element defines the shape. Otherwise, if the &lt;uri&gt;
     references an image, the shape is extracted and computed based
     on the alpha channel of the specified image using the
@@ -2296,8 +2299,8 @@ the middle. The red dot shows the initial
 
     <div class="example">
 <p>
-  An example of using a reference to an SVG <a>shape</a> for wrapping horizontal text.
-</p>
+  An example of using a reference to an SVG [=shape=] for wrapping horizontal text.
+
 
 <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -2319,8 +2322,8 @@ the middle. The red dot shows the initial
   <p class="caption">
     Horizontal text wrapping inside an SVG rectangle shape.
     The light-blue lines indicate the limits of the
-    <a>content area</a>.
-  </p>
+    [=content area=].
+  
 </div>
     </div>
   </dd>
@@ -2330,57 +2333,57 @@ the middle. The red dot shows the initial
 <p>
   The CSS values of 'outside-shape', 'shape-box', and 'display' are
   invalid for SVG.
-</p>
+
 
 <p>
   SVG allows the {{shape-inside}} property to have a list of
-  shapes. Each shape defines an independent <a>content area</a>.
+  shapes. Each shape defines an independent [=content area=].
   Text is first laid out in the content area of the first shape. If
   the text overflows the first shape, the overflow text is laid out
   in the next shape until all text is laid out or no more shapes are
   available.
-</p>
-<p class="note">
+
+Note: 
   The effect is similar to CSS columns,
   except that the columns can have arbitrary shapes.
-</p>
+
 <p>
   It is recommended that an <q>overflow</q> shape be provided to
   ensure the accessibility of all text in cases; for example, if a user
   increases the font size.
-</p>
 
-<p class="note">
+
+Note: 
   Except as noted, see the CSS Shapes Module Level 2 for the definition of
   <a href="http://dev.w3.org/csswg/css-shapes-2/#shape-inside-property">shape-inside</a>.
   [<a href="refs.html#ref-css-shapes-2">css-shapes-2</a>]
-</p>
+
 
 <p class="annotation">
   'shape-inside' was removed when the CSS Exclusions and Shapes
   Module was split into separate Exclusions and Shapes modules. At
   the Tokyo joint SVG/CSS F2F meeting, it was agreed that it would
   reappear in CSS Shapes Module Level 2.
-</p>
+
 
 <h4 id="TextShapeSubtract">The <span class="property">shape-subtract</span> property</h4>
 
 <p>
   The {{shape-subtract}} property allows one to exclude part of
-  the <a>content area</a> from the <a>wrapping area</a>. The
+  the [=content area=] from the [=wrapping area=]. The
   excluded area is the addition of all the areas defined in a list
-  of <a>CSS basic shape</a>s and/or SVG <a>shapes</a>.
-</p>
+  of [=CSS basic shape=]s and/or SVG [=shapes=].
+
 <p class="annotation">
   It was resolved at the 2016 Sydney F2F that 'shape-subtract' should
   be uses instead of 'shape-outside' due to the different behavior
   required. ('shape-outside' reduces the area of an exclusion.)
-</p>
 
-<p class="note">
+
+Note: 
   Absolute and percentage values are defined relative to the
-  current <a>user coordinate system</a> and the {{viewBox}}.
-</p>
+  current [=user coordinate system=] and the {{viewBox}}.
+
 
 <table class="propdef def">
   <tr>
@@ -2416,7 +2419,7 @@ the middle. The red dot shows the initial
     <td>computed lengths for any &lt;basic-shape&gt;, the absolute URI for &lt;uri&gt;, otherwise as specified </td>
   </tr>
   <tr>
-    <th><a>Animation type</a>:</th>
+    <th>[=Animation type=]:</th>
     <td>See <a href="https://www.w3.org/TR/css-shapes/#basic-shape-interpolation">Interpolation of Basic Shapes</a></td>
   </tr>
 </table>
@@ -2430,7 +2433,7 @@ the middle. The red dot shows the initial
 
   <dt><span class="attr-value">&lt;uri&gt;</span></dt>
   <dd>
-    For any &lt;uri&gt; that references an SVG <a>shape</a> element,
+    For any &lt;uri&gt; that references an SVG [=shape=] element,
     that element defines the contributing shape,
     expanded by the value of its {{shape-margin}} distance.
     For any &lt;uri&gt;
@@ -2446,7 +2449,7 @@ the middle. The red dot shows the initial
 <div class="example">
   <p>
     An example of using {{shape-subtract}}.
-  </p>.
+  .
 
   <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -2480,9 +2483,9 @@ Horizontal text wrapping inside two overlapping rectangles
 using {{shape-subtract}} as well as
 {{shape-inside}}, {{shape-padding}} and
       {{shape-margin}}. The black rectangles show
-the <a>content area</a>s. The inner blue lines show
-the <a>wrapping area</a>s.
-    </p>
+the [=content area=]s. The inner blue lines show
+the [=wrapping area=]s.
+    
   </div>
 </div>
 
@@ -2492,17 +2495,17 @@ the <a>wrapping area</a>s.
   The {{shape-image-threshold}} defines the alpha channel threshold used
   to extract the shape using an image. A value of 0.5 means that the
   shape will enclose all the pixels that are more than 50% opaque.
-</p>
+
 
 <p>
   For the purposes of SVG, this property applies to {{text}} elements.
-</p>
 
-<p class="note">
+
+Note: 
   Except as noted, see the CSS Shapes Module Level 1 for the definition of
   <a href="https://www.w3.org/TR/css-shapes/#shape-image-threshold-property">shape-image-threshold</a>.
   [<a href="refs.html#ref-css-shapes-1">css-shapes-1</a>]
-</p>
+
 
 <h4 id="TextShapeMargin">The <span class="property">shape-margin</span> property</h4>
 
@@ -2511,9 +2514,9 @@ the <a>wrapping area</a>s.
   {{shape-subtract}}. It defines
   a new shape where every point is the specified distance from
   the original shape. This property takes on positive values only.
-</p>
 
-<p class="issue" data-issue="77">Do nor re-specify shape-margin but reference CSS Shapes.</p>
+
+<p class="issue" data-issue="77">Do nor re-specify shape-margin but reference CSS Shapes.
 
 <table class="propdef def">
   <tr>
@@ -2549,16 +2552,16 @@ the <a>wrapping area</a>s.
     <td>an absolute length</td>
   </tr>
   <tr>
-    <th><a>Animation type</a>:</th>
+    <th>[=Animation type=]:</th>
     <td>by computed value</td>
   </tr>
 </table>
 
-<p class="note">
+Note: 
   Except as noted, see the CSS Shapes Module Level 1 for the definition of
   See <a href="https://www.w3.org/TR/css-shapes/#shape-margin-property">shape-margin</a>.
   [<a href="refs.html#ref-css-shapes-1">css-shapes-1</a>]
-</p>
+
 
 <h4 id="TextShapePadding">The <span class="property">shape-padding</span> property</h4>
 
@@ -2567,10 +2570,10 @@ the <a>wrapping area</a>s.
   inline flow content wrapping on the inside of elements. Offsets
   created by the ‘wrap-padding’ property are offset from the content
   area of the element. This property takes on positive values only.
-</p>
+
 
 <div class="example">
-  <p>An example of using {{shape-padding}}</p>.
+  <p>An example of using {{shape-padding}}.
 
   <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -2595,18 +2598,18 @@ justified on both sides. It looks good!</text>
     <p class="caption">
 Horizontal text wrapping inside a circle with
 a {{shape-padding}}. The outer black circle shows
-the <a>content area</a>. The inner blue circle shows
-the <a>wrapping area</a>.
-    </p>
+the [=content area=]. The inner blue circle shows
+the [=wrapping area=].
+    
   </div>
   <p class="annotation">This image is a PNG. Figure out how to make a good SVG.
-    Note: Chrome supports 'textLength' on 'tspan' but Firefox does not.</p>
+    Note: Chrome supports 'textLength' on 'tspan' but Firefox does not.
 </div>
 
-<p class="note">
+Note: 
   Except as noted, see the CSS Shapes Module Level 2 for the definition of
   <a href="http://dev.w3.org/csswg/css-shapes-2/#shape-padding-property">shape-padding</a>.
-</p>
+
 
 <h3 id="TextLayoutAlgorithm">Text layout – Algorithm</h3>
 
@@ -2619,34 +2622,34 @@ the <a>wrapping area</a>.
   shapes to be filled. The {{text}} element is treated as a
   block element and its descendant {{tspan}}, {{textPath}}
   and {{a}} elements are treated as inline elements. The CSS
-  renderer returns a set of <a>typographic characters</a> with
+  renderer returns a set of [=typographic characters=] with
   their positions resulting from laying out the text as if the text
   were absolutely positioned.
-</p>
-<p class="note">
-  A <a>typographic character</a> may contain more than
-  one <a>glyph</a>. It is assumed here the relative positioning of
-  the <a>glyphs</a> inside a <a>typographic character</a> is
-  encapsulated by the <a>typographic character</a> and it is
+
+Note: 
+  A [=typographic character=] may contain more than
+  one [=glyph=]. It is assumed here the relative positioning of
+  the [=glyphs=] inside a [=typographic character=] is
+  encapsulated by the [=typographic character=] and it is
   not user controllable.
-</p>
+
 <p>
-  Once a <a>content area</a> has been defined, the following
-  algorithm is used to determine the <a>typographic characters</a>
+  Once a [=content area=] has been defined, the following
+  algorithm is used to determine the [=typographic characters=]
   and their positions for a given {{text}} element:
-</p>
+
 
 <ul class='algorithm'>
-<li>For text where the <a>content area</a> is defined by the
+<li>For text where the [=content area=] is defined by the
     {{shape-inside}} property, layout the text in one or more
     areas per CSS rules for laying out text in a CSS <a>wrapping
     area</a>. 
-    <p class="note">SVG allows the {{shape-inside}} property to reference more than one shape. Each shape should be filled in turn untilthere is no more text or no more shapes.</p></li>
+    Note: SVG allows the {{shape-inside}} property to reference more than one shape. Each shape should be filled in turn untilthere is no more text or no more shapes.</li>
 <li>
-For text where the <a>content area</a> is defined by the
+For text where the [=content area=] is defined by the
 {{inline-size}} property, layout the text in a CSS content
-box where the <a>inline size</a> is set to the value of
-the {{inline-size}} property and the <a>block size</a> is
+box where the [=inline size=] is set to the value of
+the {{inline-size}} property and the [=block size=] is
 unconstrained.
 
 <p class='note'>
@@ -2654,7 +2657,7 @@ This means that text is laid out with the box width set to
 the {{inline-size}} value if {{writing-mode}}
 is <span class='prop-value'>horizontal-tb</span>, or with the
 box height set to the {{inline-size}} value otherwise.
-</p>
+
 </li>
 <li>
 For all other text (SVG 1.1 compatible text and SVG 1.1
@@ -2666,13 +2669,13 @@ is unconstrained in width and height.
 <p>
   A number of CSS properties have no or limited effect on SVG text
   layout:
-</p>
+
 
 <ul>
   <li>
     The used value of each of the following properties on a <a>text
     content element</a> (and its pseudo-elements, if any) and on
-    an {{a}} element within a <a>text content block element</a>
+    an {{a}} element within a [=text content block element=]
     must be the property's initial values:
     <span class="property">border-style</span>,
     <span class="property">float</span>,
@@ -2684,7 +2687,7 @@ is unconstrained in width and height.
 
   <li>
     If the computed value of the {{display}} property on a
-    correctly parented <a>text content block element</a> is anything
+    correctly parented [=text content block element=] is anything
     other than
     <span class='prop-value'>none</span>, then its used value must
     be
@@ -2693,12 +2696,12 @@ is unconstrained in width and height.
     <p class='note'>
 This ensures that the {{text}} element is treated as if
 it were a block element.
-    </p>
+    
   </li>
 
   <li>
     If the computed value of the {{display}} property on a
-    correctly parented <a>text content child element</a>
+    correctly parented [=text content child element=]
     or {{a}} element,
     is anything other than
     <span class='prop-value'>none</span>, then its used value must
@@ -2710,39 +2713,39 @@ This ensures that {{tspan}}, {{textPath}} and
 {{a}} elements are treated as if they were inline elements.
 Note: the {{transform}} property has no effect on
 inline elements.
-    </p>
+    
   </li>
 
   <li>
     The used value of the {{display}} property on an element
-    that is a descendant of a <a>text content block element</a> and
-    is not a correctly parented <a>text content child element</a>
+    that is a descendant of a [=text content block element=] and
+    is not a correctly parented [=text content child element=]
     or {{a}} element must be
     <span class='prop-value'>none</span>.
 
     <p class='note'>
 This ensures that graphics and metadata elements inside a {{text}}
 element do not render.
-    </p>
+    
   </li>
 </ul>
 
 <p>
   Various SVG attributes and properties may reposition the
-  <a>typographic characters</a> depending on how the <a>content
+  [=typographic characters=] depending on how the <a>content
   area</a> is defined:
-</p>
+
 
 <ul>
   <li>
-    For text where the <a>content area</a> is defined by the
+    For text where the [=content area=] is defined by the
     {{shape-inside}} property, the <a>typographic
     characters</a> are rendered with positions as returned from the
     CSS-based text renderer.
   </li>
   <li>
-    For text where the <a>content area</a> is defined by the
-    {{inline-size}} property, each <a>line box</a> is
+    For text where the [=content area=] is defined by the
+    {{inline-size}} property, each [=line box=] is
     shifted according to the {{text-anchor}} property.
     No further post-processing is performed.
   </li>
@@ -2758,7 +2761,7 @@ element do not render.
   The following SVG text layout algorithm returns output information
   about each character in the DOM in the {{text}} element's
   subtree. That information includes:
-</p>
+
 
 <ul>
   <li>
@@ -2778,12 +2781,12 @@ element do not render.
   </li>
   <li>
     an "addressable" flag, which represents whether it is
-    an <a>addressable character</a>, that is, addressable by text
+    an [=addressable character=], that is, addressable by text
     positioning attributes and SVG DOM text methods;
   </li>
   <li>
     a "middle" flag, which represents whether it is the second or
-    later character of a <a>typographic character</a>
+    later character of a [=typographic character=]
   </li>
   <li>
     an "anchored chunk" flag, which represents whether it starts a
@@ -2792,28 +2795,28 @@ element do not render.
   </li>
 </ul>
 
-<p class="note">
+Note: 
   The arrays given in the SVG attributes {{tspan/x}},
   {{tspan/y}}, {{tspan/dx}}, {{tspan/dy}},
   and {{tspan/rotate}} are indexed by <a>addressable
   characters</a>. However, repositioning is applied to
-  <a>typographic characters</a>. If a <a>typographic character</a>
+  [=typographic characters=]. If a [=typographic character=]
   corresponds to more than one character (e.g. a ligature), only
   the array values corresponding to the first character are used
-  in positioning the <a>typographic character</a>. Array values
-  corresponding to other characters in the <a>typographic character</a>
+  in positioning the [=typographic character=]. Array values
+  corresponding to other characters in the [=typographic character=]
   are skipped (for {{tspan/x}} and {{tspan/y}}), are
-  accumulated and applied to the next <a>typographic character</a>
+  accumulated and applied to the next [=typographic character=]
   (for {{tspan/dx}} and {{tspan/dy}}), or if it is the last
   value in the array, applied to the following <a>typographic
   characters</a> (for {{tspan/rotate}}). This ensures, for example,
   that attribute values are applied to the same characters regardless of
   whether or not a font has a particular ligature.
-</p>
+
 
 <p>
   The SVG specific text layout algorithm is as follows:
-</p>
+
 
 <ol class='algorithm'>
   <li>
@@ -2821,13 +2824,13 @@ element do not render.
     <ol>
 <li>
   Let <var>root</var> be the result of generating
-  <a>typographic character</a> positions for the
+  [=typographic character=] positions for the
   {{text}} element and its subtree, laid out as if it
   were an absolutely positioned element.
   <p class='note'>
     This will be a single line of text unless the
     {{white-space}} property causes line breaks.
-  </p>
+  
 </li>
 <li>
   Let <var>count</var> be the number of DOM <em>characters</em>
@@ -2853,7 +2856,7 @@ element do not render.
   Let <var>CSS_positions</var> be an array of length
   <var>count</var> whose entries will be filled with the
   <var>x</var> and <var>y</var> positions of the corresponding
-  <a>typographic character</a> in <var>root</var>. The array
+  [=typographic character=] in <var>root</var>. The array
   entries are initialized to (0, 0).
 </li>
 <li>
@@ -2867,13 +2870,13 @@ element do not render.
     <p>
 For each array element with index <var>i</var> in
 <var>result</var>:
-    </p>
+    
     <ol>
 <li>
   Set <var>addressable</var> to false if the character at index <var>i</var> was:
         <ul>
       <li>
-        part of the text content of a <a>non-rendered element</a>
+        part of the text content of a [=non-rendered element=]
       </li>
     <li>
       discarded during layout due to being a
@@ -2896,7 +2899,7 @@ For each array element with index <var>i</var> in
       Since there is collapsible white space not addressable by glyph
       positioning attributes in the following {{text}} element
       (with a standard font), the "B" glyph will be placed at x=300.
-    </p>
+    
     <pre>&lt;text x="100 200 300"&gt;
       A
       B
@@ -2904,7 +2907,7 @@ For each array element with index <var>i</var> in
     <p>
       This is because the white space before the "A", and all but one white space
       character between the "A" and "B", is collapsed away or trimmed.
-    </p>
+    
         </div>
 </li>
 <li>
@@ -2919,12 +2922,12 @@ For each array element with index <var>i</var> in
         <p class='note'>
     This ensures chunks shifted by {{text-anchor}} do not
     span multiple lines.
-  </p>
+  
 </li>
 <li>
   If <var>addressable</var> is true and <var>middle</var> is false then
   set <var>CSS_positions</var>[<var>i</var>] to the position of the
-  corresponding <a>typographic character</a> as determined by the CSS
+  corresponding [=typographic character=] as determined by the CSS
   renderer. Otherwise, if <var>i</var> &gt; 0, then set
   <var>CSS_positions</var>[<var>i</var>] =
   <var>CSS_positions</var>[<var>i</var> − 1]
@@ -2933,7 +2936,7 @@ For each array element with index <var>i</var> in
   </li>
   <li>
     <b>Resolve character positioning</b>
-    <p class="note">
+    Note: 
 Position adjustments (e.g. values in a {{tspan/x}} attribute)
 specified by a node apply to all characters in that node including
 characters in the node's descendants. Adjustments specified in
@@ -2941,7 +2944,7 @@ descendant nodes, however, override adjustments from ancestor
 nodes. This section resolves which adjustments are to be applied to
 which characters. It also directly sets the <var>rotate</var> coordinate
 of <var>result</var>.
-    </p>
+    
     <ol>
 <li>
   Set up:
@@ -2954,11 +2957,11 @@ of <var>result</var>.
     </li>
     <li>
       Set "in_text_path" flag false.
-      <p class="note">
+      Note: 
   This flag will allow {{tspan/y}} ({{tspan/x}})
   attribute values to be ignored for horizontal (vertical)
   text inside {{textPath}} elements.
-      </p>
+      
     </li>
     <li>
       Call the following procedure with the {{text}} element node.
@@ -2971,7 +2974,7 @@ of <var>result</var>.
   <p>
     A recursive procedure that takes as input a <var>node</var> and
     whose steps are as follows:
-  </p>
+  
         <ol>
     <li>
       If <var>node</var> is a {{text}} or {{tspan}} node:
@@ -3019,10 +3022,10 @@ of <var>result</var>.
   </li>
   <li>
     Let <var>i</var> = 0 and <var>j</var> = 0.
-    <p class="note">
-      <var>i</var> is an index of <a>addressable characters</a> in the node;
-      <var>j</var> is an index of all <a>characters</a> in the node.
-    </p>
+    Note: 
+      <var>i</var> is an index of [=addressable characters=] in the node;
+      <var>j</var> is an index of all [=characters=] in the node.
+    
   </li>
   <li>
     While <var>j</var> &lt; <var>length</var>, do:
@@ -3030,7 +3033,7 @@ of <var>result</var>.
       This loop applies the {{text/x}}, {{text/y}},
       {{text/dx}}, {{text/dy}} and {{text/rotate}}
       attributes to the content inside <var>node</var>.
-    </p>
+    
     <ol>
       <li>
         If the "addressable" flag of <var>result</var>[<var>index</var> +
@@ -3041,12 +3044,12 @@ of <var>result</var>.
       set the "anchored chunk" flag of
       <var>result</var>[<var>index</var> + <var>j</var>] to
       true. Else set the flag to false.
-      <p class="note">
+      Note: 
         Setting the flag to false ensures that {{tspan/x}}
         and {{tspan/y}} attributes set in a {{text}}
         element don't create anchored chunk in a {{textPath}}
         element when they should not.
-      </p>
+      
 </li>
     <li>
       If <var>i</var> &lt; length of <var>x</var>,
@@ -3057,10 +3060,10 @@ of <var>result</var>.
       If "in_text_path" flag is true and the "horizontal"
       flag is false, unset
       <var>resolve_x</var>[<var>index</var>].
-      <p class="note">
+      Note: 
         The {{tspan/x}} attribute is ignored for
         vertical text on a path.
-      </p>
+      
 </li>
     <li>
       If <var>i</var> &lt; length of <var>y</var>,
@@ -3071,10 +3074,10 @@ of <var>result</var>.
       If "in_text_path" flag is true and the "horizontal"
       flag is true, unset
       <var>resolve_y</var>[<var>index</var>].
-      <p class="note">
+      Note: 
         The {{tspan/y}} attribute is ignored for
         horizontal text on a path.
-      </p>
+      
 </li>
     <li>
       If <var>i</var> &lt; length of <var>dx</var>,
@@ -3109,9 +3112,9 @@ of <var>result</var>.
   <li>
     Set the "anchored chunk" flag of <var>result</var>[<var>index</var>]
     to true.
-    <p class="note">
+    Note: 
       A {{textPath}} element always creates an anchored chunk.
-    </p>
+    
   </li>
   <li>
     Set <var>in_text_path</var> flag true.
@@ -3141,12 +3144,12 @@ of <var>result</var>.
   </li>
   <li>
     <b>Adjust positions: dx, dy</b>
-    <p class="note">
+    Note: 
 The {{tspan/dx}} and {{tspan/dy}} adjustments are applied
 before adjustments due to the {{textLength}} attribute while
 the {{tspan/x}}, {{tspan/y}} and {{tspan/rotate}}
 adjustments are applied after.
-    </p>
+    
     <ol>
 <li>
   Let <var>shift</var> be the cumulative <var>x</var> and
@@ -3196,16 +3199,16 @@ adjustments are applied after.
   <p>
     A recursive procedure that takes as input
     a <var>node</var> and whose steps are as follows:
-  </p>
+  
         <ol>
     <li>
       For each child node <var>child</var> of node:
       <ol>
   <li>
     <a href="#ResolveTextLength">Resolve text length</a> of child.
-    <p class="note">
+    Note: 
       Child nodes are adjusted before parent nodes.
-    </p>
+    
   </li>
       </ol>
     </li>
@@ -3230,7 +3233,7 @@ adjustments are applied after.
       right-(bottom-) most extents of the <a>typographic
         characters</a> within the node and checks for
       forced line breaks.
-    </p>
+    
     <ol>
       <li>
         If the character at <var>k</var> is a linefeed
@@ -3245,7 +3248,7 @@ adjustments are applied after.
       </li>
       <li>
         Let <var>advance</var> = the advance of
-        the <a>typographic character</a> corresponding to
+        the [=typographic character=] corresponding to
         character <var>k</var>. [NOTE: This advance will be
         negative for RTL horizontal text.]
       </li>
@@ -3267,9 +3270,9 @@ adjustments are applied after.
       <li>
         Find the distance <var>delta</var> = {{textLength}}
         computed value − (b − a).
-        <p class="note">
+        Note: 
     User agents are required to shift the last
-    <a>typographic character</a> in the node by
+    [=typographic character=] in the node by
     <var>delta</var>, in the positive <var>x</var> direction
     if the "horizontal" flag is true and if
     {{direction}} is
@@ -3279,16 +3282,16 @@ adjustments are applied after.
     <span class="prop-value">rtl</span>, or in the
     positive <var>y</var> direction otherwise.  User agents
     are free to adjust intermediate
-    <a>typographic characters</a> for optimal
+    [=typographic characters=] for optimal
     typography. The next steps indicate one way to
-    adjust <a>typographic characters</a> when
+    adjust [=typographic characters=] when
     the value of {{lengthAdjust}} is
     <span class="prop-value">spacing</span>.
-        </p>
+        
       </li>
       <li>
         Find <var>n</var>, the total number of
-        <a>typographic characters</a> in this node
+        [=typographic characters=] in this node
         including any descendant nodes that are not resolved
         descendant nodes or within a resolved descendant
         node.
@@ -3296,12 +3299,12 @@ adjustments are applied after.
       <li>
         Let <var>n</var> = <var>n</var> + number of
         resolved descendant nodes − 1.
-        <p class="note">
+        Note: 
     Each resolved descendant node is treated as if it
     were a single
-    <a>typographic character</a> in this
+    [=typographic character=] in this
     context.
-        </p>
+        
       </li>
       <li>
         Find the per-character adjustment <var>δ</var>
@@ -3341,8 +3344,8 @@ adjustments are applied after.
     <p class='note'>
 This loop applies {{text/x}} and {{text/y}} values,
 and ensures that {{text-anchor}} chunks do not start in
-the middle of a <a>typographic character</a>.
-    </p>
+the middle of a [=typographic character=].
+    
     <ol>
 <li>
   Let <var>shift</var> be the current adjustment due to
@@ -3420,7 +3423,7 @@ the middle of a <a>typographic character</a>.
   do:
   <p class='note'>
     This loops over each anchored chunk.
-  </p>
+  
   <ol>
     <li>
       Let <var>a</var> = +∞ and <var>b</var> = −∞.
@@ -3433,7 +3436,7 @@ the middle of a <a>typographic character</a>.
   This loop finds the left-(top-) most and
   right-(bottom-) most extents of the <a>typographic
   character</a> within the anchored chunk.
-      </p>
+      
             <ol>
   <li>
     Let <var>pos</var> = the x coordinate of the position
@@ -3442,7 +3445,7 @@ the middle of a <a>typographic character</a>.
   </li>
   <li>
     Let <var>advance</var> = the advance of
-    the <a>typographic character</a> corresponding to
+    the [=typographic character=] corresponding to
     character <var>k</var>. [NOTE: This advance will be
     negative for RTL horizontal text.]
   </li>
@@ -3462,7 +3465,7 @@ the middle of a <a>typographic character</a>.
       If <var>a</var> ≠ +∞, then:
             <p class='note'>
   Here we perform the text anchoring.
-      </p>
+      
             <ol>
   <li>
     Let <var>shift</var> be the x coordinate of
@@ -3530,11 +3533,11 @@ the middle of a <a>typographic character</a>.
     <var>result</var>[<var>index</var>] is false, then:
     <p class='note'>
       Here we apply {{textPath}} positioning.
-    </p>
+    
     <ol>
       <li>
-        Let <var>path</var> be the <a>equivalent path</a> of
-        the <a>basic shape</a> element referenced by
+        Let <var>path</var> be the [=equivalent path=] of
+        the [=basic shape=] element referenced by
         the {{textPath}} element, or an empty path if
         the reference is invalid.
       </li>
@@ -3557,7 +3560,7 @@ the middle of a <a>typographic character</a>.
       </li>
       <li>
         Let <var>advance</var> = the advance of
-        the <a>typographic character</a> corresponding
+        the [=typographic character=] corresponding
         to character <var>k</var>. [NOTE: This advance will
         be negative for RTL horizontal text.]
       </li>
@@ -3582,21 +3585,21 @@ the middle of a <a>typographic character</a>.
     <span class='attr-value'>'auto'</span> or a
     {{textPath/method}} value of
     <span class='attr-value'>'stretch'</span>.
-        </p>
+        
       </li>
       <li>
-        If <var>path</var> is not a <a>closed subpath</a> and
+        If <var>path</var> is not a [=closed subpath=] and
         <var>mid</var> &lt; 0 or <var>mid</var> &gt; <var>length</var>,
         set the "hidden" flag of <var>result</var>[<var>index</var>] to true.
       </li>
       <li>
-        If <var>path</var> is a <a>closed subpath</a> depending on
+        If <var>path</var> is a [=closed subpath=] depending on
         the values of {{text-anchor}} and {{direction}} of
         the element the character at <var>index</var> is in:
-        <p class="note">
+        Note: 
     This implements the special wrapping criteria for single
-    <a>closed subpaths</a>.
-        </p>
+    [=closed subpaths=].
+        
         <dl class='switch'>
     <dt>(start, ltr) or (end, rtl)</dt>
     <dd>
@@ -3619,7 +3622,7 @@ the middle of a <a>typographic character</a>.
         </dl>
         <p>
     Set <var>mid</var> = <var>mid</var> mod <var>length</var>.
-        </p>
+        
       </li>
       <li>If the <var>hidden</var> flag is false:
                     <ol>
@@ -3713,10 +3716,10 @@ the middle of a <a>typographic character</a>.
       If the character at index <var>i</var> is not within a
       {{textPath}} element and corresponds to a <a>typographic
       character</a>, then:
-      <p class="note">
+      Note: 
   This sets the starting point for rendering any characters that
   occur after a {{textPath}} element to the end of the path.
-      </p>
+      
       <ol>
   <li>If the "in path" flag is true:
     <ol>
@@ -3792,20 +3795,20 @@ the middle of a <a>typographic character</a>.
 
 <h3 id="TextLayoutPre">Pre-formatted text</h3>
 
-<p class="note">
+Note: 
   This option corresponds to basic SVG 1.1 text layout.
-</p>
+
 
 <p>
   This is the default text layout method and is used in the absence
-  of an explicitly defined <a>content area</a>. It is also used as a
+  of an explicitly defined [=content area=]. It is also used as a
   first step in laying out <em>text on a path</em> (with slightly
   modified rules). In this layout method, no automatic line breaking
   or word wrapping is done. Nominally, the text is rendered as a
-  single line inside a rectangular <a>content area</a> of infinite
+  single line inside a rectangular [=content area=] of infinite
   width and height. Multiple lines of text can be obtained by
   precomputing line breaks and using one of the following methods:
-</p>
+
 
 <ul>
   <li>
@@ -3814,7 +3817,7 @@ the middle of a <a>typographic character</a>.
     or <span class="prop-value">pre-line</span>. Line spacing is set
     by {{line-height}}.
 
-    <p class="note">New in SVG 2.</p>
+    Note: New in SVG 2.
   </li>
 
   <li>
@@ -3834,12 +3837,12 @@ the middle of a <a>typographic character</a>.
   </li>
 </ul>
 
-<p class="note">
+Note: 
   The following properties do not apply to <em>pre-formatted</em> text:
   {{text-align}}, {{text-align-last}}, {{line-break}},
   {{word-break}}, {{hyphens}}, {{word-wrap}},
   and {{overflow-wrap}}.
-</p>
+
 
 <h4 id="TextLayoutPreMultiline">Multi-line text via 'white-space'</h4>
 
@@ -3848,15 +3851,15 @@ the middle of a <a>typographic character</a>.
   {{white-space}} values <span class="prop-value">pre</span>
   or <span class="prop-value">pre-line</span>. In these cases, a
   line-feed or carriage return is preserved as a forced line
-  break which creates a new <a>line box</a>. The <a>line
+  break which creates a new [=line box=]. The <a>line
   boxes</a> are stacked following the rules of CSS.
-</p>
+
 
 <h4 id="TextLayoutPreAdjustments">Repositioning Glyphs</h4>
 
 <p>
   After text is laid out according to the basic CSS text layout
-  rules, <a>typographic characters</a> can be repositioned using SVG
+  rules, [=typographic characters=] can be repositioned using SVG
   specific rules.  Absolute repositioning can be prescribed by
   giving absolute coordinates in the {{tspan/x}}
   and {{tspan/y}} attributes or by forced line breaks. Absolute
@@ -3864,49 +3867,49 @@ the middle of a <a>typographic character</a>.
   property. Relative repositioning can be prescribed by giving
   relative coordinates in the {{tspan/dx}}
   and {{tspan/dy}} attributes. The
-  <a>typographic characters</a> may be arbitrarily rotated by giving
+  [=typographic characters=] may be arbitrarily rotated by giving
   a list of values in the {{tspan/rotate}} attribute. Absolute
   repositioning (including any adjustment due to
   the {{text-anchor}} property) is done before relative
   repositioning and rotation.
-</p>
+
 
 <h3 id="TextLayoutAuto">Auto-wrapped text</h3>
 
 <p>
-  Text is automatically wrapped when a <a>content area</a> is
-  specified in the {{text}} element. The <a>content area</a>
+  Text is automatically wrapped when a [=content area=] is
+  specified in the {{text}} element. The [=content area=]
   defines the outermost container for wrapping text. A <a>wrapping
   context</a> (set of exclusion areas) may also be given. The
-  actual <a>wrapping area</a> is defined by subtracting the
-  <a>wrapping context</a> from the <a>content area</a>. The
-  <a>wrapping context</a> may also be reduced by the value of the
+  actual [=wrapping area=] is defined by subtracting the
+  [=wrapping context=] from the [=content area=]. The
+  [=wrapping context=] may also be reduced by the value of the
   {{shape-padding}} property. The effective area of an
   exclusion may be enlarged by the value of the
   {{shape-margin}} property.
-</p>
+
 
 <p>
-  In the case where the <a>content area</a> is defined by
+  In the case where the [=content area=] is defined by
   the {{inline-size}} property,
   the {{tspan/x}} and {{tspan/y}} attributes
   corresponding to the first rendered
-  <a>typographic character</a> define the initial <a>current
-  text position</a>. When the <a>content area</a> is inside
-  a <a>shape</a>, the initial <a>current text position</a> is
+  [=typographic character=] define the initial <a>current
+  text position</a>. When the [=content area=] is inside
+  a [=shape=], the initial [=current text position=] is
   determined from the position of the first rendered <a>typographic
   character</a> after laying out the first line box inside the
   shape.
-</p>
+
 
 <p>
   Except when used to determine the initial <a>current text
   position</a>, all values {{tspan/x}} and {{tspan/y}}
   are ignored on {{text}}, and {{tspan}}
   elements in auto-wrapped text.
-</p>
 
-<p class="note">
+
+Note: 
   The attributes {{text/x}} and {{text/y}} can provide a
   natural fallback mechanism for SVG1.1 renderers for wrapped text.
   Content producers may wish to pre-layout text by breaking up
@@ -3922,45 +3925,45 @@ the middle of a <a>typographic character</a>.
   Many of the text wrapping examples in this section rely on this
   mechanism to render text in browsers that have not implemented
   text wrapping.
-</p>
+
 
 <h4 id="TextLayoutAutoNotes">Notes on Text Wrapping</h4>
 
 <p>
   The following examples illustrate a few issues with laying out
   text in a shape.
-</p>
+
 
 <h5 id="TextLayoutAutoNotesStart">First Line Positioning</h5>
 
 <p>
-  Given an arbitrary shaped <a>wrapping area</a>, the first
-  <a>line box</a> may not fit flush against the top (or side for
-  vertical text). In this case, the first <a>line box</a> is shifted
+  Given an arbitrary shaped [=wrapping area=], the first
+  [=line box=] may not fit flush against the top (or side for
+  vertical text). In this case, the first [=line box=] is shifted
   until it fits.
-</p>
+
 <p class="annotation">
   In CSS, the edge of a shape is treated as a series of 1 pixel × 1
   pixel floats.
-</p>
-<p class="note">
+
+Note: 
   A future CSS specification may define a line grid that could be used
   to control the position of the first line of text to allow alignment
-  of text between different <a>wrapping areas</a>.
-</p>
+  of text between different [=wrapping areas=].
+
 
 <div class="figure">
   <img class="bordered" src="images/text/text-layout-firstline.svg"
         alt="Image showing two lines of text, the first line is 'The' and
             the next line is 'first line'.">
   <p class="caption">
-    The top <a>line box</a> (small light-blue rectangle), consisting
+    The top [=line box=] (small light-blue rectangle), consisting
     of the smallest possible block of text, is moved down until the
-    <a>line box</a> fits inside the <a>wrapping area</a> (light-blue
-    path). Note, the <a>line box</a> includes the effect of
+    [=line box=] fits inside the [=wrapping area=] (light-blue
+    path). Note, the [=line box=] includes the effect of
     the {{line-height}} property, here set to 1.25. The red
-    rectangles tightly wrap the glyphs in each <a>line box</a>.
-  </p>
+    rectangles tightly wrap the glyphs in each [=line box=].
+  
 </div>
 
 <p class="annotation">
@@ -3968,36 +3971,36 @@ the middle of a <a>typographic character</a>.
   top of the wrapping area served as the origin of a line grid.
   The first line was moved down by the line height until it fit
   inside the shape.
-</p>
+
 
 <h5 id="TextLayoutAutoNotesBrokenLines">Broken Lines</h5>
 
 <p>
-  Given an arbitrary shaped <a>wrapping area</a>, a single line of
+  Given an arbitrary shaped [=wrapping area=], a single line of
   text might be broken into more than one part. In this case,
-  a <a>line box</a> for each part is created. The height of
-  all <a>line boxes</a> in a single line of text must be the same
+  a [=line box=] for each part is created. The height of
+  all [=line boxes=] in a single line of text must be the same
   (ensuring all parts have the same baseline). This height is
   calculated by looking at all glyphs in the line of text.
-</p>
+
 <p class="annotation">
   This default behavior was agreed to at the CSS/SVG joint working
   group meeting in Sydney 2016.
-</p>
-<p class="note">
+
+Note: 
   A future CSS specification may allow one to control which parts of
   a shape broken into different parts is filled (e.g, fill only the
   right most parts, fill only the left most parts, etc.).
-</p>
+
 
 <div class="figure">
   <img class="bordered" src="images/text/text-layout-brokenline.svg"
         alt="Image showing text laidout inside a 'V' shape.">
   <p class="caption">
-    The top line is split into two <a>line boxes</a> (light-blue
-    rectangles), text in each <a>line box</a> is centered inside the
+    The top line is split into two [=line boxes=] (light-blue
+    rectangles), text in each [=line box=] is centered inside the
     box (due to 'text-align:center').
-  </p>
+  
 </div>
 
 <h3 id="TextLayoutPath">Text on a path</h3>
@@ -4006,23 +4009,23 @@ the middle of a <a>typographic character</a>.
 
 <p>
   SVG can place text along a path defined either by a {{path element}}
-  element or the path equivalent of a <a>basic shape</a>. This is
+  element or the path equivalent of a [=basic shape=]. This is
   specified by including text within a {{textPath}} element
   that has either an {{href}} attribute with an <a>URL
   reference</a> pointing to a {{path element}} element or <a>basic
   shape</a>, or by specifying a value for the {{path}} attribute that
   specifies the path data directly.
-</p>
 
-<p class="note">
+
+Note: 
   The ability to place text along a basic shape is new in SVG 2.
-</p>
+
 
 <p class="annotation">
   Placing text along a basic shape was resolved at the
   <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item05">Sydney
   (2015)</a> meeting.
-</p>
+
 
 <p class="annotation">
   Directly using a 'd' attribute to specify the path was added to
@@ -4030,7 +4033,7 @@ the middle of a <a>typographic character</a>.
   <a href="https://www.w3.org/2016/04/21-svg-minutes.html">London
     (2016)</a> editor's meeting at the same time 'd' was promoted
   to being a presentation attribute.
-</p>
+
 
 <p>
   Text on a path is conceptionally like a single line of
@@ -4038,7 +4041,7 @@ the middle of a <a>typographic character</a>.
   is then transformed to follow the path. Except as indicated, all
   the properties that apply to pre-formatted text apply to text on a
   path.
-</p>
+
 
 <h4 id="TextPathElement">The <span class="element-name">textPath</span> element</h4>
 
@@ -4067,14 +4070,14 @@ the middle of a <a>typographic character</a>.
 
 <p>
   Both the {{path}} attribute and the {{href}} attribute
-  specify a path along which the <a>typographic characters</a>
+  specify a path along which the [=typographic characters=]
   will be rendered.
-</p>
+
 <p>
   If both attributes are specified on a {{textPath}} element,
   the path that is used must follow the following order of
   precedence:
-</p>
+
 <ol>
   <li>{{path}} attribute</li>
   <li>{{href}} attribute</li>
@@ -4083,7 +4086,7 @@ the middle of a <a>typographic character</a>.
 <p>
   If the {{path}} attribute contains an error, the
   {{href}} attribute must be used.
-</p>
+
 
 <h4 id="TextPathAttributes">Attributes</h4>
 
@@ -4097,13 +4100,13 @@ the middle of a <a>typographic character</a>.
 <a href="paths.html#DistanceAlongAPath">distance along the
       path</a> algorithm,
       after converting the path to the {{textPath}} element's coordinate system.
-    </p>
+    
     <p>
       If a <a>&lt;length&gt;</a>
       other than a percentage is given, then the
 {{startOffset}} represents a distance along the path
       measured in the current user coordinate system for the {{textPath}} element.
-    </p>
+    
     <p>If a
       percentage is given, then the {{startOffset}} represents
       a percentage distance along the entire path. Thus,
@@ -4111,21 +4114,21 @@ the middle of a <a>typographic character</a>.
       start point of the path and
       <span class="attr-value">startOffset="100%"</span> indicates
       the end point of the path.
-    </p>
+    
 
-    <p class="note">
+    Note: 
 Negative values and values larger than the path length
 (e.g. 150%) are allowed.
-    </p>
+    
     <p class="annotation">
 Limiting values to the range 0%-100% prevents easily creating
 effects like text moving along the path.
-    </p>
+    
 
     <p>
-Any <a>typographic characters</a> with mid-points that
+Any [=typographic characters=] with mid-points that
 are not on the path are not rendered.
-    </p>
+    
     <div class="figure">
 <img alt="Three paths with various values of 'startOffset' showing clipping
     when glyphs are outside path region."
@@ -4133,19 +4136,19 @@ are not on the path are not rendered.
 <p class="caption">
   Rendering for different values of the {{startOffset}}
   attribute. From top to bottom: default value, 50%, -50%.
-</p>
+
 <p class="annotation">
   The bottom path should show only "path." on the left side
   of the path. Chrome and Safari both do not handle offsets
   outside the range 0% to 100%. Chrome bug
   https://bugs.chromium.org/p/chromium/issues/detail?id=476554
-</p>
+
     </div>
 
     <p>
-For paths consisting of a single <a>closed subpath</a>
+For paths consisting of a single [=closed subpath=]
 (including an equivalent path for a <a>basic
-shape</a>), <a>typographic characters</a> are rendered along
+shape</a>), [=typographic characters=] are rendered along
 one complete circuit of the path. The text is aligned as determined by
 the {{text-anchor}} property to a position along the path
 set by the {{startOffset}} attribute. For
@@ -4157,7 +4160,7 @@ position along the path is reached again. For the
 from the middle point in both directions until a point on the
 path equal distance in both directions from the initial
 position on the path is reached.
-    </p>
+    
 
     <div class="figure">
 <img alt="Two circular path with different values of
@@ -4169,7 +4172,7 @@ position on the path is reached.
   attribute. Left: 0. Right: 75% or -25%.
   The red circle marks the beginning of the path (after
   the canonical decomposition of the circle into a path).
-</p>
+
     </div>
 
     <div class="figure">
@@ -4188,12 +4191,12 @@ position on the path is reached.
   The blue square marks the reference point for the start
   of rendering (shifted from the path start by
   a {{startOffset}} value of 75%). The gray arrow(s)
-  shows the direction of <a>typographic character</a>
-  placement and the point at which <a>typographic character</a>
+  shows the direction of [=typographic character=]
+  placement and the point at which [=typographic character=]
   placement stops. The arrow(s) would be reversed if
   the {{direction}} property has a value of
   <span class="prop-value">rtl</span>.
-</p>
+
     </div>
 
     <p class="annotation">
@@ -4204,12 +4207,12 @@ wrapping to a path with a single closed sub-path and to one
 loop, effected by the 'startOffset' attribute agreed to at the
 <a href="https://www.w3.org/2016/04/22-svg-minutes.html#item02">London
   (2016)</a> Editor's Meeting.
-    </p>
+    
 
     <dl class="attrdef-svg2">
 <dt>Value</dt>                <dd><a>&lt;length-percentage&gt;</a> | <a>&lt;number&gt;</a></dd>
-<dt><a>Initial value</a></dt>  <dd>0</dd>
-<dt><a>Animatable</a></dt>    <dd>yes</dd>
+<dt>[=Initial value=]</dt>  <dd>0</dd>
+<dt>[=Animatable=]</dt>    <dd>yes</dd>
     </dl>
 
   </dd>
@@ -4219,23 +4222,23 @@ loop, effected by the 'startOffset' attribute agreed to at the
     <p>
 Indicates the method by which text should be rendered
       along the path.
-    </p>
+    
     <p>
       A value of <span class="attr-value">align</span> indicates
-      that the <a>typographic character</a> should be rendered
+      that the [=typographic character=] should be rendered
       using simple 2×3 matrix transformations such that there is no
-      stretching/warping of the <a>typographic characters</a>.
+      stretching/warping of the [=typographic characters=].
       Typically, supplemental rotation, scaling and
       translation transformations are done for each <a>typographic
       characters</a> to be rendered. As a result, with
       <span class="attr-value">align</span>, in fonts where
-      the <a>typographic characters</a> are designed to be
+      the [=typographic characters=] are designed to be
       connected (e.g., cursive fonts), the connections may not align
       properly when text is rendered along a path.
-    </p>
+    
     <p>
       A value of <span class="attr-value">stretch</span> indicates
-      that the <a>typographic character</a> outlines will be
+      that the [=typographic character=] outlines will be
       converted into paths, and then all end points and control
       points will be adjusted to be along the perpendicular vectors
       from the path, thereby stretching and possibly warping the
@@ -4244,9 +4247,9 @@ Indicates the method by which text should be rendered
       their connections. (Non-vertical straight path segments should
       be converted to Bézier curves in such a way that horizontal
       straight paths have an (approximately) constant offset from
-      the path along which the <a>typographic characters</a> are
+      the path along which the [=typographic characters=] are
       rendered.)
-    </p>
+    
 
     <div class="figure">
 <img alt="English and Arabic text on arcs."
@@ -4255,13 +4258,13 @@ Indicates the method by which text should be rendered
   Rendering of text on a path for different {{method}} values:
   Left: 'align'.
   Right: 'stretch'.
-</p>
+
     </div>
 
     <dl class="attrdef-svg2">
 <dt>Value</dt>                <dd>align | stretch</dd>
-<dt><a>Initial value</a></dt>  <dd>align</dd>
-<dt><a>Animatable</a></dt>    <dd>yes</dd>
+<dt>[=Initial value=]</dt>  <dd>align</dd>
+<dt>[=Animatable=]</dt>    <dd>yes</dd>
     </dl>
   </dd>
 
@@ -4269,27 +4272,27 @@ Indicates the method by which text should be rendered
   <dd>
     <p>
       Indicates how the user agent should determine the spacing
-      between <a>typographic characters</a> that are to be
+      between [=typographic characters=] that are to be
       rendered along a path.
-    </p>
+    
     <p>
       A value of <span class="attr-value">exact</span> indicates
-      that the <a>typographic characters</a> should be rendered
+      that the [=typographic characters=] should be rendered
       exactly according to the spacing rules as specified in
       <a href="text.html#TextpathLayoutRules">Text on a path layout
       rules</a>.
-    </p>
+    
     <p>
       A value of <span class="attr-value">auto</span> indicates that
       the user agent should use text-on-a-path layout algorithms to
-      adjust the spacing between <a>typographic characters</a>
+      adjust the spacing between [=typographic characters=]
       in order to achieve visually appealing results.
-    </p>
+    
 
     <dl class="attrdef-svg2">
 <dt>Value</dt>                <dd>auto | exact</dd>
-<dt><a>Initial value</a></dt> <dd>exact</dd>
-<dt><a>Animatable</a></dt>    <dd>yes</dd>
+<dt>[=Initial value=]</dt> <dd>exact</dd>
+<dt>[=Animatable=]</dt>    <dd>yes</dd>
     </dl>
   </dd>
 
@@ -4300,7 +4303,7 @@ Indicates the method by which text should be rendered
 (relative to the path direction). Specifying a value
 of <span class="attr-value">right</span> effectively reverses
 the path.
-    </p>
+    
     <div class="figure">
 <img alt="Two circular path with different values of 'side'
     showing glyphs rendered outside the circle for
@@ -4311,24 +4314,24 @@ the path.
   with different values of the {{side}}
   attribute. Left: <span class="attr-value">left</span>.
   Right: <span class="attr-value">right</span>.
-</p>
+
     </div>
 
-    <p class="note">
+    Note: 
 Added in SVG 2 to allow text either inside or outside
-<a>closed subpaths</a> and <a>basic shapes</a> (e.g. rectangles,
+[=closed subpaths=] and [=basic shapes=] (e.g. rectangles,
 circles, and ellipses).
-    </p>
+    
     <p class="annotation">
 Adding 'side' was resolved at the
 <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item05">Sydney
   (2015)</a> meeting.
-    </p>
+    
 
     <dl class="attrdef-svg2">
 <dt>Value</dt>                <dd>left | right</dd>
-<dt><a>Initial value</a></dt>  <dd>left</dd>
-<dt><a>Animatable</a></dt>    <dd>yes</dd>
+<dt>[=Initial value=]</dt>  <dd>left</dd>
+<dt>[=Animatable=]</dt>    <dd>yes</dd>
     </dl>
 
   </dd>
@@ -4336,43 +4339,43 @@ Adding 'side' was resolved at the
   <dt id="TextPathElementPathAttribute"><span class="adef">path</span></dt>
   <dd>
     <p>A <a href="paths.html#PathDataBNF" class="syntax">path data</a>
-      string describing the path onto which the <a>typographic characters</a>
+      string describing the path onto which the [=typographic characters=]
 will be rendered.
       An empty string indicates that there is no path data for the element.
       This means that the text within the {{textPath}} does not render or
-      contribute to the <a>bounding box</a> of the {{text}} element.
+      contribute to the [=bounding box=] of the {{text}} element.
       If the attribute is not specified,
       the path specified with {{href}} is used instead.
-    </p>
+    
     <dl class="attrdef-svg2">
 <dt>Value</dt>                  <dd><a href="paths.html#PathDataBNF" class="syntax">path data</a></dd>
-<dt><a>Initial value</a></dt>   <dd>(none)</dd>
-<dt><a>Animatable</a></dt>      <dd>yes</dd>
+<dt>[=Initial value=]</dt>   <dd>(none)</dd>
+<dt>[=Animatable=]</dt>      <dd>yes</dd>
     </dl>
 
   </dd>
   <dt id="TextPathElementHrefAttribute"><span class="adef">href</span></dt>
   <dd>
     <p>
-      An <a href="linking.html#URLReference">URL reference</a> to
-      the {{path element}} element or <a>basic shape</a> element onto which
+      An [=URL Reference=] to
+      the {{path element}} element or [=basic shape=] element onto which
       the glyphs will be rendered, if no {{path}} attribute is provided.
       If the attribute is used, and the &lt;url&gt; is an invalid
       reference (e.g., no such element exists, or the referenced
-      element is not a {{path element}} element) or <a>basic shape</a>, then
+      element is not a {{path element}} element) or [=basic shape=], then
       the {{textPath}} element is in error and its entire
       contents shall not be rendered by the user agent.
-    </p>
+    
     <p>
       Refer to the common handling defined for <a
       href="linking.html#linkRefAttrs">URL reference attributes</a> and
       <a href="linking.html#XLinkRefAttrs">deprecated XLink attributes</a>.
-    </p>
+    
 
     <dl class="attrdef-svg2">
 <dt>Value</dt>                <dd>URL <a href="types.html#attribute-url" class="syntax">&bs[;URL]</a></dd>
-<dt><a>Initial value</a></dt>  <dd>See above.</dd>
-<dt><a>Animatable</a></dt>    <dd>yes</dd>
+<dt>[=Initial value=]</dt>  <dd>See above.</dd>
+<dt>[=Animatable=]</dt>    <dd>yes</dd>
     </dl>
 
   </dd>
@@ -4381,18 +4384,18 @@ will be rendered.
 
 <p>
   The path data coordinates within the referenced {{path element}}
-  element or <a>basic shape</a>
+  element or [=basic shape=]
   element are assumed to be in the same coordinate system as the
   current {{text}} element, not in the coordinate system where
   the {{path element}} element is defined. The {{transform}}
-  attribute on the referenced {{path element}} element or <a>basic shape</a>
+  attribute on the referenced {{path element}} element or [=basic shape=]
   element represents a
   supplemental transformation relative to the current user
   coordinate system for the current {{text}} element, including
   any adjustments to the current user coordinate system due to a
   possible {{transform}} property on the current {{text}}
   element.  For example, the following fragment of SVG content:
-</p>
+
 
 <pre>
 &lt;svg xmlns="http://www.w3.org/2000/svg"&gt;
@@ -4412,7 +4415,7 @@ style="font-weight:bold; color:blue">transform="rotate(45)"</span>&gt;
 
 <p>
   should have the same effect as the following:
-</p>
+
 
 <pre>
 &lt;svg xmlns="http://www.w3.org/2000/svg"&gt;
@@ -4431,7 +4434,7 @@ style="font-weight:bold; color:green">transform="scale(2)"</span> d="M0,10 L40,2
 
 <p>
   and be equivalent to:
-</p>
+
 
 <pre>
 &lt;svg xmlns="http://www.w3.org/2000/svg"&gt;
@@ -4454,20 +4457,22 @@ style="font-weight:bold; color:green">path="M0,20 L80,40 160,20"</span>
   the <code style="font-weight:bold; color: green">transform="scale(2)"</code>
   scales the path (equivalent to multiplying every coordinate by 2 for simple linear paths),
   but does not scale the text placed along the path.
-</p>
+
 
 <p id="ExampleToap01">
   <span class="example-ref">Example toap01</span> provides a
   simple example of text on a path:
-</p>
+
 
 <pre class=include-raw>
 path: images/text/toap01.svg
 </pre>
+<!--
+@@fix
 <pre class=include>
 path: images/text/toap01.svg
 </pre>
-
+-->
 <p id="ExampleToap02">
   <span class="example-ref">Example toap02</span> shows
   how {{tspan}} elements can be included
@@ -4476,24 +4481,26 @@ path: images/text/toap01.svg
   glyph. The first occurrence of the word "up" is filled with the
   color red.  Attribute {{tspan/dy}} is used to lift the word
   "up" from the baseline.
-</p>
 
-<p class="note">
+
+Note: 
   The {{tspan/x}}, {{tspan/y}}, {{tspan/dx}},
   {{tspan/dy}}, and {{tspan/rotate}} attributes can
   only be specified on {{text}} and {{tspan}} elements
   (but may effect the rendering of glyphs in text on a path —
   see <a href="text.html#TextpathLayoutRules">text on a path layout
   rules</a>).
-</p>
+
 
 <pre class=include-raw>
 path: images/text/toap02.svg
 </pre>
+<!--
+@@fix
 <pre class=include>
 path: images/text/toap02.svg
 </pre>
-
+-->
 <p id="ExampleToap03">
   <span class="example-ref">Example toap03</span> demonstrates the
   use of the {{startOffset}} attribute on the {{textPath}}
@@ -4502,15 +4509,17 @@ path: images/text/toap02.svg
   off the end of the path are not rendered
   (see <a href="text.html#TextpathLayoutRules">text on a path layout
   rules</a>).
-</p>
+
 
 <pre class=include-raw>
 path: images/text/toap03.svg
 </pre>
+<!--
+@@fix
 <pre class=include>
 path: images/text/toap03.svg
 </pre>
-
+-->
 <h4 id="TextpathLayoutRules">Text on a path layout rules</h4>
 
 <p>
@@ -4527,7 +4536,7 @@ path: images/text/toap03.svg
   is mapped back onto the target path. Vertical and
   bidirectional <a href="text.html#TextLayoutAlgorithm">text layout</a> rules
   also apply to text on a path.
-</p>
+
 <p>
   The orientation of each glyph along a path is determined individually.
   For horizontal text layout flows, the default orientation (the <q>up</q>
@@ -4540,7 +4549,7 @@ path: images/text/toap03.svg
   point on the path to which the glyph is attached and which points
   in the direction 180 degrees from the angle of the curve at the
   intersection point.
-</p>
+
 
 <div class="figure">
   <img class="bordered" src="images/text/glyph-textpath.svg"
@@ -4549,7 +4558,7 @@ path: images/text/toap03.svg
   <p class="caption">
     Default glyph orientation along a path.
     Left, horizontal text. Right: vertical text.
-  </p>
+  
 </div>
 
 <p id="ExampleToap04">
@@ -4558,19 +4567,21 @@ path: images/text/toap03.svg
   that supplement the basic <a href="text.html#TextLayoutAlgorithm">text
     layout</a> rules for straight line horizontal or vertical
   text.
-</p>
+
 
 <pre class=include-raw>
 path: images/text/toap04.svg
 </pre>
+<!--
+@@fix
 <pre class=include>
 path: images/text/toap04.svg
 </pre>
-
+-->
 <p>
   The following picture does an initial zoom in on the first glyph
   in the {{text}} element.
-</p>
+
 
 <img alt="Image that shows text
     on a path" src="images/text/toap05.png" width="288" height="91">
@@ -4584,12 +4595,12 @@ path: images/text/toap04.svg
   (i.e., the amount which the current text position advances
   horizontally when the glyph is drawn using horizontal text
   layout).
-</p>
+
 
 <p>
   The next picture zooms in further to demonstrate the detailed
   layout rules.
-</p>
+
 
 <img alt="Image that shows text on a path"
       src="images/text/toap06.png" width="288" height="176">
@@ -4597,8 +4608,8 @@ path: images/text/toap04.svg
 <p>
   For left-to-right horizontal text layout along a path (i.e.,
   when the glyph orientation is perpendicular to the
-  <a>inline-base direction</a> the layout rules are as follows:
-</p>
+  [=inline-base direction=] the layout rules are as follows:
+
 
 <ul>
   <li>
@@ -4717,9 +4728,9 @@ path: images/text/toap04.svg
 <p>
   Comparable rules are used for top-to-bottom vertical text
   layout along a path (i.e., when the glyph orientation is
-  parallel with the <a>inline-base direction</a>,
+  parallel with the [=inline-base direction=],
   the layout rules are as follows:
-</p>
+
 
 <ul>
   <li>
@@ -4789,7 +4800,7 @@ path: images/text/toap04.svg
 
   <li>
     Glyphs whose midpoint-on-the-path are off either end of
-    an <a>open subpath</a> are not rendered.
+    an [=open subpath=] are not rendered.
   </li>
 
   <li>
@@ -4804,10 +4815,10 @@ path: images/text/toap04.svg
   the path beyond its end points with a straight line that is
   parallel to the tangent at the path at its end point so that the
   midpoint-on-the-path can still be calculated.
-</p>
+
 
 <p>
-  When the <a>inline-base direction</a>
+  When the [=inline-base direction=]
   is horizontal, then any <span class="attr-name">x</span>
   attributes on {{text}} or {{tspan}}
   elements represent new absolute offsets along
@@ -4816,18 +4827,18 @@ path: images/text/toap04.svg
   attributes on {{text}} or {{tspan}}
   elements are ignored.
 
-  When the <a>inline-base direction</a>
+  When the [=inline-base direction=]
   is vertical, then any <span class="attr-name">y</span>
   attributes on {{text}} or {{tspan}}
   elements represent new absolute offsets along
   the path, thus providing explicit new values for
   startpoint-on-the-path. Any <span class="attr-name">x</span>
   attributes on {{text}} or {{tspan}} elements are ignored.
-</p>
+
 
 <p>
   After positioning all characters within the {{textPath}},
-  the <a>current text position</a> is set to the end point of the path,
+  the [=current text position=] is set to the end point of the path,
   after adjusting for the {{startOffset}} in the case of paths
   that are a single closed loop.
   In other words,
@@ -4835,7 +4846,7 @@ path: images/text/toap04.svg
   a {{text}} element) that does not have explicit positioning
   information ({{tspan/x}} and {{tspan/y}} attributes) is
   positioned from the end of the path.
-</p>
+
 
 <div class="figure">
   <img alt="Text on a path showing the starting point for
@@ -4845,7 +4856,7 @@ path: images/text/toap04.svg
     The starting point for text after the {{textPath}} element
     without explicit positioning information is at the end of the
     path (red dot).
-    </p>
+    
 </div>
 
 
@@ -4856,7 +4867,7 @@ path: images/text/toap04.svg
   <a href="https://www.w3.org/2016/04/22-svg-minutes.html#item08">London
     (2016)</a> editor's meeting. See also
   <a href="https://github.com/w3c/svgwg/issues/104">GitHub Issue 84</a>.
-</p>
+
 
 
 
@@ -4866,29 +4877,29 @@ path: images/text/toap04.svg
 Each chunk (as produced by the <a href="#TextLayoutAlgorithm">text layout algorithm</a>)
 is rendered, one after the other, in document order.  Each
 rendered chunk, which consists of one or more glyphs,
-is filled and stroked as if it were a single path.</p>
+is filled and stroked as if it were a single path.
 
 <p>
 This means that all glyphs in the chunk should be filled,
 then all glyphs stroked at once,
 or the reverse according to the value of the {{paint-order}} property.
-</p>
+
 
 <p>For the purposes of painting, a {{text}} has zero, one, or more
-<a>equivalent paths</a>, one for each chunk.  Each equivalent path
-consists of one subpath per glyph within that chunk.</p>
+[=equivalent paths=], one for each chunk.  Each equivalent path
+consists of one subpath per glyph within that chunk.
 
-<p class="note">Since the {{fill-rule}} property does not apply
+Note: Since the {{fill-rule}} property does not apply
 to SVG text elements, the specific order of the subpaths within
-the <a>equivalent path</a> does not matter.</p>
+the [=equivalent path=] does not matter.
 
 <p>The specific position of the start of each subpath, and the direction
 that the path progresses around glyph shape, is not defined.
 However, user agents should be consistent for a given font and glyph.
-</p>
 
-<p class="note">This means that dashed strokes on text may not place
-the dash pattern at the same positions across different implementations.</p>
+
+Note: This means that dashed strokes on text may not place
+the dash pattern at the same positions across different implementations.
 
 
 <h3 id="TextProperties">Properties and pseudo-elements</h3>
@@ -4901,32 +4912,32 @@ the dash pattern at the same positions across different implementations.</p>
   apply at the <em>paragraph</em> level ({{direction}},
   {{writing-mode}}, {{line-height}}, {{letter-spacing}},
   etc.).
-</p>
+
 
 <p>
   The list of CSS properties that must be supported on SVG text
   elements can be found in the
   <a href="styling.html#RequiredProperties">Styling</a> chapter.
-</p>
+
 
 <ul>
   <li>
     Properties that apply only to pre-formatted text and auto-wrapped
-    text where the <a>wrapping area</a> is defined by the
+    text where the [=wrapping area=] is defined by the
     {{inline-size}} property:
     <p>
 {{text-anchor}}.
-    </p>
+    
   </li>
   <li>
     Properties that apply only to auto-wrapped text except for text
-    where the <a>wrapping area</a> is defined by the
+    where the [=wrapping area=] is defined by the
     {{inline-size}} property:
     <p>
 {{text-align}},
 {{text-align-last}},
 {{text-justify}},
-    </p>
+    
   </li>
   <li>
     Properties that apply only to auto-wrapped text:
@@ -4937,7 +4948,7 @@ the dash pattern at the same positions across different implementations.</p>
 {{hyphens}},
 {{word-wrap}},
 {{overflow-wrap}}.
-    </p>
+    
   </li>
 </ul>
 
@@ -4947,24 +4958,24 @@ the dash pattern at the same positions across different implementations.</p>
   the ::first-line and ::first-letter pseudo-elements must be
   supported on {{text}} elements.
   In interactive modes, the ::selection pseudo-element must also be supported.
-</p>
+
 
 <p>
   Other CSS properties that affect text layout and rendering may
   also be supported by an SVG user agent; their effect should be
   taken into account as part of the CSS text layout step of the
   overall SVG text layout process.
-</p>
 
-<p class="note">
+
+Note: 
   For example, while SVG 2 does not require support for the
   {{text-combine-upright}} property, its behavior in an SVG
   context should be obvious.
-</p>
+
 
 <p>
   A number of CSS properties must not have any effect on SVG text elements:
-</p>
+
 
 <ul>
   <li>
@@ -5017,37 +5028,37 @@ the dash pattern at the same positions across different implementations.</p>
 <p>
   Additionally, the ::before and ::after generated content pseudo-elements
   must not apply to SVG text elements.
-</p>
 
-<p class="note">
+
+Note: 
   A future specification may introduce support for
   the ::before and ::after generated content pseudo-elements;
   authors should not rely on them being ignored.
-</p>
+
 
 <h4 id="TextPropertiesSVG">SVG properties</h4>
 
 <p>
   This section covers properties that are not covered elsewhere in this
   specification and that are specific to SVG.
-</p>
+
 
 <h5 id="TextAnchoringProperties">Text alignment, the <span class="property">text-anchor</span> property</h5>
 
 <p>
   The {{text-anchor}} property is used to align (start-,
   middle- or end-alignment) a string of <em>pre-formatted</em> text
-  or <em>auto-wrapped text</em> where the <a>wrapping area</a>
+  or <em>auto-wrapped text</em> where the [=wrapping area=]
   is determined from the {{inline-size}} property
   relative to a given point. It is not applicable to other types of
   <em>auto-wrapped text</em>, see instead {{text-align}}. For
   multi-line text, the alignment takes place for each line.
-</p>
+
 
 <p>
   The {{text-anchor}} property is applied to each individual
-  <a>text chunk</a> within a given {{text}} element. Each text
-  chunk has an initial <a>current text position</a>, which
+  [=text chunk=] within a given {{text}} element. Each text
+  chunk has an initial [=current text position=], which
   represents the point in the user coordinate system resulting from
   (depending on context) application of the {{text/x}}
   and {{text/y}} attributes on the {{text}} element,
@@ -5055,11 +5066,11 @@ the dash pattern at the same positions across different implementations.</p>
   a {{tspan}} element assigned explicitly to the first rendered
   character in a text chunk, or determination of the initial current
   text position for a {{textPath}} element. Each text chunk
-  also has a final <a>current text position</a> which is the
-  <a>current text position</a> after placing the last glyph
-  in the <a>text chunk</a>. The positions are determined before
+  also has a final [=current text position=] which is the
+  [=current text position=] after placing the last glyph
+  in the [=text chunk=]. The positions are determined before
   applying the {{text-anchor}} property.
-</p>
+
 
 <table class="propdef def">
   <tr>
@@ -5076,7 +5087,7 @@ the dash pattern at the same positions across different implementations.</p>
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td><a>text content elements</a></td>
+    <td>[=text content elements=]</td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -5095,14 +5106,14 @@ the dash pattern at the same positions across different implementations.</p>
     <td>as specified</td>
   </tr>
   <tr>
-    <th><a>Animation type</a>:</th>
+    <th>[=Animation type=]:</th>
     <td>discrete</td>
   </tr>
 </table>
 
 <p>
   Values have the following meanings:
-</p>
+
 
 <dl>
   <dt><span class="attr-value">start</span></dt>
@@ -5125,7 +5136,7 @@ the dash pattern at the same positions across different implementations.</p>
   <dd>
     The rendered characters are shifted such that the geometric
     middle of the resulting rendered text (determined from the
-    initial and final <a>current text position</a> before applying
+    initial and final [=current text position=] before applying
     the {{text-anchor}} property) is at the initial current
     text position.
   </dd>
@@ -5133,7 +5144,7 @@ the dash pattern at the same positions across different implementations.</p>
   <dt><span class="attr-value">end</span></dt>
   <dd>
     The rendered characters are shifted such that the end of the
-    resulting rendered text (final <a>current text position</a>
+    resulting rendered text (final [=current text position=]
     before applying the {{text-anchor}} property)
     is at the initial current text position.
     For an element with a {{direction}} property value
@@ -5150,7 +5161,7 @@ the dash pattern at the same positions across different implementations.</p>
 </dl>
 
 <div class="example">
-  <p>An example of using {{text-anchor}} on multi-line text.</p>
+  <p>An example of using {{text-anchor}} on multi-line text.
 
   <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -5168,14 +5179,14 @@ the dash pattern at the same positions across different implementations.</p>
     <img class="bordered" src="images/text/text-anchor-middle.svg"
           alt="Image showing two lines of text centered via text-anchor.">
     <p class="caption">
-The preserved line-feed creates two <a>text chunks</a>, each
+The preserved line-feed creates two [=text chunks=], each
 anchored independently.
-    </p>
+    
   </div>
 </div>
 
 <div class="example">
-  <p>Another example of using {{text-anchor}} on multi-line text.</p>
+  <p>Another example of using {{text-anchor}} on multi-line text.
 
   <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -5190,19 +5201,19 @@ style="font-size: 42px; text-anchor: middle">I❤SVG</text>
     <img class="bordered" src="images/text/text-anchor-chunks.svg"
     alt="Image showing three lines of text divided as 'I', '❤', 'SVG'.">
     <p class="caption">
-The text is divided into three <a>text chunks</a> (due to the
+The text is divided into three [=text chunks=] (due to the
 three coordinates in the {{tspan/x}} and {{tspan/y}}
-attributes). Each <a>text chunk</a> is independently anchored.
-    </p>
+attributes). Each [=text chunk=] is independently anchored.
+    
   </div>
 </div>
 
 
 <h5 id="GlyphOrientationHorizontalProperty">The <span class="property">glyph-orientation-horizontal</span> property</h5>
 
-<p class="note">
+Note: 
   This property has been removed in SVG 2.
-</p>
+
 
 <h5 id="GlyphOrientationVerticalProperty">The <span class="property">glyph-orientation-vertical</span> property</h5>
 
@@ -5212,7 +5223,7 @@ attributes). Each <a>text chunk</a> is independently anchored.
   property of CSS Writing Modes Level 3. The following SVG 1.1
   values must still be supported by aliasing the property
   as a shorthand to {{text-orientation}} as follows:
-</p>
+
 <ul>
   <li>
     <span class="prop-value">'auto'</span> to
@@ -5231,15 +5242,15 @@ attributes). Each <a>text chunk</a> is independently anchored.
 </ul>
 <p>
   Any other values must be treated as invalid.
-</p>
+
 
 
 <h5 id="KerningProperty">The <span class="property">kerning</span> property</h5>
 
-<p class="note">
+Note: 
   The <span class="property">kerning</span> property has been
   removed in SVG 2.
-</p>
+
 <p>
   SVG 1.1 uses the 'kerning' property to determine if the font
   kerning tables should be used to adjust inter-glyph
@@ -5250,10 +5261,10 @@ attributes). Each <a>text chunk</a> is independently anchored.
   property is replaced in SVG 2 by the
   CSS {{font-kerning}} property which solely controls
   turning on/off the use of the font kerning tables.
-</p>
+
 <p class="annotation">
   Chrome's UseCounter data showed a use of 0.01% in 2014. See GitHub issue 80.
-</p>
+
 
 <h4 id="TextPropertiesAdaptions">SVG adaptions</h4>
 
@@ -5261,7 +5272,7 @@ attributes). Each <a>text chunk</a> is independently anchored.
   This section covers CSS properties that are not covered elsewhere in this
   specification and have either SVG specific adaptions or are significantly
   altered from SVG 1.1.
-</p>
+
 
 <div class="annotation svg2-requirement">
   <table>
@@ -5291,7 +5302,7 @@ attributes). Each <a>text chunk</a> is independently anchored.
 
 <p>The {{font-variant}} property gets defined by the CSS Font Module
   ([<a href="refs.html#ref-css-fonts-3">css-font-3</a>]).
-</p>
+
 
 <p>
   CSS Font Module changes the meaning of the
@@ -5299,11 +5310,11 @@ attributes). Each <a>text chunk</a> is independently anchored.
   property from that defined by CSS 2.1. It has been repurposed (and
   its functionality greatly expanded) as a shorthand for selecting font
   variants from within a single font.
-</p>
+
 
 <p>
   SVG 2 supports all {{font-variant}} longhand properties (e.g. {{font-variant-ligatures}}).
-</p>
+
 
 <h5 id="LineHeightProperty">The <span class="property">line-height</span> property</h5>
 
@@ -5312,19 +5323,19 @@ attributes). Each <a>text chunk</a> is independently anchored.
   of leading space which is added between lines in multi-line text
   (both for horizontal and vertical text). It is not applicable to
   text on a path.
-</p>
-<p class="note">
+
+Note: 
   Except for the additional information provided here, the
   <a href="https://www.w3.org/TR/CSS21/visudet.html#line-height">normative
     definition</a> of the {{line-height}} property is in the CSS 2.1
     specification
-    ([<a href="refs.html#ref-css2">CSS2</a>]).
-</p>
+    ([[CSS2]]).
+
 
 <p class="annotation">
   The <a href="https://www.w3.org/TR/css-inline-3/">CSS Inline Module
   Level 3</a> may update the definition of 'line-height'.
-</p>
+
 
 <h5 id="WritingModeProperty">The <span class="property">writing-mode</span> property</h5>
 
@@ -5332,13 +5343,13 @@ attributes). Each <a>text chunk</a> is independently anchored.
 
 <p>The {{writing-mode}} property gets defined by the CSS Writing Modes Module
       ([<a href="refs.html#ref-css-writing-modes-3">css-writing-modes-3</a>]).
-  </p>
+  
 
 <p>
-  This property sets the <a>block-flow direction</a>; or in-other-words,
+  This property sets the [=block-flow direction=]; or in-other-words,
   the direction in which lines of text are stacked. As a consequence it
   also determines if the text has a horizontal or vertical orientation.
-</p>
+
 <p class="annotation">
   SVG 2 references
   <a href="https://www.w3.org/TR/css-writing-modes-3">CSS Writing
@@ -5347,23 +5358,23 @@ attributes). Each <a>text chunk</a> is independently anchored.
   property. That specification introduces new values for the property.
   The SVG 1.1 values are obsolete but must still be supported by
   converting the specified values to computed values as follows:
-</p>
+
 
 <p class="annotation"><!-- This could be an annotation. -->
   In SVG 1.0, this property could be interpreted as to also setting the
-  <a>inline-base direction</a> leading to confusion about its role
+  [=inline-base direction=] leading to confusion about its role
   relative to the {{direction}} property. SVG 1.1 was a bit
   more specific about the role of {{direction}}
   (e.g. that {{direction}} set the reference point for
   the {{text-anchor}} property) but still was open to
   interpretation. The fact that neither SVG 1.0 nor SVG 1.1 allowed
   multi-line text added to the confusion.
-</p>
+
 
 <h5 id="DirectionProperty">The <span class="property">direction</span> property</h5>
 
 <p>
-  The property specifies the <a>inline-base direction</a> of a
+  The property specifies the [=inline-base direction=] of a
   {{text}} or {{tspan}} element. It defines the
   <q>start</q> and <q>end</q> points of a line of text as used by
   the {{text-anchor}} and {{inline-size}} properties. It
@@ -5371,37 +5382,37 @@ attributes). Each <a>text chunk</a> is independently anchored.
   if the {{unicode-bidi}} property's value is either
   <span class='prop-value'>embed</span> or
   <span class='prop-value'>bidi-override</span>.
-</p>
+
 <p>
   The {{direction}} property applies only to glyphs oriented
-  perpendicular to the <a>inline-base direction</a>,
+  perpendicular to the [=inline-base direction=],
   which includes the usual case of horizontally-oriented Latin or
   Arabic text and the case of narrow-cell Latin or Arabic characters
   rotated 90 degrees clockwise relative to a top-to-bottom
-  <a>inline-base direction</a>.
-</p>
+  [=inline-base direction=].
+
 <p class="issue" data-issue="54">
   Reviewers, please take special care to ensure this agrees with CSS3 Writing modes.
-</p>
 
-<p class="note">
+
+Note: 
   Except for the additional information provided here, the
   <a href="https://www.w3.org/TR/css-writing-modes-3/#direction">normative
     definition</a> of the {{direction}} property is in CSS
     Writing Modes Level 3
     ([<a href="refs.html#ref-css-writing-modes-3">css-writing-modes-3</a>]).
-</p>
+
 
 <p>
   In many cases, the bidirectional algorithm from Unicode
-  [<a href="refs.html#ref-unicode">UNICODE</a>] produces the desired
+  [[UNICODE]] produces the desired
   result automatically, and in such cases the author does not need
   to use these properties. For other cases, such as when using
   right-to-left languages, it may be sufficient to add the
-  {{direction}} property to the <a>outermost svg element</a>,
+  {{direction}} property to the [=outermost svg element=],
   and allow that direction to inherit to all text elements, as in the
   following example (which may be used as a template):
-</p>
+
 
 <pre class=include-raw>
 path: images/text/rtl-text.svg
@@ -5413,28 +5424,30 @@ path: images/text/rtl-text.svg
 
 <p>
   Below is another example, where implicit bidi reordering is not sufficient:
-</p>
+
 
 <pre class=include-raw>
 path: images/text/rtl-complex.svg
 </pre>
+<!--
+@@fix
 <pre class=include>
 path: images/text/rtl-complex.svg
 </pre>
-
+-->
 
 <h5 id="DominantBaselineProperty">The <span class="property">dominant-baseline</span> property</h5>
 
-<p class="note">
+Note: 
   This property is defined in the CSS Line Layout Module 3 specification. See
   <a href="https://www.w3.org/TR/css-inline-3/#propdef-dominant-baseline">dominant-baseline</a>.
   [<a href="refs.html#ref-css-inline-3">css-inline-3</a>]
-</p>
+
 
 <p>
   SVG 2 introduces some changes to the definition of this property.
   In particular:
-</p>
+
 <ul>
   <li>
     The 'reset-size' value is no longer supported.  Any change
@@ -5448,7 +5461,7 @@ path: images/text/rtl-complex.svg
   </li>
 </ul>
 
-<p class="note">
+Note: 
   SVG uses the value of the {{dominant-baseline}} property to
   align glyphs relative to the {{tspan/x}} and {{tspan/y}}
   attributes. For the {{text-orientation}} value
@@ -5459,32 +5472,32 @@ path: images/text/rtl-complex.svg
   compatibility, the glyphs should be aligned to the
   {{tspan/x}} and {{tspan/y}} attributes using the
   value <span class="prop-value">central</span>.
-</p>
+
 
 <p class="issue" data-issue="56">
   We are interested in any actual use where one would prefer the old behavior.
-</p>
+
 
 <!-- <p class="annotation">
   The SVG 1.1 definition of the {{dominant-baseline}} property
   was derived from the <a href="https://www.w3.org/TR/2006/REC-xsl11-20061205/">XSL</a>
   specification. (See
   <a href="https://www.w3.org/TR/2006/REC-xsl11-20061205/#dominant-baseline">XSL 'dominant-baseline'</a>.)
-</p> -->
+ -->
 
 
 <h5 id="AlignmentBaselineProperty">The <span class="property">alignment-baseline</span> property</h5>
 
-<p class="note">
+Note: 
   This property is defined in the CSS Line Layout Module 3 specification. See
   <a href="https://www.w3.org/TR/css-inline-3/#propdef-alignment-baseline">alignment-baseline</a>.
   [<a href="refs.html#ref-css-inline-3">css-inline-3</a>]
-</p>
 
-<p class="note">
+
+Note: 
   The {{vertical-align}} property shorthand should be preferred
   in new content.
-</p>
+
 
 <p>
   SVG 2 introduces some changes to the definition of this property.
@@ -5494,27 +5507,27 @@ path: images/text/rtl-complex.svg
   mapped to 'text-bottom'. Neither 'text-before-edge' nor
   'text-after-edge' should be used with the {{vertical-align}}
   property.
-</p>
+
 
 <h5 id="BaselineShiftProperty">The <span class="property">baseline-shift</span> property</h5>
 
-<p class="note">
+Note: 
   This property is defined in the CSS Line Layout Module 3 specification. See
   <a href="https://www.w3.org/TR/css-inline-3/#propdef-baseline-shift">baseline-shift</a>.
   [<a href="refs.html#ref-css-inline-3">css-inline-3</a>]
-</p>
 
-<p class="note">
+
+Note: 
   The {{vertical-align}} property shorthand should be preferred
   in new content.
-</p>
+
 
 <p class="annotation">
   The 'baseline' value was removed with the conversion of
   'vertical-align' to a shorthand for 'alignment-baseline' and
   'baseline-shift' as it is also a value for 'alignment-baseline'
   and it is redundant with a length value of '0'.
-</p>
+
 
 <div class="annotation svg2-requirement">
   <table>
@@ -5545,39 +5558,39 @@ path: images/text/rtl-complex.svg
   <a href="https://www.w3.org/TR/css-inline-3/#propdef-vertical-align">vertical-align</a>
   is a shorthand for changing multiple properties at once, including
   'baseline-shift'.
-</p>
+
 
 <h5 id="LetterSpacingProperty">The <span class="property">letter-spacing</span> property</h5>
 
 
-<p class="note">
+Note: 
   Except as noted, see CSS Text Level 3 for the definition of the
   {{letter-spacing}}.([<a href="refs.html#ref-css-text-3">css-text-3</a>]).
-</p>
+
 <p class="annotation">
   SVG 1.1 allowed percentage values in the {{letter-spacing}} property. Percentage values based on the SVG viewport are not seen as
   useful, so this was removed in SVG 2. This brings the definition of 'letter-spacing' in line with
   CSS.
-</p>
+
 
 <h5 id="WordSpacingProperty">The <span class="property">word-spacing</span> property</h5>
 
 
-<p class="note">
+Note: 
   Except as noted, see CSS Text Level 3 for the definition of the
   {{word-spacing}}.([<a href="refs.html#ref-css-text-3">css-text-3</a>]).
-</p>
+
 <p class="annotation">
   SVG 2 changes the meaning of percentage values for the
   {{word-spacing}} property. In SVG 1.1, percentages define
-  additional spacing as a percentage of the <a>SVG viewport</a>
+  additional spacing as a percentage of the [=SVG viewport=]
   size. Percentage values based on the SVG viewport are not seen as
   useful. In SVG 2, following CSS Text Level 3, percentages define
   additional spacing as a percentage of the affected character's
   width.
   This brings the definition of 'word-spacing' in line with
   CSS.
-</p>
+
 
 <h5 id="TextOverflowProperty">The <span class="property">text-overflow</span> property</h5>
 
@@ -5602,44 +5615,44 @@ path: images/text/rtl-complex.svg
   </table>
 </div>
 
-<p class="note">
+Note: 
   New in SVG 2.
 
   Added to allow user agents to handle text strings that overflow a
   predefined wrapping area in a more useful way.  Aligns SVG and HTML/CSS
   text processing.
-</p>
 
-<p class="note">
+
+Note: 
   See the CSS3 Overflow specification for the definition of
   <a href="https://www.w3.org/TR/css-overflow-3/#text-overflow">text-overflow</a>.
   [<a href="refs.html#ref-css-overflow-3">css-overflow-3</a>]
-</p>
+
 
 <p>
   SVG uses the {{text-overflow}} property to control
-  how <a>text content block elements</a> render when text
-  overflows <a>line boxes</a> as, for example, can happen when the
+  how [=text content block elements=] render when text
+  overflows [=line boxes=] as, for example, can happen when the
   {{white-space}} property has the value
   <span class="prop-value">nowrap</span>. The property does not
   apply to pre-formatted text or text-on-a-path.
-</p>
+
 
 <p>
   In SVG {{text-overflow}} has an effect if there is a validly
-  specified <a>wrapping area</a>, regardless of the computed value
+  specified [=wrapping area=], regardless of the computed value
   of the {{overflow}} property on the <a>text content block
   element</a>.
-</p>
+
 
 <p>
   If the {{text-overflow}} property has the value
   <span class="prop-value">ellipsis</span> then if the text that is
-  to be rendered overflows the <a>wrapping area</a> an ellipsis is
+  to be rendered overflows the [=wrapping area=] an ellipsis is
   rendered such that it fits within the given area. For the
   purposes of rendering, the ellipsis is treated as if it replaced
   the characters at the point where it is inserted.
-</p>
+
   <!--The text positioning attributes
   ({{text/x}}, {{text/y}}, {{text/dx}}, {{text/dy}}, {{text/rotate}})
   apply to the ellipsis as if it was one character in the logical
@@ -5648,21 +5661,21 @@ path: images/text/rtl-complex.svg
 <p>
   If the {{text-overflow}} property has the value
   <span class="prop-value">clip</span> then any text
-  that overflows the <a>wrapping area</a> is clipped.
+  that overflows the [=wrapping area=] is clipped.
   Characters may be partially rendered.
-</p>
+
 
 <p>
   Any other value for {{text-overflow}} is treated as if it
   wasn't specified.
-</p>
+
 
 <p>
   Note that the effect of {{text-overflow}} is purely visual,
   the ellipsis itself does not become part of the DOM. For all the
   DOM methods it is as if {{text-overflow}} was not applied, and
-  as if the <a>wrapping area</a> did not constrain the text.
-</p>
+  as if the [=wrapping area=] did not constrain the text.
+
 
 <div class="example">
   <p>
@@ -5677,7 +5690,7 @@ path: images/text/rtl-complex.svg
 
     the bottom line shows text with {{text-overflow}} value
     <span class="prop-value">ellipsis</span>.
-  </p>
+  
 
   <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -5702,7 +5715,7 @@ path: images/text/rtl-complex.svg
           alt="Image showing the use of the text-overflow property.">
     <p class="caption">The {{text-overflow}} property used on
     text elements, the bottom line showing text with an ellipsis
-    applied.</p>
+    applied.
   </div>
 </div>
 
@@ -5711,39 +5724,39 @@ path: images/text/rtl-complex.svg
   the hidden text (tool-tip on hovering over ellipses?). The text-overflow
   property only deals with text that overflows off the end of a line. It
   does not deal with text that overflows the off the end of the wrapping area.
-</p>
+
 
 <h4 id="WhiteSpace">White space</h4>
 
-<p class="note">
+Note: 
   New in SVG 2. Added {{white-space}} to allow a more useful
   way to control white-space handling.  Aligns SVG and HTML/CSS text
   processing. {{xml:space}} deprecated in new content, retained
   for backwards compatibility.
-</p>
+
 
 <h5 id="TextWhiteSpace">SVG 2 Preferred white space handling, the <span class="property">white-space</span> property</h5>
 
 <p>
   Rendering of white space in SVG 2 is controlled by the {{white-space}}
   property. This specifies two things:
-</p>
+
 <ul>
   <li>whether and how white space inside the element is collapsed</li>
   <li>whether lines may wrap at unforced soft wrap opportunities</li>
 </ul>
 
-<p class="note">
+Note: 
   Values and their meanings are defined in
   <a href="https://www.w3.org/TR/css-text-3/#white-space-property">CSS
   Text Module Level 3</a>.[<a href="refs.html#ref-css-text-3">css-text-3</a>]
-</p>
+
 
 <div class="example">
   <p>
     An example of using the {{white-space}}
     value <span class="prop-value">pre-line</span>.
-  </p>
+  
 
   <xmp>
 <svg xmlns="http://www.w3.org/2000/svg">
@@ -5767,7 +5780,7 @@ path: images/text/rtl-complex.svg
 Example of multi-line vertical text with line breaks. The text
 is from the Japanese poem <em>Iroha</em>. The lines are broken
 at traditional places.
-    </p>
+    
   </div>
 </div>
 
@@ -5780,7 +5793,7 @@ at traditional places.
   characters within a given {{text}} element's character
   data. New content should not use {{xml:space}} but
   instead, use the {{white-space}} property.
-</p>
+
 
 <p class="annotation">
   This section should be simplified to limit the discussion of
@@ -5796,7 +5809,7 @@ at traditional places.
   (<a href="https://log.csswg.org/irc.w3.org/css/2015-02-08/#e519951">fantasai
   agreed</a> to add an appropriate value for {{white-space}} to
   match SVG 1.1's odd xml:space="preserve" behavior.)
-</p>
+
 
 <p>
   Note that any child element of a {{text}} element may also
@@ -5806,12 +5819,12 @@ at traditional places.
   below. These are behaviors that occur subsequent to XML parsing
   [<a href="https://www.w3.org/TR/2008/REC-xml-20081126/">XML</a>]
   and any construction of a DOM.
-</p>
+
 
 <p>
   {{xml:space}} is an inheritable attribute which can have one of
   two values:
-</p>
+
 
 <dl>
   <dt><span class='attr-value'>'default'</span></dt>
@@ -5851,7 +5864,7 @@ at traditional places.
   these examples, there is no extra white space at the end of any of
   the lines (i.e., the line break occurs immediately after the last
   visible character).
-</p>
+
 
 <pre>
 [01]  &lt;text xml:space='default'&gt;
@@ -5872,7 +5885,7 @@ at traditional places.
   effect of indented character data. The attribute
   <span class="attr-value">xml:space="default"</span> in the first
   {{text}} element instructs the user agent to:
-</p>
+
 
 <ul>
   <li>convert all tabs (if any) to space characters,</li>
@@ -5892,7 +5905,7 @@ at traditional places.
   effect of non-indented character data. The attribute
   <span class="attr-value">xml:space="default"</span> in the third
   {{text}} element instructs the user agent to:
-</p>
+
 
 <ul>
   <li>convert all tabs (if any) to space characters,</li>
@@ -5918,7 +5931,7 @@ at traditional places.
   newlines might have been used in the original resource. (See
   <a href="https://www.w3.org/TR/2008/REC-xml-20081126/#sec-line-ends">XML
   end-of-line handling</a>.)
-</p>
+
 
 <p>
   Any features in the SVG language or the SVG DOM that are based
@@ -5933,7 +5946,7 @@ at traditional places.
   processing. Character position numbers index into the text string
   after the white space characters have been removed per the rules
   in this section.
-</p>
+
 
 <p>
   Note that a glyph corresponding to a white-space character should
@@ -5941,16 +5954,16 @@ at traditional places.
   itself happens to be non-blank.
   See <a href="http://www.unicode.org/faq/unsup_char.html">display
   of unsupported characters</a>
-  [<a href="refs.html#ref-unicode">UNICODE</a>].
-</p>
+  [[UNICODE]].
+
 
 <p>
   The {{xml:space}} attribute is:
-</p>
+
 <p>
   &nbsp;&nbsp;&nbsp;&nbsp;<span class="anim-target"><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a>:
   no.</span>
-</p>
+
 
 <h5 id="DuplicateWhiteSpace">Duplicate white-space directives</h5>
 
@@ -5962,7 +5975,7 @@ at traditional places.
   which uses both methods on the same element. If
   the {{white-space}} property is set on any element, then the
   value of {{xml:space}} is ignored.
-</p>
+
 
 
 
@@ -5980,21 +5993,21 @@ at traditional places.
   Decoration Module Level 3</a>
   [(<a href="refs.html#ref-css-text-decor-3">css-text-decor-3</a>)]
   specification.
-</p>
+
 
 <p>
   The fill and stroke of the text decoration are
   given by the fill and stroke of the text at the point
   where the text decoration is declared (see example below).
-</p>
 
-<p class="note">
+
+Note: 
   The {{text-decoration-line}} and
   {{text-decoration-style}} properties are new in SVG 2. The
   SVG 1.1/CSS 2.1 {{text-decoration}} property is transformed
   in a backwards compatible way to a short hand for these
   properties.
-</p>
+
 
 <p>
   The order in which the text and decorations are drawn is defined
@@ -6006,7 +6019,7 @@ at traditional places.
   decoration itself (fill/stroke) is determined by the value of the
   {{paint-order}} property at the point where the text
   decoration is declared.
-</p>
+
 
 <p id="ExampleTextDecoration01">
   <span class="example-ref">Example textdecoration01</span> provides
@@ -6030,15 +6043,17 @@ at traditional places.
   underline is rendered using the fill and stroke properties as
   the {{tspan}} element that surrounds the word "different"
   (i.e., yellow fill, darkgreen stroke):
-</p>
+
 
 <pre class=include-raw>
 path: images/text/textdecoration01.svg
 </pre>
+<!--
+@@fix
 <pre class=include>
 path: images/text/textdecoration01.svg
 </pre>
-
+-->
 
 <h3 id="TextSelection">Text selection and clipboard operations</h3>
 
@@ -6048,7 +6063,7 @@ path: images/text/textdecoration01.svg
   systems which are equipped with a pointer device such as a mouse) and
   which have system clipboards for copy/paste operations are required to
   support:
-</p>
+
 
 <ul>
   <li>user selection of text strings in SVG content</li>
@@ -6057,7 +6072,7 @@ path: images/text/textdecoration01.svg
 
 <p>
   A text selection operation starts when all of the following occur:
-</p>
+
 
 <ul>
   <li>
@@ -6099,21 +6114,21 @@ path: images/text/textdecoration01.svg
   selection and end of selection shall be highlighted, regardless of
   position on the canvas and regardless of any graphics elements
   that might be above the end of selection point.
-</p>
+
 
 <p>
   Once the text selection operation ends (e.g., the user releases
   the given mouse button), the selected text will stay highlighted
   until an event occurs which cancels text selection, such as a
   pointer device activation event (e.g., pressing a mouse button).
-</p>
+
 
 <p>
   Detailed rules for determining which characters to highlight
   during a text selection operation are provided in
   <a href="#TextSelectionImplementationNotes">Text
     selection implementation notes</a>.
-</p>
+
 
 <p>
   For systems which have system clipboards, the SVG user agent is
@@ -6124,7 +6139,7 @@ path: images/text/textdecoration01.svg
   preferable if the SVG user agent also posts a rich text
   alternative which captures the various font properties associated
   with the given text string.
-</p>
+
 
 <p>
   For bidirectional text, the user agent must support text selection
@@ -6138,22 +6153,22 @@ path: images/text/textdecoration01.svg
   the clipboard, then the user agent is required to make appropriate
   adjustments to copy only the visually selected characters to the
   clipboard.
-</p>
+
 
 <p>
-  SVG authors and <a>SVG generators</a> should
+  SVG authors and [=SVG generators=] should
   order their text strings to facilitate properly ordered text
   selection within SVG viewing applications such as Web browsers;
   in other words, the DOM order of the text should match
   the natural reading order of the text.
-</p>
+
 
 <h4 id="TextSelectionImplementationNotes">Text selection implementation notes</h4>
 
 <p>The following implementation notes describe the algorithm
 for deciding which characters are selected during a <a
 href="#TextSelection">text selection</a>
-operation.</p>
+operation.
 
 <p>As the text selection operation occurs (e.g., while the user
 clicks and drags the mouse to identify the selection), the user
@@ -6162,7 +6177,7 @@ agent determines a <em>start selection position</em> and an
 position in the text string between two characters. After
 determining start selection position and end selection
 position, the user agent selects the appropriate characters,
-where the resulting text selection consists of either:</p>
+where the resulting text selection consists of either:
 
 <ul>
 <li>no selection or</li>
@@ -6184,7 +6199,7 @@ tracks the completion of the selection operation (e.g., the
 mouse drag, followed ultimately by the mouse up). At the end of
 the selection operation, the user agent determines which
 boundary between characters is the best target (e.g., closest)
-for the <em>end selection position</em>.</p>
+for the <em>end selection position</em>.
 
 <p>If no character reordering has occurred due to bidirectionality,
 then the selection consists of all characters between the
@@ -6193,7 +6208,7 @@ position</em>. For example, if a {{text}} element contains the
 string "abcdef" and the start selection position and end
 selection positions are 0 and 3 respectively (assuming the left
 side of the "a" is position zero), then the selection will
-consist of "abc".</p>
+consist of "abc".
 
 <p>When the user agent is implementing selection of
 bidirectional text, and when the selection starts (or ends)
@@ -6202,12 +6217,12 @@ then there might be multiple potential combinations of
 characters that can be considered part of the selection. The
 algorithms to choose among the combinations of potential
 selection options shall choose the selection option which most
-closely matches the text string's visual rendering order.</p>
+closely matches the text string's visual rendering order.
 <p>When multiple characters map inseparably to a given set of
 one or more glyphs, the user agent can either disallow the
 selection to start in the middle of the glyph set or can
 attempt to allocate portions of the area taken up by the glyph
-set to the characters that correspond to the glyph.</p>
+set to the characters that correspond to the glyph.
 
 <p>For systems which support pointer devices such as a mouse,
 the user agent is required to provide a mechanism for selecting
@@ -6218,7 +6233,7 @@ One implementation option: For platforms which support a pointer
 device such as a mouse, the user agent may provide for a small
 additional region around character cells which initiates text
 selection operations but does not initiate event handlers or
-links.</p>
+links.
 
 <h3 id="DOMInterfaces">DOM interfaces</h3>
 
@@ -6250,46 +6265,46 @@ links.</p>
 <div class='ready-for-wider-review'>
 <h4 id="InterfaceSVGTextContentElement">Interface SVGTextContentElement</h4>
 
-<p>The <a>SVGTextContentElement</a> interface is implemented by elements
-that support rendering child text content.</p>
+<p>The [=SVGTextContentElement=] interface is implemented by elements
+that support rendering child text content.
 
 <p>For the methods on this interface that refer to an index to a
 character or a number of characters, these references are to be
 interpreted as an index to a UTF-16 code unit or a number of
 UTF-16 code units, respectively.  This is for consistency with DOM
-Level 2 Core, where methods on the <a>CharacterData</a> interface
+Level 2 Core, where methods on the [=CharacterData=] interface
 use UTF-16 code units as indexes and counts within the character
 data. Thus for example, if the text content of a {{text}}
 element is a single non-BMP character, such as U+10000, then
-invoking <a>SVGTextContentElement::getNumberOfChars</a> on that
+invoking [=SVGTextContentElement::getNumberOfChars=] on that
 element will return 2 since there are two UTF-16 code units (the
-surrogate pair) used to represent that one character.</p>
+surrogate pair) used to represent that one character.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGTextContentElement</b> : <a>SVGGraphicsElement</a> {
 
-// lengthAdjust Types
-const unsigned short <a href="text.html#__svg__SVGTextContentElement__LENGTHADJUST_UNKNOWN">LENGTHADJUST_UNKNOWN</a> = 0;
-const unsigned short <a href="text.html#__svg__SVGTextContentElement__LENGTHADJUST_SPACING">LENGTHADJUST_SPACING</a> = 1;
-const unsigned short <a href="text.html#__svg__SVGTextContentElement__LENGTHADJUST_SPACINGANDGLYPHS">LENGTHADJUST_SPACINGANDGLYPHS</a> = 2;
+  // lengthAdjust Types
+  const unsigned short <a href="text.html#__svg__SVGTextContentElement__LENGTHADJUST_UNKNOWN">LENGTHADJUST_UNKNOWN</a> = 0;
+  const unsigned short <a href="text.html#__svg__SVGTextContentElement__LENGTHADJUST_SPACING">LENGTHADJUST_SPACING</a> = 1;
+  const unsigned short <a href="text.html#__svg__SVGTextContentElement__LENGTHADJUST_SPACINGANDGLYPHS">LENGTHADJUST_SPACINGANDGLYPHS</a> = 2;
 
-[<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="text.html#__svg__SVGTextContentElement__textLength">textLength</a>;
-[<a>SameObject</a>] readonly attribute <a>SVGAnimatedEnumeration</a> <a href="text.html#__svg__SVGTextContentElement__lengthAdjust">lengthAdjust</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="text.html#__svg__SVGTextContentElement__textLength">textLength</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedEnumeration</a> <a href="text.html#__svg__SVGTextContentElement__lengthAdjust">lengthAdjust</a>;
 
-long <a href="text.html#__svg__SVGTextContentElement__getNumberOfChars">getNumberOfChars</a>();
-float <a href="text.html#__svg__SVGTextContentElement__getComputedTextLength">getComputedTextLength</a>();
-float <a href="text.html#__svg__SVGTextContentElement__getSubStringLength">getSubStringLength</a>(unsigned long charnum, unsigned long nchars);
-<a>DOMPoint</a> <a href="text.html#__svg__SVGTextContentElement__getStartPositionOfChar">getStartPositionOfChar</a>(unsigned long charnum);
-<a>DOMPoint</a> <a href="text.html#__svg__SVGTextContentElement__getEndPositionOfChar">getEndPositionOfChar</a>(unsigned long charnum);
-<a>DOMRect</a> <a href="text.html#__svg__SVGTextContentElement__getExtentOfChar">getExtentOfChar</a>(unsigned long charnum);
-float <a href="text.html#__svg__SVGTextContentElement__getRotationOfChar">getRotationOfChar</a>(unsigned long charnum);
-long <a href="text.html#__svg__SVGTextContentElement__getCharNumAtPosition">getCharNumAtPosition</a>(optional <a>DOMPointInit</a> point = {});
-undefined <a href="text.html#__svg__SVGTextContentElement__selectSubString">selectSubString</a>(unsigned long charnum, unsigned long nchars);
+  long <a href="text.html#__svg__SVGTextContentElement__getNumberOfChars">getNumberOfChars</a>();
+  float <a href="text.html#__svg__SVGTextContentElement__getComputedTextLength">getComputedTextLength</a>();
+  float <a href="text.html#__svg__SVGTextContentElement__getSubStringLength">getSubStringLength</a>(unsigned long charnum, unsigned long nchars);
+  <a>DOMPoint</a> <a href="text.html#__svg__SVGTextContentElement__getStartPositionOfChar">getStartPositionOfChar</a>(unsigned long charnum);
+  <a>DOMPoint</a> <a href="text.html#__svg__SVGTextContentElement__getEndPositionOfChar">getEndPositionOfChar</a>(unsigned long charnum);
+  <a>DOMRect</a> <a href="text.html#__svg__SVGTextContentElement__getExtentOfChar">getExtentOfChar</a>(unsigned long charnum);
+  float <a href="text.html#__svg__SVGTextContentElement__getRotationOfChar">getRotationOfChar</a>(unsigned long charnum);
+  long <a href="text.html#__svg__SVGTextContentElement__getCharNumAtPosition">getCharNumAtPosition</a>(optional <a>DOMPointInit</a> point = {});
+  undefined <a href="text.html#__svg__SVGTextContentElement__selectSubString">selectSubString</a>(unsigned long charnum, unsigned long nchars);
 };</pre>
 
-<p>The numeric length adjustment type constants defined on <a>SVGTextContentElement</a>
+<p>The numeric length adjustment type constants defined on [=SVGTextContentElement=]
 are used to represent the keyword values that the {{lengthAdjust}} attribute
-can take.  Their meanings are as follows:</p>
+can take.  Their meanings are as follows:
 
 <table class='vert'>
 <tr><th>Constant</th><th>Meaning</th></tr>
@@ -6299,27 +6314,27 @@ can take.  Their meanings are as follows:</p>
 </table>
 
 <p>The <b id="__svg__SVGTextContentElement__textLength">textLength</b> IDL attribute
-<a>reflects</a> the {{textLength}} content attribute.</p>
+[=reflects=] the {{textLength}} content attribute.
 
-<p class="note">
+Note: 
 The initial value of the {{textLength}} content attribute
 is defined to equal the user-agent's calculated length for the element.
 In other words, when the content attribute is not present,
 the IDL property is initialized with a base length equal to
-the return-value of <a>SVGTextContentElement::getComputedTextLength</a>
+the return-value of [=SVGTextContentElement::getComputedTextLength=]
 on the same element, as a length in user units.
-</p>
+
 
 <p>The <b id="__svg__SVGTextContentElement__lengthAdjust">lengthAdjust</b> IDL attribute
-<a>reflects</a> the {{lengthAdjust}} content attribute.  The <a>numeric type values</a>
+[=reflects=] the {{lengthAdjust}} content attribute.  The [=numeric type values=]
 for {{lengthAdjust}} are as described above in the numeric length adjust type
-constant table.</p>
+constant table.
 
 <div class='ready-for-wider-review'>
 <p>The <b id="__svg__SVGTextContentElement__getNumberOfChars">getNumberOfChars</b>
-method returns the total number of <a>addressable characters</a> available for
+method returns the total number of [=addressable characters=] available for
 rendering within the current element, regardless of whether they will be rendered.
-When getNumberOfChars() is called, the following steps are run:</p>
+When getNumberOfChars() is called, the following steps are run:
 
 <ol class='algorithm'>
 <li>Let <var>node</var> be the element or node upon which this method was called</li>
@@ -6327,9 +6342,9 @@ When getNumberOfChars() is called, the following steps are run:</p>
   <var>node</var>, after normalizing whitespace according to the value of the
   {{white-space}} property on its parent element.
 </li>
-<li>If <var>node</var> is an <a>Element</a>:
+<li>If <var>node</var> is an [=Element=]:
 <ul>
-<li>If the element is <a>not rendered</a>
+<li>If the element is [=not rendered=]
   (e.g., because the {{display}} property has the used value
   <span class='prop-value'>none</span>), then return 0;</li>
 <li>Otherwise, set <var>count</var> to 0, and for each child of <var>node</var>:
@@ -6346,7 +6361,7 @@ When getNumberOfChars() is called, the following steps are run:</p>
 
 <p>The <b id="__svg__SVGTextContentElement__getComputedTextLength">getComputedTextLength</b>
 method is used to compute a "length" for the text within the element.
-When getComputedTextLength() is called, the following steps are run:</p>
+When getComputedTextLength() is called, the following steps are run:
 
 <ol class='algorithm'>
 <li>Let <var>count</var> be the value that would be returned if
@@ -6361,40 +6376,40 @@ method were called on this element, passing 0 and <var>count</var> as arguments.
 <p>The <b id="__svg__SVGTextContentElement__getSubStringLength">getSubStringLength</b>
 method is used to compute the formatted text advance distance for a substring of text within the
 element.  When getSubStringLength(<var>charnum</var>, <var>nchars</var>)
-is called, the following steps are run:</p>
+is called, the following steps are run:
 
 <ol class='algorithm'>
-<li>Assign an index to each <a>addressable character</a> in the DOM within this element,
+<li>Assign an index to each [=addressable character=] in the DOM within this element,
 where the first character has index 0.</li>
 <li>If <var>charnum</var> is greater than the highest index assigned
-to a character or if <var>nchars</var> is negative, then <a>throw</a> an <a>IndexSizeError</a>.</li>
+to a character or if <var>nchars</var> is negative, then [=throw=] an [=IndexSizeError=].</li>
 <li>Let <var>length</var> be a length in user units, initialized to 0.</li>
-<li>For each <a>addressable character</a> in the DOM within this element that has an
+<li>For each [=addressable character=] in the DOM within this element that has an
   index such that
   <var>charnum</var> ≤ index &lt; (<var>charnum</var> + <var>nchars</var>):
   <ol>
-    <li>If the character corresponds to a <a>typographic character</a> and it is the first character
-    in document order to correspond to that <a>typographic character</a>, then:
+    <li>If the character corresponds to a [=typographic character=] and it is the first character
+    in document order to correspond to that [=typographic character=], then:
       <ol>
-        <li>Add the advance of the <a>typographic character</a> to <var>length</var>,
+        <li>Add the advance of the [=typographic character=] to <var>length</var>,
           adjusted for any font kerning in effect.</li>
         <li>If the {{letter-spacing}} or {{word-spacing}} properties
-        contributed space just after the <a>typographic character</a>, then add that space
+        contributed space just after the [=typographic character=], then add that space
         to <var>length</var>.</li>
       </ol>
-      <p class="note">This means that, for example, if there is a ligature
+      Note: This means that, for example, if there is a ligature
       that is only partly included in the substring, then the
-      advance of the <a>typographic character</a> and any subsequent {{letter-spacing}} or
+      advance of the [=typographic character=] and any subsequent {{letter-spacing}} or
       {{word-spacing}} space will be assigned to the first
-      character's text length.</p>
+      character's text length.
     </li>
   </ol>
 </li>
 <li>Return <var>length</var>.</li>
 </ol>
-<p class="note">
+Note: 
 Previous versions of SVG required that this method
-and <a>getComputedTextLength</a>
+and [=getComputedTextLength=]
 also include
 positioning adjustments in the inline direction due to
 {{tspan/dx}} or {{tspan/dy}} on child elements,
@@ -6404,67 +6419,67 @@ However, it was poorly specified,
 poorly implemented,
 and of dubious benefit,
 so has been simplified to match implementations.
-</p>
+
 
 <p class="annotation">
 Change to text length methods <a href="https://lists.w3.org/Archives/Public/www-svg/2015Aug/att-0009/SVGWG-F2F-minutes-20150824.html#item04">resolved at August 2015 Paris face-to-face</a>.
-</p>
+
 
 <p>To <dfn id="TermFindTypographicCharacterForCharacter" data-dfn-type="dfn" data-export="">find the typographic
 character for a character</dfn> at index <var>index</var> within an
-element <var>element</var>, the following steps are run:</p>
+element <var>element</var>, the following steps are run:
 
 <ol class="algorithm">
-<li>Assign an index to each <a>addressable character</a> in the DOM within this element,
+<li>Assign an index to each [=addressable character=] in the DOM within this element,
 where the first character has index 0.</li>
 <li>Let <var>last</var> be the highest index assigned to a character.</li>
 <li>While <var>charnum</var> &lt; <var>last</var> and
   the character at index <var>charnum</var> does not correspond to
-  a <a>typographic character</a>:
+  a [=typographic character=]:
   <ol>
     <li>Set <var>charnum</var> to <var>charnum</var> + 1.</li>
   </ol>
 </li>
 <li>If <var>charnum</var> is greater than the highest index assigned
 to a character or, then return null.</li>
-<li>Otherwise, return the <a>typographic character</a> that corresponds to
+<li>Otherwise, return the [=typographic character=] that corresponds to
 <var>charnum</var>.</li>
 </ol>
 
 <p>The <b id="__svg__SVGTextContentElement__getStartPositionOfChar">getStartPositionOfChar</b>
-method is used to get the position of a <a>typographic character</a> after text
+method is used to get the position of a [=typographic character=] after text
 layout has been performed.  When getStartPositionOfChar(<var>charnum</var>) is
-called, the following steps are run:</p>
+called, the following steps are run:
 
 <ol class='algorithm'>
 <li>Let <var>cluster</var> be the result of
 <a href="#TermFindTypographicCharacterForCharacter">finding the typographic
 character for the character</a> at index <var>charnum</var> within
 the current element.</li>
-<li>If <var>cluster</var> is null, then <a>throw</a> an
-<a>IndexSizeError</a>.</li>
+<li>If <var>cluster</var> is null, then [=throw=] an
+[=IndexSizeError=].</li>
 <li>Let <var>p</var> be the
-<a>alignment point</a> of the <a>typographic character</a>
+[=alignment point=] of the [=typographic character=]
 that correspond to the character at index <var>charnum</var>,
 in the coordinate system of the current element.</li>
 <li>Return a newly created, <a href="shapes.html#PointMode">detached</a>
-<a>DOMPoint</a> object representing the point <var>p</var>.</li>
+[=DOMPoint=] object representing the point <var>p</var>.</li>
 </ol>
 
 <p>The <b id="__svg__SVGTextContentElement__getEndPositionOfChar">getEndPositionOfChar</b>
-method is used to get the trailing position of a <a>typographic character</a> after text
+method is used to get the trailing position of a [=typographic character=] after text
 layout has been performed.  When getEndPositionOfChar(<var>charnum</var>) is
-called, the following steps are run:</p>
+called, the following steps are run:
 
 <ol class='algorithm'>
 <li>Let <var>cluster</var> be the result of
 <a href="#TermFindTypographicCharacterForCharacter">finding the typographic
 character for the character</a> at index <var>charnum</var> within
 the current element.</li>
-<li>If <var>cluster</var> is null, then <a>throw</a> an
-<a>IndexSizeError</a>.</li>
+<li>If <var>cluster</var> is null, then [=throw=] an
+[=IndexSizeError=].</li>
 <li>Let <var>p</var> be the
-<a>alignment point</a> of <var>cluster</var>
+[=alignment point=] of <var>cluster</var>
 that correspond to the character at index <var>charnum</var>,
 in the coordinate system of the current element.</li>
 <li>Let <var>direction</var> be a unit vector in the direction of
@@ -6477,42 +6492,42 @@ and any rotation applied to due a {{textPath}}.</li>
 <li>Let <var>advance</var> be <var>cluster</var>'s advance.</li>
 <li>Set <var>p</var> to <var>p</var> + <var>advance</var> · <var>direction</var>.</li>
 <li>Return a newly created, <a href="shapes.html#PointMode">detached</a>
-<a>DOMPoint</a> object representing the point <var>p</var>.</li>
+[=DOMPoint=] object representing the point <var>p</var>.</li>
 </ol>
 
 <p>The <b id="__svg__SVGTextContentElement__getExtentOfChar">getExtentOfChar</b>
 method is used to compute a tight bounding box of the glyph cell
-that corresponds to a given <a>typographic character</a>.  When getExtentOfChar(<var>charnum</var>)
-is called, the following steps are run:</p>
+that corresponds to a given [=typographic character=].  When getExtentOfChar(<var>charnum</var>)
+is called, the following steps are run:
 
 <ol class='algorithm'>
 <li>Let <var>cluster</var> be the result of
 <a href="#TermFindTypographicCharacterForCharacter">finding the typographic
 character for the character</a> at index <var>charnum</var> within
 the current element.</li>
-<li>If <var>cluster</var> is null, then <a>throw</a> an
-<a>IndexSizeError</a>.</li>
+<li>If <var>cluster</var> is null, then [=throw=] an
+[=IndexSizeError=].</li>
 <li>Let <var>quad</var> be the potentially rotated rectangle in
 the current element's coordinate system that
 is the glyph cell for <var>cluster</var>.</li>
 <li>Let <var>rect</var> be the rectangle that forms the tightest
 bounding box around <var>quad</var> in the current element's
 coordinate system.</li>
-<li>Return a newly created <a>DOMRect</a> object representing the
+<li>Return a newly created [=DOMRect=] object representing the
 rectangle <var>rect</var>.</li>
 </ol>
 
 <p>The <b id="__svg__SVGTextContentElement__getRotationOfChar">getRotationOfChar</b>
-method is used to get the rotation of <a>typographic character</a>.  When
-getRotationOfChar(<var>charnum</var>) is called, the following steps are run:</p>
+method is used to get the rotation of [=typographic character=].  When
+getRotationOfChar(<var>charnum</var>) is called, the following steps are run:
 
 <ol class='algorithm'>
 <li>Let <var>cluster</var> be the result of
 <a href="#TermFindTypographicCharacterForCharacter">finding the typographic
 character for the character</a> at index <var>charnum</var> within
 the current element.</li>
-<li>If <var>cluster</var> is null, then <a>throw</a> an
-<a>IndexSizeError</a>.</li>
+<li>If <var>cluster</var> is null, then [=throw=] an
+[=IndexSizeError=].</li>
 <li>Let <var>direction</var> be the angle in degrees that represents
 the direction of the <var>cluster</var>'s advance.
 This direction takes into account
@@ -6528,9 +6543,9 @@ and any rotation applied to due a {{textPath}}.</li>
 method is used to find which character caused a text glyph to
 be rendered at a given position in the coordinate system.
 Because the relationship between characters and glyphs is not one-to-one,
-only the first character of the relevant <a>typographic character</a> is returned
+only the first character of the relevant [=typographic character=] is returned
 When getCharNumAtPosition(<var>point</var>)
-is called, the following steps are run:</p>
+is called, the following steps are run:
 
 <ol class='algorithm'>
 <li>Assign an index to each character in the DOM within this element,
@@ -6541,10 +6556,10 @@ where the first character has index 0.</li>
 <li>While <var>charnum</var> &lt; <var>last</var>:
   <ol>
     <li>If the character at index <var>charnum</var> corresponds
-    to a <a>typographic character</a> and it is the first character
-    in document order to correspond to that <a>typographic character</a>,
+    to a [=typographic character=] and it is the first character
+    in document order to correspond to that [=typographic character=],
     and <var>point</var> in this element's coordinate system
-    is within the glyph cell for the <a>typographic character</a>, then
+    is within the glyph cell for the [=typographic character=], then
     set <var>result</var> to <var>charnum</var>.</li>
   </ol>
 </li>
@@ -6556,17 +6571,17 @@ where the first character has index 0.</li>
 <p>The <b id="__svg__SVGTextContentElement__selectSubString">selectSubString</b>
 method is used to select text within the element.  When
 selectSubString(<var>charnum</var>, <var>nchars</var>) is called, the
-following steps are run:</p>
+following steps are run:
 
 <p>Selects a substring of the text in this element, beginning at character
 index <var>charnum</var> and extending forwards <var>nchars</var>
-characters.  The following steps must be followed when this method is called:</p>
+characters.  The following steps must be followed when this method is called:
 <ol>
 <li>Let <var>node</var> be this text content element.</li>
 <li>Let <var>count</var> be the number of characters in this text content element.</li>
 <li>Let <var>end</var> = <var>charnum</var> + <var>nchars</var>.</li>
 <li>If <var>charnum</var> ≥ <var>count</var> or <var>end</var> ≥ <var>count</var>,
-then <a>throw</a> an <a>IndexSizeError</a>.</li>
+then [=throw=] an [=IndexSizeError=].</li>
 <li>Remove all <a href="https://www.w3.org/TR/2014/WD-dom-20140204/#concept-range">ranges</a>
 from the document's <a href="http://w3c.github.io/selection-api/#dfn-selection">selection</a>. [<a href="refs.html#ref-dom">DOM</a>][<a href="refs.html#ref-editing">EDITING</a>]</li>
 <li>Set the <a href="http://w3c.github.io/selection-api/#dfn-selection">selection</a>'s
@@ -6582,7 +6597,7 @@ tuple (<var>node</var>, <var>end</var>).</li>
 </ol>
 <div class="note">
 <p>Ignoring the argument checking and exception throwing, this is equivalent to
-performing the following:</p>
+performing the following:
 <pre>var selection = document.getSelection();
 selection.removeAllRanges();
 var range = new Range();
@@ -6590,24 +6605,24 @@ range.setStart(textContentElement, charnum);
 range.setEnd(textContentElement, charnum + nchars);
 selection.addRange(range);</pre>
 </div>
-<p>This method is deprecated, as it duplicates functionality from the Selection API.</p>
+<p>This method is deprecated, as it duplicates functionality from the Selection API.
 </div>
 
 
 <div class='ready-for-wider-review'>
 <h4 id="InterfaceSVGTextPositioningElement">Interface SVGTextPositioningElement</h4>
 
-<p>The <a>SVGTextPositioningElement</a> interface is implemented by elements
+<p>The [=SVGTextPositioningElement=] interface is implemented by elements
 that support attributes that position individual text glyphs.  It is inherited by
-<a>SVGTextElement</a> and <a>SVGTSpanElement</a>.</p>
+[=SVGTextElement=] and [=SVGTSpanElement=].
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGTextPositioningElement</b> : <a>SVGTextContentElement</a> {
-[<a>SameObject</a>] readonly attribute <a>SVGAnimatedLengthList</a> <a href="text.html#__svg__SVGTextPositioningElement__x">x</a>;
-[<a>SameObject</a>] readonly attribute <a>SVGAnimatedLengthList</a> <a href="text.html#__svg__SVGTextPositioningElement__y">y</a>;
-[<a>SameObject</a>] readonly attribute <a>SVGAnimatedLengthList</a> <a href="text.html#__svg__SVGTextPositioningElement__dx">dx</a>;
-[<a>SameObject</a>] readonly attribute <a>SVGAnimatedLengthList</a> <a href="text.html#__svg__SVGTextPositioningElement__dy">dy</a>;
-[<a>SameObject</a>] readonly attribute <a>SVGAnimatedNumberList</a> <a href="text.html#__svg__SVGTextPositioningElement__rotate">rotate</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLengthList</a> <a href="text.html#__svg__SVGTextPositioningElement__x">x</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLengthList</a> <a href="text.html#__svg__SVGTextPositioningElement__y">y</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLengthList</a> <a href="text.html#__svg__SVGTextPositioningElement__dx">dx</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLengthList</a> <a href="text.html#__svg__SVGTextPositioningElement__dy">dy</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGAnimatedNumberList</a> <a href="text.html#__svg__SVGTextPositioningElement__rotate">rotate</a>;
 };</pre>
 
 <p>The
@@ -6616,16 +6631,16 @@ interface <b>SVGTextPositioningElement</b> : <a>SVGTextContentElement</a> {
 <b id="__svg__SVGTextPositioningElement__dx">dx</b>,
 <b id="__svg__SVGTextPositioningElement__dy">dy</b> and
 <b id="__svg__SVGTextPositioningElement__rotate">rotate</b> IDL attributes
-<a>reflect</a> the {{tspan/x}}, {{tspan/y}},
+[=reflect=] the {{tspan/x}}, {{tspan/y}},
 {{tspan/dx}}, {{tspan/dy}} and {{tspan/rotate}}
-content attributes, respectively.</p>
+content attributes, respectively.
 
 
 <h4 id="InterfaceSVGTextElement">Interface SVGTextElement</h4>
 
 
 
-<p>An <a>SVGTextElement</a> object represents a {{text}} element in the DOM.</p>
+<p>An [=SVGTextElement=] object represents a {{text}} element in the DOM.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGTextElement</b> : <a>SVGTextPositioningElement</a> {
@@ -6637,7 +6652,7 @@ interface <b>SVGTextElement</b> : <a>SVGTextPositioningElement</a> {
 
 
 
-<p>An <a>SVGTSpanElement</a> object represents a {{tspan}} element in the DOM.</p>
+<p>An [=SVGTSpanElement=] object represents a {{tspan}} element in the DOM.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGTSpanElement</b> : <a>SVGTextPositioningElement</a> {
@@ -6649,7 +6664,7 @@ interface <b>SVGTSpanElement</b> : <a>SVGTextPositioningElement</a> {
 
 
 
-<p>An <a>SVGTextPathElement</a> object represents a {{textPath}} element in the DOM.</p>
+<p>An [=SVGTextPathElement=] object represents a {{textPath}} element in the DOM.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGTextPathElement</b> : <a>SVGTextContentElement</a> {
@@ -6671,9 +6686,9 @@ const unsigned short <a href="text.html#__svg__SVGTextPathElement__TEXTPATH_SPAC
 
 <a>SVGTextPathElement</a> includes <a>SVGURIReference</a>;</pre>
 
-<p>The numeric method type constants defined on <a>SVGTextPathElement</a>
+<p>The numeric method type constants defined on [=SVGTextPathElement=]
 are used to represent the keyword values that the {{method}}
-attribute can take.  Their meanings are as follows:</p>
+attribute can take.  Their meanings are as follows:
 
 <table class='vert'>
 <tr><th>Constant</th><th>Meaning</th></tr>
@@ -6682,9 +6697,9 @@ attribute can take.  Their meanings are as follows:</p>
 <tr><td><b id="__svg__SVGTextPathElement__TEXTPATH_METHODTYPE_UNKNOWN">TEXTPATH_METHODTYPE_UNKNOWN</b></td><td>Some other value.</td></tr>
 </table>
 
-<p>The numeric spacing type constants defined on <a>SVGTextPathElement</a>
+<p>The numeric spacing type constants defined on [=SVGTextPathElement=]
 are used to represent the keyword values that the {{spacing}}
-attribute can take.  Their meanings are as follows:</p>
+attribute can take.  Their meanings are as follows:
 
 <table class='vert'>
 <tr><th>Constant</th><th>Meaning</th></tr>
@@ -6694,16 +6709,16 @@ attribute can take.  Their meanings are as follows:</p>
 </table>
 
 <p>The <b id="__svg__SVGTextPathElement__startOffset">startOffset</b> IDL attribute
-<a>reflects</a> the {{startOffset}} content attribute.</p>
+[=reflects=] the {{startOffset}} content attribute.
 
 <p>The <b id="__svg__SVGTextPathElement__method">method</b> IDL attribute
-<a>reflects</a> the {{method}} content attribute.  The
-<a>numeric type values</a> for {{method}} are as described
-above in the numeric method type constant table.</p>
+[=reflects=] the {{method}} content attribute.  The
+[=numeric type values=] for {{method}} are as described
+above in the numeric method type constant table.
 
 <p>The <b id="__svg__SVGTextPathElement__spacing">spacing</b> IDL attribute
-<a>reflects</a> the {{spacing}} content attribute.  The
-<a>numeric type values</a> for {{spacing}} are as described
-above in the numeric spacing type constant table.</p>
+[=reflects=] the {{spacing}} content attribute.  The
+[=numeric type values=] for {{spacing}} are as described
+above in the numeric spacing type constant table.
 
 </div>

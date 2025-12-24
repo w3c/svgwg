@@ -4,7 +4,7 @@
 
 <p>SVG content can be interactive (i.e., responsive to
 user-initiated events) by utilizing the following features in
-the SVG language:</p>
+the SVG language:
 
 <ul>
   <li>User-initiated actions such as button presses on the
@@ -20,9 +20,9 @@ the SVG language:</p>
 
 <p>This chapter describes scripting
 and DOM <a href="interact.html#SVGEvents">event</a> handling in interactive SVG,
-including under which circumstances events are triggered.</p>
+including under which circumstances events are triggered.
 
-<p>Related information can be found in other chapters:</p>
+<p>Related information can be found in other chapters:
 
 <ul>
   <li>hyperlinks are discussed in <a href="linking.html">Links</a></li>
@@ -116,52 +116,52 @@ including under which circumstances events are triggered.</p>
   </table>
 </div>
 
-<p>The following aspects of SVG are affected by events:</p>
+<p>The following aspects of SVG are affected by events:
 
 <ul>
-  <li>Using <a href="types.html#SVGDOMOverview">SVG Document Object Model (DOM)</a>, a script can
+  <li>Using [[#SVGDOMOverview|SVG Document Object Model (DOM)]], a script can
   <a href="https://www.w3.org/TR/dom/#dom-eventtarget-addeventlistener">add or remove DOM event listeners</a>
   ([<a href="refs.html#ref-dom">DOM</a>]) so that
   script can be invoked or ignored when a given event occurs on an event target</li>
 
-  <li>SVG's <a>animation elements</a> can be defined to begin or end based on
+  <li>SVG's [=animation elements=] can be defined to begin or end based on
   events.</li>
 </ul>
 
-<p class="note">A number of events defined in SVG 1.1, <span class="event-name">SVGLoad</span>,
+Note: A number of events defined in SVG 1.1, <span class="event-name">SVGLoad</span>,
   <span class="event-name">SVGError</span> etc, have been replaced with the equivalent
 unprefixed events defined in <a href="https://www.w3.org/TR/uievents/#events-uievent-types">UI EVENTS</a>
 and <a href="https://html.spec.whatwg.org/multipage/indices.html#events-2">HTML</a>.
-</p>
+
 
 <p class="issue" data-issue="8">
 There should be some more modern examples of using events in svg, e.g touch events (w reference to touch events spec).
 <a href="https://www.w3.org/TR/orientation-event/">Device orientation</a> events might also be of interest.
-</p>
+
 
 <p>The following table lists the events defined by this specification, or that have
   further requirements or clarifications compared to the specification(s) where they are defined.
-</p>
+
 
 <p>The <em>Event name</em> in the
-first column is the name to use within SVG's <a>animation elements</a> to
+first column is the name to use within SVG's [=animation elements=] to
 define the events which can start or end animations. The
 <em>UI Event name</em> in the second column is the name to use when
 defining <a href="https://www.w3.org/TR/dom/#dom-eventtarget-addeventlistener">DOM event listeners</a>
 ([<a href="refs.html#ref-dom">DOM</a>], section 3.6).
-</p>
+
 
 <p>For events not listed in the table, such as events introduced in HTML or UI Events,
-the respective <a>event type</a> is the name to use within SVG's <a>animation elements</a>.
-</p>
+the respective [=event type=] is the name to use within SVG's [=animation elements=].
+
 
 <p>Requirements in the table on whether an event of a given type
 bubbles or is cancelable apply only to events that are created and
 dispatched by the user agent.  Events of those types created from script
-using the <code>createEvent</code> method on the <a>Document</a> interface can be made to bubble
+using the <code>createEvent</code> method on the [=Document=] interface can be made to bubble
 or be cancelable with the
 <a href='https://www.w3.org/TR/dom/#dom-event-initevent'>initEvent</a>
-method.</p>
+method.
 
     <table  class="vert event-table">
       <tr>
@@ -171,26 +171,26 @@ method.</p>
         <th>Event attribute name</th>
       </tr>
       <tr>
-        <td id="LoadEvent"><p class="event-name"><strong>load</strong></p>
+        <td id="LoadEvent"><p class="event-name"><strong>load</strong>
           <p>
-          The load event is dispatched only to <a>structurally external elements</a> and to the
-          <a>Window</a>, when the corresponding external resources have finished loading. Note that
-          due to it's <a href="struct.html#SVGElementEventHandlerAttributes">relationship</a> with <a>Window</a>
-          the load event on {{svg}} elements is only dispatched when all resources in the document
+          The load event is dispatched only to [=structurally external elements=] and to the
+          [=Window=], when the corresponding external resources have finished loading. Note that
+          due to it's <a href="struct.html#SVGElementEventHandlerAttributes">relationship</a> with [=Window=]
+          the load event on <{svg}> elements is only dispatched when all resources in the document
           have been completely loaded.
-          </p>
+          
 
           <p>The load event and the error event on
-          <a>structurally external elements</a> are mutually exclusive,
+          [=structurally external elements=] are mutually exclusive,
           only one of these events must be dispatched when
-          processing the element in question.</p>
+          processing the element in question.
 
-          <p>load events do not bubble and are not cancelable.</p>
+          <p>load events do not bubble and are not cancelable.
 
-          <p class="note">In previous SVG specifications the load event
+          Note: In previous SVG specifications the load event
           was called SVGLoad and could be dispatched immediately after
           parsing an element but before the related resource(s) were
-          fully loaded.</p>
+          fully loaded.
 
         </td>
         <td>(same)</td>
@@ -198,56 +198,56 @@ method.</p>
         <td>onload</td>
       </tr>
       <tr>
-        <td id="UnloadEvent"><p class="event-name"><strong>unload</strong></p>
-          <p>Only applicable to <a>outermost svg elements</a>. The unload
+        <td id="UnloadEvent"><p class="event-name"><strong>unload</strong>
+          <p>Only applicable to [=outermost svg elements=]. The unload
           event occurs when the DOM implementation removes a document
-          from a window or frame.</p>
-          <p>unload events do not bubble and are not cancelable.</p>
+          from a window or frame.
+          <p>unload events do not bubble and are not cancelable.
         </td>
         <td>(same)</td>
         <td>none</td>
         <td>onunload</td>
       </tr>
       <tr>
-        <td id="ErrorEvent"><p class="event-name"><strong>error</strong></p>
+        <td id="ErrorEvent"><p class="event-name"><strong>error</strong>
           <p>The error event occurs when a
-          <a>structurally external element</a> does not load
+          [=structurally external element=] does not load
           properly or when an error occurs during script
-          execution.</p>
-          <p>error events bubble but are not cancelable.</p>
+          execution.
+          <p>error events bubble but are not cancelable.
         </td>
         <td>(same)</td>
         <td>none</td>
         <td>onerror</td>
       </tr>
       <tr>
-        <td id="BeginEvent"><p class="event-name"><strong>beginEvent</strong></p>
+        <td id="BeginEvent"><p class="event-name"><strong>beginEvent</strong>
         <p>Occurs when an animation element begins. For details,
         see the description of Interface TimeEvent in the <a
         href="https://www.w3.org/TR/2001/REC-smil-animation-20010904/">
-        SMIL Animation specification</a>.</p></td>
+        SMIL Animation specification</a>.</td>
         <td>none</td>
         <td>none</td>
         <td>onbegin</td>
       </tr>
       <tr>
-        <td id="EndEvent"><p class="event-name"><strong>endEvent</strong></p>
+        <td id="EndEvent"><p class="event-name"><strong>endEvent</strong>
         <p>Occurs when an animation element ends. For details, see
         the description of Interface TimeEvent in the <a
         href="https://www.w3.org/TR/2001/REC-smil-animation-20010904/">
-        SMIL Animation specification</a>.</p></td>
+        SMIL Animation specification</a>.</td>
         <td>none</td>
         <td>none</td>
         <td>onend</td>
       </tr>
       <tr>
-        <td id="RepeatEvent"><p class="event-name"><strong>repeatEvent</strong></p>
+        <td id="RepeatEvent"><p class="event-name"><strong>repeatEvent</strong>
         <p>Occurs when an animation element repeats. It is raised
         each time the element repeats, after the first iteration.
         For details, see the description of Interface TimeEvent in
         the <a
         href="https://www.w3.org/TR/2001/REC-smil-animation-20010904/">
-        SMIL Animation specification</a>.</p></td>
+        SMIL Animation specification</a>.</td>
         <td>none</td>
         <td>none</td>
         <td>onrepeat</td>
@@ -257,12 +257,12 @@ method.</p>
 <p>Details on the parameters passed to event listeners for the
 event types for UI Events can be found in the ([<a href="refs.html#ref-uievents">uievents</a>]) and ([<a href="refs.html#ref-dom">DOM</a>]) specifications.
 For other event types, the parameters passed to event listeners
-are described elsewhere in this specification.</p>
+are described elsewhere in this specification.
 
 <p>Likewise, <a href='https://svgwg.org/specs/animations/#EventValueSyntax'>event-value timing specifiers</a>
-used in <a>animation element</a> {{animate/begin}} and {{animate/end}}
+used in [=animation element=] {{animate/begin}} and {{animate/end}}
 attributes are resolved to concrete times only in response to "bubbling" and
-"at target" phase events dispatched to the relevant element.</p>
+"at target" phase events dispatched to the relevant element.
 
 <h4 id="RelationshipWithUIEVENTS">Relationship with UI Events</h4>
 
@@ -272,38 +272,38 @@ all the event types from,
 and the event types defined in
 <a href="https://www.w3.org/TR/clipboard-apis/">Clipboard API and events</a>
 ([<a href="refs.html#ref-uievents">uievents</a>], [<a href="refs.html#ref-clipboard-apis">clipboard-apis</a>]).
-</p>
+
 
 <p>
 All elements in the SVG namespace support
-<a>event attributes</a> for these events;
-matching IDL properties are included in the base <a>SVGElement</a> interface
-via the <a>GlobalEventHandlers</a> mixin.
-</p>
+[=event attributes=] for these events;
+matching IDL properties are included in the base [=SVGElement=] interface
+via the [=GlobalEventHandlers=] mixin.
+
 
 <p>
 As part of SVG DOM support, conforming SVG software
 must support all (non-deprecated, non-obsolete) event types
 defined in these specifications,
 if the relevant events could occur in the software's use.
-SVG software that does not support user <a>interaction</a>
+SVG software that does not support user [=interaction=]
 should nonetheless implement support for events that can fire without interaction,
 such as <code>load</code> and <code>error</code> events.
-</p>
+
 
 <p>SVG animation elements
   (defined in the <a href="https://svgwg.org/specs/animations/">SVG Animations Level 2</a> specification)
   support additional events and event attributes.
   The following event types are triggered due to state
   changes in animations.
-</p>
+
     <ul>
       <li><a href="interact.html#BeginEvent">beginEvent</a></li>
       <li><a href="interact.html#EndEvent">endEvent</a></li>
       <li><a href="interact.html#RepeatEvent">repeatEvent</a></li>
     </ul>
 
-<p>The <a>event attributes</a> for these animation events have no effect on other elements.</p>
+<p>The [=event attributes=] for these animation events have no effect on other elements.
 
 <h3 id="UIEvents">User interface events</h3>
 
@@ -311,7 +311,7 @@ such as <code>load</code> and <code>error</code> events.
 authors to define SVG documents such that they are responsive
 to user interface events. Among the set of possible user events
 are <a href="interact.html#PointerEvents">pointer events</a>,
-keyboard events, and document events.</p>
+keyboard events, and document events.
 
 <p>In response to user interface (UI) events, the author might
 start an animation, perform a hyperlink to another Web page,
@@ -319,12 +319,12 @@ highlight part of the document (e.g., change the color of the
 graphics elements which are under the pointer), initiate a
 "roll-over" (e.g., cause some previously hidden graphics
 elements to appear near the pointer) or launch a script which
-communicates with a remote database.</p>
+communicates with a remote database.
 
 <h3 id="PointerEvents">Pointer events</h3>
 
 <p>User interface events that occur because of user actions
-performed on a pointer device are called pointer events.</p>
+performed on a pointer device are called pointer events.
 
 <p>Many systems support pointer devices such as a mouse or
 trackball. On systems which use a mouse, pointer events consist
@@ -332,7 +332,7 @@ of actions such as mouse movements and mouse clicks. On systems
 with a different pointer device, the pointing device often
 emulates the behavior of the mouse by providing a mechanism for
 equivalent user actions, such as a button to press which is
-equivalent to a mouse click.</p>
+equivalent to a mouse click.
 
 <p>For each pointer event, the SVG user agent determines the
 <em>target element</em> of a given pointer event. The target
@@ -346,7 +346,7 @@ event.) When an element is not displayed (i.e., when the
 {{display}} property on that element
 or one of its ancestors has a value of <span
 class="prop-value">none</span>), that element cannot be the
-target of pointer events.</p>
+target of pointer events.
 
 <p>If a target element for the pointer event exists, then
 the event is dispatched to that element according to the
@@ -356,10 +356,10 @@ For shadow trees created by the {{use}} element or via script,
 the event must follow
 <a href="https://dom.spec.whatwg.org/#dispatching-events">Dispatching
   Events</a> [<a href="refs.html#ref-dom">dom</a>]
-</p>
+
 
 <p>If a target element for the pointer event does not exist,
-then the event is ignored.</p>
+then the event is ignored.
 
 <h3 id="pointer-processing">Hit-testing and processing order for user interface events</h3>
 
@@ -367,7 +367,7 @@ then the event is ignored.</p>
 
   <dt><dfn id="TermHitTesting" data-dfn-type="dfn" data-export="">hit-testing</dfn></dt>
   <dd>The process of determining whether a pointer intersects a given
-  <a>graphics element</a>.  Hit-testing is used in determining which element
+  [=graphics element=].  Hit-testing is used in determining which element
   to dispatch a mouse event to, which might be done in response to the user
   moving the pointing device, or by changes in the position, shape and
   other attributes of elements in the document.  Hit-testing is also known
@@ -376,7 +376,7 @@ then the event is ignored.</p>
 
 </dl>
 
-<p>There are two distinct aspects of pointer-device interaction with an element or area:</p>
+<p>There are two distinct aspects of pointer-device interaction with an element or area:
 
 <ol>
   <li>hit-testing, to determine if a pointer event (such as a mouse movement or mouse click) occurred within the interaction area of an element, and the subsequent DOM event flow;</li>
@@ -385,27 +385,27 @@ then the event is ignored.</p>
 
 <h4 id="hit-testing">Hit-testing</h4>
 
-<p>Determining whether a pointer event results in a positive <a>hit-test</a>
+<p>Determining whether a pointer event results in a positive [=hit-test=]
 depends upon the position of the pointer, the size and shape of the
-<a>graphics element</a>, and the computed value of the {{pointer-events}}
+[=graphics element=], and the computed value of the {{pointer-events}}
 property on the element.  The definition of the {{pointer-events}}
 property below describes the exact region that is sensitive to pointer
-events for a given type of graphics element.</p>
+events for a given type of graphics element.
 
-<p>Note that the {{svg}} element is not a <a>graphics element</a>, and in
+<p>Note that the <{svg}> element is not a [=graphics element=], and in
 a <a href="conform.html#ConformingSVGStandAloneFiles">Conforming SVG Stand-Alone File</a>
-a <a>outermost svg element</a> will never be the target of pointer events,
+a [=outermost svg element=] will never be the target of pointer events,
 though events can bubble to this element.
-If a pointer event does not result in a positive <a>hit-test</a> on a
-<a>graphics element</a>, then it should evoke any user-agent-specific window
-behavior, such as a presenting a context menu.</p>
+If a pointer event does not result in a positive [=hit-test=] on a
+[=graphics element=], then it should evoke any user-agent-specific window
+behavior, such as a presenting a context menu.
 
 <p>This specification does not define the behavior of pointer events on the
-<a>outermost svg element</a> for SVG images which are embedded by reference
-or inclusion within another document, e.g., whether the <a>outermost svg element</a>
+[=outermost svg element=] for SVG images which are embedded by reference
+or inclusion within another document, e.g., whether the [=outermost svg element=]
 embedded in an HTML document intercepts mouse click events; future specifications
 may define this behavior, but for the purpose of this specification, the behavior
-is implementation-specific.</p>
+is implementation-specific.
 
 <h4 id="event-processing">Event processing</h4>
 
@@ -415,7 +415,7 @@ whether it has explicit associated interactions, such as scripted event
 listeners, CSS pseudo-classes matches, or declarative animations
 with event-based timing.  The algorithm and order for processing
 user interface events for a given target element, after dispatching the
-DOM event, is as follows:</p>
+DOM event, is as follows:
 
 <ol>
   <li>If an event handler registered on this element invokes the <code>preventDefault()</code>
@@ -431,7 +431,7 @@ DOM event, is as follows:</p>
   <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/selector.html#pseudo-class-selectors">dynamic pseudo-class selectors</a>
   appropriate to the type of pointer event, such as <code>:hover</code>,
   <code>:active</code>, or <code>:focus</code> as described in
-  [<a href="refs.html#ref-css2">CSS2</a>], section 5.11, then the relevant class
+  [[CSS2]], section 5.11, then the relevant class
   properties are applied;</li>
 
   <li>If the element and the event type are associated with the activation
@@ -448,7 +448,7 @@ DOM event, is as follows:</p>
   element by moving to another part of the same document), then no further
   processing for this element is performed;</li>
 
-  <li>If the element is a <a>text content element</a>, and the event type is one
+  <li>If the element is a [=text content element=], and the event type is one
   which the user agent recognizes as part of a text-selection operation (e.g.,
   a mouse click and drag, or a double-click), then the
   <a href="text.html#TextSelection">text selection</a> algorithm is performed;</li>
@@ -469,25 +469,25 @@ pointer is over the stroked perimeter of a given shape. In
 other cases, the author might want a given element to ignore
 pointer events under all circumstances so that graphical
 elements underneath the given element will become the target of
-pointer events.</p>
+pointer events.
 
 <p>The effects of masking and clipping differ with respect to
 <a href="interact.html#PointerEventsProperty">pointer events</a>.  A clip path is
 a geometric boundary, and a given point is clearly either inside or outside that
 boundary; thus, pointer events must be captured normally over the rendered areas
 of a clipped element, but must not be captured over the clipped areas, as described
-in the definition of <a>clipping paths</a>.
+in the definition of [=clipping paths=].
 By contrast, a mask is not a binary transition, but a pixel operation, and
 different behavior for fully transparent and almost-but-not-fully-transparent may
 be confusingly arbitrary; as a consequence, for elements with a mask applied,
 pointer events must still be captured even in areas where the mask goes to zero
 opacity.  If an author wishes to achieve an effect where the transparent parts
 of a mask allow pointer events to pass to an element below, a combination of
-masking and clipping may be used.</p>
+masking and clipping may be used.
 
 <p>The {{filter property}} property has no effect on pointer events
 processing, and must in this context be treated as if the {{filter property}}
-wasn't specified.</p>
+wasn't specified.
 
 <p>For example, suppose a circle with a {{stroke}} of
 <span class="prop-value">red</span> (i.e., the outline is solid red) and a
@@ -497,17 +497,17 @@ painted) is rendered directly on top of a rectangle with a {{fill}} of
 the target of pointer events only when the pointer is over the perimeter of
 the circle. When the pointer is over the interior of the circle, the author
 might want the underlying rectangle to be the target element of pointer
-events.</p>
+events.
 
 <p>The {{pointer-events}} property specifies under what circumstances a
 given element can be the target element for a pointer event. It affects
-the circumstances under which the following are processed:</p>
+the circumstances under which the following are processed:
 
 <ul>
   <li>user interface events such as mouse clicks</li>
 
   <li><a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/selector.html#pseudo-class-selectors">dynamic pseudo-classes</a>
-  (i.e., :hover, :active and :focus; [<a href="refs.html#ref-css2">CSS2</a>],
+  (i.e., :hover, :active and :focus; [[CSS2]],
   section 5.11)</li>
 
   <li>hyperlinks (see <a href="linking.html#Links">Links out of
@@ -531,7 +531,7 @@ the circumstances under which the following are processed:</p>
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td><a>container elements</a>, <a>graphics elements</a> and {{use}}</td>
+    <td>[=container elements=], [=graphics elements=] and {{use}}</td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -550,7 +550,7 @@ the circumstances under which the following are processed:</p>
     <td>as specified</td>
   </tr>
   <tr>
-    <th><a>Animation type</a>:</th>
+    <th>[=Animation type=]:</th>
     <td>discrete</td>
   </tr>
 </table>
@@ -561,7 +561,7 @@ the circumstances under which the following are processed:</p>
 
   <dt><span class="prop-value">bounding-box</span></dt>
   <dd>The given element can be a target element for pointer events when the pointer is over the
-  <a>bounding box</a> of the element.</dd>
+  [=bounding box=] of the element.</dd>
 
   <dt><span class="prop-value">visiblePainted</span></dt>
   <dd>The given element can be the target element for pointer events when
@@ -625,7 +625,7 @@ the circumstances under which the following are processed:</p>
   <dd>The given element does not receive pointer events.</dd>
 </dl>
 
-<p>For text elements, hit-testing is performed on a character cell basis:</p>
+<p>For text elements, hit-testing is performed on a character cell basis:
 
 <ul>
   <li>The value <span class="prop-value">visiblePainted</span> means that the
@@ -664,7 +664,7 @@ the circumstances under which the following are processed:</p>
 <p>For raster images, hit-testing is performed on a
 whole-image basis (i.e., the rectangular area for the image is
 the determinant for whether the image receives the
-event):</p>
+event):
 
 <ul>
   <li>The value <span class="prop-value">visiblePainted</span> means that the
@@ -694,14 +694,14 @@ event):</p>
   that the image does not receive pointer events.</li>
 </ul>
 
-<p>For {{foreignObject}} elements, hit-testing is performed on the rectangular
-area, the <a>object bounding box</a>, of the element. See processing for raster
-images above. Useragents may allow the foreign content of a {{foreignObject}}
-element to be target of hit-testing as well.</p>
+<p>For <{foreignObject}> elements, hit-testing is performed on the rectangular
+area, the [=object bounding box=], of the element. See processing for raster
+images above. Useragents may allow the foreign content of a <{foreignObject}>
+element to be target of hit-testing as well.
 
 <p>The values of properties {{opacity}},
 {{fill-opacity}}, {{stroke-opacity}}, {{fill}} and
-{{stroke}} do not affect event processing.</p>
+{{stroke}} do not affect event processing.
 
 
 <div class='ready-for-wider-review'>
@@ -713,7 +713,7 @@ element to be target of hit-testing as well.</p>
     At most one element in each document is <a href="https://html.spec.whatwg.org/multipage/interaction.html#focused">focused</a> at a time;
     if the document as a whole has system focus,
     this element becomes the target of all keyboard events.
-</p>
+
 <p> When an element is focused,
     the element matches the <a href="https://www.w3.org/TR/css-selectors-3/#the-user-action-pseudo-classes-hover-act">CSS <code>:focus</code> pseudo-class</a>.
     Interactive user agents must visually indicate focus (usually with an outline)
@@ -724,34 +724,34 @@ element to be target of hit-testing as well.</p>
     replace the visual indication with one more suitable to the graphic,
     (such as a stroke on a shape)
     but should not use it to remove visual indications of focus completely.
-</p>
+
 <p>
     The following SVG elements are <dfn id="TermFocusable" data-dfn-type="dfn" data-export="">focusable</dfn>
     in an interactive document.
-    Any <a>instance</a> of such an element in a <a>use-element shadow tree</a>
+    Any [=instance=] of such an element in a [=use-element shadow tree=]
     is also focusable.
     For the purpose of the HTML focus model,
     interactive user agents must treat them as
     <a href="https://html.spec.whatwg.org/multipage/interaction.html#focusable">focusable areas</a>
     whose <a href="https://html.spec.whatwg.org/multipage/interaction.html#specially-focusable">tabindex focus flag</a> should be set:
-</p>
+
 <ul>
     <li>the document root element</li>
-    <li>any element (such as within a {{foreignObject}})
+    <li>any element (such as within a <{foreignObject}>)
         that generates a scrollable region
     </li>
-    <li>any directly <a>rendered element</a>
+    <li>any directly [=rendered element=]
         with a valid integer {{tabindex}} attribute</li>
 </ul>
 <p> In the case of user-agent supplied controls,
     the element may have more than one focusable area,
     for each sub-control.
-</p>
-<p> In addition, all {{a}} elements that are valid links are <a>focusable</a>,
+
+<p> In addition, all {{a}} elements that are valid links are [=focusable=],
     and their <a href="https://html.spec.whatwg.org/multipage/interaction.html#specially-focusable">tabindex focus flag</a> must be set
     <em>unless</em> the user agent normally provides an alternative method
     of keyboard traversal of links.
-</p>
+
 <p>
     For compatibility with content that used the
     <a href="https://www.w3.org/TR/SVGTiny12/interact.html#focusable-attr">SVG Tiny 1.2 <span class="attr-name">focusable</span> attribute</a>,
@@ -760,7 +760,7 @@ element to be target of hit-testing as well.</p>
     In new content, authors should either omit the <span class="attr-name">focusable</span> attribute
     or use it only in combination with a corresponding
     <span class="attr-name">tabindex</span> value of <span class="attr-value">0</span>.
-</p>
+
 <p>
     User agents may treat other elements as focusable,
     particularly if keyboard interaction is the only or primary means of user input.
@@ -770,53 +770,53 @@ element to be target of hit-testing as well.</p>
     listeners for mouse, pointer, or focus events.
     Authors should not rely on this behavior;
     all interactive elements should directly support keyboard interaction.
-</p>
+
 <p>
-    The sequential focus order is generated from the set of all <a>focusable</a> elements,
+    The sequential focus order is generated from the set of all [=focusable=] elements,
     processing {{tabindex}} attributes on SVG elements
     in the same way as <a href="https://html.spec.whatwg.org/multipage/interaction.html#the-tabindex-attribute">tabindex attributes on HTML elements</a>.
-    Content within a <a>use-element shadow tree</a>
+    Content within a [=use-element shadow tree=]
     is inserted in the focus order as if it was child content
     of the {{use}} element.
-</p>
+
 <div class='note'>
-    A <a>non-rendered element</a> can never receive focus,
+    A [=non-rendered element=] can never receive focus,
     regardless of the value of the {{tabindex}} attribute,
     If a script programmatically assigns focus to a non-rendered
     or otherwise un-focusable element, the focusing call is aborted.
     Note, however, that an element that is not visible or onscreen
-    may still be <a>rendered</a>.
+    may still be [=rendered=].
 </div>
 <p> When the user agent supports scrolling or panning of the SVG document,
     and focus moves to an element that is currently outside the SVG viewport,
     the user agent should scroll or pan the document
     until the focused element is within the SVG viewport.
-</p>
 
-<p> As in HTML, an SVG element that is <a>focusable</a>
+
+<p> As in HTML, an SVG element that is [=focusable=]
     but does not have a defined
     <a href="https://dom.spec.whatwg.org/#eventtarget-activation-behavior">activation behavior</a>
     has an activation behaviour that does nothing
     (unless a script specifically responds to it).
-</p>
-<p class="note">
+
+Note: 
     This means that an element that is only focusable
     because of its {{tabindex}} attribute
     will fire a <code>click</code> event
     in response to a non-mouse activation
-    (e.g. hitting the "enter" key while the element has <a>focus</a>).
-</p>
+    (e.g. hitting the "enter" key while the element has [=focus=]).
+
 
 <p>
     For documents that contain a mix of inline HTML and SVG,
     focus is handled for the document as a whole
     (with a combined sequential focus order),
     not with each inline SVG or HTML fragment as an isolated subdocument.
-</p>
+
 
 <div class='note'>
   <p>For example, in the following document, pressing Tab would cycle the focus
-  between elements A, B and C, in that order.</p>
+  between elements A, B and C, in that order.
 
   <pre>&lt;!DOCTYPE html&gt;
 &lt;button id="A" tabindex="1"&gt;First thing&lt;/button&gt;
@@ -828,48 +828,48 @@ element to be target of hit-testing as well.</p>
 
 <p>Note that SVG elements do not have an equivalent of HTML's
 <a href="https://html.spec.whatwg.org/multipage/interaction.html#the-accesskey-attribute">accesskey</a>
-attribute.</p>
+attribute.
 </div>
 
 
 <h3 id="EventAttributes">Event attributes</h3>
 
   <dl class='definitions'>
-    <dt><dfn id="TermEventAttribute" data-dfn-type="dfn" data-export="">event attribute</dfn></dt>
+    <dt><dfn dfn export>event attribute</dfn></dt>
     <dd>An event attribute always has a name that starts with "on" followed by the name of the event for which it is intended.
     It specifies some script to run when the event of the given type is dispatched to the element on which the attribute
     is specified.</dd>
   </dl>
 
-  <p>For every <a>event type</a> that the <a>user agent</a> supports, SVG supports that as an event attribute,
-    following the same requirements as for <a>event handler content attributes</a> [[!HTML]].
-    The <a>event attributes</a> are available on all <a>SVG elements</a>.
-  </p>
+  <p>For every [=event type=] that the [=user agent=] supports, SVG supports that as an event attribute,
+    following the same requirements as for [=event handler content attributes=] [[!HTML]].
+    The [=event attributes=] are available on all [=SVG elements=].
+  
 
   <p>The contents of event attributes are always interpreted as ECMAScript,
   as if processed with the media type <span class="attr-value">'application/ecmascript'</span>.
-  [<a href="refs.html#ref-rfc2046">rfc2046</a>][<a href='refs.html#ref-rfc4329'>rfc4329</a>]</p>
+  [<a href="refs.html#ref-rfc2046">rfc2046</a>][<a href='refs.html#ref-rfc4329'>rfc4329</a>]
 
-  <p>Event attributes are not <a href="https://svgwg.org/specs/animations/#Animatable">animatable</a>.</p>
+  <p>Event attributes are not <a href="https://svgwg.org/specs/animations/#Animatable">animatable</a>.
 
   <p>Implementors may view the setting of event attributes as the
-  creation and registration of an <a>EventListener</a> on the
-  <a>EventTarget</a>.  Such event listeners are invoked only for
+  creation and registration of an [=EventListener=] on the
+  [=EventTarget=].  Such event listeners are invoked only for
   the "bubbling" and "at target" phases, as if false were specified
   for the <code>useCapture</code> argument to <code>addEventListener</code>.
-  This <a>EventListener</a> behaves in the same manner as any other
-  which may be registered on the <a>EventTarget</a>.</p>
+  This [=EventListener=] behaves in the same manner as any other
+  which may be registered on the [=EventTarget=].
 
   <p>If the attribute representing the event listener is changed,
   this may be viewed as the removal of the previously registered
-  <a>EventListener</a> and the registration of a new one. Furthermore, no
+  [=EventListener=] and the registration of a new one. Furthermore, no
   specification is made as to the order in which event attributes
   will receive the event with regards to the other EventListeners
-  on the <a>EventTarget</a>.</p>
+  on the [=EventTarget=].
 
   <div class="example">
   <p>In ECMAScript, one way to establish an event listener is to
-  define a function and pass that function to the <code>addEventListener</code> method:</p>
+  define a function and pass that function to the <code>addEventListener</code> method:
 
 <pre>
 function myAction1(evt) {
@@ -883,24 +883,24 @@ myElement.addEventListener("click", myAction1, false)
   <a href="interact.html">event attribute</a> becomes
   the definition of the ECMAScript function which gets invoked in
   response to the event. As with all registered ECMAScript event
-  listener functions, this function receives an <a>Event</a> object as a
+  listener functions, this function receives an [=Event=] object as a
   parameter, and the name of the Event object is
-  <strong>evt</strong>. For example, it is possible to write:</p>
+  <strong>evt</strong>. For example, it is possible to write:
 
 <xmp>
 <rect onclick="MyClickHandler(evt)" .../>
 </xmp>
 
-  <p>which will pass the <a>Event</a> object <strong>evt</strong> into
-  function <code>MyClickHandler</code>.</p>
+  <p>which will pass the [=Event=] object <strong>evt</strong> into
+  function <code>MyClickHandler</code>.
   </div>
 
   <h4 id="AnimationEvents">Animation event attributes</h4>
 
-  <p>Below are the definitions for the <a>animation event attributes</a>.
-  These can be specified on the <a>animation elements</a>.</p>
+  <p>Below are the definitions for the [=animation event attributes=].
+  These can be specified on the [=animation elements=].
 
-  <p><em>Attribute definitions:</em></p>
+  <p><em>Attribute definitions:</em>
 
   <dl class="attrdef-list">
     <dt>
@@ -979,26 +979,26 @@ myElement.addEventListener("click", myAction1, false)
   <p>A {{script}} element is equivalent to the {{script}} element in
   HTML and thus is the place for scripts (e.g., ECMAScript). Any functions
   defined within any {{script}} element have a "global" scope across the
-  entire current document.</p>
+  entire current document.
 
   <p>The script's text content is never directly rendered;
   the {{display}} value for the {{script element}} element
   must always be set to <span class="prop-value">none</span>
-  by the <a>user agent style sheet</a>,
+  by the [=user agent style sheet=],
   and this declaration must have importance over any other CSS rule or presentation attribute.
-  </p>
+  
 
   <p id="ScriptElementExecution">Before attempting to execute the {{script}}
   element the resolved media type value for {{script/type}} must be inspected.
-  If the <a>SVG user agent</a> does not support the scripting language then the
-  {{script}} element must not be executed.</p>
+  If the [=SVG user agent=] does not support the scripting language then the
+  {{script}} element must not be executed.
 
   <div class="example">
   <p id="ExampleScript01">This example defines a function
   <code>circle_click</code> which is called by the
   {{onclick}} event attribute on the {{circle}} element. The drawing
   below on the left is the initial image. The drawing below on the right shows
-  the result after clicking on the circle.</p>
+  the result after clicking on the circle.
 
 <xmp>
 <?xml version="1.0" standalone="no"?>
@@ -1047,13 +1047,13 @@ myElement.addEventListener("click", myAction1, false)
       </tr>
     </tbody>
   </table>
-  <p class="view-as-svg"><a href="images/script/script01.svg">View this example as SVG (SVG-enabled browsers only)</a></p>
+  <p class="view-as-svg"><a href="images/script/script01.svg">View this example as SVG (SVG-enabled browsers only)</a>
   </div>
 
 
   @@elementsummary script@@
 
-  <p><em>Attribute definitions:</em></p>
+  <p><em>Attribute definitions:</em>
 
   <dl class="attrdef-list">
     <dt>
@@ -1073,7 +1073,7 @@ myElement.addEventListener("click", myAction1, false)
       </table>
     </dt>
     <dd>
-      <p>The crossorigin attribute is a <a>CORS settings attribute</a>, and unless otherwise specified follows the same processing rules as in html [[!HTML]].</p>
+      <p>The crossorigin attribute is a [=CORS settings attribute=], and unless otherwise specified follows the same processing rules as in html [[!HTML]].
     </dd>
     <dt>
       <table class="attrdef def">
@@ -1117,7 +1117,7 @@ myElement.addEventListener("click", myAction1, false)
       </table>
     </dt>
     <dd>
-      An <a href="linking.html#URLReference">URL reference</a> to an external
+      An [=URL Reference=] to an external
       resource containing the script code.
       Refer to the common handling defined for <a
       href="linking.html#linkRefAttrs">URL reference attributes</a> and
@@ -1125,7 +1125,7 @@ myElement.addEventListener("click", myAction1, false)
       <p>
         The URL is processed and the resource is fetched
         <a href="linking.html#processingURL">as described in the Linking chapter</a>.
-      </p>
+      
     </dd>
   </dl>
 
@@ -1135,7 +1135,7 @@ myElement.addEventListener("click", myAction1, false)
 
 
 
-<p>An <a>SVGScriptElement</a> object represents a {{script}} element in the DOM.</p>
+<p>An <a>SVGScriptElement</a> object represents a [[SVG2#InterfaceSVGScriptElement|&lt;script>]] element in the DOM.</p>
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGScriptElement</b> : <a>SVGElement</a> {
@@ -1146,7 +1146,7 @@ interface <b>SVGScriptElement</b> : <a>SVGElement</a> {
 <a>SVGScriptElement</a> includes <a>SVGURIReference</a>;</pre>
 
 <p>The <b id="__svg__SVGScriptElement__type">type</b> IDL attribute
-<a>reflects</a> the {{type}} content attribute.</p>
+<a>reflects</a> the <a>type</a> content attribute.</p>
 
 <p>The <b id="__svg__SVGScriptElement__crossOrigin">crossOrigin</b> IDL
-attribute <a>reflects</a> the {{crossorigin}} content attribute.</p>
+attribute <a>reflects</a> the <a>crossorigin</a> content attribute.</p>

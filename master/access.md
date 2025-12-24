@@ -1,10 +1,10 @@
 <h2 id="accessibility">Appendix C: Accessibility Support</h2>
 
-<p class="normativity"><em>This appendix is informative, not normative.</em></p>
+<p class="normativity"><em>This appendix is informative, not normative.</em>
 
 <h3 id="AccessibilityAndSVG">SVG Accessibility Features</h3>
 
-<p>This appendix highlights the accessibility features of SVG and accessibility related specifications used to support SVG and the associated <a href="https://www.w3.org/TR/WCAG21/"><cite>W3C Web Content Accessibility Guidelines (WCAG) 2.0 &bs[;WCAG2]</cite></a> requirements they are designed to support.</p>
+<p>This appendix highlights the accessibility features of SVG and accessibility related specifications used to support SVG and the associated <a href="https://www.w3.org/TR/WCAG21/"><cite>W3C Web Content Accessibility Guidelines (WCAG) 2.0 &bs[;WCAG2]</cite></a> requirements they are designed to support.
 <dl>
  <dt><span class="gl"><a href="https://www.w3.org/TR/WCAG21/#content-structure-separation">&bs[;WCAG2] Create content that can be presented in different ways (for example simpler layout) without losing information or structure: Information and Relationships.</a></span></dt>
   <dd>
@@ -79,7 +79,7 @@ on each <a href="types.html#InterfaceSVGElement">SVG Element</a> in the DOM</li>
 <h3 id="SVGRelatedAccessibilityDocuments">Supporting SVG Accessibility Specifications and Guidelines</h3>
 
 <p>This section enumerates the SVG accessibility-related specifications and authoring guidelines.
-</p>
+
 
 <dl>
   <dt><span class="gl">Related SVG Accessibility Specifications for User Agents</span></dt>

@@ -1,6 +1,6 @@
 <h2>Property Index</h2>
 
-<p class="normativity"><em>This appendix is informative, not normative.</em></p>
+<p class="normativity"><em>This appendix is informative, not normative.</em>
 
 <!-- It would be great if this table were automatically generated, too. -->
 
@@ -14,7 +14,7 @@
           <th title='Inherited'>Inh.</th>
           <th>Percentages</th>
           <th>Media</th>
-          <th><a>Animation type</a></th>
+          <th>[=Animation type=]</th>
           <th>Computed value</th>
         </tr>
       </thead>
@@ -23,7 +23,7 @@
           <th>{{color-interpolation}}</th>
           <td>auto | sRGB | linearRGB </td>
           <td>sRGB</td>
-          <td><a>container elements</a>, <a>graphics elements</a>, <a>gradient elements</a>, {{use}} and {{animate}}</td>
+          <td>[=container elements=], [=graphics elements=], [=gradient elements=], {{use}} and <{animate}></td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -58,18 +58,18 @@
           <td>&lt;paint&gt; (See <a href="painting.html#SpecifyingPaint">Specifying
           paint</a>)</td>
           <td>black</td>
-          <td><a>shapes</a> and <a>text content elements</a></td>
+          <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
           <td>by computed value</td>
-          <td>as specified, but with <a>&lt;color></a> values computed and <a>&lt;url></a> values made absolute</td>
+          <td>as specified, but with [=&lt;color>=] values computed and [=&lt;url>=] values made absolute</td>
         </tr>
         <tr>
           <th>{{fill-opacity}}</th>
           <td>&lt;‘{{opacity}}’&gt;</td>
           <td>1</td>
-          <td><a>shapes</a> and <a>text content elements</a></td>
+          <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -80,7 +80,7 @@
           <th>{{fill-rule}}</th>
           <td>nonzero | evenodd </td>
           <td>nonzero</td>
-          <td><a>shapes</a> and <a>text content elements</a></td>
+          <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -88,7 +88,7 @@
           <td>as specified</td>
         </tr>
         <tr>
-          <th>{{image-rendering}}</th>
+          <th>[[SVG2#ImageRendering|image-rendering]]</th>
           <td>auto | optimizeSpeed | optimizeQuality </td>
           <td>auto</td>
           <td>images</td>
@@ -102,7 +102,7 @@
           <th>{{marker property}}</th>
           <td>see individual properties</td>
           <td>see individual properties</td>
-          <td><a>shapes</a></td>
+          <td>[=shapes=]</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -115,18 +115,18 @@
            {{marker-start}}</th>
           <td>none | <a>&lt;url&gt;</a></td>
           <td>none</td>
-          <td><a>shapes</a></td>
+          <td>[=shapes=]</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
           <td>discrete</td>
-          <td>as specified, but with <a>&lt;url></a> values (that are part of a <a>&lt;marker-ref></a>) made absolute</td>
+          <td>as specified, but with [=&lt;url>=] values (that are part of a [=&lt;marker-ref>=]) made absolute</td>
         </tr>
         <tr class="ready-for-wider-review">
           <th>{{paint-order}}</th>
           <td>normal | [ fill || stroke || markers ] </td>
           <td>normal</td>
-          <td><a>shapes</a> and <a>text content elements</a></td>
+          <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -139,7 +139,7 @@
           visible |<br />
            painted | fill | stroke | all | none </td>
           <td>auto</td>
-          <td><a>container elements</a>, <a>graphics elements</a> and {{use}}</td>
+          <td>[=container elements=], [=graphics elements=] and {{use}}</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -185,7 +185,7 @@
           <td>auto | optimizeSpeed | crispEdges |<br />
            geometricPrecision </td>
           <td>auto</td>
-          <td><a>shapes</a></td>
+          <td>[=shapes=]</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -219,18 +219,18 @@
           <td>&lt;paint&gt; (See <a href="painting.html#SpecifyingPaint">Specifying
           paint</a>)</td>
           <td>none</td>
-          <td><a>shapes</a> and <a>text content elements</a></td>
+          <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
           <td>by computed value</td>
-          <td>as specified, but with <a>&lt;color></a> values computed and <a>&lt;url></a> values made absolute</td>
+          <td>as specified, but with [=&lt;color>=] values computed and [=&lt;url>=] values made absolute</td>
         </tr>
         <tr>
           <th>{{stroke-dasharray}}</th>
           <td>none | &lt;dasharray&gt; </td>
           <td>none</td>
-          <td><a>shapes</a> and <a>text content elements</a></td>
+          <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
           <td>refer to the normalized diagonal of the current SVG viewport</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -241,7 +241,7 @@
           <th>{{stroke-dashoffset}}</th>
           <td><a>&lt;length-percentage&gt;</a> | <a>&lt;number&gt;</a></td>
           <td>0</td>
-          <td><a>shapes</a> and <a>text content elements</a></td>
+          <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
           <td>refer to the normalized diagonal of the current SVG viewport</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -252,7 +252,7 @@
           <th>{{stroke-linecap}}</th>
           <td>butt | round | square </td>
           <td>butt</td>
-          <td><a>shapes</a> and <a>text content elements</a></td>
+          <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -263,7 +263,7 @@
           <th>{{stroke-linejoin}}</th>
           <td>miter | round | bevel </td>
           <td>miter</td>
-          <td><a>shapes</a> and <a>text content elements</a></td>
+          <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -274,7 +274,7 @@
           <th>{{stroke-miterlimit}}</th>
           <td><a>&lt;number&gt;</a> (non-negative)</td>
           <td>4</td>
-          <td><a>shapes</a> and <a>text content elements</a></td>
+          <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -285,7 +285,7 @@
           <th>{{stroke-opacity}}</th>
           <td>&lt;‘{{opacity}}’&gt;</td>
           <td>1</td>
-          <td><a>shapes</a> and <a>text content elements</a></td>
+          <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -296,7 +296,7 @@
           <th>{{stroke-width}}</th>
           <td><a>&lt;length-percentage&gt;</a> | <a>&lt;number&gt;</a></td>
           <td>1px</td>
-          <td><a>shapes</a> and <a>text content elements</a></td>
+          <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
           <td>refer to the normalized diagonal of the current SVG viewport</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -307,7 +307,7 @@
           <th>{{text-anchor}}</th>
           <td>start | middle | end </td>
           <td>start</td>
-          <td><a>text content elements</a></td>
+          <td>[=text content elements=]</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -330,7 +330,7 @@
           <th>{{vector-effect}}</th>
           <td>non-scaling-stroke | none</td>
           <td>none</td>
-          <td><a>graphics elements</a> and {{use}}</td>
+          <td>[=graphics elements=] and {{use}}</td>
           <td>no</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -342,7 +342,7 @@
           <td><a>&lt;length-percentage&gt;</a></td>
           <td>0</td>
           <td>{{svg}}, {{rect}},
-            {{image}}, {{foreignObject}} elements</td>
+            {{image}}, <{foreignObject}> elements</td>
           <td>no</td>
           <td>refer to the width of the current SVG viewport (see
               <a href="coords.html#Units">Units</a>)</td>
@@ -354,7 +354,7 @@
           <td><a>&lt;length-percentage&gt;</a></td>
           <td>0</td>
           <td>{{svg}}, {{rect}},
-            {{image}}, {{foreignObject}} elements</td>
+            {{image}}, <{foreignObject}> elements</td>
           <td>no</td>
           <td>refer to the height of the current SVG viewport (see
               <a href="coords.html#Units">Units</a>)</td>
