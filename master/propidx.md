@@ -23,7 +23,7 @@
           <th>{{color-interpolation}}</th>
           <td>auto | sRGB | linearRGB </td>
           <td>sRGB</td>
-          <td>[=container elements=], [=graphics elements=], [=gradient elements=], {{use}} and <{animate}></td>
+          <td>[=container elements=], [=graphics elements=], [=gradient elements=], <{use}> and <{animate}></td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -66,7 +66,7 @@
           <td>as specified, but with [=&lt;color>=] values computed and [=&lt;url>=] values made absolute</td>
         </tr>
         <tr>
-          <th>{{fill-opacity}}</th>
+          <th>'fill-opacity'</th>
           <td>&lt;‘{{opacity}}’&gt;</td>
           <td>1</td>
           <td>[=shapes=] and [=text content elements=]</td>
@@ -123,7 +123,7 @@
           <td>as specified, but with [=&lt;url>=] values (that are part of a [=&lt;marker-ref>=]) made absolute</td>
         </tr>
         <tr class="ready-for-wider-review">
-          <th>{{paint-order}}</th>
+          <th>[=paint-order=]</th>
           <td>normal | [ fill || stroke || markers ] </td>
           <td>normal</td>
           <td>[=shapes=] and [=text content elements=]</td>
@@ -139,7 +139,7 @@
           visible |<br />
            painted | fill | stroke | all | none </td>
           <td>auto</td>
-          <td>[=container elements=], [=graphics elements=] and {{use}}</td>
+          <td>[=container elements=], [=graphics elements=] and <{use}></td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -204,7 +204,7 @@
           <td></td>
         </tr>
         <tr>
-          <th>{{stop-opacity}}</th>
+          <th>'stop-opacity'</th>
           <td>&lt;‘{{opacity}}’&gt;</td>
           <td>1</td>
           <td>{{stop}} elements</td>
@@ -282,7 +282,7 @@
           <td>as specified</td>
         </tr>
         <tr>
-          <th>{{stroke-opacity}}</th>
+          <th>'stroke-opacity'</th>
           <td>&lt;‘{{opacity}}’&gt;</td>
           <td>1</td>
           <td>[=shapes=] and [=text content elements=]</td>
@@ -330,7 +330,7 @@
           <th>{{vector-effect}}</th>
           <td>non-scaling-stroke | none</td>
           <td>none</td>
-          <td>[=graphics elements=] and {{use}}</td>
+          <td>[=graphics elements=] and <{use}></td>
           <td>no</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -341,7 +341,7 @@
           <th>{{x}}</th>
           <td><a>&lt;length-percentage&gt;</a></td>
           <td>0</td>
-          <td>{{svg}}, {{rect}},
+          <td><{svg}>, {{rect}},
             {{image}}, <{foreignObject}> elements</td>
           <td>no</td>
           <td>refer to the width of the current SVG viewport (see
@@ -353,7 +353,7 @@
           <th>{{y}}</th>
           <td><a>&lt;length-percentage&gt;</a></td>
           <td>0</td>
-          <td>{{svg}}, {{rect}},
+          <td><{svg}>, {{rect}},
             {{image}}, <{foreignObject}> elements</td>
           <td>no</td>
           <td>refer to the height of the current SVG viewport (see

@@ -112,9 +112,9 @@ Definitions</h4>
           (see <a href="#processingURL-validity">Valid URL targets</a>
           for appropriate targets).
           For example, the {{clip-path}} property can only refer to
-          {{clipPath}} elements. The property setting
+          <a element spec="css-masking">clipPath</a> elements. The property setting
           <span class="attr-value">clip-path:url(#MyElement)</span> is an
-          invalid reference if the referenced element is not a {{clipPath}}.</li>
+          invalid reference if the referenced element is not a <a element spec="css-masking">clipPath</a>.</li>
       </ul>
       <p>Invalid references may or may not be an error
         (see <a href="conform.html#ErrorProcessing">Error processing</a>),
@@ -351,7 +351,7 @@ XLink attributes. For example:
 
 
 <ul>
-  <li>For the {{a/href}} attribute of the {{a}} element,
+  <li>For the {{a/href}} attribute of the <a element spec="svg2">a</a> element,
     at the time the link is activated by the user.
   </li>
   <li>For all other <span class="attr-name">href</span> attributes,
@@ -666,7 +666,7 @@ Note:
 <p>The valid target element types for <span class="attr-name">href</span> (or {{xlink:href}}) attributes are based on the element that has the attribute, as follows:
 
 <ul>
-  <li>the {{a}} element can reference any local or non-local resource</li>
+  <li>the <a element spec="svg2">a</a> element can reference any local or non-local resource</li>
   <li>the {{image}} element must reference a document that can be processed as an image</li>
   <li>the {{linearGradient}} element must reference a different {{linearGradient}} or {{radialGradient}} element</li>
   <li>the {{pattern}} element must reference another {{pattern}} element</li>
@@ -674,7 +674,7 @@ Note:
   <li>the {{script}} element must reference an external document that provides the script content</li>
   <li>the {{textPath}} element must reference an element type
     that implements the [=SVGGeometryElement=] interface</li>
-  <li>the {{use}} element must reference an SVG-namespaced element</li>
+  <li>the <{use}> element must reference an SVG-namespaced element</li>
 </ul>
 
 <p>The valid target element types for style properties defined in this specification are as follows: 
@@ -711,22 +711,22 @@ Note:
 
 
 
-<p>SVG provides an {{a}} element, to indicate links (also known
+<p>SVG provides an <a element spec="svg2">a</a> element, to indicate links (also known
 as <em>hyperlinks</em> or <em>Web links</em>).
-An {{a}} element forms a link if it has a {{href}} or {{xlink:href}} attribute; without these attributes the {{a}} element is an inactive placeholder for a link.
+An <a element spec="svg2">a</a> element forms a link if it has a {{href}} or {{xlink:href}} attribute; without these attributes the <a element spec="svg2">a</a> element is an inactive placeholder for a link.
 
 Note: SVG 1.1 defined links in terms of the XLink specification ([<a href="https://www.w3.org/TR/2001/REC-xlink-20010627/">XLink</a>]),
 using attributes defined in the XLink namespace.
 SVG 2 uses an alternative set of attributes in the default namespace that are consistent with HTML links, and <a href="#XLinkRefAttrs">deprecates the XLink attributes</a>.
 
-<p>The {{a}} element may
-contain any element that its parent may contain, except for another {{a}} element;
+<p>The <a element spec="svg2">a</a> element may
+contain any element that its parent may contain, except for another <a element spec="svg2">a</a> element;
 the same element is used for both graphical and textual linked content.
 Links may not be nested;
-if an {{a}} element is a descendent of another hyperlink element
+if an <a element spec="svg2">a</a> element is a descendent of another hyperlink element
 (whether in the SVG namespace or another namespace),
 user agents must ignore its href attribute and treat it as inactive.
-The invalid {{a}} element must still be rendered as a generic container element.
+The invalid <a element spec="svg2">a</a> element must still be rendered as a generic container element.
 
 
 <p class="issue" data-issue="18">The rendering of invalid nested links is at risk, and will likely be synchronized with any decisions regarding the rendering of unknown elements.
@@ -734,12 +734,12 @@ The invalid {{a}} element must still be rendered as a generic container element.
 
 <p>For pointer events processing,
 a linked hit region is defined for each separate rendered element contained
-within the {{a}} element (according to the value of their {{pointer-events}} property),
-rather than for the bounding box of the {{a}} element itself.
+within the <a element spec="svg2">a</a> element (according to the value of their {{pointer-events}} property),
+rather than for the bounding box of the <a element spec="svg2">a</a> element itself.
 User agents must also ensure that all links are [=focusable=] and can be activated by keyboard commands.
 
 <p>The remote resource (the destination for the link) is defined by
-a [=URL=] specified by the {{href}} attribute on the {{a}}
+a [=URL=] specified by the {{href}} attribute on the <a element spec="svg2">a</a>
 element. The remote resource may be any Web resource (e.g., an image, a video
 clip, a sound bite, a program, another SVG document, an HTML document, an
 element within the current document, an element within a different document, etc.).
@@ -1108,7 +1108,7 @@ as follows:
 
   <li>If the SVG fragment identifier addresses specific SVG view (e.g.,
   <span class="attr-value">MyDrawing.svg#svgView(viewBox(0,200,1000,1000))</span>),
-  then the document fragment defined by the root {{svg}}
+  then the document fragment defined by the root <{svg}>
   element is displayed in the SVG viewport using the SVG view specification
   provided by the SVG fragment identifier. Parameters of the svgView specification override
   the parameters defined on the root <{svg}> element of the referenced document.
@@ -1151,7 +1151,7 @@ as follows:
 
 
 
-<p>An [=SVGElement=] object represents an {{a}} element in the DOM.
+<p>An [=SVGElement=] object represents an <a element spec="svg2">a</a> element in the DOM.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGAElement</b> : <a>SVGGraphicsElement</a> {

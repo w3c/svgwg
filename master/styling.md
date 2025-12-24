@@ -128,7 +128,7 @@ attributes must be the same as is defined for the
 <span class='element-name'>style</span> element</a>.
 
 <p>The style sheet's text content is never directly rendered;
-the {{display}} value for the {{style element}} element
+the 'display' value for the {{style element}} element
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
@@ -343,9 +343,9 @@ the presentation attribute name is the same as the property name, in lower-case 
       <{foreignObject}>,
       {{image}},
       {{rect}},
-      {{svg}},
-      {{symbol}}, and
-      {{use}}
+      <{svg}>,
+      <{symbol}>, and
+      <{use}>
     </td>
   </tr>
   <tr>
@@ -419,9 +419,9 @@ the presentation attribute name is the same as the property name, in lower-case 
       {{color-interpolation-filters}},
       {{cursor property}},
       {{direction}},
-      {{display}},
+      'display',
       {{dominant-baseline}},
-      {{fill-opacity}},
+      'fill-opacity',
       {{fill-rule}},
       {{filter property}},
       {{flood-color}},
@@ -443,19 +443,19 @@ the presentation attribute name is the same as the property name, in lower-case 
       {{mask property}},
       {{mask-type}},
       {{opacity}},
-      {{overflow}},
-      {{paint-order}},
+      [[#OverflowAndClipProperties|overflow]],
+      [=paint-order=],
       {{pointer-events}},
       {{shape-rendering}},
       {{stop-color}},
-      {{stop-opacity}},
+      'stop-opacity',
       {{stroke}},
       {{stroke-dasharray}},
       {{stroke-dashoffset}},
       {{stroke-linecap}},
       {{stroke-linejoin}},
       {{stroke-miterlimit}},
-      {{stroke-opacity}},
+      'stroke-opacity',
       {{stroke-width}},
       {{text-anchor}},
       {{text-decoration}},
@@ -464,7 +464,7 @@ the presentation attribute name is the same as the property name, in lower-case 
       {{transform-origin}},
       {{unicode-bidi}},
       {{vector-effect}},
-      {{visibility}},
+      'visibility',
       {{white-space}},
       {{word-spacing}},
       {{writing-mode}}
@@ -519,7 +519,7 @@ animating the corresponding property.
 <ul>
   <li>all properties defined in this specification</li>
 
-  <li>the {{display}}, {{overflow}} and {{visibility}} properties
+  <li>the 'display', [[#OverflowAndClipProperties|overflow]] and 'visibility' properties
     [<a href='refs.html#ref-css2'>CSS2</a>]</li>
 
   <li>the {{cursor property}} and {{text-overflow}} property
@@ -624,11 +624,11 @@ An <code>!important</code> rule in a user agent stylesheet
 <a href="https://www.w3.org/TR/css-cascade-4/#importance">over-rides all user and author styles</a>
 [<a href="refs.html#ref-css-cascade-4">css-cascade-4</a>].
 The display value for [=never-rendered elements=]
-and for {{symbol}} elements
+and for <{symbol}> elements
 can therefore not be changed.
 A symbol must only be rendered if it is the direct child
-of a shadow root whose host is a {{use}} element
-(and must always be rendered if the host {{use}} element is rendered).
+of a shadow root whose host is a <{use}> element
+(and must always be rendered if the host <{use}> element is rendered).
 The other elements, and their child content, are never rendered directly.
 
 

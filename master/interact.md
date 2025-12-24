@@ -343,7 +343,7 @@ of how to determine whether an element's relevant graphical
 content is under the pointer, and thus in which circumstances
 that graphic element can be the target element for a pointer
 event.) When an element is not displayed (i.e., when the
-{{display}} property on that element
+'display' property on that element
 or one of its ancestors has a value of <span
 class="prop-value">none</span>), that element cannot be the
 target of pointer events.
@@ -352,7 +352,7 @@ target of pointer events.
 the event is dispatched to that element according to the
 normal <a href='https://www.w3.org/TR/uievents/#event-flow'>event flow</a>
 ([<a href='refs.html#ref-uievents'>uievents</a>], section 3.1).
-For shadow trees created by the {{use}} element or via script,
+For shadow trees created by the <{use}> element or via script,
 the event must follow
 <a href="https://dom.spec.whatwg.org/#dispatching-events">Dispatching
   Events</a> [<a href="refs.html#ref-dom">dom</a>]
@@ -441,7 +441,7 @@ DOM event, is as follows:
   actions of this instance time resolution (such as immediately starting
   or stopping the animation) must be performed;</li>
 
-  <li>If the element is a hyperlink (e.g., it is a descendant element of an {{a}}
+  <li>If the element is a hyperlink (e.g., it is a descendant element of an <a element spec="svg2">a</a>
   element), and the pointer event is of a type that activates that hyperlink (e.g.
   via a mouse click), and if the hyperlinkz traversal changes the context of the
   content (e.g. opens a different document, or moves the pointer away from this
@@ -531,7 +531,7 @@ the circumstances under which the following are processed:
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td>[=container elements=], [=graphics elements=] and {{use}}</td>
+    <td>[=container elements=], [=graphics elements=] and <{use}></td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -565,7 +565,7 @@ the circumstances under which the following are processed:
 
   <dt><span class="prop-value">visiblePainted</span></dt>
   <dd>The given element can be the target element for pointer events when
-  the {{visibility}} property is set to
+  the 'visibility' property is set to
   <span class="prop-value">visible</span> and when the pointer is over a
   "painted" area. The pointer is over a painted area if it is over the
   interior (i.e., fill) of the element and the {{fill}} property has
@@ -575,20 +575,20 @@ the circumstances under which the following are processed:
 
   <dt><span class="prop-value">visibleFill</span></dt>
   <dd>The given element can be the target element for pointer events when the
-  {{visibility}}
+  'visibility'
   property is set to <span class="prop-value">visible</span> and when the
   pointer is over the interior (i.e., fill) of the element. The value of
   the {{fill}} property does not affect event processing.</dd>
 
   <dt><span class="prop-value">visibleStroke</span></dt>
   <dd>The given element can be the target element for pointer events when the
-  {{visibility}} property is set to <span class="prop-value">visible</span>
+  'visibility' property is set to <span class="prop-value">visible</span>
   and when the pointer is over the perimeter (i.e., stroke) of the element.
   The value of the {{stroke}} property does not affect event processing.</dd>
 
   <dt><span class="prop-value">visible</span></dt>
   <dd>The given element can be the target element for pointer events when the
-  {{visibility}} property is set to <span class="prop-value">visible</span>
+  'visibility' property is set to <span class="prop-value">visible</span>
   and the pointer is over either the interior (i.e., fill) or the perimeter
   (i.e., stroke) of the element. The values of the {{fill}} and
   {{stroke}} do not affect event processing.</dd>
@@ -601,25 +601,25 @@ the circumstances under which the following are processed:
   <span class="prop-value">none</span> or it is over the perimeter (i.e.,
   stroke) of the element and the {{stroke}} property has an actual
   value other than <span class="prop-value">none</span>. The value of the
-  {{visibility}} property does not affect event processing.</dd>
+  'visibility' property does not affect event processing.</dd>
 
   <dt><span class="prop-value">fill</span></dt>
   <dd>The given element can be the target element for pointer events when the
   pointer is over the interior (i.e., fill) of the element. The values of
-  the {{fill}} and {{visibility}} properties do not affect event
+  the {{fill}} and 'visibility' properties do not affect event
   processing.</dd>
 
   <dt><span class="prop-value">stroke</span></dt>
   <dd>The given element can be the target element for pointer events when the
   pointer is over the perimeter (i.e., stroke) of the element. The values
-  of the {{stroke}} and {{visibility}} properties do not affect
+  of the {{stroke}} and 'visibility' properties do not affect
   event processing.</dd>
 
   <dt><span class="prop-value">all</span></dt>
   <dd>The given element can be the target element for pointer events whenever
   the pointer is over either the interior (i.e., fill) or the perimeter
   (i.e., stroke) of the element. The values of the {{fill}}, {{stroke}}
-  and {{visibility}} properties do not affect event processing.</dd>
+  and 'visibility' properties do not affect event processing.</dd>
 
   <dt><span class="prop-value">none</span></dt>
   <dd>The given element does not receive pointer events.</dd>
@@ -633,14 +633,14 @@ the circumstances under which the following are processed:
   either the {{fill}} property is set to a value other than
   <span class="prop-value">none</span> or the {{stroke}} property is set
   to a value other than <span class="prop-value">none</span>, with the
-  additional requirement that the {{visibility}} property is set to
+  additional requirement that the 'visibility' property is set to
   <span class="prop-value">visible</span>.</li>
 
   <li>The values <span class="prop-value">visibleFill</span>,
   <span class="prop-value">visibleStroke</span> and
   <span class="prop-value">visible</span> are equivalent and indicate that the
   text string can receive events anywhere within the character cell if the
-  {{visibility}} property is set to <span class="prop-value">visible</span>.
+  'visibility' property is set to <span class="prop-value">visible</span>.
   The values of the {{fill}} and {{stroke}} properties do not affect
   event processing.</li>
 
@@ -649,13 +649,13 @@ the circumstances under which the following are processed:
   the {{fill}} property is set to a value other than
   <span class="prop-value">none</span> or the {{stroke}} property is set to
   a value other than <span class="prop-value">none</span>.  The value of the
-  {{visibility}} property does not affect event processing.</li>
+  'visibility' property does not affect event processing.</li>
 
   <li>The values <span class="prop-value">fill</span>,
   <span class="prop-value">stroke</span> and <span class="prop-value">all</span>
   are equivalent and indicate that the text string can receive events anywhere
   within the character cell.  The values of the {{fill}}, {{stroke}}
-  and {{visibility}} properties do not affect event processing.</li>
+  and 'visibility' properties do not affect event processing.</li>
 
   <li>The value <span class="prop-value">none</span> indicates that the given
   text does not receive pointer events.</li>
@@ -669,25 +669,25 @@ event):
 <ul>
   <li>The value <span class="prop-value">visiblePainted</span> means that the
   raster image can receive events anywhere within the bounds of the image,
-  with the additional requirement that the {{visibility}}
+  with the additional requirement that the 'visibility'
   property is set to <span class="prop-value">visible</span>.</li>
 
   <li>The values <span class="prop-value">visibleFill</span>,
   <span class="prop-value">visibleStroke</span> and
   <span class="prop-value">visible</span> are equivalent and indicate
   that the image can receive events anywhere within the rectangular area
-  for the image if the {{visibility}} property is set to
+  for the image if the 'visibility' property is set to
   <span class="prop-value">visible</span>.</li>
 
   <li>The value <span class="prop-value">painted</span> means that the raster
   image can receive events anywhere within the bounds of the image.
-  The value of the {{visibility}} property does not affect
+  The value of the 'visibility' property does not affect
   event processing.</li>
 
   <li>The values <span class="prop-value">fill</span>,
   <span class="prop-value">stroke</span> and <span class="prop-value">all</span>
   are equivalent and indicate that the image can receive events anywhere within
-  the rectangular area for the image. The value of the {{visibility}}
+  the rectangular area for the image. The value of the 'visibility'
   property does not affect event processing.</li>
 
   <li>The value <span class="prop-value">none</span> indicates
@@ -700,7 +700,7 @@ images above. Useragents may allow the foreign content of a <{foreignObject}>
 element to be target of hit-testing as well.
 
 <p>The values of properties {{opacity}},
-{{fill-opacity}}, {{stroke-opacity}}, {{fill}} and
+'fill-opacity', 'stroke-opacity', {{fill}} and
 {{stroke}} do not affect event processing.
 
 
@@ -741,13 +741,13 @@ element to be target of hit-testing as well.
         that generates a scrollable region
     </li>
     <li>any directly [=rendered element=]
-        with a valid integer {{tabindex}} attribute</li>
+        with a valid integer <a element-attr for="core-attributes">tabindex</a> attribute</li>
 </ul>
 <p> In the case of user-agent supplied controls,
     the element may have more than one focusable area,
     for each sub-control.
 
-<p> In addition, all {{a}} elements that are valid links are [=focusable=],
+<p> In addition, all <a element spec="svg2">a</a> elements that are valid links are [=focusable=],
     and their <a href="https://html.spec.whatwg.org/multipage/interaction.html#specially-focusable">tabindex focus flag</a> must be set
     <em>unless</em> the user agent normally provides an alternative method
     of keyboard traversal of links.
@@ -773,15 +773,15 @@ element to be target of hit-testing as well.
 
 <p>
     The sequential focus order is generated from the set of all [=focusable=] elements,
-    processing {{tabindex}} attributes on SVG elements
+    processing <a element-attr for="core-attributes">tabindex</a> attributes on SVG elements
     in the same way as <a href="https://html.spec.whatwg.org/multipage/interaction.html#the-tabindex-attribute">tabindex attributes on HTML elements</a>.
     Content within a [=use-element shadow tree=]
     is inserted in the focus order as if it was child content
-    of the {{use}} element.
+    of the <{use}> element.
 
 <div class='note'>
     A [=non-rendered element=] can never receive focus,
-    regardless of the value of the {{tabindex}} attribute,
+    regardless of the value of the <a element-attr for="core-attributes">tabindex</a> attribute,
     If a script programmatically assigns focus to a non-rendered
     or otherwise un-focusable element, the focusing call is aborted.
     Note, however, that an element that is not visible or onscreen
@@ -801,7 +801,7 @@ element to be target of hit-testing as well.
 
 Note: 
     This means that an element that is only focusable
-    because of its {{tabindex}} attribute
+    because of its <a element-attr for="core-attributes">tabindex</a> attribute
     will fire a <code>click</code> event
     in response to a non-mouse activation
     (e.g. hitting the "enter" key while the element has [=focus=]).
@@ -982,7 +982,7 @@ myElement.addEventListener("click", myAction1, false)
   entire current document.
 
   <p>The script's text content is never directly rendered;
-  the {{display}} value for the {{script element}} element
+  the 'display' value for the {{script element}} element
   must always be set to <span class="prop-value">none</span>
   by the [=user agent style sheet=],
   and this declaration must have importance over any other CSS rule or presentation attribute.

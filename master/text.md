@@ -154,7 +154,7 @@ Note:
     <a href="https://www.w3.org/TR/css-text-3/#white-space-phase-1">collapsed
     white space characters</a> are not addressable, neither are characters
     within an element with a value of <span class='prop-value'>none</span> for
-    the {{display}} property.
+    the 'display' property.
 
     Addressable characters are addressed by their index. Indexes are
     determined prior to applying any {{text-transform}}
@@ -892,7 +892,7 @@ Note:
 
 Note: 
   In CSS terms, the {{text}} element acts as a block
-  element. The {{tspan}}, {{textPath}}, and {{a}}
+  element. The {{tspan}}, {{textPath}}, and <a element spec="svg2">a</a>
   elements that are descended from [=text content elements=] act as
   inline elements.
 
@@ -902,8 +902,8 @@ Note:
   or filter to text. When one of these facilities is applied to text
   and keyword <span class="attr-value">'objectBoundingBox'</span> is
   used (see
-  <a href="coords.html#ObjectBoundingBox">Object bounding box
-  units</a>) to specify a graphical effect relative to the "object
+  [[#ObjectBoundingBoxUnits|Object bounding box
+  units]]) to specify a graphical effect relative to the "object
   bounding box", then the object bounding box units are computed
   relative to the entire {{text}} element in all cases, even
   when different effects are applied to different {{tspan}} or {{textPath}}
@@ -1003,7 +1003,7 @@ path: images/text/tspan02.svg
     </tr>
     <tr>
 <th>Purpose:</th>
-<td>Align with other elements such as {{a}} which already allow transforms.</td>
+<td>Align with other elements such as <a element spec="svg2">a</a> which already allow transforms.</td>
     </tr>
     <tr>
 <th>Owner:</th>
@@ -1018,7 +1018,7 @@ path: images/text/tspan02.svg
     This decision was reversed. See
     <a href="https://github.com/w3c/svgwg/issues/210">GitHub Issue
 210</a>. CSS/HTML does not allow transforms on inline elements
-and no renderer supports transforms on the {{a}} element
+and no renderer supports transforms on the <a element spec="svg2">a</a> element
 when inline (in both SVG and HTML).
   
 </div>
@@ -1729,7 +1729,7 @@ path: images/text/tspan05.svg
   First, a {{text}} element and its descendants are laid out
   inside a [=content area=] or [=wrapping area=] according to
   CSS, as if the {{text}} were a block element and any
-  {{tspan}}, {{textPath}}, and {{a}} descendants were
+  {{tspan}}, {{textPath}}, and <a element spec="svg2">a</a> descendants were
   inline elements. This layout takes into account all paragraph
   level and font related CSS properties described in this chapter.
 
@@ -2621,7 +2621,7 @@ Note:
   along with styling information and a description of one or more
   shapes to be filled. The {{text}} element is treated as a
   block element and its descendant {{tspan}}, {{textPath}}
-  and {{a}} elements are treated as inline elements. The CSS
+  and <a element spec="svg2">a</a> elements are treated as inline elements. The CSS
   renderer returns a set of [=typographic characters=] with
   their positions resulting from laying out the text as if the text
   were absolutely positioned.
@@ -2675,7 +2675,7 @@ is unconstrained in width and height.
   <li>
     The used value of each of the following properties on a <a>text
     content element</a> (and its pseudo-elements, if any) and on
-    an {{a}} element within a [=text content block element=]
+    an <a element spec="svg2">a</a> element within a [=text content block element=]
     must be the property's initial values:
     <span class="property">border-style</span>,
     <span class="property">float</span>,
@@ -2686,7 +2686,7 @@ is unconstrained in width and height.
   </li>
 
   <li>
-    If the computed value of the {{display}} property on a
+    If the computed value of the 'display' property on a
     correctly parented [=text content block element=] is anything
     other than
     <span class='prop-value'>none</span>, then its used value must
@@ -2700,9 +2700,9 @@ it were a block element.
   </li>
 
   <li>
-    If the computed value of the {{display}} property on a
+    If the computed value of the 'display' property on a
     correctly parented [=text content child element=]
-    or {{a}} element,
+    or <a element spec="svg2">a</a> element,
     is anything other than
     <span class='prop-value'>none</span>, then its used value must
     be
@@ -2710,17 +2710,17 @@ it were a block element.
 
     <p class='note'>
 This ensures that {{tspan}}, {{textPath}} and
-{{a}} elements are treated as if they were inline elements.
+<a element spec="svg2">a</a> elements are treated as if they were inline elements.
 Note: the {{transform}} property has no effect on
 inline elements.
     
   </li>
 
   <li>
-    The used value of the {{display}} property on an element
+    The used value of the 'display' property on an element
     that is a descendant of a [=text content block element=] and
     is not a correctly parented [=text content child element=]
-    or {{a}} element must be
+    or <a element spec="svg2">a</a> element must be
     <span class='prop-value'>none</span>.
 
     <p class='note'>
@@ -4882,7 +4882,7 @@ is filled and stroked as if it were a single path.
 <p>
 This means that all glyphs in the chunk should be filled,
 then all glyphs stroked at once,
-or the reverse according to the value of the {{paint-order}} property.
+or the reverse according to the value of the [=paint-order=] property.
 
 
 <p>For the purposes of painting, a {{text}} has zero, one, or more
@@ -4990,7 +4990,7 @@ Note:
     Display property values other than
     <span class='prop-value'>none</span> and
     <span class='prop-value'>inline</span>. Like all other SVG
-    elements, any value of {{display}} on an SVG text element
+    elements, any value of 'display' on an SVG text element
     other than <span class='prop-value'>none</span> is handled just
     as if it were <span class='prop-value'>inline</span>.  Thus it
     is not possible for a single {{text}} element to have any
@@ -5641,7 +5641,7 @@ Note:
 <p>
   In SVG {{text-overflow}} has an effect if there is a validly
   specified [=wrapping area=], regardless of the computed value
-  of the {{overflow}} property on the <a>text content block
+  of the [[#OverflowAndClipProperties|overflow]] property on the <a>text content block
   element</a>.
 
 
@@ -5683,7 +5683,7 @@ Note:
     The top line shows text as it would normally be rendered (text
     overflows due to {{white-space}} value
     <span class="prop-value">pre</span> and is displayed due to
-    {{overflow}} value <span class="prop-value">visible</span>).
+    [[#OverflowAndClipProperties|overflow]] value <span class="prop-value">visible</span>).
 
     The middle line shows text with {{text-overflow}} value
     <span class="prop-value">clip</span>, and
@@ -6017,7 +6017,7 @@ Note:
   <a href="https://www.w3.org/TR/css-text-decor-3/">CSS Text
   Decoration Module Level 3</a>. The paint order of the text
   decoration itself (fill/stroke) is determined by the value of the
-  {{paint-order}} property at the point where the text
+  [=paint-order=] property at the point where the text
   decoration is declared.
 
 
@@ -6345,7 +6345,7 @@ When getNumberOfChars() is called, the following steps are run:
 <li>If <var>node</var> is an [=Element=]:
 <ul>
 <li>If the element is [=not rendered=]
-  (e.g., because the {{display}} property has the used value
+  (e.g., because the 'display' property has the used value
   <span class='prop-value'>none</span>), then return 0;</li>
 <li>Otherwise, set <var>count</var> to 0, and for each child of <var>node</var>:
   <ul>

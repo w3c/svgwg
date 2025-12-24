@@ -36,7 +36,7 @@ different paints that the fill and stroke of a graphical element can be painted 
 {{fill}} and {{stroke}} properties.  The following section describes
 the different values that can be used for these properties.
 
-<p>Other properties, such as {{fill-opacity}} and {{stroke-width}},
+<p>Other properties, such as 'fill-opacity' and {{stroke-width}},
 also have an effect on the way fill and stroke paint is applied to the
 canvas.  The <a href='#FillProperties'>Fill properties</a> and <a href='#StrokeProperties'>Stroke properties</a>
 sections below describe these properties.
@@ -198,8 +198,8 @@ of the element being painted.  The context element of an element is defined as f
   via a [=marker property=], then the context element
   is the element referencing that {{marker element}}.</li>
   <li>If the element is within a sub-tree that is instantiated
-  with a {{use}} element, then the context element is
-  that {{use}} element.</li>
+  with a <{use}> element, then the context element is
+  that <{use}> element.</li>
   <li>Otherwise, there is no context element.</li>
 </ul>
 
@@ -484,7 +484,7 @@ intersections.
   </tr>
 </table>
 
-<p>{{fill-opacity}} specifies the opacity of the painting operation used
+<p>'fill-opacity' specifies the opacity of the painting operation used
 to paint the fill the current object. (See
 <a href="render.html#PaintingShapesAndText">Painting shapes and text</a>).
 
@@ -681,10 +681,10 @@ the stroke of a path.
   </tr>
 </table>
 
-<p>The {{stroke-opacity}} property specifies the opacity of the
+<p>The 'stroke-opacity' property specifies the opacity of the
 painting operation used to stroke the current object.  (See
 <a href="render.html#PaintingShapesAndText">Painting shapes and text</a>.)
-As with {{fill-opacity}}.
+As with 'fill-opacity'.
 
 <dl>
   <dt><span class='prop-value'>&lt;number&gt;</span></dt>
@@ -2273,7 +2273,7 @@ The {{marker-start}}, {{marker-end}} and {{marker-mid}} properties,
 together known as the <dfn id="TermMarkerProperties" data-dfn-type="dfn" data-export="">marker properties</dfn>, reference
 {{marker element}} elements.
 
-<p>Markers can be animated, and as with {{use}} elements, the animated
+<p>Markers can be animated, and as with <{use}> elements, the animated
 effects will show on all current uses of the markers within the document.
 
 <p>Markers on a given element are painted in the following order, from
@@ -2404,7 +2404,7 @@ for either attribute is an error (see
 <dd>
 
     Note: 
-      New in SVG 2: geometric keywords (matches use in {{symbol}}).
+      New in SVG 2: geometric keywords (matches use in <{symbol}>).
     
     <p class="annotation">
       We will add top/center/bottom, left/center/right keywords to
@@ -2719,13 +2719,13 @@ correctly, as follows:
   which case additional transformations are set up to produce the necessary
   result due to attributes {{viewBox}} and {{preserveAspectRatio}}.</li>
 
-  <li>If the {{overflow}} property on the {{marker element}} element
+  <li>If the [[#OverflowAndClipProperties|overflow]] property on the {{marker element}} element
   indicates that the marker needs to be clipped to its SVG viewport, then an
   implicit clipping path is established at the bounds of the SVG viewport.</li>
 </ul>
 
 <p class='note'>Note that the <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
-the {{overflow}} property for {{marker element}} elements to
+the [[#OverflowAndClipProperties|overflow]] property for {{marker element}} elements to
 <span class="prop-value">hidden</span>, which causes a rectangular clipping
 path to be created at the bounds of marker's SVG viewport by default.
 
@@ -2742,18 +2742,18 @@ the mouse is clicked or moved over a rendered marker.
 <p>Markers are not rendered directly
 and must be referenced by one of the [=marker properties=]
 to be rendered.
-The {{display}} value for the {{marker element}} element
+The 'display' value for the {{marker element}} element
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
   <!--
-The {{display}} property does not apply to the
+The 'display' property does not apply to the
 {{marker element}} element; thus, {{marker element}} elements are not
-directly rendered even if the {{display}} property is
+directly rendered even if the 'display' property is
 set to a value other than <span class="prop-value">none</span>, and
 -->
 {{marker element}} elements are available for referencing even when the
-{{display}} property on the {{marker element}} element or any of its
+'display' property on the {{marker element}} element or any of its
 ancestors is set to <span class="prop-value">none</span>.
 
 <p>The rendering effect of a marker is as if the contents of the
@@ -2910,7 +2910,7 @@ the following:
 <table class="propdef def">
   <tr>
     <th>Name:</th>
-    <td><dfn id="PaintOrderProperty" data-dfn-type="property" data-export="">paint-order</dfn></td>
+    <td><dfn dfn export>paint-order</dfn></td>
   </tr>
   <tr>
     <th>Value:</th>
@@ -2949,7 +2949,7 @@ the following:
 Note: New in SVG 2.  Added primarily to allow painting the stroke
 of text below its fill without needing to duplicate the {{text}} element.
 
-<p>The {{paint-order}} property controls the order that the three
+<p>The [=paint-order=] property controls the order that the three
 paint operations that [=shapes=] and text are rendered with:
 their fill, their stroke and any markers they might have.
 
@@ -2968,7 +2968,7 @@ has the same rendering behavior as
 <span class="prop-value">paint-order: stroke fill markers</span>.
 
 <div class="example">
-  <p>The following example shows how the {{paint-order}} property can
+  <p>The following example shows how the [=paint-order=] property can
   be used to render stroked text in a more aesthetically pleasing manner.
 
   <xmp>
@@ -3014,7 +3014,7 @@ has the same rendering behavior as
   <tr>
     <th>Applies to:</th>
     <td>[=container elements=], [=graphics elements=],
-    [=gradient elements=], {{use}} and <{animate}></td>
+    [=gradient elements=], <{use}> and <{animate}></td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -3051,7 +3051,7 @@ property controls which color space is used for the following graphics operation
   [=graphics elements=] into the current background.</li>
 </ul>
 
-Note: For <a href="https://www.w3.org/TR/filter-effects/">filter effects</a>, the
+Note: For [[filter-effects-1|Filter Effects Module Level 1]], the
 {{color-interpolation-filters}} property controls which color space is used.
 [<a href="refs.html#ref-filter-effects-1">filter-effects-1</a>]
 </div>

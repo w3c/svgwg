@@ -160,10 +160,10 @@ the attribute is assumed to have been specified as the given [=initial value=].
   was specified, this value can override values that come from lower priority
   style sheet rules, such as those from the user agent style sheet.
   <p>For example, although the user agent style sheet sets the value of the
-  {{overflow}} property to <span class="prop-value">hidden</span>
+  [[#OverflowAndClipProperties|overflow]] property to <span class="prop-value">hidden</span>
   for <{svg}> elements, specifying an invalid presentation attribute such
   as <span class='attr-value'>overflow="invalid"</span> will result
-  in a rule setting {{overflow}} to <span class="prop-value">visible</span>,
+  in a rule setting [[#OverflowAndClipProperties|overflow]] to <span class="prop-value">visible</span>,
   overriding the user agent style sheet value.
 </div>
 
@@ -786,7 +786,7 @@ steps are run:
     <dl class='switch'>
       <dt>the current element is the [=outermost svg element=]</dt>
       <dd><var>ctm</var> is a matrix that transforms the coordinate
-      space of the {{svg}} (including its {{transform}} property)
+      space of the <{svg}> (including its {{transform}} property)
       to the coordinate space of the document's viewport.  The matrix includes the
       transforms produced by the {{viewBox}} and {{preserveAspectRatio}}
       attributes, the {{transform}} property, and any transform
@@ -878,7 +878,7 @@ throw an [=InvalidStateError=].
 
 Note: [=isPointInFill=] takes the winding
 rule indicated by the {{fill-rule}} property of an element even if the element is a child
-of a {{clipPath}} element.
+of a <a element spec="css-masking">clipPath</a> element.
 
 Note: [=isPointInFill=] is aligned
 with the [=isPointInPath=] method on the [=CanvasDrawPath=] mixin as much as the SVG context

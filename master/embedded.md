@@ -15,7 +15,7 @@ Note: Content embedded with {{image}} is compatible with <a href="https://www.w3
     (the <dfn id="TermPositioningRectangle"  data-dfn-type="dfn" data-export="">positioning rectangle</dfn>).
     The [=positioning rectangle=] is used as the bounding box of the element;
     note, however, that graphics may overflow the positioning rectangle,
-    depending on the value of the {{overflow}} property.
+    depending on the value of the [[#OverflowAndClipProperties|overflow]] property.
   
 
   <p>
@@ -30,7 +30,7 @@ Note: Content embedded with {{image}} is compatible with <a href="https://www.w3
     The {{object-fit}} and {{object-position}} affect the final
     position and size of the object,
     and may cause it to be extend beyond the [=positioning rectangle=].
-    In that case, the {{overflow}} property determines whether
+    In that case, the [[#OverflowAndClipProperties|overflow]] property determines whether
     the rendered object should be clipped to its [=positioning rectangle=].
   
   <p>
@@ -44,7 +44,7 @@ Note: Content embedded with {{image}} is compatible with <a href="https://www.w3
     is implicitly <a href="https://www.w3.org/TR/CSS21/visuren.html#propdef-position">absolutely-positioned</a> for the purposes of CSS layout.
     As a result, any absolutely-positioned child elements
     are positioned relative to this containing block.
-    Again, the {{overflow}} property determines
+    Again, the [[#OverflowAndClipProperties|overflow]] property determines
     whether content that extends outside the [=positioning rectangle=] will be hidden.
   
   <p>
@@ -180,7 +180,7 @@ This is an unusual situation that authors are advised to avoid, for many reasons
 
 
 <p>
-The user agent stylesheet sets the value of the {{overflow}} property
+The user agent stylesheet sets the value of the [[#OverflowAndClipProperties|overflow]] property
 on {{image}} element to <span class="prop-value">hidden</span>.
 Unless over-ridden by the author, images will therefore be clipped to
 the [=positioning rectangle=] defined by the geometry properties.
@@ -188,7 +188,7 @@ the [=positioning rectangle=] defined by the geometry properties.
 
 <p>
 For {{image}} elements embedding an SVG image,
-two different {{overflow}} values apply.
+two different [[#OverflowAndClipProperties|overflow]] values apply.
 The value specified on the {{image}} element determines
 whether the [=image-rendering rectangle=] is clipped to the [=positioning rectangle=].
 The value on the root element of the referenced SVG
@@ -197,7 +197,7 @@ determines whether the graphics are clipped to the [=image-rendering rectangle=]
 
 Note: 
 New in SVG 2.
-Previous versions of SVG required that the {{overflow}} (and also {{clip}})
+Previous versions of SVG required that the [[#OverflowAndClipProperties|overflow]] (and also {{clip}})
 property on the embedded SVG be ignored.
 The new rules ensure that an overflowing <span class="attr-value">slice</span> layout
 can be safely used without compromising the overflow control from the referenced image.
@@ -216,7 +216,7 @@ separate document which generates its own parse tree and
 document object model (if the resource is XML). Thus, there is
 no inheritance of properties into the image.
 
-<p>Unlike {{use}}, the {{image}} element cannot reference
+<p>Unlike <{use}>, the {{image}} element cannot reference
 elements within an SVG file.
 
 <div class="annotation svg2-requirement">
@@ -402,7 +402,7 @@ fragment, including a root <{svg}> element is
 defined as a descendent of the <{foreignObject}>.
 
 <p>A <{foreignObject}>
-may be used in conjunction with the {{switch}} element and
+may be used in conjunction with the <{switch}> element and
 the {{requiredExtensions}} attribute to
 provide proper checking for user agent support and provide an
 alternate rendering in case user agent support is not
@@ -417,9 +417,9 @@ Note:
 <p>It is not required that SVG user agents support the ability
 to invoke other arbitrary user agents to handle embedded
 foreign object types; however, all conforming SVG user agents
-would need to support the {{switch}} element and
+would need to support the <{switch}> element and
 must be able to render valid SVG elements when they appear as
-one of the alternatives within a {{switch}}
+one of the alternatives within a <{switch}>
 element.
 
 <p>It is expected that commercial Web browsers will

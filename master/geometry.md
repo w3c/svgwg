@@ -280,7 +280,7 @@ Note:
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td>{{svg}}, {{rect}},
+    <td><{svg}>, {{rect}},
     {{image}}, <{foreignObject}> elements</td>
   </tr>
   <tr>
@@ -325,7 +325,7 @@ the position of the element.
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td>{{svg}}, {{rect}},
+    <td><{svg}>, {{rect}},
     {{image}}, <{foreignObject}> elements</td>
   </tr>
   <tr>
@@ -362,7 +362,7 @@ the position of the element.
 
 <p>The CSS {{width}} and {{height}} properties are used for
 sizing some SVG elements.  Specifically, they are used to size
-{{rect}}, {{svg}}, {{image}} and
+{{rect}}, <{svg}>, {{image}} and
 <{foreignObject}>.  All of these elements have <span class="attr-name">width</span>
 and <span class="attr-name">height</span> presentation attributes.
 The properties are also used for laying out embedded elements from the HTML namespace.

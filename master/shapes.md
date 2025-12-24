@@ -5,7 +5,7 @@
 <dl class="definitions">
   <dt id="TermBasicShapeElement"><dfn id="basic-shape" data-dfn-type="dfn" data-export="">basic shape</dfn></dt>
   <dt>shape</dt>
-  <dt><dfn id="TermShapeElement" data-dfn-type="dfn" data-export="">shape elements</dfn></dt><!--keep that for Bikeshed! -->
+  <dt><dfn>shape elements</dfn></dt><!--keep that for Bikeshed! -->
   <dd>A graphics element that is defined by some combination of
   straight lines and curves. Specifically:
   @@elementcategory shape@@.</dd>
@@ -319,8 +319,8 @@ Note:
 
 <p><span class="example-ref">Example ellipse01</span> below specifies
 the coordinates of the two ellipses in the user coordinate system
-established by the {{viewBox}} attribute on the {{svg}}
-element and the {{transform}} property on the {{g}} and
+established by the {{viewBox}} attribute on the <{svg}>
+element and the {{transform}} property on the <{g}> and
 {{ellipse}} elements. Both ellipses use the default values of
 zero for the {{cx}} and {{cy}} attributes (the center of the
 ellipse). The second ellipse is rotated.

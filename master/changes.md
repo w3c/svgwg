@@ -137,7 +137,7 @@ have been made.
 <ul>
   <li>Update rendering model to refer to <a href="https://www.w3.org/TR/compositing/">Compositing and Blending Specification</a>.</li>
   <li>Added new definitions regarding rendered and renderable elements.</li>
-  <li>Moved the section on {{display}} and {{visibility}} to this chapter.</li>
+  <li>Moved the section on 'display' and 'visibility' to this chapter.</li>
   <li>Moved z-index to this chapter. Removed non-normative text, keeping examples.</li>
   <li>Resolve issue 2 - removed reference to knock-out.</li>
   <li>Resolve issue 3 - rewrote description of how elements and groups are rendered.</li>
@@ -155,7 +155,7 @@ have been made.
     <a href="https://github.com/w3c/svgwg/issues/483">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/489">Edits</a></li>
   <li class='changed-since-cr1 cr3'>Clarify that <{foreignObject}> is, and its content may be, hit-testing target.</li>
-  <li class='changed-since-cr1 cr2'>Removed the use element from list of elements that the {{visibility}} property directly affects.
+  <li class='changed-since-cr1 cr2'>Removed the use element from list of elements that the 'visibility' property directly affects.
     <a href="https://github.com/w3c/svgwg/issues/405">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/430">Edits</a></li>
 </ul>
@@ -291,7 +291,7 @@ have been made.
 
   <li>Added the ability to use <span class="attr-value">'auto'</span> for the {{width}} and {{height}} attributes on {{image}}.</li>
 
-  <li>Lifted the restriction on {{use}} not being able to reference an entire document.</li>
+  <li>Lifted the restriction on <{use}> not being able to reference an entire document.</li>
 
   <li>Added {{lang}} attribute on {{desc}} and {{title}} elements.</li>
 
@@ -307,9 +307,9 @@ have been made.
 
   <li>Removed the <code>SVGElementInstance</code> and <code>SVGElementInstanceList</code> interfaces, and the corresponding attributes on the [=SVGUseElement=] interface.</li>
 
-  <li>Changed the {{use}} element event flow to follow the Shadow DOM spec.</li>
+  <li>Changed the <{use}> element event flow to follow the Shadow DOM spec.</li>
 
-  <li>Clarified that the {{switch}} element does not affect processing of {{script}} elements.</li>
+  <li>Clarified that the <{switch}> element does not affect processing of {{script}} elements.</li>
 
   <li>Made the <span class="attr-name">width</span> and <span class="attr-name">height</span> attributes on the <{svg}> element presentation attributes, and changed the initial value to
       <span class="attr-value">auto</span>.
@@ -324,7 +324,7 @@ have been made.
   on the [=SVGSVGElement=] interface in terms of the Selection API
   and simultaneously deprecated it.</li>
 
-  <li>Clarified that the {{switch}} element does not affect the processing of {{style element}} elements.</li>
+  <li>Clarified that the <{switch}> element does not affect the processing of {{style element}} elements.</li>
 
   <li>Clarified that the <a href="struct.html#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a> and <a href="struct.html#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a> methods on the [=SVGSVGElement=] interface do not return shadow tree elements.</li>
 
@@ -357,7 +357,7 @@ have been made.
 
   <li>Remove requirement for SVGDocument property on the Document interface object.</li>
 
-  <li>Descendent elements of {{switch}} that have
+  <li>Descendent elements of <{switch}> that have
   the {{systemLanguage}} attribute should be reordered according to the
   definition of the SMIL 'allowReorder' attribute.</li>
 
@@ -410,7 +410,7 @@ have been made.
       <li>Restore the (animated)instanceRoot properties on the SVGUseElement interface.</li>
     </ul>
   </li>
-  <li>Change role mapping for the {{a}} element to depend on whether it is actually a valid link.</li>
+  <li>Change role mapping for the <a element spec="svg2">a</a> element to depend on whether it is actually a valid link.</li>
   <li>Mark ARIA state and property attributes as animatable.</li>
   <li>Update requirements for {{id}} values to harmonize with HTML, with extra warning about requirements for validity in an XML document.</li>
   <li>Moved the <a href="struct.html#ForeignNamespaces">Foreign namespaces and private data</a> section to this chapter and added some new cross-references and notes.</li>
@@ -474,8 +474,8 @@ have been made.
     with a note explaining their impact.</li>
   <li>Require interactive user agents to include :focus and ::selection styles.</li>
   <li>Clean-up presentation attributes table to be consistent with other sections of the spec:
-    remove {{mask element}} from elements that treat x/y/width/height attributes as presentation attributes,
-    add {{use}} and {{symbol}};
+    remove <a element spec="css-masking">mask</a> element from elements that treat x/y/width/height attributes as presentation attributes,
+    add <{use}> and <{symbol}>;
     exclude [=animation elements=] from those that treat {{fill}} as a presentation attribute;
     remove {{d}} as a presentation attribute for {{textPath}};
     merge the discussion of gradientTransform and patternTransform into the main table.
@@ -509,7 +509,7 @@ have been made.
   are computed to <span class='prop-value'>0</span> for SVG elements that
   the properties apply to.</li>
   <li>auto equates to 100% for width and height on the <{svg}> element, and to auto-sizing for images.</li>
-  <li>Remove {{mask element}} from the list of elements where width and height are sizing properties.</li>
+  <li>Remove <a element spec="css-masking">mask</a> element from the list of elements where width and height are sizing properties.</li>
   <li>Clarify that width and height sizing properties
   can be constrained with the corresponding max/min properties.</li>
 </ul>
@@ -730,7 +730,7 @@ have been made.
   container elements.</li>
 
   <li>Removed the requirement to
-  ignore {{clip}} and {{overflow}} on an SVG document
+  ignore {{clip}} and [[#OverflowAndClipProperties|overflow]] on an SVG document
   when referenced by an {{image}} element.</li>
 
   <li>Allow image height and width to be "auto", determined from intrinsic dimensions or aspect ratio of the image file.</li>
@@ -761,7 +761,7 @@ have been made.
   <li>Added more detail to the descriptions of the stroke properties and added algorithms
   defining the exact shape a stroke must have.</li>
 
-  <li>Added the {{paint-order}} property.</li>
+  <li>Added the [=paint-order=] property.</li>
 
   <li>Moved the <span class='property'>color-interpolation-filters</span> property
   to the Filter Effects specification.</li>
@@ -904,14 +904,14 @@ have been made.
     </ul>
   </li>
   <li>Added reference to Compositing and Blending spec. Simple alpha compositing is mandatory.</li>
-  <li>The {{overflow}} property should be respected on the outermost svg elements inline in html.</li>
+  <li>The [[#OverflowAndClipProperties|overflow]] property should be respected on the outermost svg elements inline in html.</li>
   <li>Merge Clipping, Masking and Compositing chapter into Rendering Model chapter.</li>
 </ul>
 
 <h4 id="filters">Filter Effects chapter (SVG 1.1 only)</h4>
 
 <ul>
-  <li>Removed this chapter (replaced by Filter Effects specification [<a href="refs.html#ref-filter-effects-1">filter-effects-1</a>]).</li>
+  <li>Removed this chapter (replaced by Filter Effects specification [[filter-effects-1|Filter Effects Module Level 1]]).</li>
 </ul>
 
 <h4 id="interact">Scripting and Interactivity chapter (separate chapters in SVG 1.1)</h4>
@@ -986,14 +986,14 @@ have been made.
   parameter.</li>
 
   <li>Fragment-only URLs are always same-document.</li>
-  <li>Added additional attributes on {{a}} element to synchronize with HTML.</li>
+  <li>Added additional attributes on <a element spec="svg2">a</a> element to synchronize with HTML.</li>
 
   <li>Create detailed instructions for processing URLs and external resource files.</li>
 </ul>
 
 <div class='changed-since-cr1 cr2'>
   <ul>
-    <li>Harmonized attributes and IDL properties on {{a}} element with HTML,
+    <li>Harmonized attributes and IDL properties on <a element spec="svg2">a</a> element with HTML,
       other than {{a/href}} and {{a/target}}
       (which are maintained as-is for legacy reasons).
       Specifically:

@@ -43,8 +43,8 @@ to a particular rectangular area. The
 furthest ancestral SVG viewport</dfn> is the top most root SVG viewport with
 out leaving the [=SVG context=]. An ancestor SVG viewport might not be
 independent of the DOM tree order. E.g. for {{linearGradient}},
-{{radialGradient}}, {{pattern}}, {{mask element}}, {{clipPath}}
-{{symbol}} or {{use}} elements.
+{{radialGradient}}, {{pattern}}, <a element spec="css-masking">mask</a> element, <a element spec="css-masking">clipPath</a>
+<{symbol}> or <{use}> elements.
 
 <p>An <dfn id="TermSVGContext" data-dfn-type="dfn" data-export="">SVG
 context</dfn> is a document fragment where all elements within the fragment
@@ -260,7 +260,7 @@ as defined in [<a href="refs.html#ref-css-transforms-1">css-transforms-1</a>].
   </dd>
 </dl>
 
-<p class="annotation">Transform on the <{svg}> element is a bit special due to the {{viewBox}} attribute. The transform should be applied as if the {{svg}} had a parent element with that transform set.
+<p class="annotation">Transform on the <{svg}> element is a bit special due to the {{viewBox}} attribute. The transform should be applied as if the <{svg}> had a parent element with that transform set.
 <br><br><a href="http://www.w3.org/2015/01/08-svg-minutes.html">RESOLUTION: transform property applies conceptually to the outside of the `svg` element and there is no difference between
 presentation attribute and style property</a> (in terms of the visual result).
 
@@ -639,7 +639,7 @@ more spaces and then must be one of the following strings:
 <p id="ExamplePreserveAspectRatio"><span class="example-ref">Example PreserveAspectRatio</span>
 illustrates the various options on {{preserveAspectRatio}}.
 The example creates several new SVG viewports by
-including {{svg}} sub-elements embedded
+including <{svg}> sub-elements embedded
 inside the [=outermost svg element=] (see <a
 href="coords.html#EstablishingANewSVGViewport">Establishing a new
 SVG viewport</a>).
@@ -713,8 +713,8 @@ PreserveAspectRatio</a>.
 <ul>
   <li>The <{svg}> element</li>
 
-  <li>A {{symbol}} element
-    that is instanced by a {{use}} element.</li>
+  <li>A <{symbol}> element
+    that is instanced by a <{use}> element.</li>
 </ul>
 
 Note: 
@@ -722,7 +722,7 @@ Note:
   the {{pattern}} and {{marker element}} elements
   do not create a new viewport,
   despite accepting a {{viewBox}} attribute.
-  Neither do the {{clipPath}} or {{mask element}} elements.
+  Neither do the <a element spec="css-masking">clipPath</a> or <a element spec="css-masking">mask</a> element elements.
   Percentage lengths within the content of these elements
   are not proportional to the dimensions of the graphical effect region.
 
@@ -744,7 +744,7 @@ Note:
 
 
 <p>Whether a new SVG viewport also establishes a new additional
-clipping path is determined by the value of the {{overflow}} property on the element
+clipping path is determined by the value of the [[#OverflowAndClipProperties|overflow]] property on the element
 that establishes the new SVG viewport.
 
 <h3 id="Units">Units</h3>
@@ -808,7 +808,7 @@ what happens when values specified in inches are scaled.
 <p>The three rectangles in the middle demonstrate the use of
 one of the relative unit identifiers, the "em" unit. Because
 the {{font-size}} property has been set
-to <span class="prop-value">150</span> on the outermost {{g}} element, each "em" unit is
+to <span class="prop-value">150</span> on the outermost <{g}> element, each "em" unit is
 equal to 150 user units. The topmost rectangle, which is
 specified in "em" units, is exactly the same size as the middle
 rectangle, which is specified in user units such that there are
@@ -860,8 +860,8 @@ values specified in percentage units are scaled.
   an element's geometric shape, its [=stroke shape=] and its [=markers=].</li>
 </ol>
 
-<p class='note'>Note that the values of the {{opacity}}, {{visibility}}, {{fill}},
-{{fill-opacity}}, {{fill-rule}}, {{stroke-dasharray}}
+<p class='note'>Note that the values of the {{opacity}}, 'visibility', {{fill}},
+'fill-opacity', {{fill-rule}}, {{stroke-dasharray}}
 and {{stroke-dashoffset}} properties on an element have no effect on the
 bounding box of an element.
 
@@ -887,7 +887,7 @@ excluded from the bounding box.
 
 <p>Even if an element is not in the [=rendering tree=] – due to it being
 <span class='prop-value'>'display: none'</span>, within a {{defs}}
-element, not usually rendered like a {{symbol}} element or not
+element, not usually rendered like a <{symbol}> element or not
 currently present in the document tree – it still has a bounding box.
 A call to <a href="types.html#__svg__SVGGraphicsElement__getBBox">getBBox</a>
 on the element will return the same rectangle as if the element were
@@ -997,7 +997,7 @@ element.  The inputs to the algorithm are:
 <dl class="switch">
   <dt>a [=shape=]</dt>
   <dt>a [=text content element=]</dt>
-  <dt>an {{a}} element within a [=text content element=]</dt>
+  <dt>an <a element spec="svg2">a</a> element within a [=text content element=]</dt>
   <dd>
     <ol class="algorithm">
       <li>Let <var>box</var> be a rectangle initialized to (0, 0, 0, 0).</li>
@@ -1006,13 +1006,13 @@ element.  The inputs to the algorithm are:
       to the text within the elements otherwise.</li>
       <li>If <var>fill</var> is true, then set <var>box</var> to the tightest rectangle
       in the coordinate system <var>space</var> that contains <var>fill-shape</var>.
-      <p class='note'>The values of the {{fill}}, {{fill-opacity}} and {{fill-rule}}
+      <p class='note'>The values of the {{fill}}, 'fill-opacity' and {{fill-rule}}
       properties do not affect <var>fill-shape</var>.</li>
       <li>If <var>stroke</var> is true and the element's {{stroke}} is anything other than
       <span class='prop-value'>none</span>, then set <var>box</var> to be the union of <var>box</var> and the
       tightest rectangle in coordinate system <var>space</var> that contains the <a href="painting.html#StrokeShape">stroke shape</a> of the
       element, with the assumption that the element has no dash pattern.
-      <p class='note'>The values of the {{stroke-opacity}}, {{stroke-dasharray}}
+      <p class='note'>The values of the 'stroke-opacity', {{stroke-dasharray}}
       and {{stroke-dashoffset}} do not affect the calculation of the stroke shape.</li>
       <li>If <var>markers</var> is true, then for each marker <var>marker</var> rendered on the element:
         <ol>
@@ -1021,7 +1021,7 @@ element.  The inputs to the algorithm are:
             <ol>
               <li>If <var>child</var> has an ancestor element within the {{marker element}} that is
               <span class='prop-value'>'display: none'</span>, has a failing [=conditional processing attribute=],
-              or is not an {{a}}, {{g}}, {{svg}} or {{switch}} element, then
+              or is not an <a element spec="svg2">a</a>, <{g}>, <{svg}> or <{switch}> element, then
               continue to the next descendant [=graphics element=].</li>
               <li>Otherwise, set <var>box</var> to be the union of <var>box</var> and the result of invoking the
               algorithm to compute a bounding box with <var>child</var> as the element,
@@ -1039,12 +1039,12 @@ element.  The inputs to the algorithm are:
     </ol>
   </dd>
   <dt id="ContainerElementBoudingBoxComputation">a [=container element=]</dt>
-  <dt>{{use}}</dt>
+  <dt><{use}></dt>
   <dd>
     <ol class="algorithm">
       <li>Let <var>box</var> be a rectangle initialized to (0, 0, 0, 0).</li>
       <li>Let <var>parent</var> be the [=container element=] if it is one, or the
-      root of the {{use}} element's shadow tree otherwise.</li>
+      root of the <{use}> element's shadow tree otherwise.</li>
       <li>For each descendant [=graphics element=] <var>child</var> of <var>parent</var>:
         <ol>
           <li>If <var>child</var> is [=not rendered=] then
@@ -1061,7 +1061,7 @@ element.  The inputs to the algorithm are:
           <span class='prop-value'>none</span>,
           then set <var>box</var> to be the tightest rectangle
           in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
-          <li>If the {{overflow}} property applies to the <var>element</var>
+          <li>If the [[#OverflowAndClipProperties|overflow]] property applies to the <var>element</var>
           and does not have a value of <span class='prop-value'>visible</span>,
           then set <var>box</var> to be the tightest rectangle
           in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the element's overflow bounds.</li>
@@ -1092,7 +1092,7 @@ element.  The inputs to the algorithm are:
       <span class='prop-value'>none</span>, then set <var>box</var> to be the tightest rectangle
       in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
       <!--
-      <li>If <var>clipped</var> is true and the value of {{overflow}} on <var>element</var> is not
+      <li>If <var>clipped</var> is true and the value of [[#OverflowAndClipProperties|overflow]] on <var>element</var> is not
       <span class='prop-value'>visible</span>, then set <var>box</var> to be the tightest rectangle
       in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the element's [=positioning rectangle=].</li>
       -->
@@ -1116,10 +1116,10 @@ above with the following arguments:
 
 <h3 id="ObjectBoundingBoxUnits">Object bounding box units</h3>
 
-<p id="ObjectBoundingBox">The following elements offer the option of expressing
+The following elements offer the option of expressing
 coordinate values and lengths as fractions (and, in some cases,
-percentages) of the [=object bounding box=],
-by setting a specified attribute to <span class="attr-value">'objectBoundingBox'</span>
+percentages) of the [=object bounding box=], by setting a specified 
+attribute to <span class="attr-value">'objectBoundingBox'</span>
 on the given element:
 
 <table class='vert'>
@@ -1161,14 +1161,14 @@ on the given element:
       box of the element to which the pattern is applied.</td>
     </tr>
   <tr>
-    <td>{{clipPath}}</td>
+    <td><a element spec="css-masking">clipPath</a></td>
     <td>{{clipPath/clipPathUnits}}</td>
     <td>Indicates that the user coordinate system for the contents of the
-    {{clipPath}} element is established using the bounding box of the
+    <a element spec="css-masking">clipPath</a> element is established using the bounding box of the
     element to which the clipping path is applied.</td>
   </tr>
     <tr>
-      <td>{{mask element}}</td>
+      <td><a element spec="css-masking">mask</a> element</td>
       <td>{{maskUnits}}</td>
       <td>Indicates that the attributes which define the masking region
       ({{x}}, {{y}}, {{width}}, {{height}}) is
@@ -1176,10 +1176,10 @@ on the given element:
       is applied.</td>
     </tr>
     <tr>
-      <td>{{mask element}}</td>
+      <td><a element spec="css-masking">mask</a> element</td>
       <td>{{maskContentUnits}}</td>
       <td>Indicates that the user coordinate system for the contents of
-      the {{mask element}} element are established using the bounding box of
+      the <a element spec="css-masking">mask</a> element element are established using the bounding box of
       the element to which the mask is applied.</td>
     </tr>
     <tr>
@@ -1239,7 +1239,7 @@ gradient vector, the pattern tile, the filter region or the
 masking region, a percentage represents the same value as the
 corresponding decimal value (e.g., 50% means the same as 0.5).
 If percentages are used within the content of a {{pattern}},
-{{clipPath}}, {{mask element}} or {{filter element}} element, these values
+<a element spec="css-masking">clipPath</a>, <a element spec="css-masking">mask</a> element or {{filter element}} element, these values
 are treated according to the processing rules for percentages
 as defined in <a href="coords.html#Units">Units</a>.
 
@@ -1272,7 +1272,7 @@ defined in CSS Images 3 [<a href="refs.html#ref-css-images-3">css-images-3</a>],
 with the following inputs:
 
 <p>The [=specified size=] must be determined from the used values for the
-{{width}} and {{height}} sizing properties of the {{svg}}
+{{width}} and {{height}} sizing properties of the <{svg}>
 element.
 
 <p>The [=intrinsic dimensions=] must also be determined from the {{width}}
@@ -1465,7 +1465,7 @@ through this property.
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td>[=graphics elements=] and {{use}}</td>
+    <td>[=graphics elements=] and <{use}></td>
   </tr>
   <tr>
     <th>Inherited:</th>

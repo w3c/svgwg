@@ -22,7 +22,7 @@ HTML or XML document.
 
 <p id="EmbeddedSVGExample">The following example shows simple SVG
 content embedded inline as a fragment within a parent XML document.
-Note the use of XML namespaces to indicate that the {{svg}} and
+Note the use of XML namespaces to indicate that the <{svg}> and
 {{ellipse}} elements belong to the [=SVG namespace=]:
 
 <xmp>
@@ -131,19 +131,19 @@ information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommend
   <dd>The document sub-tree which starts with the outermost
   ancestor <{svg}> element of a given SVG
   element, with the requirement that all container elements
-  between the outermost {{svg}} and the given element are
+  between the outermost <{svg}> and the given element are
   all elements in the SVG namespace.</dd>
 
   <dt><dfn id="TermOutermostSVGElement" data-dfn-type="dfn" data-export="">outermost svg element</dfn></dt>
-  <dd>The furthest {{svg}} ancestor element that remains in the
+  <dd>The furthest <{svg}> ancestor element that remains in the
   [=current SVG document fragment=].</dd>
 
   <dt><dfn id="TermSVGDocumentFragment" data-dfn-type="dfn" data-export="">SVG document fragment</dfn></dt>
-  <dd>A document sub-tree which starts with an {{svg}}
+  <dd>A document sub-tree which starts with an <{svg}>
   element which is either the root element of the document or whose parent
   element is not in the SVG namespace.
   An SVG document fragment can consist of a stand-alone SVG document,
-  or a fragment of a parent document enclosed by an {{svg}}
+  or a fragment of a parent document enclosed by an <{svg}>
   element.
   However, an <{svg}> element that is a direct child of another SVG-namespaced element
   is not the root of an SVG document fragment.
@@ -233,7 +233,7 @@ replace the generic [=event handlers=] with the same names normally supported by
   @@elementcategory container@@.</dd>
 </dl>
 
-<p>The {{g}} element is a [=container element=] for grouping together
+<p>The <{g}> element is a [=container element=] for grouping together
 related [=graphics elements=].
 
 <p>A group of elements, as well as individual objects, can be given
@@ -247,7 +247,7 @@ path: images/struct/grouping01.svg
 highlight: xml
 </pre>
 
-<p>A {{g}} element can contain other {{g}} elements nested
+<p>A <{g}> element can contain other <{g}> elements nested
 within it, to an arbitrary depth.
 
 
@@ -293,17 +293,17 @@ that, whenever possible, referenced elements be defined inside
 of a {{defs}}.
 
 <p>The content model for {{defs}} is the same as for the
-{{g}} element; thus, any element that can be a child of a
-{{g}} can also be a child of a {{defs}}, and vice versa.
+<{g}> element; thus, any element that can be a child of a
+<{g}> can also be a child of a {{defs}}, and vice versa.
 
 <p>Elements that are descendants of a {{defs}} are not rendered directly;
-the {{display}} value for the {{defs}} element
+the 'display' value for the {{defs}} element
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
 Note, however, that the descendants of a {{defs}} are
 always present in the source tree and thus can always be
-referenced by other elements; thus, the value of the {{display}}
+referenced by other elements; thus, the value of the 'display'
 property on the {{defs}} element does not
 prevent those elements from being referenced by other elements.
 
@@ -311,24 +311,24 @@ prevent those elements from being referenced by other elements.
 <div class="ready-for-wider-review">
 <h3 id="SymbolElement">The <span class="element-name">symbol</span> element</h3>
 
-<p>The {{symbol}} element is used to define graphical templates
-which can be instantiated by a {{use}} element but which are not rendered
+<p>The <{symbol}> element is used to define graphical templates
+which can be instantiated by a <{use}> element but which are not rendered
 directly.
 
-<p>A {{symbol}} establishes a nested coordinate system
+<p>A <{symbol}> establishes a nested coordinate system
   for the graphics it contains.
   When a symbol is instantiated
-  as the [=referenced element=] of a {{use}} element,
+  as the [=referenced element=] of a <{use}> element,
   it is therefore rendered very similarly to a nested <{svg}> element.
 
 @@elementsummary symbol@@
 
 <p>The {{x}}, {{y}}, {{width}}, and {{height}} geometry properties
   have the same effect as on an <{svg}> element,
-  when the {{symbol}} is instantiated by a {{use}} element.
+  when the <{symbol}> is instantiated by a <{use}> element.
   In particular, if {{width}} and {{height}}
   compute to <span class="prop-value">auto</span>
-  (and are not over-ridden by values on the instantiating {{use}} element),
+  (and are not over-ridden by values on the instantiating <{use}> element),
   then they will be treated as a value of <span class="prop-value">100%</span>.
 
 
@@ -337,7 +337,7 @@ Note:
   Allowing geometry properties to be specified on a symbol
   provides a more consistent rendering model,
   and allows authors to set a default size for each symbol
-  (which may still be over-ridden by attributes on the {{use}} element).
+  (which may still be over-ridden by attributes on the <{use}> element).
 
 
 
@@ -393,8 +393,8 @@ Note:
       reference point of the symbol which is to be placed exactly at
       the symbol's <span class="prop-value">x,y</span> positioning coordinate,
       as defined by the cumulative effect of the {{x}} and {{y}}
-      properties and any transformations on the {{symbol}}
-      and its [=host=] {{use}} element.
+      properties and any transformations on the <{symbol}>
+      and its [=host=] <{use}> element.
     
     <p>
       Keyword values have the same meaning as for the
@@ -417,7 +417,7 @@ Note:
     Note: 
       For backwards compatibility,
       the behavior when {{refX}} and {{refY}}
-      are not specified on a {{symbol}}
+      are not specified on a <{symbol}>
       is different from when they are specified with a value of <span class="attr-value">0</span>,
       and therefore different from the behavior
       when equivalent attributes are not specified on a {{marker element}}.
@@ -428,52 +428,52 @@ Note:
 
 <h4 id="SymbolNotes">Notes on symbols</h4>
 
-<p>The use of {{symbol}} elements for graphics that are used multiple
+<p>The use of <{symbol}> elements for graphics that are used multiple
 times in the same document adds structure and semantics.
-Closely related to the {{symbol}} element are the
+Closely related to the <{symbol}> element are the
 {{marker element}} and {{pattern}} elements;
 all three define a container of graphical content
 that can be rendered repeatedly at various positions and scales in the SVG.
 However, while [=re-used graphics=] in a pattern and marker
 provide a graphical effect on another element,
-the content in a {{symbol}} will be embedded
+the content in a <{symbol}> will be embedded
 as fully interactive content, within a [=use-element shadow tree=].
 
 
 <p>The <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
-the {{overflow}} property for {{symbol element}} elements to
+the [[#OverflowAndClipProperties|overflow]] property for {{symbol element}} elements to
 <span class="prop-value">hidden</span>, which causes a rectangular clipping
 path to be created at the bounds of symbol's SVG viewport.  Unless the
-{{overflow}} property is overridden, any graphics within the symbol which
+[[#OverflowAndClipProperties|overflow]] property is overridden, any graphics within the symbol which
 goes outside of the symbol's SVG viewport will be clipped.
 
-<p>{{symbol}} elements must never be rendered directly;
+<p><{symbol}> elements must never be rendered directly;
 their only usage is as something that can be referenced
-using the {{use}} element.
+using the <{use}> element.
 <!--
-The {{display}} property does not apply
-to the {{symbol}} element; thus, {{symbol}} elements are
-not directly rendered even if the {{display}} property is set to a
-value other than <span class="prop-value">none</span>, and {{symbol}}
+The 'display' property does not apply
+to the <{symbol}> element; thus, <{symbol}> elements are
+not directly rendered even if the 'display' property is set to a
+value other than <span class="prop-value">none</span>, and <{symbol}>
 elements are available for referencing even when the
-{{display}} property on the {{symbol}} element or any of its
+'display' property on the <{symbol}> element or any of its
 ancestors is set to <span class="prop-value">none</span>.
 -->
 The user agent must set the
-{{display}} property on the {{symbol}} element
+'display' property on the <{symbol}> element
 to <span class="prop-value">none</span>,
 as part of the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
 
 
-<p>The generated [=instance=] of a {{symbol}}
-that is the direct [=referenced element=] of a {{use}} element
+<p>The generated [=instance=] of a <{symbol}>
+that is the direct [=referenced element=] of a <{use}> element
 must always have a computed value of <span class="prop-value">inline</span>
-for the {{display}} property.
-In other words, it must be rendered whenever the host {{use}} element is rendered.
+for the 'display' property.
+In other words, it must be rendered whenever the host <{use}> element is rendered.
 The [=user agent style sheet=] again defines this
 declaration to have importance over any other CSS rule or presentation attribute.
-Any other {{symbol}} that is cloned
+Any other <{symbol}> that is cloned
 to create an [=element instance=]
 within the [=use-element shadow tree=]
 behaves as a symbol definition, and must not be rendered.
@@ -488,7 +488,7 @@ behaves as a symbol definition, and must not be rendered.
   <table>
     <tr>
       <th>SVG 2 Requirement:</th>
-      <td>Allow {{use}} to reference an external document's root element by omitting the fragment.</td>
+      <td>Allow <{use}> to reference an external document's root element by omitting the fragment.</td>
     </tr>
     <tr>
       <th>Resolution:</th>
@@ -513,15 +513,15 @@ behaves as a symbol definition, and must not be rendered.
 
 @@elementsummary use@@
 
-<p>The {{use}} element
+<p>The <{use}> element
 references another element, a copy of which
-is rendered in place of the {{use}} in the document.
+is rendered in place of the <{use}> in the document.
 The [=referenced element=] may be a [=container element=],
 in which case a copy of
 the complete SVG document subtree rooted at that element is used.
 
 <p>
-The cloned content inherits styles from the {{use}} element
+The cloned content inherits styles from the <{use}> element
 and can be the target of user events.
 However, these cloned [=element instances=] remain linked to the referenced source
 and reflect DOM mutations in the original.
@@ -534,9 +534,9 @@ also apply in the scope of the cloned [=shadow tree=].
     geometric properties specify the positioning of the referenced element.
     The {{width}} and {{height}} attributes
     only have an effect if the [=referenced element=]
-    defines a viewport (i.e., if it is a {{svg}} or {{symbol}});
+    defines a viewport (i.e., if it is a <{svg}> or <{symbol}>);
     if so, a value other than <span class="prop-value">auto</span>
-    for the {{use}} element overrides the value
+    for the <{use}> element overrides the value
     of the corresponding geometric property on that element.
     
     <p>A negative value for {{width}} or {{height}}
@@ -572,7 +572,7 @@ also apply in the scope of the cloned [=shadow tree=].
     <p>An [=URL Reference=] to the
     element/fragment within an SVG document to be cloned for
     rendering.
-    <p>The {{use}} element can reference an entire SVG document
+    <p>The <{use}> element can reference an entire SVG document
     by specifying an {{href}} value without a fragment.
     Such references are taken to be referring to the root element
     of the referenced document.
@@ -588,39 +588,39 @@ without having to ensure that it has an ID on its root element.
 
 <p>
 User agents may restrict external resource documents for security
-reasons. In particular, this specification does not allow cross-origin and <a href="linking.html#TermDataURL">data URL</a> resource requests in {{use}}.
+reasons. In particular, this specification does not allow cross-origin and <a href="linking.html#TermDataURL">data URL</a> resource requests in <{use}>.
 
 
 <p>When the {{href}} attribute is set
 (or, in the absence of an {{href}} attribute, an {{xlink:href}} attribute),
 the user agent must <a href="linking.html#processingURL">process the URL</a>.
-The target element that results from URL processing is the [=referenced element=] of the {{use}}.
+The target element that results from URL processing is the [=referenced element=] of the <{use}>.
 
 
 <p>If the [=referenced element=] that results from resolving the URL
   is not an SVG element,
-  then the reference is [=invalid=] and the {{use}} element is in error.
+  then the reference is [=invalid=] and the <{use}> element is in error.
 
 <p>
   If the referenced element is a (shadow-including) ancestor
-  of the {{use}} element,
+  of the <{use}> element,
   then this is an [=invalid circular reference=]
-  and the {{use}} element is in error.
+  and the <{use}> element is in error.
 
 <p>
   Otherwise, the user agent must generate a [=shadow tree=]
-  of [=re-used graphics=] to render as the contents of the {{use}} element,
+  of [=re-used graphics=] to render as the contents of the <{use}> element,
   as described in the next section, <a href="#UseShadowTree">The use-element shadow tree</a>.
 
 
-<p>A {{use}} that has an [=unresolved=] or [=invalid=] URL reference
+<p>A <{use}> that has an [=unresolved=] or [=invalid=] URL reference
   is not rendered.
   For the purpose of bounding box calculations,
   it is equivalent to an empty container element.
 
 <h4 id="UseShadowTree">The use-element shadow tree</h4>
 
-<p>The [=re-used graphics=] generated by a {{use}} element
+<p>The [=re-used graphics=] generated by a <{use}> element
 are defined in terms of a [=shadow tree=].
 In terms of interactivity and style inheritance,
 they are therefore quite different from other types of [=re-used graphics=] in SVG,
@@ -629,11 +629,11 @@ such as {{pattern}} and {{marker element}} content.
 
 <p>
 Elements in the shadow tree are rendered as if
-the {{use}} element was a container and they were its children.
+the <{use}> element was a container and they were its children.
 However, the SVG Document Object Model (DOM) only contains
-the {{use}} element and its attributes.
+the <{use}> element and its attributes.
 The SVG DOM does not include the
-element instances as children of the {{use}} element.
+element instances as children of the <{use}> element.
 
 
 <p>User agents that support scripting and the document object model
@@ -649,12 +649,12 @@ and <a href="#UseAnimations">declarative animations</a> if applicable,
 are rendered in the same way as if the shadow DOM was implemented.
 
 
-<p>The following definitions apply when discussing {{use}} elements
+<p>The following definitions apply when discussing <{use}> elements
   and their shadow trees:
 
 <dl>
   <dt><dfn id="TermReferencedElement">referenced element</dfn></dt>
-  <dd>The element specified by the {{href}} (or {{xlink:href}}) attribute on the {{use}} element, or the root element of a document referenced by that attribute if the URL provided does not include a target fragment that links to a specific element {{id}}.</dd>
+  <dd>The element specified by the {{href}} (or {{xlink:href}}) attribute on the <{use}> element, or the root element of a document referenced by that attribute if the URL provided does not include a target fragment that links to a specific element {{id}}.</dd>
 
   <dt><dfn id="TermReferencedDocumentSubtree">referenced document subtree</dfn></dt>
   <dt>referenced graphics</dt>
@@ -680,11 +680,11 @@ are rendered in the same way as if the shadow DOM was implemented.
   </dd>
 
   <dt><dfn id="TermUseElementShadowTree">use-element shadow tree</dfn></dt>
-  <dd>A shadow tree whose host is a {{use}} element,
+  <dd>A shadow tree whose host is a <{use}> element,
   which contains element instances generated by cloning the referenced graphics.
   </dd>
 
-  <dt><dfn id="TermElementInstance">element instance</dfn></dt>
+  <dt><dfn dfn>element instance</dfn></dt>
   <dt>instance</dt>
   <dd>An element in the [=use-element shadow tree=],
     which is generated by cloning a corresponding element in the referenced document subtree.
@@ -692,7 +692,7 @@ are rendered in the same way as if the shadow DOM was implemented.
 
   <dt><dfn id="TermInstanceRoot">instance root</dfn></dt>
   <dd>The [=element instance=] for the referenced element;
-    it is always a direct child of the {{use}} element's shadow root.
+    it is always a direct child of the <{use}> element's shadow root.
   </dd>
 
   <dt><dfn id="TermCorrespondingElement">corresponding element</dfn></dt>
@@ -701,25 +701,25 @@ are rendered in the same way as if the shadow DOM was implemented.
 
   <dt><dfn id="TermCorrespondingUseElement">corresponding use element</dfn></dt>
   <dd>For each element instance,
-    the {{use}} element which causes it to be rendered in the document.
-    This is the instance's shadow root's host {{use}} element
-    <em>if</em> that element is not itself an element instance within a {{use}} element shadow tree,
+    the <{use}> element which causes it to be rendered in the document.
+    This is the instance's shadow root's host <{use}> element
+    <em>if</em> that element is not itself an element instance within a <{use}> element shadow tree,
     or is that element's corresponding use element otherwise,
     recursively exiting shadow trees as many times as necessary
-    to reach a {{use}} element that was not itself generated
-    as part of the shadow tree of another {{use}} element.
+    to reach a <{use}> element that was not itself generated
+    as part of the shadow tree of another <{use}> element.
   </dd>
 </dl>
 
-<p>When the user agent successfully resolves a {{use}} element
+<p>When the user agent successfully resolves a <{use}> element
 to identify a [=referenced element=],
 the user agent must create a
-[=use-element shadow tree=] whose host is the {{use}} element itself.
+[=use-element shadow tree=] whose host is the <{use}> element itself.
 The shadow tree must be created even if
-the {{use}} element is not rendered
+the <{use}> element is not rendered
 because it is a descendent of a [=never-rendered element=],
 because of conditional processing,
-or because of the {{display}} property being set to <span class="prop-value">none</span>
+or because of the 'display' property being set to <span class="prop-value">none</span>
 on it or an ancestor element.
 
 
@@ -769,18 +769,18 @@ as described further in the section on <a href="#UseStyleInheritance">style inhe
 
 
 <p>
-If either the {{use}} element or the [=referenced element=] is altered
-in a way that causes the {{use}} element's URL reference to become [=unresolved=] again,
+If either the <{use}> element or the [=referenced element=] is altered
+in a way that causes the <{use}> element's URL reference to become [=unresolved=] again,
 then the entire shadow tree for that use element is discarded.
 
 
-<p>When a {{use}} references
-another element which is another {{use}} or whose content contains a
-{{use}} element, then the shadow DOM
+<p>When a <{use}> references
+another element which is another <{use}> or whose content contains a
+<{use}> element, then the shadow DOM
 cloning approach described above is recursive. However, a set
 of references that directly or indirectly reference a element
 to create a circular dependency is an [=invalid circular reference=].
-The {{use}} element or element instance
+The <{use}> element or element instance
 whose shadow tree would create the circular reference
 is in error and must not be rendered by the user agent.
 
@@ -788,11 +788,11 @@ is in error and must not be rendered by the user agent.
 <h4 id="UseLayout">Layout of re-used graphics</h4>
 
 <p>The value of the {{x}}, {{y}}, {{width}} and {{height}} properties
-on a {{use}} element
+on a <{use}> element
 are used to position the re-used graphics
 and to set the viewport size
 if the [=referenced element=] defines a nested viewport.
-The effect of these properties on a {{use}} element
+The effect of these properties on a <{use}> element
 is notably different from their effect on a [=graphics element=],
 or from their effect in CSS box layout.
 
@@ -803,7 +803,7 @@ or from their effect in CSS box layout.
   (<span class="attr-value">translate(x,y)</span>,
   where <span class="attr-value">x</span>
   and <span class="attr-value">y</span> represent the computed value of the corresponding property)
-  to be applied to the {{use}} element,
+  to be applied to the <{use}> element,
   after any transformations specified with other properties
   (i.e., appended to the right-side of the transformation list).
 
@@ -811,28 +811,28 @@ or from their effect in CSS box layout.
 <div class="note">
   <p>
   For historical reasons,
-  the supplemental transformation is applied to the {{use}} element itself,
+  the supplemental transformation is applied to the <{use}> element itself,
   rather than solely to the re-used content in the shadow tree.
   This affects the coordinate system used for
   any masks, clipping paths, or filters
-  applied to the {{use}} element
+  applied to the <{use}> element
   and calculated in <span class="attr-value">userSpaceOnUse</span> units.
   
   <p>
   To apply <span class="attr-value">userSpaceOnUse</span> graphical effects in an un-transformed coordinate space,
   while also using the {{x}} and {{y}} to position the graphics,
-  authors can nest the {{use}} element inside a {{g}},
-  and apply the graphical effects to the {{g}} element.
+  authors can nest the <{use}> element inside a <{g}>,
+  and apply the graphical effects to the <{g}> element.
   
 </div>
 
 <p>
   The {{width}} and {{height}} properties
-  on the {{use}} element
+  on the <{use}> element
   override the values for the corresponding properties
-  on a referenced {{svg}} or {{symbol}} element
+  on a referenced <{svg}> or <{symbol}> element
   when determining the used value for that property on the [=instance root=] element.
-  However, if the computed value for the property on the {{use}} element is <span class="prop-value">auto</span>,
+  However, if the computed value for the property on the <{use}> element is <span class="prop-value">auto</span>,
   then the property is computed as normal for the element instance.
 
 <p>
@@ -840,15 +840,15 @@ or from their effect in CSS box layout.
   that defines its own coordinate system,
   each time it is re-used.
   Because <span class="prop-value">auto</span> is the initial value,
-  if dimensions are not explicitly set on the {{use}} element,
-  the values set on the {{svg}} or {{symbol}} will be used as defaults.
+  if dimensions are not explicitly set on the <{use}> element,
+  the values set on the <{svg}> or <{symbol}> will be used as defaults.
 
 <p>
   The {{width}} and {{height}} properties
-  on the {{use}} element have no effect
+  on the <{use}> element have no effect
   if the [=referenced element=] does not
   <a href="coords.html#EstablishingANewSVGViewport">establish a new viewport</a>.
-  In particular, the {{use}} element does not itself establish a new viewport,
+  In particular, the <{use}> element does not itself establish a new viewport,
   and therefore does not affect the interpretation of percentages in the re-used graphics.
 
 
@@ -856,9 +856,9 @@ or from their effect in CSS box layout.
   In all other ways,
   rendering and layout of elements within the
   [=use-element shadow tree=]
-  occurs as if the {{use}} element was a container for its shadow content.
+  occurs as if the <{use}> element was a container for its shadow content.
   In particular, unless elements within the shadow tree establish a new viewport,
-  they must be drawn in the coordinate system in which the {{use}} element is defined
+  they must be drawn in the coordinate system in which the <{use}> element is defined
   (including any cumulative transformations).
   This affects the interpretation of percentage lengths,
   and also graphical effects with <span class="prop-value">userSpaceOnUse</span> units.
@@ -870,7 +870,7 @@ or from their effect in CSS box layout.
   exhibits style encapsulation,
   as defined in the <a href="https://www.w3.org/TR/css-scoping-1/">CSS Scoping</a> module <a href="refs.html#ref-css-scoping-1">[css-scoping-1]</a>.
   This means that elements in the shadow tree inherit styles
-  from its [=host=] {{use}} element,
+  from its [=host=] <{use}> element,
   but that style rules defined in the outer document
   do not match the elements in the shadow tree.
   Instead, the shadow tree maintains its own list of stylesheets,
@@ -886,7 +886,7 @@ Note:
 
 <p>
   When the [=referenced element=]
-  is from the same document as the {{use}} element,
+  is from the same document as the <{use}> element,
   the same document stylesheets will apply in
   both the original document and the shadow tree document fragment.
   Any changes to the stylesheets in the main document
@@ -956,17 +956,17 @@ Note:
   
   <ul>
     <li>{{stroke-width}} (20) is set in a presentation attribute on the circle itself.</li>
-    <li>{{stroke-opacity}} (0.7) is set via a CSS rule with a simple selector matching the circle tag name.</li>
+    <li>'stroke-opacity' (0.7) is set via a CSS rule with a simple selector matching the circle tag name.</li>
     <li>{{stroke}} color (green) is set using a complex CSS selector, matching the circle as a descendent of an element with class <code>special</code>.</li>
-    <li>{{fill}} color is not set directly on the circle, so is inherited from the style set on the containing {{g}} element (blue).</li>
+    <li>{{fill}} color is not set directly on the circle, so is inherited from the style set on the containing <{g}> element (blue).</li>
   </ul>
   <p>
     In the SVG 1.1 style-cloning model,
     the <a href="https://www.w3.org/TR/css-cascade-3/#specified">specified style values</a>
     would be cloned from the original element to the element instance.
     The re-used circle would have the same styles as the original,
-    except that the {{fill}} value would be inherited from the {{use}} (orange)
-    instead of from the {{g}} (blue).
+    except that the {{fill}} value would be inherited from the <{use}> (orange)
+    instead of from the <{g}> (blue).
   
   <p>
     In the shadow DOM model required by SVG 2,
@@ -974,9 +974,9 @@ Note:
   
   <ul>
     <li>the {{stroke-width}} (20) presentation attribute is cloned to the element instance.</li>
-    <li>the CSS rule setting {{stroke-opacity}} (0.7) is part of the CSS stylesheet cloned into the shadow tree; it matches the circle tag name of the [=element instance=], so is applied.</li>
-    <li>the CSS rule with the complex selector is also part of the cloned stylesheet, but it does not match the [=element instance=] of the circle, which is not a descendent of an element with class <code>special</code>; instead, {{stroke}} color on the circle is inherited from the host {{use}} element (purple).</li>
-    <li>{{fill}} color is still not set directly, so is once again inherited from the host {{use}} element.</li>
+    <li>the CSS rule setting 'stroke-opacity' (0.7) is part of the CSS stylesheet cloned into the shadow tree; it matches the circle tag name of the [=element instance=], so is applied.</li>
+    <li>the CSS rule with the complex selector is also part of the cloned stylesheet, but it does not match the [=element instance=] of the circle, which is not a descendent of an element with class <code>special</code>; instead, {{stroke}} color on the circle is inherited from the host <{use}> element (purple).</li>
+    <li>{{fill}} color is still not set directly, so is once again inherited from the host <{use}> element.</li>
   </ul>
   <p>
     The re-used circle therefore differs from the original in both fill color (because it inherits from a different element) and stroke color (because the complex selector no longer matches).
@@ -1002,17 +1002,17 @@ highlight: xml
 <div class="example">
   <p>
   Specifying <span
-  class="prop-value">'visibility:hidden'</span> on a {{use}} element does not guarantee
+  class="prop-value">'visibility:hidden'</span> on a <{use}> element does not guarantee
   that the referenced content will not be rendered.
-  Unlike the {{display}} or the {{opacity}} properties,
-  the {{visibility}} property does not apply directly to container elements,
-  and therefore does not apply directly to the {{use}} element.
-  Because {{visibility}} is normally inherited,
+  Unlike the 'display' or the {{opacity}} properties,
+  the 'visibility' property does not apply directly to container elements,
+  and therefore does not apply directly to the <{use}> element.
+  Because 'visibility' is normally inherited,
   hiding the use element will often hide the child content,
   but not necessarily.
   If any graphics elements in the shadow tree have
   <span class="prop-value">'visibility:visible'</span> specified, then that
-  element will be visible even if the {{use}} element specifies <span
+  element will be visible even if the <{use}> element specifies <span
   class="prop-value">'visibility:hidden'</span>.
 
   <p>
@@ -1030,7 +1030,7 @@ svg:hover .dark, svg:focus .dark {
 }
 </pre>
   <p>
-    The "dark" class is set on the group containing the {{use}} elements,
+    The "dark" class is set on the group containing the <{use}> elements,
     so all parts of the re-used graphics inherit the hidden visibility setting,
     except for the subtrees with class "eyes", where it is reset to visible.
     Upon hovering or focusing the graphic, the hiding effect is removed.
@@ -1049,7 +1049,7 @@ svg:hover .dark, svg:focus .dark {
   <p>
     The example also demonstrates inheritance of other style properties
     ({{fill}} and {{stroke}})
-    specified on the {{use}} elements,
+    specified on the <{use}> elements,
     and how these are also not used if any elements within the symbol
     specify explicit values (e.g., the pink noses and ears and the white tails).
   
@@ -1278,29 +1278,29 @@ Note:
     In general, the event path for a [=use-element shadow tree=]
     is constructed from the ancestors of the event target element
     up to the [=shadow root=],
-    then the [=host=] {{use}} element
+    then the [=host=] <{use}> element
     and its event path through to the document window.
     This means that, in the capture phase,
     an event propagates from the window through the regular document tree
-    to the {{use}} element
+    to the <{use}> element
     and then to the shadow root object
     and down through the shadow tree
     (or recursively through multiple shadow trees)
     to the event target element.
     In the bubbling phase, the event passes in the opposite direction,
     from the shadow tree elements to the shadow root,
-    then to the {{use}} element and its ancestors.
+    then to the <{use}> element and its ancestors.
   
   <p>
     The event retargeting algorithm ensures that
     from the perspective of event listeners
-    on the {{use}} element or its ancestors,
+    on the <{use}> element or its ancestors,
     all events targetted to [=element instances=] in the shadow tree
-    instead have a target of the {{use}} element itself.
+    instead have a target of the <{use}> element itself.
     If the event has both a <a href="https://www.w3.org/TR/dom/#dom-event-target"><code>target</code></a>
     and a <code>relatedTarget</code>,
     and both of these properties would be retargeted
-    to point to the same {{use}} element,
+    to point to the same <{use}> element,
     then the event is not propagated at all outside of the shadow tree.
     This would occur, for example,
     if focus moved from one element inside the shadow tree to another.
@@ -1327,29 +1327,29 @@ Note:
 
 <h4 id="ConditionalProcessingOverview">Conditional processing overview</h4>
 
-<p>SVG contains a {{switch}} element along with
+<p>SVG contains a <{switch}> element along with
 attributes {{requiredExtensions}} and {{systemLanguage}} to provide an
 ability to specify alternate viewing depending on the
 capabilities of a given user agent or the user's language.
 
 <p>Attributes {{requiredExtensions}} and {{systemLanguage}} act as tests and
-evaluate to either true or false. The {{switch}} renders the first of
+evaluate to either true or false. The <{switch}> renders the first of
 its children for which all of these attributes test true. If
 the given attribute is not specified, then a true value is
 assumed.
 
 <p>When an element is excluded because of conditional processing,
-it is treated as if it had a used value of <code>none</code> for the {{display}} property.
-Similar to the {{display}} property, conditional processing
+it is treated as if it had a used value of <code>none</code> for the 'display' property.
+Similar to the 'display' property, conditional processing
 attributes only affect the direct rendering of elements and do
 not prevent elements from being successfully referenced by
-other elements (such as via a {{use}}).
+other elements (such as via a <{use}>).
 
 <p>In consequence:
 
 <ul>
   <li>conditional processing affects the visual display of [=graphics elements=],
-  {{a}}, <{foreignObject}>, and [=text content elements=].</li>
+  <a element spec="svg2">a</a>, <{foreignObject}>, and [=text content elements=].</li>
 
   <li>conditional processing prevents [=animation elements=] from playing.</li>
 
@@ -1358,7 +1358,7 @@ other elements (such as via a {{use}}).
   in particular, conditional processing does not affect the processing of a {{style element}} or {{script}} element.</li>
 
   <li>conditional processing of child content of a never-rendered container element
-  (e.g., a {{pattern}} or a {{mask element}})
+  (e.g., a {{pattern}} or a <a element spec="css-masking">mask</a> element)
   will affect whether that child content contributes to the graphical effect.</li>
 </ul>
 
@@ -1393,24 +1393,24 @@ the {{requiredExtensions}} and
 order, and then processes and renders the first child for which these
 attributes evaluate to true. All others will be bypassed and therefore
 not rendered. If the child element is a container element such as a
-{{g}}, then the entire subtree is either processed/rendered or
+<{g}>, then the entire subtree is either processed/rendered or
 bypassed/not rendered.
 
 <p class='ready-for-wider-review'>
 In SVG, when evaluating the {{systemLanguage}} attribute, the order of
-evaluation of descendant elements of the {{switch}} element must be as if the
+evaluation of descendant elements of the <{switch}> element must be as if the
 <a href="https://www.w3.org/TR/REC-smil/smil-content.html#adef-allowReorder">allowReorder</a>
 attribute, defined in the SMIL specification [<a href="refs.html#ref-SMIL">SMIL</a>]
 always has a value of 'yes'.
 
-<p>Note that the values of properties {{display}} and
-{{visibility}} have no effect on {{switch}} element
-processing. In particular, setting {{display}} to
-<span class="prop-value">none</span> on a child of a {{switch}} element
-has no effect on true/false testing associated with {{switch}}
+<p>Note that the values of properties 'display' and
+'visibility' have no effect on <{switch}> element
+processing. In particular, setting 'display' to
+<span class="prop-value">none</span> on a child of a <{switch}> element
+has no effect on true/false testing associated with <{switch}>
 element processing.
 
-<p>The {{switch}} element does not affect the processing of
+<p>The <{switch}> element does not affect the processing of
 {{script}} and {{style element}} elements.
 
 <p>For more information and an example, see
@@ -1462,7 +1462,7 @@ given to attribute {{requiredExtensions}}, the attribute
 evaluates to "false".
 
 <p>{{requiredExtensions}} is often
-used in conjunction with the {{switch}} element. If the {{requiredExtensions}} is used in other
+used in conjunction with the <{switch}> element. If the {{requiredExtensions}} is used in other
 situations, then it represents a simple switch on the given
 element whether to render the element or not.
 
@@ -1547,14 +1547,14 @@ this case, the {{systemLanguage}} test attribute
 should only include "en".
 
 Note: Authoring note: Authors should realize that if several
-alternative language objects are enclosed in a {{switch}}, and none of them
+alternative language objects are enclosed in a <{switch}>, and none of them
 matches, this may lead to situations where no content is
 displayed. It is thus recommended to include a "catch-all"
-choice at the end of such a {{switch}} which is acceptable in
+choice at the end of such a <{switch}> which is acceptable in
 all cases.
 
 <p>{{systemLanguage}} is often used
-in conjunction with the {{switch}} element. If the {{systemLanguage}} is used in other
+in conjunction with the <{switch}> element. If the {{systemLanguage}} is used in other
 situations, then it represents a simple switch on the given
 element whether to render the element or not.
 
@@ -1579,7 +1579,7 @@ Removed text that limited number of 'desc' and 'title' elements. Status: Done.
 can have zero or more {{desc}} and/or {{title}} elements as children,
 whose content is text. {{desc}} and {{title}} elements are
 not visually rendered as part of the graphics.
-The {{display}} value for the {{title}} and {{desc}} elements
+The 'display' value for the {{title}} and {{desc}} elements
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
@@ -1640,7 +1640,7 @@ as this will result in a nameless object being presented to assistive technology
 <p>
 If an individual graphic element has no meaning on its own,
 alternative text should instead be provided for the nearest container element that describes a meaningful object.
-Authors should use grouping ({{g}}) elements to structure their drawing elements into meaningful objects, and name those groups with {{title}}.
+Authors should use grouping (<{g}>) elements to structure their drawing elements into meaningful objects, and name those groups with {{title}}.
 Conversely, if a container object is used simply to apply styles or layout,
 and neither defines an object nor provides meaningful grouping structure,
 it does not need alternative text.
@@ -1735,7 +1735,7 @@ elements in any particular way.
 @@elementsummary metadata@@
 
 <p>Metadata content is not directly rendered;
-the {{display}} value for the {{metadata}} element
+the 'display' value for the {{metadata}} element
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
@@ -1797,7 +1797,7 @@ the HTML namespace) must be supported in SVG documents:
 </ul>
 
 Note: 
-Note that the <a class="html" href="https://html.spec.whatwg.org/multipage/semantics.html#the-base-element"><code>base</code></a> element will affect all URL values in the document, including e.g. paint server references or {{use}} element references.
+Note that the <a class="html" href="https://html.spec.whatwg.org/multipage/semantics.html#the-base-element"><code>base</code></a> element will affect all URL values in the document, including e.g. paint server references or <{use}> element references.
 However, when <a href="linking.html#processingURL-absolute">processing URL references</a>
 to identify a specific target element,
 the user agent must always compare the generated absolute URL against the current document base URL
@@ -2068,7 +2068,7 @@ or the empty string. Setting the attribute to the empty string indicates that th
         <th>Animatable</th>
       </tr>
       <tr>
-        <td><dfn id="SVGElementTabindexAttribute" data-dfn-for="core-attributes" data-dfn-type="element-attr">tabindex</dfn></td>
+        <td><dfn element-attr for="core-attributes">tabindex</dfn></td>
         <td><a href="https://html.spec.whatwg.org/#valid-integer">valid integer</a> <span class="syntax">&bs[;HTML]</span></td>
         <td>(none)</td>
         <td>no</td>
@@ -2253,7 +2253,7 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       </thead>
 
    <tbody>
-    <tr><td>{{a}}</td>
+    <tr><td><a element spec="svg2">a</a></td>
         <td><code title="attr-aria-role-link">link</code> role
     if the element has a valid <code>href</code> or <code>xlink:href</code> attribute.
     For <code>a</code> elements that are not links, the default semantics are the same as
@@ -2269,7 +2269,7 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{clipPath}}</td>
+      <td><a element spec="css-masking">clipPath</a></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
@@ -2428,7 +2428,7 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{g}}</td>
+      <td><{g}></td>
       <td><code>group</code> role
         if the element meets the [=inclusion criteria=],
         otherwise <code>none</code></td>
@@ -2457,7 +2457,7 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{mask element}}</td>
+      <td><a element spec="css-masking">mask</a> element</td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
@@ -2525,17 +2525,17 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{svg}}</td>
+      <td><{svg}></td>
       <td><code>graphics-document</code> role</td>
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{switch}}</td>
+      <td><{switch}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{symbol}}</td>
+      <td><{symbol}></td>
       <td><code>graphics-object</code> role
         if the element is a rendered [=element instance=]
         that meets the [=inclusion criteria=],
@@ -2569,7 +2569,7 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{use}}</td>
+      <td><{use}></td>
       <td><code>graphics-object</code> role
         if the element meets the [=inclusion criteria=],
         otherwise <code>none</code></td>
@@ -2810,13 +2810,13 @@ to be interpreted, the following steps are run:
 
 <ol class='algorithm'>
   <li>Let <var>result</var> be an initially empty list.</li>
-  <li>If <var>element</var> is not displayed, due to having a {{display}} value
+  <li>If <var>element</var> is not displayed, due to having a 'display' value
   of <span class='prop-value'>none</span> or being in a subtree that has
   failing [=conditional processing attributes=] or a failing branch
-  of a {{switch}}, then return <var>result</var>.</li>
+  of a <{switch}>, then return <var>result</var>.</li>
   <li>For each child element <var>child</var> of <var>element</var>, in document order:
     <ol>
-      <li>If <var>child</var> is an {{svg}} or {{g}} element, then:
+      <li>If <var>child</var> is an <{svg}> or <{g}> element, then:
         <ol>
           <li>Let <var>descendants</var> be the result of
           <a href="#TermFindIntersectingOrEnclosedDescendants">finding the
@@ -2825,7 +2825,7 @@ to be interpreted, the following steps are run:
           <li>Append to <var>result</var> all the elements of <var>descendants</var>.</li>
         </ol>
       </li>
-      <li>Otherwise, if <var>child</var> is a {{use}} element, then:
+      <li>Otherwise, if <var>child</var> is a <{use}> element, then:
         <ol>
           <li>Let <var>root</var> be the root of the <var>child</var>'s shadow tree.</li>
           <li>Let <var>descendants</var> be the result of
@@ -2837,7 +2837,7 @@ to be interpreted, the following steps are run:
             Note: This means that although we look at the
             elements in the [=use-element shadow tree=],
             we don't place the [=element instances=] or their [=corresponding element=]
-            in the <var>result</var> list; only the {{use}}
+            in the <var>result</var> list; only the <{use}>
             element itself is returned.
           </li>
         </ol>
@@ -2865,7 +2865,7 @@ steps are run:
 
 <ol class='algorithm'>
   <li>Let <var>result</var> be an initially empty list.</li>
-  <li>If <var>element</var> is an {{svg}} or {{g}} element,
+  <li>If <var>element</var> is an <{svg}> or <{g}> element,
   then for each child element <var>child</var> of <var>element</var>,
   in document order:
     <ol>
@@ -2999,7 +2999,7 @@ null if there is no such element.
 
 
 
-<p>An [=SVGGElement=] object represents a {{g}} element in the DOM.
+<p>An [=SVGGElement=] object represents a <{g}> element in the DOM.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGGElement</b> : <a>SVGGraphicsElement</a> {
@@ -3064,7 +3064,7 @@ interface <b>SVGTitleElement</b> : <a>SVGElement</a> {
 
 
 
-<p>An [=SVGSymbolElement=] object represents a {{symbol}} element in the DOM.
+<p>An [=SVGSymbolElement=] object represents a <{symbol}> element in the DOM.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGSymbolElement</b> : <a>SVGGraphicsElement</a> {
@@ -3085,7 +3085,7 @@ Note:
 
 
 
-<p>An [=SVGUseElement=] object represents a {{use}} element in the DOM.
+<p>An [=SVGUseElement=] object represents a <{use}> element in the DOM.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGUseElement</b> : <a>SVGGraphicsElement</a> {
@@ -3227,7 +3227,7 @@ interface <b>ShadowAnimation</b> : <a>Animation</a> {
 
 
 
-<p>An [=SVGSwitchElement=] object represents a {{switch}} element in the DOM.
+<p>An [=SVGSwitchElement=] object represents a <{switch}> element in the DOM.
 
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGSwitchElement</b> : <a>SVGGraphicsElement</a> {

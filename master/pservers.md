@@ -70,17 +70,17 @@ redefine them here. -->
   Paint-server elements are never rendered directly; their only usage is
   as something that can be referenced using
   the {{fill}} and {{stroke}} properties.
-  The {{display}} value for these elements
+  The 'display' value for these elements
   must always be set to <span class="prop-value">none</span>
   by the [=user agent style sheet=],
   and this declaration must have importance over any other CSS rule or presentation attribute.
   <!--The
-  {{display}} property does not apply to a paint-server element;
+  'display' property does not apply to a paint-server element;
   thus, paint-server elements are not directly rendered even if
-  the {{display}} property is set to a value other
+  the 'display' property is set to a value other
   than <span class="prop-value">none</span>, and -->
   Paint-server elements
-  are available for referencing even when the {{display}}
+  are available for referencing even when the 'display'
   property on the paint-server element or any of its ancestors is set
   to <span class="prop-value">none</span>.
 
@@ -363,8 +363,8 @@ Where, for each channel:
 
 	    is established using the bounding box of the element to
             which the gradient is applied
-            (see <a href="coords.html#ObjectBoundingBox">Object
-            bounding box units</a>) and then applying the transform
+            (see [[#ObjectBoundingBoxUnits|Object
+            bounding box units]]) and then applying the transform
             specified by attribute {{gradientTransform}}.
             Percentages represent values relative to the bounding box
             for the object.
@@ -412,8 +412,8 @@ Where, for each channel:
         (i.e., inserted to the right of) any previously defined
         transformations, including the implicit transformation
         necessary to convert
-        from <a href="coords.html#ObjectBoundingBox">object bounding
-        box units</a> to user coordinate system.
+        from [[#ObjectBoundingBoxUnits|object bounding
+        box units]] to user coordinate system.
       
 
       <dl class="attrdef-svg2">
@@ -674,8 +674,8 @@ path: images/pservers/lingrad01.svg
 
 	    is established using the bounding box of the element to
             which the gradient is applied
-            (see <a href="coords.html#ObjectBoundingBox">Object
-            bounding box units</a>) and then applying the transform
+            (see [[#ObjectBoundingBoxUnits|Object
+            bounding box units]]) and then applying the transform
             specified by attribute {{gradientTransform}}.
             Percentages represent values relative to the bounding box
             for the object.
@@ -720,8 +720,8 @@ path: images/pservers/lingrad01.svg
         (i.e., inserted to the right of) any previously defined
         transformations, including the implicit transformation
         necessary to convert
-        from <a href="coords.html#ObjectBoundingBox">object bounding
-        box units</a> to user coordinate system.
+        from [[#ObjectBoundingBoxUnits|object bounding
+        box units]] to user coordinate system.
       
 
       <dl class="attrdef-svg2">
@@ -1165,7 +1165,7 @@ colors..." but "ramp" is used nowhere else in this section.
       space, so 'transparent' really means transparent black. Specifying
       a {{stop-color}} with the value 'transparent' is equivalent to
       specifying a {{stop-color}} with the value 'black' and a
-      {{stop-opacity}} with the value '0'.
+      'stop-opacity' with the value '0'.
       
       <dl class="propdef-svg2">
         <dt>Value</dt>              <dd>&lt;‘{{color}}’&gt;</dd>
@@ -1180,11 +1180,11 @@ colors..." but "ramp" is used nowhere else in this section.
     <dt id="StopOpacityProperty"><span class="propdef-title property">'stop-opacity'</span></dt>
     <dd>
       <p>
-      The {{stop-opacity}} property defines the opacity of
+      The 'stop-opacity' property defines the opacity of
       a given gradient stop.
       <span class='ready-for-wider-review'>
       The opacity value used for the gradient calculation is the product
-      of the value of {{stop-opacity}} and the opacity of the value of
+      of the value of 'stop-opacity' and the opacity of the value of
       {{stop-color}}. For {{stop-color}} value types of that
       don't include explicit opacity information, the opacity of that
       component must be treated as 1.</span>
@@ -1347,8 +1347,8 @@ and <em>n</em>.
 
             is established using the bounding box of the element to
             which the pattern is applied
-            (see <a href="coords.html#ObjectBoundingBox">Object
-            bounding box units</a>) and then applying the transform
+            (see [[#ObjectBoundingBoxUnits|Object
+            bounding box units]]) and then applying the transform
             specified by attribute {{patternTransform}}.
             Percentages represent values relative to the bounding box
             for the object.
@@ -1403,8 +1403,8 @@ and <em>n</em>.
             the {{pattern}} element is established using the
             bounding box of the element to which the pattern is
             applied
-            (see <a href="coords.html#ObjectBoundingBox">Object
-            bounding box units</a>) and then applying the transform
+            (see [[#ObjectBoundingBoxUnits|Object
+            bounding box units]]) and then applying the transform
             specified by attribute {{patternTransform}}.
 	  
 	</dd>
@@ -1432,8 +1432,8 @@ and <em>n</em>.
         (i.e., inserted to the right of) any previously defined
         transformations, including the implicit transformation
         necessary to convert
-        from <a href="coords.html#ObjectBoundingBox">object bounding
-        box units</a> to user coordinate system.
+        from [[#ObjectBoundingBoxUnits|object bounding
+        box units]] to user coordinate system.
       
 
       <dl class="attrdef-svg2">
@@ -1560,16 +1560,16 @@ and <em>n</em>.
 <h4 id="PatternNotes">Notes on patterns</h4>
 
 <p>SVG's <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
-the {{overflow}} property for {{pattern}} elements to
+the [[#OverflowAndClipProperties|overflow]] property for {{pattern}} elements to
 <span class="prop-value">hidden</span>, which causes a rectangular clipping
 path to be created at the bounds of the pattern tile.  Unless the
-{{overflow}} property is overridden, any graphics within the pattern
+[[#OverflowAndClipProperties|overflow]] property is overridden, any graphics within the pattern
 which goes outside of the pattern rectangle will be clipped.
 <a href="pservers.html#ExamplePattern01">Example pattern01</a> below shows the
 effect of clipping to the pattern tile.
 
 Note: 
-  Note that if the {{overflow}} property is set to
+  Note that if the [[#OverflowAndClipProperties|overflow]] property is set to
   <span class="prop-value">visible</span> the rendering behavior
   for the pattern outside the bounds of the pattern is currently
   undefined. A future version of SVG may require the overflow to be
@@ -1619,7 +1619,7 @@ shows how to fill a rectangle by referencing a pattern paint
 server. Note how the blue stroke of each triangle has been
 slightly clipped at the top and the left. This is due to SVG's
 <a href="styling.html#UAStyleSheet">user agent style sheet</a> setting
-the {{overflow}} property for {{pattern}} elements to
+the [[#OverflowAndClipProperties|overflow]] property for {{pattern}} elements to
 <span class="prop-value">hidden</span>, which causes the pattern to be clipped
 to the bounds of the pattern tile.
 

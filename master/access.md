@@ -13,7 +13,7 @@
       <li>Support for <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-describedby">aria-describedby</a> for description relationships.</li>
       <li>Support for <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-owns">aria-owns</a> for structural relationships. </li>
       <li>Support for <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-controls">aria-controls</a> for control relationships where an element controls the content and or behavior of another element. </li>
-      <li>The {{g}} for defined groupings.</li>
+      <li>The <{g}> for defined groupings.</li>
       <li>Support for the WAI-ARIA <a href="https://www.w3.org/TR/wai-aria-1.1/#group">group</a> and <a href="https://www.w3.org/TR/wai-aria-1.1/#radiogroup">radiogroup</a> roles.</li>
     </ul>
   </dd>
@@ -22,7 +22,7 @@
  <dt><span class="gl"><a href="https://www.w3.org/TR/WCAG21/#keyboard-operation">&bs[;WCAG2] Keyboard Accessible: Make all functionality available from the keyboard.</a></span></dt>
   <dd>
     <ul>
-      <li><a href="interact.html#Focus">Focus support</a> and the {{tabindex}} attribute for sequential focus navigation aligned with HTML </li>
+      <li><a href="interact.html#Focus">Focus support</a> and the <a element-attr for="core-attributes">tabindex</a> attribute for sequential focus navigation aligned with HTML </li>
 
       <li><a href="interact.html#EventAttributes">Keyboard Event attribute support along with Mouse Event support</a>
  for script authors
@@ -30,7 +30,7 @@
       <li><a href="interact.html#SVGEvents">Keyboard Events</a> for script authors
       </li>
       <li>Script support for setting focus on each <a href="types.html#InterfaceSVGElement">SVG Element</a> in the DOM</li>
-      <li>Script support for acquiring the {{tabindex}} attribute
+      <li>Script support for acquiring the <a element-attr for="core-attributes">tabindex</a> attribute
 on each <a href="types.html#InterfaceSVGElement">SVG Element</a> in the DOM</li>
       <li>Script support for the HTML activeElement property in the <a href="struct.html#InterfaceDocumentExtensions">Document interface</a></li>
     </ul>
@@ -42,8 +42,8 @@ on each <a href="types.html#InterfaceSVGElement">SVG Element</a> in the DOM</li>
     <ul>
       <li>To enable bypassing of blocks of content SVG supports the: WAI-ARIA <a href="https://www.w3.org/TR/wai-aria-1.1/#landmark_roles">landmark</a> roles.</li>
       <li>Supports {{title}} to provide page titles.</li>
-      <li>Supports {{tabindex}} to provide a sequential focus navigation order.</li>
-      <li>Supports the {{a}} element, enabling authors to supply the link purpose both from its content.</li>
+      <li>Supports <a element-attr for="core-attributes">tabindex</a> to provide a sequential focus navigation order.</li>
+      <li>Supports the <a element spec="svg2">a</a> element, enabling authors to supply the link purpose both from its content.</li>
       <li>Supports headings and labels through the use of the <a href="https://www.w3.org/TR/wai-aria-1.1/#heading">heading</a> role with <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-level">aria-level</a>, <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-labelledby">aria-labelledby</a> and <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-label">aria-label</a>.</li>
       <li>Support visible focus by rendering visible focus on focused elements in the tab order.</li>
     </ul>
