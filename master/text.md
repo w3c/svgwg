@@ -123,13 +123,13 @@ Note:
   indicate its function.
   For example,
   a text element that provides a visible label for part of a diagram
-  should have an {{id}} that is referenced by
+  should have an <a element-attr for="core-attributes" spec="svg2">id</a> that is referenced by
   an {{aria-labelledby}} attribute on the relevant group or path element.
   See <a href="access.html">SVG
   accessibility guidelines</a> for more information.
 
 
-<h4 id="Definitions">Definitions</h4>
+<h4 id="text-Definitions">Definitions</h4>
 
 <dl class="definitions">
 

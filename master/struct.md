@@ -112,7 +112,7 @@ in the <a href="#EmbeddedSVGExample">above example</a>). For more
 information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommendation
 [[!xml-names]].
 
-<h4 id="Definitions">Definitions</h4>
+<h4 id="structure-Definitions">Definitions</h4>
 
 <dl class="definitions">
   <dt><dfn id="TermStructuralElement" data-dfn-type="dfn" data-export="">structural element</dfn></dt>
@@ -237,7 +237,7 @@ replace the generic [=event handlers=] with the same names normally supported by
 related [=graphics elements=].
 
 <p>A group of elements, as well as individual objects, can be given
-a name using the {{id}} attribute. Named groups are needed for
+a name using the <a element-attr for="core-attributes" spec="svg2">id</a> attribute. Named groups are needed for
 several purposes such as animation and re-usable objects.
 
 <p>An example:
@@ -264,7 +264,7 @@ To do this, SVG makes extensive use of the [=URL reference=]
 construct [<a href="refs.html#ref-rfc3987">rfc3987</a>].
 For example, to fill a rectangle with a linear gradient, a
 {{linearGradient}} element may be defined with an
-{{id}} property that may be referenced in the value for
+<a element-attr for="core-attributes" spec="svg2">id</a> property that may be referenced in the value for
 the rectangle's {{fill}} property, as in the following:
 
 <xmp>
@@ -654,7 +654,7 @@ are rendered in the same way as if the shadow DOM was implemented.
 
 <dl>
   <dt><dfn id="TermReferencedElement">referenced element</dfn></dt>
-  <dd>The element specified by the {{href}} (or {{xlink:href}}) attribute on the <{use}> element, or the root element of a document referenced by that attribute if the URL provided does not include a target fragment that links to a specific element {{id}}.</dd>
+  <dd>The element specified by the {{href}} (or {{xlink:href}}) attribute on the <{use}> element, or the root element of a document referenced by that attribute if the URL provided does not include a target fragment that links to a specific element <a element-attr for="core-attributes" spec="svg2">id</a>.</dd>
 
   <dt><dfn id="TermReferencedDocumentSubtree">referenced document subtree</dfn></dt>
   <dt>referenced graphics</dt>
@@ -1153,30 +1153,30 @@ Note:
   Each animation element or instance must only affect a target element
   in the same node tree (shadow or light),
   regardless of whether the targetting is implicit (the parent element)
-  or explicit (a URL cross-reference to an element {{id}}).
+  or explicit (a URL cross-reference to an element <a element-attr for="core-attributes" spec="svg2">id</a>).
   In this way, the one-to-one relationship between animation elements
   and target elements is preserved.
 
 
 Note: 
-  The {{id}} attribute is cloned, like any other attribute,
+  The <a element-attr for="core-attributes" spec="svg2">id</a> attribute is cloned, like any other attribute,
   from the [=corresponding element=] to the [=element instance=];
-  This does not conflict with the requirement for {{id}} to be unique,
+  This does not conflict with the requirement for <a element-attr for="core-attributes" spec="svg2">id</a> to be unique,
   because the clone and the original are in distinct node trees.
 
 
 <p>
   All animation elements, in the document or in the shadow trees,
   which are timed to begin or end in response to an event
-  on another element identified by its {{id}} attribute,
-  must also begin or end when any [=instance=] of an element with that {{id}}
+  on another element identified by its <a element-attr for="core-attributes" spec="svg2">id</a> attribute,
+  must also begin or end when any [=instance=] of an element with that <a element-attr for="core-attributes" spec="svg2">id</a>
   receives the same event.
   This is consistent with how event listeners on a
   referenced element also listen to events on instances of that element,
   as described in the section on
   <a href="#UseEventHandling">Event handling in use-element shadow trees</a>.
   This behavior does not apply to animation begin or end times
-  defined only by an event and not by an {{id}}
+  defined only by an event and not by an <a element-attr for="core-attributes" spec="svg2">id</a>
   (and therefore implicitly listening for the event on the target element);
   in that case, each animation element is only triggered by its own target.
 
@@ -1201,7 +1201,7 @@ Note:
     will animate synchronously.
     This will be the case if the animation is purely time-based,
     or if it begins and ends in response to user interaction
-    on an element referenced by its {{id}}.
+    on an element referenced by its <a element-attr for="core-attributes" spec="svg2">id</a>.
     However, if the animation is triggered by a user interaction event
     on the targetted element (implicitly),
     then only the element or element instance that receives the interaction event
@@ -1220,7 +1220,7 @@ Note:
     In order to create animations
     that apply to all instances when any instance or the original element
     receives an event,
-    specify the element {{id}} explicitly:
+    specify the element <a element-attr for="core-attributes" spec="svg2">id</a> explicitly:
   
   <pre><code>
 &lt;set href="#target" begin="mouseover" ... />
@@ -1713,7 +1713,7 @@ with the value being an ID reference to one or more SVG or HTML elements contain
 The {{aria-describedby}} attribute takes precedence
 over the child {{desc}} when providing a description.
 If an element has both visible description and a child {{desc}} element providing supplementary information,
-authors should explicitly include the {{id}} of the element itself in its own {{aria-describedby}} list, in order to concatenate the two descriptions together.
+authors should explicitly include the <a element-attr for="core-attributes" spec="svg2">id</a> of the element itself in its own {{aria-describedby}} list, in order to concatenate the two descriptions together.
 
 
 
@@ -1909,7 +1909,7 @@ this case) upon reading it back in:
 
 <h4 id="Core.attrib">Attributes common to all elements: <span class="attr-name">id</span></h4>
 
-<p>The {{id}} attribute is available on all SVG elements:
+<p>The <a element-attr for="core-attributes" spec="svg2">id</a> attribute is available on all SVG elements:
 
 <dl class="attrdef-list">
   <dt>
@@ -1921,7 +1921,7 @@ this case) upon reading it back in:
         <th>Animatable</th>
       </tr>
       <tr>
-        <td><dfn dfn element-attr export for=SVG2>id</dfn></td>
+        <td><dfn dfn element-attr export for="core-attributes">id</dfn></td>
         <td>(see below)</td>
         <td>(none)</td>
         <td>no</td>
@@ -1931,24 +1931,24 @@ this case) upon reading it back in:
   <dd class="ready-for-wider-review">
     <p>Must reflect the <a href="https://www.w3.org/TR/dom/#concept-id">element's
     ID</a> [<a href="refs.html#ref-dom">DOM</a>].
-    The {{id}} attribute must be unique within the node tree,
+    The <a element-attr for="core-attributes" spec="svg2">id</a> attribute must be unique within the node tree,
     must not be an empty string,
     and must not contain any whitespace characters.
     
     <p>
       Additional requirements apply in order for
-      the {{id}} attribute to be valid in XML documents,
+      the <a element-attr for="core-attributes" spec="svg2">id</a> attribute to be valid in XML documents,
       as defined in the specification for the relevant version of XML.
       A stand-alone SVG document uses XML 1.0 syntax [[!xml]],
-      which specifies that valid {{id}} values are <a href="https://www.w3.org/TR/xml/#NT-Name">XML name tokens</a>.
+      which specifies that valid <a element-attr for="core-attributes" spec="svg2">id</a> values are <a href="https://www.w3.org/TR/xml/#NT-Name">XML name tokens</a>.
       Valid XML 1.0 names only include designated characters (letters, digits, and a few punctuation marks),
       and do not start with a digit, a full stop (.) character, or a hyphen-minus (-) character.
     
     <p>
-      User agents should process {{id}} values in SVG files irrespective of XML validity.
+      User agents should process <a element-attr for="core-attributes" spec="svg2">id</a> values in SVG files irrespective of XML validity.
     
     <p>
-      Authors should avoid the use of {{id}} values that would be parsed
+      Authors should avoid the use of <a element-attr for="core-attributes" spec="svg2">id</a> values that would be parsed
       as an <a href="linking.html#SVGViewSpecification">SVG view specification</a>
       or a <a href="linking.html#MediaFragments">basic media fragment</a>
       when used as a URL target fragment.

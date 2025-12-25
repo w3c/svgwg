@@ -3,7 +3,7 @@
 <div class="ready-for-wider-review">
 <h3 id="Introduction">Introduction</h3>
 
-<h4 id="Definitions">Definitions</h4>
+<h4 id="painting-Definitions">Definitions</h4>
 <dl class="definitions">
 
   <dt><dfn id="TermFill" data-dfn-type="dfn" data-export="">fill</dfn></dt>

@@ -79,9 +79,9 @@ image files such as PNG or JPEG or to files with MIME type of
 href="conform.html#ConformingSVGViewers">Conforming SVG
 viewers</a> need to support at least PNG, JPEG and SVG format
 files.
-SVG files must be processed in [=secure animated mode=]
+SVG files must be processed in [[#secure-animated-mode]]
 if the current document supports animation,
-or in [=secure static mode=] if the current document is static.
+or in [[#secure-static-mode]] if the current document is static.
 
 
 <p>The result of processing an {{image}} is always a four-channel

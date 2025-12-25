@@ -41,7 +41,7 @@ on the scripting context when a {{script}} element's
 
 -->
 
-<h4 id="definitions">
+<h4 id="linking-definitions">
 Definitions</h4>
 
     <dl class='definitions'>
@@ -512,7 +512,7 @@ Note:
   <li>
     <p>
       If the document containing the reference is being processed in
-      [=secure static mode=] or [=secure animated mode=],
+      [[#secure-static-mode]] or [[#secure-animated-mode]],
       [=external file references=] are disallowed.
       Unless the reference is a [=data URL=],
       the user agent must treat the reference as if there was a network error,
@@ -583,7 +583,7 @@ Note:
   Otherwise, the subresource must be parsed to identify the target element.
   If the fetched document is a type that the user agent can parse
   to create a document object model,
-  it must process it in [=secure static mode=]
+  it must process it in [[#secure-static-mode]]
   (meaning, do not fetch any additional external resources
   and do not run scripts or play animations).
   The document model generated for an external subresource reference
@@ -643,7 +643,7 @@ Note:
       An external subresource document is always immutable once fully parsed;
       the current document is also immutable once parsed
       if it is being processed in any mode other than
-      [=dynamic interactive mode=].
+      [[#dynamic-interactive-mode]].
     
   </li>
   <li>

@@ -68,9 +68,9 @@ Features</h4>
             animation is defined to begin at <code>0s</code>, it still 
             will not be applied.
 
-        <dt><dfn>references to external resources</dfn>
+        <dt><dfn dfn export>references to external resources</dfn>
         <dd>
-            References to [=external resources=] are URLs references
+            References to [=external file reference|external resources=] are URLs references
             or network access requests made by markup, style 
             properties, script or other Web platform features used in 
             the document, except for:
@@ -100,7 +100,8 @@ Features</h4>
         <dd>
             Script execution is the execution of any SVG [[SVG2#ScriptElement|&lt;script>]]
             elements, script found in [=event attributes=] (such as 
-            {{onclick}} on SVG elements), or any other script defined 
+            [=event attribute|onclick=] on SVG elements), or any other 
+            script defined 
             by other Web platform features used in the document, such 
             as any HTML {{script}} elements. When script execution is 
             disabled in an SVG document, no script in the document 
@@ -119,7 +120,7 @@ Features</h4>
             any elements within the document must have no effect.
 
 <h4 id="dynamic-interactive-mode">
-<dfn>Dynamic interactive mode</dfn></h4>
+Dynamic interactive mode</h4>
 
     This [=processing mode=] imposes no restrictions on any
     feature of the SVG language.
@@ -147,7 +148,7 @@ Features</h4>
     </table>
 
 <h4 id="animated-mode">
-<dfn>Animated mode</dfn></h4>
+Animated mode</h4>
 
     This [=processing mode=] is intended for circumstances where an 
     SVG document is to be used as an animated image that is allowed to 
@@ -177,7 +178,7 @@ Features</h4>
     </table>
 
 <h4 id="secure-animated-mode">
-<dfn dfn export>Secure animated mode</dfn></h4>
+Secure animated mode</h4>
 
     This [=processing mode=] is intended for circumstances where an 
     SVG document is to be used as an animated image that is not 
@@ -209,7 +210,7 @@ Features</h4>
     </table>
 
 <h4 id="static-mode">
-<dfn>Static mode</dfn></h4>
+Static mode</h4>
 
     This [=processing mode=] is intended for circumstances where an 
     SVG document is to be used as a non-animated image that is allowed
@@ -242,8 +243,8 @@ Features</h4>
 </table>
 
 
-<h4 id="secure-static-mode"><dfn dfn export>
-Secure static mode</dfn></h4>
+<h4 id="secure-static-mode">
+Secure static mode</h4>
 
     This [=processing mode=] is intended for circumstances where
     an SVG document is to be used as a non-animated image that is not 
@@ -290,9 +291,9 @@ Processing modes for SVG sub-resource documents</h3>
         <dt id="image-document-mode"><{image}> references
         <dd>
             An SVG embedded within an <{image}> element must be 
-            processed in [=secure animated mode=] if the embedding 
+            processed in [[#secure-animated-mode]] if the embedding 
             document supports [=declarative animation=],
-            or in [=secure static mode=] otherwise.
+            or in [[#secure-static-mode]] otherwise.
         
 
             Note: The same processing modes are expected to be used
@@ -309,7 +310,7 @@ Processing modes for SVG sub-resource documents</h3>
         <dd>
             When SVG documents are loaded through <{use}> element 
             references or [=paint server element=] cross-references
-            they must be processed in [=secure static mode=].
+            they must be processed in [[#secure-static-mode]].
             
 
             Note: Animations do not run while processing the 
@@ -329,7 +330,7 @@ Processing modes for SVG sub-resource documents</h3>
             When SVG documents are loaded through any style property 
             references that target specific elements in the document
             (as opposed to SVG as an image format), they must be 
-            processed in [=secure static mode=].
+            processed in [[#secure-static-mode]].
 
             Note: animations do not run in sub-resource documents, for 
             both performance reasons and because there is currently no 
@@ -346,8 +347,8 @@ Processing modes for SVG sub-resource documents</h3>
         <dt id="font-document-mode">SVG in fonts</dt>
         <dd>
             When SVG files are processed as part of a font reference,
-            they must use the [=secure animated mode=] if animated 
-            glyphs are supported, or [=secure static mode=] otherwise.
+            they must use the [[#secure-animated-mode]] if animated 
+            glyphs are supported, or [[#secure-static-mode]] otherwise.
 
             Note: These restrictions are included in the OpenType 
             specification for processing documents from the "SVG"
@@ -366,7 +367,7 @@ Processing modes for SVG sub-resource documents</h3>
     processed with equivalent restrictions.
 
     Note: For example, if an SVG document is being used in 
-    [=secure animated mode=] due to being referenced by an HTML 
+    [[#secure-animated-mode]] due to being referenced by an HTML 
     <{img}> or SVG <{image}> element, then any content within a 
     <{foreignObject}> element must have scripts, interactivity, and 
     [=external file references=] disabled, but should have declarative 
@@ -595,8 +596,10 @@ Conforming XML-Compatible SVG Markup Fragments</h4>
             specification [[!xml-names]],
 
         <li>
-            all {{id}} attributes are [[xml#sec-attribute-types|valid
-            XML IDs]] ([[!xml]], section 3.3.1), and
+            all <a element-attr for="core-attributes" 
+            spec="svg2">id</a> attributes are 
+            [[xml#sec-attribute-types|valid XML IDs]] ([[!xml]], 
+            section 3.3.1), and
 
         <li>
             any <code>&lt;?xml-stylesheet?&gt;</code> processing
@@ -608,7 +611,7 @@ Conforming XML-Compatible SVG Markup Fragments</h4>
 Conforming XML-Compatible SVG DOM Subtrees</h4>
 
     A DOM node tree or subtree rooted at a given element is an
-    <dfn>conforming XML-compatible SVG DOM subtree</dfn> if, once
+    <dfn dfn export>conforming XML-compatible SVG DOM subtree</dfn> if, once
     serialized to XML, it could form a [=conforming XML-compatible SVG
     markup fragment=].
 
@@ -715,7 +718,7 @@ Software Conformance Classes</h3>
             to generate SVG. SVG authoring tools are implicitly also
             [=SVG generators=].
 
-        <dt><dfn>SVG servers</dfn>
+        <dt><dfn dfn export>SVG servers</dfn>
         <dd>
             Any network or file server that makes available SVG
             content in response to requests from other software. SVG
@@ -809,7 +812,7 @@ Conforming SVG Authoring Tools</h4>
 
 
     An [[ATAG20#def-Authoring-Tool|authoring tool]], as defined in
-    [[ATAG20]], is a <dfn>conforming SVG authoring tool</dfn>
+    [[ATAG20]], is a <dfn dfn export>conforming SVG authoring tool</dfn>
     if it is a [=conforming SVG generator=] and it also conforms to
     all relevant Level A requirements from that document [[ATAG20]].
     Level AA and Level AAA requirements are encouraged but not
@@ -818,7 +821,7 @@ Conforming SVG Authoring Tools</h4>
 <h4 id="ConformingSVGServers">
 Conforming SVG Servers</h4>
 
-    A <dfn>conforming SVG server</dfn> must meet all the requirements
+    A <dfn dfn export>conforming SVG server</dfn> must meet all the requirements
     of a [=conforming SVG generator=]. In addition, conforming SVG
     servers using HTTP or other protocols that use Internet Media
     types must serve SVG stand-alone files with the media type
@@ -942,15 +945,15 @@ Conforming SVG Viewers</h4>
 
     <ul>
         <li>
-            [=dynamic interactive mode=]
+            [[#dynamic-interactive-mode]]
         <li>
-            [=animated mode=]
+            [[#animated-mode]]
         <li>
-            [=secure animated mode=]
+            [[#secure-animated-mode]]
         <li>
-            [=static mode=]
+            [[#static-mode]]
         <li>
-            [=secure static mode=]
+            [[#secure-static-mode]]
     </ul>
 
     A conforming SVG viewer must meet all normative requirements
@@ -1072,10 +1075,10 @@ Conforming SVG Viewers</h4>
             operations for conversion of coordinates. However, in
             order to prevent the rounding error on coordinate
             transformation, at least double-precision floating point
-            computation must be used on @@fix {{current transformation matrix}}
-            <!-- [[css-transforms-1#current-transformation-matrix|CTM]] -->
-            generation processing. Such minimum typical computation
-            way is expressed with following formulas.
+            computation must be used on 
+            <a spec="css-transforms-1">current transformation matrix</a> 
+            (CTM) generation processing. Such minimum typical 
+            computation way is expressed with following formulas.
             
             <div role="math"
                  aria-describedby="ctm-matrix">

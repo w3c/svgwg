@@ -286,7 +286,7 @@ Where, for each channel:
   applied to the gradient.
 
 
-<h4 id="Definitions">Definitions</h4>
+<h4 id="pserverDefinitions">Definitions</h4>
 
 <dl class="definitions">
   <dt><dfn id="TermGradientElement" data-dfn-type="dfn" data-export="">gradient element</dfn></dt>

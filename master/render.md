@@ -71,7 +71,7 @@ The rendering tree</h3>
     and may be rasterized at different scales or transformations.
 
 
-<h4 id="Definitions">
+<h4 id="render-Definitions">
 Definitions</h4>
 
     <dl class="definitions">
@@ -721,7 +721,9 @@ Clipping and masking</h3>
     <ul>
         <li>
             clipping paths, which either uses any combination of 
-            <{path}>, <{text}> and [=basic shapes=] or basic shapes to 
+            <a element spec="svg2">path</a>, 
+            <a element spec="svg2">text</a> 
+            and [=basic shapes=] or basic shapes to 
             serve as the outline of a (in the absence of 
             anti-aliasing) 1-bit mask, where everything on the 
             "inside" of the outline is allowed to show through but 

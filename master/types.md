@@ -1,6 +1,9 @@
-<h2>Basic Data Types and Interfaces</h2>
+<h2 id="types">
+Basic Data Types and Interfaces</h2>
 
-<h3 id="definitions">Definitions</h3>
+<h3 id="types-definitions">
+Definitions</h3>
+
 <dl class="definitions">
   <dt><dfn id="TermInitialValue" data-dfn-type="dfn" data-export="">initial value</dfn></dt>
   <dd>

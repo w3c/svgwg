@@ -401,7 +401,7 @@ have been made.
       <li>Define a ShadowAnimation interface to represent the cloning of Web Animations API animations</li>
       <li>Prohibit WAAPI animations from being directly applied to element instances in the use-element shadow tree.</li>
       <li>Define the propagation of SMIL-style animations through the cloning of animation elements; require that animations elements affecting the referenced graphic be cloned into the shadow tree, even if they are not descendents of the referenced element.</li>
-      <li>Define how event-based animation element triggers and animation element href attributes behave when there are multiple elements with the same {{id}} in different node trees.</li>
+      <li>Define how event-based animation element triggers and animation element href attributes behave when there are multiple elements with the same <a element-attr for="core-attributes" spec="svg2">id</a> in different node trees.</li>
       <li>Require event handling in use-element shadow trees to follow the event retargetting rules from the Shadow DOM spec.</li>
       <li>Clarify that the copying of event listeners from referenced graphics to their element instances applies to listeners added by script as well as by event attributes.</li>
       <li>Prohibit event listeners from being directly added to elements in the use-element shadow tree.</li>
@@ -412,7 +412,7 @@ have been made.
   </li>
   <li>Change role mapping for the <a element spec="svg2">a</a> element to depend on whether it is actually a valid link.</li>
   <li>Mark ARIA state and property attributes as animatable.</li>
-  <li>Update requirements for {{id}} values to harmonize with HTML, with extra warning about requirements for validity in an XML document.</li>
+  <li>Update requirements for <a element-attr for="core-attributes" spec="svg2">id</a> values to harmonize with HTML, with extra warning about requirements for validity in an XML document.</li>
   <li>Moved the <a href="struct.html#ForeignNamespaces">Foreign namespaces and private data</a> section to this chapter and added some new cross-references and notes.</li>
 </ul>
 <div class='changed-since-cr1'>
