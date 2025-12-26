@@ -312,7 +312,7 @@ Where, for each channel:
     on a {{linearGradient}} are not presentation attributes;
     the used value is not affected by CSS styles.
     The {{gradientTransform}} attribute is a presentation attribute
-    for the {{transform}} property.
+    for the [[#TransformProperty|transform]] property.
   
 
   <dl class="attrdef-list-svg2">
@@ -403,8 +403,8 @@ Where, for each channel:
         transformation from the gradient coordinate system onto the
         target coordinate system
 
-        (i.e., <span class='attr-value'>'userSpaceOnUse'</span> or
-        <span class='attr-value'>'objectBoundingBox'</span>).
+        (i.e., <code>userSpaceOnUse</code> or
+        <code class='attr-value'>objectBoundingBox</code>).
 
 	This allows for things such as skewing the gradient.
 
@@ -438,7 +438,7 @@ Where, for each channel:
       
 
       <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt>Value</dt>                <dd><<length>></dd>
 	<dt>[=Initial value=]</dt>  <dd>0%</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
@@ -453,7 +453,7 @@ Where, for each channel:
       
 
       <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt>Value</dt>                <dd><<length>></dd>
 	<dt>[=Initial value=]</dt>  <dd>0%</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
@@ -468,7 +468,7 @@ Where, for each channel:
       
 
       <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt>Value</dt>                <dd><<length>></dd>
 	<dt>[=Initial value=]</dt>  <dd>100%</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
@@ -482,7 +482,7 @@ Where, for each channel:
       
 
       <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt>Value</dt>                <dd><<length>></dd>
 	<dt>[=Initial value=]</dt>  <dd>0%</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
@@ -616,7 +616,7 @@ path: images/pservers/lingrad01.svg
     on a {{radialGradient}} are not presentation attributes;
     the used value is not affected by CSS styles.
     The {{gradientTransform}} attribute is a presentation attribute
-    for the {{transform}} property.
+    for the [[#TransformProperty|transform]] property.
   
 
   <dl class="attrdef-list-svg2">
@@ -711,8 +711,8 @@ path: images/pservers/lingrad01.svg
         transformation from the gradient coordinate system onto the
         target coordinate system
 
-        (i.e., <span class='attr-value'>'userSpaceOnUse'</span> or
-        <span class='attr-value'>'objectBoundingBox'</span>).
+        (i.e., <code>userSpaceOnUse</code> or
+        <code class='attr-value'>objectBoundingBox</code>).
 
 	This allows for things such as skewing the gradient.
 
@@ -734,7 +734,7 @@ path: images/pservers/lingrad01.svg
 
     <dt id="RadialGradientElementCXAttribute">
       <span class="adef">cx</span> =
-      "<span class="attr-value"><a>&lt;length&gt;</a></span>"
+      "<span class="attr-value"><<length>></span>"
     </dt>
     <dd>
 
@@ -746,7 +746,7 @@ path: images/pservers/lingrad01.svg
       
 
       <dl class="attrdef-svg2">
-<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+<!--	<dt>Value</dt>                <dd><<length>></dd> -->
 	<dt>[=Initial value=]</dt>  <dd>50%</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
@@ -755,7 +755,7 @@ path: images/pservers/lingrad01.svg
 
     <dt id="RadialGradientElementCYAttribute">
       <span class="adef">cy</span> =
-      "<span class="attr-value"><a>&lt;length&gt;</a></span>"
+      "<span class="attr-value"><<length>></span>"
     </dt>
     <dd>
 
@@ -764,7 +764,7 @@ path: images/pservers/lingrad01.svg
       
 
       <dl class="attrdef-svg2">
-<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+<!--	<dt>Value</dt>                <dd><<length>></dd> -->
 	<dt>[=Initial value=]</dt>  <dd>50%</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
@@ -773,7 +773,7 @@ path: images/pservers/lingrad01.svg
 
     <dt id="RadialGradientElementRAttribute">
       <span class="adef">r</span> =
-      "<span class="attr-value"><a>&lt;length&gt;</a></span>"
+      "<span class="attr-value"><<length>></span>"
     </dt>
     <dd>
 
@@ -788,7 +788,7 @@ path: images/pservers/lingrad01.svg
       
 
       <dl class="attrdef-svg2">
-<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+<!--	<dt>Value</dt>                <dd><<length>></dd> -->
 	<dt>[=Initial value=]</dt>  <dd>50%</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
@@ -797,7 +797,7 @@ path: images/pservers/lingrad01.svg
 
     <dt id="RadialGradientElementFXAttribute">
       <span class="adef">fx</span> =
-      "<span class="attr-value"><a>&lt;length&gt;</a></span>"
+      "<span class="attr-value"><<length>></span>"
     </dt>
     <dd>
 
@@ -810,7 +810,7 @@ path: images/pservers/lingrad01.svg
       
 
       <dl class="attrdef-svg2">
-<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+<!--	<dt>Value</dt>                <dd><<length>></dd> -->
 	<dt>[=Initial value=]</dt>  <dd>see below</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
@@ -845,7 +845,7 @@ path: images/pservers/lingrad01.svg
 
     <dt id="RadialGradientElementFYAttribute">
       <span class="adef">fy</span> =
-      "<span class="attr-value"><a>&lt;length&gt;</a></span>"
+      "<span class="attr-value"><<length>></span>"
     </dt>
     <dd>
 
@@ -854,7 +854,7 @@ path: images/pservers/lingrad01.svg
       
 
       <dl class="attrdef-svg2">
-<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+<!--	<dt>Value</dt>                <dd><<length>></dd> -->
 	<dt>[=Initial value=]</dt>  <dd>see below</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
@@ -871,7 +871,7 @@ path: images/pservers/lingrad01.svg
 
     <dt id="RadialGradientElementFRAttribute">
       <span class="adef">fr</span> =
-      "<span class="attr-value"><a>&lt;length&gt;</a></span>"
+      "<span class="attr-value"><<length>></span>"
     </dt>
     <dd>
 
@@ -888,14 +888,14 @@ path: images/pservers/lingrad01.svg
       
 
       <dl class="attrdef-svg2">
-<!--	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd> -->
+<!--	<dt>Value</dt>                <dd><<length>></dd> -->
 	<dt>[=Initial value=]</dt>  <dd>0%, see below</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
 
       <p>
         If the attribute is not specified, the effect is as if a
-	value of <span class='attr-value'>'0%'</span> were
+	value of <code class='attr-value'>0%</code> were
 	specified.  If the element references an element that
 	specifies a value for 'fr', then the value of 'fr' is
 	inherited from the referenced element.
@@ -933,7 +933,7 @@ path: images/pservers/lingrad01.svg
       <p>
 	Indicates what happens if the gradient starts or ends inside
         the bounds of the object(s) being painted by the gradient. Has
-        the same values and meanings as the {{linearGradient/spreadMethod}}
+        the same values and meanings as the <{linearGradient/spreadMethod}>
         attribute on {{linearGradient}} element.
       
 
@@ -1126,7 +1126,7 @@ colors..." but "ramp" is used nowhere else in this section.
 
       <dl class="attrdef-svg2">
 
-	<dt>Value</dt>                <dd><a>&lt;number&gt;</a> | <a>&lt;percentage&gt;</a></dd>
+	<dt>Value</dt>                <dd><<number>> | <a>&lt;percentage&gt;</a></dd>
 	<dt>[=Initial value=]</dt>  <dd>0</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
 
@@ -1134,7 +1134,7 @@ colors..." but "ramp" is used nowhere else in this section.
 
       <dl class="attrdef-values">
 
-	<dt><a>&lt;number&gt;</a></dt>
+	<dt><<number>></dt>
         <dd>A number usually ranging from 0 to 1.</dd>
 
 	<dt><a>&lt;percentage&gt;</a></dt>
@@ -1295,7 +1295,7 @@ and <em>n</em>.
     Note that the {{x}},{{y}}, {{width}} and {{height}} attributes
     on a {{pattern}} are not presentation attributes;
     the used value is not affected by CSS styles.
-    The {{patternTransform}} attribute is a presentation attribute for the {{transform}} property.
+    The {{patternTransform}} attribute is a presentation attribute for the [[#TransformProperty|transform]] property.
   
 
   <dl class="attrdef-list-svg2">
@@ -1367,7 +1367,7 @@ and <em>n</em>.
       <p>
 	Defines the coordinate system for the contents of the
 	{{pattern}}. Note that this attribute has no effect if
-	attribute {{viewBox}} is specified.
+	attribute [[#ViewBoxAttribute|viewBox]] is specified.
       
 
       <dl class="attrdef-svg2">
@@ -1423,8 +1423,8 @@ and <em>n</em>.
         transformation from the pattern coordinate system onto the
         target coordinate system
 
-        (i.e., <span class='attr-value'>'userSpaceOnUse'</span> or
-        <span class='attr-value'>'objectBoundingBox'</span>).
+        (i.e., <code>userSpaceOnUse</code> or
+        <code class='attr-value'>objectBoundingBox</code>).
 
 	This allows for things such as skewing the pattern tiles.
 
@@ -1456,7 +1456,7 @@ and <em>n</em>.
       
 
       <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt>Value</dt>                <dd><<length>></dd>
 	<dt>[=Initial value=]</dt>  <dd>0</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
@@ -1471,7 +1471,7 @@ and <em>n</em>.
       
 
       <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt>Value</dt>                <dd><<length>></dd>
 	<dt>[=Initial value=]</dt>  <dd>0</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
@@ -1486,7 +1486,7 @@ and <em>n</em>.
       
 
       <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt>Value</dt>                <dd><<length>></dd>
 	<dt>[=Initial value=]</dt>  <dd>0</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
@@ -1508,7 +1508,7 @@ and <em>n</em>.
       
 
       <dl class="attrdef-svg2">
-	<dt>Value</dt>                <dd><a>&lt;length&gt;</a></dd>
+	<dt>Value</dt>                <dd><<length>></dd>
 	<dt>[=Initial value=]</dt>  <dd>0</dd>
 	<dt>[=Animatable=]</dt>    <dd>yes</dd>
       </dl>
@@ -1541,8 +1541,8 @@ and <em>n</em>.
         <li>{{y}}</li>
         <li>{{width}}</li>
         <li>{{height}}</li>
-        <li>{{viewBox}}</li>
-        <li>{{preserveAspectRatio}}</li>
+        <li>[[#ViewBoxAttribute|viewBox]]</li>
+        <li>[[#PreserveAspectRatioAttribute|preserveAspectRatio]]</li>
         <li>{{patternTransform}}</li>
         <li>{{patternUnits}}</li>
         <li>{{patternContentUnits}}</li>
@@ -1583,11 +1583,11 @@ Note:
 
 
 <p>The contents of the {{pattern}} are relative to a new coordinate
-system. If there is a {{viewBox}} attribute, then the new coordinate
+system. If there is a [[#ViewBoxAttribute|viewBox]] attribute, then the new coordinate
 system is fitted into the region defined by the {{x}}, {{y}},
 {{width}}, {{height}} and {{patternUnits}} attributes on the
-{{pattern}} element using the standard rules for {{viewBox}} and
-{{preserveAspectRatio}}. If there is no {{viewBox}} attribute, then
+{{pattern}} element using the standard rules for [[#ViewBoxAttribute|viewBox]] and
+[[#PreserveAspectRatioAttribute|preserveAspectRatio]]. If there is no [[#ViewBoxAttribute|viewBox]] attribute, then
 the new coordinate system has its origin at (<var>x</var>,&nbsp;<var>y</var>),
 where <var>x</var> is established by the {{x}} attribute on the
 {{pattern}} element, and <var>y</var> is established by the {{y}}
@@ -1604,7 +1604,7 @@ attribute on the {{pattern}} element. Thus, in the following example:
 <p>the rectangle has its top/left located 5 units to the right and 5
 units down from the origin of the pattern tile.
 
-<p>The {{viewBox}} attribute introduces a supplemental transformation
+<p>The [[#ViewBoxAttribute|viewBox]] attribute introduces a supplemental transformation
 which is applied on top of any transformations necessary to create a new
 pattern coordinate system due to attributes {{x}}, {{y}},
 {{width}}, {{height}} and {{patternUnits}}.
@@ -1638,10 +1638,11 @@ path: images/pservers/pattern01.svg
 
 <h4 id="InterfaceSVGGradientElement">Interface SVGGradientElement</h4>
 
-<p>The [=SVGGradientElement=] interface is used as a base interface
+<p>The [[#InterfaceSVGGradientElement|SVGGradientElement]] interface is used as a base interface
 for gradient paint server element interfaces.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGGradientElement</b> : <a>SVGElement</a> {
 
   // Spread Method Types
@@ -1658,7 +1659,7 @@ interface <b>SVGGradientElement</b> : <a>SVGElement</a> {
 <a>SVGGradientElement</a> includes <a>SVGURIReference</a>;
 </pre>
 
-<p>The numeric spread method type constants defined on [=SVGGradientElement=]
+<p>The numeric spread method type constants defined on [[#InterfaceSVGGradientElement|SVGGradientElement]]
 are used to represent the keyword values that the <span class="attr-name">spreadMethod</span>
 attribute can take.  Their meanings are as follows:
 
@@ -1688,7 +1689,7 @@ attributes on gradient elements are as follows:
 </table>
 
 <p>The <b id="__svg__SVGGradientElement__gradientTransform">gradientTransform</b> IDL
-attribute [=reflects=] the computed value of the {{transform}} property
+attribute [=reflects=] the computed value of the [[#TransformProperty|transform]] property
 and  the <span class='gradientTransform'>'gradientTransform'</span> presentation attribute
 for {{linearGradient}} and {{radialGradient}} elements.
 
@@ -1703,16 +1704,18 @@ numeric spread type constant table.
 
 
 
-<p>An [=SVGLinearGradientElement=] object represents an {{linearGradient}}
+<p>An [[#InterfaceSVGLinearGradientElement|SVGLinearGradientElement]] object represents an {{linearGradient}}
 in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGLinearGradientElement</b> : <a>SVGGradientElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGLinearGradientElement__x1">x1</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGLinearGradientElement__y1">y1</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGLinearGradientElement__x2">x2</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGLinearGradientElement__y2">y2</a>;
-};</pre>
+};
+</pre>
 
 <p>The
 <b id="__svg__SVGLinearGradientElement__x1">x1</b>,
@@ -1729,10 +1732,11 @@ content attributes, respectively
 
 
 
-<p>An [=SVGRadialGradientElement=] object represents an {{radialGradient}}
+<p>An [[#InterfaceSVGRadialGradientElement|SVGRadialGradientElement]] object represents an {{radialGradient}}
 in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGRadialGradientElement</b> : <a>SVGGradientElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__cx">cx</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__cy">cy</a>;
@@ -1740,7 +1744,8 @@ interface <b>SVGRadialGradientElement</b> : <a>SVGGradientElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__fx">fx</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__fy">fy</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="pservers.html#__svg__SVGRadialGradientElement__fr">fr</a>;
-};</pre>
+};
+</pre>
 
 <p>The
 <b id="__svg__SVGRadialGradientElement__cx">cx</b>,
@@ -1758,18 +1763,20 @@ interface <b>SVGRadialGradientElement</b> : <a>SVGGradientElement</a> {
 
 
 
-<p>An [=SVGStopElement=] object represents a {{stop}} element
+<p>An [[#InterfaceSVGStopElement|SVGStopElement]] object represents a {{stop}} element
 in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGStopElement</b> : <a>SVGElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedNumber</a> <a href="pservers.html#__svg__SVGStopElement__offset">offset</a>;
-};</pre>
+};
+</pre>
 
 <p>The <b id="__svg__SVGStopElement__offset">offset</b> IDL attribute
 [=reflects=] the {{offset}} content attribute.
 
-Note: Note that [=SVGStopElement=] does not have a
+Note: Note that [[#InterfaceSVGStopElement|SVGStopElement]] does not have a
 [=reflecting=] IDL attribute for its {{path}} attribute.
 
 
@@ -1778,10 +1785,11 @@ Note: Note that [=SVGStopElement=] does not have a
 
 
 
-<p>An [=SVGPatternElement=] object represents a {{pattern}} element
+<p>An [[#InterfaceSVGPatternElement|SVGPatternElement]] object represents a {{pattern}} element
 in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGPatternElement</b> : <a>SVGElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedEnumeration</a> <a href="pservers.html#__svg__SVGPatternElement__patternUnits">patternUnits</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedEnumeration</a> <a href="pservers.html#__svg__SVGPatternElement__patternContentUnits">patternContentUnits</a>;
@@ -1816,7 +1824,7 @@ The [=numeric type values=] for {{patternUnits}} and
 </table>
 
 <p>The <b id="__svg__SVGPatternElement__patternTransform">patternTransform</b> IDL
-attribute [=reflects=] the computed value of the {{transform}} property
+attribute [=reflects=] the computed value of the [[#TransformProperty|transform]] property
 and the <span class="attr-name">patternTransform</span> presentation attribute.
 
 <p>The

@@ -121,10 +121,10 @@ including under which circumstances events are triggered.
 <ul>
   <li>Using [[#SVGDOMOverview|SVG Document Object Model (DOM)]], a script can
   <a href="https://www.w3.org/TR/dom/#dom-eventtarget-addeventlistener">add or remove DOM event listeners</a>
-  ([<a href="refs.html#ref-dom">DOM</a>]) so that
+  ([[DOM]]) so that
   script can be invoked or ignored when a given event occurs on an event target</li>
 
-  <li>SVG's [=animation elements=] can be defined to begin or end based on
+  <li>SVG's <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a> can be defined to begin or end based on
   events.</li>
 </ul>
 
@@ -144,15 +144,15 @@ There should be some more modern examples of using events in svg, e.g touch even
 
 
 <p>The <em>Event name</em> in the
-first column is the name to use within SVG's [=animation elements=] to
+first column is the name to use within SVG's <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a> to
 define the events which can start or end animations. The
 <em>UI Event name</em> in the second column is the name to use when
 defining <a href="https://www.w3.org/TR/dom/#dom-eventtarget-addeventlistener">DOM event listeners</a>
-([<a href="refs.html#ref-dom">DOM</a>], section 3.6).
+([[DOM]], section 3.6).
 
 
 <p>For events not listed in the table, such as events introduced in HTML or UI Events,
-the respective [=event type=] is the name to use within SVG's [=animation elements=].
+the respective [=event type=] is the name to use within SVG's <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a>.
 
 
 <p>Requirements in the table on whether an event of a given type
@@ -255,12 +255,12 @@ method.
     </table>
 
 <p>Details on the parameters passed to event listeners for the
-event types for UI Events can be found in the ([<a href="refs.html#ref-uievents">uievents</a>]) and ([<a href="refs.html#ref-dom">DOM</a>]) specifications.
+event types for UI Events can be found in the ([<a href="refs.html#ref-uievents">uievents</a>]) and ([[DOM]]) specifications.
 For other event types, the parameters passed to event listeners
 are described elsewhere in this specification.
 
 <p>Likewise, <a href='https://svgwg.org/specs/animations/#EventValueSyntax'>event-value timing specifiers</a>
-used in [=animation element=] {{animate/begin}} and {{animate/end}}
+used in <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a> <{animate/begin}> and <{animate/end}>
 attributes are resolved to concrete times only in response to "bubbling" and
 "at target" phase events dispatched to the relevant element.
 
@@ -277,7 +277,7 @@ and the event types defined in
 <p>
 All elements in the SVG namespace support
 [=event attributes=] for these events;
-matching IDL properties are included in the base [=SVGElement=] interface
+matching IDL properties are included in the base [[#InterfaceSVGElement|SVGElement]] interface
 via the [=GlobalEventHandlers=] mixin.
 
 
@@ -355,7 +355,7 @@ normal <a href='https://www.w3.org/TR/uievents/#event-flow'>event flow</a>
 For shadow trees created by the <{use}> element or via script,
 the event must follow
 <a href="https://dom.spec.whatwg.org/#dispatching-events">Dispatching
-  Events</a> [<a href="refs.html#ref-dom">dom</a>]
+  Events</a> [[DOM]]
 
 
 <p>If a target element for the pointer event does not exist,
@@ -898,7 +898,7 @@ myElement.addEventListener("click", myAction1, false)
   <h4 id="AnimationEvents">Animation event attributes</h4>
 
   <p>Below are the definitions for the [=animation event attributes=].
-  These can be specified on the [=animation elements=].
+  These can be specified on the <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a>.
 
   <p><em>Attribute definitions:</em>
 
@@ -989,65 +989,65 @@ myElement.addEventListener("click", myAction1, false)
   
 
   <p id="ScriptElementExecution">Before attempting to execute the {{script}}
-  element the resolved media type value for {{script/type}} must be inspected.
+  element the resolved media type value for <{script/type}> must be inspected.
   If the [=SVG user agent=] does not support the scripting language then the
   {{script}} element must not be executed.
 
-  <div class="example">
-  <p id="ExampleScript01">This example defines a function
-  <code>circle_click</code> which is called by the
-  {{onclick}} event attribute on the {{circle}} element. The drawing
-  below on the left is the initial image. The drawing below on the right shows
-  the result after clicking on the circle.
+    <div class="example">
+        <p id="ExampleScript01">This example defines a function
+        <code>circle_click</code> which is called by the
+        {{onclick}} event attribute on the {{circle}} element. The drawing
+        below on the left is the initial image. The drawing below on the right shows
+        the result after clicking on the circle.
 
-<xmp>
-<?xml version="1.0" standalone="no"?>
-  <svg width="6cm" height="5cm" viewBox="0 0 600 500"
-       xmlns="http://www.w3.org/2000/svg">
-    <desc>Example script01 - invoke an ECMAScript function from an onclick event
-    </desc>
-    <!-- ECMAScript to change the radius with each click -->
-    <script type="application/ecmascript"> ]]>&lt;![CDATA[<![CDATA[
-      function circle_click(evt) {
-        var circle = evt.target;
-        var currentRadius = circle.getAttribute("r");
-        if (currentRadius == 100)
-          circle.setAttribute("r", currentRadius*2);
-        else
-          circle.setAttribute("r", currentRadius*0.5);
-      }
-    ]]>]]&gt;<![CDATA[ </script>
+        <xmp>
+            <?xml version="1.0" standalone="no"?>
+            <svg width="6cm" height="5cm" viewBox="0 0 600 500"
+                xmlns="http://www.w3.org/2000/svg">
+            <desc>Example script01 - invoke an ECMAScript function from an onclick event
+            </desc>
+            <!-- ECMAScript to change the radius with each click -->
+            <script type="application/ecmascript"> <![CDATA[
+                function circle_click(evt) {
+                var circle = evt.target;
+                var currentRadius = circle.getAttribute("r");
+                if (currentRadius == 100)
+                    circle.setAttribute("r", currentRadius*2);
+                else
+                    circle.setAttribute("r", currentRadius*0.5);
+                }
+            ]]> </script>
 
-    <!-- Outline the drawing area with a blue line -->
-    <rect x="1" y="1" width="598" height="498" fill="none" stroke="blue"/>
+            <!-- Outline the drawing area with a blue line -->
+            <rect x="1" y="1" width="598" height="498" fill="none" stroke="blue"/>
 
-    <!-- Act on each click event -->
-    <circle onclick="circle_click(evt)" cx="300" cy="225" r="100"
-            fill="red"/>
+            <!-- Act on each click event -->
+            <circle onclick="circle_click(evt)" cx="300" cy="225" r="100"
+                    fill="red"/>
 
-    <text x="300" y="480"
-          font-family="Verdana" font-size="35" text-anchor="middle">
+            <text x="300" y="480"
+                    font-family="Verdana" font-size="35" text-anchor="middle">
 
-      Click on circle to change its size
-    </text>
-  </svg>
-</xmp>
+                Click on circle to change its size
+            </text>
+            </svg>
+        </xmp>
 
-  <!--
-    It would be good to replace this markup with an <edit:example>, but that
-    currently doesn't support multiple images like this example needs.
-    -->
-  <table >
-    <caption>An example demonstrating the effect of the {{onclick}} event
-    handler on an SVG shape.</caption>
-    <tbody>
-      <tr>
-        <td><img alt="An example demonstrating how to invoke an ECMAScript function from an onclick event — before first click" src="images/script/script01.png">&nbsp;
-       <img alt="An example demonstrating how to invoke an ECMAScript function from an onclick event — after first click" src="images/script/script01-AfterClick.png"></td>
-      </tr>
-    </tbody>
-  </table>
-  <p class="view-as-svg"><a href="images/script/script01.svg">View this example as SVG (SVG-enabled browsers only)</a>
+        <!--
+            It would be good to replace this markup with an <edit:example>, but that
+            currently doesn't support multiple images like this example needs.
+            -->
+        <table >
+            <caption>An example demonstrating the effect of the {{onclick}} event
+            handler on an SVG shape.</caption>
+            <tbody>
+            <tr>
+                <td><img alt="An example demonstrating how to invoke an ECMAScript function from an onclick event — before first click" src="images/script/script01.png">&nbsp;
+            <img alt="An example demonstrating how to invoke an ECMAScript function from an onclick event — after first click" src="images/script/script01-AfterClick.png"></td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="view-as-svg"><a href="images/script/script01.svg">View this example as SVG (SVG-enabled browsers only)</a>
   </div>
 
 
@@ -1096,7 +1096,7 @@ myElement.addEventListener("click", myAction1, false)
       must be a valid media type, per
       <a href="http://www.ietf.org/rfc/rfc2046.txt">Multipurpose Internet Mail Extensions
       (MIME) Part Two</a> [<a href="refs.html#ref-rfc2046">rfc2046</a>].
-      If a {{script/type}} is not provided, then the default scripting
+      If a <{script/type}> is not provided, then the default scripting
       language assumed is ECMAScript, as if processed with the
       <span class="attr-name">application/ecmascript</span> media type.
     </dd>
@@ -1137,13 +1137,15 @@ myElement.addEventListener("click", myAction1, false)
 
 <p>An <a>SVGScriptElement</a> object represents a [[SVG2#InterfaceSVGScriptElement|&lt;script>]] element in the DOM.</p>
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGScriptElement</b> : <a>SVGElement</a> {
   attribute DOMString <a href="interact.html#__svg__SVGScriptElement__type">type</a>;
   attribute DOMString? <a href="interact.html#__svg__SVGScriptElement__crossOrigin">crossOrigin</a>;
 };
 
-<a>SVGScriptElement</a> includes <a>SVGURIReference</a>;</pre>
+<a>SVGScriptElement</a> includes <a>SVGURIReference</a>;
+</pre>
 
 <p>The <b id="__svg__SVGScriptElement__type">type</b> IDL attribute
 <a>reflects</a> the <a>type</a> content attribute.</p>

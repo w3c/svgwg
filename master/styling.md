@@ -9,7 +9,7 @@ geometry are controlled using CSS <dfn id="TermProperty" data-dfn-type="dfn">pro
 For example, the {{fill}} property controls the paint used to
 fill the inside of a shape, and the {{width}} and
 {{height}} properties are used to control the size
-of a {{rect}} element.
+of a <{rect}> element.
 
 <p>SVG user agents must support all of the CSS styling
 mechanisms described in this chapter.
@@ -141,7 +141,7 @@ and this declaration must have importance over any other CSS rule or presentatio
 <span class='element-name'>link</span> element</a> in an SVG document (that is,
 an element in the HTML namespace with local name "link")
 with its <span class="attr-name">rel</span>
-attribute set to <span class='attr-value'>'stylesheet'</span> must be processed
+attribute set to <code class='attr-value'>stylesheet</code> must be processed
 as defined in the HTML specification and cause external style sheets to be
 loaded and applied to the document.  Such elements in HTML documents outside
 of an inline SVG fragment must also apply to the SVG content.
@@ -193,7 +193,7 @@ document must also apply its style sheet to the document.
 
 <h3 id="ElementSpecificStyling">Element-specific styling: the <span class="attr-name">class</span> and <span class="attr-name">style</span> attributes</h3>
 
-<p>As with HTML, SVG supports the {{class}} and {{style attribute}}
+<p>As with HTML, SVG supports the <a element-attr for="core-attributes">class</a> and {{style attribute}}
 attributes on all elements to support element-specific styling.
 
 <p><em>Attribute definitions:</em>
@@ -216,7 +216,7 @@ attributes on all elements to support element-specific styling.
     </table>
   </dt>
   <dd>
-    <p>The {{class}} attribute assigns one or more class names to an element,
+    <p>The <a element-attr for="core-attributes">class</a> attribute assigns one or more class names to an element,
     which can then be used for addressing by the styling language.
   </dd>
   <dt>
@@ -242,16 +242,16 @@ attributes on all elements to support element-specific styling.
   </dd>
 </dl>
 
-<p>Aside from the way that the {{class}} attribute is reflected in the
+<p>Aside from the way that the <a element-attr for="core-attributes">class</a> attribute is reflected in the
 SVG DOM (in the <a href="types.html#__svg__SVGElement__className">className</a>
-IDL attribute on [=SVGElement=]), the semantics and behavior of the
-{{class}} and {{style attribute}} attributes must be the same
+IDL attribute on [[#InterfaceSVGElement|SVGElement]]), the semantics and behavior of the
+<a element-attr for="core-attributes">class</a> and {{style attribute}} attributes must be the same
 as that for <a href="https://html.spec.whatwg.org/multipage/dom.html#global-attributes">the corresponding
 attributes in HTML</a>.
 
 <div class='example'>
   <p>In the following example, the {{text}} element is used in
-  conjunction with the {{class}}
+  conjunction with the <a element-attr for="core-attributes">class</a>
   attribute to markup document messages. Messages appear in both
   English and French versions.
 
@@ -317,7 +317,7 @@ on designated elements.
 Attributes of the same name on other elements must not affect CSS cascading and inheritance.
 
 <p>
-Except as noted in the table for the {{transform}} presentation attributes,
+Except as noted in the table for the [[#TransformProperty|transform]] presentation attributes,
 the presentation attribute name is the same as the property name, in lower-case letters.
 
 
@@ -342,7 +342,7 @@ the presentation attribute name is the same as the property name, in lower-case 
     <td>
       <{foreignObject}>,
       {{image}},
-      {{rect}},
+      <{rect}>,
       <{svg}>,
       <{symbol}>, and
       <{use}>
@@ -361,7 +361,7 @@ the presentation attribute name is the same as the property name, in lower-case 
       {{rx}}, {{ry}}
     </td>
     <td>
-      {{ellipse}} and {{rect}}
+      {{ellipse}} and <{rect}>
     </td>
   </tr>
   <tr>
@@ -377,32 +377,32 @@ the presentation attribute name is the same as the property name, in lower-case 
       {{fill}}
     </td>
     <td>
-      Any element in the SVG namespace except for [=animation elements=],
-      which have a different {{animate/fill}} attribute.
+      Any element in the SVG namespace except for <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a>,
+      which have a different <{animate/fill}> attribute.
     </td>
   </tr>
   <tr>
     <td>
-      {{transform}}
+      [[#TransformProperty|transform]]
     </td>
     <td>
-      For historical reasons, the {{transform}} property gets represented by different presentation attributes depending on the SVG element it applies to:
+      For historical reasons, the [[#TransformProperty|transform]] property gets represented by different presentation attributes depending on the SVG element it applies to:
       <dl>
-        <dt>{{transform}}</dt>
+        <dt>[[#TransformProperty|transform]]</dt>
         <dd>
           Any element in the SVG namespace with the exception of the {{pattern}},
           {{linearGradient}} and {{radialGradient}} elements.
         </dd>
-        <dt>{{pattern/patternTransform}}</dt>
+        <dt><{pattern/patternTransform}></dt>
         <dd>
-            {{pattern}}. {{pattern/patternTransform}} gets mapped to the
-            {{transform}} CSS property
+            <{pattern}}. {{pattern/patternTransform}> gets mapped to the
+            [[#TransformProperty|transform]] CSS property
             [<a href='refs.html#ref-css-transforms-1'>css-transforms-1</a>].
         </dd>
-        <dt>{{linearGradient/gradientTransform}}</dt>
+        <dt><{linearGradient/gradientTransform}></dt>
         <dd>
             {{linearGradient}} and {{radialGradient}} elements.
-            {{linearGradient/gradientTransform}} gets mapped to the {{transform}}
+            <{linearGradient/gradientTransform}> gets mapped to the [[#TransformProperty|transform]]
             CSS property [<a href='refs.html#ref-css-transforms-1'>css-transforms-1</a>].
         </dd>
       </dl>
@@ -422,7 +422,7 @@ the presentation attribute name is the same as the property name, in lower-case 
       'display',
       {{dominant-baseline}},
       'fill-opacity',
-      {{fill-rule}},
+      'fill-rule',
       {{filter property}},
       {{flood-color}},
       {{flood-opacity}},
@@ -484,9 +484,9 @@ the presentation attribute name is the same as the property name, in lower-case 
 <span class="attr-name">width</span> and
 <span class="attr-name">height</span> attributes are not
 always presentation attributes.
-For example, the {{tspan/x}} attribute on {{text}} and {{tspan}}
+For example, the <{tspan/x}> attribute on {{text}} and {{tspan}}
 is not a presentation attribute for the {{x}} property,
-and the {{radialGradient/r}} attribute on a {{radialGradient}}
+and the <{radialGradient/r}> attribute on a {{radialGradient}}
 is not a presentation attribute for the {{r}} property.
 
 
@@ -498,8 +498,8 @@ their property.
 
 <table class='vert' style='font-size: 90%'>
   <tr><th>Property</th><th>Element</th><th>Presentation attribute name</th></tr>
-  <tr><td>{{transform}}</td><td>{{linearGradient}} and {{radialGradient}}</td><td><span class="attr-name">gradientTransform</span></td></tr>
-  <tr><td>{{transform}}</td><td>{{pattern}}</td><td><span class="attr-name">patternTransform</span></td></tr>
+  <tr><td>[[#TransformProperty|transform]]</td><td>{{linearGradient}} and {{radialGradient}}</td><td><span class="attr-name">gradientTransform</span></td></tr>
+  <tr><td>[[#TransformProperty|transform]]</td><td>{{pattern}}</td><td><span class="attr-name">patternTransform</span></td></tr>
 </table>
 -->
 
@@ -540,7 +540,7 @@ animating the corresponding property.
   <li>the {{isolation property}} property
     [<a href='refs.html#ref-compositing-1'>compositing-1</a>]</li>
 
-  <li>the {{transform}}, {{transform-box}} and {{transform-origin}} properties
+  <li>the [[#TransformProperty|transform]], {{transform-box}} and {{transform-origin}} properties
     [<a href='refs.html#ref-css-transforms-1'>css-transforms-1</a>]</li>
 
   <li>the {{letter-spacing}}, {{text-align}},
@@ -709,10 +709,11 @@ also supported in SVG user agents:
 
 
 
-<p>An [=SVGStyleElement=] object represents a {{style element}} element
+<p>An [[#InterfaceSVGStyleElement|SVGStyleElement]] object represents a {{style element}} element
 in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGStyleElement</b> : <a>SVGElement</a> {
   attribute DOMString <a href="styling.html#__svg__SVGStyleElement__type">type</a>;
   attribute DOMString <a href="styling.html#__svg__SVGStyleElement__media">media</a>;
@@ -720,7 +721,8 @@ interface <b>SVGStyleElement</b> : <a>SVGElement</a> {
   attribute boolean <a href="styling.html#__svg__SVGStyleElement__disabled">disabled</a>;
 };
 
-<a>SVGStyleElement</a> includes <a>LinkStyle</a>;</pre>
+<a>SVGStyleElement</a> includes <a>LinkStyle</a>;
+</pre>
 
 <p>The <b id="__svg__SVGStyleElement__type">type</b>,
 <b id="__svg__SVGStyleElement__media">media</b> and

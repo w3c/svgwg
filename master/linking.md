@@ -36,7 +36,7 @@ attribute of an element in the tree is altered by any means (e.g. script, declar
 animation) such that a new resource is referenced, the new resource must replace
 the existing resource, and must be rendered as appropriate.  For specific effects
 on the scripting context when a {{script}} element's
-{{script/href}} attribute is altered, see
+<{script/href}> attribute is altered, see
 <a href="interact.html#ScriptContentProcessing">Script processing</a>.
 
 -->
@@ -179,7 +179,7 @@ to other objects.
 For example, a {{linearGradient}} element
 may be based on another gradient element,
 so that only the differences between the two need to be specified,
-by referencing the source gradient with a URL in the {{linearGradient/href}} attribute:
+by referencing the source gradient with a URL in the <{linearGradient/href}> attribute:
 
 
 <pre class=include-raw>
@@ -250,7 +250,7 @@ This usage is now deprecated and instead [=URL references=] should be
 specified using the <span class="attr-name">href</span> attribute without
 a namespace.
 
-<p>For backwards compatibility, the deprecated {{xlink:href}} attribute
+<p>For backwards compatibility, the deprecated <a href="#linking-XLinkHrefAttribute">xlink:href</a> attribute
 is defined below along with the {{xlink:title}} attribute which has also
 been deprecated.
 
@@ -266,7 +266,7 @@ been deprecated.
         <th>Animatable</th>
       </tr>
       <tr>
-        <td><dfn id="XLinkHrefAttribute" data-dfn-type="element-attr" data-dfn-for="a, image, linearGradient, pattern, radialGradient, script, textPath, use" data-export="">xlink:href</dfn></td>
+        <td><dfn id="linking-XLinkHrefAttribute" data-dfn-type="element-attr" for="a, image, linearGradient, pattern, radialGradient, script, textPath, use">xlink:href</dfn></td>
         <td>URL <a href="types.html#attribute-url" class="syntax">&bs[;URL]</a></td>
         <td>(none)</td>
         <td>(see below)</td>
@@ -328,7 +328,7 @@ been deprecated.
   </dd>
 </dl>
 
-<p>When using the deprecated XLink attributes {{xlink:href}} or
+<p>When using the deprecated XLink attributes <a href="#linking-XLinkHrefAttribute">xlink:href</a> or
 {{xlink:title}} an explicit XLink namespace declaration must be provided
 [[!xml-names]],
 
@@ -351,7 +351,7 @@ XLink attributes. For example:
 
 
 <ul>
-  <li>For the {{a/href}} attribute of the <a element spec="svg2">a</a> element,
+  <li>For the <{a/href}> attribute of the <a element spec="svg2">a</a> element,
     at the time the link is activated by the user.
   </li>
   <li>For all other <span class="attr-name">href</span> attributes,
@@ -368,7 +368,7 @@ XLink attributes. For example:
 </ul>
 
 <p>
-  Legacy {{xlink:href}} attributes are processed
+  Legacy <a href="#linking-XLinkHrefAttribute">xlink:href</a> attributes are processed
   at the time a corresponding <span class="attr-name">href</span> attribute would be processed,
   but only if no such <span class="attr-name">href</span> attribute exists on the element.
 
@@ -441,7 +441,7 @@ in section 3.1 of the <a href="http://www.ietf.org/rfc/rfc3987.txt">URL specific
       the user agent must follow the <a href="https://html.spec.whatwg.org/multipage/browsing-the-web.html#browsing-the-web">algorithm for navigating to a URL</a>
       described in the HTML specification [[!HTML]].
       The outcome of this algorithm varies depending on the
-      {{a/target}} browsing context and security restrictions between browsing contexts,
+      <{a/target}> browsing context and security restrictions between browsing contexts,
       and on whether the link is to the same document as is currently contained in that browsing context
       (in which case the fragment is navigated without reloading the document).
       If the document that was navigated was an SVG document,
@@ -539,7 +539,7 @@ Note:
     For an <span class="attr-name">href</span> reference on an
     {{image}} element or
     {{script}} element,
-    the CORS state specified by the {{image/crossorigin}} attribute.
+    the CORS state specified by the <{image/crossorigin}> attribute.
   </li>
   <li>
     For a reference from a style property or presentation attribute,
@@ -663,7 +663,7 @@ Note:
 
 <h5 id="processingURL-validity">Valid URL targets</h5>
 
-<p>The valid target element types for <span class="attr-name">href</span> (or {{xlink:href}}) attributes are based on the element that has the attribute, as follows:
+<p>The valid target element types for <span class="attr-name">href</span> (or <a href="#linking-XLinkHrefAttribute">xlink:href</a>) attributes are based on the element that has the attribute, as follows:
 
 <ul>
   <li>the <a element spec="svg2">a</a> element can reference any local or non-local resource</li>
@@ -673,7 +673,7 @@ Note:
   <li>the {{radialGradient}} element must reference a {{linearGradient}} or another {{radialGradient}} element</li>
   <li>the {{script}} element must reference an external document that provides the script content</li>
   <li>the {{textPath}} element must reference an element type
-    that implements the [=SVGGeometryElement=] interface</li>
+    that implements the [[#InterfaceSVGGeometryElement|SVGGeometryElement]] interface</li>
   <li>the <{use}> element must reference an SVG-namespaced element</li>
 </ul>
 
@@ -686,7 +686,7 @@ Note:
   <li>the {{fill}} property (see <a href="painting.html#SpecifyingPaint">Specifying paint</a> for reference rules)</li>
   <li>the {{marker property}}, {{marker-start}}, {{marker-mid}} and {{marker-end}} properties must reference a {{marker element}} element.</li>
   <li>the {{shape-inside}} and {{shape-subtract}} properties must reference an element type
-    that implements the [=SVGGeometryElement=] interface,
+    that implements the [[#InterfaceSVGGeometryElement|SVGGeometryElement]] interface,
     or a document that can be processed as an image
   </li>
   <li>the {{stroke}} property (see <a href="painting.html#SpecifyingPaint">Specifying paint</a> for reference rules)</li>
@@ -713,7 +713,7 @@ Note:
 
 <p>SVG provides an <a element spec="svg2">a</a> element, to indicate links (also known
 as <em>hyperlinks</em> or <em>Web links</em>).
-An <a element spec="svg2">a</a> element forms a link if it has a {{href}} or {{xlink:href}} attribute; without these attributes the <a element spec="svg2">a</a> element is an inactive placeholder for a link.
+An <a element spec="svg2">a</a> element forms a link if it has a {{href}} or <a href="#linking-XLinkHrefAttribute">xlink:href</a> attribute; without these attributes the <a element spec="svg2">a</a> element is an inactive placeholder for a link.
 
 Note: SVG 1.1 defined links in terms of the XLink specification ([<a href="https://www.w3.org/TR/2001/REC-xlink-20010627/">XLink</a>]),
 using attributes defined in the XLink namespace.
@@ -1024,16 +1024,16 @@ transformSpec ::= 'transform(' TransformParams ')'
 <ul>
 
   <li><em>ViewBoxParams</em> corresponds to the
-  parameter values for the {{viewBox}} attribute on the {{view}}
+  parameter values for the [[#ViewBoxAttribute|viewBox]] attribute on the {{view}}
   element. For example, <span class="attr-value">viewBox(0,0,200,200)</span>.</li>
 
   <li><em>AspectParams</em> corresponds to the
-  parameter values for the {{preserveAspectRatio}} attribute on the
+  parameter values for the [[#PreserveAspectRatioAttribute|preserveAspectRatio]] attribute on the
   {{view}} element. For example,
   <span class="attr-value">preserveAspectRatio(xMidYMid)</span>.</li>
 
   <li><em>TransformParams</em> corresponds to the
-  parameter values for the {{transform}} property that is available on
+  parameter values for the [[#TransformProperty|transform]] property that is available on
   many elements. For example, <span class="attr-value">transform(scale(5))</span>.
   Currently additional transform styles and parameters (e.g. transform-origin, perspective) are not supported.
   </li>
@@ -1073,7 +1073,7 @@ as follows:
   <li>If no SVG fragment identifier is provided (e.g, the specified URL did
   not contain a "#" character, such as <span class="attr-value">MyDrawing.svg</span>),
   then the initial view into the SVG document is established using the view
-  specification attributes (i.e., {{viewBox}}, etc.) on the
+  specification attributes (i.e., [[#ViewBoxAttribute|viewBox]], etc.) on the
   [=outermost svg element=].</li>
 
   <li>If the SVG fragment identifier addresses a <a href="https://www.w3.org/TR/media-frags/#spacesegment">space segment</a>
@@ -1151,9 +1151,10 @@ as follows:
 
 
 
-<p>An [=SVGElement=] object represents an <a element spec="svg2">a</a> element in the DOM.
+<p>An [[#InterfaceSVGElement|SVGElement]] object represents an <a element spec="svg2">a</a> element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGAElement</b> : <a>SVGGraphicsElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedString</a> <a href="linking.html#__svg__SVGAElement__target">target</a>;
   attribute DOMString <a href="linking.html#__svg__SVGAElement__download">download</a>;
@@ -1167,7 +1168,8 @@ interface <b>SVGAElement</b> : <a>SVGGraphicsElement</a> {
 };
 
 <a>SVGAElement</a> includes <a>SVGURIReference</a>;
-<a>SVGAElement</a> includes <a>HTMLHyperlinkElementUtils</a>;</pre>
+<a>SVGAElement</a> includes <a>HTMLHyperlinkElementUtils</a>;
+</pre>
 
 <p>The <b id="__svg__SVGAElement__target">target</b>,
   <b id="__svg__SVGAElement__download">download</b>,
@@ -1191,12 +1193,14 @@ interface <b>SVGAElement</b> : <a>SVGGraphicsElement</a> {
 
 
 
-<p>An [=SVGViewElement=] object represents a {{view}} element in the DOM.
+<p>An [[#InterfaceSVGViewElement|SVGViewElement]] object represents a {{view}} element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGViewElement</b> : <a>SVGElement</a> {};
 
-<a>SVGViewElement</a> includes <a>SVGFitToViewBox</a>;</pre>
+<a>SVGViewElement</a> includes <a>SVGFitToViewBox</a>;
+</pre>
 
 
 </div>

@@ -49,6 +49,9 @@ which cannot currently be represented in the basic path syntax.
 
 <h3 id="PathElement">The <span class="element-name">path</span> element</h3>
 
+<!-- <pre class=include>
+path: paths.path.element.summary.md
+</pre> -->
 
 <p>The outline of a shape for a {{path}} element is specified using the {{d}}
 property.  See <a href="#PathData">Path data</a> below.
@@ -1161,11 +1164,11 @@ and will affect rendering in the following cases:
     even if that [=path segment=] is a sub-component of
     a compound path data command, such as a "lineto" with
     several pairs of coordinates. For example, for the path
-    data string <span class='attr-value'>'M 10,10 L 20,20,30'</span>,
+    data string <code class='attr-value'>M 10,10 L 20,20,30</code>,
     there is an odd number of parameters for the "L" command, which requires an even
     number of parameters. The user agent is required to draw
     the line from (10,10) to (20,20) and then perform error
-    reporting since <span class='attr-value'>'L 20 20'</span>
+    reporting since <code class='attr-value'>L 20 20</code>
     is the last correctly defined segment of the path data specification.</li>
 
     <li>Wherever possible, all SVG user agents shall report
@@ -1210,7 +1213,7 @@ commands contribute to path length calculations.
       </tr>
       <tr>
         <td>{{pathLength}}</td>
-        <td><a>&lt;number&gt;</a></td>
+        <td><<number>></td>
         <td>(none)</td>
         <td>yes</td>
       </tr>
@@ -1245,10 +1248,12 @@ commands contribute to path length calculations.
 
 <h4 id="InterfaceSVGPathElement">Interface SVGPathElement</h4>
 
-<p>An [=SVGPathElement=] object represents a {{path}} in the DOM.
+<p>An [[#InterfaceSVGPathElement|SVGPathElement]] object represents a {{path}} in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGPathElement</b> : <a>SVGGeometryElement</a> {
-};</pre>
+};
+</pre>
 
 </div>

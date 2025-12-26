@@ -12,7 +12,7 @@ contained within an <{svg}> element.
 <p>An SVG document fragment can range from an empty fragment (i.e.,
 no content inside of the <{svg}> element), to a very simple SVG
 document fragment containing a single SVG [=graphics element=]
-such as a {{rect}}, to a complex, deeply nested collection of
+such as a <{rect}>, to a complex, deeply nested collection of
 [=container elements=] and [=graphics elements=].
 
 <p>An SVG document fragment can stand by itself as a self-contained
@@ -212,7 +212,7 @@ information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommend
 
 <p>If an SVG document is likely to be referenced as a component
 of another document, the author will often want to include a
-{{viewBox}} attribute on the [=outermost svg element=] of the
+[[#ViewBoxAttribute|viewBox]] attribute on the [=outermost svg element=] of the
 referenced document. This attribute provides a convenient way to design
 SVG documents to scale-to-fit into an arbitrary SVG viewport.
 
@@ -355,13 +355,13 @@ Note:
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="symbol" id="SymbolElementRefXAttribute">refX</dfn></td>
-        <td><a>&lt;length&gt;</a> | left | center | right</td>
+        <td><<length>> | left | center | right</td>
         <td>(none)</td>
         <td>yes</td>
       </tr>
       <tr>
         <td><dfn data-dfn-type="element-attr" data-dfn-for="symbol" id="SymbolElementRefYAttribute">refY</dfn></td>
-        <td><a>&lt;length&gt;</a> | top | center | bottom</td>
+        <td><<length>> | top | center | bottom</td>
         <td>(none)</td>
         <td>yes</td>
       </tr>
@@ -398,19 +398,19 @@ Note:
     
     <p>
       Keyword values have the same meaning as for the
-      {{marker/refX}} and {{marker/refY}} attributes on the {{marker element}} element,
+      <{marker/refX}> and <{marker/refY}> attributes on the {{marker element}} element,
       resolving to 0%, 50%, or 100% in the applicable direction.
     
     <p>
       Unlike other positioning attributes,
       {{refX}} and {{refY}}
       are interpreted as being in the coordinate system of the
-      symbol contents, after application of the {{viewBox}}
-      and {{preserveAspectRatio}} attributes.
+      symbol contents, after application of the [[#ViewBoxAttribute|viewBox]]
+      and [[#PreserveAspectRatioAttribute|preserveAspectRatio]] attributes.
       If one or both of the attributes is not specified,
       no adjustment is made in the corresponding dimension,
       and the top or left side of the symbol's rectangular viewport region
-      (regardless of the {{viewBox}} coordinates)
+      (regardless of the [[#ViewBoxAttribute|viewBox]] coordinates)
       is positioned at the <span class="prop-value">x,y</span> point.
     
 
@@ -592,7 +592,7 @@ reasons. In particular, this specification does not allow cross-origin and <a hr
 
 
 <p>When the {{href}} attribute is set
-(or, in the absence of an {{href}} attribute, an {{xlink:href}} attribute),
+(or, in the absence of an {{href}} attribute, an <a href="linking-XLinkHrefAttribute">xlink:href</a> attribute),
 the user agent must <a href="linking.html#processingURL">process the URL</a>.
 The target element that results from URL processing is the [=referenced element=] of the <{use}>.
 
@@ -654,7 +654,7 @@ are rendered in the same way as if the shadow DOM was implemented.
 
 <dl>
   <dt><dfn id="TermReferencedElement">referenced element</dfn></dt>
-  <dd>The element specified by the {{href}} (or {{xlink:href}}) attribute on the <{use}> element, or the root element of a document referenced by that attribute if the URL provided does not include a target fragment that links to a specific element <a element-attr for="core-attributes" spec="svg2">id</a>.</dd>
+  <dd>The element specified by the {{href}} (or <a href="#linking-XLinkHrefAttribute">xlink:href</a>) attribute on the <{use}> element, or the root element of a document referenced by that attribute if the URL provided does not include a target fragment that links to a specific element <a element-attr for="core-attributes" spec="svg2">id</a>.</dd>
 
   <dt><dfn id="TermReferencedDocumentSubtree">referenced document subtree</dfn></dt>
   <dt>referenced graphics</dt>
@@ -662,7 +662,7 @@ are rendered in the same way as if the shadow DOM was implemented.
 
   <dt><dfn id="TermShadowRoot">shadow root</dfn></dt>
   <dd>A [=ShadowRoot=] object,
-  a type of [=DocumentFragment=] node which is associated with a host [=Element=],
+  a type of [=DocumentFragment=] node which is associated with a host [=Attr/element|Element=],
   and which contains the content that will be used to render that host.
   A shadow root should be implemented in conformance with the <a href="refs.html#ref-dom">dom</a> specification <a href="refs.html#ref-dom">[dom]</a>,
   or its future replacement.
@@ -1134,7 +1134,7 @@ Note:
 
 
 <p>
-  For each [=animation element=] [<a href="refs.html#ref-svg-animation">svg-animation</a>]
+  For each <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a> [<a href="refs.html#ref-svg-animation">svg-animation</a>]
   that targets an element in the
   [=referenced document subtree=],
   the user agent must ensure that an equivalent animation element
@@ -1270,7 +1270,7 @@ Note:
 
 <p>Events in the [=use-element shadow tree=]
   are dispatched and bubble according to the shadow tree
-  <a href="https://dom.spec.whatwg.org/#events">event path and event retargeting algorithm</a> [<a href="refs.html#ref-dom">DOM</a>].
+  <a href="https://dom.spec.whatwg.org/#events">event path and event retargeting algorithm</a> [[DOM]].
 
 
 <div class="note">
@@ -1351,7 +1351,7 @@ other elements (such as via a <{use}>).
   <li>conditional processing affects the visual display of [=graphics elements=],
   <a element spec="svg2">a</a>, <{foreignObject}>, and [=text content elements=].</li>
 
-  <li>conditional processing prevents [=animation elements=] from playing.</li>
+  <li>conditional processing prevents <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a> from playing.</li>
 
   <li>conditional processing will
   have no effect on [=never-rendered elements=];
@@ -1930,7 +1930,7 @@ this case) upon reading it back in:
   </dt>
   <dd class="ready-for-wider-review">
     <p>Must reflect the <a href="https://www.w3.org/TR/dom/#concept-id">element's
-    ID</a> [<a href="refs.html#ref-dom">DOM</a>].
+    ID</a> [[DOM]].
     The <a element-attr for="core-attributes" spec="svg2">id</a> attribute must be unique within the node tree,
     must not be an empty string,
     and must not contain any whitespace characters.
@@ -2046,7 +2046,7 @@ or the empty string. Setting the attribute to the empty string indicates that th
   <dd>
     <p>Deprecated XML attribute to specify whether white space
     is preserved in character data. The only possible values
-    are the strings <span class='attr-value'>'default'</span> and <span class='attr-value'>'preserve'</span>, without
+    are the strings <code class='attr-value'>default</code> and <code class='attr-value'>preserve</code>, without
     white space.  Refer to the
     <a href="https://www.w3.org/TR/2008/REC-xml-20081126/"><cite>Extensible Markup Language (XML) 1.0</cite></a>
     Recommendation [[!xml]] and to the
@@ -2503,7 +2503,7 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{rect}}</td>
+      <td><{rect}></td>
       <td><code>graphics-symbol</code> role
         if the element meets the [=inclusion criteria=],
         otherwise <code>none</code></td>
@@ -2598,9 +2598,11 @@ two distinct DOM hierarchies. The first DOM hierarchy will be for the
 referencing document (e.g., an XHTML document). The second DOM hierarchy
 will be for the referenced SVG document.
 
-<pre class="idl">partial interface <a>Document</a> {
+<pre class="idl">
+partial interface <a>Document</a> {
   readonly attribute <a>SVGSVGElement</a>? <a href="struct.html#__svg__SVGDocument__rootElement">rootElement</a>;
-};</pre>
+};
+</pre>
 
 <p>The <b id="__svg__SVGDocument__rootElement">rootElement</b> IDL attribute
 represents the root <{svg}> element.  On getting
@@ -2632,17 +2634,18 @@ partial interface <a>Document</a> {
 <h4 id="InterfaceSVGSVGElement">Interface SVGSVGElement</h4>
 
 
-<p>An [=SVGSVGElement=] object represents an <{svg}> element
-in the DOM.  The [=SVGSVGElement=] interface also contains
+<p>An [[#InterfaceSVGSVGElement|SVGSVGElement]] object represents an <{svg}> element
+in the DOM.  The [[#InterfaceSVGSVGElement|SVGSVGElement]] interface also contains
 miscellaneous utility methods, such as data type object factory methods.
 
-<p>An [=SVGSVGElement=] object maintains an internal
-[=DOMPoint=] object, called its
+<p>An [[#InterfaceSVGSVGElement|SVGSVGElement]] object maintains an internal
+{{DOMPoint}} object, called its
 <dfn id="CurrentTranslatePointObject" data-dfn-type="dfn" data-export="">current translate point object</dfn>,
 which is the object returned from the <a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>
 IDL attribute.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGSVGElement</b> : <a>SVGGraphicsElement</a> {
 
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="struct.html#__svg__SVGSVGElement__x">x</a>;
@@ -2680,7 +2683,8 @@ interface <b>SVGSVGElement</b> : <a>SVGGraphicsElement</a> {
 };
 
 <a>SVGSVGElement</a> includes <a>SVGFitToViewBox</a>;
-<a>SVGSVGElement</a> includes <a>WindowEventHandlers</a>;</pre>
+<a>SVGSVGElement</a> includes <a>WindowEventHandlers</a>;
+</pre>
 
 <p>The
 <b id="__svg__SVGSVGElement__x">x</b>,
@@ -2699,7 +2703,7 @@ They only have an effect on the [=outermost svg element=] of an [=SVG document f
 <p>The document's magnification and panning
 transform is a 2x3 matrix of the form
 <code>[currentScale 0 0 currentScale currentTranslate.x currentTranslate.y]</code>.
-The value of the {{transform}} property does not affect
+The value of the [[#TransformProperty|transform]] property does not affect
 <a href="#__svg__SVGSVGElement__currentScale">currentScale</a> or
 <a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>.
 
@@ -2751,7 +2755,7 @@ the following steps are run:
 </ol>
 
 <p>On getting <a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>,
-the [=SVGSVGElement=] object's <a href="#CurrentTranslatePointObject">current
+the [[#InterfaceSVGSVGElement|SVGSVGElement]] object's <a href="#CurrentTranslatePointObject">current
 translate point object</a> is returned.  This object
 <a href="shapes.html#PointMode">represents the current translation</a>
 for the <{svg}> element.  A <a href="#CurrentTranslatePointObject">current
@@ -2904,7 +2908,7 @@ the following steps are run:
   as an ancestor.</li>
   <li>Return a <a href="https://www.w3.org/TR/dom/#concept-collection-static">static</a>
   [=NodeList=] that contains all of the elements in <var>descendants</var>.
-  ([<a href="refs.html#ref-dom">DOM</a>], section 5.2.7)</li>
+  ([[DOM]], section 5.2.7)</li>
 </ol>
 
 <p>When checkIntersection(<var>element</var>, <var>rect</var>) or
@@ -2942,7 +2946,7 @@ all <a href="https://www.w3.org/TR/2014/WD-dom-20140204/#concept-range">ranges</
 from the document's <a href="http://w3c.github.io/selection-api/#dom-selection">selection</a>
 are removed and the <a href="http://w3c.github.io/selection-api/#dom-selection">selection</a>'s
 <a href="http://w3c.github.io/selection-api/#dfn-direction">direction</a> is set to
-forwards. [<a href="refs.html#ref-dom">DOM</a>][<a href="refs.html#ref-editing">EDITING</a>]
+forwards. [[DOM]][<a href="refs.html#ref-editing">EDITING</a>]
 This method is deprecated, as it duplicates functionality from the Selection API.
 
 Note: This is equivalent to calling <code>document.getSelection().removeAllRanges()</code>
@@ -2963,27 +2967,27 @@ object is returned according to the following table:
 
 <table class='vert'>
   <tr><th>Method</th><th>Object and details</th></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGNumber">createSVGNumber</a></td><td>A new, <a href="types.html#NumberMode">detached</a> [=SVGNumber=] object whose value is 0.</td></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGLength">createSVGLength</a></td><td>A new, <a href="types.html#LengthMode">detached</a> [=SVGLength=] object whose value is the unitless <a>&lt;number&gt;</a> 0.</td></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGAngle">createSVGAngle</a></td><td>A new, <a href="types.html#AngleMode">detached</a> [=SVGAngle=] object whose value is the unitless <a>&lt;number&gt;</a> 0.</td></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGPoint">createSVGPoint</a></td><td>A new, <a href="shapes.html#PointMode">detached</a> [=DOMPoint=] object whose coordinates are all 0.</td></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGMatrix">createSVGMatrix</a></td><td>A new, <a href="coords.html#MatrixMode">detached</a> [=DOMMatrix=] object representing the identity matrix.</td></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGRect">createSVGRect</a></td><td>A new, [=DOMRect=] object whose x, y, width and height are all 0.</td></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGTransform">createSVGTransform</a></td><td>A new, <a href="coords.html#TransformMode">detached</a> [=SVGTransform=] object whose value is <span class='prop-value'>matrix(1, 0, 0, 1, 0, 0)</span>.</td></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGNumber">createSVGNumber</a></td><td>A new, <a href="types.html#NumberMode">detached</a> [[#InterfaceSVGNumber|SVGNumber]] object whose value is 0.</td></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGLength">createSVGLength</a></td><td>A new, <a href="types.html#LengthMode">detached</a> [[#InterfaceSVGLength|SVGLength]] object whose value is the unitless <<number>> 0.</td></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGAngle">createSVGAngle</a></td><td>A new, <a href="types.html#AngleMode">detached</a> [[#InterfaceSVGAngle|SVGAngle]] object whose value is the unitless <<number>> 0.</td></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGPoint">createSVGPoint</a></td><td>A new, <a href="shapes.html#PointMode">detached</a> {{DOMPoint}} object whose coordinates are all 0.</td></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGMatrix">createSVGMatrix</a></td><td>A new, <a href="#MatrixMode">detached</a> [[geometry-1#DOMMatrix|DOMMatrix]] object representing the identity matrix.</td></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGRect">createSVGRect</a></td><td>A new, {{DOMRect}} object whose x, y, width and height are all 0.</td></tr>
+  <tr><td><a href="#__svg__SVGSVGElement__createSVGTransform">createSVGTransform</a></td><td>A new, <a href="coords.html#TransformMode">detached</a> [[#InterfaceSVGTransform|SVGTransform]] object whose value is <span class='prop-value'>matrix(1, 0, 0, 1, 0, 0)</span>.</td></tr>
 </table>
 
 <p>The <a href="#__svg__SVGSVGElement__createSVGPoint">createSVGPoint</a>,
 <a href="#__svg__SVGSVGElement__createSVGMatrix">createSVGMatrix</a> and
 <a href="#__svg__SVGSVGElement__createSVGRect">createSVGRect</a> methods
 are all deprecated and kept only for compatibility with legacy content.
-Authors are encouraged to use the [=DOMPoint=], [=DOMMatrix=] and
-[=DOMRect=] constructors instead.
+Authors are encouraged to use the {{DOMPoint}}, [[geometry-1#DOMMatrix|DOMMatrix]] and
+{{DOMRect}} constructors instead.
 
 <p>The <b id="__svg__SVGSVGElement__createSVGTransformFromMatrix">createSVGTransformFromMatrix</b>
-method is used to create a new [=SVGTransform=] object from a matrix object.
+method is used to create a new [[#InterfaceSVGTransform|SVGTransform]] object from a matrix object.
 Its behavior is the same as the
-<a href="coords.html#__svg__SVGTransformList__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>
-method on [=SVGTransformList=].
+<a href="#__svg__SVGTransformList__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>
+method on [[#InterfaceSVGTransformList|SVGTransformList]].
 
 <div class='ready-for-wider-review'>
 <p>The <b id="__svg__SVGSVGElement__getElementById">getElementById</b> method,
@@ -2999,11 +3003,13 @@ null if there is no such element.
 
 
 
-<p>An [=SVGGElement=] object represents a <{g}> element in the DOM.
+<p>An [[#InterfaceSVGGElement|SVGGElement]] object represents a <{g}> element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGGElement</b> : <a>SVGGraphicsElement</a> {
-};</pre>
+};
+</pre>
 
 
 
@@ -3012,11 +3018,13 @@ interface <b>SVGGElement</b> : <a>SVGGraphicsElement</a> {
 
 
 
-<p>An [=SVGDefsElement=] object represents a {{defs}} element in the DOM.
+<p>An [[#InterfaceSVGDefsElement|SVGDefsElement]] object represents a {{defs}} element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGDefsElement</b> : <a>SVGGraphicsElement</a> {
-};</pre>
+};
+</pre>
 
 
 
@@ -3025,11 +3033,13 @@ interface <b>SVGDefsElement</b> : <a>SVGGraphicsElement</a> {
 
 
 
-<p>An [=SVGDescElement=] object represents a {{desc}} element in the DOM.
+<p>An [[#InterfaceSVGDescElement|SVGDescElement]] object represents a {{desc}} element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGDescElement</b> : <a>SVGElement</a> {
-};</pre>
+};
+</pre>
 
 
 
@@ -3038,11 +3048,13 @@ interface <b>SVGDescElement</b> : <a>SVGElement</a> {
 
 
 
-<p>An [=SVGMetadataElement=] object represents a {{metadata}} element in the DOM.
+<p>An [[#InterfaceSVGMetadataElement|SVGMetadataElement]] object represents a {{metadata}} element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGMetadataElement</b> : <a>SVGElement</a> {
-};</pre>
+};
+</pre>
 
 
 
@@ -3051,11 +3063,13 @@ interface <b>SVGMetadataElement</b> : <a>SVGElement</a> {
 
 
 
-<p>An [=SVGTitleElement=] object represents a {{title}} element in the DOM.
+<p>An [[#InterfaceSVGTitleElement|SVGTitleElement]] object represents a {{title}} element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGTitleElement</b> : <a>SVGElement</a> {
-};</pre>
+};
+</pre>
 
 
 
@@ -3064,17 +3078,19 @@ interface <b>SVGTitleElement</b> : <a>SVGElement</a> {
 
 
 
-<p>An [=SVGSymbolElement=] object represents a <{symbol}> element in the DOM.
+<p>An [[#InterfaceSVGSymbolElement|SVGSymbolElement]] object represents a <{symbol}> element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGSymbolElement</b> : <a>SVGGraphicsElement</a> {
 };
 
-<a>SVGSymbolElement</a> includes <a>SVGFitToViewBox</a>;</pre>
+<a>SVGSymbolElement</a> includes <a>SVGFitToViewBox</a>;
+</pre>
 
 Note: 
   New in SVG 2.
-  The [=SVGSymbolElement=] interface now inherits from [=SVGGraphicsElement=],
+  The [[#InterfaceSVGSymbolElement|SVGSymbolElement]] interface now inherits from [[#InterfaceSVGGraphicsElement|SVGGraphicsElement]],
   so that the instantiated symbol in the shadow DOM can be queried as a graphics element.
 
 
@@ -3085,9 +3101,10 @@ Note:
 
 
 
-<p>An [=SVGUseElement=] object represents a <{use}> element in the DOM.
+<p>An [[#InterfaceSVGUseElement|SVGUseElement]] object represents a <{use}> element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGUseElement</b> : <a>SVGGraphicsElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__x">x</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="struct.html#__svg__SVGUseElement__y">y</a>;
@@ -3097,7 +3114,8 @@ interface <b>SVGUseElement</b> : <a>SVGGraphicsElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGElement</a>? <a href="struct.html#__svg__SVGUseElement__animatedInstanceRoot">animatedInstanceRoot</a>;
 };
 
-<a>SVGUseElement</a> includes <a>SVGURIReference</a>;</pre>
+<a>SVGUseElement</a> includes <a>SVGURIReference</a>;
+</pre>
 
 <p>The
 <b id="__svg__SVGUseElement__x">x</b>,
@@ -3111,7 +3129,7 @@ presentation attributes, respectively.
 <p>The <b id="__svg__SVGUseElement__instanceRoot">instanceRoot</b> and
 <b id="__svg__SVGUseElement__animatedInstanceRoot">animatedInstanceRoot</b>
 IDL attributes both point to the [=instance root=],
-the [=SVGElementInstance=] that is a direct child
+the [[#InterfaceSVGElementInstance|SVGElementInstance]] that is a direct child
 of this element's shadow root
 (<code>u.instanceRoot</code> is equivalent to getting <code>u.shadowRoot.firstChild</code>).
 If this element does not have a shadow tree
@@ -3125,7 +3143,7 @@ then getting these attributes returns null.
 <h4 id="InterfaceSVGUseElementShadowRoot">Interface SVGUseElementShadowRoot</h4>
 
 <p>The root object of each [=use-element shadow tree=]
-  implements the [=SVGUseElementShadowRoot=] interface.
+  implements the [[#InterfaceSVGUseElementShadowRoot|SVGUseElementShadowRoot]] interface.
   This interface does not currently define any extensions
   to the properties and methods defined for the
   [=ShadowRoot=] interface
@@ -3133,13 +3151,15 @@ then getting these attributes returns null.
   However, the tree rooted at this node
   is entirely read-only from the perspective of author scripts.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGUseElementShadowRoot</b> : <a>ShadowRoot</a> {
-};</pre>
+};
+</pre>
 
 <h3 id="InterfaceSVGElementInstance" data-dfn-type="interface" data-lt="SVGElementInstance">Mixin SVGElementInstance</h3>
 
-<p>The [=SVGElementInstance=] interface defines extensions to the [=SVGElement=] interface,
+<p>The [[#InterfaceSVGElementInstance|SVGElementInstance]] interface defines extensions to the [[#InterfaceSVGElement|SVGElement]] interface,
   which are only used for elements in a [=use-element shadow tree=].
 
 Note: 
@@ -3156,10 +3176,12 @@ Note:
   on HTML-namespaced element objects in the shadow tree.
 
 
-<pre class="idl">interface mixin <b>SVGElementInstance</b> {
+<pre class="idl">
+interface mixin <b>SVGElementInstance</b> {
   [<a>SameObject</a>] readonly attribute <a>SVGElement</a>? <a href="#__svg__SVGElementInstance__correspondingElement">correspondingElement</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGUseElement</a>? <a href="#__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</a>;
-};</pre>
+};
+</pre>
 
 <p>The <b id="__svg__SVGElementInstance__correspondingElement">correspondingElement</b> IDL attribute
 points to the [=corresponding element=] if this element is an [=element instance=] in a [=use-element shadow tree=],
@@ -3191,11 +3213,13 @@ or is null otherwise.
 
 
 
-<pre class="idl">[Exposed=Window]
+<pre class="idl">
+[Exposed=Window]
 interface <b>ShadowAnimation</b> : <a>Animation</a> {
   constructor(<a>Animation</a> source, (<a>Element</a> or <a>CSSPseudoElement</a>) newTarget);
   [<a>SameObject</a>] readonly attribute <a>Animation</a> <a href="#__svg__ShadowAnimation__sourceAnimation">sourceAnimation</a>;
-};</pre>
+};
+</pre>
 
 <p>The <b id="__svg__ShadowAnimation__sourceAnimation">sourceAnimation</b> IDL property
   points to the [=Animation=] object passed in the constructor.
@@ -3227,11 +3251,13 @@ interface <b>ShadowAnimation</b> : <a>Animation</a> {
 
 
 
-<p>An [=SVGSwitchElement=] object represents a <{switch}> element in the DOM.
+<p>An [[#InterfaceSVGSwitchElement|SVGSwitchElement]] object represents a <{switch}> element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGSwitchElement</b> : <a>SVGGraphicsElement</a> {
-};</pre>
+};
+</pre>
 
 
 
@@ -3257,9 +3283,11 @@ the [=GetSVGDocument=] does.  Those three interfaces therefore do not need
 to implement [=GetSVGDocument=].  Still, authors are strongly recommended
 to use contentDocument instead.
 
-<pre class="idl">interface mixin <b>GetSVGDocument</b> {
+<pre class="idl">
+interface mixin <b>GetSVGDocument</b> {
   <a>Document</a> <a href="struct.html#__svg__GetSVGDocument__getSVGDocument">getSVGDocument</a>();
-};</pre>
+};
+</pre>
 
 <p>The <b id="__svg__GetSVGDocument__getSVGDocument">getSVGDocument</b> method
 is used to return a referenced SVG document.  When getSVGDocument() is called,

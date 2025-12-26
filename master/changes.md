@@ -65,9 +65,9 @@ have been made.
 
   <li>Added "length" attribute and indexed property access to all list interfaces.</li>
 
-  <li>Remove definition of <a>&lt;angle&gt;</a> type and reference CSS3-values.</li>
+  <li>Remove definition of <<angle>> type and reference CSS3-values.</li>
 
-  <li>Change all coordinate types to <a>&lt;length&gt;</a> in preparation for referencing css3-values.</li>
+  <li>Change all coordinate types to <<length>> in preparation for referencing css3-values.</li>
 
   <li>Add the {{script}} element to the content model of all elements.</li>
 
@@ -160,41 +160,41 @@ have been made.
     <a href="https://github.com/w3c/svgwg/pull/430">Edits</a></li>
 </ul>
 
-<h4 id="types">Basic Data Types and Interfaces chapter</h4>
+<h4 id="changes-types">Basic Data Types and Interfaces chapter</h4>
 
 <ul>
-  <li>All appearance of [=SVGMatrix=] were replaced by [=DOMMatrix=] or [=DOMMatrixReadOnly=].</li>
+  <li>All appearance of [=SVGMatrix=] were replaced by [[geometry-1#DOMMatrix|DOMMatrix]] or [=DOMMatrixReadOnly=].</li>
 
-  <li>All appearance of [=SVGRect=] were replaced by [=DOMRect=] or [=DOMRectReadOnly=].</li>
+  <li>All appearance of [=SVGRect=] were replaced by {{DOMRect}} or [=DOMRectReadOnly=].</li>
 
-  <li>All appearance of [=SVGPoint=] were replaced by [=DOMPoint=] or [=DOMPointReadOnly=].</li>
+  <li>All appearance of [=SVGPoint=] were replaced by {{DOMPoint}} or [=DOMPointReadOnly=].</li>
 
-  <li>Removed the SVGStylable and SVGLangSpace interfaces and moved all of their members on to [=SVGElement=].</li>
+  <li>Removed the SVGStylable and SVGLangSpace interfaces and moved all of their members on to [[#InterfaceSVGElement|SVGElement]].</li>
 
-  <li>Turned SVGLocatable and SVGTransformable into [=SVGGraphicsElement=],
-  which directly inherits from [=SVGElement=].</li>
+  <li>Turned SVGLocatable and SVGTransformable into [[#InterfaceSVGGraphicsElement|SVGGraphicsElement]],
+  which directly inherits from [[#InterfaceSVGElement|SVGElement]].</li>
 
-  <li>Added an [=SVGGraphicsElement=] interface.</li>
+  <li>Added an [[#InterfaceSVGGraphicsElement|SVGGraphicsElement]] interface.</li>
 
-  <li>Added an [=SVGGeometryElement=] interface with isPointInFill and isPointInStroke methods.</li>
+  <li>Added an [[#InterfaceSVGGeometryElement|SVGGeometryElement]] interface with isPointInFill and isPointInStroke methods.</li>
 
   <li>Removed the SVGExternalResourcesRequired interface.</li>
 
-  <li>Added getStrokeBBox on [=SVGGraphicsElement=] to get the tight stroke bounding box.</li>
+  <li>Added getStrokeBBox on [[#InterfaceSVGGraphicsElement|SVGGraphicsElement]] to get the tight stroke bounding box.</li>
 
-  <li>Make viewportElement and ownerSVGElement on [=SVGElement=] nullable.</li>
+  <li>Make viewportElement and ownerSVGElement on [[#InterfaceSVGElement|SVGElement]] nullable.</li>
 
-  <li>Removed the getPresentationAttribute operation on [=SVGElement=] and the SVGColor and SVGICCColor interfaces.</li>
+  <li>Removed the getPresentationAttribute operation on [[#InterfaceSVGElement|SVGElement]] and the SVGColor and SVGICCColor interfaces.</li>
 
-  <li>Added focus and blur operations and tabIndex attribute to [=SVGElement=].</li>
+  <li>Added focus and blur operations and tabIndex attribute to [[#InterfaceSVGElement|SVGElement]].</li>
 
   <li>Added <a href="struct.html#__svg__SVGDocument__activeElement">activeElement</a> attribute to [=Document=].</li>
 
-  <li>Made [=SVGElement=] include the [=GlobalEventHandlers=] interface from HTML.</li>
+  <li>Made [[#InterfaceSVGElement|SVGElement]] include the [=GlobalEventHandlers=] interface from HTML.</li>
 
-  <li>Removed getStrokeBBox from [=SVGGraphicsElement=] and extended <a href="types.html#__svg__SVGGraphicsElement__getBBox">getBBox</a> with a dictionary argument that controls which parts of the element are included in the returned bounding box.</li>
+  <li>Removed getStrokeBBox from [[#InterfaceSVGGraphicsElement|SVGGraphicsElement]] and extended <a href="types.html#__svg__SVGGraphicsElement__getBBox">getBBox</a> with a dictionary argument that controls which parts of the element are included in the returned bounding box.</li>
 
-  <li>Allow leading and trailing whitespace in <a>&lt;length&gt;</a>, <a>&lt;angle&gt;</a>, <a>&lt;number&gt;</a> and <a>&lt;integer&gt;</a>.</li>
+  <li>Allow leading and trailing whitespace in <<length>>, <<angle>>, <<number>> and <a>&lt;integer&gt;</a>.</li>
 
   <li>Make whitespace include form feed (U+000C) to align with CSS and HTML.</li>
 
@@ -204,15 +204,15 @@ have been made.
 
   <li>Allow a single trailing comma-wsp in various list-typed attributes.</li>
 
-  <li>Removed the xmlbase, xmllang and xmlspace attributes from the [=SVGElement=] interface.</li>
+  <li>Removed the xmlbase, xmllang and xmlspace attributes from the [[#InterfaceSVGElement|SVGElement]] interface.</li>
 
   <li>Removed the SVGViewSpec interface.</li>
 
-  <li>Removed the style IDL attribute from [=SVGElement=],
+  <li>Removed the style IDL attribute from [[#InterfaceSVGElement|SVGElement]],
   since CSSOM defines that for us.</li>
 
   <li>Removed the getTransformToElement method on
-  [=SVGGraphicsElement=].</li>
+  [[#InterfaceSVGGraphicsElement|SVGGraphicsElement]].</li>
 
   <li>Defined that getCTM on an [=outermost svg element=]
   should work, and listed which transforms it should include.</li>
@@ -222,7 +222,7 @@ have been made.
 
   <li>animVal IDL attributes on all interfaces now alias baseVal.</li>
 
-  <li>Added the dataset IDL attribute to [=SVGElement=].</li>
+  <li>Added the dataset IDL attribute to [[#InterfaceSVGElement|SVGElement]].</li>
 
   <li>Moved the <a href='types.html#__svg__SVGGeometryElement__pathLength'>pathLength</a> attribute,
   <a href='types.html#__svg__SVGGeometryElement__getTotalLength'>getTotalLength()</a>,
@@ -234,21 +234,21 @@ have been made.
 </ul>
 <div class='changed-since-cr1'>
 <ul>
-  <li>[=SVGUnitTypes=] is no longer NoInterfaceObject.
+  <li>[[#InterfaceSVGUnitTypes|SVGUnitTypes]] is no longer NoInterfaceObject.
     <a href="https://github.com/w3c/svgwg/issues/291">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/295">Edits</a></li>
-  <li>Clarified that [=SVGElement=].<a href="types.html#__svg__SVGElement__className">className</a>
-      overrides [=Element=].className. Not normative.
+  <li>Clarified that [[#InterfaceSVGElement|SVGElement]].<a href="types.html#__svg__SVGElement__className">className</a>
+      overrides [=Attr/element|Element=].className. Not normative.
     <a href="https://github.com/w3c/svgwg/issues/298">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/301">Edits</a></li>
-  <li>Specify [=DOMPointInit=] as argument type for isPointInFill() and isPointInStroke() instead of [=DOMPoint=], and
+  <li>Specify [=DOMPointInit=] as argument type for isPointInFill() and isPointInStroke() instead of {{DOMPoint}}, and
     specify algorithm used for isPointInFill() and isPointInStroke().
     <a href="https://github.com/w3c/svgwg/issues/416">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/443">Edits</a></li>
   <li>Moved dataset, tabIndex, focus(), and blur() to a shared [=HTMLOrSVGElement=] mixin defined in the HTML specification.
     <a href="https://github.com/w3c/svgwg/issues/60">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/415">Edits</a></li>
-  <li>Made [=SVGElement=] include the DocumentAndElementEventHandlers interface from HTML.
+  <li>Made [[#InterfaceSVGElement|SVGElement]] include the DocumentAndElementEventHandlers interface from HTML.
     <a href="https://github.com/w3c/svgwg/issues/395">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/413">Edits</a></li>
 </ul>
@@ -283,7 +283,7 @@ have been made.
 <h4 id="structure">Document Structure chapter</h4>
 
 <ul>
-  <li>Updated IDL for [=SVGSVGElement=] marking the referenceElement argument in <a href="struct.html#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a> and <a href="struct.html#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a> as nullable.</li>
+  <li>Updated IDL for [[#InterfaceSVGSVGElement|SVGSVGElement]] marking the referenceElement argument in <a href="struct.html#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a> and <a href="struct.html#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a> as nullable.</li>
 
   <li>Deprecated the <code>suspendRedraw</code>, <code>unsuspendRedraw</code> and <code>unsuspendRedrawAll</code> methods on the SVGSVGElement interface.</li>
 
@@ -305,7 +305,7 @@ have been made.
 
   <li>Moved the {{image}} element to the <a href='embedded.html'>Embedded Content chapter</a>.</li>
 
-  <li>Removed the <code>SVGElementInstance</code> and <code>SVGElementInstanceList</code> interfaces, and the corresponding attributes on the [=SVGUseElement=] interface.</li>
+  <li>Removed the <code>SVGElementInstance</code> and <code>SVGElementInstanceList</code> interfaces, and the corresponding attributes on the [[#InterfaceSVGUseElement|SVGUseElement]] interface.</li>
 
   <li>Changed the <{use}> element event flow to follow the Shadow DOM spec.</li>
 
@@ -317,20 +317,20 @@ have been made.
 
   <li>Removed the <span class="attr-name">baseProfile</span> and <span class="attr-name">version</span> attributes from the <{svg}> element.</li>
 
-  <li>Deprecated the <a href="struct.html#__svg__SVGSVGElement__forceRedraw">forceRedraw</a> method on the [=SVGSVGElement=] interface and defined it to have no effect when called.</li>
+  <li>Deprecated the <a href="struct.html#__svg__SVGSVGElement__forceRedraw">forceRedraw</a> method on the [[#InterfaceSVGSVGElement|SVGSVGElement]] interface and defined it to have no effect when called.</li>
 
   <li>Defined the
   <a href="struct.html#__svg__SVGSVGElement__deselectAll">deselectAll</a> method
-  on the [=SVGSVGElement=] interface in terms of the Selection API
+  on the [[#InterfaceSVGSVGElement|SVGSVGElement]] interface in terms of the Selection API
   and simultaneously deprecated it.</li>
 
   <li>Clarified that the <{switch}> element does not affect the processing of {{style element}} elements.</li>
 
-  <li>Clarified that the <a href="struct.html#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a> and <a href="struct.html#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a> methods on the [=SVGSVGElement=] interface do not return shadow tree elements.</li>
+  <li>Clarified that the <a href="struct.html#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a> and <a href="struct.html#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a> methods on the [[#InterfaceSVGSVGElement|SVGSVGElement]] interface do not return shadow tree elements.</li>
 
   <li>Removed the <span class="attr-name">requiredFeatures</span> attribute.</li>
 
-  <li>Removed the currentView and useCurrentView properties on [=SVGSVGElement=].</li>
+  <li>Removed the currentView and useCurrentView properties on [[#InterfaceSVGSVGElement|SVGSVGElement]].</li>
 
   <li>Added SVGUnknownElement for handling unknown elements in the svg namespace.</li>
   <div class="changed-since-cr1 cr2 cr3">
@@ -339,7 +339,7 @@ have been made.
 
   <li>Added the {{lang}} attribute in no namespace.</li>
 
-  <li>Removed the <code>viewport</code> attribute from the [=SVGSVGElement=] interface.</li>
+  <li>Removed the <code>viewport</code> attribute from the [[#InterfaceSVGSVGElement|SVGSVGElement]] interface.</li>
 
   <li>Removed the <span class="attr-name">xml:base</span> attribute.</li>
 
@@ -373,7 +373,7 @@ have been made.
 
   <li>Allow x, y, width, and height presentation attributes on a symbol, with the same effect on a rendered instance as on a nested svg element.</li>
 
-  <li>Specify a backwards-compatible default behavior for {{symbol/refX}} and {{symbol/refY}} on a symbol (which will be different from marker); clarify that keywords have same behavior as marker.</li>
+  <li>Specify a backwards-compatible default behavior for <{symbol/refX}> and <{symbol/refY}> on a symbol (which will be different from marker); clarify that keywords have same behavior as marker.</li>
 
   <li>Re-define use-element shadow trees to be consistent with the shadow DOM spec,
     to integrate better with other SVG 2 changes,
@@ -417,7 +417,7 @@ have been made.
 </ul>
 <div class='changed-since-cr1'>
 <ul>
-  <li>Corrected incorrect interface name for definition of [=SVGUseElementShadowRoot=].
+  <li>Corrected incorrect interface name for definition of [[#InterfaceSVGUseElementShadowRoot|SVGUseElementShadowRoot]].
     <a href="https://github.com/w3c/svgwg/issues/290">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/296">Edits</a></li>
 </ul>
@@ -446,7 +446,7 @@ have been made.
 
 <ul>
   <li>Removed the <span class="attr-name">contentStyleType</span> attribute.</li>
-  <li>[=SVGStyleElement=] now implements [=LinkStyle=].</li>
+  <li>[[#InterfaceSVGStyleElement|SVGStyleElement]] now implements [=LinkStyle=].</li>
   <li>Updated user agent style sheet - inner svg elements and foreignObject elements are no longer set as overflow:hidden.</li>
   <li>Added hatch to list of elements with overflow:hidden in User Agent style sheet.</li>
   <li>Set the default value of transform-origin to '0 0' for all elements except root svg elements and svg elements that are the child of a foreignObject element.</li>
@@ -476,7 +476,7 @@ have been made.
   <li>Clean-up presentation attributes table to be consistent with other sections of the spec:
     remove <a element spec="css-masking">mask</a> element from elements that treat x/y/width/height attributes as presentation attributes,
     add <{use}> and <{symbol}>;
-    exclude [=animation elements=] from those that treat {{fill}} as a presentation attribute;
+    exclude <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a> from those that treat {{fill}} as a presentation attribute;
     remove {{d}} as a presentation attribute for {{textPath}};
     merge the discussion of gradientTransform and patternTransform into the main table.
   </li>
@@ -484,8 +484,8 @@ have been made.
 </ul>
 <div class='changed-since-cr1'>
   <ul>
-    <li>Specify that {{transform}}, {{pattern/patternTransform}} and {{linearGradient/gradientTransform}}
-      are presentation attributes for {{transform}} that can be specified to certain sets of elements in the SVG namespace.
+    <li>Specify that [[#TransformProperty|transform]], <{pattern/patternTransform}> and <{linearGradient/gradientTransform}>
+      are presentation attributes for [[#TransformProperty|transform]] that can be specified to certain sets of elements in the SVG namespace.
     <a href="https://github.com/w3c/csswg-drafts/issues/919">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/378">Edits</a></li>
   </ul>
@@ -521,7 +521,7 @@ have been made.
   <li>Added improved wording on bounding box
   from SVG Tiny 1.2, and an algorithm which can compute a bounding box for an element.</li>
   <li>Define bounding box for element with no position to be at (0,0).</li>
-  <li>Removed the defer keyword from {{preserveAspectRatio}}.</li>
+  <li>Removed the defer keyword from [[#PreserveAspectRatioAttribute|preserveAspectRatio]].</li>
   <li>Add definition for 'current viewport'. Change SVG viewport to mean all viewports created by SVG elements.</li>
   <li>Add <span class='prop-value'>non-scaling-size</span>, <span class='prop-value'>non-rotation</span>,
   and <span class='prop-value'>fixed-position</span> values for {{vector-effect}}</li>
@@ -540,7 +540,7 @@ have been made.
   <ul>
     <li>Use DOMMatrix2DInit as parameters for methods</li>
     <li>
-      Setting the enumerated parts of an [=SVGPreserveAspectRatio=] object
+      Setting the enumerated parts of an [[#InterfaceSVGPreserveAspectRatio|SVGPreserveAspectRatio]] object
       to an out-of-range integer or 0 throws a TypeError.
       <a href="https://github.com/w3c/svgwg/issues/547">Issue discussion</a>
     </li>
@@ -556,10 +556,10 @@ have been made.
   <li>Define how <a href="paths.html#__svg__SVGPathElement__getPathSegAtLength">getPathSegAtLength</a> and
   <a href="paths.html#__svg__SVGPathElement__getPointAtLength">getPointAtLength</a> handle out-of-range input, and what to do in case there's no valid path data.</li>
 
-  <li>Removed the <code>normalizedPathSegList</code> and <code>animatedNormalizedPathSegList</code> attributes from [=SVGAnimatedPathData=].</li>
+  <li>Removed the <code>normalizedPathSegList</code> and <code>animatedNormalizedPathSegList</code> attributes from [[#InterfaceSVGAnimatedPathData|SVGAnimatedPathData]].</li>
   -->
 
-  <li>Removed the <code>SVGPathSeg*</code> and <code>SVGAnimatedPathData</code> interfaces and the related methods on [=SVGPathElement=].</li>
+  <li>Removed the <code>SVGPathSeg*</code> and <code>SVGAnimatedPathData</code> interfaces and the related methods on [[#InterfaceSVGPathElement|SVGPathElement]].</li>
 
   <li>Promoted the <span class="attr-name">d</span> attribute
   to a property.</li>
@@ -631,13 +631,13 @@ have been made.
   <li>Added ability to reference basic shapes to {{textPath}}.</li>
 
   <li>
-    Added the {{textPath/side}} attribute to allow placing text on
+    Added the <{textPath/side}> attribute to allow placing text on
     either side of a path.
   </li>
 
   <li>
     Render characters for one loop of a single closed path, effected by the
-    {{textPath/startOffset}} attribute and {{text-anchor}} property.
+    <{textPath/startOffset}> attribute and {{text-anchor}} property.
   </li>
 
   <li>Removed the <span class='element'>'tref'</span> element.</li>
@@ -647,11 +647,11 @@ have been made.
 
   <li>Defined the
   <a href="text.html#__svg__SVGTextContentElement__selectSubString">selectSubString</a>
-  method on the [=SVGTextContentElement=] interface in terms of the
+  method on the [[#InterfaceSVGTextContentElement|SVGTextContentElement]] interface in terms of the
   Selection API and simultaneously deprecated it.</li>
 
   <li>Changed getComputedTextLength() to not include
-  {{tspan/dx}} and {{tspan/dy}} values.</li>
+  <{tspan/dx}> and <{tspan/dy}> values.</li>
 
   <li>Moved the discussion of {{width property}}
   and {{height property}} properties to the Geometry Properties chapter.</li>
@@ -677,7 +677,7 @@ have been made.
 <ul>
 
   <li>Specify [=DOMPointInit=] as argument type for getCharNumAtPosition() instead of
-    [=DOMPoint=].
+    {{DOMPoint}}.
     <a href="https://github.com/w3c/svgwg/issues/389">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/414">Edits</a>
   </li>
@@ -686,8 +686,8 @@ have been made.
     <a href="https://github.com/w3c/svgwg/issues/436">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/482">Edits</a>
   </li>
-  <li>Removed unintended restriction that {{path/pathLength}} applied only to <span class='element'>path</span>s
-    and not [=shapes=] when computing {{textPath/startOffset}}.
+  <li>Removed unintended restriction that <{path/pathLength}> applied only to <span class='element'>path</span>s
+    and not [=shapes=] when computing <{textPath/startOffset}>.
     <a href="https://github.com/w3c/svgwg/issues/382">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/476">Edits</a>
   </li>
@@ -779,7 +779,7 @@ have been made.
   <li>Added arcs value on {{stroke-linejoin}}.</li>
 
   <li>Added the <span class="attr-value">'auto-start-reverse'</span>
-  attribute to the {{marker/orient}} attribute on {{marker element}}.</li>
+  attribute to the <{marker/orient}> attribute on {{marker element}}.</li>
 
   <li>Removed the SVGPaint interface.</li>
 
@@ -854,7 +854,7 @@ have been made.
     and solid-opacity, ported over from SVG Tiny 1.2. (Renamed 'solidColor' to
   'solidcolor'.)</li>
 
-  <li>Added an {{radialGradient/fr}} attribute to the {{radialGradient}} element,
+  <li>Added an <{radialGradient/fr}> attribute to the {{radialGradient}} element,
   which allows specifying the radius of the focal circle.</li>
 
   <li>Added a section for mesh gradients, defining the mesh, meshrow
@@ -880,7 +880,7 @@ have been made.
 </ul>
 <div class='changed-since-cr1'>
 <ul>
-  <li>[=SVGGradientElement=] and [=SVGPatternElement=] no longer implement [=SVGUnitTypes=].
+  <li>[[#InterfaceSVGGradientElement|SVGGradientElement]] and [[#InterfaceSVGPatternElement|SVGPatternElement]] no longer implement [[#InterfaceSVGUnitTypes|SVGUnitTypes]].
     <a href="https://github.com/w3c/svgwg/issues/291">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/295">Edits</a></li>
   <li>Deferred hatch and hatchpath elements to a future version of SVG.
@@ -964,10 +964,10 @@ have been made.
 <h4 id="linking">Linking chapter</h4>
 
 <ul>
-  <li>Added [=animation elements=] to the content model of {{view}}.</li>
+  <li>Added <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a> to the content model of {{view}}.</li>
   <li>Added the possibility to link to SVG resources with fragment identifiers defined by the Media Fragments specification.</li>
   <li>Removed the <span class="attr-name">xlink:type</span>, <span class="attr-name">xlink:role</span>, <span class="attr-name">xlink:arcrole</span>, <span class="attr-name">xlink:show</span> and <span class="attr-name">xlink:actuate</span> attributes.</li>
-  <li>Deprecated the {{xlink:href}} attribute in favor of using <span
+  <li>Deprecated the <a href="#linking-XLinkHrefAttribute">xlink:href</a> attribute in favor of using <span
    class="attr-name">href</span> without a namespace.
   </li>
   <li>Deprecated the {{xlink:title}} attribute in favor of using child
@@ -994,15 +994,15 @@ have been made.
 <div class='changed-since-cr1 cr2'>
   <ul>
     <li>Harmonized attributes and IDL properties on <a element spec="svg2">a</a> element with HTML,
-      other than {{a/href}} and {{a/target}}
+      other than <{a/href}> and <{a/target}>
       (which are maintained as-is for legacy reasons).
       Specifically:
       <ul>
-        <li>Added the {{a/ping}} and {{a/referrerpolicy}} attributes
+        <li>Added the <{a/ping}> and <{a/referrerpolicy}> attributes
           and their matching IDL properties.</li>
         <li>Added the <code>text</code> IDL property.</li>
-        <li>Specified the meaning of a non-empty value for {{a/download}}.</li>
-        <li>Made all attributes except {{a/href}} and {{a/target}} non-animatable,
+        <li>Specified the meaning of a non-empty value for <{a/download}>.</li>
+        <li>Made all attributes except <{a/href}> and <{a/target}> non-animatable,
           with a simple read/write DOMString representation in the IDL.</li>
       </ul>
     <a href="https://github.com/w3c/svgwg/issues/315">Issue discussion</a>

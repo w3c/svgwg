@@ -14,7 +14,7 @@
 <p>SVG contains the following set of basic shape elements:
 
 <ul>
-  <li>rectangles (including optional rounded corners), created with the {{rect}} element,</li>
+  <li>rectangles (including optional rounded corners), created with the <{rect}> element,</li>
   <li>circles, created with the {{circle}} element,</li>
   <li>ellipses, created with the {{ellipse}} element,</li>
   <li>straight lines, created with the {{line}} element,</li>
@@ -34,7 +34,7 @@ shapes.
 <h3 id="RectElement">The <span class="element-name">rect</span> element</h3>
 
 
-<p>The {{rect}} element defines a rectangle which is axis-aligned
+<p>The <{rect}> element defines a rectangle which is axis-aligned
 with the current [=user coordinate system=]. Rounded rectangles can be achieved by setting
 non-zero values for the {{rx}} and {{ry}} geometric properties.
 
@@ -99,7 +99,7 @@ from the computed values by following these steps in order:
  </ol></li>
 </ol>
 
-<p>Mathematically, a {{rect}} element is mapped to an
+<p>Mathematically, a <{rect}> element is mapped to an
 equivalent {{path}} element as follows,
 after generating absolute used values
 <var>x</var>, <var>y</var>, <var>width</var>, <var>height</var>,
@@ -156,7 +156,7 @@ following the rules specified above and in <a href="coords.html#Units">Units</a>
 
 
 <p id="ExampleRect01"><span class="example-ref">Example rect01</span> shows a
-rectangle with sharp corners. The {{rect}} element is filled with yellow
+rectangle with sharp corners. The <{rect}> element is filled with yellow
 and stroked with navy.
 
 <pre class=include-raw>
@@ -319,8 +319,8 @@ Note:
 
 <p><span class="example-ref">Example ellipse01</span> below specifies
 the coordinates of the two ellipses in the user coordinate system
-established by the {{viewBox}} attribute on the <{svg}>
-element and the {{transform}} property on the <{g}> and
+established by the [[#ViewBoxAttribute|viewBox]] attribute on the <{svg}>
+element and the [[#TransformProperty|transform]] property on the <{g}> and
 {{ellipse}} elements. Both ellipses use the default values of
 zero for the {{cx}} and {{cy}} attributes (the center of the
 ellipse). The second ellipse is rotated.
@@ -356,7 +356,7 @@ and ends at another.
       </tr>
       <tr>
         <td><dfn id="LineElementX1Attribute" data-dfn-type="element-attr" data-dfn-for="line" data-export="">x1</dfn>, <dfn id="LineElementY1Attribute" data-dfn-type="element-attr" data-dfn-for="line" data-export="">y1</dfn></td>
-        <td><a>&lt;length-percentage&gt;</a> | <a>&lt;number&gt;</a></td>
+        <td><<length-percentage>> | <<number>></td>
         <td>0</td>
         <td>yes</td>
       </tr>
@@ -375,7 +375,7 @@ and ends at another.
       </tr>
       <tr>
         <td><dfn id="LineElementX2Attribute" data-dfn-type="element-attr" data-dfn-for="line" data-export="">x2</dfn>, <dfn id="LineElementY2Attribute" data-dfn-type="element-attr" data-dfn-for="line" data-export="">y2</dfn></td>
-        <td><a>&lt;length-percentage&gt;</a> | <a>&lt;number&gt;</a></td>
+        <td><<length-percentage>> | <<number>></td>
         <td>0</td>
         <td>yes</td>
       </tr>
@@ -411,7 +411,7 @@ filled (see the {{fill}} property).
 
 <p id="ExampleLine01"><span class="example-ref">Example line01</span> below
 specifies the coordinates of the five lines in the user coordinate system
-established by the {{viewBox}} attribute on the <{svg}> element. The
+established by the [[#ViewBoxAttribute|viewBox]] attribute on the <{svg}> element. The
 lines have different thicknesses.
 
 <pre class=include-raw>
@@ -456,7 +456,7 @@ shapes.
     <p>where:
     <div class="definition prod">
       <dfn id="DataTypePoints" data-dfn-type="type" data-export="">&lt;points&gt;</dfn> =
-      <div style="margin-left: 4em">[ <a>&lt;number&gt;</a>+ ]#</div>
+      <div style="margin-left: 4em">[ <<number>>+ ]#</div>
     </div>
     <p>The points that make up the polyline. All coordinate
     values are in the user coordinate system.
@@ -488,7 +488,7 @@ equivalent {{path}} element as follows:
 
 <p id="ExamplePolyline01"><span class="example-ref">Example polyline01</span>
 below specifies a polyline in the user coordinate system established by the
-{{viewBox}} attribute on the <{svg}> element.
+[[#ViewBoxAttribute|viewBox]] attribute on the <{svg}> element.
 
 <pre class=include-raw>
 path: images/shapes/polyline01.svg
@@ -561,7 +561,7 @@ equivalent {{path}} element as follows:
 
 <p id="ExamplePolygon01"><span class="example-ref">Example
 polygon01</span> below specifies two polygons (a star and a hexagon) in
-the user coordinate system established by the {{viewBox}} attribute
+the user coordinate system established by the [[#ViewBoxAttribute|viewBox]] attribute
 on the <{svg}> element.
 
 <pre class=include-raw>
@@ -581,9 +581,10 @@ path: images/shapes/polygon01.svg
 <h4 id="InterfaceSVGRectElement">Interface SVGRectElement</h4>
 
 
-<p>An [=SVGRectElement=] object represents a {{rect}} element in the DOM.
+<p>An [[#InterfaceSVGRectElement|SVGRectElement]] object represents a <{rect}> element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGRectElement</b> : <a>SVGGeometryElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGRectElement__x">x</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGRectElement__y">y</a>;
@@ -591,7 +592,8 @@ interface <b>SVGRectElement</b> : <a>SVGGeometryElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGRectElement__height">height</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGRectElement__rx">rx</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGRectElement__ry">ry</a>;
-};</pre>
+};
+</pre>
 
 <p>The
 <b id="__svg__SVGRectElement__x">x</b>,
@@ -610,14 +612,16 @@ respectively.
 <h4 id="InterfaceSVGCircleElement">Interface SVGCircleElement</h4>
 
 
-<p>An [=SVGCircleElement=] object represents a {{circle}} element in the DOM.
+<p>An [[#InterfaceSVGCircleElement|SVGCircleElement]] object represents a {{circle}} element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGCircleElement</b> : <a>SVGGeometryElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGCircleElement__cx">cx</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGCircleElement__cy">cy</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGCircleElement__r">r</a>;
-};</pre>
+};
+</pre>
 
 <p>The
 <b id="__svg__SVGCircleElement__cx">cx</b>,
@@ -632,15 +636,17 @@ respectively.
 <h4 id="InterfaceSVGEllipseElement">Interface SVGEllipseElement</h4>
 
 
-<p>An [=SVGEllipseElement=] object represents a {{ellipse}} element in the DOM.
+<p>An [[#InterfaceSVGEllipseElement|SVGEllipseElement]] object represents a {{ellipse}} element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGEllipseElement</b> : <a>SVGGeometryElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGEllipseElement__cx">cx</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGEllipseElement__cy">cy</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGEllipseElement__rx">rx</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGEllipseElement__ry">ry</a>;
-};</pre>
+};
+</pre>
 
 <p>The
 <b id="__svg__SVGEllipseElement__cx">cx</b>,
@@ -656,16 +662,18 @@ respectively.
 <h4 id="InterfaceSVGLineElement">Interface SVGLineElement</h4>
 
 
-The [=SVGLineElement=] interface corresponds to the {{line}}
+The [[#InterfaceSVGLineElement|SVGLineElement]] interface corresponds to the {{line}}
 element.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGLineElement</b> : <a>SVGGeometryElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGLineElement__x1">x1</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGLineElement__y1">y1</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGLineElement__x2">x2</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="shapes.html#__svg__SVGLineElement__y2">y2</a>;
-};</pre>
+};
+</pre>
 
 <p>The
 <b id="__svg__SVGLineElement__x1">x1</b>,
@@ -678,27 +686,29 @@ content attributes, respectively
 
 <h4 id="InterfaceSVGAnimatedPoints" data-dfn-type="interface" data-lt="SVGAnimatedPoints">Mixin SVGAnimatedPoints</h4>
 
-<p>The [=SVGAnimatedPoints=] interface is used to [=reflect=]
-a {{polygon/points}} attribute on a {{polygon}} or {{polyline}}
-element.  It is mixed in to the [=SVGPolygonElement=] and [=SVGPolylineElement=]
+<p>The [[#InterfaceSVGAnimatedPoints|SVGAnimatedPoints]] interface is used to [=reflect=]
+a <{polygon/points}> attribute on a {{polygon}} or {{polyline}}
+element.  It is mixed in to the [[#InterfaceSVGPolygonElement|SVGPolygonElement]] and [[#InterfaceSVGPolylineElement|SVGPolylineElement]]
 interfaces.
 
-<pre class="idl">interface mixin <b>SVGAnimatedPoints</b> {
+<pre class="idl">
+interface mixin <b>SVGAnimatedPoints</b> {
   [<a>SameObject</a>] readonly attribute <a>SVGPointList</a> <a href="shapes.html#__svg__SVGAnimatedPoints__points">points</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGPointList</a> <a href="shapes.html#__svg__SVGAnimatedPoints__animatedPoints">animatedPoints</a>;
-};</pre>
+};
+</pre>
 
 
 <p class='ready-for-wider-review'>The <b id="__svg__SVGAnimatedPoints__points">points</b> IDL attribute
 represents the current non-animated value of the reflected attribute.
 On getting <a href="#__svg__SVGAnimatedPoints__points">points</a>,
-an [=SVGPointList=] object is returned that reflects the base
+an [[#InterfaceSVGPointList|SVGPointList]] object is returned that reflects the base
 value of the reflected attribute.
 
 <p>The <b id="__svg__SVGAnimatedPoints__animatedPoints">animatedPoints</b> IDL attribute
 represents the current non-animated value of the reflected attribute.
 On getting <a href="#__svg__SVGAnimatedPoints__animatedPoints">animatedPoints</a>,
-an [=SVGPointList=] object is returned that reflects the animated
+an [[#InterfaceSVGPointList|SVGPointList]] object is returned that reflects the animated
 value of the reflected attribute.
 
 <p>The objects returned from <a href="#__svg__SVGAnimatedPoints__points">points</a>
@@ -707,11 +717,12 @@ if there is no animation currently affecting the attribute.
 
 <h4 id="InterfaceSVGPointList">Interface SVGPointList</h4>
 
-<p>The [=SVGPointList=] interface is a [=list interface=] whose
-elements are [=DOMPoint=] objects.  An [=SVGPointList=]
+<p>The [[#InterfaceSVGPointList|SVGPointList]] interface is a [=list interface=] whose
+elements are {{DOMPoint}} objects.  An [[#InterfaceSVGPointList|SVGPointList]]
 object represents a list of points.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGPointList</b> {
 
   readonly attribute unsigned long <a href="types.html#__svg__SVGNameList__length">length</a>;
@@ -725,17 +736,18 @@ interface <b>SVGPointList</b> {
   <a>DOMPoint</a> <a href="types.html#__svg__SVGNameList__removeItem">removeItem</a>(unsigned long index);
   <a>DOMPoint</a> <a href="types.html#__svg__SVGNameList__appendItem">appendItem</a>(<a>DOMPoint</a> newItem);
   <a href="types.html#__svg__SVGNameList__setter">setter</a> undefined (unsigned long index, <a>DOMPoint</a> newItem);
-};</pre>
+};
+</pre>
 
-<p>The behavior of all of the interface members of [=SVGPointList=] are
+<p>The behavior of all of the interface members of [[#InterfaceSVGPointList|SVGPointList]] are
 defined in <a href="types.html#ListInterfaces">List interfaces</a>.
 
-<p>This specification imposes additional requirements on the behaviour of [=DOMPoint=]
+<p>This specification imposes additional requirements on the behaviour of {{DOMPoint}}
 objects beyond those described in the
 <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/">Geometry Interfaces</a>
-specification, so that they can be used to reflect {{polygon/points}} attributes.
+specification, so that they can be used to reflect <{polygon/points}> attributes.
 
-<p id="PointMode">Every [=DOMPoint=] object operates in one of four modes. It
+<p id="PointMode">Every {{DOMPoint}} object operates in one of four modes. It
 can:
 
 <div class='ready-for-wg-review'>
@@ -743,30 +755,30 @@ can:
   <li><em>reflect an element of the base value</em> of a [=reflected=] animatable
   attribute (being exposed through the methods on the
   <a href="#__svg__SVGAnimatedPoints__points">points</a> member of
-  an [=SVGAnimatedPoints=]),</li>
+  an [[#InterfaceSVGAnimatedPoints|SVGAnimatedPoints]]),</li>
   <li><em>reflect an element of the animated value</em> of a [=reflected=] animatable
   attribute (being exposed through the methods on the
   <a href="#__svg__SVGAnimatedPoints__animatedPoints">animatedPoints</a> member of
-  an [=SVGAnimatedPoints=]),</li>
+  an [[#InterfaceSVGAnimatedPoints|SVGAnimatedPoints]]),</li>
   <li><em>represent the current translation</em> of a given <{svg}> element
   (being exposed through the
   <a href="struct.html#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>
-  member on [=SVGSVGElement=]), or</li>
-  <li><em>be detached</em>, which is the case for [=DOMPoint=] objects created
+  member on [[#InterfaceSVGSVGElement|SVGSVGElement]]), or</li>
+  <li><em>be detached</em>, which is the case for {{DOMPoint}} objects created
   using their constructor or with
   <a href='struct.html#__svg__SVGSVGElement__createSVGPoint'>createSVGPoint</a>.</li>
 </ol>
 </div>
 
-<p id="PointAssociatedElement">A [=DOMPoint=] object can be <em>associated</em>
+<p id="PointAssociatedElement">A {{DOMPoint}} object can be <em>associated</em>
 with a particular element.  The associated element is used to
 determine which element's content attribute to update if the object [=reflects=]
-an attribute.  Unless otherwise described, a [=DOMPoint=] object is not
+an attribute.  Unless otherwise described, a {{DOMPoint}} object is not
 associated with any element.
 
-<p id="ReadOnlyPoint">A [=DOMPoint=] object can be designated as <em>read only</em>,
+<p id="ReadOnlyPoint">A {{DOMPoint}} object can be designated as <em>read only</em>,
 which means that attempts to modify the object will result in an exception
-being thrown.  When assigning to a read only [=DOMPoint=]'s
+being thrown.  When assigning to a read only {{DOMPoint}}'s
 <a href='https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dompointreadonly-dompoint-x'>x</a>,
 <a href='https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dompointreadonly-dompoint-y'>y</a>,
 <a href='https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dompointreadonly-dompoint-w'>w</a> or
@@ -774,12 +786,12 @@ being thrown.  When assigning to a read only [=DOMPoint=]'s
 IDL attribute, a [=NoModificationAllowedError=] must be
 [=thrown=] instead of updating the internal coordinate value.
 
-<p class='note'>Note that this applies only to the read-write [=DOMPoint=]
+<p class='note'>Note that this applies only to the read-write {{DOMPoint}}
 interface; the [=DOMPointReadOnly=] interface, which is not used for reflecting
-the {{polygon/points}} attribute, will already throw an exception if
+the <{polygon/points}> attribute, will already throw an exception if
 an attempt is made to modify it.
 
-<p id="AssignToDOMPoint">When assigning to a writable [=DOMPoint=]'s
+<p id="AssignToDOMPoint">When assigning to a writable {{DOMPoint}}'s
 <a href='https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dompointreadonly-dompoint-x'>x</a>,
 <a href='https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dompointreadonly-dompoint-y'>y</a>,
 <a href='https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dompointreadonly-dompoint-w'>w</a> or
@@ -788,12 +800,12 @@ IDL attribute, the following steps are run after updating
 the internal coordinate value:
 
 <ol class='algorithm'>
-  <li>If the [=DOMPoint=] <a href='#PointMode'>reflects an element of the
+  <li>If the {{DOMPoint}} <a href='#PointMode'>reflects an element of the
   base value</a> of a [=reflected=] attribute, then [=reserialize=]
-  the reflected attribute using the [=SVGPointList=] that reflects
+  the reflected attribute using the [[#InterfaceSVGPointList|SVGPointList]] that reflects
   the attribute's base value.
   </li>
-  <li>Otherwise, if the [=DOMPoint=] <a href='#PointMode'>represents
+  <li>Otherwise, if the {{DOMPoint}} <a href='#PointMode'>represents
   the current translation</a> of an <{svg}> element and that
   element is the [=outermost svg element=], then:
     <ol>
@@ -801,7 +813,7 @@ the internal coordinate value:
       be the 2x3 matrix that represents the document's magnification and panning
       transform.</li>
       <li>Let <var>x</var> and <var>y</var> be the x and y coordinates of the
-      [=DOMPoint=] object, respectively.</li>
+      {{DOMPoint}} object, respectively.</li>
       <li>Set the document's magnification and panning transform to
       [<var>a</var> 0 0 <var>d</var> <var>x</var> <var>y</var>].</li>
     </ol>
@@ -812,25 +824,29 @@ the internal coordinate value:
 <h4 id="InterfaceSVGPolylineElement">Interface SVGPolylineElement</h4>
 
 
-<p>An [=SVGPolylineElement=] object represents a {{polyline}} element in the DOM.
+<p>An [[#InterfaceSVGPolylineElement|SVGPolylineElement]] object represents a {{polyline}} element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGPolylineElement</b> : <a>SVGGeometryElement</a> {
 };
 
-<a>SVGPolylineElement</a> includes <a>SVGAnimatedPoints</a>;</pre>
+<a>SVGPolylineElement</a> includes <a>SVGAnimatedPoints</a>;
+</pre>
 
 
 
 <h4 id="InterfaceSVGPolygonElement">Interface SVGPolygonElement</h4>
 
 
-<p>An [=SVGPolygonElement=] object represents a {{polygon}} element in the DOM.
+<p>An [[#InterfaceSVGPolygonElement|SVGPolygonElement]] object represents a {{polygon}} element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGPolygonElement</b> : <a>SVGGeometryElement</a> {
 };
 
-<a>SVGPolygonElement</a> includes <a>SVGAnimatedPoints</a>;</pre>
+<a>SVGPolygonElement</a> includes <a>SVGAnimatedPoints</a>;
+</pre>
 
 </div>

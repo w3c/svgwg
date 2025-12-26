@@ -32,7 +32,7 @@
         </tr>
         <tr>
           <th>{{cx}}</th>
-          <td><a>&lt;length-percentage&gt;</a></td>
+          <td><<length-percentage>></td>
           <td>0</td>
           <td>{{circle}} and {{ellipse}} elements</td>
           <td>no</td>
@@ -43,7 +43,7 @@
         </tr>
         <tr>
           <th>{{cy}}</th>
-          <td><a>&lt;length-percentage&gt;</a></td>
+          <td><<length-percentage>></td>
           <td>0</td>
           <td>{{circle}} and {{ellipse}} elements</td>
           <td>no</td>
@@ -77,7 +77,7 @@
           <td>the specified value converted to a number, clamped to the range [0,1]</td>
         </tr>
         <tr>
-          <th>{{fill-rule}}</th>
+          <th>'fill-rule'</th>
           <td>nonzero | evenodd </td>
           <td>nonzero</td>
           <td>[=shapes=] and [=text content elements=]</td>
@@ -148,7 +148,7 @@
         </tr>
         <tr>
           <th>{{r}}</th>
-          <td><a>&lt;length-percentage&gt;</a></td>
+          <td><<length-percentage>></td>
           <td>0</td>
           <td>{{circle}} element</td>
           <td>no</td>
@@ -159,9 +159,9 @@
         </tr>
         <tr>
           <th>{{rx}}</th>
-          <td><a>&lt;length-percentage&gt;</a> | auto</td>
+          <td><<length-percentage>> | auto</td>
           <td>auto</td>
-          <td>{{ellipse}}, {{rect}} elements</td>
+          <td>{{ellipse}}, <{rect}> elements</td>
           <td>no</td>
           <td>refer to the width of the current SVG viewport (see
               <a href="coords.html#Units">Units</a>)</td>
@@ -170,9 +170,9 @@
         </tr>
         <tr>
           <th>{{ry}}</th>
-          <td><a>&lt;length-percentage&gt;</a> | auto</td>
+          <td><<length-percentage>> | auto</td>
           <td>auto</td>
-          <td>{{ellipse}}, {{rect}} elements</td>
+          <td>{{ellipse}}, <{rect}> elements</td>
           <td>no</td>
           <td>refer to the height of the current SVG viewport (see
               <a href="coords.html#Units">Units</a>)</td>
@@ -239,7 +239,7 @@
         </tr>
         <tr>
           <th>{{stroke-dashoffset}}</th>
-          <td><a>&lt;length-percentage&gt;</a> | <a>&lt;number&gt;</a></td>
+          <td><<length-percentage>> | <<number>></td>
           <td>0</td>
           <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
@@ -272,7 +272,7 @@
         </tr>
         <tr>
           <th>{{stroke-miterlimit}}</th>
-          <td><a>&lt;number&gt;</a> (non-negative)</td>
+          <td><<number>> (non-negative)</td>
           <td>4</td>
           <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
@@ -294,7 +294,7 @@
         </tr>
         <tr>
           <th>{{stroke-width}}</th>
-          <td><a>&lt;length-percentage&gt;</a> | <a>&lt;number&gt;</a></td>
+          <td><<length-percentage>> | <<number>></td>
           <td>1px</td>
           <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
@@ -339,9 +339,9 @@
         </tr>
         <tr>
           <th>{{x}}</th>
-          <td><a>&lt;length-percentage&gt;</a></td>
+          <td><<length-percentage>></td>
           <td>0</td>
-          <td><{svg}>, {{rect}},
+          <td><{svg}>, <{rect}>,
             {{image}}, <{foreignObject}> elements</td>
           <td>no</td>
           <td>refer to the width of the current SVG viewport (see
@@ -351,9 +351,9 @@
         </tr>
         <tr>
           <th>{{y}}</th>
-          <td><a>&lt;length-percentage&gt;</a></td>
+          <td><<length-percentage>></td>
           <td>0</td>
-          <td><{svg}>, {{rect}},
+          <td><{svg}>, <{rect}>,
             {{image}}, <{foreignObject}> elements</td>
           <td>no</td>
           <td>refer to the height of the current SVG viewport (see

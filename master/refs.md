@@ -189,7 +189,7 @@
   <dd><div>Brian Birtles; Shane Stephens; Alex Danilo; Tab Atkins Jr.. <a href="https://www.w3.org/TR/web-animations-1/"><cite><strong class="highlight">Web Animations</strong></cite></a>. 13 September 2016. W3C Working Draft. URL:&nbsp;<a href="https://www.w3.org/TR/web-animations-1/">https://www.w3.org/TR/web-animations-1/</a> ED:&nbsp;<a href="https://w3c.github.io/web-animations/">https://w3c.github.io/web-animations/</a></div></dd>
 
   <dt id="ref-webidl" class="normref">[<a href="https://www.w3.org/TR/WebIDL-1/">WebIDL</a>]</dt>
-  <dd><div>Cameron McCormack; Boris Zbarsky. <a href="https://www.w3.org/TR/WebIDL-1/"><cite>WebIDL Level 1</cite></a>. 15 December 2016. W3C Recommendation. URL:&nbsp;<a href="https://www.w3.org/TR/WebIDL-1/">https://www.w3.org/TR/WebIDL-1/</a> ED:&nbsp;<a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a></div></dd>
+  <dd><div>Cameron McCormack; Boris Zbarsky. <a href="https://www.w3.org/TR/WebIDL-1/"><cite>WebIDL Level 1</cite></a>. 15 December 2016. W3C Recommendation. URL:&nbsp;<a href="https://www.w3.org/TR/WebIDL-1/">https://www.w3.org/TR/WebIDL-1/</a> ED:&nbsp;<a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a></div></dd>
 
   <dt id="ref-woff" class="normref">[<a href="https://www.w3.org/TR/WOFF/">WOFF</a>]</dt>
   <dd><div>Jonathan Kew; Tal Leming; Erik van Blokland. <a href="https://www.w3.org/TR/WOFF/"><cite>WOFF File Format 1.0</cite></a>. 13 December 2012. W3C Recommendation. URL:&nbsp;<a href="https://www.w3.org/TR/WOFF/">https://www.w3.org/TR/WOFF/</a></div></dd>

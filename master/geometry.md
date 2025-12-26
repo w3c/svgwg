@@ -3,7 +3,7 @@
 <p>Beside SVG's styling properties, SVG also defines
 <dfn id='geometry-properties' data-dfn-type="dfn" data-export="">geometry properties</dfn>. Geometry properties
 describe the position and dimension of the [=graphics element=]s {{circle}},
-{{ellipse}}, {{rect}}, {{image}}, <{foreignObject}> and the
+{{ellipse}}, <{rect}>, {{image}}, <{foreignObject}> and the
 <{svg}> element.
 
 <h3 id='CX'>Horizontal center coordinate: The <span class="property">cx</span> property</h3>
@@ -14,7 +14,7 @@ describe the position and dimension of the [=graphics element=]s {{circle}},
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a>&lt;length-percentage&gt;</a></td>
+    <td><<length-percentage>></td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -59,7 +59,7 @@ of the position of the element.
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a>&lt;length-percentage&gt;</a></td>
+    <td><<length-percentage>></td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -104,7 +104,7 @@ of the position of the element.
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a>&lt;length-percentage&gt;</a></td>
+    <td><<length-percentage>></td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -150,7 +150,7 @@ element.
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a>&lt;length-percentage&gt;</a> | auto</td>
+    <td><<length-percentage>> | auto</td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -158,7 +158,7 @@ element.
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td>{{ellipse}}, {{rect}} elements</td>
+    <td>{{ellipse}}, <{rect}> elements</td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -184,7 +184,7 @@ element.
 </table>
 
 <p>The {{rx}} property describes the horizontal radius of the
-{{ellipse}} element and the curve radius of the {{rect}}
+{{ellipse}} element and the curve radius of the <{rect}>
 element.
     When the computed value of <span class="property">rx</span>
  is <span class="prop-value">auto</span>, the used radius is equal to the absolute length used for {{ry}}, creating a circular arc.
@@ -193,12 +193,12 @@ element.
  have a computed value of <span class="prop-value">auto</span>, the used value is 0.
 
 <p> Regardless of how the value is calculated, the used value of <span class="property">rx</span>
- for a {{rect}} is never more than 50% of the used value of {{width}} for the same shape.
+ for a <{rect}> is never more than 50% of the used value of {{width}} for the same shape.
 
 
 Note: 
     The <span class="prop-value">auto</span> behavior is new in SVG 2 for {{ellipse}},
-    matching the behavior for {{rect}} elements when {{rx}} was not specified.
+    matching the behavior for <{rect}> elements when {{rx}} was not specified.
 
 
 <p>A negative value for {{rx}} is [=invalid=] and must be [=ignored=].
@@ -211,7 +211,7 @@ Note:
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a>&lt;length-percentage&gt;</a> | auto</td>
+    <td><<length-percentage>> | auto</td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -219,7 +219,7 @@ Note:
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td>{{ellipse}}, {{rect}}</td>
+    <td>{{ellipse}}, <{rect}></td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -245,7 +245,7 @@ Note:
 </table>
 
 <p>The {{ry}} property describes the vertical radius of the
-{{ellipse}} element and the vertical curve radius of the {{rect}}
+{{ellipse}} element and the vertical curve radius of the <{rect}>
     element.
     When the computed value of <span class="property">ry</span>
  is <span class="prop-value">auto</span>, the used radius is equal to the absolute length used for {{rx}}, creating a circular arc.
@@ -254,12 +254,12 @@ Note:
  have a computed value of <span class="prop-value">auto</span>, the used value is 0.
 
 <p> Regardless of how the value is calculated, the used value of <span class="property">ry</span>
- for a {{rect}} is never more than 50% of the used value of {{height}} for the same shape.
+ for a <{rect}> is never more than 50% of the used value of {{height}} for the same shape.
 
 
 Note: 
     The <span class="prop-value">auto</span> behavior is new in SVG 2 for {{ellipse}},
-    matching the behavior for {{rect}} elements when {{ry}} was not specified.
+    matching the behavior for <{rect}> elements when {{ry}} was not specified.
 
 
 <p>A negative value for {{ry}} is [=invalid=] and must be [=ignored=].
@@ -272,7 +272,7 @@ Note:
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a>&lt;length-percentage&gt;</a></td>
+    <td><<length-percentage>></td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -280,7 +280,7 @@ Note:
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td><{svg}>, {{rect}},
+    <td><{svg}>, <{rect}>,
     {{image}}, <{foreignObject}> elements</td>
   </tr>
   <tr>
@@ -317,7 +317,7 @@ the position of the element.
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a>&lt;length-percentage&gt;</a></td>
+    <td><<length-percentage>></td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -325,7 +325,7 @@ the position of the element.
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td><{svg}>, {{rect}},
+    <td><{svg}>, <{rect}>,
     {{image}}, <{foreignObject}> elements</td>
   </tr>
   <tr>
@@ -362,7 +362,7 @@ the position of the element.
 
 <p>The CSS {{width}} and {{height}} properties are used for
 sizing some SVG elements.  Specifically, they are used to size
-{{rect}}, <{svg}>, {{image}} and
+<{rect}>, <{svg}>, {{image}} and
 <{foreignObject}>.  All of these elements have <span class="attr-name">width</span>
 and <span class="attr-name">height</span> presentation attributes.
 The properties are also used for laying out embedded elements from the HTML namespace.

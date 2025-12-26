@@ -335,7 +335,7 @@ svg { border: 1px solid #888; background-color: #eee }
 element. The area to be painted consists of any areas inside the outline
 of the shape. To determine the inside of the shape, all subpaths are
 considered, and the interior is determined according to the rules
-associated with the current value of the {{fill-rule}} property.
+associated with the current value of the 'fill-rule' property.
 The zero-width geometric outline of a shape is included in the area to
 be painted.
 
@@ -351,7 +351,7 @@ the subpath. Thus, fill operations apply to both [=open subpaths=] within
 <table class="propdef def">
   <tr>
     <th>Name:</th>
-    <td><dfn id="FillRuleProperty" data-dfn-type="property" data-export="">fill-rule</dfn></td>
+    <td><dfn id="FillRuleProperty" property export>fill-rule</dfn></td>
   </tr>
   <tr>
     <th>Value:</th>
@@ -387,7 +387,7 @@ the subpath. Thus, fill operations apply to both [=open subpaths=] within
   </tr>
 </table>
 
-<p>The {{fill-rule}} property indicates the algorithm (or
+<p>The 'fill-rule' property indicates the algorithm (or
 <em>winding rule</em>) which is to
 be used to determine what parts of the canvas are included inside the
 shape. For a simple, non-intersecting path, it is intuitively clear
@@ -395,7 +395,7 @@ what region lies "inside"; however, for a more complex path, such as a
 path that intersects itself or where one subpath encloses another, the
 interpretation of "inside" is not so obvious.
 
-<p>The {{fill-rule}} property provides two options for how the
+<p>The 'fill-rule' property provides two options for how the
 inside of a shape is determined:
 
 <dl>
@@ -712,7 +712,7 @@ group opacity.
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a>&lt;length-percentage&gt;</a> | <a>&lt;number&gt;</a></td>
+    <td><<length-percentage>> | <<number>></td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -746,7 +746,7 @@ group opacity.
 
 <p>This property specifies the width of the stroke on the current object.
 A zero value causes no stroke to be painted. A negative value
-is [=invalid=]. A <a>&lt;number&gt;</a> value represents a value in [=user units=].
+is [=invalid=]. A <<number>> value represents a value in [=user units=].
 
 <h4 id="LineCaps">Drawing caps at the ends of strokes: the <span class="property">stroke-linecap</span> property</h4>
 
@@ -949,7 +949,7 @@ Note:
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a>&lt;number&gt;</a></td>
+    <td><<number>></td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -1166,7 +1166,7 @@ Note:
 <p>where:
 
 <p class="definition prod"><dfn id="DataTypeDasharray" data-dfn-type="type" data-export="">&lt;dasharray&gt;</dfn> =
-[ [ <a>&lt;length-percentage&gt;</a> | <a>&lt;number&gt;</a> ]+ ]#
+[ [ <<length-percentage>> | <<number>> ]+ ]#
 
 <p>The {{stroke-dasharray}} property controls
 the pattern of dashes and gaps used to form the shape of
@@ -1179,9 +1179,9 @@ a path's stroke.
   <dt><span class='prop-value'>&lt;dasharray&gt;</span></dt>
   <dd>
     <p>Specifies a dashing pattern to use.  A <a>&lt;dasharray&gt;</a> is
-    a list of comma and/or white space separated <a>&lt;number&gt;</a> or
-    <a>&lt;length-percentage&gt;</a> values.
-    A <a>&lt;number&gt;</a> value represents a value in [=user units=].
+    a list of comma and/or white space separated <<number>> or
+    <<length-percentage>> values.
+    A <<number>> value represents a value in [=user units=].
     Each value specifies a length along the path for which the stroke
     is to be painted (a <em>dash</em>) and not painted (a <em>gap</em>).
     The first value and every second value in the list after it specifies
@@ -1206,9 +1206,9 @@ a path's stroke.
   The red line shows the actual path that is stroked.
 </div>
 
-<p>The {{path/pathLength}} attribute on a {{path}} element affects
+<p>The <{path/pathLength}> attribute on a {{path}} element affects
 {{stroke-dasharray}}: each dash and gap length is interpreted relative
-to the author's path length as specified by {{path/pathLength}}.
+to the author's path length as specified by <{path/pathLength}>.
 
 <p id="interpolationDashPattern">{{stroke-dasharray}} values are [=not additive=]. For interpolation,
 {{stroke-dasharray}} values are combined as follows:
@@ -1251,7 +1251,7 @@ After that, each item is then combined by computed value.
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a>&lt;length-percentage&gt;</a> | <a>&lt;number&gt;</a></td>
+    <td><<length-percentage>> | <<number>></td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -1316,11 +1316,11 @@ value is negative, then the effect is the same as dash offset <var>d</var>:
 </div>
 
 <p>Like {{stroke-dasharray}}, {{stroke-dashoffset}} is interpreted
-relative to the author's path length as specified by the {{path/pathLength}}
+relative to the author's path length as specified by the <{path/pathLength}>
 attribute on a {{path}} element.
 
 <div class="example">
-  <p>The example below shows how a {{path/pathLength}} that is greatly
+  <p>The example below shows how a <{path/pathLength}> that is greatly
   different from the actual path length can be used to control stroke
   dashing more easily.
 
@@ -1334,7 +1334,7 @@ path: images/painting/dash-pathlength.svg
               produced using stroke dashing.">
     <p class="caption">The four broad white dashes and the eight small circular
     dashes around each chip are placed relative to an author specified
-    {{path/pathLength}} of <span class='attr-value'>'80'</span>, which
+    <{path/pathLength}> of <code class='attr-value'>80</code>, which
     makes the desired {{stroke-dasharray}} and {{stroke-dashoffset}}
     values easy to compute.
   </div>
@@ -1408,12 +1408,12 @@ The ideal stroke shape is determined as follows:
     <ol>
       <li>Let <var>scale</var> be a scale factor for the dash pattern.  If we are
       computing the stroke shape of a {{text}} chunk,
-      or if the {{path/pathLength}} attribute is not present on the element,
+      or if the <{path/pathLength}> attribute is not present on the element,
       then <var>scale</var> is 1.  Otherwise, it is determined as follows:
         <ol>
           <li>Let <var>length</var> be the user agent's computed length of the
           {{path}} or [=equivalent path=] for a [=basic shape=].</li>
-          <li>Let <var>authorlength</var> be the value of the {{path/pathLength}}
+          <li>Let <var>authorlength</var> be the value of the <{path/pathLength}>
           attribute on the [=shape=].</li>
           <li><var>scale</var> is <var>authorlength</var> / <var>length</var>.</li>
         </ol>
@@ -1596,9 +1596,9 @@ a subpath is determined as follows:
 
   <li>If the unit tangent vector at the end of the segment and the unit tangent vector
   at the start of the following segment are equal, then return an empty shape.
-  Note: This means for example that <span class='attr-value'>'M 100,100 h 100 h 100'</span>
+  Note: This means for example that <code class='attr-value'>M 100,100 h 100 h 100</code>
   would not produce a line join shape between the two straight line segment, but
-  <span class='attr-value'>'M 100,100 h 100 h -100'</span> would.</li>
+  <code class='attr-value'>M 100,100 h 100 h -100</code> would.</li>
 
   <li>Let <var>A</var> be the line parallel to the tangent at the end of the segment.</li>
   <li>Let <var>B</var> be the line parallel to the tangent at the start of the following segment.</li>
@@ -2359,7 +2359,7 @@ also being non scaling.
   <tr>
     <td><dfn id="MarkerWidthAttribute" data-dfn-type="element-attr" data-dfn-for="marker" data-export="">markerWidth</dfn>,
     <dfn id="MarkerHeightAttribute" data-dfn-type="element-attr" data-dfn-for="marker" data-export="">markerHeight</dfn></td>
-    <td><a>&lt;length-percentage&gt;</a> | <a>&lt;number&gt;</a></td>
+    <td><<length-percentage>> | <<number>></td>
     <td>3</td>
     <td>yes</td>
   </tr>
@@ -2370,7 +2370,7 @@ also being non scaling.
 
 <p>The {{markerWidth}} and {{markerHeight}} attributes
 represent the size of the SVG viewport into which the marker is to
-be fitted according to the {{viewBox}} and {{preserveAspectRatio}}
+be fitted according to the [[#ViewBoxAttribute|viewBox]] and [[#PreserveAspectRatioAttribute|preserveAspectRatio]]
 attributes.  A value of zero for either
 attribute results in nothing being rendered for the marker.  A negative value
 for either attribute is an error (see
@@ -2388,13 +2388,13 @@ for either attribute is an error (see
   </tr>
   <tr>
     <td><dfn id="MarkerElementRefXAttribute" data-dfn-type="element-attr" data-dfn-for="marker" data-export="">refX</dfn></td>
-    <td><a>&lt;length-percentage&gt;</a> | <a>&lt;number&gt;</a> | left | center | right</td>
+    <td><<length-percentage>> | <<number>> | left | center | right</td>
     <td>0</td>
     <td>yes</td>
   </tr>
   <tr>
     <td><dfn id="MarkerElementRefYAttribute" data-dfn-type="element-attr" data-dfn-for="marker" data-export="">refY</dfn></td>
-    <td><a>&lt;length-percentage&gt;</a> | <a>&lt;number&gt;</a> | top | center | bottom</td>
+    <td><<length-percentage>> | <<number>> | top | center | bottom</td>
     <td>0</td>
     <td>yes</td>
   </tr>
@@ -2418,9 +2418,9 @@ for either attribute is an error (see
 point of the marker, which is to be placed exactly at the marker's
 position on the [=shape=].  Lengths and numbers must be interpreted
 as being in the coordinate system of the marker contents, after application of the
-{{viewBox}} and {{preserveAspectRatio}} attributes. Percentage
-values must be interpreted as being a percentage of the {{viewBox}}
-width for {{refX}} or a percentage of the {{viewBox}} height for
+[[#ViewBoxAttribute|viewBox]] and [[#PreserveAspectRatioAttribute|preserveAspectRatio]] attributes. Percentage
+values must be interpreted as being a percentage of the [[#ViewBoxAttribute|viewBox]]
+width for {{refX}} or a percentage of the [[#ViewBoxAttribute|viewBox]] height for
 {{refY}}.
 <p>The keyword values must evaluate to the following percentages:
 <table class="data compact">
@@ -2449,7 +2449,7 @@ width for {{refX}} or a percentage of the {{viewBox}} height for
   </tr>
   <tr>
     <td><dfn id="OrientAttribute" data-dfn-type="element-attr" data-dfn-for="marker" data-export="">orient</dfn></td>
-    <td>auto | auto-start-reverse | <a>&lt;angle&gt;</a> | <a>&lt;number&gt;</a></td>
+    <td>auto | auto-start-reverse | <<angle>> | <<number>></td>
     <td>0</td>
     <td>yes&#160;(non-additive)</td>
   </tr>
@@ -2488,12 +2488,12 @@ Values have the following meanings:
 </dl>
 
 <dl>
-  <dt><span class="attr-value"><a>&lt;angle&gt;</a></span></dt>
-  <dt><span class="attr-value"><a>&lt;number&gt;</a></span></dt>
+  <dt><span class="attr-value"><<angle>></span></dt>
+  <dt><span class="attr-value"><<number>></span></dt>
   <dd>
     <p>The marker is oriented such that the specified angle is
     that measured between the [=shape=]'s positive x-axis
-    and the marker's positive x-axis.  A <a>&lt;number&gt;</a> value
+    and the marker's positive x-axis.  A <<number>> value
     specifies an angle in degrees.
     Note: For example, if a value of <span class="attr-value">'45'</span>
     is given, then the marker's positive x-axis would be pointing down and right
@@ -2684,7 +2684,7 @@ directly for all three of the corresponding longhand properties.
 <h4 id="RenderingMarkers">Rendering markers</h4>
 
 <p>When orienting a marker automatically, due to specifying {{orient}}
-as <span class='attr-value'>'auto'</span>, the following rules are used:
+as <code class='attr-value'>auto</code>, the following rules are used:
 
 <ul>
   <li>If the vertex is the start or end of an [=open subpath=], then the marker is
@@ -2715,9 +2715,9 @@ correctly, as follows:
   transformation is applied.</li>
 
   <li>An additional set of transformations might occur if the
-  {{marker element}} element includes a {{viewBox}} attribute, in
+  {{marker element}} element includes a [[#ViewBoxAttribute|viewBox]] attribute, in
   which case additional transformations are set up to produce the necessary
-  result due to attributes {{viewBox}} and {{preserveAspectRatio}}.</li>
+  result due to attributes [[#ViewBoxAttribute|viewBox]] and [[#PreserveAspectRatioAttribute|preserveAspectRatio]].</li>
 
   <li>If the [[#OverflowAndClipProperties|overflow]] property on the {{marker element}} element
   indicates that the marker needs to be clipped to its SVG viewport, then an
@@ -3423,9 +3423,9 @@ on them.
 
 <div class='example'>
   <p>The following example demonstrates how {{will-change}} can be used
-  to forewarn the user agent that an element will have its {{transform}}
+  to forewarn the user agent that an element will have its [[#TransformProperty|transform]]
   property changed, with the potential result of the user agent rendering the
-  element into its own GPU layer so that the scripted {{transform}}
+  element into its own GPU layer so that the scripted [[#TransformProperty|transform]]
   changes appear smooth.
 
 <pre class=include-raw>
@@ -3456,10 +3456,11 @@ SVG Tiny 1.2.
 
 
 
-<p>An [=SVGMarkerElement=] object represents a {{marker element}}
+<p>An [[#InterfaceSVGMarkerElement|SVGMarkerElement]] object represents a {{marker element}}
 element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGMarkerElement</b> : <a>SVGElement</a> {
 
   // Marker Unit Types
@@ -3486,9 +3487,10 @@ interface <b>SVGMarkerElement</b> : <a>SVGElement</a> {
   undefined <a href="painting.html#__svg__SVGMarkerElement__setOrientToAngle">setOrientToAngle</a>(<a>SVGAngle</a> angle);
 };
 
-<a>SVGMarkerElement</a> includes <a>SVGFitToViewBox</a>;</pre>
+<a>SVGMarkerElement</a> includes <a>SVGFitToViewBox</a>;
+</pre>
 
-<p>The numeric marker unit type constants defined on [=SVGMarkerElement=]
+<p>The numeric marker unit type constants defined on [[#InterfaceSVGMarkerElement|SVGMarkerElement]]
 are used to represent the keyword values that the {{markerUnits}}
 attribute can take.  Their meanings are as follows:
 
@@ -3499,7 +3501,7 @@ attribute can take.  Their meanings are as follows:
   <tr><td><b id="__svg__SVGMarkerElement__SVG_MARKERUNITS_UNKNOWN">SVG_MARKERUNITS_UNKNOWN</b></td><td>Some other value.</td></tr>
 </table>
 
-<p>The numeric marker orientation type constants defined on [=SVGMarkerElement=]
+<p>The numeric marker orientation type constants defined on [[#InterfaceSVGMarkerElement|SVGMarkerElement]]
 are used to represent the types of values that the {{orient}}
 attribute can take.  Their meanings are as follows:
 
@@ -3507,7 +3509,7 @@ attribute can take.  Their meanings are as follows:
   <tr><th>Constant</th><th>Meaning</th></tr>
   <tr><td><b id="__svg__SVGMarkerElement__SVG_MARKER_ORIENT_AUTO">SVG_MARKER_ORIENT_AUTO</b></td><td>The <span class="attr-value">auto</span> keyword.</td></tr>
   <tr><td><b id="__svg__SVGMarkerElement__SVG_MARKER_ORIENT_AUTO_START_REVERSE">SVG_MARKER_ORIENT_AUTO_START_REVERSE</b></td><td>The <span class="attr-value">auto-start-reverse</span> keyword.</td></tr>
-  <tr><td><b id="__svg__SVGMarkerElement__SVG_MARKER_ORIENT_ANGLE">SVG_MARKER_ORIENT_ANGLE</b></td><td>An <a>&lt;angle&gt;</a> or <a>&lt;number&gt;</a> value indicating the orientation angle.</td></tr>
+  <tr><td><b id="__svg__SVGMarkerElement__SVG_MARKER_ORIENT_ANGLE">SVG_MARKER_ORIENT_ANGLE</b></td><td>An <<angle>> or <<number>> value indicating the orientation angle.</td></tr>
   <tr><td><b id="__svg__SVGMarkerElement__SVG_MARKER_ORIENT_UNKNOWN">SVG_MARKER_ORIENT_UNKNOWN</b></td><td>Some other value.</td></tr>
 </table>
 
@@ -3533,7 +3535,7 @@ The [=numeric type values=] for {{orient}} are as follows:
     <td><a href='painting.html#__svg__SVGMarkerElement__SVG_MARKER_ORIENT_AUTO_START_REVERSE'>SVG_MARKER_ORIENT_AUTO_START_REVERSE</a></td>
   </tr>
   <tr>
-    <td><a>&lt;angle&gt;</a> | <a>&lt;number&gt;</a></td>
+    <td><<angle>> | <<number>></td>
     <td><a href='painting.html#__svg__SVGMarkerElement__SVG_MARKER_ORIENT_ANGLE'>SVG_MARKER_ORIENT_ANGLE</a></td>
   </tr>
 </table>
@@ -3547,8 +3549,8 @@ and {{markerHeight}} content attributes, respectively.
 
 <p>The <b id="__svg__SVGMarkerElement__setOrientToAuto">setOrientToAuto</b>
 method is used to set the value of the {{orient}} attribute
-to <span class='attr-value'>'auto'</span>.  When setOrientToAuto() is
-called, the {{orient}} attribute is simply set to <span class='attr-value'>'auto'</span>.
+to <code class='attr-value'>auto</code>.  When setOrientToAuto() is
+called, the {{orient}} attribute is simply set to <code class='attr-value'>auto</code>.
 
 <p>The <b id="__svg__SVGMarkerElement__setOrientToAngle">setOrientToAngle</b>
 method is used to set the value of the {{orient}} attribute

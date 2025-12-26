@@ -39,7 +39,7 @@ Note: Content embedded with {{image}} is compatible with <a href="https://www.w3
     the [=positioning rectangle=] defines the bounds of a
     <a href="https://www.w3.org/TR/CSS21/visuren.html#containing-block">containing block</a> for laying out the child content using CSS.
     The scale of the containing block is defined in the current coordinate system,
-    including all explicit and implicit (e.g., {{viewBox}}) transformations.
+    including all explicit and implicit (e.g., [[#ViewBoxAttribute|viewBox]]) transformations.
     The <{foreignObject}>, or other element that is positioned using SVG layout attributes,
     is implicitly <a href="https://www.w3.org/TR/CSS21/visuren.html#propdef-position">absolutely-positioned</a> for the purposes of CSS layout.
     As a result, any absolutely-positioned child elements
@@ -95,7 +95,7 @@ into a 4-channel RGBA image, where the single channel from the
 referenced object is used to compute the three color channels
 and the alpha channel is uniformly set to 1.
 
-<p>The {{preserveAspectRatio}} attribute
+<p>The [[#PreserveAspectRatioAttribute|preserveAspectRatio]] attribute
 determines how the referenced image is scaled and positioned to fit
 into the [=concrete object size=] determined from the
 [=positioning rectangle=] and the {{object-fit}} and {{object-position}} properties.
@@ -107,17 +107,17 @@ the [=SVG viewport=] used for rendering that SVG.
 
 
 Note: 
-  The {{preserveAspectRatio}} calculations
+  The [[#PreserveAspectRatioAttribute|preserveAspectRatio]] calculations
   are applied <em>after</em> determining the [=concrete object size=],
   and only have an effect if that size does not match the
   [=intrinsic aspect ratio=] of the embedded image.
   If a value of {{object-fit}} is used that
   ensures that the concrete object size matches the intrinsic aspect ratio
   (i.e., any value other than the default <span class="prop-value">fill</span>),
-  then the {{preserveAspectRatio}} value will have no effect;
+  then the [[#PreserveAspectRatioAttribute|preserveAspectRatio]] value will have no effect;
   the [=image-rendering rectangle=] will be that determined
   when scaling and positioning the object with CSS.
-  The {{preserveAspectRatio}} attribute can therefore be safely used
+  The [[#PreserveAspectRatioAttribute|preserveAspectRatio]] attribute can therefore be safely used
   as a fallback for most values of {{object-fit}} and {{object-position}};
   it must be explicitly set to <span class="attr-value">none</span>
   to turn off aspect ratio control, regardless of {{object-fit}} value.
@@ -125,15 +125,15 @@ Note:
 
 <p>
 The aspect ratio to use when
-evaluating the {{preserveAspectRatio}} attribute is
+evaluating the [[#PreserveAspectRatioAttribute|preserveAspectRatio]] attribute is
 defined by the [=intrinsic aspect ratio=] of the referenced content.
 For an SVG file, the aspect ratio is defined
 in <a href="coords.html#SizingSVGInCSS">Intrinsic sizing properties of SVG content"</a>.
 For most raster content (PNG, JPEG) the pixel width and height of the image file
 define an intrinsic aspect ratio.
 Where the embedded image does not have an [=intrinsic aspect ratio=]
-(e.g. an SVG file with neither {{viewBox}} attribute nor explicit dimensions for the
-[=outermost svg element=]) the {{preserveAspectRatio}} attribute is
+(e.g. an SVG file with neither [[#ViewBoxAttribute|viewBox]] attribute nor explicit dimensions for the
+[=outermost svg element=]) the [[#PreserveAspectRatioAttribute|preserveAspectRatio]] attribute is
 ignored;
 the embedded image is drawn to fill the [=positioning rectangle=] defined by the geometry properties
 on the {{image}} element.
@@ -148,7 +148,7 @@ for both X and Y), the raster would be sized as large as
 possible while ensuring that the entire raster fits within the
 viewport, and the top/left of the raster would be aligned with
 the top/left of the viewport as defined by the attributes {{x}}, {{y}}, {{width}} and {{height}} on the {{image}} element.  If the value
-of {{preserveAspectRatio}} was <span class='attr-value'>'none'</span>
+of [[#PreserveAspectRatioAttribute|preserveAspectRatio]] was <code class='attr-value'>none</code>
 then aspect ratio of the image would not be preserved. The
 image would be fit such that the top/left corner of the
 raster exactly aligns with coordinate ({{x}}, {{y}}) and the bottom/right corner of
@@ -156,26 +156,26 @@ the raster exactly aligns with coordinate ({{x}}+{{width}}, {{y}}+{{height}}).
 
 <p>
 For {{image}} elements embedding an SVG image,
-the {{preserveAspectRatio}} attribute on the root
+the [[#PreserveAspectRatioAttribute|preserveAspectRatio]] attribute on the root
 element in the referenced SVG image must be ignored,
 and instead treated as if it had a value of <span class="attr-value">none</span>.
-(see {{preserveAspectRatio}} for details).
-This ensures that the {{preserveAspectRatio}} attribute on
+(see [[#PreserveAspectRatioAttribute|preserveAspectRatio]] for details).
+This ensures that the [[#PreserveAspectRatioAttribute|preserveAspectRatio]] attribute on
 the referencing {{image}} has its intended effect,
 even if it is <span class="attr-value">none</span>.
 
 
 Note: 
-When the value of the {{preserveAspectRatio}} attribute on the {{image}}
+When the value of the [[#PreserveAspectRatioAttribute|preserveAspectRatio]] attribute on the {{image}}
 is <em>not</em> <span class="attr-value">none</span>,
 the [=image-rendering rectangle=] determined
 from the properties of the {{image}} element
 will exactly match the embedded SVG's intrinsic aspect ratio.
-Ignoring the {{preserveAspectRatio}} attribute from the embedded SVG
+Ignoring the [[#PreserveAspectRatioAttribute|preserveAspectRatio]] attribute from the embedded SVG
 will therefore not usually have any effect.
 The exception is if the aspect ratio of that image
 is determined from absolute values for the {{width}} and {{height}} attributes
-which <em>do not</em> match its {{viewBox}} aspect ratio.
+which <em>do not</em> match its [[#ViewBoxAttribute|viewBox]] aspect ratio.
 This is an unusual situation that authors are advised to avoid, for many reasons.
 
 
@@ -248,7 +248,7 @@ elements within an SVG file.
     </tr>
     <tr>
       <th>Resolution:</th>
-      <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-45-13">We will have a method for <span class="element-name">image</span> to select a part of an image to display, maybe by allowing <span class="attr-name">$1</span> on it.</a></td>
+      <td><a href="http://www.w3.org/2011/10/27-svg-irc#T18-45-13">We will have a method for <span class="element-name">image</span> to select a part of an image to display, maybe by allowing <span class="attr-name">viewBox</span> on it.</a></td>
     </tr>
     <tr>
       <th>Purpose:</th>
@@ -273,7 +273,7 @@ elements within an SVG file.
     </tr>
     <tr>
       <th>Purpose:</th>
-      <td>To align with the CSS way of specifying image fitting that {{preserveAspectRatio}} provides.</td>
+      <td>To align with the CSS way of specifying image fitting that [[#PreserveAspectRatioAttribute|preserveAspectRatio]] provides.</td>
     </tr>
     <tr>
       <th>Owner:</th>
@@ -357,8 +357,9 @@ elements within an SVG file.
   preventing infinite recursion.
 
 
-<pre class=include-raw>
+<pre class=include-code>
 path: images/embedded/recursive-image.svg
+highlight: xml
 </pre>
 <!--
 @@fix
@@ -471,9 +472,10 @@ At this time, such a capability is not a requirement.
 
 
 
-<p>An [=SVGImageElement=] object represents an {{image}} element in the DOM.
+<p>An [[#InterfaceSVGImageElement|SVGImageElement]] object represents an {{image}} element in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGImageElement</b> : <a>SVGGraphicsElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__x">x</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGImageElement__y">y</a>;
@@ -483,7 +485,8 @@ interface <b>SVGImageElement</b> : <a>SVGGraphicsElement</a> {
   attribute DOMString? <a href="embedded.html#__svg__SVGImageElement__crossOrigin">crossOrigin</a>;
 };
 
-<a>SVGImageElement</a> includes <a>SVGURIReference</a>;</pre>
+<a>SVGImageElement</a> includes <a>SVGURIReference</a>;
+</pre>
 
 <p>The
 <b id="__svg__SVGImageElement__x">x</b>,
@@ -495,7 +498,7 @@ interface <b>SVGImageElement</b> : <a>SVGGraphicsElement</a> {
 presentation attributes, respectively.
 
 <p>The <b id="__svg__SVGImageElement__preserveAspectRatio">preserveAspectRatio</b>
-IDL attribute [=reflects=] the {{preserveAspectRatio}} content attribute.
+IDL attribute [=reflects=] the [[#PreserveAspectRatioAttribute|preserveAspectRatio]] content attribute.
 
 <p>The <b id="__svg__SVGImageElement__crossOrigin">crossOrigin</b> IDL attribute
 [=reflects=] the {{crossorigin}} content attribute.
@@ -506,16 +509,18 @@ IDL attribute [=reflects=] the {{preserveAspectRatio}} content attribute.
 
 
 
-<p>An [=SVGForeignObjectElement=] object represents a <{foreignObject}>
+<p>An [[#InterfaceSVGForeignObjectElement|SVGForeignObjectElement]] object represents a <{foreignObject}>
 in the DOM.
 
-<pre class="idl">[<a>Exposed</a>=Window]
+<pre class="idl">
+[<a>Exposed</a>=Window]
 interface <b>SVGForeignObjectElement</b> : <a>SVGGraphicsElement</a> {
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGForeignObjectElement__x">x</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGForeignObjectElement__y">y</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGForeignObjectElement__width">width</a>;
   [<a>SameObject</a>] readonly attribute <a>SVGAnimatedLength</a> <a href="embedded.html#__svg__SVGForeignObjectElement__height">height</a>;
-};</pre>
+};
+</pre>
 
 <p>The
 <b id="__svg__SVGForeignObjectElement__x">x</b>,

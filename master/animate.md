@@ -29,7 +29,7 @@ SVG content can be animated in the following ways:
 
   <li>Using the [[#SVGDOMOverview|SVG DOM]].
   The SVG DOM is defined as an extension of the DOM4 specification
-  [<a href="refs.html#ref-dom">dom</a>].
+  [[DOM]].
   Every attribute and style sheet setting is
   accessible to scripting, and SVG offers a set of additional
   DOM interfaces to support efficient animation via scripting.
