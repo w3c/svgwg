@@ -1051,7 +1051,113 @@ myElement.addEventListener("click", myAction1, false)
   </div>
 
 
-  @@elementsummary script@@
+    <div class="element-summary">
+      <div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element"
+               data-export=""
+               id="interact-elementdef-script">script</dfn>’</span></div>
+      <dl>
+        <dt>Categories:</dt>
+        <dd><a href="#render-TermNeverRenderedElement">Never-rendered element</a>, <a
+             href="#struct-TermStructurallyExternalElement">structurally external element</a></dd>
+        <dt>Content model:</dt>
+        <dd>Character data.</dd>
+        <dt>Attributes:</dt>
+        <dd>
+          <ul class="no-bullets">
+            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
+                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+            <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
+                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
+                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
+                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+            </li>
+            <li><a href="#linking-XLinkRefAttrs">deprecated xlink attributes</a><span class="expanding"> — <span
+                      class="attr-name">‘<a href="#linking-XLinkHrefAttribute"><span>xlink:href</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="#linking-XLinkTitleAttribute"><span>xlink:title</span></a>’</span></span></li>
+            <li><span class="attr-name">‘<a href="#interact-ScriptElementTypeAttribute"><span>type</span></a>’</span>
+            </li>
+            <li><span class="attr-name">‘<a href="#interact-ScriptElementHrefAttribute"><span>href</span></a>’</span>
+            </li>
+            <li><span class="attr-name">‘<a
+                   href="#interact-ScriptElementCrossoriginAttribute"><span>crossorigin</span></a>’</span></li>
+          </ul>
+        </dd>
+        <dt>DOM Interfaces:</dt>
+        <dd>
+          <ul class="no-bullets">
+            <li><a class="idlinterface"
+                 href="#interact-InterfaceSVGScriptElement">SVGScriptElement</a></li>
+          </ul>
+        </dd>
+      </dl>
+    </div>
 
   <p><em>Attribute definitions:</em>
 

@@ -68,7 +68,253 @@ Note: Content embedded with {{image}} is compatible with <a href="https://www.w3
 
 
 
-@@elementsummary image@@
+    <div class="element-summary">
+      <div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element"
+               data-export=""
+               id="embedded-elementdef-image">image</dfn>’</span></div>
+      <dl>
+        <dt>Categories:</dt>
+        <dd><a href="#struct-TermGraphicsElement">Graphics element</a>, <a
+             href="#struct-TermGraphicsReferencingElement">graphics referencing element</a>, <a
+             href="#render-TermRenderableElement">renderable element</a>, <a
+             href="#struct-TermStructurallyExternalElement">structurally external element</a></dd>
+        <dt>Content model:</dt>
+        <dd>Any number of the following elements, in any order:<ul class="no-bullets">
+            <li><a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a><span
+                    class="expanding"> — <span class="element-name">‘<a
+                     href="https://svgwg.org/specs/animations/#AnimateElement"><span>animate</span></a>’</span>, <span
+                      class="element-name">‘<a
+                     href="https://svgwg.org/specs/animations/#AnimateMotionElement"><span>animateMotion</span></a>’</span>,
+                <span class="element-name">‘<a
+                     href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>,
+                <span class="element-name">‘<a
+                     href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li>
+            <li><a href="#struct-TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span
+                      class="element-name">‘<a href="#struct-DescElement"><span>desc</span></a>’</span>, <span
+                      class="element-name">‘<a href="#struct-TitleElement"><span>title</span></a>’</span>, <span
+                      class="element-name">‘<a href="#struct-MetadataElement"><span>metadata</span></a>’</span></span>
+            </li>
+          </ul><span class="element-name"><a
+               href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span
+                class="element-name"><a
+               href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span
+                class="element-name"><a href="#interact-ScriptElement"><span>script</span></a></span>, <span
+                class="element-name"><a href="#styling-StyleElement"><span>style</span></a></span></dd>
+        <dt>Attributes:</dt>
+        <dd>
+          <ul class="no-bullets">
+            <li><a href="#struct-TermARIAAttribute">aria attributes</a><span class="expanding"> — <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-atomic"><span>aria-atomic</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-autocomplete"><span>aria-autocomplete</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-busy"><span>aria-busy</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-checked"><span>aria-checked</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-colcount"><span>aria-colcount</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-colindex"><span>aria-colindex</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-colspan"><span>aria-colspan</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-controls"><span>aria-controls</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-current"><span>aria-current</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-describedby"><span>aria-describedby</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-details"><span>aria-details</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-disabled"><span>aria-disabled</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-dropeffect"><span>aria-dropeffect</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-errormessage"><span>aria-errormessage</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-expanded"><span>aria-expanded</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-flowto"><span>aria-flowto</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-grabbed"><span>aria-grabbed</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-haspopup"><span>aria-haspopup</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-hidden"><span>aria-hidden</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-invalid"><span>aria-invalid</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-keyshortcuts"><span>aria-keyshortcuts</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-label"><span>aria-label</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-labelledby"><span>aria-labelledby</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-level"><span>aria-level</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-live"><span>aria-live</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-modal"><span>aria-modal</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-multiline"><span>aria-multiline</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-multiselectable"><span>aria-multiselectable</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-orientation"><span>aria-orientation</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-owns"><span>aria-owns</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-placeholder"><span>aria-placeholder</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-posinset"><span>aria-posinset</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-pressed"><span>aria-pressed</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-readonly"><span>aria-readonly</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-relevant"><span>aria-relevant</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-required"><span>aria-required</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-roledescription"><span>aria-roledescription</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowcount"><span>aria-rowcount</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowindex"><span>aria-rowindex</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowspan"><span>aria-rowspan</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-selected"><span>aria-selected</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-setsize"><span>aria-setsize</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-sort"><span>aria-sort</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuemax"><span>aria-valuemax</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuemin"><span>aria-valuemin</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
+                <span class="attr-name">‘<a href="#struct-RoleAttribute"><span>role</span></a>’</span></span></li>
+            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
+                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+            <li><a href="#struct-TermConditionalProcessingAttribute">conditional processing attributes</a><span
+                    class="expanding"> — <span class="attr-name">‘<a
+                     href="#struct-RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="#struct-SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+            <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
+                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
+                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
+                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+            </li>
+            <li><a href="#linking-XLinkRefAttrs">deprecated xlink attributes</a><span class="expanding"> — <span
+                      class="attr-name">‘<a href="#linking-XLinkHrefAttribute"><span>xlink:href</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="#linking-XLinkTitleAttribute"><span>xlink:title</span></a>’</span></span></li>
+            <li><a href="#styling-TermPresentationAttribute">presentation attributes</a><span class="expanding"> —
+              </span></li>
+            <li><span class="attr-name">‘<a
+                   href="#coords-PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span></li>
+            <li><span class="attr-name">‘<a href="#embedded-ImageElementHrefAttribute"><span>href</span></a>’</span>
+            </li>
+            <li><span class="attr-name">‘<a
+                   href="#embedded-ImageElementCrossoriginAttribute"><span>crossorigin</span></a>’</span></li>
+          </ul>
+        </dd>
+        <dt>Geometry properties:</dt>
+        <dd>
+          <ul class="no-bullets">
+            <li><a class="property"
+                 href="#geometry-XProperty">x</a></li>
+            <li><a class="property"
+                 href="#geometry-YProperty">y</a></li>
+            <li><a class="property"
+                 href="#geometry-Sizing">width</a></li>
+            <li><a class="property"
+                 href="#geometry-Sizing">height</a></li>
+          </ul>
+        </dd>
+        <dt>DOM Interfaces:</dt>
+        <dd>
+          <ul class="no-bullets">
+            <li><a class="idlinterface"
+                 href="#embedded-InterfaceSVGImageElement">SVGImageElement</a></li>
+          </ul>
+        </dd>
+      </dl>
+    </div>
 
 <p>The {{image}} element
 indicates that the contents of a complete file are to be
@@ -371,7 +617,222 @@ path: images/embedded/recursive-image.svg
 
 <h3 id="ForeignObjectElement">The <span class="element-name">foreignObject</span> element</h3>
 
-@@elementsummary foreignObject@@
+    <div class="element-summary">
+      <div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element"
+               data-export=""
+               id="embedded-elementdef-foreignObject">foreignObject</dfn>’</span></div>
+      <dl>
+        <dt>Categories:</dt>
+        <dd><a href="#struct-TermGraphicsElement">Graphics element</a>, <a
+             href="#render-TermRenderableElement">renderable element</a>, <a
+             href="#struct-TermStructurallyExternalElement">structurally external element</a></dd>
+        <dt>Content model:</dt>
+        <dd>Any elements or character data.</dd>
+        <dt>Attributes:</dt>
+        <dd>
+          <ul class="no-bullets">
+            <li><a href="#struct-TermARIAAttribute">aria attributes</a><span class="expanding"> — <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-atomic"><span>aria-atomic</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-autocomplete"><span>aria-autocomplete</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-busy"><span>aria-busy</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-checked"><span>aria-checked</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-colcount"><span>aria-colcount</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-colindex"><span>aria-colindex</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-colspan"><span>aria-colspan</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-controls"><span>aria-controls</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-current"><span>aria-current</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-describedby"><span>aria-describedby</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-details"><span>aria-details</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-disabled"><span>aria-disabled</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-dropeffect"><span>aria-dropeffect</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-errormessage"><span>aria-errormessage</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-expanded"><span>aria-expanded</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-flowto"><span>aria-flowto</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-grabbed"><span>aria-grabbed</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-haspopup"><span>aria-haspopup</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-hidden"><span>aria-hidden</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-invalid"><span>aria-invalid</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-keyshortcuts"><span>aria-keyshortcuts</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-label"><span>aria-label</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-labelledby"><span>aria-labelledby</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-level"><span>aria-level</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-live"><span>aria-live</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-modal"><span>aria-modal</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-multiline"><span>aria-multiline</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-multiselectable"><span>aria-multiselectable</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-orientation"><span>aria-orientation</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-owns"><span>aria-owns</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-placeholder"><span>aria-placeholder</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-posinset"><span>aria-posinset</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-pressed"><span>aria-pressed</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-readonly"><span>aria-readonly</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-relevant"><span>aria-relevant</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-required"><span>aria-required</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-roledescription"><span>aria-roledescription</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowcount"><span>aria-rowcount</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowindex"><span>aria-rowindex</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowspan"><span>aria-rowspan</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-selected"><span>aria-selected</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-setsize"><span>aria-setsize</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-sort"><span>aria-sort</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuemax"><span>aria-valuemax</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuemin"><span>aria-valuemin</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
+                <span class="attr-name">‘<a href="#struct-RoleAttribute"><span>role</span></a>’</span></span></li>
+            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
+                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+            <li><a href="#struct-TermConditionalProcessingAttribute">conditional processing attributes</a><span
+                    class="expanding"> — <span class="attr-name">‘<a
+                     href="#struct-RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="#struct-SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+            <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
+                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
+                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
+                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
+                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
+                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+            </li>
+            <li><a href="#styling-TermPresentationAttribute">presentation attributes</a><span class="expanding"> —
+              </span></li>
+          </ul>
+        </dd>
+        <dt>Geometry properties:</dt>
+        <dd>
+          <ul class="no-bullets">
+            <li><a class="property"
+                 href="#geometry-XProperty">x</a></li>
+            <li><a class="property"
+                 href="#geometry-YProperty">y</a></li>
+            <li><a class="property"
+                 href="#geometry-Sizing">width</a></li>
+            <li><a class="property"
+                 href="#geometry-Sizing">height</a></li>
+          </ul>
+        </dd>
+        <dt>DOM Interfaces:</dt>
+        <dd>
+          <ul class="no-bullets">
+            <li><a class="idlinterface"
+                 href="#embedded-InterfaceSVGForeignObjectElement">SVGForeignObjectElement</a></li>
+          </ul>
+        </dd>
+      </dl>
+    </div>
 
 <p>SVG is designed to be compatible with other XML languages
 for describing and rendering other types of content.
