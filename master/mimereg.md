@@ -138,14 +138,14 @@ Additional information:</dt>
     <dd></dd>
     <dt>File extension(s):</dt>
      <dd>svg
-     <p>Note that the extension 'svgz' is used as an alias for 'svg.gz'
+     <p>Note that the extension <span class="attr-value">svgz</span> is used as an alias for 'svg.gz'
        <cite>[[rfc1952]]</cite>,
 		<em>i.e.</em> octet streams of type image/svg+xml, subsequently
         compressed with gzip.</dd>
      <dt>Macintosh file type code(s):</dt>
      <dd>"svg "  (all lowercase, with a space character as the
      fourth letter).
-     <p>Note that the Macintosh file type code 'svgz' (all lowercase) is used as an alias for GZIP
+     <p>Note that the Macintosh file type code <span class="attr-value">svgz</span> (all lowercase) is used as an alias for GZIP
         <cite>[[rfc1952]]</cite> compressed "svg ", <em>i.e.</em>
          octet streams of type image/svg+xml, subsequently compressed with gzip.</dd>
  <dt>Macintosh Universal Type Identifier code:  </dt>

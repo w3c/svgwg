@@ -1,7 +1,7 @@
-<h2>Painting: Filling, Stroking and Marker Symbols</h2>
+<h2 id="chap-painting">Painting: Filling, Stroking and Marker Symbols</h2>
 
 <div class="ready-for-wider-review">
-<h3 id="Introduction">Introduction</h3>
+<h3 id="painting-intro">Introduction</h3>
 
 <h4 id="painting-Definitions">Definitions</h4>
 <dl class="definitions">
@@ -18,7 +18,7 @@
 
 </dl>
 
-<p>Graphical elements that define a shape – {{path}} elements, [=basic shapes=],
+<p>Graphical elements that define a shape – <{path}> elements, [=basic shapes=],
 and [=text content elements=] – are rendered by being <strong>filled</strong>,
 which is painting the interior of the object, and <strong>stroked</strong>, which is
 painting along the outline of the object.  Filling and stroking are both
@@ -33,15 +33,15 @@ different paints that the fill and stroke of a graphical element can be painted 
 </ul>
 
 <p>The paint to use for filling and stroking an element is specified using the
-{{fill}} and {{stroke}} properties.  The following section describes
+'fill' and 'stroke' properties.  The following section describes
 the different values that can be used for these properties.
 
-<p>Other properties, such as 'fill-opacity' and {{stroke-width}},
+<p>Other properties, such as 'fill-opacity' and 'stroke-width',
 also have an effect on the way fill and stroke paint is applied to the
 canvas.  The <a href='#FillProperties'>Fill properties</a> and <a href='#StrokeProperties'>Stroke properties</a>
 sections below describe these properties.
 
-<p>Some graphics elements – {{path}} elements and <a>basic
+<p>Some graphics elements – <{path}> elements and <a>basic
 shapes</a> – can also have <strong>marker symbols</strong>
 drawn at their vertices or at other positions along the path that
 they describe.  The <a href='#Markers'>Markers</a> section below describes
@@ -53,7 +53,7 @@ how markers can be defined and used.
 <!--
 <p>SVG uses the general notion of a <strong>paint server</strong>. Paint
 servers are specified using a [=URL Reference=]
-on a {{fill}} or {{stroke}} property.
+on a 'fill' or 'stroke' property.
 <a href="pservers.html">Gradients and patterns</a> are just specific types of
 paint servers.
 -->
@@ -108,7 +108,7 @@ paint servers.
   </table>
 </div>
 
-<p>The {{fill}} and {{stroke}} properties, defined below, are used to
+<p>The 'fill' and 'stroke' properties, defined below, are used to
 specify the <dfn id="TermPaint" data-dfn-type="dfn" data-export="">paint</dfn> used to render the interior of and the
 stroke around shapes and text. A paint specification describes a way of putting
 color values on to the canvas and is composed of one or more paint layers.
@@ -132,7 +132,7 @@ Four types of paints within these paint layers are supported:
   <dd>No paint is applied in this layer.</dd>
 
   <dt><a>&lt;url&gt;</a> [none | <a>&lt;color&gt;</a>]?</dt>
-  <dd>A URL reference to a <dfn dfn export>paint server element</dfn>,
+  <dd>A URL reference to a <dfn id="TermPaintServerElement" dfn export>paint server element</dfn>,
   which is an element that defines a <a href="pservers.html">paint server</a>:
   @@elementcategory paint server@@, optionally followed by a fall-back
   value that is used if the paint server reference cannot be resolved.</dd>
@@ -140,11 +140,11 @@ Four types of paints within these paint layers are supported:
   <dt><a>&lt;color&gt;</a></dt>
   <dd>A solid color paint.</dd>
 
-  <dt>context-fill</dt>
-  <dd>Use the paint value of {{fill}} from a [=context element=].</dd>
+  <dt><dfn id="painting-context-paint" data-dfn-type="dfn" data-export="">context-fill</dfn></dt>
+  <dd>Use the paint value of 'fill' from a [=context element=].</dd>
 
-  <dt>context-stroke</dt>
-  <dd>Use the paint value of {{stroke}} from a [=context element=].</dd>
+  <dt><dfn id="painting-context-stroke" data-dfn-type="dfn" data-export="">context-stroke</dfn></dt>
+  <dd>Use the paint value of 'stroke' from a [=context element=].</dd>
 </dl>
 
 <p>A <a>&lt;paint&gt;</a> allows a paint server reference, to be optionally followed
@@ -155,7 +155,7 @@ server reference in the layer is invalid (due to pointing to an element that
 does not exist or which is not a valid paint server).
 
 Note: Note that this is slightly different from CSS background syntax, where
-a background image and color specified in the final layer of a {{background}}
+a background image and color specified in the final layer of a 'background'
 value will result in both the image and color being rendered.
 
 <p>If a paint server reference in a <a>&lt;paint&gt;</a> is invalid, and no
@@ -171,7 +171,7 @@ color specified.
   </xmp>
   <div class="figure">
     <img
-       alt="An example with a fallback solid paint fill."
+no-autosize alt="An example with a fallback solid paint fill."
        src="images/painting/fallback_paint.svg">
     <p class="caption">The left rectangle shows the expected fill if MyHatch is defined.
     The right rectangle shows the expected fill if MyHatch is missing.
@@ -188,15 +188,15 @@ the <a href="https://www.w3.org/TR/css-color-3/#svg-color">extended color keywor
 the <span class='prop-value'>currentColor</span> value.
 
 <p id="context-paint">The <span class='prop-value'>context-fill</span> and <span class='prop-value'>context-stroke</span>
-values are a reference to the paint layers generated for the {{fill}} or {{stroke}}
+values are a reference to the paint layers generated for the 'fill' or 'stroke'
 property, respectively, of the <dfn id="TermContextElement" data-dfn-type="dfn" data-export="">context element</dfn>
 of the element being painted.  The context element of an element is defined as follows:
 
 <ul>
-  <li>If the element is within a {{marker element}}, and
+  <li>If the element is within a <{marker}> element, and
   is being rendered as part of that marker due to being referenced
   via a [=marker property=], then the context element
-  is the element referencing that {{marker element}}.</li>
+  is the element referencing that <{marker}> element.</li>
   <li>If the element is within a sub-tree that is instantiated
   with a <{use}> element, then the context element is
   that <{use}> element.</li>
@@ -216,7 +216,7 @@ should be continuous from the main shape to the markers,
 or from one element within a [=use-element shadow tree=] to another.
 
 
-<p>If the referenced value of {{fill}} or {{stroke}} is a
+<p>If the referenced value of 'fill' or 'stroke' is a
 <span class='prop-value'>context-fill</span> and <span class='prop-value'>context-stroke</span>
 value, then those contextual referencing is recursive.
 
@@ -231,8 +231,8 @@ path: images/painting/marker-context.svg2.svg
        alt="An example of the content-stroke keyword used in a marker"
        src="images/painting/marker-context.svg11.svg" height="200">
     <p class="caption">The marker is defined using a shape whose
-    {{stroke}} is set to <span class='prop-value'>context-stroke</span>.
-    This causes the marker to take on the color of each {{path}}
+    'stroke' is set to <span class='prop-value'>context-stroke</span>.
+    This causes the marker to take on the color of each <{path}>
     element that uses the marker.
   </div>
 </div>
@@ -241,18 +241,18 @@ path: images/painting/marker-context.svg2.svg
 <h3 id="ColorProperty">The effect of the <span class="property">color</span> property</h3>
 
 Note: See the CSS Color Module Level 3 specification for the
-definition of {{color}}.
+definition of 'color'.
 [<a href="refs.html#ref-css-color-3">css-color-3</a>]
 
-<p>The {{color}} property is used to provide a potential indirect value,
-<span class="prop-value">currentColor</span>, for the {{fill}},
-{{stroke}}, {{stop-color}}, {{flood-color}} and
-{{lighting-color}} properties.  The property has no other effect
+<p>The 'color' property is used to provide a potential indirect value,
+<span class="prop-value">currentColor</span>, for the 'fill',
+'stroke', 'stop-color', 'flood-color' and
+'lighting-color' properties.  The property has no other effect
 on SVG elements.
 
 <div class="example">
   <p>The following example shows how the inherited value of the
-  {{color}} property from an HTML document can be used to
+  'color' property from an HTML document can be used to
   set the color of SVG text in an inline SVG fragment.
 
   <xmp>
@@ -283,7 +283,7 @@ svg { border: 1px solid #888; background-color: #eee }
       </svg>
     </div>
     <p class="caption">The text and arrow in the SVG fragment are filled
-    with the same color as the inherited {{color}} property.
+    with the same color as the inherited 'color' property.
   </div>
 </div>
 
@@ -331,7 +331,7 @@ svg { border: 1px solid #888; background-color: #eee }
   </tr>
 </table>
 
-<p>The {{fill}} property paints the interior of the given graphical
+<p>The 'fill' property paints the interior of the given graphical
 element. The area to be painted consists of any areas inside the outline
 of the shape. To determine the inside of the shape, all subpaths are
 considered, and the interior is determined according to the rules
@@ -343,8 +343,8 @@ be painted.
 operation as if an additional "closepath" command were added to the
 path to connect the last point of the subpath with the first point of
 the subpath. Thus, fill operations apply to both [=open subpaths=] within
-{{path}} elements (i.e., subpaths without a closepath command) and
-{{polyline}} elements.
+<{path}> elements (i.e., subpaths without a closepath command) and
+<{polyline}> elements.
 
 <h4 id="WindingRule">Winding rule: the <span class="property">fill-rule</span> property</h4>
 
@@ -414,7 +414,7 @@ inside of a shape is determined:
     rule:
 
     <div class="figure">
-      <img class="bordered" src="images/painting/fillrule-nonzero.svg" alt="Image showing nonzero fill rule">
+      <img no-autosize class="bordered" src="images/painting/fillrule-nonzero.svg" alt="Image showing nonzero fill rule">
       <p class="caption">The effect of a nonzero fill rule on paths with self-intersections
       and enclosed subpaths.
     </div>
@@ -431,7 +431,7 @@ inside of a shape is determined:
     rule:
 
     <div class="figure">
-      <img class="bordered" src="images/painting/fillrule-evenodd.svg" alt="Image showing evenodd fill rule">
+      <img no-autosize class="bordered" src="images/painting/fillrule-evenodd.svg" alt="Image showing evenodd fill rule">
       <p class="caption">The effect of an evenodd fill rule on paths with self-intersections
       and enclosed subpaths.
     </div>
@@ -452,7 +452,7 @@ intersections.
   </tr>
   <tr>
     <th>Value:</th>
-    <td>&lt;‘{{opacity}}’&gt;</td>
+    <td>&lt;‘'opacity'’&gt;</td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -502,7 +502,7 @@ to paint the fill the current object. (See
   </dd>
 </dl>
 
-Note: See also the {{opacity}} property, which
+Note: See also the 'opacity' property, which
 specifies group opacity.
 
 <h3 id="StrokeProperties">Stroke properties</h3>
@@ -542,7 +542,7 @@ path segments.
 <p>In all cases, all stroking properties which are affected by
 directionality, such as those having to do with dash patterns, must be
 rendered such that the stroke operation starts at the same point at
-which the graphics element starts. In particular, for {{path}}
+which the graphics element starts. In particular, for <{path}>
 elements, the start of the path is the first point of the initial
 "moveto" command.
 
@@ -556,7 +556,7 @@ algorithms.
 gradient or a pattern, the stroke operation must be identical to the
 result that would have occurred if the geometric shape defined by the
 geometry of the current graphics element and its associated stroking
-properties were converted to an equivalent {{path}} element and
+properties were converted to an equivalent <{path}> element and
 then filled using the given paint server.
 
 <h4 id="SpecifyingStrokePaint">Specifying stroke paint: the <span class="property">stroke</span> property</h4>
@@ -601,16 +601,16 @@ then filled using the given paint server.
   </tr>
 </table>
 
-<p>The {{stroke}} property paints along the outline of the given
+<p>The 'stroke' property paints along the outline of the given
 graphical element.
 
-Note: Note that when stroking a {{path}} element,
+Note: Note that when stroking a <{path}> element,
 any subpath consisting of a <a href="paths.html#PathDataMovetoCommands">moveto</a>
 but no following line drawing command will not be stroked.
 Any other type of zero-length subpath, such as
 <span class="attr-value">'M 10,10 L 10,10'</span>
 or <span class="attr-value">'M 30,30 Z'</span>
-will also not be stroked if the {{stroke-linecap}} property has a value of
+will also not be stroked if the 'stroke-linecap' property has a value of
 <span class="prop-value">butt</span>.  See the definition of
 the [=stroke shape=] below for the details of computing
 the stroke of a path.
@@ -649,7 +649,7 @@ the stroke of a path.
   </tr>
   <tr>
     <th>Value:</th>
-    <td>&lt;‘{{opacity}}’&gt;</td>
+    <td>&lt;‘'opacity'’&gt;</td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -700,7 +700,7 @@ As with 'fill-opacity'.
   </dd>
 </dl>
 
-Note: See also the {{opacity}} property, which specifies
+Note: See also the 'opacity' property, which specifies
 group opacity.
 
 <h4 id="StrokeWidth">Stroke width: the <span class="property">stroke-width</span> property</h4>
@@ -789,7 +789,7 @@ is [=invalid=]. A <<number>> value represents a value in [=user units=].
   </tr>
 </table>
 
-<p>{{stroke-linecap}} specifies the shape to be used at the end of
+<p>'stroke-linecap' specifies the shape to be used at the end of
 [=open subpaths=] when they are stroked, <span class="ready-for-wider-review">
 and the shape to be drawn for zero length
 subpaths whether they are open or closed.</span>  The possible values are:
@@ -826,7 +826,7 @@ subpaths whether they are open or closed.</span>  The possible values are:
 </dl>
 
 <div class="figure">
-  <img class="bordered" src="images/painting/linecap.svg"
+  <img no-autosize class="bordered" src="images/painting/linecap.svg"
        alt="Image showing three paths, each with a different line cap.">
   <p class="caption">The three types of line caps.
 </div>
@@ -838,7 +838,7 @@ description of the shape a line cap will have.
 
 <p class="issue" data-issue="592">
     The values <span class="prop-value">miter-clip</span> and <span class="prop-value">arcs</span>
-    of the {{stroke-linejoin}} property are at risk. There are no known browser implementations.
+    of the 'stroke-linejoin' property are at risk. There are no known browser implementations.
     See issue <a href="https://github.com/w3c/svgwg/issues/592">GitHub issue #592</a>.
 
 <table class="propdef def">
@@ -880,7 +880,7 @@ description of the shape a line cap will have.
   </tr>
 </table>
 
-<p>{{stroke-linejoin}} specifies the shape to be used at the
+<p>'stroke-linejoin' specifies the shape to be used at the
 corners of paths or basic shapes when they are stroked. For further details see
 the <a href="paths.html#PathElementImplementationNotes">path implementation notes</a>.
 
@@ -888,14 +888,14 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
   <dt><span class='prop-value'>miter</span></dt>
   <dd>This value indicates that a sharp corner is to be used to join path segments.
   The corner is formed by extending the outer edges of the stroke at the tangents
-  of the path segments until they intersect. If the {{stroke-miterlimit}}
+  of the path segments until they intersect. If the 'stroke-miterlimit'
   is exceeded, the line join falls back to <span class='prop-value'>bevel</span>
   (see below).</dd>
 
   <dt><span class='prop-value'>miter-clip</span></dt>
   <dd>This value is the same as <span class='prop-value'>miter</span> but if
-    the {{stroke-miterlimit}} is exceeded, the miter is clipped at a
-    distance equal to half the {{stroke-miterlimit}} value multiplied
+    the 'stroke-miterlimit' is exceeded, the miter is clipped at a
+    distance equal to half the 'stroke-miterlimit' value multiplied
     by the stroke width from the intersection of the path segments
     (see below).</dd>
 
@@ -925,19 +925,19 @@ Note:
 
 
 <p class="annotation">
-  Adding 'arcs' line join was resolved at the
+  Adding <span class="attr-value">arcs</span> line join was resolved at the
   <a href="http://www.w3.org/2012/09/19-svg-minutes.html#item08">Rigi
   Kaltbad group meeting</a>.
 
 
 <p class="annotation">
-  Adding 'miter-clip' line join was resolved at the
+  Adding <span class="attr-value">miter-clip</span> line join was resolved at the
   <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item03">Sydney
   (2015) group meeting</a>.
 
 
 <div class="figure">
-  <img class="bordered" src="images/painting/linejoin-four.svg"
+  <img no-autosize class="bordered" src="images/painting/linejoin-four.svg"
        alt="Image showing four paths, each with a different line join.">
   <p class="caption">Four types of line joins.
 </div>
@@ -986,9 +986,9 @@ Note:
   <span class='prop-value'>miter</span>,
   <span class='prop-value'>miter-clip</span>, or
   <span class='prop-value'>arcs</span> has been specified for
-  {{stroke-linejoin}}, it is possible for the join to extend
+  'stroke-linejoin', it is possible for the join to extend
   far beyond the thickness of the line stroking the path. The
-  {{stroke-miterlimit}} imposes a limit on the extent of the
+  'stroke-miterlimit' imposes a limit on the extent of the
   line join.
 
 
@@ -999,8 +999,8 @@ Note:
     <span class='prop-value'>miter</span>,
     <span class='prop-value'>miter-clip</span>, or
     <span class='prop-value'>arcs</span> line join as a multiple of
-    the {{stroke-width}} value.
-    A negative value for {{stroke-miterlimit}} is [=invalid=] and must be [=ignored=].
+    the 'stroke-width' value.
+    A negative value for 'stroke-miterlimit' is [=invalid=] and must be [=ignored=].
   </dd>
 </dl>
 
@@ -1051,11 +1051,11 @@ Note:
     point of the
     <span class='prop-value'>miter-clip</span> and
     <span class='prop-value'>arcs</span> line joins is at a distance
-    or arc length equal to half the {{stroke-miterlimit}} times
+    or arc length equal to half the 'stroke-miterlimit' times
     the stroke width from the point the two path segments join.
   
   <div class="figure">
-    <img class="bordered" src="images/painting/miter-limit-def.svg"
+    <img no-autosize class="bordered" src="images/painting/miter-limit-def.svg"
 	 alt="Image showing the definition of the stroke miter length
 	      and consistency of clipping between different shaped
 	      path segments.">
@@ -1073,7 +1073,7 @@ Note:
 
 <p>
   If the miter length divided by the stroke width exceeds the
-  {{stroke-miterlimit}} then for the value:
+  'stroke-miterlimit' then for the value:
 
 <dl>
   <dt><span class='prop-value'>miter</span></dt>
@@ -1089,12 +1089,12 @@ Note:
 </dl>
 
 <div class="figure">
-  <img class="bordered" src="images/painting/miter-limit.svg"
+  <img no-autosize class="bordered" src="images/painting/miter-limit.svg"
        alt="Image showing resulting stroke when stroke miter limit is exceeded.">
   <p class="caption">
-    Effect on line join when {{stroke-miterlimit}} is
+    Effect on line join when 'stroke-miterlimit' is
     exceeded. The olive-green dashed lines shows the position of the
-    miter limit when the {{stroke-miterlimit}} value is 3. The
+    miter limit when the 'stroke-miterlimit' value is 3. The
     gray regions shows what the joins would look like without a miter
     limit.
   
@@ -1107,12 +1107,12 @@ Note:
   the point the two segments intersect and passes through the end
   point of the join. The line join is clipped, if necessary, by a line
   perpendicular to this arc at an arc length from the intersection
-  point equal to half the value of the {{stroke-miterlimit}} value
+  point equal to half the value of the 'stroke-miterlimit' value
   multiplied by the stroke width.
 
 
 <p class="annotation">
-  The effect of 'stroke-miterlimit' on an 'arcs' line join was resolved
+  The effect of 'stroke-miterlimit' on an <span class="attr-value">arcs</span> line join was resolved
   at <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item12">Sydney
   (2015) group meeting</a>.
 
@@ -1168,7 +1168,7 @@ Note:
 <p class="definition prod"><dfn id="DataTypeDasharray" data-dfn-type="type" data-export="">&lt;dasharray&gt;</dfn> =
 [ [ <<length-percentage>> | <<number>> ]+ ]#
 
-<p>The {{stroke-dasharray}} property controls
+<p>The 'stroke-dasharray' property controls
 the pattern of dashes and gaps used to form the shape of
 a path's stroke.
 
@@ -1201,17 +1201,17 @@ a path's stroke.
 </dl>
 
 <div class="figure">
-  <img class="bordered" src="images/painting/dashes.svg" alt="Image showing a thick, dashed stroke.">
+  <img no-autosize class="bordered" src="images/painting/dashes.svg" alt="Image showing a thick, dashed stroke.">
   <p class="caption">A dashed stroke.  The dashing pattern is <span class="prop-value">20,10</span>.
   The red line shows the actual path that is stroked.
 </div>
 
-<p>The <{path/pathLength}> attribute on a {{path}} element affects
-{{stroke-dasharray}}: each dash and gap length is interpreted relative
+<p>The <{path/pathLength}> attribute on a <{path}> element affects
+'stroke-dasharray': each dash and gap length is interpreted relative
 to the author's path length as specified by <{path/pathLength}>.
 
-<p id="interpolationDashPattern">{{stroke-dasharray}} values are [=not additive=]. For interpolation,
-{{stroke-dasharray}} values are combined as follows:
+<p id="interpolationDashPattern">'stroke-dasharray' values are [=not additive=]. For interpolation,
+'stroke-dasharray' values are combined as follows:
 <dl class="switch">
   <dt>If either <var>start</var> or <var>end</var> compute to <span class="prop-value">none</span> or are invalid</dt>
   <dd><var>start</var> or <var>end</var> are combined using the discrete animation type.</dd>
@@ -1221,7 +1221,7 @@ to the author's path length as specified by <{path/pathLength}>.
 </dl>
 
 <div class="example">
-The two {{stroke-dasharray}} value lists in the following example have different number
+The two 'stroke-dasharray' value lists in the following example have different number
 of elements:
 
 <pre><code>path {
@@ -1283,7 +1283,7 @@ After that, each item is then combined by computed value.
   </tr>
 </table>
 
-<p>The {{stroke-dashoffset}} property specifies the distance into the repeated
+<p>The 'stroke-dashoffset' property specifies the distance into the repeated
 dash pattern to start the stroke dashing at the beginning of the path.  If the
 value is negative, then the effect is the same as dash offset <var>d</var>:
 
@@ -1304,10 +1304,10 @@ value is negative, then the effect is the same as dash offset <var>d</var>:
   <pre id="math-dashoffset">d = s - (abs(stroke-dashoffset) mod s)</pre>
 </div>
 
-<p>where <var>s</var> is the sum of the dash array values.
+<p>where <var ignore=''>s</var> is the sum of the dash array values.
 
 <div class="figure">
-  <img class="bordered" src="images/painting/dashoffset.svg"
+  <img no-autosize class="bordered" src="images/painting/dashoffset.svg"
        alt="Image showing a thick, dashed stroke with a non-zero dash offset.">
   <p class="caption">A dashed stroke with a non-zero dash offset.  The dashing
   pattern is <span class="prop-value">20,10</span> and the dash offset is
@@ -1315,9 +1315,9 @@ value is negative, then the effect is the same as dash offset <var>d</var>:
   is stroked.
 </div>
 
-<p>Like {{stroke-dasharray}}, {{stroke-dashoffset}} is interpreted
+<p>Like 'stroke-dasharray', 'stroke-dashoffset' is interpreted
 relative to the author's path length as specified by the <{path/pathLength}>
-attribute on a {{path}} element.
+attribute on a <{path}> element.
 
 <div class="example">
   <p>The example below shows how a <{path/pathLength}> that is greatly
@@ -1329,13 +1329,13 @@ path: images/painting/dash-pathlength.svg
 </pre>
 
   <div class="figure">
-    <img src="images/painting/dash-pathlength.svg"
+    <img no-autosize src="images/painting/dash-pathlength.svg"
          alt="Image of three casino chips, each of which has a patterned border
               produced using stroke dashing.">
     <p class="caption">The four broad white dashes and the eight small circular
     dashes around each chip are placed relative to an author specified
     <{path/pathLength}> of <code class='attr-value'>80</code>, which
-    makes the desired {{stroke-dasharray}} and {{stroke-dashoffset}}
+    makes the desired 'stroke-dasharray' and 'stroke-dashoffset'
     values easy to compute.
   </div>
 </div>
@@ -1370,10 +1370,10 @@ description of positions along a path that dashes will be placed.
 
 <div class="ready-for-wider-review">
 <p>The <dfn id="TermStrokeShape" data-dfn-type="dfn" data-export="">stroke shape</dfn> of an element is the
-shape that is filled by the {{stroke}} property.  Since {{text}}
+shape that is filled by the 'stroke' property.  Since <{text}>
 elements can be rendered in multiple chunks, each chunk has its own
 [=stroke shape=].  The following algorithm describes the ideal stroke shape
-of a {{path}}, [=basic shape=] or individual {{text}} chunk is,
+of a <{path}>, [=basic shape=] or individual <{text}> chunk is,
 taking into account the stroking properties above. The ideal stroke shape
 described defines a best case implementation, but implementations are given some
 leeway to deviate from this description for performance reasons.
@@ -1404,22 +1404,22 @@ The ideal stroke shape is determined as follows:
 
 <ol class="algorithm">
   <li>Let <var>shape</var> be an empty shape.</li>
-  <li class="ready-for-wider-review">If {{stroke-width}} > 0, then:
+  <li class="ready-for-wider-review">If 'stroke-width' > 0, then:
     <ol>
       <li>Let <var>scale</var> be a scale factor for the dash pattern.  If we are
-      computing the stroke shape of a {{text}} chunk,
+      computing the stroke shape of a <{text}> chunk,
       or if the <{path/pathLength}> attribute is not present on the element,
       then <var>scale</var> is 1.  Otherwise, it is determined as follows:
         <ol>
           <li>Let <var>length</var> be the user agent's computed length of the
-          {{path}} or [=equivalent path=] for a [=basic shape=].</li>
+          <{path}> or [=equivalent path=] for a [=basic shape=].</li>
           <li>Let <var>authorlength</var> be the value of the <{path/pathLength}>
           attribute on the [=shape=].</li>
           <li><var>scale</var> is <var>authorlength</var> / <var>length</var>.</li>
         </ol>
       </li>
       <li>Let <var>path</var> be the [=equivalent path=] of the element (or the individual
-      chunk of a {{text}} element).</li>
+      chunk of a <{text}> element).</li>
       <li>For each subpath of <var>path</var>:
         <ol>
           <li>Let <var>positions</var> be the [=dash positions=] for the subpath.</li>
@@ -1430,7 +1430,7 @@ The ideal stroke shape is determined as follows:
               <li>Let <var>dash</var> be the shape that includes, for all distances
               between <var>start</var> and <var>end</var> along the subpath, all
               points that lie on the line perpendicular to the subpath at that
-              distance and which are within distance {{stroke-width}} of
+              distance and which are within distance 'stroke-width' of
               the point on the subpath at that position.</li>
 
               <li>Set <var>dash</var> to be the union of <var>dash</var> and the
@@ -1469,7 +1469,7 @@ The ideal stroke shape is determined as follows:
 </ol>
 
 <p>The <dfn id="TermDashPositions" data-dfn-type="dfn" data-export="">dash positions</dfn> for a given subpath of
-the [=equivalent path=] of a {{path}} or [=basic shape=] is a
+the [=equivalent path=] of a <{path}> or [=basic shape=] is a
 sequence of pairs of values, which represent the starting and ending distance
 along the subpath for each of the dashes that form the subpath's stroke.  It is
 determined as follows:
@@ -1477,7 +1477,7 @@ determined as follows:
 <ol class="algorithm">
   <li>Let <var>pathlength</var> be the length of the subpath.</li>
 
-  <li>Let <var>dashes</var> be the list of values of {{stroke-dasharray}}
+  <li>Let <var>dashes</var> be the list of values of 'stroke-dasharray'
   on the element, converted to user units, repeated if necessary so that it has
   an even number of elements; if the property has the value
   <span class="prop-value">none</span>, then the list has a single value 0.</li>
@@ -1490,7 +1490,7 @@ determined as follows:
 
   <li>Let <var>positions</var> be an empty sequence.</li>
 
-  <li>Let <var>offset</var> be the value of the {{stroke-dashoffset}}
+  <li>Let <var>offset</var> be the value of the 'stroke-dashoffset'
   property on the element.</li>
 
   <li>If <var>offset</var> is negative, then set <var>offset</var> to
@@ -1530,11 +1530,11 @@ determined as follows:
 <var>position</var> along a subpath are determined as follows:
 
 <ol class="algorithm">
-  <li>If {{stroke-linecap}} is <span class="prop-value">butt</span>, then return an empty shape.</li>
+  <li>If 'stroke-linecap' is <span class="prop-value">butt</span>, then return an empty shape.</li>
 
-  <li>Otherwise, if {{stroke-linecap}} is <span class="prop-value">round</span>, then:
+  <li>Otherwise, if 'stroke-linecap' is <span class="prop-value">round</span>, then:
     <ol>
-      <li>If this is a starting cap, then return a semicircle of diameter {{stroke-width}} positioned such that:
+      <li>If this is a starting cap, then return a semicircle of diameter 'stroke-width' positioned such that:
         <ul>
           <li class='ready-for-wider-review'>The subpath that the semicircle is relative to is the subpath starting
           at distance <var>position</var>.</li>
@@ -1544,7 +1544,7 @@ determined as follows:
           the subpath at distance <var>position</var>.</li>
         </ul>
       </li>
-      <li>Otherwise, this is an ending cap.  Return a semicircle of diameter {{stroke-width}} positioned such that:
+      <li>Otherwise, this is an ending cap.  Return a semicircle of diameter 'stroke-width' positioned such that:
         <ul>
           <li class='ready-for-wider-review'>The subpath that the semicircle is relative to is the subpath ending
           at distance <var>position</var>.</li>
@@ -1557,16 +1557,16 @@ determined as follows:
     </ol>
   </li>
 
-  <li>Otherwise, {{stroke-linecap}} is <span class="prop-value">square</span>:
+  <li>Otherwise, 'stroke-linecap' is <span class="prop-value">square</span>:
     <ol>
-      <li>If this is a starting cap, then return a rectangle with side lengths {{stroke-width}} and {{stroke-width}} / 2 positioned such that:
+      <li>If this is a starting cap, then return a rectangle with side lengths 'stroke-width' and 'stroke-width' / 2 positioned such that:
         <ul>
           <li>Its longer edges, <var>A</var> and <var>B</var>, are parallel to the line perpendicular to the subpath at distance <var>position</var> along it.</li>
           <li>The midpoint of <var>A</var> is at <var>start</var>.</li>
           <li>The direction from the midpoint of <var>B</var> to the midpoint of <var>A</var> is the same as the direction of the subpath at distance <var>position</var> along it.</li>
         </ul>
       </li>
-      <li>Otherwise, this is an ending cap.  Return a rectangle with side lengths {{stroke-width}} and {{stroke-width}} / 2 positioned such that:
+      <li>Otherwise, this is an ending cap.  Return a rectangle with side lengths 'stroke-width' and 'stroke-width' / 2 positioned such that:
         <ul>
           <li>Its longer edges, <var>A</var> and <var>B</var>, are parallel to the line perpendicular to the subpath at distance <var>position</var> along it.</li>
           <li>The midpoint of <var>A</var> is at <var>end</var>.</li>
@@ -1578,9 +1578,9 @@ determined as follows:
 </ol>
 
 <div class="figure">
-  <img class="bordered" src="images/painting/linecap-construction.svg"
+  <img no-autosize class="bordered" src="images/painting/linecap-construction.svg"
        alt="Image showing how to construct the three types of line caps">
-  <p class="caption">The three different {{stroke-linecap}} values used on
+  <p class="caption">The three different 'stroke-linecap' values used on
   paths with a single, non-zero length subpath.  The white line is the path
   itself and the thick gray area is the stroke.  On the top row, the green lines
   indicate the perpendicular to the tangent at the path endpoints and the pink
@@ -1604,11 +1604,11 @@ a subpath is determined as follows:
   <li>Let <var>B</var> be the line parallel to the tangent at the start of the following segment.</li>
 
   <li>Let <var>A<sub>left</sub></var> and <var>A<sub>right</sub></var> be lines
-  parallel to <var>A</var> at a distance of {{stroke-width}} / 2 to the
+  parallel to <var>A</var> at a distance of 'stroke-width' / 2 to the
   left and to the right of <var>A</var> relative to the subpath direction, respectively.</li>
 
   <li>Let <var>B<sub>left</sub></var> and <var>B<sub>right</sub></var> be lines
-  parallel to <var>B</var> at a distance of {{stroke-width}} / 2 to the
+  parallel to <var>B</var> at a distance of 'stroke-width' / 2 to the
   left and to the right of <var>B</var>, relative to the subpath direction, respectively.</li>
 
   <li>
@@ -1633,13 +1633,13 @@ a subpath is determined as follows:
   <li>Let <var>bevel</var> be the triangle formed from the three points
   <var>P</var>, <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub>.</li>
 
-  <li>If {{stroke-linejoin}} is <span class="prop-value">round</span>, then
+  <li>If 'stroke-linejoin' is <span class="prop-value">round</span>, then
   return the union of <var>bevel</var> and a circular sector of diameter
-  {{stroke-width}}, centered on <var>P</var>, and which has
+  'stroke-width', centered on <var>P</var>, and which has
   <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> as the two endpoints of
   the arc.</li>
 
-  <li>If {{stroke-linejoin}} is <span class="prop-value">arcs</span>,
+  <li>If 'stroke-linejoin' is <span class="prop-value">arcs</span>,
     then find the circles that are tangent to the stroke edges at
     <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> with the
     same curvature as the edges at those points (see below). If both
@@ -1662,7 +1662,7 @@ a subpath is determined as follows:
     and <var>P</var><sub>2</sub>.
 
     Next calculate the <em>miter limit</em> as defined in
-    the {{stroke-miterlimit}} section. Clip any part of the line
+    the 'stroke-miterlimit' section. Clip any part of the line
     join region that extends past the miter limit. Return the
     resulting region.
 
@@ -1670,7 +1670,7 @@ a subpath is determined as follows:
     transforms are applied.</li>
 
   <li>
-    If {{stroke-linejoin}} is <span class="prop-value">miter</span> or
+    If 'stroke-linejoin' is <span class="prop-value">miter</span> or
     <span class="prop-value">miter-clip</span> then the line join
     region is the union of <var>bevel</var> and the triangle formed
     from the three points <var>P</var><sub>1</sub>,
@@ -1679,12 +1679,12 @@ a subpath is determined as follows:
 
   <li>
     Let <var>θ</var> be the angle between <var>A</var> and <var>B</var>.
-    If 1 / sin(<var>θ</var> / 2) ≤ {{stroke-miterlimit}}, then return
+    If 1 / sin(<var>θ</var> / 2) ≤ 'stroke-miterlimit', then return
     the line join region.
   </li>
 
   <li>
-    If {{stroke-linejoin}} is <span class="prop-value">miter-clip</span>,
+    If 'stroke-linejoin' is <span class="prop-value">miter-clip</span>,
     then clip any part of the line join region that extends past the
     miter limit and return this region.
   </li>
@@ -1693,7 +1693,7 @@ a subpath is determined as follows:
 </ol>
 
 <div class="figure">
-  <img class="bordered" src="images/painting/linejoin-construction.svg"
+  <img no-autosize class="bordered" src="images/painting/linejoin-construction.svg"
        alt="Image showing the lines and points computed to construct a round line join.">
   <p class="caption">Construction of a round line join shape, shown in pink.
   The white line is the original path, which has two segments that come to a
@@ -1701,7 +1701,7 @@ a subpath is determined as follows:
 </div>
 
 <div class="figure">
-  <img class="bordered" src="images/painting/linejoin-construction-arcs.svg"
+  <img no-autosize class="bordered" src="images/painting/linejoin-construction-arcs.svg"
        alt="Image showing the lines and points computed to construct an arcs line join.">
   <p class="caption">Construction of an arcs line join shape, shown in
     pink. The white line is the original path, which has two segments
@@ -1713,7 +1713,7 @@ a subpath is determined as follows:
 
 <h4 id="CurvatureCalculation">Computing the circles for the <span class="prop-value">arcs</span> 'stroke-linejoin'</h4>
 
-<p>The <span class="prop-value">arcs</span> {{stroke-linejoin}}
+<p>The <span class="prop-value">arcs</span> 'stroke-linejoin'
   requires finding circles that are both tangent to and have the same
   curvatures as the outer stroke edges at the ends of path
   segments. To find one of these circles, first calculate the
@@ -2108,8 +2108,8 @@ a subpath is determined as follows:
   signed curvatures at the start and end of the path segment
   respectively, and the <var>P</var>'s are the four points that define
   the cubic Bézier. Note, if
-  <var>P<sub>0</sub></var> and <var>P<sub>1</sub></var>, or
-  <var>P<sub>2</sub></var> and <var>P<sub>3</sub></var> are degenerate, the
+  <var ignore="">P<sub>0</sub></var> and <var ignore="">P<sub>1</sub></var>, or
+  <var ignore="">P<sub>2</sub></var> and <var ignore="">P<sub>3</sub></var> are degenerate, the
   curvature will be infinite and a line should be used in constructing the join.
 
 <h4 id="ArcsLinejoinFallback">Adjusting the circles for the <span class="prop-value">arcs</span> 'stroke-linejoin' when the initial circles do not intersect</h4>
@@ -2123,7 +2123,7 @@ a subpath is determined as follows:
 
   <p>
     When the initial circles calculated for the
-    <span class="prop-value">arcs</span> {{stroke-linejoin}} do
+    <span class="prop-value">arcs</span> 'stroke-linejoin' do
     not intersect, they need to be adjusted by changing both radii by
     the same magnitude (moving the circle centers to keep the circles
     tangent to the offset paths) until the circles just touch. There
@@ -2133,7 +2133,7 @@ a subpath is determined as follows:
   
 
   <div class="figure">
-    <img class="bordered" src="images/painting/linejoin-construction-fallback.svg"
+    <img no-autosize class="bordered" src="images/painting/linejoin-construction-fallback.svg"
 	 alt="Image showing the lines and points computed to construct an arcs line join
 	      when the original offset circles do not intersect.">
     <p class="caption">Construction of an arcs line join shape, shown
@@ -2156,7 +2156,7 @@ a subpath is determined as follows:
   
 
   <div class="figure">
-    <img class="bordered" src="images/painting/linejoin-construction-fallback2.svg"
+    <img no-autosize class="bordered" src="images/painting/linejoin-construction-fallback2.svg"
 	 alt="Image showing the lines and points computed to construct an arcs line join
 	      when the original offset circles do not intersect.">
     <p class="caption">Construction of an arcs line join shape, shown
@@ -2177,11 +2177,11 @@ a subpath is determined as follows:
     they touch. The line join should then be constructed as a
     rectangle whose width is the stroke width and whose length is the
     stroke width times one half of the value of the
-    {{stroke-miterlimit}}:
+    'stroke-miterlimit':
   
 
   <div class="figure">
-    <img class="bordered" src="images/painting/linejoin-construction-fallback3.svg"
+    <img no-autosize class="bordered" src="images/painting/linejoin-construction-fallback3.svg"
 	 alt="Image showing the lines and points computed to construct an arcs line join
 	      when the original offset circles do not intersect.">
     <p class="caption">Construction of an arcs line join shape, shown
@@ -2209,7 +2209,7 @@ a subpath is determined as follows:
 
 <h3 id="PaintingVectorEffects">Vector effects</h3>
 
-<p>This chapter explains {{vector-effect}} related to Painting. Please refer to <a href="coords.html#VectorEffects">this</a> for the perspective of {{vector-effect}}. 
+<p>This chapter explains 'vector-effect' related to Painting. Please refer to <a href="coords.html#VectorEffects">this</a> for the perspective of 'vector-effect'. 
 
 <dl>
   <dt class="prop-value" id="non-scaling-stroke">non-scaling-stroke</dt>
@@ -2257,21 +2257,21 @@ a subpath is determined as follows:
 <p>A marker is a graphical object that is painted at particular positions along
 any [=shape=] element.
 
-<p>The {{marker-start}} and {{marker-end}} properties
+<p>The 'marker-start' and 'marker-end' properties
 can be used to place markers at the first and last vertex of a
-[=shape=], and the {{marker-mid}} property can be used
+[=shape=], and the 'marker-mid' property can be used
 to place markers at all other vertices (aside from the first and last).
-The {{marker-start}} and {{marker-end}} can be used for example to
+The 'marker-start' and 'marker-end' can be used for example to
 add arrowheads to paths.  Markers placed using these properties are known as
 <dfn id="TermVertexMarker" data-dfn-type="dfn" data-export="">vertex markers</dfn>.
 
 <p class='note'>In SVG 2, vertex markers are the only kind of markers
 available.  Other specifications will add new types of markers.
 
-<p>The graphics for a marker are defined by a {{marker element}} element.
-The {{marker-start}}, {{marker-end}} and {{marker-mid}} properties,
+<p>The graphics for a marker are defined by a <{marker}> element element.
+The 'marker-start', 'marker-end' and 'marker-mid' properties,
 together known as the <dfn id="TermMarkerProperties" data-dfn-type="dfn" data-export="">marker properties</dfn>, reference
-{{marker element}} elements.
+<{marker}> element elements.
 
 <p>Markers can be animated, and as with <{use}> elements, the animated
 effects will show on all current uses of the markers within the document.
@@ -2280,11 +2280,11 @@ effects will show on all current uses of the markers within the document.
 bottom to top:
 
 <ul>
-  <li>any marker specified by {{marker-start}}</li>
+  <li>any marker specified by 'marker-start'</li>
 
-  <li>the {{marker-mid}} markers, in order of their position along the path</li>
+  <li>the 'marker-mid' markers, in order of their position along the path</li>
 
-  <li>any marker specified by {{marker-end}}</li>
+  <li>any marker specified by 'marker-end'</li>
 </ul>
 
 
@@ -2296,8 +2296,7 @@ bottom to top:
                  id="painting-elementdef-marker">marker</dfn>’</span></div>
         <dl>
           <dt>Categories:</dt>
-          <dd><a href="#struct-TermContainerElement">Container element</a>, <a
-               href="#render-TermNeverRenderedElement">never-rendered element</a></dd>
+          <dd>[=container element|Container element=], [=never-rendered element=]</dd>
           <dt>Content model:</dt>
           <dd>Any number of the following elements, in any order:<ul class="no-bullets">
               <li><a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a><span
@@ -2309,154 +2308,144 @@ bottom to top:
                        href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>,
                   <span class="element-name">‘<a
                        href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li>
-              <li><a href="#struct-TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span
-                        class="element-name">‘<a href="#struct-DescElement"><span>desc</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-TitleElement"><span>title</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-MetadataElement"><span>metadata</span></a>’</span></span>
+              <li>[=descriptive element|descriptive elements=]<span class="expanding"> — <span
+                        class="element-name">‘<{desc}>’</span>, <span
+                        class="element-name">‘<{title}>’</span>, <span
+                        class="element-name">‘<{metadata}>’</span></span>
               </li>
-              <li><a href="#painting-TermPaintServerElement">paint server elements</a><span class="expanding"> — <span
-                        class="element-name">‘<a
-                       href="#pservers-LinearGradientElement"><span>linearGradient</span></a>’</span>, <span
-                        class="element-name">‘<a
-                       href="#pservers-RadialGradientElement"><span>radialGradient</span></a>’</span>, <span
-                        class="element-name">‘<a href="#pservers-PatternElement"><span>pattern</span></a>’</span></span>
+              <li>[=paint server element|paint server elements=]<span class="expanding"> — <span
+                        class="element-name">‘<{linearGradient}>’</span>, <span
+                        class="element-name">‘<{radialGradient}>’</span>, <span
+                        class="element-name">‘<{pattern}>’</span></span>
               </li>
-              <li><a href="#shapes-TermShapeElement">shape elements</a><span class="expanding"> — <span
-                        class="element-name">‘<a href="#shapes-CircleElement"><span>circle</span></a>’</span>, <span
-                        class="element-name">‘<a href="#shapes-EllipseElement"><span>ellipse</span></a>’</span>, <span
-                        class="element-name">‘<a href="#shapes-LineElement"><span>line</span></a>’</span>, <span
-                        class="element-name">‘<a href="#paths-PathElement"><span>path</span></a>’</span>, <span
-                        class="element-name">‘<a href="#shapes-PolygonElement"><span>polygon</span></a>’</span>, <span
-                        class="element-name">‘<a href="#shapes-PolylineElement"><span>polyline</span></a>’</span>, <span
-                        class="element-name">‘<a href="#shapes-RectElement"><span>rect</span></a>’</span></span></li>
-              <li><a href="#struct-TermStructuralElement">structural elements</a><span class="expanding"> — <span
-                        class="element-name">‘<a href="#struct-DefsElement"><span>defs</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-GElement"><span>g</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-SymbolElement"><span>symbol</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-UseElement"><span>use</span></a>’</span></span></li>
-            </ul><span class="element-name"><a href="#linking-AElement"><span>a</span></a></span>, <span
+              <li>[=shape elements=]<span class="expanding"> — <span
+                        class="element-name">‘<{circle}>’</span>, <span
+                        class="element-name">‘<{ellipse}>’</span>, <span
+                        class="element-name">‘<{line}>’</span>, <span
+                        class="element-name">‘<{path}>’</span>, <span
+                        class="element-name">‘<{polygon}>’</span>, <span
+                        class="element-name">‘<{polyline}>’</span>, <span
+                        class="element-name">‘<{rect}>’</span></span></li>
+              <li>[=structural element|structural elements=]<span class="expanding"> — <span
+                        class="element-name">‘<{defs}>’</span>, <span
+                        class="element-name">‘<{g}>’</span>, <span
+                        class="element-name">‘<a href="#SVGElement"><span>svg</span></a>’</span>, <span
+                        class="element-name">‘<{symbol}>’</span>, <span
+                        class="element-name">‘<{use}>’</span></span></li>
+            </ul><span class="element-name"><{a}></span>, <span
                   class="element-name"><a
                  href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span
                   class="element-name"><a
                  href="https://drafts.fxtf.org/filter-effects/#FilterElement"><span>filter</span></a></span>, <span
-                  class="element-name"><a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a></span>,
-            <span class="element-name"><a href="#embedded-ImageElement"><span>image</span></a></span>, <span
-                  class="element-name"><a href="#painting-MarkerElement"><span>marker</span></a></span>, <span
+                  class="element-name"><a href="#ForeignObjectElement"><span>foreignObject</span></a></span>,
+            <span class="element-name"><{image}></span>, <span
+                  class="element-name"><{marker}></span>, <span
                   class="element-name"><a
                  href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span
-                  class="element-name"><a href="#interact-ScriptElement"><span>script</span></a></span>, <span
-                  class="element-name"><a href="#styling-StyleElement"><span>style</span></a></span>, <span
-                  class="element-name"><a href="#struct-SwitchElement"><span>switch</span></a></span>, <span
-                  class="element-name"><a href="#text-TextElement"><span>text</span></a></span>, <span
-                  class="element-name"><a href="#linking-ViewElement"><span>view</span></a></span></dd>
+                  class="element-name"><{script}></span>, <span
+                  class="element-name"><{style}></span>, <span
+                  class="element-name"><a href="#SwitchElement"><span>switch</span></a></span>, <span
+                  class="element-name"><a href="#TextElement"><span>text</span></a></span>, <span
+                  class="element-name"><a href="#ViewElement"><span>view</span></a></span></dd>
           <dt>Attributes:</dt>
           <dd>
             <ul class="no-bullets">
-              <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                        class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                        class="attr-name">‘<a
-                       href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                        class="attr-name">‘<a
-                       href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+              <li>[=core attributes=]<span class="expanding"> — <span
+                        class="attr-name">‘<span>id</span>’</span>, <span
+                        class="attr-name">‘<span>tabindex</span>’</span>, <span
+                        class="attr-name">‘<span>autofocus</span>’</span>, <span
+                        class="attr-name">‘<span>lang</span>’</span>, <span
+                        class="attr-name">‘<span>xml:space</span>’</span>, <span
+                        class="attr-name">‘<span>class</span>’</span>, <span
+                        class="attr-name">‘<span>style</span>’</span></span></li>
               <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                  attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                        class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                  <span class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                  attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                        class="attr-name">‘<span>onchange</span>’</span>, <span
+                        class="attr-name">‘<span>onclick</span>’</span>, <span
+                        class="attr-name">‘<span>onclose</span>’</span>, <span
+                        class="attr-name">‘<span>oncopy</span>’</span>, <span
+                        class="attr-name">‘<span>oncuechange</span>’</span>,
+                  <span class="attr-name">‘<span>oncut</span>’</span>, <span
+                        class="attr-name">‘<span>ondblclick</span>’</span>,
+                  <span class="attr-name">‘<span>ondrag</span>’</span>, <span
+                        class="attr-name">‘<span>ondragend</span>’</span>, <span
+                        class="attr-name">‘<span>ondragenter</span>’</span>,
+                  <span class="attr-name">‘<span>ondragexit</span>’</span>,
+                  <span class="attr-name">‘<span>ondragleave</span>’</span>,
+                  <span class="attr-name">‘<span>ondragover</span>’</span>,
+                  <span class="attr-name">‘<span>ondragstart</span>’</span>,
+                  <span class="attr-name">‘<span>ondrop</span>’</span>, <span
+                        class="attr-name">‘<span>ondurationchange</span>’</span>, <span
+                        class="attr-name">‘<span>onemptied</span>’</span>, <span
+                        class="attr-name">‘<span>onended</span>’</span>, <span
+                        class="attr-name">‘<span>onerror</span>’</span>, <span
+                        class="attr-name">‘<span>onfocus</span>’</span>, <span
+                        class="attr-name">‘<span>oninput</span>’</span>, <span
+                        class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                        class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                        class="attr-name">‘<span>onkeypress</span>’</span>,
+                  <span class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                        class="attr-name">‘<span>onload</span>’</span>, <span
+                        class="attr-name">‘<span>onloadeddata</span>’</span>,
+                  <span class="attr-name">‘<span>onloadedmetadata</span>’</span>, <span
+                        class="attr-name">‘<span>onloadstart</span>’</span>,
+                  <span class="attr-name">‘<span>onmousedown</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseenter</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                  <span class="attr-name">‘<span>onmousemove</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseout</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseover</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                        class="attr-name">‘<span>onpaste</span>’</span>, <span
+                        class="attr-name">‘<span>onpause</span>’</span>, <span
+                        class="attr-name">‘<span>onplay</span>’</span>, <span
+                        class="attr-name">‘<span>onplaying</span>’</span>, <span
+                        class="attr-name">‘<span>onprogress</span>’</span>,
+                  <span class="attr-name">‘<span>onratechange</span>’</span>,
+                  <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                        class="attr-name">‘<span>onresize</span>’</span>, <span
+                        class="attr-name">‘<span>onscroll</span>’</span>, <span
+                        class="attr-name">‘<span>onseeked</span>’</span>, <span
+                        class="attr-name">‘<span>onseeking</span>’</span>, <span
+                        class="attr-name">‘<span>onselect</span>’</span>, <span
+                        class="attr-name">‘<span>onshow</span>’</span>, <span
+                        class="attr-name">‘<span>onstalled</span>’</span>, <span
+                        class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                        class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                        class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                  <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                        class="attr-name">‘<span>onvolumechange</span>’</span>,
+                  <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                        class="attr-name">‘<span>onwheel</span>’</span></span>
               </li>
-              <li><a href="#styling-TermPresentationAttribute">presentation attributes</a><span class="expanding"> —
+              <li>[=presentation attributes=]<span class="expanding"> —
                 </span></li>
-              <li><span class="attr-name">‘<a href="#coords-ViewBoxAttribute"><span>viewBox</span></a>’</span></li>
+              <li><span class="attr-name">‘<a href="#ViewBoxAttribute"><span>viewBox</span></a>’</span></li>
               <li><span class="attr-name">‘<a
-                     href="#coords-PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span></li>
-              <li><span class="attr-name">‘<a href="#painting-MarkerElementRefXAttribute"><span>refX</span></a>’</span>
+                     href="#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span></li>
+              <li><span class="attr-name">‘<{marker/refX}>’</span>
               </li>
-              <li><span class="attr-name">‘<a href="#painting-MarkerElementRefYAttribute"><span>refY</span></a>’</span>
+              <li><span class="attr-name">‘<{marker/refY}>’</span>
               </li>
-              <li><span class="attr-name">‘<a href="#painting-MarkerUnitsAttribute"><span>markerUnits</span></a>’</span>
+              <li><span class="attr-name">‘<a href="#MarkerUnitsAttribute"><span>markerUnits</span></a>’</span>
               </li>
-              <li><span class="attr-name">‘<a href="#painting-MarkerWidthAttribute"><span>markerWidth</span></a>’</span>
+              <li><span class="attr-name">‘<a href="#MarkerWidthAttribute"><span>markerWidth</span></a>’</span>
               </li>
               <li><span class="attr-name">‘<a
-                     href="#painting-MarkerHeightAttribute"><span>markerHeight</span></a>’</span></li>
-              <li><span class="attr-name">‘<a href="#painting-OrientAttribute"><span>orient</span></a>’</span></li>
+                     href="#MarkerHeightAttribute"><span>markerHeight</span></a>’</span></li>
+              <li><span class="attr-name">‘<a href="#OrientAttribute"><span>orient</span></a>’</span></li>
             </ul>
           </dd>
           <dt>DOM Interfaces:</dt>
           <dd>
             <ul class="no-bullets">
-              <li><a class="idlinterface"
-                   href="#painting-InterfaceSVGMarkerElement">SVGMarkerElement</a></li>
+              <li>{{SVGMarkerElement}}</li>
             </ul>
           </dd>
         </dl>
       </div>
 
-<p>The {{marker element}} element defines the graphics that are to
+<p>The <{marker}> element element defines the graphics that are to
 be used for drawing markers on a [=shape=].
 
 <p id="MarkerAttributes"><em>Attribute definitions:</em>
@@ -2484,19 +2473,19 @@ be used for drawing markers on a [=shape=].
 
 <p>The {{markerUnits}} attribute defines the coordinate system for
 attributes {{markerWidth}}, {{markerHeight}} and the
-contents of the {{marker element}}.  Values have the
+contents of the <{marker}> element.  Values have the
 following meanings:
 
 <dl>
   <dt><span class="attr-value">strokeWidth</span></dt>
   <dd>{{markerWidth}}, {{markerHeight}} and the contents
-  of the {{marker element}} have values in a coordinate system
+  of the <{marker}> element have values in a coordinate system
   which has a single unit equal to the size in user units of the
   painted stroke width of the element referencing the marker.</dd>
 
   <dt><span class="attr-value">userSpaceOnUse</span></dt>
   <dd>{{markerWidth}}, {{markerHeight}} and the contents
-  of the {{marker element}} have values in the current
+  of the <{marker}> element have values in the current
   user coordinate system in place for the element
   referencing the marker.</dd>
 </dl>
@@ -2506,10 +2495,10 @@ following meanings:
 
 Note: 
 When {{markerUnits}} has the value <span class="attr-value">strokeWidth</span>,
-the size of the marker is relative to the {{stroke-width}} after it has
+the size of the marker is relative to the 'stroke-width' after it has
 had any transforms applied that affect the width of the stroke in the
 [=user coordinate system=] for the stroke. This means that, for example,
-the {{vector-effect}} attribute with a value of
+the 'vector-effect' attribute with a value of
 <span class="attr-value">non-scaling-stroke</span> will result in the markers
 also being non scaling.
 
@@ -2627,7 +2616,7 @@ is rotated when it is placed at its position on the [=shape=].
 Values have the following meanings:
 
 <dl>
-  <dt><span class="attr-value">'auto'</span></dt>
+  <dt><span class="attr-value">auto</span></dt>
   <dd>
     <p>The marker is oriented such that its positive x-axis
     is pointing in a direction relative to the path
@@ -2637,13 +2626,13 @@ Values have the following meanings:
 </dl>
 
 <dl class="ready-for-wider-review">
-  <dt><span class="attr-value">'auto-start-reverse'</span></dt>
+  <dt><span class="attr-value">auto-start-reverse</span></dt>
   <dd>
-    <p>If placed by {{marker-start}}, the marker is oriented
+    <p>If placed by 'marker-start', the marker is oriented
     180° different from the orientation that would be used if
-    <span class="attr-value">'auto'</span> where specified.  For
-    all other markers, <span class="attr-value">'auto-start-reverse'</span>
-    means the same as <span class="attr-value">'auto'</span>.
+    <span class="attr-value">auto</span> where specified.  For
+    all other markers, <span class="attr-value">auto-start-reverse</span>
+    means the same as <span class="attr-value">auto</span>.
 
     Note: This allows a single arrowhead marker to be defined
     that can be used for both the start and end of a path, i.e. which points
@@ -2659,7 +2648,7 @@ Values have the following meanings:
     that measured between the [=shape=]'s positive x-axis
     and the marker's positive x-axis.  A <<number>> value
     specifies an angle in degrees.
-    Note: For example, if a value of <span class="attr-value">'45'</span>
+    Note: For example, if a value of <span class="attr-value">45</span>
     is given, then the marker's positive x-axis would be pointing down and right
     in the [=shape=]'s coordinate system.
   </dd>
@@ -2719,13 +2708,13 @@ Values have the following meanings:
 
 <p class="definition prod"><dfn id="DataTypeMarkerRef"  data-dfn-type="type" data-export="">&lt;marker-ref&gt;</dfn> = <a>&lt;url&gt;</a>
 
-<p>The {{marker-start}} and {{marker-end}} properties are used
+<p>The 'marker-start' and 'marker-end' properties are used
 to specify the marker that will be drawn at the first and last vertices
-of the given [=shape=], respectively.  {{marker-mid}}
+of the given [=shape=], respectively.  'marker-mid'
 is used to specify the marker that will be drawn at all other vertices
 (i.e., every vertex except the first and last).
-Possible values for {{marker-start}}, {{marker-mid}} and
-{{marker-end}} are:
+Possible values for 'marker-start', 'marker-mid' and
+'marker-end' are:
 
 <dl>
   <dt><span class='prop-value'>none</span></dt>
@@ -2733,7 +2722,7 @@ Possible values for {{marker-start}}, {{marker-mid}} and
   vertex or vertices.</dd>
 
   <dt><span class='prop-value'>&lt;marker-ref&gt;</span></dt>
-  <dd>Indicates that the {{marker element}} element referenced
+  <dd>Indicates that the <{marker}> element element referenced
   by the <a>&lt;marker-ref&gt;</a> value will be drawn at the given vertex or
   vertices.
   If the reference is not valid, then no marker will be drawn at the given
@@ -2744,16 +2733,16 @@ Possible values for {{marker-start}}, {{marker-mid}} and
 marker positions is the [=equivalent path=].
 
 <div class='ready-for-wider-review'>
-<p>For all [=shape=] elements, except {{polyline}} and {{path}},
+<p>For all [=shape=] elements, except <{polyline}> and <{path}>,
 the last vertex is the same as the first
-vertex. In this case, if the value of {{marker-start}} and {{marker-end}}
+vertex. In this case, if the value of 'marker-start' and 'marker-end'
 are both not <span class="prop-value">none</span>, then two markers
 will be rendered on that final vertex.
-For {{path}} elements, for each [=closed subpath=], the last vertex is
-the same as the first vertex. {{marker-start}} must only be rendered on
-the first vertex of the [=path data=]. {{marker-end}} must only be
+For <{path}> elements, for each [=closed subpath=], the last vertex is
+the same as the first vertex. 'marker-start' must only be rendered on
+the first vertex of the [=path data=]. 'marker-end' must only be
 rendered on the final vertex of the [=path data=].
-{{marker-mid}} must be rendered on every vertex other than the first
+'marker-mid' must be rendered on every vertex other than the first
 vertex of the [=path data=] and the last vertex of the [=path data=].
 
 <div class="example">
@@ -2762,20 +2751,20 @@ path: images/painting/marker-doubled.svg
 </pre>
 
   <div class="figure">
-    <img class="bordered" src="images/painting/marker-doubled.svg"
+    <img no-autosize class="bordered" src="images/painting/marker-doubled.svg"
          alt="Image showing that for closed subpaths, two markers are painted at the start of each subpath.">
     <p class="caption">For [=path data=] containing [=closed subpaths=],
     two markers are drawn at the first/last vertex of each [=closed subpath=].
-    For the leftmost [=closed subpath=], a {{marker-mid}} is drawn over
-    the {{marker-start}}. For the middle [=closed subpath=], two
-    {{marker-mid}} are drawn on top of one another. For the rightmost
-    [=closed subpath=], {{marker-end}} is drawn over {{marker-mid}}.
+    For the leftmost [=closed subpath=], a 'marker-mid' is drawn over
+    the 'marker-start'. For the middle [=closed subpath=], two
+    'marker-mid' are drawn on top of one another. For the rightmost
+    [=closed subpath=], 'marker-end' is drawn over 'marker-mid'.
     
   </div>
 </div>
 </div>
 
-Note: Note that {{marker-start}} and {{marker-end}}
+Note: Note that 'marker-start' and 'marker-end'
 refer to the first and last vertex of the entire path, not each subpath.
 
 <div class="ready-for-wider-review">
@@ -2788,12 +2777,12 @@ path: images/painting/marker.svg
 </pre>
 
   <div class="figure">
-    <img class="bordered" src="images/painting/marker-rendering.svg"
+    <img no-autosize class="bordered" src="images/painting/marker-rendering.svg"
          alt="Image showing the use of an automatically oriented marker.">
     <p class="caption">The triangle is placed at the end of the path and
     oriented automatically so that it points in the right direction.
     The use of <span class="prop-value">context-stroke</span> ensures
-    the fill of the triangle matches the stroke of each {{path}}.
+    the fill of the triangle matches the stroke of each <{path}>.
   </div>
 </div>
 </div>
@@ -2839,9 +2828,9 @@ path: images/painting/marker.svg
   </tr>
 </table>
 
-<p>The {{marker property}} property sets values for the
-{{marker-start}}, {{marker-mid}} and {{marker-end}}
-properties.  The value of the {{marker property}} is used
+<p>The 'marker' property sets values for the
+'marker-start', 'marker-mid' and 'marker-end'
+properties.  The value of the 'marker' is used
 directly for all three of the corresponding longhand properties.
 
 
@@ -2867,67 +2856,67 @@ correctly, as follows:
 <ul>
   <li>The axes of the temporary new user coordinate system are aligned
   according to the {{orient}} attribute on the
-  {{marker element}} element.</li>
+  <{marker}> element element.</li>
 
   <li>A temporary new coordinate system is established by attribute
   {{markerUnits}}. If {{markerUnits}} equals
-  <span class="attr-value">'strokeWidth'</span>, then the temporary new
+  <span class="attr-value">strokeWidth</span>, then the temporary new
   user coordinate system is the result of scaling the current
   user coordinate system by the current value of property
-  {{stroke-width}}. If {{markerUnits}} equals
-  <span class="attr-value">'userSpaceOnUse'</span>, then no extra scale
+  'stroke-width'. If {{markerUnits}} equals
+  <span class="attr-value">userSpaceOnUse</span>, then no extra scale
   transformation is applied.</li>
 
   <li>An additional set of transformations might occur if the
-  {{marker element}} element includes a [[#ViewBoxAttribute|viewBox]] attribute, in
+  <{marker}> element element includes a [[#ViewBoxAttribute|viewBox]] attribute, in
   which case additional transformations are set up to produce the necessary
   result due to attributes [[#ViewBoxAttribute|viewBox]] and [[#PreserveAspectRatioAttribute|preserveAspectRatio]].</li>
 
-  <li>If the [[#OverflowAndClipProperties|overflow]] property on the {{marker element}} element
+  <li>If the [[#OverflowAndClipProperties|overflow]] property on the <{marker}> element element
   indicates that the marker needs to be clipped to its SVG viewport, then an
   implicit clipping path is established at the bounds of the SVG viewport.</li>
 </ul>
 
 <p class='note'>Note that the <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
-the [[#OverflowAndClipProperties|overflow]] property for {{marker element}} elements to
+the [[#OverflowAndClipProperties|overflow]] property for <{marker}> element elements to
 <span class="prop-value">hidden</span>, which causes a rectangular clipping
 path to be created at the bounds of marker's SVG viewport by default.
 
-<p>Properties do not inherit from the element referencing the {{marker element}}
+<p>Properties do not inherit from the element referencing the <{marker}> element
 into the contents of the marker.  However, by using the
-<span class="prop-value">context-stroke</span> value for the {{fill}} or
-{{stroke}} on elements in its definition, a single marker can be designed
+<span class="prop-value">context-stroke</span> value for the 'fill' or
+'stroke' on elements in its definition, a single marker can be designed
 to match the style of the element referencing the marker.
 
 <p>Markers cannot be interacted with.  Events such as click or mouseover,
-for example, are not dispatched to a {{marker element}} or its children when
+for example, are not dispatched to a <{marker}> element or its children when
 the mouse is clicked or moved over a rendered marker.
 
 <p>Markers are not rendered directly
 and must be referenced by one of the [=marker properties=]
 to be rendered.
-The 'display' value for the {{marker element}} element
+The 'display' value for the <{marker}> element element
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
   <!--
 The 'display' property does not apply to the
-{{marker element}} element; thus, {{marker element}} elements are not
+<{marker}> element element; thus, <{marker}> element elements are not
 directly rendered even if the 'display' property is
 set to a value other than <span class="prop-value">none</span>, and
 -->
-{{marker element}} elements are available for referencing even when the
-'display' property on the {{marker element}} element or any of its
+<{marker}> element elements are available for referencing even when the
+'display' property on the <{marker}> element element or any of its
 ancestors is set to <span class="prop-value">none</span>.
 
 <p>The rendering effect of a marker is as if the contents of the
-referenced {{marker element}} element were deeply cloned
+referenced <{marker}> element element were deeply cloned
 into a separate non-exposed DOM tree for each instance of the
 marker. Because the cloned DOM tree is non-exposed, the SVG DOM
 does not show the cloned instance of the marker.
 
 <p>The conceptual deep cloning of the referenced
-{{marker element}} element into a non-exposed DOM tree also
+<{marker}> element element into a non-exposed DOM tree also
 copies any property values resulting from
 <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html">the CSS cascade</a>
 ([[CSS2]], chapter 6) and
@@ -3074,7 +3063,7 @@ the following:
 <table class="propdef def">
   <tr>
     <th>Name:</th>
-    <td><dfn dfn export>paint-order</dfn></td>
+    <td><dfn data-dfn-type="property" data-export="">paint-order</dfn></td>
   </tr>
   <tr>
     <th>Value:</th>
@@ -3111,9 +3100,9 @@ the following:
 </table>
 
 Note: New in SVG 2.  Added primarily to allow painting the stroke
-of text below its fill without needing to duplicate the {{text}} element.
+of text below its fill without needing to duplicate the <{text}> element.
 
-<p>The [=paint-order=] property controls the order that the three
+<p>The 'paint-order' property controls the order that the three
 paint operations that [=shapes=] and text are rendered with:
 their fill, their stroke and any markers they might have.
 
@@ -3132,7 +3121,7 @@ has the same rendering behavior as
 <span class="prop-value">paint-order: stroke fill markers</span>.
 
 <div class="example">
-  <p>The following example shows how the [=paint-order=] property can
+  <p>The following example shows how the 'paint-order' property can
   be used to render stroked text in a more aesthetically pleasing manner.
 
   <xmp>
@@ -3152,7 +3141,7 @@ has the same rendering behavior as
 </xmp>
 
   <div class="figure">
-    <img class="bordered" src="images/painting/paintorder.svg"
+    <img no-autosize class="bordered" src="images/painting/paintorder.svg"
          alt="Image showing the effect of paint-order.">
     <p class="caption">Text painted with its stroke below the fill.
   </div>
@@ -3203,7 +3192,7 @@ has the same rendering behavior as
 </table>
 
 <p>The SVG user agent performs color interpolations and compositing
-at various points as it processes SVG content.  The {{color-interpolation}}
+at various points as it processes SVG content.  The 'color-interpolation'
 property controls which color space is used for the following graphics operations:
 
 <ul>
@@ -3216,15 +3205,15 @@ property controls which color space is used for the following graphics operation
 </ul>
 
 Note: For [[filter-effects-1|Filter Effects Module Level 1]], the
-{{color-interpolation-filters}} property controls which color space is used.
+'color-interpolation-filters' property controls which color space is used.
 [<a href="refs.html#ref-filter-effects-1">filter-effects-1</a>]
 </div>
 
 <div class='ready-for-wider-review'>
-<p>The {{color-interpolation}} property chooses between color operations
+<p>The 'color-interpolation' property chooses between color operations
 occurring in the sRGB color space or in a (light energy linear) linearized RGB
 color space. Having chosen the appropriate color space, component-wise linear
-interpolation is used.  Values for {{color-interpolation}} have the
+interpolation is used.  Values for 'color-interpolation' have the
 following meanings:
 
 <dl>
@@ -3250,8 +3239,8 @@ color space (i.e., color values expressed as sRGB tristimulus values without a
 gamma curve) can be found in <a href="https://webstore.iec.ch/publication/6168">the sRGB specification</a>
 [<a href="refs.html#ref-srgb">SRGB</a>].
 For illustrative purposes, the following formula shows the conversion from
-sRGB to linearized RGB, where <var>C<sub>srgb</sub></var> is one of the
-three sRGB color components, <var>C<sub>linear</sub></var> is the corresponding
+sRGB to linearized RGB, where <var ignore="">C<sub>srgb</sub></var> is one of the
+three sRGB color components, <var ignore="">C<sub>linear</sub></var> is the corresponding
 linearized RGB color component, and all color values are between 0 and 1:
 
 <div role="math" aria-describedby="math-linearRGB">
@@ -3328,14 +3317,14 @@ else if c_srgb &gt; 0.04045
 converted using the above formulas.
 
 <p>When a child element is blended into a background, the value of the
-{{color-interpolation}} property on the child determines the type of
-blending, not the value of the {{color-interpolation}} on the parent.
+'color-interpolation' property on the child determines the type of
+blending, not the value of the 'color-interpolation' on the parent.
 For <a href="pservers.html#Gradients">gradients</a> which make use of the
 <span class='attr-name'>href</span> attribute to reference another
-gradient, the gradient uses the {{color-interpolation}} property value
-from the gradient element which is directly referenced by the {{fill}} or
-{{stroke}} property. When animating colors, color interpolation is
-performed according to the value of the {{color-interpolation}} property
+gradient, the gradient uses the 'color-interpolation' property value
+from the gradient element which is directly referenced by the 'fill' or
+'stroke' property. When animating colors, color interpolation is
+performed according to the value of the 'color-interpolation' property
 on the element being animated.
 
 
@@ -3382,9 +3371,9 @@ on the element being animated.
   </tr>
 </table>
 
-<p>The {{shape-rendering}} property provides a hint to the
+<p>The 'shape-rendering' property provides a hint to the
 implementation about what tradeoffs to make as it renders vector graphics
-elements such as {{path}} elements and <a href="shapes.html">basic shapes</a>
+elements such as <{path}> elements and <a href="shapes.html">basic shapes</a>
 such as circles and rectangles.  Values have the following meanings:
 
 <dl>
@@ -3432,7 +3421,7 @@ such as circles and rectangles.  Values have the following meanings:
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td>{{text}}</td>
+    <td><{text}></td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -3456,7 +3445,7 @@ such as circles and rectangles.  Values have the following meanings:
   </tr>
 </table>
 
-<p>The {{text-rendering}} property provides a hint to the implementation
+<p>The 'text-rendering' property provides a hint to the implementation
 about what tradeoffs to make as it renders text.  Values have the
 following meanings:
 
@@ -3573,20 +3562,20 @@ image resampling using a linear color space.
 <h3 id="WillChange">The effect of the <span class="property">will-change</span> property</h3>
 
 Note: See the CSS Will Change Module Level 1 specification for the
-definition of {{will-change}}.
+definition of 'will-change'.
 
-<p>The {{will-change}} property is used to provide a hint to the user
+<p>The 'will-change' property is used to provide a hint to the user
 agent as to the types of changes that will be made to content, giving
 the user agent a better chance at performing rendering optimizations
 for a given element.
 
-<p>The {{will-change}} property applies to all SVG [=graphics elements=],
+<p>The 'will-change' property applies to all SVG [=graphics elements=],
 however since SVG elements do not support scrolling, the
 <span class='prop-value'>scroll-position</span> value will have no effect
 on them.
 
 <div class='example'>
-  <p>The following example demonstrates how {{will-change}} can be used
+  <p>The following example demonstrates how 'will-change' can be used
   to forewarn the user agent that an element will have its [[#TransformProperty|transform]]
   property changed, with the potential result of the user agent rendering the
   element into its own GPU layer so that the scripted [[#TransformProperty|transform]]
@@ -3600,27 +3589,27 @@ path: images/painting/will-change.svg
     <img class="bordered" src="images/painting/will-change-image.svg"
          width="200" height="150"
          alt='A blue star with the text "Drag the star!" above.'>
-    <p class="caption">In a user agent that supports {{will-change}}
+    <p class="caption">In a user agent that supports 'will-change'
     on SVG elements, the star might be rendered into a layer so that
     it can be composited quickly when it is dragged around the canvas.
     <a href="images/painting/will-change.svg">View interactive SVG document.</a>
   </div>
 </div>
 
-Note: The {{will-change}} property replaces the
+Note: The 'will-change' property replaces the
 <span class="property">buffered-rendering</span> property defined in
 SVG Tiny 1.2.
 </div>
 
 
 <div class='ready-for-wider-review'>
-<h3 id="DOMInterfaces">DOM interfaces</h3>
+<h3 id="painting-dom">DOM interfaces</h3>
 
 <h4 id="InterfaceSVGMarkerElement">Interface SVGMarkerElement</h4>
 
 
 
-<p>An [[#InterfaceSVGMarkerElement|SVGMarkerElement]] object represents a {{marker element}}
+<p>An [[#InterfaceSVGMarkerElement|SVGMarkerElement]] object represents a <{marker}> element
 element in the DOM.
 
 <pre class="idl">

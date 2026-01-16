@@ -1,16 +1,16 @@
 <h2 id="text">Text</h2>
 
-<h3 id="Introduction">Introduction</h3>
+<h3 id="text-intro">Introduction</h3>
 
 <p>
   Text that is to be rendered as part of an SVG document fragment is
-  specified using the {{text}} element. The text within a
-  {{text}} element can be rendered:
+  specified using the <{text}> element. The text within a
+  <{text}> element can be rendered:
 
 <ul>
   <li>pre-formatted (with limited line wrapping),</li>
   <li>auto-wrapped (if a [=content area=] is provided),</li>
-  <li>on a path (if a {{textPath}} element is provided).</li>
+  <li>on a path (if a <{textPath}> element is provided).</li>
 </ul>
 
 <p>
@@ -38,12 +38,12 @@ Note:
 
 
 <p>
-  SVG's {{text}} elements are rendered like other graphics
+  SVG's <{text}> elements are rendered like other graphics
   elements. Thus, <a href="coords.html">coordinate system
   transformations</a>, <a href="painting.html">painting</a>,
   <a href="render.html#ClippingAndMasking">clipping</a> and
   <a href="render.html#ClippingAndMasking">masking</a> features apply to
-  {{text}} elements in the same way as they apply to
+  <{text}> elements in the same way as they apply to
   [=shapes=] such as
   <a href="paths.html">paths</a> and <a href="shapes.html#RectElement">rectangles</a>.
 
@@ -93,7 +93,7 @@ Note:
 <p>
   The characters to be drawn are expressed as
   <a href="https://www.w3.org/TR/2008/REC-xml-20081126/#syntax">character data</a> ([[!xml]],
-  section 2.4) inside the {{text}} element. As a result:
+  section 2.4) inside the <{text}> element. As a result:
 
 
 <ul>
@@ -124,7 +124,7 @@ Note:
   For example,
   a text element that provides a visible label for part of a diagram
   should have an <a element-attr for="core-attributes" spec="svg2">id</a> that is referenced by
-  an {{aria-labelledby}} attribute on the relevant group or path element.
+  an <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-labelledby">aria-labelledby</a> attribute on the relevant group or path element.
   See <a href="access.html">SVG
   accessibility guidelines</a> for more information.
 
@@ -157,7 +157,7 @@ Note:
     the 'display' property.
 
     Addressable characters are addressed by their index. Indexes are
-    determined prior to applying any {{text-transform}}
+    determined prior to applying any 'text-transform'
     conversions, as described for the methods in the
     [[#InterfaceSVGTextContentElement|SVGTextContentElement]] interface.
 
@@ -167,9 +167,9 @@ Note:
     <ol>
       <li>
         For the purposes of mapping text positioning attributes, the
-        index is measured in Unicode code points (thus a 'u'
+        index is measured in Unicode code points (thus a <span class="attr-value">u</span>
         followed by the combining diaeresis ' ̈' is counted as two
-        characters while the precomposed character 'ü' is counted as
+        characters while the precomposed character <span class="attr-value">ü</span> is counted as
         one character).
       </li>
       <li>
@@ -266,7 +266,7 @@ Text Module Level 3</a>,
 <a href="text.html#TextElement"><span class="element-name">text</span></a>
 and
 <a href="text.html#TextAreaElement"><span class="element-name">textArea</span></a>-->
-    SVG 2 defines a single text content block element: {{text}}.
+    SVG 2 defines a single text content block element: <{text}>.
   </dd>
 
   <dt><dfn>content area</dfn></dt>
@@ -286,7 +286,7 @@ and
 CSS wrapping context</a>.
   </dd>
 
-  <dt><dfn for=TermWrappingArea>wrapping area</dfn></dt>
+  <dt><dfn data-export="">wrapping area</dfn></dt>
   <dd>
     The area in which the text is laid out after subtracting any
     padding or exclude areas ([=wrapping context=]). This is the
@@ -314,8 +314,8 @@ Although various CSS 3 text layout specs use the term,
     The primary direction in which content is ordered within a line
     or part of a line of text. It defines the <q>start</q> and
     <q>end</q> sides of a line or part of a line of text (relevant,
-    for example to how the {{text-anchor}} property is
-    applied). It is determined by the {{direction}} property.
+    for example to how the 'text-anchor' property is
+    applied). It is determined by the 'direction' property.
     (Note: the ordering of characters in a line of text is primary
     controlled by the Unicode bidi algorithm and not the inline-base
     direction.)
@@ -324,7 +324,7 @@ Although various CSS 3 text layout specs use the term,
   <dt><dfn id="TermBlockFlowDirection">block-flow direction</dfn></dt>
   <dd>
     The direction in which [=line boxes=] are stacked. It is
-    determined by the {{writing-mode}} property.
+    determined by the 'writing-mode' property.
   </dd>
 
   <dt><dfn id="TermAlignmentPoint">alignment point</dfn></dt>
@@ -353,7 +353,7 @@ should be placed.
     text.
   </dd>
 
-  <dt><dfn id="TermWhiteSpaceCharacter">white space characters</dfn></dt>
+  <dt><dfn id="TermWhiteSpaceCharacter" data-export="">white space characters</dfn></dt>
   <dd>The following characters are considered white space characters:
     U+0009 CHARACTER TABULATION,
     U+000C FORM FEED (FF),
@@ -416,10 +416,10 @@ should be placed.
     <p>
     Discretionary ligatures should not be used when the spacing
     between two characters is not the same as the
-    default space (e.g. when {{letter-spacing}} has a
-    non-default value, or {{text-align}} has a value of
+    default space (e.g. when 'letter-spacing' has a
+    non-default value, or 'text-align' has a value of
   <span class="propvalue">justify</span>
-    and {{text-justify}} has a value of <span class="propvalue">distribute</span>).
+    and 'text-justify' has a value of <span class="propvalue">distribute</span>).
     (See
     <a href="https://www.w3.org/TR/css-text-3/#letter-spacing-property">CSS
 Text Module Level 3</a>,
@@ -427,11 +427,11 @@ Text Module Level 3</a>,
     
     <p>
     SVG attributes such as <{tspan/dx}>, {{textLength}},
-    and <{textPath/spacing}> (in {{textPath}}) that may
+    and <{textPath/spacing}> (in <{textPath}>) that may
     reposition [=typographic characters=] do not break discretionary
     ligatures.
     If discretionary ligatures are not desired they can be turned
-    off by using the {{font-variant-ligatures}} property.
+    off by using the 'font-variant-ligatures' property.
     
     <p>
     For OpenType fonts, discretionary ligatures include those enabled
@@ -526,11 +526,11 @@ Note:
 
 
 <div class="figure">
-  <img class="bordered" src="images/text/font_embox.svg"
-        alt="An 'M' inside an EM box showing the coordinate system, baseline,
+  <img no-autosize class="bordered" src="images/text/font_embox.svg"
+        alt="An M inside an EM box showing the coordinate system, baseline,
       ascent and descent.">
   <p class="caption">
-    An 'M' inside an Em box (blue square). The 'M' sits on the
+    An <span class="attr-value">M</span> inside an Em box (blue square). The <span class="attr-value">M</span> sits on the
     baseline (blue line). The origin of the coordinate system is
     shown by the small black circle.
   
@@ -580,7 +580,7 @@ Note:
 
 
 <div class="figure">
-  <img class="bordered" src="images/text/font_baseline.svg"
+  <img no-autosize class="bordered" src="images/text/font_baseline.svg"
         alt="Baseline example in three different scripts.">
   <p class="caption">
     Example baselines (red lines) in three different scripts. From
@@ -593,19 +593,19 @@ Note:
   As glyphs are sequentially placed along a baseline, the
   [=alignment point=] of a glyph is typically positioned at the
   [=current text position=] (some properties such as
-  {{vertical-align}} may alter the positioning). After each
+  'vertical-align' may alter the positioning). After each
   glyph is placed, the [=current text position=] is advanced by
   the glyph's <em>advance</em> value (typically the width for
   horizontal text or height for vertical text) with any correction
   for kerning or other spacing adjustment as well as for new lines
   in pre-formatted or auto-wrapped text. The initial and final
   current text positions are used for alignment (e.g. when
-  the {{text-anchor}} value is either 'middle' or 'end'). The
+  the 'text-anchor' value is either <span class="attr-value">middle</span> or <span class="attr-value">end</span>). The
   glyph's advance is needed when placing text along a path.
 
 
 <div class="figure">
-  <img class="bordered" src="images/text/font_metrics.svg"
+  <img no-autosize class="bordered" src="images/text/font_metrics.svg"
         alt="Baseline example in three different scripts.">
   <p class="caption">
     Example of font metrics. The blue boxes show the geometric
@@ -613,8 +613,8 @@ Note:
     [=current text position=] before glyph placement. The
     small square shows the final [=current text position=]
     after placing the last glyph. Note that the left side of
-    the 'a' glyph's box is not aligned with the right side of
-    the 'V' glyph's box due to kerning.
+    the <span class="attr-value">a</span> glyph's box is not aligned with the right side of
+    the <span class="attr-value">V</span> glyph's box due to kerning.
   
 </div>
 
@@ -628,7 +628,7 @@ Note:
 <p>
   The initial [=current text position=] is established by the
   <{text/x}> and <{text/y}> attributes on the
-  {{text}} element or first rendered {{tspan}} element for
+  <{text}> element or first rendered <{tspan}> element for
   pre-formatted text, or auto-wrapped text when the <a>content
   area</a> is determined by the {{inline-size}} property. For
   other auto-wrapped text, the initial [=current text position=]
@@ -663,7 +663,7 @@ Note:
   middle of a run of text, the <dfn id="TermDominantBaseline" data-dfn-type="dfn" data-export="">dominant baseline</dfn>
   determines the baseline used to align glyphs in the new font (new
   size) to those in the previous font. The
-  {{dominant-baseline}} property is used to set the dominant
+  'dominant-baseline' property is used to set the dominant
   baseline.
 
 
@@ -671,31 +671,31 @@ Note:
   Alignment between an object relative to its parent is determined
   by the <dfn id="TermAlignmentBaseline" data-dfn-type="dfn" data-export="">alignment baseline</dfn>. It is normally the same
   baseline as the dominant baseline but by using the shorthand
-  {{vertical-align}} property (preferred) or the longhand
-  {{alignment-baseline}} another baseline can be chosen.
+  'vertical-align' property (preferred) or the longhand
+  'alignment-baseline' another baseline can be chosen.
 
 
 <p>
   The dominant baseline can be temporarily shifted (as needed
   for superscripts or subscripts) by using either the shorthand
-  {{vertical-align}} property (preferred) or the longhand
-  {{baseline-shift}} property. Note that shifts can be
+  'vertical-align' property (preferred) or the longhand
+  'baseline-shift' property. Note that shifts can be
   nested, each shift added to the previous shift.
 
 
 <div class="figure">
-  <img class="bordered" src="images/text/vertical_align.svg"
-        alt="Examples of using the 'vertical-align' property. Left shows '[[z]]' where the inner brackets are smaller. Right shows 'x2' where the '2' is a superscript.">
+  <img no-autosize class="bordered" src="images/text/vertical_align.svg"
+        alt="Examples of using the 'vertical-align' property. Left shows '[[z]]' where the inner brackets are smaller. Right shows <code>x2</code> where the '2' is a superscript.">
   <p class="caption">
     Examples of using the 'vertical-align' property.
 
     Left: 'vertical-align:mathematical'
     ('alignment-baseline:mathematical') is applied to
-    the {{tspan}} containing '[z]'. The light-blue line shows
+    the <{tspan}> containing <span class="attr-value">[z]</span>. The light-blue line shows
     the position of the mathematical baseline.
 
     Right: 'vertical-align:super' ('baseline-shift:super') applied
-    to the {{tspan}} containing '2'.  The light-blue lines
+    to the <{tspan}> containing <span class="attr-value">2</span>.  The light-blue lines
     indicate the shift in baseline.
   
 </div>
@@ -750,7 +750,7 @@ Note:
   Multi-line text is produced by stacking these boxes. The height of
   a [=line box=] is determined by finding the maximum ascent and
   the maximum descent of all the glyphs in a line of text after
-  applying the effect of the {{line-height}} property.  The
+  applying the effect of the 'line-height' property.  The
   width of a [=line box=] is normally the width of the containing
   text block. In SVG, when the containing text block does not have a
   fixed geometry (as with pre-formatted text), the [=line box=]
@@ -758,15 +758,15 @@ Note:
 
 
 <div class="figure">
-  <img class="bordered" src="images/text/line_box.svg"
+  <img no-autosize class="bordered" src="images/text/line_box.svg"
         alt="The sentence 'A big word.' where 'big' is in a larger font.">
   <p class="caption">
     Example of determining the height of a [=line box=].
 
     First each glyph box (small light-blue boxes) is extended
-    vertically above and below according to the {{line-height}}
-    property. In this case the {{line-height}} property is
-    125%. The larger glyphs have a {{font-size}} of 96px so
+    vertically above and below according to the 'line-height'
+    property. In this case the 'line-height' property is
+    125%. The larger glyphs have a 'font-size' of 96px so
     their extra height is 24px (25% of 96px). The extra height is
     evenly divided above and below resulting in the red boxes.  (For
     clarity, all glyphs in the same inline element have been grouped
@@ -812,8 +812,8 @@ Note:
       <li>
   Any change in glyph
   orientation due to processing of the
-  {{text-orientation}} or obsoleted
-  {{glyph-orientation-vertical}} properties
+  'text-orientation' or obsoleted
+  'glyph-orientation-vertical' properties
   will start a new independent
   blocks of text for bi-directional purposes.
       </li>
@@ -821,13 +821,13 @@ Note:
   </li>
   <li>
   After processing the Unicode bidirectional
-  algorithm and properties {{direction}} and
-  {{unicode-bidi}} on each of the independent text blocks, the
+  algorithm and properties 'direction' and
+  'unicode-bidi' on each of the independent text blocks, the
   user agent will have a potentially re-ordered list of characters
   which are now in left-to-right rendering order. Simultaneous with
   re-ordering of the characters, the <{tspan/dx}>,
   <{tspan/dy}>, and <{tspan/rotate}> attributes on the
-  {{text}} and {{tspan}} elements are also re-ordered to
+  <{text}> and <{tspan}> elements are also re-ordered to
   maintain the original correspondence between characters and
   attribute values.
   </li>
@@ -842,32 +842,32 @@ Note:
 <p>
   The orientation of [=line boxes=] as well as the direction in
   which they are stacked ([=block-flow direction=]) is determined
-  by the {{writing-mode}} property. For horizontal text
-  ({{writing-mode}} value
+  by the 'writing-mode' property. For horizontal text
+  ('writing-mode' value
   <span class="prop-value">horizontal-tb</span>) [=line boxes=]
   are stacked from top to bottom. For vertical text, [=line boxes=]
-  are stacked from right-to-left ({{writing-mode}} value
+  are stacked from right-to-left ('writing-mode' value
   <span class="prop-value">vertical-rl</span>) or left-to-right
-  ({{writing-mode}} value
+  ('writing-mode' value
   <span class="prop-value">vertical-lr</span>).
 
 
 <h3 id="TextElement">The <span class="element-name">text</span> and <span class="element-name">tspan</span> elements</h3>
 
 <p>
-  The {{text}} element defines a graphics element consisting of
-  text. The {{tspan}} element within a {{text}} or another
-  {{tspan}} element, allows one to switch the style and/or
-  adjust the position of the rendered text inside the {{tspan}}
+  The <{text}> element defines a graphics element consisting of
+  text. The <{tspan}> element within a <{text}> or another
+  <{tspan}> element, allows one to switch the style and/or
+  adjust the position of the rendered text inside the <{tspan}>
   element relative to the parent element.
 
 
 <p>
-  The character data within the {{text}} and {{tspan}}
+  The character data within the <{text}> and <{tspan}>
   elements, along with relevant attributes and properties, and
   character-to-glyph mapping tables within the font itself, define
   the glyphs to be rendered. The attributes and properties on
-  the {{text}} and {{tspan}} elements indicate such things
+  the <{text}> and <{tspan}> elements indicate such things
   as the writing direction, font specification, and painting
   attributes which describe how exactly to render the
   characters. Subsequent sections of this chapter describe the
@@ -875,24 +875,24 @@ Note:
 
 
 <p>
-  Since {{text}} and {{tspan}} elements are rendered using
+  Since <{text}> and <{tspan}> elements are rendered using
   the same rendering methods as other graphics elements, all of the
   same
   <a href="painting.html">painting</a> features that apply to
   [=shapes=] such as <a href="paths.html">paths</a> and
   <a href="shapes.html#RectElement">rectangles</a> also apply to
-  {{text}} and {{tspan}} elements,
+  <{text}> and <{tspan}> elements,
   except for [=markers=].
   In addition,
   <a href="coords.html">coordinate system transformations</a>,
   <a href="render.html#ClippingAndMasking">clipping</a>, and
   <a href="render.html#ClippingAndMasking">masking</a> can be applied
-  to the {{text}} element as a whole.
+  to the <{text}> element as a whole.
 
 
 Note: 
-  In CSS terms, the {{text}} element acts as a block
-  element. The {{tspan}}, {{textPath}}, and <a element spec="svg2">a</a>
+  In CSS terms, the <{text}> element acts as a block
+  element. The <{tspan}>, <{textPath}>, and <a element spec="svg2">a</a>
   elements that are descended from [=text content elements=] act as
   inline elements.
 
@@ -900,27 +900,27 @@ Note:
 <p id="ObjectBoundingBoxUnitsTextObjects">
   It is possible to apply a gradient, pattern, clipping path, mask
   or filter to text. When one of these facilities is applied to text
-  and keyword <span class="attr-value">'objectBoundingBox'</span> is
+  and keyword <span class="attr-value"><span class="attr-value">objectBoundingBox</span></span> is
   used (see
   [[#ObjectBoundingBoxUnits|Object bounding box
   units]]) to specify a graphical effect relative to the "object
   bounding box", then the object bounding box units are computed
-  relative to the entire {{text}} element in all cases, even
-  when different effects are applied to different {{tspan}} or {{textPath}}
-  elements within the same {{text}} element.
+  relative to the entire <{text}> element in all cases, even
+  when different effects are applied to different <{tspan}> or <{textPath}>
+  elements within the same <{text}> element.
 
 
 <p>
-  The {{text}} element renders its first glyph (after
+  The <{text}> element renders its first glyph (after
   bidirectionality
   reordering) at the initial [=current text position=] (with
   possible adjustments due to the value of the
-  {{text-anchor}} property or the {{text-align}} property).
+  'text-anchor' property or the 'text-align' property).
   For pre-formatted text and for auto-wrapped text where the
   [=content area=] is determined by the {{inline-size}}
   property, the initial <a>current text
   position</a> is determined by the <{tspan/x}> and
-  <{tspan/y}> values of the {{text}} or {{tspan}}
+  <{tspan/y}> values of the <{text}> or <{tspan}>
   element which contains the first rendered character.
 
   For auto-wrapped text in a shape or text on a path see
@@ -950,31 +950,31 @@ path: images/text/text01.svg
 </pre>
 
   <div class="figure">
-    <img class="bordered" src="images/text/text01.svg"
+    <img no-autosize class="bordered" src="images/text/text01.svg"
     alt="Image showing the blue text.">
   </div>
 </div>
 
 <div class="example">
   <p>
-    A {{tspan}} is used to change the styling of the word <q>not</q>.
+    A <{tspan}> is used to change the styling of the word <q>not</q>.
   
 <pre class=include-raw>
 path: images/text/tspan01.svg
 </pre>
 
   <div class="figure">
-    <img class="bordered" src="images/text/tspan01.svg"
+    <img no-autosize class="bordered" src="images/text/tspan01.svg"
     alt="Blue text except the word 'not' is red.">
   </div>
 </div>
 
 <div class="example">
   <p>
-    Two {{tspan}} elements are repositioned horizontally and
+    Two <{tspan}> elements are repositioned horizontally and
     vertically using the <{text/x}> and <{text/y}>
     attributes. Because all the text is within a single
-    {{text}} element, a user will be able to select through all
+    <{text}> element, a user will be able to select through all
     the text and copy it to the system clipboard in user agents that
     support <a href="text.html#TextSelection">text selection and
     clipboard operations</a>.
@@ -984,7 +984,7 @@ path: images/text/tspan02.svg
 </pre>
 
   <div class="figure">
-    <img class="bordered" src="images/text/tspan02.svg"
+    <img no-autosize class="bordered" src="images/text/tspan02.svg"
     alt="A sentence with several shifted words.">
   </div>
 </div>
@@ -996,8 +996,7 @@ path: images/text/tspan02.svg
                id="text-elementdef-text">text</dfn>’</span></div>
       <dl>
         <dt>Categories:</dt>
-        <dd><a href="#struct-TermGraphicsElement">Graphics element</a>, <a
-             href="#render-TermRenderableElement">renderable element</a>, <a href="#text-TermTextContentElement">text
+        <dd><a href="#TermGraphicsElement">Graphics element</a>, [=renderable element=], <a href="#TermTextContentElement">text
             content element</a></dd>
         <dt>Content model:</dt>
         <dd>Any number of the following elements or character data, in any order:<ul class="no-bullets">
@@ -1010,34 +1009,32 @@ path: images/text/tspan02.svg
                      href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>,
                 <span class="element-name">‘<a
                      href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li>
-            <li><a href="#struct-TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#struct-DescElement"><span>desc</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-TitleElement"><span>title</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-MetadataElement"><span>metadata</span></a>’</span></span>
+            <li>[=descriptive element|descriptive elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{desc}>’</span>, <span
+                      class="element-name">‘<{title}>’</span>, <span
+                      class="element-name">‘<{metadata}>’</span></span>
             </li>
-            <li><a href="#painting-TermPaintServerElement">paint server elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a
-                     href="#pservers-LinearGradientElement"><span>linearGradient</span></a>’</span>, <span
-                      class="element-name">‘<a
-                     href="#pservers-RadialGradientElement"><span>radialGradient</span></a>’</span>, <span
-                      class="element-name">‘<a href="#pservers-PatternElement"><span>pattern</span></a>’</span></span>
+            <li>[=paint server element|paint server elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{linearGradient}>’</span>, <span
+                      class="element-name">‘<{radialGradient}>’</span>, <span
+                      class="element-name">‘<{pattern}>’</span></span>
             </li>
-            <li><a href="#text-TermTextContentChildElement">text content child elements</a><span class="expanding"> —
-                <span class="element-name">‘<a href="#text-TextElement"><span>tspan</span></a>’</span>, <span
-                      class="element-name">‘<a href="#text-TextPathElement"><span>textPath</span></a>’</span></span>
+            <li>[=text content child element|text content child elements=]<span class="expanding"> —
+                <span class="element-name">‘<a href="#TextElement"><span>tspan</span></a>’</span>, <span
+                      class="element-name">‘<a href="#TextPathElement"><span>textPath</span></a>’</span></span>
             </li>
-          </ul><span class="element-name"><a href="#linking-AElement"><span>a</span></a></span>, <span
+          </ul><span class="element-name"><{a}></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span
-                class="element-name"><a href="#painting-MarkerElement"><span>marker</span></a></span>, <span
+                class="element-name"><{marker}></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span
-                class="element-name"><a href="#interact-ScriptElement"><span>script</span></a></span>, <span
-                class="element-name"><a href="#styling-StyleElement"><span>style</span></a></span></dd>
+                class="element-name"><{script}></span>, <span
+                class="element-name"><{style}></span></dd>
         <dt>Attributes:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a href="#struct-TermARIAAttribute">aria attributes</a><span class="expanding"> — <span
+            <li>[=aria attributes=]<span class="expanding"> — <span
                       class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>,
                 <span class="attr-name">‘<a
@@ -1134,103 +1131,95 @@ path: images/text/tspan02.svg
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>,
                 <span class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
-                <span class="attr-name">‘<a href="#struct-RoleAttribute"><span>role</span></a>’</span></span></li>
-            <li><a href="#struct-TermConditionalProcessingAttribute">conditional processing attributes</a><span
+                <span class="attr-name">‘<a href="#RoleAttribute"><span>role</span></a>’</span></span></li>
+            <li>[=conditional processing attributes=]<span
                     class="expanding"> — <span class="attr-name">‘<a
-                     href="#struct-RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
+                     href="#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
                       class="attr-name">‘<a
-                     href="#struct-SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
-            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+                     href="#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+            <li>[=core attributes=]<span class="expanding"> — <span
+                      class="attr-name">‘<span>id</span>’</span>, <span
+                      class="attr-name">‘<span>tabindex</span>’</span>, <span
+                      class="attr-name">‘<span>autofocus</span>’</span>, <span
+                      class="attr-name">‘<span>lang</span>’</span>, <span
+                      class="attr-name">‘<span>xml:space</span>’</span>, <span
+                      class="attr-name">‘<span>class</span>’</span>, <span
+                      class="attr-name">‘<span>style</span>’</span></span></li>
             <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                      class="attr-name">‘<span>onchange</span>’</span>, <span
+                      class="attr-name">‘<span>onclick</span>’</span>, <span
+                      class="attr-name">‘<span>onclose</span>’</span>, <span
+                      class="attr-name">‘<span>oncopy</span>’</span>, <span
+                      class="attr-name">‘<span>oncuechange</span>’</span>, <span
+                      class="attr-name">‘<span>oncut</span>’</span>, <span
+                      class="attr-name">‘<span>ondblclick</span>’</span>, <span
+                      class="attr-name">‘<span>ondrag</span>’</span>, <span
+                      class="attr-name">‘<span>ondragend</span>’</span>, <span
+                      class="attr-name">‘<span>ondragenter</span>’</span>, <span
+                      class="attr-name">‘<span>ondragexit</span>’</span>, <span
+                      class="attr-name">‘<span>ondragleave</span>’</span>, <span
+                      class="attr-name">‘<span>ondragover</span>’</span>, <span
+                      class="attr-name">‘<span>ondragstart</span>’</span>, <span
+                      class="attr-name">‘<span>ondrop</span>’</span>, <span
+                      class="attr-name">‘<span>ondurationchange</span>’</span>,
+                <span class="attr-name">‘<span>onemptied</span>’</span>, <span
+                      class="attr-name">‘<span>onended</span>’</span>, <span
+                      class="attr-name">‘<span>onerror</span>’</span>, <span
+                      class="attr-name">‘<span>onfocus</span>’</span>, <span
+                      class="attr-name">‘<span>oninput</span>’</span>, <span
+                      class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                      class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                      class="attr-name">‘<span>onkeypress</span>’</span>, <span
+                      class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                      class="attr-name">‘<span>onload</span>’</span>, <span
+                      class="attr-name">‘<span>onloadeddata</span>’</span>,
+                <span class="attr-name">‘<span>onloadedmetadata</span>’</span>,
+                <span class="attr-name">‘<span>onloadstart</span>’</span>, <span
+                      class="attr-name">‘<span>onmousedown</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseenter</span>’</span>,
+                <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                <span class="attr-name">‘<span>onmousemove</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseout</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseover</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                      class="attr-name">‘<span>onpaste</span>’</span>, <span
+                      class="attr-name">‘<span>onpause</span>’</span>, <span
+                      class="attr-name">‘<span>onplay</span>’</span>, <span
+                      class="attr-name">‘<span>onplaying</span>’</span>, <span
+                      class="attr-name">‘<span>onprogress</span>’</span>, <span
+                      class="attr-name">‘<span>onratechange</span>’</span>,
+                <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                      class="attr-name">‘<span>onresize</span>’</span>, <span
+                      class="attr-name">‘<span>onscroll</span>’</span>, <span
+                      class="attr-name">‘<span>onseeked</span>’</span>, <span
+                      class="attr-name">‘<span>onseeking</span>’</span>, <span
+                      class="attr-name">‘<span>onselect</span>’</span>, <span
+                      class="attr-name">‘<span>onshow</span>’</span>, <span
+                      class="attr-name">‘<span>onstalled</span>’</span>, <span
+                      class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                      class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                      class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                      class="attr-name">‘<span>onvolumechange</span>’</span>,
+                <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                      class="attr-name">‘<span>onwheel</span>’</span></span>
             </li>
-            <li><a href="#styling-TermPresentationAttribute">presentation attributes</a><span class="expanding"> —
+            <li>[=presentation attributes=]<span class="expanding"> —
               </span></li>
-            <li><span class="attr-name">‘<a
-                   href="#text-TextElementLengthAdjustAttribute"><span>lengthAdjust</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#text-TextElementXAttribute"><span>x</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#text-TextElementYAttribute"><span>y</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#text-TextElementDXAttribute"><span>dx</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#text-TextElementDYAttribute"><span>dy</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#text-TextElementRotateAttribute"><span>rotate</span></a>’</span></li>
-            <li><span class="attr-name">‘<a
-                   href="#text-TextElementTextLengthAttribute"><span>textLength</span></a>’</span></li>
+            <li><span class="attr-name">‘<{text/lengthAdjust}>’</span></li>
+            <li><span class="attr-name">‘<{text/x}>’</span></li>
+            <li><span class="attr-name">‘<{text/y}>’</span></li>
+            <li><span class="attr-name">‘<{text/dx}>’</span></li>
+            <li><span class="attr-name">‘<{text/dy}>’</span></li>
+            <li><span class="attr-name">‘<{text/rotate}>’</span></li>
+            <li><span class="attr-name">‘<{text/textLength}>’</span></li>
           </ul>
         </dd>
         <dt>DOM Interfaces:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a class="idlinterface"
-                 href="#text-InterfaceSVGTextElement">SVGTextElement</a></li>
+            <li>{{SVGTextElement}}</li>
           </ul>
         </dd>
       </dl>
@@ -1240,7 +1229,7 @@ path: images/text/tspan02.svg
   <table>
     <tr>
 <th>SVG 2 Requirement:</th>
-<td>Allow transforms on {{tspan}}.</td>
+<td>Allow transforms on <{tspan}>.</td>
     </tr>
     <tr>
 <th>Resolution:</th>
@@ -1274,35 +1263,32 @@ when inline (in both SVG and HTML).
                id="text-elementdef-tspan">tspan</dfn>’</span></div>
       <dl>
         <dt>Categories:</dt>
-        <dd><a href="#struct-TermGraphicsElement">Graphics element</a>, <a
-             href="#render-TermRenderableElement">renderable element</a>, <a href="#text-TermTextContentElement">text
-            content element</a>, <a href="#text-TermTextContentChildElement">text content child element</a></dd>
+        <dd><a href="#TermGraphicsElement">Graphics element</a>, [=renderable element=], <a href="#TermTextContentElement">text
+            content element</a>, <a href="#TermTextContentChildElement">text content child element</a></dd>
         <dt>Content model:</dt>
         <dd>Any number of the following elements or character data, in any order:<ul class="no-bullets">
-            <li><a href="#struct-TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#struct-DescElement"><span>desc</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-TitleElement"><span>title</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-MetadataElement"><span>metadata</span></a>’</span></span>
+            <li>[=descriptive element|descriptive elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{desc}>’</span>, <span
+                      class="element-name">‘<{title}>’</span>, <span
+                      class="element-name">‘<{metadata}>’</span></span>
             </li>
-            <li><a href="#painting-TermPaintServerElement">paint server elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a
-                     href="#pservers-LinearGradientElement"><span>linearGradient</span></a>’</span>, <span
-                      class="element-name">‘<a
-                     href="#pservers-RadialGradientElement"><span>radialGradient</span></a>’</span>, <span
-                      class="element-name">‘<a href="#pservers-PatternElement"><span>pattern</span></a>’</span></span>
+            <li>[=paint server element|paint server elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{linearGradient}>’</span>, <span
+                      class="element-name">‘<{radialGradient}>’</span>, <span
+                      class="element-name">‘<{pattern}>’</span></span>
             </li>
-          </ul><span class="element-name"><a href="#linking-AElement"><span>a</span></a></span>, <span
+          </ul><span class="element-name"><{a}></span>, <span
                 class="element-name"><a
                href="https://svgwg.org/specs/animations/#AnimateElement"><span>animate</span></a></span>, <span
-                class="element-name"><a href="#interact-ScriptElement"><span>script</span></a></span>, <span
+                class="element-name"><{script}></span>, <span
                 class="element-name"><a
                href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a></span>, <span
-                class="element-name"><a href="#styling-StyleElement"><span>style</span></a></span>, <span
-                class="element-name"><a href="#text-TextElement"><span>tspan</span></a></span></dd>
+                class="element-name"><{style}></span>, <span
+                class="element-name"><a href="#TextElement"><span>tspan</span></a></span></dd>
         <dt>Attributes:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a href="#struct-TermARIAAttribute">aria attributes</a><span class="expanding"> — <span
+            <li>[=aria attributes=]<span class="expanding"> — <span
                       class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>,
                 <span class="attr-name">‘<a
@@ -1399,103 +1385,95 @@ when inline (in both SVG and HTML).
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>,
                 <span class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
-                <span class="attr-name">‘<a href="#struct-RoleAttribute"><span>role</span></a>’</span></span></li>
-            <li><a href="#struct-TermConditionalProcessingAttribute">conditional processing attributes</a><span
+                <span class="attr-name">‘<a href="#RoleAttribute"><span>role</span></a>’</span></span></li>
+            <li>[=conditional processing attributes=]<span
                     class="expanding"> — <span class="attr-name">‘<a
-                     href="#struct-RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
+                     href="#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
                       class="attr-name">‘<a
-                     href="#struct-SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
-            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+                     href="#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+            <li>[=core attributes=]<span class="expanding"> — <span
+                      class="attr-name">‘<span>id</span>’</span>, <span
+                      class="attr-name">‘<span>tabindex</span>’</span>, <span
+                      class="attr-name">‘<span>autofocus</span>’</span>, <span
+                      class="attr-name">‘<span>lang</span>’</span>, <span
+                      class="attr-name">‘<span>xml:space</span>’</span>, <span
+                      class="attr-name">‘<span>class</span>’</span>, <span
+                      class="attr-name">‘<span>style</span>’</span></span></li>
             <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                      class="attr-name">‘<span>onchange</span>’</span>, <span
+                      class="attr-name">‘<span>onclick</span>’</span>, <span
+                      class="attr-name">‘<span>onclose</span>’</span>, <span
+                      class="attr-name">‘<span>oncopy</span>’</span>, <span
+                      class="attr-name">‘<span>oncuechange</span>’</span>, <span
+                      class="attr-name">‘<span>oncut</span>’</span>, <span
+                      class="attr-name">‘<span>ondblclick</span>’</span>, <span
+                      class="attr-name">‘<span>ondrag</span>’</span>, <span
+                      class="attr-name">‘<span>ondragend</span>’</span>, <span
+                      class="attr-name">‘<span>ondragenter</span>’</span>, <span
+                      class="attr-name">‘<span>ondragexit</span>’</span>, <span
+                      class="attr-name">‘<span>ondragleave</span>’</span>, <span
+                      class="attr-name">‘<span>ondragover</span>’</span>, <span
+                      class="attr-name">‘<span>ondragstart</span>’</span>, <span
+                      class="attr-name">‘<span>ondrop</span>’</span>, <span
+                      class="attr-name">‘<span>ondurationchange</span>’</span>,
+                <span class="attr-name">‘<span>onemptied</span>’</span>, <span
+                      class="attr-name">‘<span>onended</span>’</span>, <span
+                      class="attr-name">‘<span>onerror</span>’</span>, <span
+                      class="attr-name">‘<span>onfocus</span>’</span>, <span
+                      class="attr-name">‘<span>oninput</span>’</span>, <span
+                      class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                      class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                      class="attr-name">‘<span>onkeypress</span>’</span>, <span
+                      class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                      class="attr-name">‘<span>onload</span>’</span>, <span
+                      class="attr-name">‘<span>onloadeddata</span>’</span>,
+                <span class="attr-name">‘<span>onloadedmetadata</span>’</span>,
+                <span class="attr-name">‘<span>onloadstart</span>’</span>, <span
+                      class="attr-name">‘<span>onmousedown</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseenter</span>’</span>,
+                <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                <span class="attr-name">‘<span>onmousemove</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseout</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseover</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                      class="attr-name">‘<span>onpaste</span>’</span>, <span
+                      class="attr-name">‘<span>onpause</span>’</span>, <span
+                      class="attr-name">‘<span>onplay</span>’</span>, <span
+                      class="attr-name">‘<span>onplaying</span>’</span>, <span
+                      class="attr-name">‘<span>onprogress</span>’</span>, <span
+                      class="attr-name">‘<span>onratechange</span>’</span>,
+                <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                      class="attr-name">‘<span>onresize</span>’</span>, <span
+                      class="attr-name">‘<span>onscroll</span>’</span>, <span
+                      class="attr-name">‘<span>onseeked</span>’</span>, <span
+                      class="attr-name">‘<span>onseeking</span>’</span>, <span
+                      class="attr-name">‘<span>onselect</span>’</span>, <span
+                      class="attr-name">‘<span>onshow</span>’</span>, <span
+                      class="attr-name">‘<span>onstalled</span>’</span>, <span
+                      class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                      class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                      class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                      class="attr-name">‘<span>onvolumechange</span>’</span>,
+                <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                      class="attr-name">‘<span>onwheel</span>’</span></span>
             </li>
-            <li><a href="#styling-TermPresentationAttribute">presentation attributes</a><span class="expanding"> —
+            <li>[=presentation attributes=]<span class="expanding"> —
               </span></li>
-            <li><span class="attr-name">‘<a href="#text-TextElementXAttribute"><span>x</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#text-TextElementYAttribute"><span>y</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#text-TextElementDXAttribute"><span>dx</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#text-TextElementDYAttribute"><span>dy</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#text-TextElementRotateAttribute"><span>rotate</span></a>’</span></li>
-            <li><span class="attr-name">‘<a
-                   href="#text-TextElementTextLengthAttribute"><span>textLength</span></a>’</span></li>
-            <li><span class="attr-name">‘<a
-                   href="#text-TextElementLengthAdjustAttribute"><span>lengthAdjust</span></a>’</span></li>
+            <li><span class="attr-name">‘<{text/x}>’</span></li>
+            <li><span class="attr-name">‘<{text/y}>’</span></li>
+            <li><span class="attr-name">‘<{text/dx}>’</span></li>
+            <li><span class="attr-name">‘<{text/dy}>’</span></li>
+            <li><span class="attr-name">‘<{text/rotate}>’</span></li>
+            <li><span class="attr-name">‘<{text/textLength}>’</span></li>
+            <li><span class="attr-name">‘<{text/lengthAdjust}>’</span></li>
           </ul>
         </dd>
         <dt>DOM Interfaces:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a class="idlinterface"
-                 href="#text-InterfaceSVGTSpanElement">SVGTSpanElement</a></li>
+            <li>{{SVGTSpanElement}}</li>
           </ul>
         </dd>
       </dl>
@@ -1514,9 +1492,9 @@ when inline (in both SVG and HTML).
         <th>Animatable</th>
 </tr>
 <tr>
-        <td><dfn id="TextElementXAttribute" data-dfn-type="element-attr" data-dfn-for="text" data-export="">x</dfn>, <dfn id="TextElementYAttribute" data-dfn-type="element-attr" data-dfn-for="text" data-export="">y</dfn></td>
+        <td><dfn id="TextElementXAttribute" data-dfn-type="element-attr" data-dfn-for="text, tspan" data-export="">x</dfn>, <dfn id="TextElementYAttribute" data-dfn-type="element-attr" data-dfn-for="text, tspan" data-export="">y</dfn></td>
         <td>[ [ <<length-percentage>> | <<number>> ]+ ]#</td>
-        <td>0 for {{text}};<br/> (none) for {{tspan}}</td>
+        <td>0 for <{text}>;<br/> (none) for <{tspan}></td>
         <td>yes</td>
 </tr>
     </table>
@@ -1545,11 +1523,11 @@ If more <<length>>s are provided than characters,
     
     <p>
 If more characters exist than <<length>>s,
-  or if the attribute is not specified on a {{tspan}},
+  or if the attribute is not specified on a <{tspan}>,
   then for each additional character:
     
     <ol style="list-style-type: lower-alpha">
-      <li>if an ancestor {{text}} or {{tspan}} element
+      <li>if an ancestor <{text}> or <{tspan}> element
       specifies an absolute X (Y) coordinate for the given character
       via an <span class="attr-name">x</span>
       (<span class="attr-name">y</span>) attribute
@@ -1561,11 +1539,11 @@ If more characters exist than <<length>>s,
     the starting X (Y) coordinate for rendering the glyphs
       corresponding to the given character is the X (Y) coordinate
       of the resulting [=current text position=] from the most
-      recently rendered glyph for the current {{text}} element.
+      recently rendered glyph for the current <{text}> element.
       </li>
     </ol>
     Note: 
-In SVG 2, the {{text}} and {{tspan}} {{text/x}}
+In SVG 2, the <{text}> and <{tspan}> <{text/x}>
 and <{text/y}> attributes are not presentation attributes
 and cannot be set via CSS. This may change in a future version
 of SVG.
@@ -1581,7 +1559,7 @@ of SVG.
         <th>Animatable</th>
 </tr>
 <tr>
-        <td><dfn id="TextElementDXAttribute" data-dfn-type="element-attr" data-dfn-for="text" data-export="">dx</dfn>, <dfn id="TextElementDYAttribute" data-dfn-type="element-attr" data-dfn-for="text" data-export="">dy</dfn></td>
+        <td><dfn id="TextElementDXAttribute" data-dfn-type="element-attr" data-dfn-for="text, tspan" data-export="">dx</dfn>, <dfn id="TextElementDYAttribute" data-dfn-type="element-attr" data-dfn-for="text, tspan" data-export="">dy</dfn></td>
         <td>[ [ <<length-percentage>> | <<number>> ]+ ]#</td>
         <td>(none)</td>
         <td>yes</td>
@@ -1608,7 +1586,7 @@ If a single <<length>> is provided, this value
       element or any of its descendants. Thus, before the glyphs are
       rendered corresponding to each character, the <a >current text
       position</a> resulting from drawing the glyphs for the
-      previous character within the current {{text}} element is
+      previous character within the current <{text}> element is
       shifted along the x-axis (y-axis) of the current user
       coordinate system by <<length>>.
     
@@ -1624,7 +1602,7 @@ If more characters exist than <<length>>s,
     
     <ol style="list-style-type: lower-alpha">
       <li>
-        if an ancestor {{text}} or {{tspan}} element
+        if an ancestor <{text}> or <{tspan}> element
       specifies a relative X (Y) coordinate for the given character
       via a <span class="attr-name">dx</span>
       (<span class="attr-name">dy</span>) attribute
@@ -1647,7 +1625,7 @@ If more characters exist than <<length>>s,
         <th>Animatable</th>
 </tr>
 <tr>
-        <td><dfn id="TextElementRotateAttribute" data-dfn-type="element-attr" data-dfn-for="text" data-export="">rotate</dfn></td>
+        <td><dfn id="TextElementRotateAttribute" data-dfn-type="element-attr" data-dfn-for="text, tspan" data-export="">rotate</dfn></td>
         <td>[ <<number>>+ ]#</td>
         <td>(none)</td>
         <td>yes (non-additive).</td>
@@ -1681,7 +1659,7 @@ If more characters are provided than <<number>>s,
     
     <p>
       If the attribute is not specified and if an ancestor of a
-      {{tspan}} element specifies a supplemental rotation for a
+      <{tspan}> element specifies a supplemental rotation for a
       given character via a {{rotate}} attribute
       (nearest ancestor has precedence), then the
       given supplemental rotation is applied to the given character.
@@ -1696,9 +1674,9 @@ If more characters are provided than <<number>>s,
       which [=current text position=] is modified as glyphs get
       rendered and is supplemental to any rotation due to
       <a href="text.html#TextLayoutPath">text on a path</a> and
-      to {{text-orientation}},
-      {{glyph-orientation-horizontal}},
-      or {{glyph-orientation-vertical}}.
+      to 'text-orientation',
+      <span class="attr-value">glyph-orientation-horizontal</span>,
+      or 'glyph-orientation-vertical'.
     
   </dd>
 
@@ -1723,10 +1701,10 @@ If more characters are provided than <<number>>s,
 The author's computation of the total sum of all of the
       advance values that correspond to character data within this
       element, including the advance value on the glyph (horizontal
-      or vertical), the effect of properties {{letter-spacing}}
-      and {{word-spacing}} and adjustments due to attributes
-      {{dx}} and {{dy}} on this {{text}}
-      or {{tspan}} element or any descendants. This value is
+      or vertical), the effect of properties 'letter-spacing'
+      and 'word-spacing' and adjustments due to attributes
+      {{dx}} and {{dy}} on this <{text}>
+      or <{tspan}> element or any descendants. This value is
       used to calibrate the user agent's own calculations with that
       of the author.
     
@@ -1768,16 +1746,16 @@ A negative value is an error
     
     <p>
 The {{textLength}} attribute is only applied when the <a>wrapping
-area</a> is not defined by the {{shape-inside}} or
+area</a> is not defined by the 'shape-inside' or
 the {{inline-size}} properties. It is also not applied for
-any {{text}} or {{tspan}} element that has forced line breaks
-(due to a {{white-space}} value of
+any <{text}> or <{tspan}> element that has forced line breaks
+(due to a 'white-space' value of
 <span class="prop-value">pre</span> or
 <span class="prop-value">pre-line</span>).
     
     <p>
 If the attribute is not specified anywhere within a
-      {{text}} element, the effect is as if the author's
+      <{text}> element, the effect is as if the author's
       computation exactly matched the value calculated by the user
       agent; thus, no advance adjustments are made.
       For the purpose of [=reflecting=] the attribute in the DOM,
@@ -1839,18 +1817,18 @@ If the attribute is not specified anywhere within a
 
 </dl>
 
-<h4 id="TSpanNotes">Notes on 'x', 'y', 'dx', 'dy' and 'rotate'</h4>
+<h4 id="TSpanNotes">Notes on <span class="attr-value">x</span>, <span class="attr-value">y</span>, <span class="attr-value">dx</span>, <span class="attr-value">dy</span> and 'rotate'</h4>
 
 <p>
-  The {{x}}, {{y}}, {{dx}}, {{dy}}, and
-  {{rotate}} on the {{text}} and {{tspan}} elements
+  The 'x', 'y', {{dx}}, {{dy}}, and
+  {{rotate}} on the <{text}> and <{tspan}> elements
   are useful in
   high-end typography scenarios where individual glyphs require
   exact placement. These attributes are useful for minor positioning
   adjustments between characters or for major positioning
   adjustments, such as moving a section of text to a new location to
   achieve the visual effect of a new line of text (compatible with
-  SVG 1.1). Note that the {{x}}, {{y}}, {{dx}},
+  SVG 1.1). Note that the 'x', 'y', {{dx}},
   {{dy}}, and {{rotate}} attributes are
   ignored for auto-wrapped text (except for the initial <a>current
   text position</a> when the [=content area=] is specified by
@@ -1858,7 +1836,7 @@ If the attribute is not specified anywhere within a
 
 
 <p class="annotation" data-issue="2">
-  It was decided at the 2015 Sydney F2F that 'dx', 'dy', and 'rotate'
+  It was decided at the 2015 Sydney F2F that <span class="attr-value">dx</span>, <span class="attr-value">dy</span>, and 'rotate'
   would be ignored for auto-wrapped text. (Technically, it is not
   difficult to apply them but it was not seen as being really useful.)
 
@@ -1873,15 +1851,15 @@ If the attribute is not specified anywhere within a
   and that the viewing software will process the font in the
   expected way (the capabilities, characteristics and font layout
   mechanisms vary greatly from system to system). If the SVG content
-  contains {{x}}, {{y}}, {{dx}}, or
+  contains 'x', 'y', {{dx}}, or
   {{dy}} attribute values which are meant to correspond to a
   particular font processed by a particular set of viewing software
   and either of these requirements is not met, then the text might
   display with poor quality.
 
 <p>
-  The following additional rules apply to attributes {{x}},
-  {{y}}, {{dx}}, {{dy}}, and {{rotate}} when they
+  The following additional rules apply to attributes 'x',
+  'y', {{dx}}, {{dy}}, and {{rotate}} when they
   contain a list of numbers:
 
 
@@ -1889,7 +1867,7 @@ If the attribute is not specified anywhere within a
   <li>
     When a single character maps to a single glyph – In this
     case, the <var>n</var>-th value for the
-    {{x}}, {{y}}, {{dx}}, {{dy}},
+    'x', 'y', {{dx}}, {{dy}},
     and {{rotate}} attributes is applied to the glyph that
     corresponds to the <var>n</var>-th
     character.
@@ -1899,7 +1877,7 @@ If the attribute is not specified anywhere within a
     When a single character maps to multiple glyphs (e.g., when
     an accent glyph is placed on top of a base glyph) – In this
     case, the <var>n</var>-th value for
-    the {{x}}, {{y}}, {{dx}}, and {{dy}} values
+    the 'x', 'y', {{dx}}, and {{dy}} values
     are applied (i.e., the [=current text position=] is adjusted)
     before rendering the first glyph.  The rotation transformation
     corresponding to the
@@ -1918,10 +1896,10 @@ If the attribute is not specified anywhere within a
     (<var>n</var>+1)-th characters
     map to a single glyph. In this case, the
     <var>n</var>-th value for the
-    {{x}}, {{y}}, {{dx}}, {{dy}},
+    'x', 'y', {{dx}}, {{dy}},
     and {{rotate}} attributes all apply when rendering the
     glyph. The (<var>n</var>+1)-th values,
-    however, for {{x}}, {{y}}, and {{rotate}} are
+    however, for 'x', 'y', and {{rotate}} are
     ignored (exception: the final {{rotate}} value in the list
     would still apply to subsequent characters), whereas
     the {{dx}} and {{dy}} are applied to the subsequent
@@ -1943,7 +1921,7 @@ If the attribute is not specified anywhere within a
     (<var>n</var>+2)-th characters map
     to two glyphs. In this case, the
     <var>n</var>-th value for the
-    {{x}}, {{y}}, {{dx}}, and {{dy}} values
+    'x', 'y', {{dx}}, and {{dy}} values
     are applied (i.e., the <a >current text position</a> is
     adjusted) before rendering the first glyph.  The rotation
     transformation corresponding to the
@@ -1954,7 +1932,7 @@ If the attribute is not specified anywhere within a
     two glyphs are rendered into the temporary rotated coordinate
     system). The (<var>n</var>+1)-th and
     (<var>n</var>+2)-th values, however, for
-    the {{x}}, {{y}}, and {{rotate}} attributes are
+    the 'x', 'y', and {{rotate}} attributes are
     not applied (exception: the final {{rotate}} value in the
     list would still apply to subsequent characters), whereas
     the (<var>n</var>+1)-th
@@ -1972,11 +1950,11 @@ If the attribute is not specified anywhere within a
     Text is laid out in a two-step process, where any bidirectional
     text is first re-ordered into a left-to-right string, and then
     text layout occurs with the re-ordered text string. Whenever the
-    character data within a {{tspan}} element is re-ordered,
-    the corresponding elements within the {{x}}, {{y}},
+    character data within a <{tspan}> element is re-ordered,
+    the corresponding elements within the 'x', 'y',
     {{dx}}, {{dy}}, and {{rotate}} are also
     re-ordered to maintain the correspondence. For example,
-    suppose that there is the following {{tspan}} element:
+    suppose that there is the following <{tspan}> element:
     <div style="margin-left: 2em"><code>&lt;tspan dx="11 12 13 14 15 0 21 22 23 0 31 32 33 34 35 36"&gt;Latin and Hebrew&lt;/tspan&gt;</code></div>
     and that the word "Hebrew" will be drawn right-to-left. First,
     the character data and the corresponding values in
@@ -1991,12 +1969,12 @@ If the attribute is not specified anywhere within a
 
 <p>
   <span class="example-ref">Example tspan04</span> uses the
-  {{rotate}} attribute on the {{tspan}} element to rotate the
+  {{rotate}} attribute on the <{tspan}> element to rotate the
   glyphs to be rendered. This example shows a single text string in a
-  {{tspan}} element that contains more characters than the
+  <{tspan}> element that contains more characters than the
   number of values specified in the {{rotate}} attribute. In
   this case the last value specified in the {{rotate}}
-  attribute of the {{tspan}} must be applied to the remaining
+  attribute of the <{tspan}> must be applied to the remaining
   characters in the string.
 
 
@@ -2012,8 +1990,8 @@ path: images/text/tspan04.svg
 
 <p>
   <span class="example-ref">Example tspan05</span> specifies the
-  {{rotate}} attribute on the {{text}} element and on all
-  but one of the child {{tspan}} elements to rotate the glyphs
+  {{rotate}} attribute on the <{text}> element and on all
+  but one of the child <{tspan}> elements to rotate the glyphs
   to be rendered. The example demonstrates the propagation of the
   {{rotate}} attribute.
 
@@ -2029,7 +2007,7 @@ path: images/text/tspan05.svg
 -->
 
 <p>
-  Rotation of red text inside the {{text}} element:
+  Rotation of red text inside the <{text}> element:
 
 
 <ul>
@@ -2040,17 +2018,17 @@ path: images/text/tspan05.svg
   <li>
     A {{rotate}} value is applied to the space that follows the
     text <em>"Not"</em>, to the space in between the text in the
-    "child1" and "child5" {{tspan}} elements, and to the space
+    "child1" and "child5" <{tspan}> elements, and to the space
     before the text <em>"rotation"</em>.
   </li>
   <li>
     The next current {{rotate}} value specified is 45 followed
-    by 55. The current {{rotate}} value in the {{text}}
+    by 55. The current {{rotate}} value in the <{text}>
     element is incremented as subsequent characters in the text of the
-    child {{tspan}} elements are processed.
+    child <{tspan}> elements are processed.
   </li>
   <li>
-    The next immediate {{tspan}} element specifies rotate values
+    The next immediate <{tspan}> element specifies rotate values
     for the text, hence the current {{rotate}} value will change to
     the next value in the list (but is not used) as each character is
     processed until the last value of 55 degrees is reached.
@@ -2062,7 +2040,7 @@ path: images/text/tspan05.svg
 </ul>
 
 <p>
-  Rotation of the orange text inside the "child1" {{tspan}} element:
+  Rotation of the orange text inside the "child1" <{tspan}> element:
 
 
 <ul>
@@ -2074,16 +2052,16 @@ path: images/text/tspan05.svg
   <li>
     The last {{rotate}} value of -40 becomes the current
     {{rotate}} value and will be applied to all subsequent
-    characters in the {{tspan}} element and to any child
-    {{tspan}} elements that do not specify {{rotate}}
+    characters in the <{tspan}> element and to any child
+    <{tspan}> elements that do not specify {{rotate}}
     values.
   </li>
   <li>
-    The "child4" {{tspan}} element does not specify any
+    The "child4" <{tspan}> element does not specify any
     {{rotate}} values and thus uses the current {{rotate}} of
-    its ancestor ("child1" {{tspan}} element). All the characters
+    its ancestor ("child1" <{tspan}> element). All the characters
     in the text <em>"text"</em> specified within the "child4"
-    {{tspan}} element will be rotated by -40 degrees.
+    <{tspan}> element will be rotated by -40 degrees.
   </li>
   <li>
     The last {{rotate}} value of -40 degrees will be applied to all
@@ -2091,13 +2069,13 @@ path: images/text/tspan05.svg
   </li>
   <li>
     A {{rotate}} value is applied to the space in between the text
-    in the "child2" and "child4" {{tspan}} elements, and to the
+    in the "child2" and "child4" <{tspan}> elements, and to the
     space before the text <em>"have a"</em>.
   </li>
 </ul>
 
 <p>
-  Rotation of the yellow text inside the "child2" {{tspan}} element:
+  Rotation of the yellow text inside the "child2" <{tspan}> element:
 
 
 <ul>
@@ -2112,17 +2090,17 @@ path: images/text/tspan05.svg
   <li>
     There are more {{rotate}} values specified than characters,
     thus the additional {{rotate}} values will be applied to the
-    "child3" {{tspan}} element which does not specified any
+    "child3" <{tspan}> element which does not specified any
     {{rotate}} values.
   </li>
   <li>
     The characters in the text <em>"the"</em> specified within the
-    "child3" {{tspan}} element will be rotated 40, 30 and 20
+    "child3" <{tspan}> element will be rotated 40, 30 and 20
     degrees respectively.
   </li>
 </ul>
 
-<p>Rotation of the blue text inside the "child5" {{tspan}} element:
+<p>Rotation of the blue text inside the "child5" <{tspan}> element:
 
 <ul>
   <li>
@@ -2131,13 +2109,13 @@ path: images/text/tspan05.svg
   </li>
   <li>
     Only one {{rotate}} value is specified and is thus
-    applied to all characters in the {{tspan}} element.
+    applied to all characters in the <{tspan}> element.
   </li>
 </ul>
 
 <p>
   The following diagram illustrates how the rotation values propagate to
-  {{tspan}} elements nested withing a {{text}} element:
+  <{tspan}> elements nested withing a <{text}> element:
 
 
 <img alt="Image that shows propagation of rotation values" src="images/text/tspan05-diagram.png" width="528" height="918">
@@ -2196,16 +2174,16 @@ path: images/text/tspan05.svg
 
 <p>
   Text layout in SVG is a multi-stage process that takes as input
-  a {{text}} element subtree and its property values and
+  a <{text}> element subtree and its property values and
   produces a sequence of glyphs to render and their positions in
   each [=text content element=]'s coordinate system.
 
 
 <p>
-  First, a {{text}} element and its descendants are laid out
+  First, a <{text}> element and its descendants are laid out
   inside a [=content area=] or [=wrapping area=] according to
-  CSS, as if the {{text}} were a block element and any
-  {{tspan}}, {{textPath}}, and <a element spec="svg2">a</a> descendants were
+  CSS, as if the <{text}> were a block element and any
+  <{tspan}>, <{textPath}>, and <a element spec="svg2">a</a> descendants were
   inline elements. This layout takes into account all paragraph
   level and font related CSS properties described in this chapter.
 
@@ -2213,7 +2191,7 @@ path: images/text/tspan05.svg
 <p>
   The [=content area=] may be explicitly declared by setting the
   {{inline-size}} property, or by setting
-  the {{shape-inside}} property that defines or references an
+  the 'shape-inside' property that defines or references an
   SVG [=shape=]. If a [=content area=] is not declared, it
   defaults to a rectangle of infinite width and height.
 
@@ -2231,12 +2209,12 @@ path: images/text/tspan05.svg
 
 
 <p>
-  Third, the effect of the {{text-anchor}} property is applied
+  Third, the effect of the 'text-anchor' property is applied
   if necessary.
 
 
 <p>
-  Finally, layout of glyphs for any {{textPath}} elements is
+  Finally, layout of glyphs for any <{textPath}> elements is
   performed, converting <em>pre-formatted</em> text
   to <em>text-on-a-path</em>.
 
@@ -2266,9 +2244,9 @@ path: images/text/tspan05.svg
 </xmp>
 
 <div class="figure">
-  <img class="bordered" src="images/text/text-preformatted.svg"
+  <img no-autosize class="bordered" src="images/text/text-preformatted.svg"
               alt="Image showing two lines of pre-formatted text.">
-  <p class="caption">Pre-formatted text where a {{tspan}} element has
+  <p class="caption">Pre-formatted text where a <{tspan}> element has
     been used to create multi-line text.
 </div>
     </div>
@@ -2292,7 +2270,7 @@ path: images/text/tspan05.svg
 </xmp>
 
 <div class="figure">
-  <img class="bordered" src="images/text/text-wrapped.svg"
+  <img no-autosize class="bordered" src="images/text/text-wrapped.svg"
               alt="Image showing auto-wrapped text on two lines.">
   <p class="caption">Auto-wrapped text. The {{inline-size}}
     property defines a rectangular content area of infinite height
@@ -2311,21 +2289,21 @@ path: images/text/tspan05.svg
 <svg xmlns="http://www.w3.org/2000/svg"
     width="300" height="100" viewBox="0 0 300 100">
 
-<path id="MyPath" stroke="lightblue" fill="none"
+<path id="example-textpath" stroke="lightblue" fill="none"
 d="M 50,50 C 100,0 200,100 250,50"/>
 
 <text style="font: 24px sans-serif;">
-  <textPath href="#MyPath">Text on a path.</textPath>
+  <textPath href="#example-textpath">Text on a path.</textPath>
 </text>
 
 </svg>
 </xmp>
 
 <div class="figure">
-  <img class="bordered" src="images/text/text-path.svg"
+  <img no-autosize class="bordered" src="images/text/text-path.svg"
               alt="Image showing text following a path.">
-  <p class="caption">Text on a path. The {{textPath}}
-    element references a {{path element}} element (shown in light
+  <p class="caption">Text on a path. The <{textPath}>
+    element references a <{path}> element element (shown in light
     blue).
 </div>
     </div>
@@ -2349,11 +2327,11 @@ Note:
   &lt;br/&gt; elements which create line breaks. Instead, SVG relies
   on the <span class="prop-value">pre</span> and
   <span class="prop-value">pre-line</span> values of
-  {{white-space}} to provide line breaks. SVG wrapped text also
+  'white-space' to provide line breaks. SVG wrapped text also
   allows a content-creation tool to provide a natural fallback for
   SVG 1.1 renderers that do not support wrapped text (by use of
-  <{text/x}> and <{text/y}> attributes in the {{text}} and
-  {{tspan}} elements, which are ignored by SVG 2 renderers for
+  <{text/x}> and <{text/y}> attributes in the <{text}> and
+  <{tspan}> elements, which are ignored by SVG 2 renderers for
   auto-wrapped text).
 
 
@@ -2369,28 +2347,28 @@ Note:
 
 <p>
   A content area is defined by specifying in
-  a {{text}} element an {{inline-size}} property,
-  or a {{shape-inside}} property that defines
+  a <{text}> element an {{inline-size}} property,
+  or a 'shape-inside' property that defines
   or references an SVG [=shape=]. If no [=content area=] is
   provided, the [=content area=] defaults to a rectangle of
   infinite width and height (see the
   <a href="text.html#TextLayoutPre">pre-formatted text</a> section).
   If both an {{inline-size}} property and a
-  {{shape-inside}} property with value other than 'none' are
-  given, the {{shape-inside}} property is used.
+  'shape-inside' property with value other than <span class="attr-value">none</span> are
+  given, the 'shape-inside' property is used.
 
 
 <p id="TextLayoutWrappingArea">
-  Wrapped text is laid out in a <dfn>wrapping area</dfn>. The
+  Wrapped text is laid out in a wrapping area. The
   [=wrapping area=] is normally the same as the <a>content
   area</a>. When the [=content area=] is defined using
-  the {{shape-inside}} property, the [=wrapping area=]
-  may be smaller due to the presence of a {{shape-subtract}}
-  property and/or a {{shape-padding}} property. The
-  {{shape-subtract}} property (along with the
-  {{shape-margin}} property) defines a [=wrapping
+  the 'shape-inside' property, the [=wrapping area=]
+  may be smaller due to the presence of a 'shape-subtract'
+  property and/or a 'shape-padding' property. The
+  'shape-subtract' property (along with the
+  'shape-margin' property) defines a [=wrapping
   context=]. The [=wrapping area=] is found by
-  insetting the [=content area=] by the {{shape-padding}} distance,
+  insetting the [=content area=] by the 'shape-padding' distance,
   and then subtracting the [=wrapping context=].
 
 <p>
@@ -2405,7 +2383,7 @@ Note:
     inside the wrapping areas is rendered the same in both cases.
   
   <div class="figure">
-    <img class="bordered" src="images/text/text-layout-svg.svg"
+    <img no-autosize class="bordered" src="images/text/text-layout-svg.svg"
           alt="Image showing the creation of an hour glass shape
           using a circle with two semicircles spaced out
           horizontally. Text is wrapped in the circle after
@@ -2414,18 +2392,18 @@ Note:
     <p class="caption">
 Defining a [=wrapping area=] in SVG.
 
-The {{text}} element has both a {{shape-inside}}
-property and a {{shape-subtract}} property.
-The {{shape-inside}} property references a circle that
+The <{text}> element has both a 'shape-inside'
+property and a 'shape-subtract' property.
+The 'shape-inside' property references a circle that
 defines a [=content area=] (dotted purple line). The
-{{shape-subtract}} property referencing two semicircles
+'shape-subtract' property referencing two semicircles
 defines a [=wrapping context=] (dotted green line) which when
 subtracted from the [=content area=] results in
 the [=wrapping area=] (light blue line).
     
   </div>
   <div class="figure">
-    <img class="bordered" src="images/text/text-layout-html.svg"
+    <img no-autosize class="bordered" src="images/text/text-layout-html.svg"
           alt="Image showing the creation of an hour glass shape
           using a circle with two semicircles spaced out
           horizontally. Text is wrapped in the circle after
@@ -2436,12 +2414,12 @@ Defining a [=wrapping area=] in HTML.
 
 A <q>wrapper</q> &lt;div&gt; contains two <q>float</q>
 &lt;div&gt;s. The wrapper &lt;div&gt; defines a rectangular
-region (solid purple line). Its {{shape-inside}} property
+region (solid purple line). Its 'shape-inside' property
 defines a [=content area=] within the &lt;div&gt; (dotted
 purple line). The two other &lt;div&gt;s define two floats,
 one on the left (solid green line) and the right (solid pink
 line). The floats are rectangular in shape. Each float has a
-{{shape-outside}} property which defines the
+'shape-outside' property which defines the
 [=wrapping context=] for each float (dotted green and pink
   lines). The combined [=wrapping context=] is subtracted
   from the [=content area=] to defined the
@@ -2454,9 +2432,9 @@ line). The floats are rectangular in shape. Each float has a
 <h4 id="InlineSize">The <span class="property">inline-size</span> property</h4>
 
 <p class="annotation">
-  'extent' added by resolution from
+  <span class="attr-value">extent</span> added by resolution from
   <a href="http://www.w3.org/2015/02/12-svg-minutes.html#action17">February
-    12th, 2015</a>. 'extent' replaces the 'width' and 'height'
+    12th, 2015</a>. <span class="attr-value">extent</span> replaces the 'width' and 'height'
   attributes, added by resolution from June 27th, 2013.
   Replaced by 'inline-size' presentation attribute per resolution from
   <a href="http://www.w3.org/2015/06/11-svg-minutes.html#item09">Linkoping
@@ -2476,8 +2454,8 @@ line). The floats are rectangular in shape. Each float has a
 <p>
   The initial [=current text position=] is taken from the
   <{text/x}> and <{text/y}> attributes of the
-  {{text}} element (or first child {{tspan}} element
-  if the attributes are not given on the {{text}} element).
+  <{text}> element (or first child <{tspan}> element
+  if the attributes are not given on the <{text}> element).
 
   For left-to-right text, the initial [=current text position=]
   is at the left of the rectangle. For right-to-left text it is at
@@ -2489,7 +2467,7 @@ line). The floats are rectangular in shape. Each float has a
 
 <p>
   The rectangle ([=wrapping area=]) is then anchored according to
-  the {{text-anchor}} property using the edges of the
+  the 'text-anchor' property using the edges of the
   [=wrapping area=] to determine the start, middle, and end
   positions.
 
@@ -2499,9 +2477,9 @@ Note:
   extension to pre-formatted SVG text where the author simply gives
   a limit to the width or height of the block of text; thus the use
   of the <{tspan/x}> and <{tspan/y}> attributes along with
-  the {{direction}} and {{text-anchor}} properties to
+  the 'direction' and 'text-anchor' properties to
   position the first line of text. If full justification is needed,
-  the {{shape-inside}} property should be used to create
+  the 'shape-inside' property should be used to create
   the [=wrapping area=].
 
 
@@ -2520,7 +2498,7 @@ Note:
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td>{{text}} elements</td>
+    <td><{text}> elements</td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -2560,7 +2538,7 @@ Note:
 </xmp>
 
   <div class="figure">
-    <img class="bordered" src="images/text/text-wrap-horizontal.svg"
+    <img no-autosize class="bordered" src="images/text/text-wrap-horizontal.svg"
           alt="Image showing English text wrapped into two lines.">
     <p class="caption">
 Horizontal text wrapping. The light-blue lines indicate the
@@ -2586,7 +2564,7 @@ style="font: 20px PakType Naqsh; inline-size: 200px; direction: rtl;">
 </xmp>
 
   <div class="figure">
-    <img class="bordered" src="images/text/text-wrap-horizontal-rl.svg"
+    <img no-autosize class="bordered" src="images/text/text-wrap-horizontal-rl.svg"
           alt="Image showing Arabic text wrapped into two lines.">
     <p class="caption">
 Horizontal text wrapping for right to left text.
@@ -2618,7 +2596,7 @@ style="font: 25px IPAMincho; inline-size: 200px; writing-mode: vertical-rl;">
 </xmp>
 
   <div class="figure">
-    <img class="bordered" src="images/text/text-wrap-vertical.svg"
+    <img no-autosize class="bordered" src="images/text/text-wrap-vertical.svg"
           alt="Image showing vertical Japanese text wrapped into two columns.">
     <p class="caption">
 Vertical text wrapping. The light-blue lines indicate the
@@ -2650,7 +2628,7 @@ area is of infinite width. The red dot shows the initial
 </xmp>
 
   <div class="figure">
-    <img class="bordered" src="images/text/text-wrap-anchored.svg"
+    <img no-autosize class="bordered" src="images/text/text-wrap-anchored.svg"
           alt="Image showing English text wrapped into two lines, anchored in the center.">
     <p class="caption">
 Horizontal text wrapping. The light-blue lines indicate the
@@ -2664,12 +2642,12 @@ the middle. The red dot shows the initial
 <h4 id="TextShapeInside">The <span class="property">shape-inside</span> property</h4>
 
 <p>
-  The {{shape-inside}} property allows one to set the
-  [=content area=] to a [=CSS basic shape=] or to an
+  The 'shape-inside' property allows one to set the
+  [=content area=] to a <a href="https://drafts.csswg.org/css-shapes-1/#basic-shape-functions">CSS basic shape</a> or to an
   SVG [=shape=].
 
 Note: 
-  In CSS/HTML {{shape-inside}} applies to block-level elements
+  In CSS/HTML 'shape-inside' applies to block-level elements
   and absolute and percentage values are defined relative to the
   block-level element.
 
@@ -2694,7 +2672,7 @@ Note:
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td>{{text}} elements</td>
+    <td><{text}> elements</td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -2721,7 +2699,7 @@ Note:
 <dl>
   <dt><span class="attr-value">auto</span></dt>
   <dd>
-    For the purposes of SVG, the 'auto' value indicates that the
+    For the purposes of SVG, the <span class="attr-value">auto</span> value indicates that the
     content area should be defined using the {{inline-size}}
     property or as for pre-formatted text.
   </dd>
@@ -2768,7 +2746,7 @@ Note:
     that element defines the shape. Otherwise, if the &lt;uri&gt;
     references an image, the shape is extracted and computed based
     on the alpha channel of the specified image using the
-    {{shape-image-threshold}}. If the
+    'shape-image-threshold'. If the
     &lt;uri&gt; does not reference an SVG shape element or an
     image, the effect is as if the value ‘auto’ had been
     specified.
@@ -2793,7 +2771,7 @@ Note:
 </xmp>
 
 <div class="figure">
-  <img class="bordered" src="images/text/text-wrap-rectangle.svg"
+  <img no-autosize class="bordered" src="images/text/text-wrap-rectangle.svg"
         alt="Image showing text wrapped inside a rectangle.">
   <p class="caption">
     Horizontal text wrapping inside an SVG rectangle shape.
@@ -2807,12 +2785,12 @@ Note:
 </dl>
 
 <p>
-  The CSS values of 'outside-shape', 'shape-box', and 'display' are
+  The CSS values of <span class="attr-value">outside-shape</span>, <span class="attr-value">shape-box</span>, and 'display' are
   invalid for SVG.
 
 
 <p>
-  SVG allows the {{shape-inside}} property to have a list of
+  SVG allows the 'shape-inside' property to have a list of
   shapes. Each shape defines an independent [=content area=].
   Text is first laid out in the content area of the first shape. If
   the text overflows the first shape, the overflow text is laid out
@@ -2845,10 +2823,10 @@ Note:
 <h4 id="TextShapeSubtract">The <span class="property">shape-subtract</span> property</h4>
 
 <p>
-  The {{shape-subtract}} property allows one to exclude part of
+  The 'shape-subtract' property allows one to exclude part of
   the [=content area=] from the [=wrapping area=]. The
   excluded area is the addition of all the areas defined in a list
-  of [=CSS basic shape=]s and/or SVG [=shapes=].
+  of <a href="https://drafts.csswg.org/css-shapes-1/#basic-shape-functions">CSS basic shape</a>s and/or SVG [=shapes=].
 
 <p class="annotation">
   It was resolved at the 2016 Sydney F2F that 'shape-subtract' should
@@ -2876,7 +2854,7 @@ Note:
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td>{{text}} elements</td>
+    <td><{text}> elements</td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -2911,11 +2889,11 @@ Note:
   <dd>
     For any &lt;uri&gt; that references an SVG [=shape=] element,
     that element defines the contributing shape,
-    expanded by the value of its {{shape-margin}} distance.
+    expanded by the value of its 'shape-margin' distance.
     For any &lt;uri&gt;
     that references an image, the contributing shape is extracted
     and computed based on the alpha channel of the specified image
-    using the {{shape-image-threshold}}. If an &lt;uri&gt; does
+    using the 'shape-image-threshold'. If an &lt;uri&gt; does
     not reference an SVG shape element or an image, that &lt;uri&gt;
     is ignored.
   </dd>
@@ -2924,7 +2902,7 @@ Note:
 
 <div class="example">
   <p>
-    An example of using {{shape-subtract}}.
+    An example of using 'shape-subtract'.
   .
 
   <xmp>
@@ -2956,9 +2934,9 @@ Note:
           alt="Image showing horizontal text wrapped inside two overlapping rectangles.">
     <p class="caption">
 Horizontal text wrapping inside two overlapping rectangles
-using {{shape-subtract}} as well as
-{{shape-inside}}, {{shape-padding}} and
-      {{shape-margin}}. The black rectangles show
+using 'shape-subtract' as well as
+'shape-inside', 'shape-padding' and
+      'shape-margin'. The black rectangles show
 the [=content area=]s. The inner blue lines show
 the [=wrapping area=]s.
     
@@ -2968,13 +2946,13 @@ the [=wrapping area=]s.
 <h4 id="TextShapeImageThreshold">The <span class="property">shape-image-threshold</span> property</h4>
 
 <p>
-  The {{shape-image-threshold}} defines the alpha channel threshold used
+  The 'shape-image-threshold' defines the alpha channel threshold used
   to extract the shape using an image. A value of 0.5 means that the
   shape will enclose all the pixels that are more than 50% opaque.
 
 
 <p>
-  For the purposes of SVG, this property applies to {{text}} elements.
+  For the purposes of SVG, this property applies to <{text}> elements.
 
 
 Note: 
@@ -2986,8 +2964,8 @@ Note:
 <h4 id="TextShapeMargin">The <span class="property">shape-margin</span> property</h4>
 
 <p>
-  The {{shape-margin}} property adds a margin to a shape referenced with
-  {{shape-subtract}}. It defines
+  The 'shape-margin' property adds a margin to a shape referenced with
+  'shape-subtract'. It defines
   a new shape where every point is the specified distance from
   the original shape. This property takes on positive values only.
 
@@ -3009,7 +2987,7 @@ Note:
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td>{{text}} elements</td>
+    <td><{text}> elements</td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -3042,14 +3020,14 @@ Note:
 <h4 id="TextShapePadding">The <span class="property">shape-padding</span> property</h4>
 
 <p>
-  The {{shape-padding}} property can be used to offset the
+  The 'shape-padding' property can be used to offset the
   inline flow content wrapping on the inside of elements. Offsets
   created by the ‘wrap-padding’ property are offset from the content
   area of the element. This property takes on positive values only.
 
 
 <div class="example">
-  <p>An example of using {{shape-padding}}.
+  <p>An example of using 'shape-padding'.
 
   <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -3073,13 +3051,13 @@ justified on both sides. It looks good!</text>
           alt="Image showing horizontal text wrapped inside a circle with a padding.">
     <p class="caption">
 Horizontal text wrapping inside a circle with
-a {{shape-padding}}. The outer black circle shows
+a 'shape-padding'. The outer black circle shows
 the [=content area=]. The inner blue circle shows
 the [=wrapping area=].
     
   </div>
   <p class="annotation">This image is a PNG. Figure out how to make a good SVG.
-    Note: Chrome supports 'textLength' on 'tspan' but Firefox does not.
+    Note: Chrome supports <span class="attr-value">textLength</span> on <{tspan}> but Firefox does not.
 </div>
 
 Note: 
@@ -3093,10 +3071,10 @@ Note:
 
 <p>
   Text layout begins by passing to a CSS-based text renderer the
-  content of the {{text}} element which includes text data
+  content of the <{text}> element which includes text data
   along with styling information and a description of one or more
-  shapes to be filled. The {{text}} element is treated as a
-  block element and its descendant {{tspan}}, {{textPath}}
+  shapes to be filled. The <{text}> element is treated as a
+  block element and its descendant <{tspan}>, <{textPath}>
   and <a element spec="svg2">a</a> elements are treated as inline elements. The CSS
   renderer returns a set of [=typographic characters=] with
   their positions resulting from laying out the text as if the text
@@ -3112,15 +3090,15 @@ Note:
 <p>
   Once a [=content area=] has been defined, the following
   algorithm is used to determine the [=typographic characters=]
-  and their positions for a given {{text}} element:
+  and their positions for a given <{text}> element:
 
 
 <ul class='algorithm'>
 <li>For text where the [=content area=] is defined by the
-    {{shape-inside}} property, layout the text in one or more
+    'shape-inside' property, layout the text in one or more
     areas per CSS rules for laying out text in a CSS <a>wrapping
     area</a>. 
-    Note: SVG allows the {{shape-inside}} property to reference more than one shape. Each shape should be filled in turn untilthere is no more text or no more shapes.</li>
+    Note: SVG allows the 'shape-inside' property to reference more than one shape. Each shape should be filled in turn untilthere is no more text or no more shapes.</li>
 <li>
 For text where the [=content area=] is defined by the
 {{inline-size}} property, layout the text in a CSS content
@@ -3130,7 +3108,7 @@ unconstrained.
 
 <p class='note'>
 This means that text is laid out with the box width set to
-the {{inline-size}} value if {{writing-mode}}
+the {{inline-size}} value if 'writing-mode'
 is <span class='prop-value'>horizontal-tb</span>, or with the
 box height set to the {{inline-size}} value otherwise.
 
@@ -3170,7 +3148,7 @@ is unconstrained in width and height.
     <span class='prop-value'>block</span>.
 
     <p class='note'>
-This ensures that the {{text}} element is treated as if
+This ensures that the <{text}> element is treated as if
 it were a block element.
     
   </li>
@@ -3185,7 +3163,7 @@ it were a block element.
     <span class='prop-value'>inline</span>.
 
     <p class='note'>
-This ensures that {{tspan}}, {{textPath}} and
+This ensures that <{tspan}>, <{textPath}> and
 <a element spec="svg2">a</a> elements are treated as if they were inline elements.
 Note: the [[#TransformProperty|transform]] property has no effect on
 inline elements.
@@ -3200,7 +3178,7 @@ inline elements.
     <span class='prop-value'>none</span>.
 
     <p class='note'>
-This ensures that graphics and metadata elements inside a {{text}}
+This ensures that graphics and metadata elements inside a <{text}>
 element do not render.
     
   </li>
@@ -3215,14 +3193,14 @@ element do not render.
 <ul>
   <li>
     For text where the [=content area=] is defined by the
-    {{shape-inside}} property, the <a>typographic
+    'shape-inside' property, the <a>typographic
     characters</a> are rendered with positions as returned from the
     CSS-based text renderer.
   </li>
   <li>
     For text where the [=content area=] is defined by the
     {{inline-size}} property, each [=line box=] is
-    shifted according to the {{text-anchor}} property.
+    shifted according to the 'text-anchor' property.
     No further post-processing is performed.
   </li>
   <li>
@@ -3235,25 +3213,25 @@ element do not render.
 
 <p>
   The following SVG text layout algorithm returns output information
-  about each character in the DOM in the {{text}} element's
+  about each character in the DOM in the <{text}> element's
   subtree. That information includes:
 
 
 <ul>
   <li>
     a global index number, which indicates the index of the
-    character relative to the start of the {{text}} element;
+    character relative to the start of the <{text}> element;
   </li>
   <li>
     an (x, y) coordinate pair, which gives its position in the
-    coordinate space of the {{text}} element;
+    coordinate space of the <{text}> element;
   </li>
   <li>
     an angle value, which gives its rotation;
   </li>
   <li>
     a "hidden" flag, which represents whether it is hidden due to
-    falling off the end of a {{textPath}};
+    falling off the end of a <{textPath}>;
   </li>
   <li>
     an "addressable" flag, which represents whether it is
@@ -3301,16 +3279,16 @@ Note:
 <li>
   Let <var>root</var> be the result of generating
   [=typographic character=] positions for the
-  {{text}} element and its subtree, laid out as if it
+  <{text}> element and its subtree, laid out as if it
   were an absolutely positioned element.
   <p class='note'>
     This will be a single line of text unless the
-    {{white-space}} property causes line breaks.
+    'white-space' property causes line breaks.
   
 </li>
 <li>
   Let <var>count</var> be the number of DOM <em>characters</em>
-  within the {{text}} element's subtree.
+  within the <{text}> element's subtree.
 </li>
 <li>
   Let <var>result</var> be an array of length <var>count</var>
@@ -3336,7 +3314,7 @@ Note:
   entries are initialized to (0, 0).
 </li>
 <li>
-  Let "horizontal" be a flag, true if the writing mode of {{text}}
+  Let "horizontal" be a flag, true if the writing mode of <{text}>
   is horizontal, false otherwise.
 </li>
     </ol>
@@ -3373,7 +3351,7 @@ For each array element with index <var>i</var> in
         <div class='note'>
     <p>
       Since there is collapsible white space not addressable by glyph
-      positioning attributes in the following {{text}} element
+      positioning attributes in the following <{text}> element
       (with a standard font), the "B" glyph will be placed at x=300.
     
     <pre>&lt;text x="100 200 300"&gt;
@@ -3396,7 +3374,7 @@ For each array element with index <var>i</var> in
   character</a> at the beginning of a line, then set the "anchored
   chunk" flag of <var>result</var>[<var>i</var>] to true.
         <p class='note'>
-    This ensures chunks shifted by {{text-anchor}} do not
+    This ensures chunks shifted by 'text-anchor' do not
     span multiple lines.
   
 </li>
@@ -3436,11 +3414,11 @@ of <var>result</var>.
       Note: 
   This flag will allow <{tspan/y}> (<{tspan/x}>)
   attribute values to be ignored for horizontal (vertical)
-  text inside {{textPath}} elements.
+  text inside <{textPath}> elements.
       
     </li>
     <li>
-      Call the following procedure with the {{text}} element node.
+      Call the following procedure with the <{text}> element node.
     </li>
   </ol>
 </li>
@@ -3453,7 +3431,7 @@ of <var>result</var>.
   
         <ol>
     <li>
-      If <var>node</var> is a {{text}} or {{tspan}} node:
+      If <var>node</var> is a <{text}> or <{tspan}> node:
       <ol>
   <li>
     Let <var>index</var> equal the "global index number" of the
@@ -3516,14 +3494,14 @@ of <var>result</var>.
         <var>j</var>] is true, then:
                     <ol>
     <li>
-      If <var>i</var> &lt; <var>new_check_count</var>, then
+      If <var>i</var> &lt; <var ignore=''>new_check_count</var>, then
       set the "anchored chunk" flag of
       <var>result</var>[<var>index</var> + <var>j</var>] to
       true. Else set the flag to false.
       Note: 
         Setting the flag to false ensures that <{tspan/x}>
-        and <{tspan/y}> attributes set in a {{text}}
-        element don't create anchored chunk in a {{textPath}}
+        and <{tspan/y}> attributes set in a <{text}>
+        element don't create anchored chunk in a <{textPath}>
         element when they should not.
       
 </li>
@@ -3579,7 +3557,7 @@ of <var>result</var>.
       </ol>
     </li>
     <li>
-      If <var>node</var> is a {{textPath}} node:
+      If <var>node</var> is a <{textPath}> node:
       <ol>
   <li>
     Let <var>index</var> equal the global index number of the
@@ -3589,11 +3567,11 @@ of <var>result</var>.
     Set the "anchored chunk" flag of <var>result</var>[<var>index</var>]
     to true.
     Note: 
-      A {{textPath}} element always creates an anchored chunk.
+      A <{textPath}> element always creates an anchored chunk.
     
   </li>
   <li>
-    Set <var>in_text_path</var> flag true.
+    Set <var ignore=''>in_text_path</var> flag true.
   </li>
       </ol>
     </li>
@@ -3607,7 +3585,7 @@ of <var>result</var>.
       </ol>
     </li>
     <li>
-      If <var>node</var> is a {{textPath}} node:
+      If <var>node</var> is a <{textPath}> node:
       <ol>
   <li>
     Set "in_text_path" flag false.
@@ -3665,7 +3643,7 @@ adjustments are applied after.
       attribute.
     </li>
     <li>
-      Call the following procedure with the {{text}} element
+      Call the following procedure with the <{text}> element
       node.
     </li>
   </ol>
@@ -3689,7 +3667,7 @@ adjustments are applied after.
       </ol>
     </li>
     <li>
-      If <var>node</var> is a {{text}} or {{tspan}} node
+      If <var>node</var> is a <{text}> or <{tspan}> node
       and if the node has a valid {{textLength}} attribute value:
       <ol>
   <li>
@@ -3751,10 +3729,10 @@ adjustments are applied after.
     [=typographic character=] in the node by
     <var>delta</var>, in the positive <var>x</var> direction
     if the "horizontal" flag is true and if
-    {{direction}} is
+    'direction' is
     <span class="prop-value">lrt</span>, in the
     negative <var>x</var> direction if the "horizontal" flag
-    is true and {{direction}} is
+    is true and 'direction' is
     <span class="prop-value">rtl</span>, or in the
     positive <var>y</var> direction otherwise.  User agents
     are free to adjust intermediate
@@ -3819,7 +3797,7 @@ adjustments are applied after.
     <b>Adjust positions: x, y</b>
     <p class='note'>
 This loop applies <{text/x}> and <{text/y}> values,
-and ensures that {{text-anchor}} chunks do not start in
+and ensures that 'text-anchor' chunks do not start in
 the middle of a [=typographic character=].
     
     <ol>
@@ -3949,8 +3927,8 @@ the middle of a [=typographic character=].
     is true, and the y coordinate otherwise.
   </li>
   <li>
-    Adjust shift based on the value of {{text-anchor}}
-    and {{direction}} of the element the character at
+    Adjust shift based on the value of 'text-anchor'
+    and 'direction' of the element the character at
     index <var>i</var> is in:
     <dl class='switch'>
       <dt>(start, ltr) or (end, rtl)</dt>
@@ -3991,14 +3969,14 @@ the middle of a [=typographic character=].
 </li>
 <li>
   Let <var>path_end</var> be an offset for characters that follow
-  a {{textPath}} element. Set <var>path_end</var> to (0,0).
+  a <{textPath}> element. Set <var>path_end</var> to (0,0).
 </li>
 <li>
   While <var>index</var> &lt; <var>count</var>:
   <ol>
     <li>
       If the character at index <var>i</var> is within a
-      {{textPath}} element and corresponds to a <a>typographic
+      <{textPath}> element and corresponds to a <a>typographic
       character</a>, then:
             <ol>
   <li>
@@ -4008,18 +3986,18 @@ the middle of a [=typographic character=].
     If the "middle" flag of
     <var>result</var>[<var>index</var>] is false, then:
     <p class='note'>
-      Here we apply {{textPath}} positioning.
+      Here we apply <{textPath}> positioning.
     
     <ol>
       <li>
         Let <var>path</var> be the [=equivalent path=] of
         the [=basic shape=] element referenced by
-        the {{textPath}} element, or an empty path if
+        the <{textPath}> element, or an empty path if
         the reference is invalid.
       </li>
       <li>
         If the <{textPath/side}> attribute of
-        the {{textPath}} element is
+        the <{textPath}> element is
         <code class='attr-value'>right</code>, then
         reverse <var>path</var>.
       </li>
@@ -4029,7 +4007,7 @@ the middle of a [=typographic character=].
       </li>
       <li>
         Let <var>offset</var> be the value of the
-        {{textPath}} element's
+        <{textPath}> element's
         <{textPath/startOffset}> attribute, adjusted
         due to any <{path/pathLength}> attribute on the
         referenced element.
@@ -4070,7 +4048,7 @@ the middle of a [=typographic character=].
       </li>
       <li>
         If <var>path</var> is a [=closed subpath=] depending on
-        the values of {{text-anchor}} and {{direction}} of
+        the values of 'text-anchor' and 'direction' of
         the element the character at <var>index</var> is in:
         Note: 
     This implements the special wrapping criteria for single
@@ -4100,7 +4078,7 @@ the middle of a [=typographic character=].
     Set <var>mid</var> = <var>mid</var> mod <var>length</var>.
         
       </li>
-      <li>If the <var>hidden</var> flag is false:
+      <li>If the <var ignore=''>hidden</var> flag is false:
                     <ol>
     <li>
       Let <var>point</var> be the position and
@@ -4190,11 +4168,11 @@ the middle of a [=typographic character=].
     </li>
     <li>
       If the character at index <var>i</var> is not within a
-      {{textPath}} element and corresponds to a <a>typographic
+      <{textPath}> element and corresponds to a <a>typographic
       character</a>, then:
       Note: 
   This sets the starting point for rendering any characters that
-  occur after a {{textPath}} element to the end of the path.
+  occur after a <{textPath}> element to the end of the path.
       
       <ol>
   <li>If the "in path" flag is true:
@@ -4207,7 +4185,7 @@ the middle of a [=typographic character=].
       </li>
       <li>
         Set <var>path_end</var> equal to the end point of the path
-        referenced by {{textPath}} − the position of
+        referenced by <{textPath}> − the position of
         <var>result</var>[<var>index</var>].
       </li>
     </ol>
@@ -4216,16 +4194,16 @@ the middle of a [=typographic character=].
     If the "after path" is true.
     <ol>
       <li>
-        If <var>anchored chunk</var> of
+        If <var ignore=''>anchored chunk</var> of
         <var>result</var>[<var>index</var>] is true, set the
         "after path" flag to false.
       </li>
       <li>
         Else,
         let <var>result.x</var>[<var>index</var>] =
-        <var>result.x</var>[<var>index</var>] + <var>path_end.x</var>
+        <var>result.x</var>[<var>index</var>] + <var ignore=''>path_end.x</var>
         and <var>result.y</var>[<var>index</var>] =
-        <var>result.y</var>[<var>index</var>] + <var>path_end.y</var>.
+        <var>result.y</var>[<var>index</var>] + <var ignore=''>path_end.y</var>.
       </li>
     </ol>
   </li>
@@ -4288,16 +4266,16 @@ Note:
 
 <ul>
   <li>
-    Use a single {{text}} element with {{white-space}} set
+    Use a single <{text}> element with 'white-space' set
     to <span class="prop-value">pre</span>
     or <span class="prop-value">pre-line</span>. Line spacing is set
-    by {{line-height}}.
+    by 'line-height'.
 
     Note: New in SVG 2.
   </li>
 
   <li>
-    Use a single {{text}} element with one or more {{tspan}}
+    Use a single <{text}> element with one or more <{tspan}>
     child elements with appropriate values for attributes
     <{tspan/x}>, <{tspan/y}>,
     <{tspan/dx}> and <{tspan/dy}> to set new start positions
@@ -4305,7 +4283,7 @@ Note:
   </li>
 
   <li>
-    Use multiple {{text}} elements, one for each line of
+    Use multiple <{text}> elements, one for each line of
     text. (Not recommended as this may prevent selection across multiple
     lines of text -- see
     <a href="text.html#TextSelection">Text selection and clipboard
@@ -4315,16 +4293,16 @@ Note:
 
 Note: 
   The following properties do not apply to <em>pre-formatted</em> text:
-  {{text-align}}, {{text-align-last}}, {{line-break}},
-  {{word-break}}, {{hyphens}}, {{word-wrap}},
-  and {{overflow-wrap}}.
+  'text-align', 'text-align-last', 'line-break',
+  'word-break', 'hyphens', 'word-wrap',
+  and 'overflow-wrap'.
 
 
 <h4 id="TextLayoutPreMultiline">Multi-line text via 'white-space'</h4>
 
 <p>
   Multi-line pre-formatted text may be created by using the
-  {{white-space}} values <span class="prop-value">pre</span>
+  'white-space' values <span class="prop-value">pre</span>
   or <span class="prop-value">pre-line</span>. In these cases, a
   line-feed or carriage return is preserved as a forced line
   break which creates a new [=line box=]. The <a>line
@@ -4339,14 +4317,14 @@ Note:
   specific rules.  Absolute repositioning can be prescribed by
   giving absolute coordinates in the <{tspan/x}>
   and <{tspan/y}> attributes or by forced line breaks. Absolute
-  repositioning may be influenced by the {{text-anchor}}
+  repositioning may be influenced by the 'text-anchor'
   property. Relative repositioning can be prescribed by giving
   relative coordinates in the <{tspan/dx}>
   and <{tspan/dy}> attributes. The
   [=typographic characters=] may be arbitrarily rotated by giving
   a list of values in the <{tspan/rotate}> attribute. Absolute
   repositioning (including any adjustment due to
-  the {{text-anchor}} property) is done before relative
+  the 'text-anchor' property) is done before relative
   repositioning and rotation.
 
 
@@ -4354,15 +4332,15 @@ Note:
 
 <p>
   Text is automatically wrapped when a [=content area=] is
-  specified in the {{text}} element. The [=content area=]
+  specified in the <{text}> element. The [=content area=]
   defines the outermost container for wrapping text. A <a>wrapping
   context</a> (set of exclusion areas) may also be given. The
   actual [=wrapping area=] is defined by subtracting the
   [=wrapping context=] from the [=content area=]. The
   [=wrapping context=] may also be reduced by the value of the
-  {{shape-padding}} property. The effective area of an
+  'shape-padding' property. The effective area of an
   exclusion may be enlarged by the value of the
-  {{shape-margin}} property.
+  'shape-margin' property.
 
 
 <p>
@@ -4381,7 +4359,7 @@ Note:
 <p>
   Except when used to determine the initial <a>current text
   position</a>, all values <{tspan/x}> and <{tspan/y}>
-  are ignored on {{text}}, and {{tspan}}
+  are ignored on <{text}>, and <{tspan}>
   elements in auto-wrapped text.
 
 
@@ -4389,7 +4367,7 @@ Note:
   The attributes <{text/x}> and <{text/y}> can provide a
   natural fallback mechanism for SVG1.1 renderers for wrapped text.
   Content producers may wish to pre-layout text by breaking up
-  lines into {{tspan}} elements with {{text/x}} and
+  lines into <{tspan}> elements with <{text/x}> and
   <{text/y}> attributes. Then, for example, if a fallback font
   is used to render the text, an SVG2 renderer will ignore
   the <{text/x}> and <{text/y}> attributes and reflow the
@@ -4429,7 +4407,7 @@ Note:
 
 
 <div class="figure">
-  <img class="bordered" src="images/text/text-layout-firstline.svg"
+  <img no-autosize class="bordered" src="images/text/text-layout-firstline.svg"
         alt="Image showing two lines of text, the first line is 'The' and
             the next line is 'first line'.">
   <p class="caption">
@@ -4437,7 +4415,7 @@ Note:
     of the smallest possible block of text, is moved down until the
     [=line box=] fits inside the [=wrapping area=] (light-blue
     path). Note, the [=line box=] includes the effect of
-    the {{line-height}} property, here set to 1.25. The red
+    the 'line-height' property, here set to 1.25. The red
     rectangles tightly wrap the glyphs in each [=line box=].
   
 </div>
@@ -4470,7 +4448,7 @@ Note:
 
 
 <div class="figure">
-  <img class="bordered" src="images/text/text-layout-brokenline.svg"
+  <img no-autosize class="bordered" src="images/text/text-layout-brokenline.svg"
         alt="Image showing text laidout inside a 'V' shape.">
   <p class="caption">
     The top line is split into two [=line boxes=] (light-blue
@@ -4484,12 +4462,12 @@ Note:
 
 
 <p>
-  SVG can place text along a path defined either by a {{path element}}
+  SVG can place text along a path defined either by a <{path}> element
   element or the path equivalent of a [=basic shape=]. This is
-  specified by including text within a {{textPath}} element
+  specified by including text within a <{textPath}> element
   that has either an {{href}} attribute with an <a>URL
-  reference</a> pointing to a {{path element}} element or <a>basic
-  shape</a>, or by specifying a value for the {{path}} attribute that
+  reference</a> pointing to a <{path}> element element or <a>basic
+  shape</a>, or by specifying a value for the <{path}> attribute that
   specifies the path data directly.
 
 
@@ -4505,7 +4483,7 @@ Note:
 
 <p class="annotation">
   Directly using a 'd' attribute to specify the path was added to
-  SVG 2. The 'd' attribute was renamed to 'path' by decision at the
+  SVG 2. The 'd' attribute was renamed to <span class="attr-value">path</span> by decision at the
   <a href="https://www.w3.org/2016/04/21-svg-minutes.html">London
     (2016)</a> editor's meeting at the same time 'd' was promoted
   to being a presentation attribute.
@@ -4527,40 +4505,37 @@ Note:
                id="text-elementdef-textPath">textPath</dfn>’</span></div>
       <dl>
         <dt>Categories:</dt>
-        <dd><a href="#struct-TermGraphicsElement">Graphics element</a>, <a
-             href="#render-TermRenderableElement">renderable element</a>, <a href="#text-TermTextContentElement">text
-            content element</a>, <a href="#text-TermTextContentChildElement">text content child element</a></dd>
+        <dd><a href="#TermGraphicsElement">Graphics element</a>, [=renderable element=], <a href="#TermTextContentElement">text
+            content element</a>, <a href="#TermTextContentChildElement">text content child element</a></dd>
         <dt>Content model:</dt>
         <dd>Any number of the following elements or character data, in any order:<ul class="no-bullets">
-            <li><a href="#struct-TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#struct-DescElement"><span>desc</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-TitleElement"><span>title</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-MetadataElement"><span>metadata</span></a>’</span></span>
+            <li>[=descriptive element|descriptive elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{desc}>’</span>, <span
+                      class="element-name">‘<{title}>’</span>, <span
+                      class="element-name">‘<{metadata}>’</span></span>
             </li>
-            <li><a href="#painting-TermPaintServerElement">paint server elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a
-                     href="#pservers-LinearGradientElement"><span>linearGradient</span></a>’</span>, <span
-                      class="element-name">‘<a
-                     href="#pservers-RadialGradientElement"><span>radialGradient</span></a>’</span>, <span
-                      class="element-name">‘<a href="#pservers-PatternElement"><span>pattern</span></a>’</span></span>
+            <li>[=paint server element|paint server elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{linearGradient}>’</span>, <span
+                      class="element-name">‘<{radialGradient}>’</span>, <span
+                      class="element-name">‘<{pattern}>’</span></span>
             </li>
-          </ul><span class="element-name"><a href="#linking-AElement"><span>a</span></a></span>, <span
+          </ul><span class="element-name"><{a}></span>, <span
                 class="element-name"><a
                href="https://svgwg.org/specs/animations/#AnimateElement"><span>animate</span></a></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span
-                class="element-name"><a href="#painting-MarkerElement"><span>marker</span></a></span>, <span
+                class="element-name"><{marker}></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span
-                class="element-name"><a href="#interact-ScriptElement"><span>script</span></a></span>, <span
+                class="element-name"><{script}></span>, <span
                 class="element-name"><a
                href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a></span>, <span
-                class="element-name"><a href="#styling-StyleElement"><span>style</span></a></span>, <span
-                class="element-name"><a href="#text-TextElement"><span>tspan</span></a></span></dd>
+                class="element-name"><{style}></span>, <span
+                class="element-name"><a href="#TextElement"><span>tspan</span></a></span></dd>
         <dt>Attributes:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a href="#struct-TermARIAAttribute">aria attributes</a><span class="expanding"> — <span
+            <li>[=aria attributes=]<span class="expanding"> — <span
                       class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>,
                 <span class="attr-name">‘<a
@@ -4657,111 +4632,101 @@ Note:
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>,
                 <span class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
-                <span class="attr-name">‘<a href="#struct-RoleAttribute"><span>role</span></a>’</span></span></li>
-            <li><a href="#struct-TermConditionalProcessingAttribute">conditional processing attributes</a><span
+                <span class="attr-name">‘<a href="#RoleAttribute"><span>role</span></a>’</span></span></li>
+            <li>[=conditional processing attributes=]<span
                     class="expanding"> — <span class="attr-name">‘<a
-                     href="#struct-RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
+                     href="#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
                       class="attr-name">‘<a
-                     href="#struct-SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
-            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+                     href="#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+            <li>[=core attributes=]<span class="expanding"> — <span
+                      class="attr-name">‘<span>id</span>’</span>, <span
+                      class="attr-name">‘<span>tabindex</span>’</span>, <span
+                      class="attr-name">‘<span>autofocus</span>’</span>, <span
+                      class="attr-name">‘<span>lang</span>’</span>, <span
+                      class="attr-name">‘<span>xml:space</span>’</span>, <span
+                      class="attr-name">‘<span>class</span>’</span>, <span
+                      class="attr-name">‘<span>style</span>’</span></span></li>
             <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                      class="attr-name">‘<span>onchange</span>’</span>, <span
+                      class="attr-name">‘<span>onclick</span>’</span>, <span
+                      class="attr-name">‘<span>onclose</span>’</span>, <span
+                      class="attr-name">‘<span>oncopy</span>’</span>, <span
+                      class="attr-name">‘<span>oncuechange</span>’</span>, <span
+                      class="attr-name">‘<span>oncut</span>’</span>, <span
+                      class="attr-name">‘<span>ondblclick</span>’</span>, <span
+                      class="attr-name">‘<span>ondrag</span>’</span>, <span
+                      class="attr-name">‘<span>ondragend</span>’</span>, <span
+                      class="attr-name">‘<span>ondragenter</span>’</span>, <span
+                      class="attr-name">‘<span>ondragexit</span>’</span>, <span
+                      class="attr-name">‘<span>ondragleave</span>’</span>, <span
+                      class="attr-name">‘<span>ondragover</span>’</span>, <span
+                      class="attr-name">‘<span>ondragstart</span>’</span>, <span
+                      class="attr-name">‘<span>ondrop</span>’</span>, <span
+                      class="attr-name">‘<span>ondurationchange</span>’</span>,
+                <span class="attr-name">‘<span>onemptied</span>’</span>, <span
+                      class="attr-name">‘<span>onended</span>’</span>, <span
+                      class="attr-name">‘<span>onerror</span>’</span>, <span
+                      class="attr-name">‘<span>onfocus</span>’</span>, <span
+                      class="attr-name">‘<span>oninput</span>’</span>, <span
+                      class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                      class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                      class="attr-name">‘<span>onkeypress</span>’</span>, <span
+                      class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                      class="attr-name">‘<span>onload</span>’</span>, <span
+                      class="attr-name">‘<span>onloadeddata</span>’</span>,
+                <span class="attr-name">‘<span>onloadedmetadata</span>’</span>,
+                <span class="attr-name">‘<span>onloadstart</span>’</span>, <span
+                      class="attr-name">‘<span>onmousedown</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseenter</span>’</span>,
+                <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                <span class="attr-name">‘<span>onmousemove</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseout</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseover</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                      class="attr-name">‘<span>onpaste</span>’</span>, <span
+                      class="attr-name">‘<span>onpause</span>’</span>, <span
+                      class="attr-name">‘<span>onplay</span>’</span>, <span
+                      class="attr-name">‘<span>onplaying</span>’</span>, <span
+                      class="attr-name">‘<span>onprogress</span>’</span>, <span
+                      class="attr-name">‘<span>onratechange</span>’</span>,
+                <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                      class="attr-name">‘<span>onresize</span>’</span>, <span
+                      class="attr-name">‘<span>onscroll</span>’</span>, <span
+                      class="attr-name">‘<span>onseeked</span>’</span>, <span
+                      class="attr-name">‘<span>onseeking</span>’</span>, <span
+                      class="attr-name">‘<span>onselect</span>’</span>, <span
+                      class="attr-name">‘<span>onshow</span>’</span>, <span
+                      class="attr-name">‘<span>onstalled</span>’</span>, <span
+                      class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                      class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                      class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                      class="attr-name">‘<span>onvolumechange</span>’</span>,
+                <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                      class="attr-name">‘<span>onwheel</span>’</span></span>
             </li>
-            <li><a href="#styling-TermPresentationAttribute">presentation attributes</a><span class="expanding"> —
+            <li>[=presentation attributes=]<span class="expanding"> —
               </span></li>
-            <li><a href="#linking-XLinkRefAttrs">deprecated xlink attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#linking-XLinkHrefAttribute"><span>xlink:href</span></a>’</span>,
+            <li><a href="#XLinkRefAttrs">deprecated xlink attributes</a><span class="expanding"> — <span
+                      class="attr-name">‘<a href="#XLinkHrefAttribute"><span>xlink:href</span></a>’</span>,
                 <span class="attr-name">‘<a
-                     href="#linking-XLinkTitleAttribute"><span>xlink:title</span></a>’</span></span></li>
-            <li><span class="attr-name">‘<a
-                   href="#text-TextElementLengthAdjustAttribute"><span>lengthAdjust</span></a>’</span></li>
-            <li><span class="attr-name">‘<a
-                   href="#text-TextElementTextLengthAttribute"><span>textLength</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#text-TextPathElementPathAttribute"><span>path</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#text-TextPathElementHrefAttribute"><span>href</span></a>’</span></li>
-            <li><span class="attr-name">‘<a
-                   href="#text-TextPathElementStartOffsetAttribute"><span>startOffset</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#text-TextPathElementMethodAttribute"><span>method</span></a>’</span>
+                     href="#XLinkTitleAttribute"><span>xlink:title</span></a>’</span></span></li>
+            <li><span class="attr-name">‘<{text/lengthAdjust}>’</span></li>
+            <li><span class="attr-name">‘<{text/textLength}>’</span></li>
+            <li><span class="attr-name">‘<{textPath/path}>’</span></li>
+            <li><span class="attr-name">‘<{textPath/href}>’</span></li>
+            <li><span class="attr-name">‘<{textPath/startOffset}>’</span></li>
+            <li><span class="attr-name">‘<{textPath/method}>’</span>
             </li>
-            <li><span class="attr-name">‘<a
-                   href="#text-TextPathElementSpacingAttribute"><span>spacing</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#text-TextPathElementSideAttribute"><span>side</span></a>’</span></li>
+            <li><span class="attr-name">‘<{textPath/spacing}>’</span></li>
+            <li><span class="attr-name">‘<{textPath/side}>’</span></li>
           </ul>
         </dd>
         <dt>DOM Interfaces:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a class="idlinterface"
-                 href="#text-InterfaceSVGTextPathElement">SVGTextPathElement</a></li>
+            <li>{{SVGTextPathElement}}</li>
           </ul>
         </dd>
       </dl>
@@ -4789,22 +4754,22 @@ Note:
 </div>
 
 <p>
-  Both the {{path}} attribute and the {{href}} attribute
+  Both the <{path}> attribute and the {{href}} attribute
   specify a path along which the [=typographic characters=]
   will be rendered.
 
 <p>
-  If both attributes are specified on a {{textPath}} element,
+  If both attributes are specified on a <{textPath}> element,
   the path that is used must follow the following order of
   precedence:
 
 <ol>
-  <li>{{path}} attribute</li>
+  <li><{path}> attribute</li>
   <li>{{href}} attribute</li>
-  <li><a href="#linking-XLinkHrefAttribute">xlink:href</a> attribute</li>
+  <li><a href="#XLinkHrefAttribute">xlink:href</a> attribute</li>
 </ol>
 <p>
-  If the {{path}} attribute contains an error, the
+  If the <{path}> attribute contains an error, the
   {{href}} attribute must be used.
 
 
@@ -4819,13 +4784,13 @@ Note:
       text position, calculated using the user agent's
 <a href="paths.html#DistanceAlongAPath">distance along the
       path</a> algorithm,
-      after converting the path to the {{textPath}} element's coordinate system.
+      after converting the path to the <{textPath}> element's coordinate system.
     
     <p>
       If a <<length>>
       other than a percentage is given, then the
 {{startOffset}} represents a distance along the path
-      measured in the current user coordinate system for the {{textPath}} element.
+      measured in the current user coordinate system for the <{textPath}> element.
     
     <p>If a
       percentage is given, then the {{startOffset}} represents
@@ -4850,7 +4815,7 @@ Any [=typographic characters=] with mid-points that
 are not on the path are not rendered.
     
     <div class="figure">
-<img alt="Three paths with various values of 'startOffset' showing clipping
+<img no-autosize alt="Three paths with various values of startOffset showing clipping
     when glyphs are outside path region."
       src="images/text/text-path-startoffset.svg">
 <p class="caption">
@@ -4870,7 +4835,7 @@ For paths consisting of a single [=closed subpath=]
 (including an equivalent path for a <a>basic
 shape</a>), [=typographic characters=] are rendered along
 one complete circuit of the path. The text is aligned as determined by
-the {{text-anchor}} property to a position along the path
+the 'text-anchor' property to a position along the path
 set by the {{startOffset}} attribute. For
 the <span class="prop-value">start</span>
 (<span class="prop-value">end</span>) value, the text is
@@ -4883,11 +4848,11 @@ position on the path is reached.
     
 
     <div class="figure">
-<img alt="Two circular path with different values of
-    'startOffset' showing that all glyphs are rendered."
+<img no-autosize alt="Two circular path with different values of
+    startOffset showing that all glyphs are rendered."
     src="images/text/text-path-startoffset2.svg">
 <p class="caption">
-  Rendering for text on a path referencing a {{circle}}
+  Rendering for text on a path referencing a <{circle}>
   with different values of the {{startOffset}}
   attribute. Left: 0. Right: 75% or -25%.
   The red circle marks the beginning of the path (after
@@ -4896,16 +4861,16 @@ position on the path is reached.
     </div>
 
     <div class="figure">
-<img alt="Three circular path with different values of
+<img no-autosize alt="Three circular path with different values of
     'text-anchor' showing how glyphs are rendered."
     src="images/text/text-path-startoffset3.svg">
 <p class="caption">
-  Rendering for text on a path referencing a {{circle}}
-  with different values of the {{text-anchor}}
+  Rendering for text on a path referencing a <{circle}>
+  with different values of the 'text-anchor'
   attribute.
-  Left: 'start'.
-  Middle: 'middle'.
-  Right: 'end'.
+  Left: <span class="attr-value">start</span>.
+  Middle: <span class="attr-value">middle</span>.
+  Right: <span class="attr-value">end</span>.
   The red circles marks the beginning of the path (after
   the canonical decomposition of the circle into a path).
   The blue square marks the reference point for the start
@@ -4914,7 +4879,7 @@ position on the path is reached.
   shows the direction of [=typographic character=]
   placement and the point at which [=typographic character=]
   placement stops. The arrow(s) would be reversed if
-  the {{direction}} property has a value of
+  the 'direction' property has a value of
   <span class="prop-value">rtl</span>.
 
     </div>
@@ -4924,7 +4889,7 @@ Rendering all glyphs was agreed to for basic shapes at the
 <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item05">Sydney
   (2015)</a> meeting (but missing in minutes). Limiting the
 wrapping to a path with a single closed sub-path and to one
-loop, effected by the 'startOffset' attribute agreed to at the
+loop, effected by the <span class="attr-value">startOffset</span> attribute agreed to at the
 <a href="https://www.w3.org/2016/04/22-svg-minutes.html#item02">London
   (2016)</a> Editor's Meeting.
     
@@ -4976,8 +4941,8 @@ Indicates the method by which text should be rendered
     src="images/text/text-path-method.png">
 <p class="caption">
   Rendering of text on a path for different {{method}} values:
-  Left: 'align'.
-  Right: 'stretch'.
+  Left: <span class="attr-value">align</span>.
+  Right: <span class="attr-value">stretch</span>.
 
     </div>
 
@@ -5025,13 +4990,13 @@ of <span class="attr-value">right</span> effectively reverses
 the path.
     
     <div class="figure">
-<img alt="Two circular path with different values of 'side'
+<img no-autosize alt="Two circular path with different values of 'side'
     showing glyphs rendered outside the circle for
     'left' and inside the circle for 'right'."
     src="images/text/text-path-side.svg">
 <p class="caption">
-  Rendering for text on a path referencing a {{circle}}
-  with different values of the {{side}}
+  Rendering for text on a path referencing a <{circle}>
+  with different values of the <{textPath/side}>
   attribute. Left: <span class="attr-value">left</span>.
   Right: <span class="attr-value">right</span>.
 
@@ -5043,7 +5008,7 @@ Added in SVG 2 to allow text either inside or outside
 circles, and ellipses).
     
     <p class="annotation">
-Adding 'side' was resolved at the
+Adding <span class="attr-value">side</span> was resolved at the
 <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item05">Sydney
   (2015)</a> meeting.
     
@@ -5062,8 +5027,8 @@ Adding 'side' was resolved at the
       string describing the path onto which the [=typographic characters=]
 will be rendered.
       An empty string indicates that there is no path data for the element.
-      This means that the text within the {{textPath}} does not render or
-      contribute to the [=bounding box=] of the {{text}} element.
+      This means that the text within the <{textPath}> does not render or
+      contribute to the [=bounding box=] of the <{text}> element.
       If the attribute is not specified,
       the path specified with {{href}} is used instead.
     
@@ -5078,12 +5043,12 @@ will be rendered.
   <dd>
     <p>
       An [=URL Reference=] to
-      the {{path element}} element or [=basic shape=] element onto which
-      the glyphs will be rendered, if no {{path}} attribute is provided.
+      the <{path}> element element or [=basic shape=] element onto which
+      the glyphs will be rendered, if no <{path}> attribute is provided.
       If the attribute is used, and the &lt;url&gt; is an invalid
       reference (e.g., no such element exists, or the referenced
-      element is not a {{path element}} element) or [=basic shape=], then
-      the {{textPath}} element is in error and its entire
+      element is not a <{path}> element element) or [=basic shape=], then
+      the <{textPath}> element is in error and its entire
       contents shall not be rendered by the user agent.
     
     <p>
@@ -5103,17 +5068,17 @@ will be rendered.
 </dl>
 
 <p>
-  The path data coordinates within the referenced {{path element}}
+  The path data coordinates within the referenced <{path}> element
   element or [=basic shape=]
   element are assumed to be in the same coordinate system as the
-  current {{text}} element, not in the coordinate system where
-  the {{path element}} element is defined. The [[#TransformProperty|transform]]
-  attribute on the referenced {{path element}} element or [=basic shape=]
+  current <{text}> element, not in the coordinate system where
+  the <{path}> element element is defined. The [[#TransformProperty|transform]]
+  attribute on the referenced <{path}> element element or [=basic shape=]
   element represents a
   supplemental transformation relative to the current user
-  coordinate system for the current {{text}} element, including
+  coordinate system for the current <{text}> element, including
   any adjustments to the current user coordinate system due to a
-  possible [[#TransformProperty|transform]] property on the current {{text}}
+  possible [[#TransformProperty|transform]] property on the current <{text}>
   element.  For example, the following fragment of SVG content:
 
 
@@ -5169,10 +5134,10 @@ style="font-weight:bold; color:green">path="M0,20 L80,40 160,20"</span>
 <p>
   Note that the <code style="font-weight:bold;
   color:red">transform="translate(25,25)"</code> has no effect on
-  the {{textPath}} element, whereas the
+  the <{textPath}> element, whereas the
   <code style="font-weight:bold;
   color:blue">transform="rotate(45)"</code> applies to both
-  the {{text}} and the use of the {{path element}} element as the
+  the <{text}> and the use of the <{path}> element element as the
   referenced shape for text on a path. Further note that
   the <code style="font-weight:bold; color: green">transform="scale(2)"</code>
   scales the path (equivalent to multiplying every coordinate by 2 for simple linear paths),
@@ -5195,8 +5160,8 @@ path: images/text/toap01.svg
 -->
 <p id="ExampleToap02">
   <span class="example-ref">Example toap02</span> shows
-  how {{tspan}} elements can be included
-  within {{textPath}} elements to adjust styling attributes and
+  how <{tspan}> elements can be included
+  within <{textPath}> elements to adjust styling attributes and
   adjust the current text position before rendering a particular
   glyph. The first occurrence of the word "up" is filled with the
   color red.  Attribute <{tspan/dy}> is used to lift the word
@@ -5206,7 +5171,7 @@ path: images/text/toap01.svg
 Note: 
   The <{tspan/x}>, <{tspan/y}>, <{tspan/dx}>,
   <{tspan/dy}>, and <{tspan/rotate}> attributes can
-  only be specified on {{text}} and {{tspan}} elements
+  only be specified on <{text}> and <{tspan}> elements
   (but may effect the rendering of glyphs in text on a path —
   see <a href="text.html#TextpathLayoutRules">text on a path layout
   rules</a>).
@@ -5223,7 +5188,7 @@ path: images/text/toap02.svg
 -->
 <p id="ExampleToap03">
   <span class="example-ref">Example toap03</span> demonstrates the
-  use of the {{startOffset}} attribute on the {{textPath}}
+  use of the {{startOffset}} attribute on the <{textPath}>
   element to specify the start position of the text string as a
   particular position along the path. Notice that glyphs that fall
   off the end of the path are not rendered
@@ -5272,7 +5237,7 @@ path: images/text/toap03.svg
 
 
 <div class="figure">
-  <img class="bordered" src="images/text/glyph-textpath.svg"
+  <img no-autosize class="bordered" src="images/text/glyph-textpath.svg"
         alt="Left, horizontal text with the character 'A' on a path.
       Right, vertical text with the character '字' on a path.">
   <p class="caption">
@@ -5300,7 +5265,7 @@ path: images/text/toap04.svg
 -->
 <p>
   The following picture does an initial zoom in on the first glyph
-  in the {{text}} element.
+  in the <{text}> element.
 
 
 <img alt="Image that shows text
@@ -5336,7 +5301,7 @@ path: images/text/toap04.svg
     Determine the
     <dfn id="StartPointOnPath" data-dfn-type="dfn" data-export="">startpoint-on-the-path</dfn> for the
     first glyph using attribute {{startOffset}} and property
-    {{text-anchor}}. For <span class='prop-value'>text-anchor:start</span>,
+    'text-anchor'. For <span class='prop-value'>text-anchor:start</span>,
     startpoint-on-the-path is the point on the path which represents
     the point on the path which is {{startOffset}} distance
     along the path from the start of the path, calculated using the
@@ -5347,7 +5312,7 @@ path: images/text/toap04.svg
     startpoint-on-the-path is the point on the path which represents
     the point on the path which is [ {{startOffset}} minus half
     of the total advance values for all of the glyphs in
-    the {{textPath}} element ] distance along the path from the
+    the <{textPath}> element ] distance along the path from the
     start of the path, calculated using the user
     agent's <a href="paths.html#DistanceAlongAPath">distance along
     the path</a> algorithm.
@@ -5356,11 +5321,11 @@ path: images/text/toap04.svg
     startpoint-on-the-path is the point on the path which represents
     the point on the path which is [ {{startOffset}} minus the
     total advance values for all of the glyphs in
-    the {{textPath}} element ]. Before rendering the first
+    the <{textPath}> element ]. Before rendering the first
     glyph, the horizontal component of the startpoint-on-the-path is
     adjusted to take into account various horizontal alignment text
     properties and attributes, such as a <{tspan/dx}> attribute
-    value on a {{tspan}} element. (In the picture above, the
+    value on a <{tspan}> element. (In the picture above, the
     startpoint-on-the-path is the leftmost dot on the path.)
   </li>
 
@@ -5409,12 +5374,12 @@ path: images/text/toap04.svg
 
   <li>
     Align the glyph vertically relative to the midpoint-on-the-path
-    based on property {{alignment-baseline}} and any specified
-    values for attribute <{tspan/dy}> on a {{tspan}}
-    element. In the example above, the {{alignment-baseline}}
+    based on property 'alignment-baseline' and any specified
+    values for attribute <{tspan/dy}> on a <{tspan}>
+    element. In the example above, the 'alignment-baseline'
     property is unspecified, so the initial value
     of <span class="prop-value">alignment-baseline:baseline</span>
-    will be used. There are no {{tspan}} elements; thus, the
+    will be used. There are no <{tspan}> elements; thus, the
     baseline of the glyph is aligned to the
     midpoint-on-the-path.
   </li>
@@ -5424,8 +5389,8 @@ path: images/text/toap04.svg
     the previous endpoint-on-the-path, but with appropriate
     adjustments taking into account horizontal kerning tables in the
     font and current values of various attributes and properties,
-    including spacing properties (e.g. {{letter-spacing}}
-    and {{word-spacing}}) and {{tspan}} elements with
+    including spacing properties (e.g. 'letter-spacing'
+    and 'word-spacing') and <{tspan}> elements with
     values provided
     for attributes <{tspan/dx}> and <{tspan/dy}>. All
     adjustments are calculated as distance adjustments along the
@@ -5459,7 +5424,7 @@ path: images/text/toap04.svg
     rendering the first glyph, the horizontal component of the
     startpoint-on-the-path is adjusted to take into account various
     vertical alignment text properties and attributes, such as
-    a <{tspan/dy}> attribute value on a {{tspan}} element.
+    a <{tspan/dy}> attribute value on a <{tspan}> element.
   </li>
 
   <li>
@@ -5500,8 +5465,8 @@ path: images/text/toap04.svg
     Align the glyph horizontally (where horizontal is relative to
     the glyph's coordinate system) relative to the
     midpoint-on-the-path based on
-    property {{alignment-baseline}} and any specified values
-    for attribute <{tspan/dx}> on a {{tspan}} element.
+    property 'alignment-baseline' and any specified values
+    for attribute <{tspan/dx}> on a <{tspan}> element.
   </li>
 
   <li>
@@ -5510,7 +5475,7 @@ path: images/text/toap04.svg
     adjustments taking into account vertical kerning tables in the
     font and current values of various attributes and properties,
     including spacing
-    properties and {{tspan}} elements with values provided
+    properties and <{tspan}> elements with values provided
     for attributes <{tspan/dx}> and <{tspan/dy}>. All
     adjustments are calculated as distance adjustments along the
     path, calculated using the user agent's
@@ -5540,40 +5505,40 @@ path: images/text/toap04.svg
 <p>
   When the [=inline-base direction=]
   is horizontal, then any <span class="attr-name">x</span>
-  attributes on {{text}} or {{tspan}}
+  attributes on <{text}> or <{tspan}>
   elements represent new absolute offsets along
   the path, thus providing explicit new values for
   startpoint-on-the-path. Any <span class="attr-name">y</span>
-  attributes on {{text}} or {{tspan}}
+  attributes on <{text}> or <{tspan}>
   elements are ignored.
 
   When the [=inline-base direction=]
   is vertical, then any <span class="attr-name">y</span>
-  attributes on {{text}} or {{tspan}}
+  attributes on <{text}> or <{tspan}>
   elements represent new absolute offsets along
   the path, thus providing explicit new values for
   startpoint-on-the-path. Any <span class="attr-name">x</span>
-  attributes on {{text}} or {{tspan}} elements are ignored.
+  attributes on <{text}> or <{tspan}> elements are ignored.
 
 
 <p>
-  After positioning all characters within the {{textPath}},
+  After positioning all characters within the <{textPath}>,
   the [=current text position=] is set to the end point of the path,
   after adjusting for the {{startOffset}} in the case of paths
   that are a single closed loop.
   In other words,
-  text that follows a {{textPath}} element (but is still inside
-  a {{text}} element) that does not have explicit positioning
+  text that follows a <{textPath}> element (but is still inside
+  a <{text}> element) that does not have explicit positioning
   information (<{tspan/x}> and <{tspan/y}> attributes) is
   positioned from the end of the path.
 
 
 <div class="figure">
-  <img alt="Text on a path showing the starting point for
+  <img no-autosize alt="Text on a path showing the starting point for
       rendering text after the &lt;textPath&gt; element."
   src="images/text/text-path-nonpath-text.svg">
   <p class="caption">
-    The starting point for text after the {{textPath}} element
+    The starting point for text after the <{textPath}> element
     without explicit positioning information is at the end of the
     path (red dot).
     
@@ -5593,7 +5558,7 @@ path: images/text/toap04.svg
 
 <h3 id="TextRenderingOrder">Text rendering order</h3>
 
-<p>A {{text}} element is rendered in one or more chunks.
+<p>A <{text}> element is rendered in one or more chunks.
 Each chunk (as produced by the <a href="#TextLayoutAlgorithm">text layout algorithm</a>)
 is rendered, one after the other, in document order.  Each
 rendered chunk, which consists of one or more glyphs,
@@ -5602,10 +5567,10 @@ is filled and stroked as if it were a single path.
 <p>
 This means that all glyphs in the chunk should be filled,
 then all glyphs stroked at once,
-or the reverse according to the value of the [=paint-order=] property.
+or the reverse according to the value of the 'paint-order' property.
 
 
-<p>For the purposes of painting, a {{text}} has zero, one, or more
+<p>For the purposes of painting, a <{text}> has zero, one, or more
 [=equivalent paths=], one for each chunk.  Each equivalent path
 consists of one subpath per glyph within that chunk.
 
@@ -5628,9 +5593,9 @@ the dash pattern at the same positions across different implementations.
   CSS offers a multitude of properties for styling text. In
   general, only two sets of properties are applicable to SVG: those
   that determine which glyphs are to be rendered
-  ({{font-family}}, {{font-style}}, etc.) and those that
-  apply at the <em>paragraph</em> level ({{direction}},
-  {{writing-mode}}, {{line-height}}, {{letter-spacing}},
+  ('font-family', 'font-style', etc.) and those that
+  apply at the <em>paragraph</em> level ('direction',
+  'writing-mode', 'line-height', 'letter-spacing',
   etc.).
 
 
@@ -5646,7 +5611,7 @@ the dash pattern at the same positions across different implementations.
     text where the [=wrapping area=] is defined by the
     {{inline-size}} property:
     <p>
-{{text-anchor}}.
+'text-anchor'.
     
   </li>
   <li>
@@ -5654,20 +5619,20 @@ the dash pattern at the same positions across different implementations.
     where the [=wrapping area=] is defined by the
     {{inline-size}} property:
     <p>
-{{text-align}},
-{{text-align-last}},
-{{text-justify}},
+'text-align',
+'text-align-last',
+'text-justify',
     
   </li>
   <li>
     Properties that apply only to auto-wrapped text:
     <p>
-{{text-indent}},
-{{line-break}},
-{{word-break}},
-{{hyphens}},
-{{word-wrap}},
-{{overflow-wrap}}.
+'text-indent',
+'line-break',
+'word-break',
+'hyphens',
+'word-wrap',
+'overflow-wrap'.
     
   </li>
 </ul>
@@ -5676,7 +5641,7 @@ the dash pattern at the same positions across different implementations.
   Additionally, the @font-face rule must be supported for
   font selection as well as
   the ::first-line and ::first-letter pseudo-elements must be
-  supported on {{text}} elements.
+  supported on <{text}> elements.
   In interactive modes, the ::selection pseudo-element must also be supported.
 
 
@@ -5689,7 +5654,7 @@ the dash pattern at the same positions across different implementations.
 
 Note: 
   For example, while SVG 2 does not require support for the
-  {{text-combine-upright}} property, its behavior in an SVG
+  'text-combine-upright' property, its behavior in an SVG
   context should be obvious.
 
 
@@ -5699,10 +5664,10 @@ Note:
 
 <ul>
   <li>
-    Border properties (such as {{border-top-style}}).  Boxes
+    Border properties (such as 'border-top-style').  Boxes
     generated by the CSS layout process must not be sized as if they
     had any borders.  The used value for all of
-    the {{border-style}} component longhand properties on SVG
+    the 'border-style' component longhand properties on SVG
     text elements is <span class='prop-value'>none</span>.
   </li>
 
@@ -5713,7 +5678,7 @@ Note:
     elements, any value of 'display' on an SVG text element
     other than <span class='prop-value'>none</span> is handled just
     as if it were <span class='prop-value'>inline</span>.  Thus it
-    is not possible for a single {{text}} element to have any
+    is not possible for a single <{text}> element to have any
     block children.
   </li>
 
@@ -5723,24 +5688,24 @@ Note:
   </li>
 
   <li>
-    The {{position}} property, whose used value on SVG text
+    The 'position' property, whose used value on SVG text
     elements is <span class='prop-value'>static</span>.
   </li>
 
   <li>
-    Margin properties (such as {{margin-top}}), whose used
+    Margin properties (such as 'margin-top'), whose used
     values on SVG text elements are
     <span class='prop-value'>0</span>.
   </li>
 
   <li>
-    The {{text-align}} property when text is pre-formatted,
+    The 'text-align' property when text is pre-formatted,
     whose used value on such SVG text
     elements is <span class='prop-value'>start</span>.
   </li>
 
   <li>
-    The {{content}} property, whose used value on SVG text
+    The 'content' property, whose used value on SVG text
     elements is <span class='prop-value'>none</span>.
   </li>
 </ul>
@@ -5766,30 +5731,30 @@ Note:
 <h5 id="TextAnchoringProperties">Text alignment, the <span class="property">text-anchor</span> property</h5>
 
 <p>
-  The {{text-anchor}} property is used to align (start-,
+  The 'text-anchor' property is used to align (start-,
   middle- or end-alignment) a string of <em>pre-formatted</em> text
   or <em>auto-wrapped text</em> where the [=wrapping area=]
   is determined from the {{inline-size}} property
   relative to a given point. It is not applicable to other types of
-  <em>auto-wrapped text</em>, see instead {{text-align}}. For
+  <em>auto-wrapped text</em>, see instead 'text-align'. For
   multi-line text, the alignment takes place for each line.
 
 
 <p>
-  The {{text-anchor}} property is applied to each individual
-  [=text chunk=] within a given {{text}} element. Each text
+  The 'text-anchor' property is applied to each individual
+  [=text chunk=] within a given <{text}> element. Each text
   chunk has an initial [=current text position=], which
   represents the point in the user coordinate system resulting from
   (depending on context) application of the <{text/x}>
-  and <{text/y}> attributes on the {{text}} element,
+  and <{text/y}> attributes on the <{text}> element,
   any <{tspan/x}> or <{tspan/y}> attribute values on
-  a {{tspan}} element assigned explicitly to the first rendered
+  a <{tspan}> element assigned explicitly to the first rendered
   character in a text chunk, or determination of the initial current
-  text position for a {{textPath}} element. Each text chunk
+  text position for a <{textPath}> element. Each text chunk
   also has a final [=current text position=] which is the
   [=current text position=] after placing the last glyph
   in the [=text chunk=]. The positions are determined before
-  applying the {{text-anchor}} property.
+  applying the 'text-anchor' property.
 
 
 <table class="propdef def">
@@ -5840,11 +5805,11 @@ Note:
   <dd>
     The rendered characters are aligned such that the start of the
     resulting rendered text is at the initial current text position.
-    For an element with a {{direction}} property value
+    For an element with a 'direction' property value
     of <span class="prop-value">"ltr"</span> (typical for most
     European languages), the left side of the text is rendered at
     the initial text position.  For an element with a
-    {{direction}} property value of
+    'direction' property value of
     <span class="prop-value">"rtl"</span> (typical for Arabic and
     Hebrew), the right side of the text is rendered at the initial
     text position.  For an element with a vertical primary text
@@ -5857,7 +5822,7 @@ Note:
     The rendered characters are shifted such that the geometric
     middle of the resulting rendered text (determined from the
     initial and final [=current text position=] before applying
-    the {{text-anchor}} property) is at the initial current
+    the 'text-anchor' property) is at the initial current
     text position.
   </dd>
 
@@ -5865,13 +5830,13 @@ Note:
   <dd>
     The rendered characters are shifted such that the end of the
     resulting rendered text (final [=current text position=]
-    before applying the {{text-anchor}} property)
+    before applying the 'text-anchor' property)
     is at the initial current text position.
-    For an element with a {{direction}} property value
+    For an element with a 'direction' property value
     of <span class="prop-value">"ltr"</span> (typical for most
     European languages), the right side of the text is rendered at
     the initial text position.  For an element with
-    a {{direction}} property value
+    a 'direction' property value
     of <span class="prop-value">"rtl"</span> (typical for Arabic and
     Hebrew), the left side of the text is rendered at the initial
     text position.  For an element with a vertical primary text
@@ -5881,7 +5846,7 @@ Note:
 </dl>
 
 <div class="example">
-  <p>An example of using {{text-anchor}} on multi-line text.
+  <p>An example of using 'text-anchor' on multi-line text.
 
   <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -5896,7 +5861,7 @@ Note:
 </xmp>
 
   <div class="figure">
-    <img class="bordered" src="images/text/text-anchor-middle.svg"
+    <img no-autosize class="bordered" src="images/text/text-anchor-middle.svg"
           alt="Image showing two lines of text centered via text-anchor.">
     <p class="caption">
 The preserved line-feed creates two [=text chunks=], each
@@ -5906,7 +5871,7 @@ anchored independently.
 </div>
 
 <div class="example">
-  <p>Another example of using {{text-anchor}} on multi-line text.
+  <p>Another example of using 'text-anchor' on multi-line text.
 
   <xmp>
 <svg xmlns="http://www.w3.org/2000/svg"
@@ -5918,7 +5883,7 @@ style="font-size: 42px; text-anchor: middle">I❤SVG</text>
 </xmp>
 
   <div class="figure">
-    <img class="bordered" src="images/text/text-anchor-chunks.svg"
+    <img no-autosize class="bordered" src="images/text/text-anchor-chunks.svg"
     alt="Image showing three lines of text divided as 'I', '❤', 'SVG'.">
     <p class="caption">
 The text is divided into three [=text chunks=] (due to the
@@ -5939,25 +5904,25 @@ Note:
 
 <p>
   This property applies only to vertical text. It has been obsoleted
-  in SVG 2 and partially replaced by the {{text-orientation}}
+  in SVG 2 and partially replaced by the 'text-orientation'
   property of CSS Writing Modes Level 3. The following SVG 1.1
   values must still be supported by aliasing the property
-  as a shorthand to {{text-orientation}} as follows:
+  as a shorthand to 'text-orientation' as follows:
 
 <ul>
   <li>
-    <span class="prop-value">'auto'</span> to
-    <span class="prop-value">'mixed'</span>;
+    <span class="prop-value">auto</span> to
+    <span class="prop-value">mixed</span>;
   </li>
   <li>
-    <span class="prop-value">'0deg'</span>, and
-    <span class="prop-value">'0'</span>, to
-    <span class="prop-value">'upright'</span>.
+    <span class="prop-value">0deg</span>, and
+    <span class="prop-value">0</span>, to
+    <span class="prop-value">upright</span>.
   </li>
   <li>
-    <span class="prop-value">'90deg'</span>, and
-    <span class="prop-value">'90'</span>, to
-    <span class="prop-value">'sideways'</span>.
+    <span class="prop-value">90deg</span>, and
+    <span class="prop-value">90</span>, to
+    <span class="prop-value">sideways</span>.
   </li>
 </ul>
 <p>
@@ -5972,14 +5937,14 @@ Note:
   removed in SVG 2.
 
 <p>
-  SVG 1.1 uses the 'kerning' property to determine if the font
+  SVG 1.1 uses the <span class="attr-value">kerning</span> property to determine if the font
   kerning tables should be used to adjust inter-glyph
   spacing. It also allows a
   <span class="prop-value">&lt;length&gt;</span> value which
   if given is added to the spacing between glyphs (supplemental
-  to any from the {{letter-spacing}} property). This
+  to any from the 'letter-spacing' property). This
   property is replaced in SVG 2 by the
-  CSS {{font-kerning}} property which solely controls
+  CSS 'font-kerning' property which solely controls
   turning on/off the use of the font kerning tables.
 
 <p class="annotation">
@@ -6020,26 +5985,26 @@ Note:
 
 <em>This section is not normative</em>
 
-<p>The {{font-variant}} property gets defined by the CSS Font Module
+<p>The 'font-variant' property gets defined by the CSS Font Module
   ([<a href="refs.html#ref-css-fonts-3">css-font-3</a>]).
 
 
 <p>
   CSS Font Module changes the meaning of the
-  {{font-variant}}
+  'font-variant'
   property from that defined by CSS 2.1. It has been repurposed (and
   its functionality greatly expanded) as a shorthand for selecting font
   variants from within a single font.
 
 
 <p>
-  SVG 2 supports all {{font-variant}} longhand properties (e.g. {{font-variant-ligatures}}).
+  SVG 2 supports all 'font-variant' longhand properties (e.g. 'font-variant-ligatures').
 
 
 <h5 id="LineHeightProperty">The <span class="property">line-height</span> property</h5>
 
 <p>
-  SVG uses the {{line-height}} property to determine the amount
+  SVG uses the 'line-height' property to determine the amount
   of leading space which is added between lines in multi-line text
   (both for horizontal and vertical text). It is not applicable to
   text on a path.
@@ -6047,7 +6012,7 @@ Note:
 Note: 
   Except for the additional information provided here, the
   <a href="https://www.w3.org/TR/CSS21/visudet.html#line-height">normative
-    definition</a> of the {{line-height}} property is in the CSS 2.1
+    definition</a> of the 'line-height' property is in the CSS 2.1
     specification
     ([[CSS2]]).
 
@@ -6061,7 +6026,7 @@ Note:
 
 <em>This section is not normative.</em>
 
-<p>The {{writing-mode}} property gets defined by the CSS Writing Modes Module
+<p>The 'writing-mode' property gets defined by the CSS Writing Modes Module
       ([<a href="refs.html#ref-css-writing-modes-3">css-writing-modes-3</a>]).
   
 
@@ -6083,10 +6048,10 @@ Note:
 <p class="annotation"><!-- This could be an annotation. -->
   In SVG 1.0, this property could be interpreted as to also setting the
   [=inline-base direction=] leading to confusion about its role
-  relative to the {{direction}} property. SVG 1.1 was a bit
-  more specific about the role of {{direction}}
-  (e.g. that {{direction}} set the reference point for
-  the {{text-anchor}} property) but still was open to
+  relative to the 'direction' property. SVG 1.1 was a bit
+  more specific about the role of 'direction'
+  (e.g. that 'direction' set the reference point for
+  the 'text-anchor' property) but still was open to
   interpretation. The fact that neither SVG 1.0 nor SVG 1.1 allowed
   multi-line text added to the confusion.
 
@@ -6095,16 +6060,16 @@ Note:
 
 <p>
   The property specifies the [=inline-base direction=] of a
-  {{text}} or {{tspan}} element. It defines the
+  <{text}> or <{tspan}> element. It defines the
   <q>start</q> and <q>end</q> points of a line of text as used by
-  the {{text-anchor}} and {{inline-size}} properties. It
+  the 'text-anchor' and {{inline-size}} properties. It
   also may affect the direction in which characters are positioned
-  if the {{unicode-bidi}} property's value is either
+  if the 'unicode-bidi' property's value is either
   <span class='prop-value'>embed</span> or
   <span class='prop-value'>bidi-override</span>.
 
 <p>
-  The {{direction}} property applies only to glyphs oriented
+  The 'direction' property applies only to glyphs oriented
   perpendicular to the [=inline-base direction=],
   which includes the usual case of horizontally-oriented Latin or
   Arabic text and the case of narrow-cell Latin or Arabic characters
@@ -6118,7 +6083,7 @@ Note:
 Note: 
   Except for the additional information provided here, the
   <a href="https://www.w3.org/TR/css-writing-modes-3/#direction">normative
-    definition</a> of the {{direction}} property is in CSS
+    definition</a> of the 'direction' property is in CSS
     Writing Modes Level 3
     ([<a href="refs.html#ref-css-writing-modes-3">css-writing-modes-3</a>]).
 
@@ -6129,7 +6094,7 @@ Note:
   result automatically, and in such cases the author does not need
   to use these properties. For other cases, such as when using
   right-to-left languages, it may be sufficient to add the
-  {{direction}} property to the [=outermost svg element=],
+  'direction' property to the [=outermost svg element=],
   and allow that direction to inherit to all text elements, as in the
   following example (which may be used as a template):
 
@@ -6170,11 +6135,11 @@ Note:
 
 <ul>
   <li>
-    The 'reset-size' value is no longer supported.  Any change
-    in {{font-size}} resets the dominant baseline table.
+    The <span class="attr-value">reset-size</span> value is no longer supported.  Any change
+    in 'font-size' resets the dominant baseline table.
   </li>
   <li>
-    The 'use-script' and 'no-change' values are no longer supported.
+    The <span class="attr-value">use-script</span> and <span class="attr-value">no-change</span> values are no longer supported.
   </li>
   <li>
     The property is now inherited. (Behavior is effectively unchanged.)
@@ -6182,12 +6147,12 @@ Note:
 </ul>
 
 Note: 
-  SVG uses the value of the {{dominant-baseline}} property to
+  SVG uses the value of the 'dominant-baseline' property to
   align glyphs relative to the <{tspan/x}> and <{tspan/y}>
-  attributes. For the {{text-orientation}} value
+  attributes. For the 'text-orientation' value
   <span class="prop-value">sideways</span>, the
   <span class="prop-value">auto</span> value for
-  {{dominant-baseline}} is
+  'dominant-baseline' is
   <span class="prop-value">alphabetic</span>; however, for backwards
   compatibility, the glyphs should be aligned to the
   <{tspan/x}> and <{tspan/y}> attributes using the
@@ -6199,7 +6164,7 @@ Note:
 
 
 <!-- <p class="annotation">
-  The SVG 1.1 definition of the {{dominant-baseline}} property
+  The SVG 1.1 definition of the 'dominant-baseline' property
   was derived from the <a href="https://www.w3.org/TR/2006/REC-xsl11-20061205/">XSL</a>
   specification. (See
   <a href="https://www.w3.org/TR/2006/REC-xsl11-20061205/#dominant-baseline">XSL 'dominant-baseline'</a>.)
@@ -6215,17 +6180,17 @@ Note:
 
 
 Note: 
-  The {{vertical-align}} property shorthand should be preferred
+  The 'vertical-align' property shorthand should be preferred
   in new content.
 
 
 <p>
   SVG 2 introduces some changes to the definition of this property.
-  In particular: the values 'auto', 'before-edge', and 'after-edge'
-  have been removed. For backwards compatibility, 'text-before-edge'
-  should be mapped to 'text-top' and 'text-after-edge' should be
-  mapped to 'text-bottom'. Neither 'text-before-edge' nor
-  'text-after-edge' should be used with the {{vertical-align}}
+  In particular: the values <span class="attr-value">auto</span>, <span class="attr-value">before-edge</span>, and <span class="attr-value">after-edge</span>
+  have been removed. For backwards compatibility, <span class="attr-value">text-before-edge</span>
+  should be mapped to <span class="attr-value">text-top</span> and <span class="attr-value">text-after-edge</span> should be
+  mapped to <span class="attr-value">text-bottom</span>. Neither <span class="attr-value">text-before-edge</span> nor
+  <span class="attr-value">text-after-edge</span> should be used with the 'vertical-align'
   property.
 
 
@@ -6238,15 +6203,15 @@ Note:
 
 
 Note: 
-  The {{vertical-align}} property shorthand should be preferred
+  The 'vertical-align' property shorthand should be preferred
   in new content.
 
 
 <p class="annotation">
-  The 'baseline' value was removed with the conversion of
+  The <span class="attr-value">baseline</span> value was removed with the conversion of
   'vertical-align' to a shorthand for 'alignment-baseline' and
   'baseline-shift' as it is also a value for 'alignment-baseline'
-  and it is redundant with a length value of '0'.
+  and it is redundant with a length value of <span class="attr-value">0</span>.
 
 
 <div class="annotation svg2-requirement">
@@ -6285,10 +6250,10 @@ Note:
 
 Note: 
   Except as noted, see CSS Text Level 3 for the definition of the
-  {{letter-spacing}}.([<a href="refs.html#ref-css-text-3">css-text-3</a>]).
+  'letter-spacing'.([<a href="refs.html#ref-css-text-3">css-text-3</a>]).
 
 <p class="annotation">
-  SVG 1.1 allowed percentage values in the {{letter-spacing}} property. Percentage values based on the SVG viewport are not seen as
+  SVG 1.1 allowed percentage values in the 'letter-spacing' property. Percentage values based on the SVG viewport are not seen as
   useful, so this was removed in SVG 2. This brings the definition of 'letter-spacing' in line with
   CSS.
 
@@ -6298,11 +6263,11 @@ Note:
 
 Note: 
   Except as noted, see CSS Text Level 3 for the definition of the
-  {{word-spacing}}.([<a href="refs.html#ref-css-text-3">css-text-3</a>]).
+  'word-spacing'.([<a href="refs.html#ref-css-text-3">css-text-3</a>]).
 
 <p class="annotation">
   SVG 2 changes the meaning of percentage values for the
-  {{word-spacing}} property. In SVG 1.1, percentages define
+  'word-spacing' property. In SVG 1.1, percentages define
   additional spacing as a percentage of the [=SVG viewport=]
   size. Percentage values based on the SVG viewport are not seen as
   useful. In SVG 2, following CSS Text Level 3, percentages define
@@ -6318,7 +6283,7 @@ Note:
   <table>
     <tr>
 <th>SVG 2 Requirement:</th>
-<td>Add {{text-overflow}} functionality.</td>
+<td>Add 'text-overflow' functionality.</td>
     </tr>
     <tr>
 <th>Resolution:</th>
@@ -6350,23 +6315,23 @@ Note:
 
 
 <p>
-  SVG uses the {{text-overflow}} property to control
+  SVG uses the 'text-overflow' property to control
   how [=text content block elements=] render when text
   overflows [=line boxes=] as, for example, can happen when the
-  {{white-space}} property has the value
+  'white-space' property has the value
   <span class="prop-value">nowrap</span>. The property does not
   apply to pre-formatted text or text-on-a-path.
 
 
 <p>
-  In SVG {{text-overflow}} has an effect if there is a validly
+  In SVG 'text-overflow' has an effect if there is a validly
   specified [=wrapping area=], regardless of the computed value
   of the [[#OverflowAndClipProperties|overflow]] property on the <a>text content block
   element</a>.
 
 
 <p>
-  If the {{text-overflow}} property has the value
+  If the 'text-overflow' property has the value
   <span class="prop-value">ellipsis</span> then if the text that is
   to be rendered overflows the [=wrapping area=] an ellipsis is
   rendered such that it fits within the given area. For the
@@ -6379,36 +6344,36 @@ Note:
   document order mapping to one glyph.-->
 
 <p>
-  If the {{text-overflow}} property has the value
+  If the 'text-overflow' property has the value
   <span class="prop-value">clip</span> then any text
   that overflows the [=wrapping area=] is clipped.
   Characters may be partially rendered.
 
 
 <p>
-  Any other value for {{text-overflow}} is treated as if it
+  Any other value for 'text-overflow' is treated as if it
   wasn't specified.
 
 
 <p>
-  Note that the effect of {{text-overflow}} is purely visual,
+  Note that the effect of 'text-overflow' is purely visual,
   the ellipsis itself does not become part of the DOM. For all the
-  DOM methods it is as if {{text-overflow}} was not applied, and
+  DOM methods it is as if 'text-overflow' was not applied, and
   as if the [=wrapping area=] did not constrain the text.
 
 
 <div class="example">
   <p>
-    The following example shows the use of {{text-overflow}}.
+    The following example shows the use of 'text-overflow'.
     The top line shows text as it would normally be rendered (text
-    overflows due to {{white-space}} value
+    overflows due to 'white-space' value
     <span class="prop-value">pre</span> and is displayed due to
     [[#OverflowAndClipProperties|overflow]] value <span class="prop-value">visible</span>).
 
-    The middle line shows text with {{text-overflow}} value
+    The middle line shows text with 'text-overflow' value
     <span class="prop-value">clip</span>, and
 
-    the bottom line shows text with {{text-overflow}} value
+    the bottom line shows text with 'text-overflow' value
     <span class="prop-value">ellipsis</span>.
   
 
@@ -6431,9 +6396,9 @@ Note:
 </xmp>
 
   <div class="figure">
-    <img class="bordered" src="images/text/text-overflow-ref.svg"
+    <img no-autosize class="bordered" src="images/text/text-overflow-ref.svg"
           alt="Image showing the use of the text-overflow property.">
-    <p class="caption">The {{text-overflow}} property used on
+    <p class="caption">The 'text-overflow' property used on
     text elements, the bottom line showing text with an ellipsis
     applied.
   </div>
@@ -6449,16 +6414,16 @@ Note:
 <h4 id="WhiteSpace">White space</h4>
 
 Note: 
-  New in SVG 2. Added {{white-space}} to allow a more useful
+  New in SVG 2. Added 'white-space' to allow a more useful
   way to control white-space handling.  Aligns SVG and HTML/CSS text
-  processing. {{xml:space}} deprecated in new content, retained
+  processing. <code>xml:space</code> deprecated in new content, retained
   for backwards compatibility.
 
 
 <h5 id="TextWhiteSpace">SVG 2 Preferred white space handling, the <span class="property">white-space</span> property</h5>
 
 <p>
-  Rendering of white space in SVG 2 is controlled by the {{white-space}}
+  Rendering of white space in SVG 2 is controlled by the 'white-space'
   property. This specifies two things:
 
 <ul>
@@ -6474,7 +6439,7 @@ Note:
 
 <div class="example">
   <p>
-    An example of using the {{white-space}}
+    An example of using the 'white-space'
     value <span class="prop-value">pre-line</span>.
   
 
@@ -6494,7 +6459,7 @@ Note:
 </xmp>
 
   <div class="figure">
-    <img class="bordered" src="images/text/text-whitespace-vertical.svg"
+    <img no-autosize class="bordered" src="images/text/text-whitespace-vertical.svg"
           alt="Japanese poem showing traditional line-breaking after every seven kanji.">
     <p class="caption">
 Example of multi-line vertical text with line breaks. The text
@@ -6507,18 +6472,18 @@ at traditional places.
 
 <h5 id="LegacyXMLSpace">Legacy white-space handling, the <span class="property">xml:space</span> property</h5>
 
-<p id="XMLSpaceAttribute">
+<p>
   For compatibility, SVG 2 also supports the  XML attribute
-  {{xml:space}} to specify the handling of white space
-  characters within a given {{text}} element's character
-  data. New content should not use {{xml:space}} but
-  instead, use the {{white-space}} property.
+  <code>xml:space</code> to specify the handling of white space
+  characters within a given <{text}> element's character
+  data. New content should not use <code>xml:space</code> but
+  instead, use the 'white-space' property.
 
 
 <p class="annotation">
   This section should be simplified to limit the discussion of
   xml:space and instead define it in the user agent style sheet using the
-  {{white-space}} property. The
+  'white-space' property. The
   <a href="https://drafts.csswg.org/css-text-4/">CSS Text 4</a>
   specification's
   <span class="prop-value">preserve-spaces</span> value for the
@@ -6527,13 +6492,13 @@ at traditional places.
   property is intended to match
   <span class="prop-value">xml:space=preserve</span>.
   (<a href="https://log.csswg.org/irc.w3.org/css/2015-02-08/#e519951">fantasai
-  agreed</a> to add an appropriate value for {{white-space}} to
+  agreed</a> to add an appropriate value for 'white-space' to
   match SVG 1.1's odd xml:space="preserve" behavior.)
 
 
 <p>
-  Note that any child element of a {{text}} element may also
-  have an {{xml:space}} attribute which will apply to that
+  Note that any child element of a <{text}> element may also
+  have an <code>xml:space</code> attribute which will apply to that
   child element's text content.  The SVG user agent has special
   processing rules associated with this attribute as described
   below. These are behaviors that occur subsequent to XML parsing
@@ -6542,14 +6507,14 @@ at traditional places.
 
 
 <p>
-  {{xml:space}} is an inheritable attribute which can have one of
+  <code>xml:space</code> is an inheritable attribute which can have one of
   two values:
 
 
 <dl>
   <dt><code class='attr-value'>default</code></dt>
   <dd>
-    (The initial/default value for {{xml:space}}.) When
+    (The initial/default value for <code>xml:space</code>.) When
     <span class='attr-value'>xml:space="default"</span>, the SVG
     user agent will do the following using a copy of the original
     character data content. First, it will remove all newline
@@ -6578,8 +6543,8 @@ at traditional places.
   The following example illustrates that line indentation can be
   important when using
   <span class='attr-value'>xml:space="default"</span>.  The fragment
-  below show two pairs of similar {{text}} elements, with
-  both {{text}} elements using
+  below show two pairs of similar <{text}> elements, with
+  both <{text}> elements using
   <span class="attr-value">xml:space="default"</span>. For
   these examples, there is no extra white space at the end of any of
   the lines (i.e., the line break occurs immediately after the last
@@ -6601,10 +6566,10 @@ at traditional places.
 </pre>
 
 <p>
-  The first pair of {{text}} elements above show the
+  The first pair of <{text}> elements above show the
   effect of indented character data. The attribute
   <span class="attr-value">xml:space="default"</span> in the first
-  {{text}} element instructs the user agent to:
+  <{text}> element instructs the user agent to:
 
 
 <ul>
@@ -6621,10 +6586,10 @@ at traditional places.
 </ul>
 
 <p>
-  The second pair of {{text}} elements above show the
+  The second pair of <{text}> elements above show the
   effect of non-indented character data. The attribute
   <span class="attr-value">xml:space="default"</span> in the third
-  {{text}} element instructs the user agent to:
+  <{text}> element instructs the user agent to:
 
 
 <ul>
@@ -6657,7 +6622,7 @@ at traditional places.
   Any features in the SVG language or the SVG DOM that are based
   on character position number, such as the <{tspan/x}>,
   <{tspan/y}>, <{tspan/dx}>, <{tspan/dy}> and
-  <{tspan/rotate}> attributes on the {{text}} and {{tspan}}
+  <{tspan/rotate}> attributes on the <{text}> and <{tspan}>
   elements, are based on
   character position after applying the white space handling rules
   described here.  In particular,
@@ -6678,7 +6643,7 @@ at traditional places.
 
 
 <p>
-  The {{xml:space}} attribute is:
+  The <code>xml:space</code> attribute is:
 
 <p>
   &nbsp;&nbsp;&nbsp;&nbsp;<span class="anim-target"><a href="https://svgwg.org/specs/animations/#Animatable">Animatable</a>:
@@ -6688,13 +6653,13 @@ at traditional places.
 <h5 id="DuplicateWhiteSpace">Duplicate white-space directives</h5>
 
 <p>
-  Older, SVG 1.1 content will use {{xml:space}}. New content,
+  Older, SVG 1.1 content will use <code>xml:space</code>. New content,
   and older content that is being reworked, will use
-  {{white-space}} and remove any existing
-  {{xml:space}}. However, user agents may come across content
+  'white-space' and remove any existing
+  <code>xml:space</code>. However, user agents may come across content
   which uses both methods on the same element. If
-  the {{white-space}} property is set on any element, then the
-  value of {{xml:space}} is ignored.
+  the 'white-space' property is set on any element, then the
+  value of <code>xml:space</code> is ignored.
 
 
 
@@ -6704,9 +6669,9 @@ at traditional places.
 <p>
   Text in SVG can be <em>decorated</em> with an underline, overline,
   and/or strike-through. The position and style of the decoration is
-  determined respectively by the {{text-decoration-line}} and
-  {{text-decoration-style}} properties, or by
-  the {{text-decoration}} shorthand property as defined in the
+  determined respectively by the 'text-decoration-line' and
+  'text-decoration-style' properties, or by
+  the 'text-decoration' shorthand property as defined in the
   <a href="https://www.w3.org/TR/css-text-decor-3/#line-decoration">Line
     Decoration</a> section of the
   <a href="https://www.w3.org/TR/css-text-decor-3/">CSS Text
@@ -6722,9 +6687,9 @@ at traditional places.
 
 
 Note: 
-  The {{text-decoration-line}} and
-  {{text-decoration-style}} properties are new in SVG 2. The
-  SVG 1.1/CSS 2.1 {{text-decoration}} property is transformed
+  The 'text-decoration-line' and
+  'text-decoration-style' properties are new in SVG 2. The
+  SVG 1.1/CSS 2.1 'text-decoration' property is transformed
   in a backwards compatible way to a short hand for these
   properties.
 
@@ -6737,14 +6702,14 @@ Note:
   <a href="https://www.w3.org/TR/css-text-decor-3/">CSS Text
   Decoration Module Level 3</a>. The paint order of the text
   decoration itself (fill/stroke) is determined by the value of the
-  [=paint-order=] property at the point where the text
+  'paint-order' property at the point where the text
   decoration is declared.
 
 
 <p id="ExampleTextDecoration01">
   <span class="example-ref">Example textdecoration01</span> provides
-  examples for {{text-decoration}}. The first line of text has
-  no value for {{text-decoration}}, so the initial value
+  examples for 'text-decoration'. The first line of text has
+  no value for 'text-decoration', so the initial value
   of <span class="prop-value">text-decoration:none</span> is
   used. The second line shows
   <span class="prop-value">text-decoration:line-through</span>. The
@@ -6752,16 +6717,16 @@ Note:
   <span class="prop-value">text-decoration:underline</span>. The
   fourth line illustrates the rule whereby decorations are rendered
   using the same fill and stroke properties as are present on the
-  element for which the {{text-decoration}} is specified. Since
-  {{text-decoration}} is specified on the {{text}}
-  element, all text within the {{text}} element has its
+  element for which the 'text-decoration' is specified. Since
+  'text-decoration' is specified on the <{text}>
+  element, all text within the <{text}> element has its
   underline rendered with the same fill and stroke properties as
-  exist on the {{text}} element (i.e., blue fill, red stroke),
+  exist on the <{text}> element (i.e., blue fill, red stroke),
   even though the various words have different fill and stroke
   property values. However, the word "different" explicitly
-  specifies a value for {{text-decoration}}; thus, its
+  specifies a value for 'text-decoration'; thus, its
   underline is rendered using the fill and stroke properties as
-  the {{tspan}} element that surrounds the word "different"
+  the <{tspan}> element that surrounds the word "different"
   (i.e., yellow fill, darkgreen stroke):
 
 
@@ -6797,7 +6762,7 @@ path: images/text/textdecoration01.svg
 <ul>
   <li>
     the user positions the pointing device over a glyph that has
-    been rendered as part of a {{text}} element, initiates a
+    been rendered as part of a <{text}> element, initiates a
     <em>select</em> operation (e.g., pressing the standard system
     mouse button for select operations) and then moves the pointing
     device while continuing the <em>select</em> operation (e.g.,
@@ -6813,8 +6778,8 @@ path: images/text/textdecoration01.svg
   <li>
     no <a href="linking.html#Links">links</a> or
     <a href="interact.html">events</a> have been
-    assigned to the {{text}}, {{tspan}} or
-    {{textPath}} element(s) (or their ancestors) associated
+    assigned to the <{text}>, <{tspan}> or
+    <{textPath}> element(s) (or their ancestors) associated
     with the given glyph.
   </li>
 </ul>
@@ -6828,9 +6793,9 @@ path: images/text/textdecoration01.svg
   As the
   pointer is moved during the text selection process, the end glyph
   for the text selection operation is the glyph within the
-  same {{text}} element whose glyph cell is closest to the
-  pointer. All characters within the {{text}} element whose
-  position within the {{text}} element is between the start of
+  same <{text}> element whose glyph cell is closest to the
+  pointer. All characters within the <{text}> element whose
+  position within the <{text}> element is between the start of
   selection and end of selection shall be highlighted, regardless of
   position on the canvas and regardless of any graphics elements
   that might be above the end of selection point.
@@ -6904,7 +6869,7 @@ where the resulting text selection consists of either:
 
 <li>a <em>start character</em>, an <em>end character</em>
 (possibly the same character), and all of the characters
-within the same {{text}} element whose position
+within the same <{text}> element whose position
 in the DOM is logically between the start character and end
 character.</li>
 </ul>
@@ -6924,7 +6889,7 @@ for the <em>end selection position</em>.
 <p>If no character reordering has occurred due to bidirectionality,
 then the selection consists of all characters between the
 <em>start selection position</em> and <em>end selection
-position</em>. For example, if a {{text}} element contains the
+position</em>. For example, if a <{text}> element contains the
 string "abcdef" and the start selection position and end
 selection positions are 0 and 3 respectively (assuming the left
 side of the "a" is position zero), then the selection will
@@ -6955,13 +6920,13 @@ additional region around character cells which initiates text
 selection operations but does not initiate event handlers or
 links.
 
-<h3 id="DOMInterfaces">DOM interfaces</h3>
+<h3 id="text-dom">DOM interfaces</h3>
 
 <div class="annotation svg2-requirement">
   <table>
     <tr>
 <th>SVG 2 Requirement:</th>
-<td>Have a DOM method to convert a {{text}} element to outline path data.</td>
+<td>Have a DOM method to convert a <{text}> element to outline path data.</td>
     </tr>
     <tr>
 <th>Resolution:</th>
@@ -6992,11 +6957,11 @@ that support rendering child text content.
 character or a number of characters, these references are to be
 interpreted as an index to a UTF-16 code unit or a number of
 UTF-16 code units, respectively.  This is for consistency with DOM
-Level 2 Core, where methods on the [=CharacterData=] interface
+Level 2 Core, where methods on the {{CharacterData}} interface
 use UTF-16 code units as indexes and counts within the character
-data. Thus for example, if the text content of a {{text}}
+data. Thus for example, if the text content of a <{text}>
 element is a single non-BMP character, such as U+10000, then
-invoking [=SVGTextContentElement::getNumberOfChars=] on that
+invoking [=getNumberOfChars=] on that
 element will return 2 since there are two UTF-16 code units (the
 surrogate pair) used to represent that one character.
 
@@ -7035,15 +7000,15 @@ can take.  Their meanings are as follows:
 <tr><td><b id="__svg__SVGTextContentElement__LENGTHADJUST_UNKNOWN">LENGTHADJUST_UNKNOWN</b></td><td>Some other value.</td></tr>
 </table>
 
-<p>The <b id="__svg__SVGTextContentElement__textLength">textLength</b> IDL attribute
+<p>The <dfn id="__svg__SVGTextContentElement__textLength" data-dfn-type="dfn" data-export="">textLength</dfn> IDL attribute
 [=reflects=] the {{textLength}} content attribute.
 
-Note: 
+Note:
 The initial value of the {{textLength}} content attribute
 is defined to equal the user-agent's calculated length for the element.
 In other words, when the content attribute is not present,
 the IDL property is initialized with a base length equal to
-the return-value of [=SVGTextContentElement::getComputedTextLength=]
+the return-value of [=getComputedTextLength=]
 on the same element, as a length in user units.
 
 
@@ -7053,7 +7018,7 @@ for {{lengthAdjust}} are as described above in the numeric length adjust type
 constant table.
 
 <div class='ready-for-wider-review'>
-<p>The <b id="__svg__SVGTextContentElement__getNumberOfChars">getNumberOfChars</b>
+<p>The <dfn id="__svg__SVGTextContentElement__getNumberOfChars" data-dfn-type="dfn" data-export="">getNumberOfChars</dfn>
 method returns the total number of [=addressable characters=] available for
 rendering within the current element, regardless of whether they will be rendered.
 When getNumberOfChars() is called, the following steps are run:
@@ -7062,7 +7027,7 @@ When getNumberOfChars() is called, the following steps are run:
 <li>Let <var>node</var> be the element or node upon which this method was called</li>
 <li>If <var>node</var> is a DOM text node, return the length of the text content of
   <var>node</var>, after normalizing whitespace according to the value of the
-  {{white-space}} property on its parent element.
+  'white-space' property on its parent element.
 </li>
 <li>If <var>node</var> is an [=Attr/element|Element=]:
 <ul>
@@ -7081,16 +7046,16 @@ When getNumberOfChars() is called, the following steps are run:
 </ol>
 </div>
 
-<p>The <b id="__svg__SVGTextContentElement__getComputedTextLength">getComputedTextLength</b>
+<p>The <dfn id="__svg__SVGTextContentElement__getComputedTextLength" data-dfn-type="dfn" data-export="">getComputedTextLength</dfn>
 method is used to compute a "length" for the text within the element.
 When getComputedTextLength() is called, the following steps are run:
 
 <ol class='algorithm'>
 <li>Let <var>count</var> be the value that would be returned if
-the <a href="#__svg__SVGTextContentElement__getNumberOfChars">getNumberOfChars</a>
+the getNumberOfChars
 method were called on this element.</li>
 <li>Let <var>length</var> be the value that would be returned
-if the <a href="#__svg__SVGTextContentElement__getSubStringLength">getSubStringLength</a>
+if the getSubStringLength
 method were called on this element, passing 0 and <var>count</var> as arguments.</li>
 <li>Return <var>length</var>.</li>
 </ol>
@@ -7104,7 +7069,7 @@ is called, the following steps are run:
 <li>Assign an index to each [=addressable character=] in the DOM within this element,
 where the first character has index 0.</li>
 <li>If <var>charnum</var> is greater than the highest index assigned
-to a character or if <var>nchars</var> is negative, then [=throw=] an [=IndexSizeError=].</li>
+to a character or if <var>nchars</var> is negative, then [=throw=] an {{IndexSizeError}}.</li>
 <li>Let <var>length</var> be a length in user units, initialized to 0.</li>
 <li>For each [=addressable character=] in the DOM within this element that has an
   index such that
@@ -7115,14 +7080,14 @@ to a character or if <var>nchars</var> is negative, then [=throw=] an [=IndexSiz
       <ol>
         <li>Add the advance of the [=typographic character=] to <var>length</var>,
           adjusted for any font kerning in effect.</li>
-        <li>If the {{letter-spacing}} or {{word-spacing}} properties
+        <li>If the 'letter-spacing' or 'word-spacing' properties
         contributed space just after the [=typographic character=], then add that space
         to <var>length</var>.</li>
       </ol>
       Note: This means that, for example, if there is a ligature
       that is only partly included in the substring, then the
-      advance of the [=typographic character=] and any subsequent {{letter-spacing}} or
-      {{word-spacing}} space will be assigned to the first
+      advance of the [=typographic character=] and any subsequent 'letter-spacing' or
+      'word-spacing' space will be assigned to the first
       character's text length.
     </li>
   </ol>
@@ -7179,7 +7144,7 @@ called, the following steps are run:
 character for the character</a> at index <var>charnum</var> within
 the current element.</li>
 <li>If <var>cluster</var> is null, then [=throw=] an
-[=IndexSizeError=].</li>
+{{IndexSizeError}}.</li>
 <li>Let <var>p</var> be the
 [=alignment point=] of the [=typographic character=]
 that correspond to the character at index <var>charnum</var>,
@@ -7199,7 +7164,7 @@ called, the following steps are run:
 character for the character</a> at index <var>charnum</var> within
 the current element.</li>
 <li>If <var>cluster</var> is null, then [=throw=] an
-[=IndexSizeError=].</li>
+{{IndexSizeError}}.</li>
 <li>Let <var>p</var> be the
 [=alignment point=] of <var>cluster</var>
 that correspond to the character at index <var>charnum</var>,
@@ -7207,10 +7172,10 @@ in the coordinate system of the current element.</li>
 <li>Let <var>direction</var> be a unit vector in the direction of
 the <var>cluster</var>'s advance.  This direction takes into account
 the writing mode being used, the direction of the character,
-the {{text-orientation}}, {{glyph-orientation-horizontal}}
-and {{glyph-orientation-vertical}} properties,
+the 'text-orientation', <span class="attr-value">glyph-orientation-horizontal</span>
+and 'glyph-orientation-vertical' properties,
 any <{tspan/rotate}> value that applies to <var>cluster</var>,
-and any rotation applied to due a {{textPath}}.</li>
+and any rotation applied to due a <{textPath}>.</li>
 <li>Let <var>advance</var> be <var>cluster</var>'s advance.</li>
 <li>Set <var>p</var> to <var>p</var> + <var>advance</var> · <var>direction</var>.</li>
 <li>Return a newly created, <a href="shapes.html#PointMode">detached</a>
@@ -7228,7 +7193,7 @@ is called, the following steps are run:
 character for the character</a> at index <var>charnum</var> within
 the current element.</li>
 <li>If <var>cluster</var> is null, then [=throw=] an
-[=IndexSizeError=].</li>
+{{IndexSizeError}}.</li>
 <li>Let <var>quad</var> be the potentially rotated rectangle in
 the current element's coordinate system that
 is the glyph cell for <var>cluster</var>.</li>
@@ -7249,15 +7214,15 @@ getRotationOfChar(<var>charnum</var>) is called, the following steps are run:
 character for the character</a> at index <var>charnum</var> within
 the current element.</li>
 <li>If <var>cluster</var> is null, then [=throw=] an
-[=IndexSizeError=].</li>
+{{IndexSizeError}}.</li>
 <li>Let <var>direction</var> be the angle in degrees that represents
 the direction of the <var>cluster</var>'s advance.
 This direction takes into account
 the writing mode being used, the direction of the character,
-the {{text-orientation}}, {{glyph-orientation-horizontal}}
-and {{glyph-orientation-vertical}} properties,
+the 'text-orientation', <span class="attr-value">glyph-orientation-horizontal</span>
+and 'glyph-orientation-vertical' properties,
 any <{tspan/rotate}> value that applies to <var>cluster</var>,
-and any rotation applied to due a {{textPath}}.</li>
+and any rotation applied to due a <{textPath}>.</li>
 <li>Return <var>direction</var>.</li>
 </ol>
 
@@ -7303,7 +7268,7 @@ characters.  The following steps must be followed when this method is called:
 <li>Let <var>count</var> be the number of characters in this text content element.</li>
 <li>Let <var>end</var> = <var>charnum</var> + <var>nchars</var>.</li>
 <li>If <var>charnum</var> ≥ <var>count</var> or <var>end</var> ≥ <var>count</var>,
-then [=throw=] an [=IndexSizeError=].</li>
+then [=throw=] an {{IndexSizeError}}.</li>
 <li>Remove all <a href="https://www.w3.org/TR/2014/WD-dom-20140204/#concept-range">ranges</a>
 from the document's <a href="http://w3c.github.io/selection-api/#dfn-selection">selection</a>. [[DOM]][<a href="refs.html#ref-editing">EDITING</a>]</li>
 <li>Set the <a href="http://w3c.github.io/selection-api/#dfn-selection">selection</a>'s
@@ -7364,7 +7329,7 @@ content attributes, respectively.
 
 
 
-<p>An [[#InterfaceSVGTextElement|SVGTextElement]] object represents a {{text}} element in the DOM.
+<p>An [[#InterfaceSVGTextElement|SVGTextElement]] object represents a <{text}> element in the DOM.
 
 <pre class="idl">
 [<a>Exposed</a>=Window]
@@ -7378,7 +7343,7 @@ interface <b>SVGTextElement</b> : <a>SVGTextPositioningElement</a> {
 
 
 
-<p>An [[#InterfaceSVGTSpanElement|SVGTSpanElement]] object represents a {{tspan}} element in the DOM.
+<p>An [[#InterfaceSVGTSpanElement|SVGTSpanElement]] object represents a <{tspan}> element in the DOM.
 
 <pre class="idl">
 [<a>Exposed</a>=Window]
@@ -7392,7 +7357,7 @@ interface <b>SVGTSpanElement</b> : <a>SVGTextPositioningElement</a> {
 
 
 
-<p>An [[#InterfaceSVGTextPathElement|SVGTextPathElement]] object represents a {{textPath}} element in the DOM.
+<p>An [[#InterfaceSVGTextPathElement|SVGTextPathElement]] object represents a <{textPath}> element in the DOM.
 
 <pre class="idl">
 [<a>Exposed</a>=Window]

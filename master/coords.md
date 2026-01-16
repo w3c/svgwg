@@ -1,6 +1,6 @@
-<h2>Coordinate Systems, Transformations and Units</h2>
+<h2 id="chap-coords">Coordinate Systems, Transformations and Units</h2>
 
-<h3 id="Introduction">Introduction</h3>
+<h3 id="coords-intro">Introduction</h3>
 <div class="ready-for-wider-review">
 
 <p>All SVG content is drawn inside
@@ -42,8 +42,8 @@ to a particular rectangular area. The
 <dfn id="TermFurthestAncestorSVGViewport" data-dfn-type="dfn" data-export="">
 furthest ancestral SVG viewport</dfn> is the top most root SVG viewport with
 out leaving the [=SVG context=]. An ancestor SVG viewport might not be
-independent of the DOM tree order. E.g. for {{linearGradient}},
-{{radialGradient}}, {{pattern}}, <a element spec="css-masking">mask</a> element, <a element spec="css-masking">clipPath</a>
+independent of the DOM tree order. E.g. for <{linearGradient}>,
+<{radialGradient}>, <{pattern}>, <a element spec="css-masking">mask</a> element, <a element spec="css-masking">clipPath</a>
 <{symbol}> or <{use}> elements.
 
 <p>An <dfn id="TermSVGContext" data-dfn-type="dfn" data-export="">SVG
@@ -77,26 +77,26 @@ a scale that is applied to content contained by the element.
   the min-x, min-y, width and height values of the viewBox attribute respectively.</li>
   <li>Let <var>e-x</var>, <var>e-y</var>, <var>e-width</var>, <var>e-height</var> be
   the position and size of the element respectively.</li>
-  <li>Let <var>align</var> be the align value of preserveAspectRatio, or 'xMidYMid' if
+  <li>Let <var>align</var> be the align value of preserveAspectRatio, or <span class="attr-value">xMidYMid</span> if
   preserveAspectRatio is not defined.</li>
-  <li>Let <var>meetOrSlice</var> be the meetOrSlice value of preserveAspectRatio, or 'meet'
+  <li>Let <var>meetOrSlice</var> be the meetOrSlice value of preserveAspectRatio, or <span class="attr-value">meet</span>
   if preserveAspectRatio is not defined or if meetOrSlice is missing from this value.</li>
   <li>Initialize <var>scale-x</var> to <var>e-width</var>/<var>vb-width</var>.</li>
   <li>Initialize <var>scale-y</var> to <var>e-height</var>/<var>vb-height</var>.</li>
-  <li>If <var>align</var> is not 'none' and <var>meetOrSlice</var> is 'meet', set
+  <li>If <var>align</var> is not <span class="attr-value">none</span> and <var>meetOrSlice</var> is <span class="attr-value">meet</span>, set
   the larger of <var>scale-x</var> and <var>scale-y</var> to the smaller.</li>
-  <li>Otherwise, if <var>align</var> is not 'none' and <var>meetOrSlice</var> is 'slice',
+  <li>Otherwise, if <var>align</var> is not <span class="attr-value">none</span> and <var>meetOrSlice</var> is <span class="attr-value">slice</span>,
   set the smaller of <var>scale-x</var> and <var>scale-y</var> to the larger.</li>
   <li>Initialize <var>translate-x</var> to <var>e-x</var> - (<var>vb-x</var> * scale-x).</li>
   <li>Initialize <var>translate-y</var> to <var>e-y</var> - (<var>vb-y</var> * scale-y)</li>
-  <li>If <var>align</var> contains 'xMid', add
+  <li>If <var>align</var> contains <span class="attr-value">xMid</span>, add
   (<var>e-width</var> - <var>vb-width</var> * <var>scale-x</var>) / 2 to <var>translate-x</var>.</li>
-  <li>If <var>align</var> contains 'xMax', add
+  <li>If <var>align</var> contains <span class="attr-value">xMax</span>, add
   (<var>e-width</var> - <var>vb-width</var> * <var>scale-x</var>) to <var>translate-x</var>.</li>
-  <li>If <var>align</var> contains 'yMid', add
+  <li>If <var>align</var> contains <span class="attr-value">yMid</span>, add
   (<var>e-height</var> - <var>vb-height</var> * <var>scale-y</var>) / 2 to <var>translate-y</var>.</li>
-  <li>If <var>align</var> contains 'yMax', add
-  (<var>e-height</var> - <var>vb-height</var> * <var>scale-y</var>) to <var>translate-y.</var></li>
+  <li>If <var>align</var> contains <span class="attr-value">yMax</span>, add
+  (<var>e-height</var> - <var>vb-height</var> * <var>scale-y</var>) to <var ignore=''>translate-y.</var></li>
 </ol>
 
 <p>The transform applied to content contained by the element is given by
@@ -106,7 +106,7 @@ translate(<var>translate-x</var>, <var>translate-y</var>) scale(<var>scale-x</va
 
 <h3 id="ViewportSpace">The initial viewport</h3>
 
-<p>The initial viewport's width, must be the value of the {{width}}
+<p>The initial viewport's width, must be the value of the 'width'
 presentation attribute on the [=outermost svg element=], unless the
 following conditions are met:
 
@@ -136,10 +136,10 @@ specified on the referencing element or on the
 [=outermost svg element=] that are
 sufficient to establish the height of the viewport, then these
 positioning properties must establish the viewport's height;
-otherwise, the initial viewport's height must be the value of the {{height}}
+otherwise, the initial viewport's height must be the value of the 'height'
 presentation attribute on the [=outermost svg element=].
 
-<p>If the {{width}} or {{height}}
+<p>If the 'width' or 'height'
 presentation attributes on the [=outermost svg element=]
 are in [=user units=] (i.e., no unit
 identifier has been provided), then the value is assumed to be
@@ -413,14 +413,14 @@ the <span class="attr-name">x</span>, <span
 class="attr-name">y</span>, <span
 class="attr-name">width</span> and <span
 class="attr-name">height</span> attributes (or in the case of
-the {{marker element}} element, the
+the <{marker}> element element, the
 <{marker/markerWidth}> and <{marker/markerHeight}> attributes) on the
 element with the [[#ViewBoxAttribute|viewBox]]
 attribute. Thus, in the example above which shows an
 <{svg}> element which has
-{{width}} and {{height}} presentation attributes
+'width' and 'height' presentation attributes
 and a [[#ViewBoxAttribute|viewBox]] attribute,
-the {{width}} and {{height}}
+the 'width' and 'height'
 represent values in the coordinate system that exists <em>before</em> the
 [[#ViewBoxAttribute|viewBox]] transformation is applied. On
 the other hand, like the [[#TransformProperty|transform]] property, it does
@@ -457,10 +457,10 @@ for descendant elements.
     elements that establish a new SVG viewport (see <a
     href="coords.html#ElementsThatEstablishViewports">elements that
     establish SVG viewports</a>), plus the
-    {{image}},
-    {{marker element}},
-    {{pattern}} and
-    {{view}} elements
+    <{image}>,
+    <{marker}> element,
+    <{pattern}> and
+    <{view}> elements
   </dd>
 </dl>
 
@@ -474,16 +474,16 @@ of the graphics.
 <p>For elements that establish a new SVG viewport (see <a
 href="coords.html#ElementsThatEstablishViewports">elements that
 establish SVG viewports</a>), plus the
-{{marker element}},
-{{pattern}} and
-{{view}} elements,
+<{marker}> element,
+<{pattern}> and
+<{view}> elements,
 [[#PreserveAspectRatioAttribute|preserveAspectRatio]] only applies when
 a value has been provided for [[#ViewBoxAttribute|viewBox]]
 on the same element. For these elements, if attribute
 [[#ViewBoxAttribute|viewBox]] is not provided, then
 [[#PreserveAspectRatioAttribute|preserveAspectRatio]] is ignored.
 
-<p>For {{image}} elements,
+<p>For <{image}> elements,
 [[#PreserveAspectRatioAttribute|preserveAspectRatio]] indicates how
 referenced images should be fitted with respect to the
 reference rectangle and whether the aspect ratio of the
@@ -718,7 +718,7 @@ PreserveAspectRatio</a>.
 
 Note: 
   For historical reasons,
-  the {{pattern}} and {{marker element}} elements
+  the <{pattern}> and <{marker}> element elements
   do not create a new viewport,
   despite accepting a [[#ViewBoxAttribute|viewBox]] attribute.
   Neither do the <a element spec="css-masking">clipPath</a> or <a element spec="css-masking">mask</a> element elements.
@@ -736,7 +736,7 @@ Note:
   a new <{svg}> element must establish an SVG document fragment and SVG viewport.
 
 <p>
-  An {{image}} creates a new
+  An <{image}> creates a new
   <a href="https://www.w3.org/TR/css-position-3/#vp">document viewport</a>
   for the referenced document.
   If the referenced document is a SVG file, it will of course establish its own SVG viewport.
@@ -802,7 +802,7 @@ what happens when values specified in inches are scaled.
 
 <p>The three rectangles in the middle demonstrate the use of
 one of the relative unit identifiers, the "em" unit. Because
-the {{font-size}} property has been set
+the 'font-size' property has been set
 to <span class="prop-value">150</span> on the outermost <{g}> element, each "em" unit is
 equal to 150 user units. The topmost rectangle, which is
 specified in "em" units, is exactly the same size as the middle
@@ -819,7 +819,7 @@ case, the [=outermost svg element=]) are 4000 and
 transformed user coordinate system. The topmost rectangle,
 which is specified in percentage units, is exactly the same
 size as the middle rectangle, which is specified in equivalent
-user units. In particular, note that the {{stroke-width}} property in the
+user units. In particular, note that the 'stroke-width' property in the
 middle rectangle is set to 1% of the
 <code>sqrt((<em>actual-width</em>)**2 +
 (<em>actual-height</em>)**2) / sqrt(2)</code>, which in this
@@ -855,9 +855,9 @@ values specified in percentage units are scaled.
   an element's geometric shape, its [=stroke shape=] and its [=markers=].</li>
 </ol>
 
-<p class='note'>Note that the values of the {{opacity}}, 'visibility', {{fill}},
-'fill-opacity', 'fill-rule', {{stroke-dasharray}}
-and {{stroke-dashoffset}} properties on an element have no effect on the
+<p class='note'>Note that the values of the 'opacity', 'visibility', 'fill',
+'fill-opacity', 'fill-rule', 'stroke-dasharray'
+and 'stroke-dashoffset' properties on an element have no effect on the
 bounding box of an element.
 
 <p>For curved shapes, the bounding box must enclose all portions of the shape
@@ -871,7 +871,7 @@ than the curve edge, from the non-enclosing side of the curve edge, must be
 excluded from the bounding box.
 
 <div class="figure">
-  <img src="images/coords/bbox01.svg"
+  <img no-autosize src="images/coords/bbox01.svg"
        alt="Image showing the object bounding box of a quadratic Bézier curve.">
   <p class="caption">The path <code class='attr-value'>M20,50 L35,100 H120 V50 Q70,10 20,50</code>
   is shown in light blue.  On the left, a correct object bounding box of the path is
@@ -881,7 +881,7 @@ excluded from the bounding box.
 </div>
 
 <p>Even if an element is not in the [=rendering tree=] – due to it being
-<span class='prop-value'>'display: none'</span>, within a {{defs}}
+<span class='prop-value'>'display: none'</span>, within a <{defs}>
 element, not usually rendered like a <{symbol}> element or not
 currently present in the document tree – it still has a bounding box.
 A call to <a href="types.html#__svg__SVGGraphicsElement__getBBox">getBBox</a>
@@ -955,14 +955,14 @@ or as part of a declarative or linking syntax.
 
 <p>An element which has zero width, zero height, or both (such as a
 vertical or horizontal line, or a <{rect}> element with a zero
-{{width}} or {{height}}) still has a bounding box, with a
+'width' or 'height') still has a bounding box, with a
 positive value for the positive dimension, or with <code class='attr-value'>0</code>
 for both the width and height if no positive dimension is specified. Similarly,
-subpaths segments of a {{path}} element with zero width and height must be
+subpaths segments of a <{path}> element with zero width and height must be
 included in that element's geometry for the sake of the bounding box.
 
 <p class="ready-for-wider-review">An element with no position specified (such as a
-{{path}} element with a value of <span class='prop-value'>none</span> for the {{d}} property) is positioned at the
+<{path}> element with a value of <span class='prop-value'>none</span> for the {{d}} property) is positioned at the
 point (0,0) for the purposes of calculating a bounding box.
 
 <p>Note that elements whose DOM object does not derive from [[#InterfaceSVGGraphicsElement|SVGGraphicsElement]]
@@ -1001,20 +1001,20 @@ element.  The inputs to the algorithm are:
       to the text within the elements otherwise.</li>
       <li>If <var>fill</var> is true, then set <var>box</var> to the tightest rectangle
       in the coordinate system <var>space</var> that contains <var>fill-shape</var>.
-      <p class='note'>The values of the {{fill}}, 'fill-opacity' and 'fill-rule'
+      <p class='note'>The values of the 'fill', 'fill-opacity' and 'fill-rule'
       properties do not affect <var>fill-shape</var>.</li>
-      <li>If <var>stroke</var> is true and the element's {{stroke}} is anything other than
+      <li>If <var>stroke</var> is true and the element's 'stroke' is anything other than
       <span class='prop-value'>none</span>, then set <var>box</var> to be the union of <var>box</var> and the
       tightest rectangle in coordinate system <var>space</var> that contains the <a href="painting.html#StrokeShape">stroke shape</a> of the
       element, with the assumption that the element has no dash pattern.
-      <p class='note'>The values of the 'stroke-opacity', {{stroke-dasharray}}
-      and {{stroke-dashoffset}} do not affect the calculation of the stroke shape.</li>
+      <p class='note'>The values of the 'stroke-opacity', 'stroke-dasharray'
+      and 'stroke-dashoffset' do not affect the calculation of the stroke shape.</li>
       <li>If <var>markers</var> is true, then for each marker <var>marker</var> rendered on the element:
         <ol>
-          <li>For each descendant [=graphics element=] <var>child</var> of the {{marker element}} element
+          <li>For each descendant [=graphics element=] <var>child</var> of the <{marker}> element element
           that defines <var>marker</var>'s content:
             <ol>
-              <li>If <var>child</var> has an ancestor element within the {{marker element}} that is
+              <li>If <var>child</var> has an ancestor element within the <{marker}> element that is
               <span class='prop-value'>'display: none'</span>, has a failing [=conditional processing attribute=],
               or is not an <a element spec="svg2">a</a>, <{g}>, <{svg}> or <{switch}> element, then
               continue to the next descendant [=graphics element=].</li>
@@ -1027,7 +1027,7 @@ element.  The inputs to the algorithm are:
           </li>
         </ol>
       </li>
-      <li>If <var>clipped</var> is true and the value of {{clip-path}} on <var>element</var> is not
+      <li>If <var>clipped</var> is true and the value of 'clip-path' on <var>element</var> is not
       <span class='prop-value'>none</span>, then set <var>box</var> to be the tightest rectangle
       in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
       <li>Return <var>box</var>.</li>
@@ -1052,7 +1052,7 @@ element.  The inputs to the algorithm are:
       </li>
       <li>If <var>clipped</var> is true:
         <ul>
-          <li>If the value of {{clip-path}} on <var>element</var> is not
+          <li>If the value of 'clip-path' on <var>element</var> is not
           <span class='prop-value'>none</span>,
           then set <var>box</var> to be the tightest rectangle
           in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
@@ -1060,17 +1060,17 @@ element.  The inputs to the algorithm are:
           and does not have a value of <span class='prop-value'>visible</span>,
           then set <var>box</var> to be the tightest rectangle
           in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the element's overflow bounds.</li>
-          <li>If the {{clip}} property applies to the <var>element</var>
+          <li>If the 'clip' property applies to the <var>element</var>
           and does not have a value of <span class='prop-value'>auto</span>,
           then set <var>box</var> to be the tightest rectangle
-          in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the rectangle specified by {{clip}}.</li>
+          in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the rectangle specified by 'clip'.</li>
         </ul>
       </li>
       <li>Return <var>box</var>.</li>
     </ol>
   </dd>
   <dt><{foreignObject}></dt>
-  <dt>{{image}}</dt>
+  <dt><{image}></dt>
   <dd>
     <ol class="algorithm">
       <li>Let <var>box</var> be the tightest rectangle in coordinate space <var>space</var> that
@@ -1083,7 +1083,7 @@ element.  The inputs to the algorithm are:
       input arguments to this algorithm do not affect the bounding box returned
       for these elements.
       </li>
-      <li>If <var>clipped</var> is true and the value of {{clip-path}} on <var>element</var> is not
+      <li>If <var>clipped</var> is true and the value of 'clip-path' on <var>element</var> is not
       <span class='prop-value'>none</span>, then set <var>box</var> to be the tightest rectangle
       in coordinate system <var>space</var> that contains the intersection of <var>box</var> and the clipping path.</li>
       <!--
@@ -1114,7 +1114,7 @@ above with the following arguments:
 The following elements offer the option of expressing
 coordinate values and lengths as fractions (and, in some cases,
 percentages) of the [=object bounding box=], by setting a specified 
-attribute to <span class="attr-value">'objectBoundingBox'</span>
+attribute to <span class="attr-value"><span class="attr-value">objectBoundingBox</span></span>
 on the given element:
 
 <table class='vert'>
@@ -1124,32 +1124,32 @@ on the given element:
     <th>Effect</th>
   </tr>
   <tr>
-      <td>{{linearGradient}}</td>
+      <td><{linearGradient}></td>
       <td>{{gradientUnits}}</td>
       <td>Indicates that the attributes which specify the
-      gradient vector ({{x1}}, {{y1}}, {{x2}}, {{y2}}) represent fractions or
+      gradient vector (<code>x1</code>, <code>y1</code>, <code>x2</code>, <code>y2</code>) represent fractions or
       percentages of the bounding box of the element to which the
       gradient is applied.</td>
   </tr>
   <tr>
-      <td>{{radialGradient}}</td>
+      <td><{radialGradient}></td>
       <td>{{gradientUnits}}</td>
       <td>Indicates that the attributes which specify the center
-      ({{cx}}, {{cy}}), the radius ({{r}}) and focus
+      ('cx', 'cy'), the radius ('r') and focus
       ({{fx}}, {{fy}}) represent fractions or
       percentages of the bounding box of the element to which the
       gradient is applied.</td>
   </tr>
     <tr>
-      <td>{{pattern}}</td>
+      <td><{pattern}></td>
       <td>{{patternUnits}}</td>
       <td>Indicates that the attributes which define how to tile the pattern
-      ({{x}}, {{y}}, {{width}}, {{height}}) are
+      ('x', 'y', 'width', 'height') are
       established using the bounding box of the element to which the pattern
       is applied.</td>
     </tr>
     <tr>
-      <td>{{pattern}}</td>
+      <td><{pattern}></td>
       <td>{{patternContentUnits}}</td>
       <td>Indicates that the user coordinate system for the
       contents of the pattern is established using the bounding
@@ -1166,7 +1166,7 @@ on the given element:
       <td><a element spec="css-masking">mask</a> element</td>
       <td>{{maskUnits}}</td>
       <td>Indicates that the attributes which define the masking region
-      ({{x}}, {{y}}, {{width}}, {{height}}) is
+      ('x', 'y', 'width', 'height') is
       established using the bounding box of the element to which the mask
       is applied.</td>
     </tr>
@@ -1178,16 +1178,16 @@ on the given element:
       the element to which the mask is applied.</td>
     </tr>
     <tr>
-      <td>{{filter element}}</td>
+      <td><{filter}> element</td>
       <td>{{filterUnits}}</td>
       <td>Indicates that the attributes which define the
-      [=filter effects region=]
-      ({{x}}, {{y}}, {{width}}, {{height}}) represent
+      <a href="https://drafts.fxtf.org/filter-effects/#FilterPrimitiveSubRegion">filter effects region</a>
+      ('x', 'y', 'width', 'height') represent
       fractions or percentages of the bounding box of the element to which
       the filter is applied.</td>
     </tr>
     <tr>
-      <td>{{filter element}}</td>
+      <td><{filter}> element</td>
       <td>{{primitiveUnits}}</td>
       <td>Indicates that the various length values within the filter
       primitives represent fractions or percentages of the bounding box of
@@ -1198,7 +1198,7 @@ on the given element:
 <p>In the discussion that follows, the term <em>applicable element</em>
 is the element to which the given effect applies. For gradients and
 patterns, the applicable element is the [=graphics element=]
-which has its {{fill}} or {{stroke}} property referencing the
+which has its 'fill' or 'stroke' property referencing the
 given gradient or pattern. (For special rules concerning <a
 href="text.html">text elements</a>, see the discussion of <a
 href="text.html#ObjectBoundingBoxUnitsTextObjects">object
@@ -1233,8 +1233,8 @@ transformation matrix produces the correct effect:
 gradient vector, the pattern tile, the filter region or the
 masking region, a percentage represents the same value as the
 corresponding decimal value (e.g., 50% means the same as 0.5).
-If percentages are used within the content of a {{pattern}},
-<a element spec="css-masking">clipPath</a>, <a element spec="css-masking">mask</a> element or {{filter element}} element, these values
+If percentages are used within the content of a <{pattern}>,
+<a element spec="css-masking">clipPath</a>, <a element spec="css-masking">mask</a> element or <{filter}> element element, these values
 are treated according to the processing rules for percentages
 as defined in <a href="coords.html#Units">Units</a>.
 
@@ -1267,31 +1267,31 @@ defined in CSS Images 3 [<a href="refs.html#ref-css-images-3">css-images-3</a>],
 with the following inputs:
 
 <p>The [=specified size=] must be determined from the used values for the
-{{width}} and {{height}} sizing properties of the <{svg}>
+'width' and 'height' sizing properties of the <{svg}>
 element.
 
-<p>The [=intrinsic dimensions=] must also be determined from the {{width}}
-and {{height}} sizing properties. If either {{width}} or {{height}} are
-not specified, the used value is the initial value <span class="attr-value">'auto'</span>.
-<span class="attr-value">'auto'</span> and percentage lengths must not be used to
-determine an [=intrinsic width=] or [=intrinsic height=].
+<p>The [=intrinsic dimensions=] must also be determined from the 'width'
+and 'height' sizing properties. If either 'width' or 'height' are
+not specified, the used value is the initial value <span class="attr-value">auto</span>.
+<span class="attr-value">auto</span> and percentage lengths must not be used to
+determine an <a href="https://www.w3.org/TR/css3-images/#intrinsic-width">intrinsic width</a> or <a href="https://www.w3.org/TR/css3-images/#intrinsic-height">intrinsic height</a>.
 
 <p class='note'>
 With bitmap image formats, the [=intrinsic dimensions=] are fixed in
 the image file, and the specified size is defined in the host document as needed
 to scale the image.
-SVG, being inherently scalable, adapts the [=intrinsic width=] and
-[=intrinsic height=] to be the width and height of the [=specified size=].
-Therefore, when specified as a length, the {{width}} and
-{{height}} sizing properties of the <{svg}> element control the
+SVG, being inherently scalable, adapts the <a href="https://www.w3.org/TR/css3-images/#intrinsic-width">intrinsic width</a> and
+<a href="https://www.w3.org/TR/css3-images/#intrinsic-height">intrinsic height</a> to be the width and height of the [=specified size=].
+Therefore, when specified as a length, the 'width' and
+'height' sizing properties of the <{svg}> element control the
 [=intrinsic dimensions=] of the SVG image and the [=specified size=] that
 is used when placing the SVG image in a host document.
 
-<p> The [=intrinsic aspect ratio=] must be calculated using the following
+<p> The <a href="https://www.w3.org/TR/css3-images/#intrinsic-aspect-ratio">intrinsic aspect ratio</a> must be calculated using the following
 algorithm. If the algorithm returns null, then there is no intrinsic aspect ratio.
 
 <ol class='algorithm'>
-<li>If the {{width}} and {{height}} sizing properties on the
+<li>If the 'width' and 'height' sizing properties on the
     <{svg}> element are both absolute values:
     <ol>
         <li>return width / height</li>
@@ -1314,7 +1314,7 @@ algorithm. If the algorithm returns null, then there is no intrinsic aspect rati
 </ol>
 
 <p>The behaviour defined in this section is specific to CSS, but may be adapted
-to other host contexts. In all host contexts, the [=intrinsic aspect ratio=],
+to other host contexts. In all host contexts, the <a href="https://www.w3.org/TR/css3-images/#intrinsic-aspect-ratio">intrinsic aspect ratio</a>,
 where available, must be respected when sizing the SVG viewport.
 </div>
 
@@ -1429,7 +1429,7 @@ user zooms into the map, or introductory notes on the graphic chart in which
 panning is possible. 
 
 <p>To offer such effects regarding special coordinate transformations and
-graphic drawings, SVG Tiny 1.2 introduced the {{vector-effect}} property.
+graphic drawings, SVG Tiny 1.2 introduced the 'vector-effect' property.
 Although SVG Tiny 1.2 introduced only non-scaling stroke behavior, this version
 introduces a number of additional effects. Furthermore, since these effects
 can be specified in combination, they show more various effects. And, future
@@ -1437,7 +1437,7 @@ versions of the SVG language will allow for more powerful vector effects
 through this property.
 
 <p class="issue" data-issue="31">
-  Values of {{vector-effect}} other than
+  Values of 'vector-effect' other than
   <span class="prop-value">non-scaling-stroke</span> and <span class="prop-value">none</span>
   are at risk of being dropped from SVG 2 due to a lack of implementations.
   Feedback from implementers is requested,
@@ -1484,6 +1484,8 @@ through this property.
   </tr>
 </table>
 
+<p>The <dfn id="TermCTM" data-dfn-type="dfn" data-export="">CTM</dfn> (current transformation matrix) represents the matrix that maps coordinates from the [=user coordinate system=] to the viewport coordinate system.</p>
+
 <dl>
   <dt class="prop-value">none</dt>
   <dd>Specifies that no vector effect shall be applied, i.e. the default rendering behaviour
@@ -1527,7 +1529,7 @@ through this property.
 <p>These values can be enumerated. Thereby, the effect which has these
 characteristics simultaneously can be specified.
 
-<p>The host coordinate space for {{vector-effect}} is the <a>viewport
+<p>The host coordinate space for 'vector-effect' is the <a>viewport
 coordinate system</a> of the [=furthest ancestral SVG viewport=].
 
 Note: Note: Future versions of SVG may allow ways to specify the device coordinate system.
@@ -1539,7 +1541,7 @@ combinations of the values for clarification of the behavior of vector effects
 excluding <span class="prop-value">non-scaling-stroke</span> which has clear
 implications.
 
-<p class='ready-for-wider-review'>The {{vector-effect}} property has no effect on transformations
+<p class='ready-for-wider-review'>The 'vector-effect' property has no effect on transformations
 performed in a [=3D rendering context=].
 
 <p>The normal coordinate transformation formula from [=user coordinate system=]
@@ -1676,10 +1678,10 @@ to [=viewport coordinate system=] is as follows.
 -->
 
 <pre class='xml'>
-&lt;circle vector-effect="<var>veValue</var>" transform="translate(<var>x<sub>o</sub></var> <var>y<sub>o</sub></var>)" cx="<var>x<sub>f</sub></var>" cy="<var>y<sub>f</sub></var>" r=".."/&gt;
+&lt;circle vector-effect="<var ignore=''>veValue</var>" transform="translate(<var>x<sub>o</sub></var> <var>y<sub>o</sub></var>)" cx="<var>x<sub>f</sub></var>" cy="<var>y<sub>f</sub></var>" r=".."/&gt;
 </pre>
 
-<p>When the {{vector-effect}} is added to an element like the above, the
+<p>When the 'vector-effect' is added to an element like the above, the
 transformation formula for user coordinate to the device coordinate changes as
 follows. Here, <var>x<sub>f</sub></var> and <var>y<sub>f</sub></var> are user
 coordinate of the corresponding element and its descendant. And,
@@ -1688,7 +1690,7 @@ coordinate of the corresponding element and its descendant. And,
 corresponding element has. In addition, <b>|det(CTM)|</b> is absolute value of
 the determinants of [=CTM=]. When this value becomes 0 and
 <span class="prop-value">non-scaling-size</span> is appointed,
-{{vector-effect}} becomes invalidity namely <span class="prop-value">none</span>.
+'vector-effect' becomes invalidity namely <span class="prop-value">none</span>.
 
 <div role="math">
 <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
@@ -2761,7 +2763,7 @@ rootmost viewport coordinate system (UA).
 coordinate systems, the application way of those formulas changes as follows
 by whether <span class="prop-value">viewport</span> or
 <span class="prop-value">screen</span> is specified as the additional value of
-<a><span class="prop-name">vector-effect</span></a>.
+'vector-effect'.
 
 <p>When <span class="prop-value">viewport</span> value is specified,
 [=user agent=] computes coordinates combining either of seven formulas of
@@ -2964,8 +2966,7 @@ Examples of vector effects</h4>
 
     <div class="example">
         Below is an example of the <span
-        class="prop-value">non-scaling-stroke</span> <a><span
-        class="prop-name">vector-effect</span></a>.
+        class="prop-value">non-scaling-stroke</span> 'vector-effect'.
 
         @@fix 
         <!-- <pre class=include-code>
@@ -2975,12 +2976,12 @@ Examples of vector effects</h4>
     </div>
 
 <div class="example">
-  <p>Below is an example of the <span class="prop-value">none</span> <a><span class="prop-name">vector-effect</span></a> (no vector effect).
+  <p>Below is an example of the <span class="prop-value">none</span> 'vector-effect' (no vector effect).
   <table>
     <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
     <tr>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing none vector effect"></td>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-none.svg" alt="Image showing none vector effect"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing none vector effect"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-none.svg" alt="Image showing none vector effect"></td>
     </tr>
   </table>
 
@@ -3035,8 +3036,8 @@ Examples of vector effects</h4>
   <table>
     <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
     <tr>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-nonScalingSize.svg" alt="Image showing non-scaling-size vector effect"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-nonScalingSize.svg" alt="Image showing non-scaling-size vector effect"></td>
     </tr>
   </table>
 
@@ -3053,8 +3054,8 @@ Examples of vector effects</h4>
   <table>
     <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
     <tr>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-nonRotation.svg" alt="Image showing non-rotation vector effect"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-nonRotation.svg" alt="Image showing non-rotation vector effect"></td>
     </tr>
   </table>
 
@@ -3070,8 +3071,8 @@ Examples of vector effects</h4>
   <table>
     <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
     <tr>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-nonScalingSize-nonRotation.svg" alt="Image showing non-scaling-size non-rotation vector effect"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-nonScalingSize-nonRotation.svg" alt="Image showing non-scaling-size non-rotation vector effect"></td>
     </tr>
   </table>
 
@@ -3087,8 +3088,8 @@ Examples of vector effects</h4>
   <table>
     <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
     <tr>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-fixedPosition.svg" alt="Image showing fixed-position vector effect"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-fixedPosition.svg" alt="Image showing fixed-position vector effect"></td>
     </tr>
   </table>
 
@@ -3105,8 +3106,8 @@ Examples of vector effects</h4>
   <table>
     <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
     <tr>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-nonScalingSize-fixedPosition.svg" alt="Image showing non-scaling-size fixed-position vector effect"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-nonScalingSize-fixedPosition.svg" alt="Image showing non-scaling-size fixed-position vector effect"></td>
     </tr>
   </table>
 
@@ -3122,8 +3123,8 @@ Examples of vector effects</h4>
   <table>
     <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
     <tr>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-nonRotation-fixedPosition.svg" alt="Image showing non-rotation fixed-position vector effect"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-nonRotation-fixedPosition.svg" alt="Image showing non-rotation fixed-position vector effect"></td>
     </tr>
   </table>
 
@@ -3139,8 +3140,8 @@ Examples of vector effects</h4>
   <table>
     <tr><td>Before changing CTM</td><td>After changing CTM</td></tr>
     <tr>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
-      <td><img class="bordered" src="images/painting/vectorEffects/ve-nonScalingSize-nonRotation-fixedPosition.svg" alt="Image showing non-scaling-size non-rotation fixed-position vector effect"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-initial.svg" alt="Image showing appearance before the effect of the vector effect showing up"></td>
+      <td><img no-autosize class="bordered" src="images/painting/vectorEffects/ve-nonScalingSize-nonRotation-fixedPosition.svg" alt="Image showing non-scaling-size non-rotation fixed-position vector effect"></td>
     </tr>
   </table>
 
@@ -3152,7 +3153,7 @@ Examples of vector effects</h4>
 </div>
 
 <div class='ready-for-wider-review'>
-<h3 id="DOMInterfaces">DOM interfaces</h3>
+<h3 id="coords-dom">DOM interfaces</h3>
 
 <h4 id="InterfaceSVGTransform">Interface SVGTransform</h4>
 
@@ -3184,7 +3185,7 @@ two modes.  It can:
 <ol>
   <li><em>reflect an element of a presentation attribute value</em>
   (being exposed through the methods on the
-  <a href="#__svg__SVGAnimatedTransformList__baseVal">baseVal</a> member of
+  baseVal member of
   an [[#InterfaceSVGAnimatedTransformList|SVGAnimatedTransformList]]),</li>
   <li><em>be detached</em>, which is the case for [[#InterfaceSVGTransform|SVGTransform]] objects created
   with <a href='struct.html#__svg__SVGSVGElement__createSVGTransform'>createSVGTransform</a>
@@ -3194,43 +3195,43 @@ two modes.  It can:
 
 <p>An [[#InterfaceSVGTransform|SVGTransform]] object maintains an internal
 <a href='https://drafts.csswg.org/css-transforms-1/#typedef-transform-function'>&lt;transform-function&gt;</a>
-value, which is called its <dfn for=TransformValue>value</dfn>.
+value.
 It also maintains a [[geometry-1#DOMMatrix|DOMMatrix]] object,
 which is called its <dfn id="TransformMatrixObject" dfn export>matrix object</dfn>,
-which is the object returned from the <a href="#__svg__SVGTransform__matrix">matrix</a>
+which is the object returned from the matrix
 IDL attribute.  An [[#InterfaceSVGTransform|SVGTransform]] object's
 [=matrix object=]
-is always kept synchronized with its <{TransformValue/value}>.
+is always kept synchronized with its value.
 
 <pre class="idl">
 [<a>Exposed</a>=Window]
 interface <b>SVGTransform</b> {
 
   // Transform Types
-  const unsigned short <a href="#__svg__SVGTransform__SVG_TRANSFORM_UNKNOWN">SVG_TRANSFORM_UNKNOWN</a> = 0;
-  const unsigned short <a href="#__svg__SVGTransform__SVG_TRANSFORM_MATRIX">SVG_TRANSFORM_MATRIX</a> = 1;
-  const unsigned short <a href="#__svg__SVGTransform__SVG_TRANSFORM_TRANSLATE">SVG_TRANSFORM_TRANSLATE</a> = 2;
-  const unsigned short <a href="#__svg__SVGTransform__SVG_TRANSFORM_SCALE">SVG_TRANSFORM_SCALE</a> = 3;
-  const unsigned short <a href="#__svg__SVGTransform__SVG_TRANSFORM_ROTATE">SVG_TRANSFORM_ROTATE</a> = 4;
-  const unsigned short <a href="#__svg__SVGTransform__SVG_TRANSFORM_SKEWX">SVG_TRANSFORM_SKEWX</a> = 5;
-  const unsigned short <a href="#__svg__SVGTransform__SVG_TRANSFORM_SKEWY">SVG_TRANSFORM_SKEWY</a> = 6;
+  const unsigned short SVG_TRANSFORM_UNKNOWN = 0;
+  const unsigned short SVG_TRANSFORM_MATRIX = 1;
+  const unsigned short SVG_TRANSFORM_TRANSLATE = 2;
+  const unsigned short SVG_TRANSFORM_SCALE = 3;
+  const unsigned short SVG_TRANSFORM_ROTATE = 4;
+  const unsigned short SVG_TRANSFORM_SKEWX = 5;
+  const unsigned short SVG_TRANSFORM_SKEWY = 6;
 
-  readonly attribute unsigned short <a href="#__svg__SVGTransform__type">type</a>;
-  [<a>SameObject</a>] readonly attribute DOMMatrix <a href="#__svg__SVGTransform__matrix">matrix</a>;
-  readonly attribute float <a href="#__svg__SVGTransform__angle">angle</a>;
+  readonly attribute unsigned short type;
+  [<a>SameObject</a>] readonly attribute DOMMatrix matrix;
+  readonly attribute float angle;
 
-  undefined <a href="#__svg__SVGTransform__setMatrix">setMatrix</a>(optional DOMMatrix2DInit matrix = {});
-  undefined <a href="#__svg__SVGTransform__setTranslate">setTranslate</a>(float tx, float ty);
-  undefined <a href="#__svg__SVGTransform__setScale">setScale</a>(float sx, float sy);
-  undefined <a href="#__svg__SVGTransform__setRotate">setRotate</a>(float angle, float cx, float cy);
-  undefined <a href="#__svg__SVGTransform__setSkewX">setSkewX</a>(float angle);
-  undefined <a href="#__svg__SVGTransform__setSkewY">setSkewY</a>(float angle);
+  undefined setMatrix(optional DOMMatrix2DInit matrix = {});
+  undefined setTranslate(float tx, float ty);
+  undefined setScale(float sx, float sy);
+  undefined setRotate(float angle, float cx, float cy);
+  undefined setSkewX(float angle);
+  undefined setSkewY(float angle);
 };
 </pre>
 
 
 <p>The numeric transform type constants defined on [[#InterfaceSVGTransform|SVGTransform]] are used
-to represent the type of an [[#InterfaceSVGTransform|SVGTransform]]'s {TransformValue/value}}.
+to represent the type of an [[#InterfaceSVGTransform|SVGTransform]]'s value.
 Their meanings are as follows:
 
 <table class='vert'>
@@ -3247,17 +3248,17 @@ Their meanings are as follows:
 Note: The use of numeric transform type constants is an anti-pattern and
 new constant values will not be introduced for any transform types supported by
 [[#InterfaceSVGTransform|SVGTransform]].  If other types of transforms are supported and used, the [[#InterfaceSVGTransform|SVGTransform]]
-uses the <a href="#__svg__SVGTransform__SVG_TRANSFORM_UNKNOWN">SVG_TRANSFORM_UNKNOWN</a>
+uses the SVG_TRANSFORM_UNKNOWN
 type.  See below for details on how the other properties of an [[#InterfaceSVGTransform|SVGTransform]]
 operate with these types of transforms.
 
 <p>The <b id="__svg__SVGTransform__type">type</b> IDL attribute represents
-the type of transform item that the [[#InterfaceSVGTransform|SVGTransform]]'s <{TransformValue/value}> is.
-On getting <a href='#__svg__SVGTransform__type'>type</a>, the following steps
+the type of transform item that the [[#InterfaceSVGTransform|SVGTransform]]'s value is.
+On getting type, the following steps
 are run:
 
 <ol class='algorithm'>
-  <li>If the [[#InterfaceSVGTransform|SVGTransform]]'s <{TransformValue/value}>
+  <li>If the [[#InterfaceSVGTransform|SVGTransform]]'s value
   is a
   <span class='prop-value'>matrix(…)</span>,
   <span class='prop-value'>translate(…)</span>,
@@ -3267,10 +3268,10 @@ are run:
   <span class='prop-value'>skewY(…)</span> function,
   then return the corresponding constant
   value from the transform type table above.</li>
-  <li>Otherwise, return <a href="#__svg__SVGTransform__SVG_TRANSFORM_UNKNOWN">SVG_TRANSFORM_UNKNOWN</a>.
+  <li>Otherwise, return SVG_TRANSFORM_UNKNOWN.
     <p class='note'>For example, for a <span class='prop-value'>scaleX(…)</span>
     or <span class='prop-value'>translate3d(…)</span> transform,
-    <a href="#__svg__SVGTransform__SVG_TRANSFORM_UNKNOWN">SVG_TRANSFORM_UNKNOWN</a>
+    SVG_TRANSFORM_UNKNOWN
     would be returned.
   </li>
 </ol>
@@ -3280,7 +3281,7 @@ represents the transform as a 4x4 homogeneous matrix, and on getting
 returns the [[#InterfaceSVGTransform|SVGTransform]]'s [=matrix object=].
 When the [=matrix object=] is first created, its
 values are set to match the [[#InterfaceSVGTransform|SVGTransform]]'s transform
-function <{TransformValue/value}>, and is set to
+function value, and is set to
 <a href="#MatrixMode">reflects the SVGTransform</a>.
 
 Note: See the
@@ -3296,7 +3297,7 @@ represents the angle parameter of a
 On getting, the following steps are run:
 
 <ol class='algorithm'>
-  <li>If the [[#InterfaceSVGTransform|SVGTransform]] object's <{TransformValue/value}>
+  <li>If the [[#InterfaceSVGTransform|SVGTransform]] object's value
   is a <span class="prop-value">rotate(…)</span>,
   <span class="prop-value">skewX(…)</span> or
   <span class="prop-value">skewY(…)</span> function,
@@ -3310,19 +3311,19 @@ setMatrix(<var>matrix</var>) is called, the following steps are run:
 
 <ol class='algorithm'>
   <li>If the [[#InterfaceSVGTransform|SVGTransform]] object is <a href='#ReadOnlyTransform'>read only</a>, then
-  [=throw=] a [=NoModificationAllowedError=].</li>
-  <li>Let <var>newMatrix</var> be the result of <code>[=DOMMatrixReadOnly=].fromMatrix(<var>matrix</var>)</code>,
+  [=throw=] a {{NoModificationAllowedError}}.</li>
+  <li>Let <var>newMatrix</var> be the result of <code>{{DOMMatrixReadOnly}}.fromMatrix(<var>matrix</var>)</code>,
   including the <a href="https://drafts.fxtf.org/geometry/#dommatrixinit-dictionary">validate and fix-up</a> steps for missing values.
   If that method throws an error, then re-throw that error and abort these steps.</li>
   <li>If <var>newMatrix</var>.is2D() would return true,
   then set the [[#InterfaceSVGTransform|SVGTransform]] object's
-  <{TransformValue/value}> to a <span class='prop-value'>matrix(…)</span>
+  value to a <span class='prop-value'>matrix(…)</span>
   value that represents the same matrix as <var>newMatrix</var>.</li>
   <li>Otherwise, set the [[#InterfaceSVGTransform|SVGTransform]] object's
-  <{TransformValue/value}> to a <span class='prop-value'>matrix3d(…)</span>
+  value to a <span class='prop-value'>matrix3d(…)</span>
   value that represents the same matrix as <var>newMatrix</var>.</li>
   <li>In either case, [=matrix object=] gets synchronized
-  to the [[#InterfaceSVGTransform|SVGTransform]] object's <{TransformValue/value}>.</li>
+  to the [[#InterfaceSVGTransform|SVGTransform]] object's value.</li>
   <li>If the [[#InterfaceSVGTransform|SVGTransform]] object
   <a href="#TransformMode">reflects a presentation attribute value of an element</a>,
   then [=reserialize=] the reflected attribute.</li>
@@ -3340,9 +3341,9 @@ the following steps are run:
 
 <ol class='algorithm'>
   <li>If the [[#InterfaceSVGTransform|SVGTransform]] object is <a href='#ReadOnlyTransform'>read only</a>, then
-  [=throw=] a [=NoModificationAllowedError=].</li>
+  [=throw=] a {{NoModificationAllowedError}}.</li>
   <li>Set the [[#InterfaceSVGTransform|SVGTransform]] object's
-  <{TransformValue/value}> to a new transform function
+  value to a new transform function
   value, depending on which method was called:
     <dl class='switch'>
       <dt>setTranslate(<var>tx</var>, <var>ty</var>)</dt>
@@ -3359,7 +3360,7 @@ the following steps are run:
   </li>
   <li>Set the components of the [[#InterfaceSVGTransform|SVGTransform]] object's
   [=matrix object=] to
-  match the new transform function <{TransformValue/value}>.</li>
+  match the new transform function value.</li>
   <li>If the [[#InterfaceSVGTransform|SVGTransform]] object
   <a href="#TransformMode">reflects an element of a
   presentation attribute value</a>, then [=reserialize=] the
@@ -3377,7 +3378,7 @@ It can:
 
 <ol>
   <li><em>reflect an [[#InterfaceSVGTransform|SVGTransform]]</em> (being exposed through the
-  <a href="#__svg__SVGTransform__matrix">matrix</a> IDL attribute on
+  matrix IDL attribute on
   an [[#InterfaceSVGTransform|SVGTransform]]), or</li>
   <li><em>be detached</em>, which is the case for [[geometry-1#DOMMatrix|DOMMatrix]] objects
   created using their constructor or with
@@ -3388,11 +3389,11 @@ It can:
 which means that attempts to modify the object will result in an exception
 being thrown.  When assigning to any of a read only [[geometry-1#DOMMatrix|DOMMatrix]]'s
 IDL attributes, or when invoking any of its mutable transform methods,
-a [=NoModificationAllowedError=] exception will be [=thrown=]
+a {{NoModificationAllowedError}} exception will be [=thrown=]
 instead of updating the internal value.
 
 <p class='note'>Note that this applies only to the read-write [[geometry-1#DOMMatrix|DOMMatrix]]
-interface; the [=DOMMatrixReadOnly=] interface, which is not used for reflecting
+interface; the {{DOMMatrixReadOnly}} interface, which is not used for reflecting
 [[#TransformProperty|transform]], will already throw an exception if an attempt is made to modify it.
 
 <p>When assigning to any of a writable [[geometry-1#DOMMatrix|DOMMatrix]]'s
@@ -3406,10 +3407,10 @@ the following steps are run after updating the internal matrix value:
       <li>If the [[geometry-1#DOMMatrix|DOMMatrix]] would return true from its
       <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dommatrixreadonly-is2d">is2d</a>
       method, then set the [[#InterfaceSVGTransform|SVGTransform]] object's
-      <{TransformValue/value}> to a <span class='prop-value'>matrix(…)</span>
+      value to a <span class='prop-value'>matrix(…)</span>
       value that represents the same matrix as the [[geometry-1#DOMMatrix|DOMMatrix]].</li>
       <li>Otherwise, set the [[#InterfaceSVGTransform|SVGTransform]] object's
-      <{TransformValue/value}> to a <span class='prop-value'>matrix3d(…)</span>
+      value to a <span class='prop-value'>matrix3d(…)</span>
       value that represents the same matrix as the [[geometry-1#DOMMatrix|DOMMatrix]].</li>
       <li>If the [[#InterfaceSVGTransform|SVGTransform]] object
       <a href="#TransformMode">reflects an element of a
@@ -3444,8 +3445,8 @@ interface <b>SVGTransformList</b> {
   <a href="types.html#__svg__SVGNameList__setter">setter</a> undefined (unsigned long index, SVGTransform newItem);
 
   <span class='comment'>// Additional methods not common to other list interfaces.</span>
-  SVGTransform <a href="#__svg__SVGTransformList__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>(optional DOMMatrix2DInit matrix = {});
-  SVGTransform? <a href="#__svg__SVGTransformList__consolidate">consolidate</a>();
+  SVGTransform createSVGTransformFromMatrix(optional DOMMatrix2DInit matrix = {});
+  SVGTransform? consolidate();
 };
 </pre>
 
@@ -3457,7 +3458,7 @@ the following steps are run:
 <ol class="algorithm">
   <li>Let <var>transform</var> be a newly created [[#InterfaceSVGTransform|SVGTransform]] object
   that is <a href="#TransformMode">detached</a>.</li>
-  <li>Follow the steps that would be run if the <a href="#__svg__SVGTransform__setMatrix">setMatrix</a>
+  <li>Follow the steps that would be run if the setMatrix
   method on <var>transform</var> were called, passing <var>matrix</var>
   as its argument.</li>
   <li>Return <var>transform</var>.</li>
@@ -3470,7 +3471,7 @@ consolidate() method is called, the following steps are run:
 
 <ol class="algorithm">
   <li>If the [[#InterfaceSVGTransformList|SVGTransformList]] object is <a href="types.html#ReadOnlyList">read only</a>,
-  then [=throw=] a [=NoModificationAllowedError=].</li>
+  then [=throw=] a {{NoModificationAllowedError}}.</li>
   <li>If the list is empty, return null.</li>
   <li>[=Detach=] and then remove all elements in the list.</li>
   <li>Let <var>transform</var> be a newly created [[#InterfaceSVGTransform|SVGTransform]]
@@ -3486,10 +3487,10 @@ consolidate() method is called, the following steps are run:
   [=matrix object=] would return true from its
   <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#dom-dommatrixreadonly-is2d">is2d</a>
   method, then set <var>transform</var>'s
-  <{TransformValue/value}> to a <span class='prop-value'>matrix(…)</span>
+  value to a <span class='prop-value'>matrix(…)</span>
   value that represents the same matrix as the [=matrix object=].</li>
   <li>Otherwise, set <var>transform</var>'s
-  <{TransformValue/value}> to a <span class='prop-value'>matrix3d(…)</span>
+  value to a <span class='prop-value'>matrix3d(…)</span>
   value that represents the same matrix as the [=matrix object=].</li>
   <li>[=Attach=] <var>transform</var> to this [[#InterfaceSVGTransformList|SVGTransformList]].</li>
   <li>Append <var>transform</var> to this list.</li>
@@ -3522,8 +3523,8 @@ interface <b>SVGAnimatedTransformList</b> {
 <p class='ready-for-wider-review'>The <b id="__svg__SVGAnimatedTransformList__baseVal">baseVal</b> and
 <b id="__svg__SVGAnimatedTransformList__animVal">animVal</b> IDL attributes
 represent the value of the reflected presentation attribute.
-On getting <a href="#__svg__SVGAnimatedTransformList__baseVal">baseVal</a> or
-<a href="#__svg__SVGAnimatedTransformList__animVal">animVal</a>, an
+On getting baseVal or
+animVal, an
 [[#InterfaceSVGTransformList|SVGTransformList]] object is returned that reflects the given
 presentation attribute.
 
@@ -3539,8 +3540,8 @@ being thrown, as described below.
 <p id="PreserveAspectRatioMode" class='ready-for-wider-review'>Every [[#InterfaceSVGPreserveAspectRatio|SVGPreserveAspectRatio]] object
 <em>reflects the base value</em> of a [=reflected=] [[#PreserveAspectRatioAttribute|preserveAspectRatio]]
 attribute (being exposed through the methods on the
-<a href="#__svg__SVGAnimatedPreserveAspectRatio__baseVal">baseVal</a> or
-<a href="#__svg__SVGAnimatedPreserveAspectRatio__animVal">animVal</a> member of
+baseVal or
+animVal member of
 an [[#InterfaceSVGAnimatedPreserveAspectRatio|SVGAnimatedPreserveAspectRatio]]).
 
 <pre class="idl">
@@ -3618,13 +3619,13 @@ value.  On getting, the following steps are run:
 </ol>
 </div>
 
-<p>On setting <a href="#__svg__SVGPreserveAspectRatio__align">align</a>, the
+<p>On setting align, the
 following steps are run:
 
 <ol class='algorithm'>
-  <li>If the [[#InterfaceSVGPreserveAspectRatio|SVGPreserveAspectRatio]] is <a href="#ReadOnlyPreserveAspectRatio">read only</a>, then [=throw=] a [=NoModificationAllowedError=].</li>
+  <li>If the [[#InterfaceSVGPreserveAspectRatio|SVGPreserveAspectRatio]] is <a href="#ReadOnlyPreserveAspectRatio">read only</a>, then [=throw=] a {{NoModificationAllowedError}}.</li>
   <li>If <var>value</var> is
-  <a href="#__svg__SVGPreserveAspectRatio__SVG_PRESERVEASPECTRATIO_UNKNOWN">SVG_PRESERVEASPECTRATIO_UNKNOWN</a>
+  SVG_PRESERVEASPECTRATIO_UNKNOWN
   or does not have a corresponding entry in the
   alignment keyword table above, then throw a {{TypeError}}.</li>
   <li>Let <var>string</var> be the corresponding keyword
@@ -3632,7 +3633,7 @@ following steps are run:
   <li>Append a single U+0020 SPACE character to <var>string</var>.</li>
   <li>Let <var>meet or slice</var> be the value that would be
   returned from the
-  <a href="#__svg__SVGPreserveAspectRatio__meetOrSlice">meetOrSlice</a>
+  meetOrSlice
   member on this [[#InterfaceSVGPreserveAspectRatio|SVGPreserveAspectRatio]].</li>
   <li>Append to <var>string</var> the corresponding keyword
   in the meet-or-slice keyword table above for <var>meet or slice</var>.</li>
@@ -3650,25 +3651,25 @@ value.  On getting, the following steps are run:
   attribute <var>value</var> is the current non-animated value of the attribute.
   </li>
   <li>If the meet-or-slice value is not present in <var>value</var>,
-  then return <a href="#__svg__SVGPreserveAspectRatio__SVG_MEETORSLICE_MEET">SVG_MEETORSLICE_MEET</a>.</li>
+  then return SVG_MEETORSLICE_MEET.</li>
   <li>Otherwise, the meet-or-slice value is present.  Return the constant
   value as specified in the meet-or-slice constant table above for the meet-or-slice
   keyword in <var>value</var>.</li>
 </ol>
 </div>
 
-<p>On setting <a href="#__svg__SVGPreserveAspectRatio__meetOrSlice">meetOrSlice</a>, the
+<p>On setting meetOrSlice, the
 following steps are run:
 
 <ol class='algorithm'>
-  <li>If the [[#InterfaceSVGPreserveAspectRatio|SVGPreserveAspectRatio]] is <a href="#ReadOnlyPreserveAspectRatio">read only</a>, then [=throw=] a [=NoModificationAllowedError=].</li>
+  <li>If the [[#InterfaceSVGPreserveAspectRatio|SVGPreserveAspectRatio]] is <a href="#ReadOnlyPreserveAspectRatio">read only</a>, then [=throw=] a {{NoModificationAllowedError}}.</li>
   <li>If <var>value</var> is
-  <a href="#__svg__SVGPreserveAspectRatio__SVG_MEETORSLICE_UNKNOWN">SVG_MEETORSLICE_UNKNOWN</a>
+  SVG_MEETORSLICE_UNKNOWN
   or does not have a corresponding entry in the
   meet-or-slice keyword table above, then throw a {{TypeError}}.</li>
   <li>Let <var>align</var> be the value that would be
   returned from the
-  <a href="#__svg__SVGPreserveAspectRatio__align">align</a>
+  align
   member on this [[#InterfaceSVGPreserveAspectRatio|SVGPreserveAspectRatio]].</li>
   <li>Let <var>string</var> be the corresponding keyword
   in the alignment keyword table above for <var>align</var>.</li>
@@ -3695,8 +3696,8 @@ interface <b>SVGAnimatedPreserveAspectRatio</b> {
 <p class='ready-for-wider-review'>The <b id="__svg__SVGAnimatedPreserveAspectRatio__baseVal">baseVal</b> and
 <b id="__svg__SVGAnimatedPreserveAspectRatio__animVal">animVal</b> IDL
 attributes represent the current non-animated value of the reflected [[#PreserveAspectRatioAttribute|preserveAspectRatio]]
-attribute.  On getting <a href="#__svg__SVGAnimatedPreserveAspectRatio__baseVal">baseVal</a>
-or <a href="#__svg__SVGAnimatedPreserveAspectRatio__animVal">animVal</a>,
+attribute.  On getting baseVal
+or animVal,
 an [[#InterfaceSVGPreserveAspectRatio|SVGPreserveAspectRatio]] object is returned that
 <a href="#PreserveAspectRatioMode">reflects the base value</a> of the [[#PreserveAspectRatioAttribute|preserveAspectRatio]]
 attribute on the SVG element that the object with the reflecting IDL attribute

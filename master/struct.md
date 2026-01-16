@@ -1,4 +1,4 @@
-﻿<h2>Document Structure</h2>
+﻿<h2 id="chap-struct">Document Structure</h2>
 
 <h3 id="NewDocument">Defining an SVG document fragment: the <span class="element-name">svg</span> element</h3>
 
@@ -23,7 +23,7 @@ HTML or XML document.
 <p id="EmbeddedSVGExample">The following example shows simple SVG
 content embedded inline as a fragment within a parent XML document.
 Note the use of XML namespaces to indicate that the <{svg}> and
-{{ellipse}} elements belong to the [=SVG namespace=]:
+<{ellipse}> elements belong to the [=SVG namespace=]:
 
 <xmp>
 <?xml version="1.0" standalone="yes"?>
@@ -119,7 +119,7 @@ information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommend
   <dd>The structural elements are those which define the primary
   structure of an SVG document.  Specifically, the following
   elements are structural elements:
-  @@elementcategory name='structural'@@.</dd>
+  @@elementcategory name=<span class="attr-value">structural</span>@@.</dd>
 
   <dt><dfn id="TermStructurallyExternalElement" data-dfn-type="dfn" data-export="">structurally external element</dfn></dt>
   <dd>Elements that define its structure by reference to an external resource.
@@ -138,7 +138,7 @@ information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommend
   <dd>The furthest <{svg}> ancestor element that remains in the
   [=current SVG document fragment=].</dd>
 
-  <dt><dfn id="TermSVGDocumentFragment" data-dfn-type="dfn" data-export="">SVG document fragment</dfn></dt>
+  <dt><dfn id="TermSVGDocumentFragment" data-dfn-type="dfn" data-export="" data-lt="SVG document">SVG document fragment</dfn></dt>
   <dd>A document sub-tree which starts with an <{svg}>
   element which is either the root element of the document or whose parent
   element is not in the SVG namespace.
@@ -197,9 +197,7 @@ information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommend
                id="struct-elementdef-svg">svg</dfn>’</span></div>
       <dl>
         <dt>Categories:</dt>
-        <dd><a href="#struct-TermContainerElement">Container element</a>, <a
-             href="#render-TermRenderableElement">renderable element</a>, <a
-             href="#struct-TermStructuralElement">structural element</a></dd>
+        <dd>[=container element=], [=renderable element=], [=structural element=]</dd>
         <dt>Content model:</dt>
         <dd>Any number of the following elements, in any order:<ul class="no-bullets">
             <li><a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a><span
@@ -211,51 +209,49 @@ information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommend
                      href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>,
                 <span class="element-name">‘<a
                      href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li>
-            <li><a href="#struct-TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#struct-DescElement"><span>desc</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-TitleElement"><span>title</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-MetadataElement"><span>metadata</span></a>’</span></span>
+            <li>[=descriptive element|descriptive elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{desc}>’</span>, <span
+                      class="element-name">‘<{title}>’</span>, <span
+                      class="element-name">‘<{metadata}>’</span></span>
             </li>
-            <li><a href="#painting-TermPaintServerElement">paint server elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a
-                     href="#pservers-LinearGradientElement"><span>linearGradient</span></a>’</span>, <span
-                      class="element-name">‘<a
-                     href="#pservers-RadialGradientElement"><span>radialGradient</span></a>’</span>, <span
-                      class="element-name">‘<a href="#pservers-PatternElement"><span>pattern</span></a>’</span></span>
+            <li>[=paint server element|paint server elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{linearGradient}>’</span>, <span
+                      class="element-name">‘<{radialGradient}>’</span>, <span
+                      class="element-name">‘<{pattern}>’</span></span>
             </li>
-            <li><a href="#shapes-TermShapeElement">shape elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#shapes-CircleElement"><span>circle</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-EllipseElement"><span>ellipse</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-LineElement"><span>line</span></a>’</span>, <span
-                      class="element-name">‘<a href="#paths-PathElement"><span>path</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-PolygonElement"><span>polygon</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-PolylineElement"><span>polyline</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-RectElement"><span>rect</span></a>’</span></span></li>
-            <li><a href="#struct-TermStructuralElement">structural elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#struct-DefsElement"><span>defs</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-GElement"><span>g</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-SymbolElement"><span>symbol</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-UseElement"><span>use</span></a>’</span></span></li>
-          </ul><span class="element-name"><a href="#linking-AElement"><span>a</span></a></span>, <span
+            <li>[=shape elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{circle}>’</span>, <span
+                      class="element-name">‘<{ellipse}>’</span>, <span
+                      class="element-name">‘<{line}>’</span>, <span
+                      class="element-name">‘<{path}>’</span>, <span
+                      class="element-name">‘<{polygon}>’</span>, <span
+                      class="element-name">‘<{polyline}>’</span>, <span
+                      class="element-name">‘<{rect}>’</span></span></li>
+            <li>[=structural element|structural elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{defs}>’</span>, <span
+                      class="element-name">‘<{g}>’</span>, <span
+                      class="element-name">‘<a href="#SVGElement"><span>svg</span></a>’</span>, <span
+                      class="element-name">‘<{symbol}>’</span>, <span
+                      class="element-name">‘<{use}>’</span></span></li>
+          </ul><span class="element-name"><{a}></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/filter-effects/#FilterElement"><span>filter</span></a></span>, <span
-                class="element-name"><a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a></span>,
-          <span class="element-name"><a href="#embedded-ImageElement"><span>image</span></a></span>, <span
-                class="element-name"><a href="#painting-MarkerElement"><span>marker</span></a></span>, <span
+                class="element-name"><a href="#ForeignObjectElement"><span>foreignObject</span></a></span>,
+          <span class="element-name"><{image}></span>, <span
+                class="element-name"><{marker}></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span
-                class="element-name"><a href="#interact-ScriptElement"><span>script</span></a></span>, <span
-                class="element-name"><a href="#styling-StyleElement"><span>style</span></a></span>, <span
-                class="element-name"><a href="#struct-SwitchElement"><span>switch</span></a></span>, <span
-                class="element-name"><a href="#text-TextElement"><span>text</span></a></span>, <span
-                class="element-name"><a href="#linking-ViewElement"><span>view</span></a></span></dd>
+                class="element-name"><{script}></span>, <span
+                class="element-name"><{style}></span>, <span
+                class="element-name"><a href="#SwitchElement"><span>switch</span></a></span>, <span
+                class="element-name"><a href="#TextElement"><span>text</span></a></span>, <span
+                class="element-name"><a href="#ViewElement"><span>view</span></a></span></dd>
         <dt>Attributes:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a href="#struct-TermARIAAttribute">aria attributes</a><span class="expanding"> — <span
+            <li>[=aria attributes=]<span class="expanding"> — <span
                       class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>,
                 <span class="attr-name">‘<a
@@ -352,125 +348,115 @@ information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommend
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>,
                 <span class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
-                <span class="attr-name">‘<a href="#struct-RoleAttribute"><span>role</span></a>’</span></span></li>
-            <li><a href="#struct-TermConditionalProcessingAttribute">conditional processing attributes</a><span
+                <span class="attr-name">‘<a href="#RoleAttribute"><span>role</span></a>’</span></span></li>
+            <li>[=conditional processing attributes=]<span
                     class="expanding"> — <span class="attr-name">‘<a
-                     href="#struct-RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
+                     href="#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
                       class="attr-name">‘<a
-                     href="#struct-SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
-            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
-            <li><a href="#interact-EventAttributes">document event attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onunload</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onabort</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span></span>
+                     href="#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+            <li>[=core attributes=]<span class="expanding"> — <span
+                      class="attr-name">‘<span>id</span>’</span>, <span
+                      class="attr-name">‘<span>tabindex</span>’</span>, <span
+                      class="attr-name">‘<span>autofocus</span>’</span>, <span
+                      class="attr-name">‘<span>lang</span>’</span>, <span
+                      class="attr-name">‘<span>xml:space</span>’</span>, <span
+                      class="attr-name">‘<span>class</span>’</span>, <span
+                      class="attr-name">‘<span>style</span>’</span></span></li>
+            <li><a href="#EventAttributes">document event attributes</a><span class="expanding"> — <span
+                      class="attr-name">‘<span>onunload</span>’</span>, <span
+                      class="attr-name">‘<span>onabort</span>’</span>, <span
+                      class="attr-name">‘<span>onerror</span>’</span>, <span
+                      class="attr-name">‘<span>onresize</span>’</span>, <span
+                      class="attr-name">‘<span>onscroll</span>’</span></span>
             </li>
             <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                      class="attr-name">‘<span>onchange</span>’</span>, <span
+                      class="attr-name">‘<span>onclick</span>’</span>, <span
+                      class="attr-name">‘<span>onclose</span>’</span>, <span
+                      class="attr-name">‘<span>oncopy</span>’</span>, <span
+                      class="attr-name">‘<span>oncuechange</span>’</span>, <span
+                      class="attr-name">‘<span>oncut</span>’</span>, <span
+                      class="attr-name">‘<span>ondblclick</span>’</span>, <span
+                      class="attr-name">‘<span>ondrag</span>’</span>, <span
+                      class="attr-name">‘<span>ondragend</span>’</span>, <span
+                      class="attr-name">‘<span>ondragenter</span>’</span>, <span
+                      class="attr-name">‘<span>ondragexit</span>’</span>, <span
+                      class="attr-name">‘<span>ondragleave</span>’</span>, <span
+                      class="attr-name">‘<span>ondragover</span>’</span>, <span
+                      class="attr-name">‘<span>ondragstart</span>’</span>, <span
+                      class="attr-name">‘<span>ondrop</span>’</span>, <span
+                      class="attr-name">‘<span>ondurationchange</span>’</span>,
+                <span class="attr-name">‘<span>onemptied</span>’</span>, <span
+                      class="attr-name">‘<span>onended</span>’</span>, <span
+                      class="attr-name">‘<span>onerror</span>’</span>, <span
+                      class="attr-name">‘<span>onfocus</span>’</span>, <span
+                      class="attr-name">‘<span>oninput</span>’</span>, <span
+                      class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                      class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                      class="attr-name">‘<span>onkeypress</span>’</span>, <span
+                      class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                      class="attr-name">‘<span>onload</span>’</span>, <span
+                      class="attr-name">‘<span>onloadeddata</span>’</span>,
+                <span class="attr-name">‘<span>onloadedmetadata</span>’</span>,
+                <span class="attr-name">‘<span>onloadstart</span>’</span>, <span
+                      class="attr-name">‘<span>onmousedown</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseenter</span>’</span>,
+                <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                <span class="attr-name">‘<span>onmousemove</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseout</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseover</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                      class="attr-name">‘<span>onpaste</span>’</span>, <span
+                      class="attr-name">‘<span>onpause</span>’</span>, <span
+                      class="attr-name">‘<span>onplay</span>’</span>, <span
+                      class="attr-name">‘<span>onplaying</span>’</span>, <span
+                      class="attr-name">‘<span>onprogress</span>’</span>, <span
+                      class="attr-name">‘<span>onratechange</span>’</span>,
+                <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                      class="attr-name">‘<span>onresize</span>’</span>, <span
+                      class="attr-name">‘<span>onscroll</span>’</span>, <span
+                      class="attr-name">‘<span>onseeked</span>’</span>, <span
+                      class="attr-name">‘<span>onseeking</span>’</span>, <span
+                      class="attr-name">‘<span>onselect</span>’</span>, <span
+                      class="attr-name">‘<span>onshow</span>’</span>, <span
+                      class="attr-name">‘<span>onstalled</span>’</span>, <span
+                      class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                      class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                      class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                      class="attr-name">‘<span>onvolumechange</span>’</span>,
+                <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                      class="attr-name">‘<span>onwheel</span>’</span></span>
             </li>
-            <li><a href="#styling-TermPresentationAttribute">presentation attributes</a><span class="expanding"> —
+            <li>[=presentation attributes=]<span class="expanding"> —
               </span></li>
-            <li><span class="attr-name">‘<a href="#coords-ViewBoxAttribute"><span>viewBox</span></a>’</span></li>
+            <li><span class="attr-name">‘<a href="#ViewBoxAttribute"><span>viewBox</span></a>’</span></li>
             <li><span class="attr-name">‘<a
-                   href="#coords-PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#coords-TransformProperty"><span>transform</span></a>’</span></li>
+                   href="#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span></li>
+            <li><span class="attr-name">‘<a href="#TransformProperty"><span>transform</span></a>’</span></li>
           </ul>
         </dd>
         <dt>Geometry properties:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a class="property"
-                 href="#geometry-XProperty">x</a></li>
-            <li><a class="property"
-                 href="#geometry-YProperty">y</a></li>
-            <li><a class="property"
-                 href="#geometry-Sizing">width</a></li>
-            <li><a class="property"
-                 href="#geometry-Sizing">height</a></li>
+            <li><a property>x</a></li>
+            <li><a property>y</a></li>
+            <li><a property>width</a></li>
+            <li><a property>height</a></li>
           </ul>
         </dd>
         <dt>DOM Interfaces:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a class="idlinterface"
-                 href="#struct-InterfaceSVGSVGElement">SVGSVGElement</a></li>
+            <li>{{SVGSVGElement}}</li>
           </ul>
         </dd>
       </dl>
     </div>
 
     <p>
-  The {{x}} and {{y}} attributes specify the
+  The 'x' and 'y' attributes specify the
   top-left corner of the rectangular region into which an
   embedded <{svg}> element is placed.  On an [=outermost svg element=],
   these attributes have no effect.
@@ -478,7 +464,7 @@ information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommend
 
 <p>
   For [=outermost svg elements=],
-  the {{width property}} and {{height property}} attributes specify
+  the 'width' and 'height' attributes specify
   the intrinsic size of the SVG document fragment.
   For embedded <{svg}> elements, they specify the size
   of the rectangular region into which the <{svg}> element
@@ -536,9 +522,7 @@ within it, to an arbitrary depth.
                id="struct-elementdef-g">g</dfn>’</span></div>
       <dl>
         <dt>Categories:</dt>
-        <dd><a href="#struct-TermContainerElement">Container element</a>, <a
-             href="#render-TermRenderableElement">renderable element</a>, <a
-             href="#struct-TermStructuralElement">structural element</a></dd>
+        <dd>[=container element=], [=renderable element=], [=structural element=]</dd>
         <dt>Content model:</dt>
         <dd>Any number of the following elements, in any order:<ul class="no-bullets">
             <li><a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a><span
@@ -550,51 +534,49 @@ within it, to an arbitrary depth.
                      href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>,
                 <span class="element-name">‘<a
                      href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li>
-            <li><a href="#struct-TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#struct-DescElement"><span>desc</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-TitleElement"><span>title</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-MetadataElement"><span>metadata</span></a>’</span></span>
+            <li>[=descriptive element|descriptive elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{desc}>’</span>, <span
+                      class="element-name">‘<{title}>’</span>, <span
+                      class="element-name">‘<{metadata}>’</span></span>
             </li>
-            <li><a href="#painting-TermPaintServerElement">paint server elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a
-                     href="#pservers-LinearGradientElement"><span>linearGradient</span></a>’</span>, <span
-                      class="element-name">‘<a
-                     href="#pservers-RadialGradientElement"><span>radialGradient</span></a>’</span>, <span
-                      class="element-name">‘<a href="#pservers-PatternElement"><span>pattern</span></a>’</span></span>
+            <li>[=paint server element|paint server elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{linearGradient}>’</span>, <span
+                      class="element-name">‘<{radialGradient}>’</span>, <span
+                      class="element-name">‘<{pattern}>’</span></span>
             </li>
-            <li><a href="#shapes-TermShapeElement">shape elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#shapes-CircleElement"><span>circle</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-EllipseElement"><span>ellipse</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-LineElement"><span>line</span></a>’</span>, <span
-                      class="element-name">‘<a href="#paths-PathElement"><span>path</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-PolygonElement"><span>polygon</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-PolylineElement"><span>polyline</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-RectElement"><span>rect</span></a>’</span></span></li>
-            <li><a href="#struct-TermStructuralElement">structural elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#struct-DefsElement"><span>defs</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-GElement"><span>g</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-SymbolElement"><span>symbol</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-UseElement"><span>use</span></a>’</span></span></li>
-          </ul><span class="element-name"><a href="#linking-AElement"><span>a</span></a></span>, <span
+            <li>[=shape elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{circle}>’</span>, <span
+                      class="element-name">‘<{ellipse}>’</span>, <span
+                      class="element-name">‘<{line}>’</span>, <span
+                      class="element-name">‘<{path}>’</span>, <span
+                      class="element-name">‘<{polygon}>’</span>, <span
+                      class="element-name">‘<{polyline}>’</span>, <span
+                      class="element-name">‘<{rect}>’</span></span></li>
+            <li>[=structural element|structural elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{defs}>’</span>, <span
+                      class="element-name">‘<{g}>’</span>, <span
+                      class="element-name">‘<a href="#SVGElement"><span>svg</span></a>’</span>, <span
+                      class="element-name">‘<{symbol}>’</span>, <span
+                      class="element-name">‘<{use}>’</span></span></li>
+          </ul><span class="element-name"><{a}></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/filter-effects/#FilterElement"><span>filter</span></a></span>, <span
-                class="element-name"><a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a></span>,
-          <span class="element-name"><a href="#embedded-ImageElement"><span>image</span></a></span>, <span
-                class="element-name"><a href="#painting-MarkerElement"><span>marker</span></a></span>, <span
+                class="element-name"><a href="#ForeignObjectElement"><span>foreignObject</span></a></span>,
+          <span class="element-name"><{image}></span>, <span
+                class="element-name"><{marker}></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span
-                class="element-name"><a href="#interact-ScriptElement"><span>script</span></a></span>, <span
-                class="element-name"><a href="#styling-StyleElement"><span>style</span></a></span>, <span
-                class="element-name"><a href="#struct-SwitchElement"><span>switch</span></a></span>, <span
-                class="element-name"><a href="#text-TextElement"><span>text</span></a></span>, <span
-                class="element-name"><a href="#linking-ViewElement"><span>view</span></a></span></dd>
+                class="element-name"><{script}></span>, <span
+                class="element-name"><{style}></span>, <span
+                class="element-name"><a href="#SwitchElement"><span>switch</span></a></span>, <span
+                class="element-name"><a href="#TextElement"><span>text</span></a></span>, <span
+                class="element-name"><a href="#ViewElement"><span>view</span></a></span></dd>
         <dt>Attributes:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a href="#struct-TermARIAAttribute">aria attributes</a><span class="expanding"> — <span
+            <li>[=aria attributes=]<span class="expanding"> — <span
                       class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>,
                 <span class="attr-name">‘<a
@@ -691,94 +673,88 @@ within it, to an arbitrary depth.
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>,
                 <span class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
-                <span class="attr-name">‘<a href="#struct-RoleAttribute"><span>role</span></a>’</span></span></li>
-            <li><a href="#struct-TermConditionalProcessingAttribute">conditional processing attributes</a><span
+                <span class="attr-name">‘<a href="#RoleAttribute"><span>role</span></a>’</span></span></li>
+            <li>[=conditional processing attributes=]<span
                     class="expanding"> — <span class="attr-name">‘<a
-                     href="#struct-RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
+                     href="#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
                       class="attr-name">‘<a
-                     href="#struct-SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
-            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+                     href="#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+            <li>[=core attributes=]<span class="expanding"> — <span
+                      class="attr-name">‘<span>id</span>’</span>, <span
+                      class="attr-name">‘<span>tabindex</span>’</span>, <span
+                      class="attr-name">‘<span>autofocus</span>’</span>, <span
+                      class="attr-name">‘<span>lang</span>’</span>, <span
+                      class="attr-name">‘<span>xml:space</span>’</span>, <span
+                      class="attr-name">‘<span>class</span>’</span>, <span
+                      class="attr-name">‘<span>style</span>’</span></span></li>
             <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                      class="attr-name">‘<span>onchange</span>’</span>, <span
+                      class="attr-name">‘<span>onclick</span>’</span>, <span
+                      class="attr-name">‘<span>onclose</span>’</span>, <span
+                      class="attr-name">‘<span>oncopy</span>’</span>, <span
+                      class="attr-name">‘<span>oncuechange</span>’</span>, <span
+                      class="attr-name">‘<span>oncut</span>’</span>, <span
+                      class="attr-name">‘<span>ondblclick</span>’</span>, <span
+                      class="attr-name">‘<span>ondrag</span>’</span>, <span
+                      class="attr-name">‘<span>ondragend</span>’</span>, <span
+                      class="attr-name">‘<span>ondragenter</span>’</span>, <span
+                      class="attr-name">‘<span>ondragexit</span>’</span>, <span
+                      class="attr-name">‘<span>ondragleave</span>’</span>, <span
+                      class="attr-name">‘<span>ondragover</span>’</span>, <span
+                      class="attr-name">‘<span>ondragstart</span>’</span>, <span
+                      class="attr-name">‘<span>ondrop</span>’</span>, <span
+                      class="attr-name">‘<span>ondurationchange</span>’</span>,
+                <span class="attr-name">‘<span>onemptied</span>’</span>, <span
+                      class="attr-name">‘<span>onended</span>’</span>, <span
+                      class="attr-name">‘<span>onerror</span>’</span>, <span
+                      class="attr-name">‘<span>onfocus</span>’</span>, <span
+                      class="attr-name">‘<span>oninput</span>’</span>, <span
+                      class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                      class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                      class="attr-name">‘<span>onkeypress</span>’</span>, <span
+                      class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                      class="attr-name">‘<span>onload</span>’</span>, <span
+                      class="attr-name">‘<span>onloadeddata</span>’</span>,
+                <span class="attr-name">‘<span>onloadedmetadata</span>’</span>,
+                <span class="attr-name">‘<span>onloadstart</span>’</span>, <span
+                      class="attr-name">‘<span>onmousedown</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseenter</span>’</span>,
+                <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                <span class="attr-name">‘<span>onmousemove</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseout</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseover</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                      class="attr-name">‘<span>onpaste</span>’</span>, <span
+                      class="attr-name">‘<span>onpause</span>’</span>, <span
+                      class="attr-name">‘<span>onplay</span>’</span>, <span
+                      class="attr-name">‘<span>onplaying</span>’</span>, <span
+                      class="attr-name">‘<span>onprogress</span>’</span>, <span
+                      class="attr-name">‘<span>onratechange</span>’</span>,
+                <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                      class="attr-name">‘<span>onresize</span>’</span>, <span
+                      class="attr-name">‘<span>onscroll</span>’</span>, <span
+                      class="attr-name">‘<span>onseeked</span>’</span>, <span
+                      class="attr-name">‘<span>onseeking</span>’</span>, <span
+                      class="attr-name">‘<span>onselect</span>’</span>, <span
+                      class="attr-name">‘<span>onshow</span>’</span>, <span
+                      class="attr-name">‘<span>onstalled</span>’</span>, <span
+                      class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                      class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                      class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                      class="attr-name">‘<span>onvolumechange</span>’</span>,
+                <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                      class="attr-name">‘<span>onwheel</span>’</span></span>
             </li>
-            <li><a href="#styling-TermPresentationAttribute">presentation attributes</a><span class="expanding"> —
+            <li>[=presentation attributes=]<span class="expanding"> —
               </span></li>
           </ul>
         </dd>
         <dt>DOM Interfaces:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a class="idlinterface"
-                 href="#struct-InterfaceSVGGElement">SVGGElement</a></li>
+            <li>{{SVGGElement}}</li>
           </ul>
         </dd>
       </dl>
@@ -786,19 +762,19 @@ within it, to an arbitrary depth.
 
 <h3 id="Head">Defining content for reuse, and the <span class="element-name">defs</span> element</h3>
 
-<h4 id="Overview">Overview</h4>
+<h4 id="struct-overview">Overview</h4>
 
 <p>SVG allows a graphical object to be defined for later reuse.
 To do this, SVG makes extensive use of the [=URL reference=]
 construct [<a href="refs.html#ref-rfc3987">rfc3987</a>].
 For example, to fill a rectangle with a linear gradient, a
-{{linearGradient}} element may be defined with an
+<{linearGradient}> element may be defined with an
 <a element-attr for="core-attributes" spec="svg2">id</a> property that may be referenced in the value for
-the rectangle's {{fill}} property, as in the following:
+the rectangle's 'fill' property, as in the following:
 
 <xmp>
-<linearGradient id="MyGradient">...</linearGradient>
-<rect style="fill:url(#MyGradient)"/>
+<linearGradient id="example-gradient">...</linearGradient>
+<rect style="fill:url(#example-gradient)"/>
 </xmp>
 
 <p>Some types of element, such as gradients, will not by themselves produce a graphical result. They can therefore be placed anywhere convenient. However, sometimes it is desired to define a graphical object and prevent it from being directly rendered. it is only there to be referenced elsewhere. To do this, and to allow convenient grouping defined content, SVG provides the <span class="element-name">defs</span> element.
@@ -806,7 +782,7 @@ the rectangle's {{fill}} property, as in the following:
 <p>It is recommended that, where possible, referenced elements be defined
 prior to the elements that use them, in document order.
 Collecting all referenced elements
-inside of a single {{defs}} element
+inside of a single <{defs}> element
 near the top of the file
 can make the markup easier to read and understand.
 
@@ -819,9 +795,7 @@ can make the markup easier to read and understand.
                id="struct-elementdef-defs">defs</dfn>’</span></div>
       <dl>
         <dt>Categories:</dt>
-        <dd><a href="#struct-TermContainerElement">Container element</a>, <a
-             href="#render-TermNeverRenderedElement">never-rendered element</a>, <a
-             href="#struct-TermStructuralElement">structural element</a></dd>
+        <dd>[=container element=], [=never-rendered element=], [=structural element=]</dd>
         <dt>Content model:</dt>
         <dd>Any number of the following elements, in any order:<ul class="no-bullets">
             <li><a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a><span
@@ -833,156 +807,148 @@ can make the markup easier to read and understand.
                      href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>,
                 <span class="element-name">‘<a
                      href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li>
-            <li><a href="#struct-TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#struct-DescElement"><span>desc</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-TitleElement"><span>title</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-MetadataElement"><span>metadata</span></a>’</span></span>
+            <li>[=descriptive element|descriptive elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{desc}>’</span>, <span
+                      class="element-name">‘<{title}>’</span>, <span
+                      class="element-name">‘<{metadata}>’</span></span>
             </li>
-            <li><a href="#painting-TermPaintServerElement">paint server elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a
-                     href="#pservers-LinearGradientElement"><span>linearGradient</span></a>’</span>, <span
-                      class="element-name">‘<a
-                     href="#pservers-RadialGradientElement"><span>radialGradient</span></a>’</span>, <span
-                      class="element-name">‘<a href="#pservers-PatternElement"><span>pattern</span></a>’</span></span>
+            <li>[=paint server element|paint server elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{linearGradient}>’</span>, <span
+                      class="element-name">‘<{radialGradient}>’</span>, <span
+                      class="element-name">‘<{pattern}>’</span></span>
             </li>
-            <li><a href="#shapes-TermShapeElement">shape elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#shapes-CircleElement"><span>circle</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-EllipseElement"><span>ellipse</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-LineElement"><span>line</span></a>’</span>, <span
-                      class="element-name">‘<a href="#paths-PathElement"><span>path</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-PolygonElement"><span>polygon</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-PolylineElement"><span>polyline</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-RectElement"><span>rect</span></a>’</span></span></li>
-            <li><a href="#struct-TermStructuralElement">structural elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#struct-DefsElement"><span>defs</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-GElement"><span>g</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-SymbolElement"><span>symbol</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-UseElement"><span>use</span></a>’</span></span></li>
-          </ul><span class="element-name"><a href="#linking-AElement"><span>a</span></a></span>, <span
+            <li>[=shape elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{circle}>’</span>, <span
+                      class="element-name">‘<{ellipse}>’</span>, <span
+                      class="element-name">‘<{line}>’</span>, <span
+                      class="element-name">‘<{path}>’</span>, <span
+                      class="element-name">‘<{polygon}>’</span>, <span
+                      class="element-name">‘<{polyline}>’</span>, <span
+                      class="element-name">‘<{rect}>’</span></span></li>
+            <li>[=structural element|structural elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{defs}>’</span>, <span
+                      class="element-name">‘<{g}>’</span>, <span
+                      class="element-name">‘<a href="#SVGElement"><span>svg</span></a>’</span>, <span
+                      class="element-name">‘<{symbol}>’</span>, <span
+                      class="element-name">‘<{use}>’</span></span></li>
+          </ul><span class="element-name"><{a}></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/filter-effects/#FilterElement"><span>filter</span></a></span>, <span
-                class="element-name"><a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a></span>,
-          <span class="element-name"><a href="#embedded-ImageElement"><span>image</span></a></span>, <span
-                class="element-name"><a href="#painting-MarkerElement"><span>marker</span></a></span>, <span
+                class="element-name"><a href="#ForeignObjectElement"><span>foreignObject</span></a></span>,
+          <span class="element-name"><{image}></span>, <span
+                class="element-name"><{marker}></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span
-                class="element-name"><a href="#interact-ScriptElement"><span>script</span></a></span>, <span
-                class="element-name"><a href="#styling-StyleElement"><span>style</span></a></span>, <span
-                class="element-name"><a href="#struct-SwitchElement"><span>switch</span></a></span>, <span
-                class="element-name"><a href="#text-TextElement"><span>text</span></a></span>, <span
-                class="element-name"><a href="#linking-ViewElement"><span>view</span></a></span></dd>
+                class="element-name"><{script}></span>, <span
+                class="element-name"><{style}></span>, <span
+                class="element-name"><a href="#SwitchElement"><span>switch</span></a></span>, <span
+                class="element-name"><a href="#TextElement"><span>text</span></a></span>, <span
+                class="element-name"><a href="#ViewElement"><span>view</span></a></span></dd>
         <dt>Attributes:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+            <li>[=core attributes=]<span class="expanding"> — <span
+                      class="attr-name">‘<span>id</span>’</span>, <span
+                      class="attr-name">‘<span>tabindex</span>’</span>, <span
+                      class="attr-name">‘<span>autofocus</span>’</span>, <span
+                      class="attr-name">‘<span>lang</span>’</span>, <span
+                      class="attr-name">‘<span>xml:space</span>’</span>, <span
+                      class="attr-name">‘<span>class</span>’</span>, <span
+                      class="attr-name">‘<span>style</span>’</span></span></li>
             <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                      class="attr-name">‘<span>onchange</span>’</span>, <span
+                      class="attr-name">‘<span>onclick</span>’</span>, <span
+                      class="attr-name">‘<span>onclose</span>’</span>, <span
+                      class="attr-name">‘<span>oncopy</span>’</span>, <span
+                      class="attr-name">‘<span>oncuechange</span>’</span>, <span
+                      class="attr-name">‘<span>oncut</span>’</span>, <span
+                      class="attr-name">‘<span>ondblclick</span>’</span>, <span
+                      class="attr-name">‘<span>ondrag</span>’</span>, <span
+                      class="attr-name">‘<span>ondragend</span>’</span>, <span
+                      class="attr-name">‘<span>ondragenter</span>’</span>, <span
+                      class="attr-name">‘<span>ondragexit</span>’</span>, <span
+                      class="attr-name">‘<span>ondragleave</span>’</span>, <span
+                      class="attr-name">‘<span>ondragover</span>’</span>, <span
+                      class="attr-name">‘<span>ondragstart</span>’</span>, <span
+                      class="attr-name">‘<span>ondrop</span>’</span>, <span
+                      class="attr-name">‘<span>ondurationchange</span>’</span>,
+                <span class="attr-name">‘<span>onemptied</span>’</span>, <span
+                      class="attr-name">‘<span>onended</span>’</span>, <span
+                      class="attr-name">‘<span>onerror</span>’</span>, <span
+                      class="attr-name">‘<span>onfocus</span>’</span>, <span
+                      class="attr-name">‘<span>oninput</span>’</span>, <span
+                      class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                      class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                      class="attr-name">‘<span>onkeypress</span>’</span>, <span
+                      class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                      class="attr-name">‘<span>onload</span>’</span>, <span
+                      class="attr-name">‘<span>onloadeddata</span>’</span>,
+                <span class="attr-name">‘<span>onloadedmetadata</span>’</span>,
+                <span class="attr-name">‘<span>onloadstart</span>’</span>, <span
+                      class="attr-name">‘<span>onmousedown</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseenter</span>’</span>,
+                <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                <span class="attr-name">‘<span>onmousemove</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseout</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseover</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                      class="attr-name">‘<span>onpaste</span>’</span>, <span
+                      class="attr-name">‘<span>onpause</span>’</span>, <span
+                      class="attr-name">‘<span>onplay</span>’</span>, <span
+                      class="attr-name">‘<span>onplaying</span>’</span>, <span
+                      class="attr-name">‘<span>onprogress</span>’</span>, <span
+                      class="attr-name">‘<span>onratechange</span>’</span>,
+                <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                      class="attr-name">‘<span>onresize</span>’</span>, <span
+                      class="attr-name">‘<span>onscroll</span>’</span>, <span
+                      class="attr-name">‘<span>onseeked</span>’</span>, <span
+                      class="attr-name">‘<span>onseeking</span>’</span>, <span
+                      class="attr-name">‘<span>onselect</span>’</span>, <span
+                      class="attr-name">‘<span>onshow</span>’</span>, <span
+                      class="attr-name">‘<span>onstalled</span>’</span>, <span
+                      class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                      class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                      class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                      class="attr-name">‘<span>onvolumechange</span>’</span>,
+                <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                      class="attr-name">‘<span>onwheel</span>’</span></span>
             </li>
-            <li><a href="#styling-TermPresentationAttribute">presentation attributes</a><span class="expanding"> —
+            <li>[=presentation attributes=]<span class="expanding"> —
               </span></li>
           </ul>
         </dd>
         <dt>DOM Interfaces:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a class="idlinterface"
-                 href="#struct-InterfaceSVGDefsElement">SVGDefsElement</a></li>
+            <li>{{SVGDefsElement}}</li>
           </ul>
         </dd>
       </dl>
     </div>
 
-<p>The {{defs}} element is a container element for
+<p>The <{defs}> element is a container element for
 <a href="struct.html#Head">referenced elements</a>. For understandability and
 <a href="access.html">accessibility</a> reasons, it is recommended
 that, whenever possible, referenced elements be defined inside
-of a {{defs}}.
+of a <{defs}>.
 
-<p>The content model for {{defs}} is the same as for the
+<p>The content model for <{defs}> is the same as for the
 <{g}> element; thus, any element that can be a child of a
-<{g}> can also be a child of a {{defs}}, and vice versa.
+<{g}> can also be a child of a <{defs}>, and vice versa.
 
-<p>Elements that are descendants of a {{defs}} are not rendered directly;
-the 'display' value for the {{defs}} element
+<p>Elements that are descendants of a <{defs}> are not rendered directly;
+the 'display' value for the <{defs}> element
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
-Note, however, that the descendants of a {{defs}} are
+Note, however, that the descendants of a <{defs}> are
 always present in the source tree and thus can always be
 referenced by other elements; thus, the value of the 'display'
-property on the {{defs}} element does not
+property on the <{defs}> element does not
 prevent those elements from being referenced by other elements.
 
 
@@ -1005,8 +971,7 @@ directly.
                  id="struct-elementdef-symbol">symbol</dfn>’</span></div>
         <dl>
           <dt>Categories:</dt>
-          <dd><a href="#struct-TermContainerElement">Container element</a>, <a
-               href="#struct-TermStructuralElement">structural element</a></dd>
+          <dd>[=container element=], [=structural element=]</dd>
           <dt>Content model:</dt>
           <dd>Any number of the following elements, in any order:<ul class="no-bullets">
               <li><a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a><span
@@ -1018,51 +983,49 @@ directly.
                        href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>,
                   <span class="element-name">‘<a
                        href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li>
-              <li><a href="#struct-TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span
-                        class="element-name">‘<a href="#struct-DescElement"><span>desc</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-TitleElement"><span>title</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-MetadataElement"><span>metadata</span></a>’</span></span>
+              <li>[=descriptive element|descriptive elements=]<span class="expanding"> — <span
+                        class="element-name">‘<{desc}>’</span>, <span
+                        class="element-name">‘<{title}>’</span>, <span
+                        class="element-name">‘<{metadata}>’</span></span>
               </li>
-              <li><a href="#painting-TermPaintServerElement">paint server elements</a><span class="expanding"> — <span
-                        class="element-name">‘<a
-                       href="#pservers-LinearGradientElement"><span>linearGradient</span></a>’</span>, <span
-                        class="element-name">‘<a
-                       href="#pservers-RadialGradientElement"><span>radialGradient</span></a>’</span>, <span
-                        class="element-name">‘<a href="#pservers-PatternElement"><span>pattern</span></a>’</span></span>
+              <li>[=paint server element|paint server elements=]<span class="expanding"> — <span
+                        class="element-name">‘<{linearGradient}>’</span>, <span
+                        class="element-name">‘<{radialGradient}>’</span>, <span
+                        class="element-name">‘<{pattern}>’</span></span>
               </li>
-              <li><a href="#shapes-TermShapeElement">shape elements</a><span class="expanding"> — <span
-                        class="element-name">‘<a href="#shapes-CircleElement"><span>circle</span></a>’</span>, <span
-                        class="element-name">‘<a href="#shapes-EllipseElement"><span>ellipse</span></a>’</span>, <span
-                        class="element-name">‘<a href="#shapes-LineElement"><span>line</span></a>’</span>, <span
-                        class="element-name">‘<a href="#paths-PathElement"><span>path</span></a>’</span>, <span
-                        class="element-name">‘<a href="#shapes-PolygonElement"><span>polygon</span></a>’</span>, <span
-                        class="element-name">‘<a href="#shapes-PolylineElement"><span>polyline</span></a>’</span>, <span
-                        class="element-name">‘<a href="#shapes-RectElement"><span>rect</span></a>’</span></span></li>
-              <li><a href="#struct-TermStructuralElement">structural elements</a><span class="expanding"> — <span
-                        class="element-name">‘<a href="#struct-DefsElement"><span>defs</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-GElement"><span>g</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-SymbolElement"><span>symbol</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-UseElement"><span>use</span></a>’</span></span></li>
-            </ul><span class="element-name"><a href="#linking-AElement"><span>a</span></a></span>, <span
+              <li>[=shape elements=]<span class="expanding"> — <span
+                        class="element-name">‘<{circle}>’</span>, <span
+                        class="element-name">‘<{ellipse}>’</span>, <span
+                        class="element-name">‘<{line}>’</span>, <span
+                        class="element-name">‘<{path}>’</span>, <span
+                        class="element-name">‘<{polygon}>’</span>, <span
+                        class="element-name">‘<{polyline}>’</span>, <span
+                        class="element-name">‘<{rect}>’</span></span></li>
+              <li>[=structural element|structural elements=]<span class="expanding"> — <span
+                        class="element-name">‘<{defs}>’</span>, <span
+                        class="element-name">‘<{g}>’</span>, <span
+                        class="element-name">‘<a href="#SVGElement"><span>svg</span></a>’</span>, <span
+                        class="element-name">‘<{symbol}>’</span>, <span
+                        class="element-name">‘<{use}>’</span></span></li>
+            </ul><span class="element-name"><{a}></span>, <span
                   class="element-name"><a
                  href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span
                   class="element-name"><a
                  href="https://drafts.fxtf.org/filter-effects/#FilterElement"><span>filter</span></a></span>, <span
-                  class="element-name"><a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a></span>,
-            <span class="element-name"><a href="#embedded-ImageElement"><span>image</span></a></span>, <span
-                  class="element-name"><a href="#painting-MarkerElement"><span>marker</span></a></span>, <span
+                  class="element-name"><a href="#ForeignObjectElement"><span>foreignObject</span></a></span>,
+            <span class="element-name"><{image}></span>, <span
+                  class="element-name"><{marker}></span>, <span
                   class="element-name"><a
                  href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span
-                  class="element-name"><a href="#interact-ScriptElement"><span>script</span></a></span>, <span
-                  class="element-name"><a href="#styling-StyleElement"><span>style</span></a></span>, <span
-                  class="element-name"><a href="#struct-SwitchElement"><span>switch</span></a></span>, <span
-                  class="element-name"><a href="#text-TextElement"><span>text</span></a></span>, <span
-                  class="element-name"><a href="#linking-ViewElement"><span>view</span></a></span></dd>
+                  class="element-name"><{script}></span>, <span
+                  class="element-name"><{style}></span>, <span
+                  class="element-name"><a href="#SwitchElement"><span>switch</span></a></span>, <span
+                  class="element-name"><a href="#TextElement"><span>text</span></a></span>, <span
+                  class="element-name"><a href="#ViewElement"><span>view</span></a></span></dd>
           <dt>Attributes:</dt>
           <dd>
             <ul class="no-bullets">
-              <li><a href="#struct-TermARIAAttribute">aria attributes</a><span class="expanding"> — <span
+              <li>[=aria attributes=]<span class="expanding"> — <span
                         class="attr-name">‘<a
                        href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>,
                   <span class="attr-name">‘<a
@@ -1159,120 +1122,108 @@ directly.
                        href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>,
                   <span class="attr-name">‘<a
                        href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#struct-RoleAttribute"><span>role</span></a>’</span></span></li>
-              <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                        class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                        class="attr-name">‘<a
-                       href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                        class="attr-name">‘<a
-                       href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+                  <span class="attr-name">‘<a href="#RoleAttribute"><span>role</span></a>’</span></span></li>
+              <li>[=core attributes=]<span class="expanding"> — <span
+                        class="attr-name">‘<span>id</span>’</span>, <span
+                        class="attr-name">‘<span>tabindex</span>’</span>, <span
+                        class="attr-name">‘<span>autofocus</span>’</span>, <span
+                        class="attr-name">‘<span>lang</span>’</span>, <span
+                        class="attr-name">‘<span>xml:space</span>’</span>, <span
+                        class="attr-name">‘<span>class</span>’</span>, <span
+                        class="attr-name">‘<span>style</span>’</span></span></li>
               <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                  attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                        class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                  <span class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                  attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                        class="attr-name">‘<span>onchange</span>’</span>, <span
+                        class="attr-name">‘<span>onclick</span>’</span>, <span
+                        class="attr-name">‘<span>onclose</span>’</span>, <span
+                        class="attr-name">‘<span>oncopy</span>’</span>, <span
+                        class="attr-name">‘<span>oncuechange</span>’</span>,
+                  <span class="attr-name">‘<span>oncut</span>’</span>, <span
+                        class="attr-name">‘<span>ondblclick</span>’</span>,
+                  <span class="attr-name">‘<span>ondrag</span>’</span>, <span
+                        class="attr-name">‘<span>ondragend</span>’</span>, <span
+                        class="attr-name">‘<span>ondragenter</span>’</span>,
+                  <span class="attr-name">‘<span>ondragexit</span>’</span>,
+                  <span class="attr-name">‘<span>ondragleave</span>’</span>,
+                  <span class="attr-name">‘<span>ondragover</span>’</span>,
+                  <span class="attr-name">‘<span>ondragstart</span>’</span>,
+                  <span class="attr-name">‘<span>ondrop</span>’</span>, <span
+                        class="attr-name">‘<span>ondurationchange</span>’</span>, <span
+                        class="attr-name">‘<span>onemptied</span>’</span>, <span
+                        class="attr-name">‘<span>onended</span>’</span>, <span
+                        class="attr-name">‘<span>onerror</span>’</span>, <span
+                        class="attr-name">‘<span>onfocus</span>’</span>, <span
+                        class="attr-name">‘<span>oninput</span>’</span>, <span
+                        class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                        class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                        class="attr-name">‘<span>onkeypress</span>’</span>,
+                  <span class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                        class="attr-name">‘<span>onload</span>’</span>, <span
+                        class="attr-name">‘<span>onloadeddata</span>’</span>,
+                  <span class="attr-name">‘<span>onloadedmetadata</span>’</span>, <span
+                        class="attr-name">‘<span>onloadstart</span>’</span>,
+                  <span class="attr-name">‘<span>onmousedown</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseenter</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                  <span class="attr-name">‘<span>onmousemove</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseout</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseover</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                        class="attr-name">‘<span>onpaste</span>’</span>, <span
+                        class="attr-name">‘<span>onpause</span>’</span>, <span
+                        class="attr-name">‘<span>onplay</span>’</span>, <span
+                        class="attr-name">‘<span>onplaying</span>’</span>, <span
+                        class="attr-name">‘<span>onprogress</span>’</span>,
+                  <span class="attr-name">‘<span>onratechange</span>’</span>,
+                  <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                        class="attr-name">‘<span>onresize</span>’</span>, <span
+                        class="attr-name">‘<span>onscroll</span>’</span>, <span
+                        class="attr-name">‘<span>onseeked</span>’</span>, <span
+                        class="attr-name">‘<span>onseeking</span>’</span>, <span
+                        class="attr-name">‘<span>onselect</span>’</span>, <span
+                        class="attr-name">‘<span>onshow</span>’</span>, <span
+                        class="attr-name">‘<span>onstalled</span>’</span>, <span
+                        class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                        class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                        class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                  <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                        class="attr-name">‘<span>onvolumechange</span>’</span>,
+                  <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                        class="attr-name">‘<span>onwheel</span>’</span></span>
               </li>
-              <li><a href="#styling-TermPresentationAttribute">presentation attributes</a><span class="expanding"> —
+              <li>[=presentation attributes=]<span class="expanding"> —
                 </span></li>
               <li><span class="attr-name">‘<a
-                     href="#coords-PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span></li>
-              <li><span class="attr-name">‘<a href="#coords-ViewBoxAttribute"><span>viewBox</span></a>’</span></li>
-              <li><span class="attr-name">‘<a href="#struct-SymbolElementRefXAttribute"><span>refX</span></a>’</span>
+                     href="#PreserveAspectRatioAttribute"><span>preserveAspectRatio</span></a>’</span></li>
+              <li><span class="attr-name">‘<a href="#ViewBoxAttribute"><span>viewBox</span></a>’</span></li>
+              <li><span class="attr-name">‘<{symbol/refX}>’</span>
               </li>
-              <li><span class="attr-name">‘<a href="#struct-SymbolElementRefYAttribute"><span>refY</span></a>’</span>
+              <li><span class="attr-name">‘<{symbol/refY}>’</span>
               </li>
             </ul>
           </dd>
           <dt>Geometry properties:</dt>
           <dd>
             <ul class="no-bullets">
-              <li><a class="property"
-                   href="#geometry-XProperty">x</a></li>
-              <li><a class="property"
-                   href="#geometry-YProperty">y</a></li>
-              <li><a class="property"
-                   href="#geometry-Sizing">width</a></li>
-              <li><a class="property"
-                   href="#geometry-Sizing">height</a></li>
+              <li>'x'</li>
+              <li>'y'</li>
+              <li>'width'</li>
+              <li>'height'</li>
             </ul>
           </dd>
           <dt>DOM Interfaces:</dt>
           <dd>
             <ul class="no-bullets">
-              <li><a class="idlinterface"
-                   href="#struct-InterfaceSVGSymbolElement">SVGSymbolElement</a></li>
+              <li>{{SVGSymbolElement}}</li>
             </ul>
           </dd>
         </dl>
       </div>
 
-<p>The {{x}}, {{y}}, {{width}}, and {{height}} geometry properties
+<p>The 'x', 'y', 'width', and 'height' geometry properties
   have the same effect as on an <{svg}> element,
   when the <{symbol}> is instantiated by a <{use}> element.
-  In particular, if {{width}} and {{height}}
+  In particular, if 'width' and 'height'
   compute to <span class="prop-value">auto</span>
   (and are not over-ridden by values on the instantiating <{use}> element),
   then they will be treated as a value of <span class="prop-value">100%</span>.
@@ -1317,7 +1268,7 @@ Note:
     Note: 
       New in SVG 2. Added to make it easier to align symbols to a
       particular point, as is often done in maps. Similar to the
-      matching attributes on {{marker element}}.
+      matching attributes on <{marker}> element.
     
 
     <p class="annotation">
@@ -1338,13 +1289,13 @@ Note:
       The {{refX}} and {{refY}} attributes define the
       reference point of the symbol which is to be placed exactly at
       the symbol's <span class="prop-value">x,y</span> positioning coordinate,
-      as defined by the cumulative effect of the {{x}} and {{y}}
+      as defined by the cumulative effect of the 'x' and 'y'
       properties and any transformations on the <{symbol}>
       and its [=host=] <{use}> element.
     
     <p>
       Keyword values have the same meaning as for the
-      <{marker/refX}> and <{marker/refY}> attributes on the {{marker element}} element,
+      <{marker/refX}> and <{marker/refY}> attributes on the <{marker}> element element,
       resolving to 0%, 50%, or 100% in the applicable direction.
     
     <p>
@@ -1366,7 +1317,7 @@ Note:
       are not specified on a <{symbol}>
       is different from when they are specified with a value of <span class="attr-value">0</span>,
       and therefore different from the behavior
-      when equivalent attributes are not specified on a {{marker element}}.
+      when equivalent attributes are not specified on a <{marker}> element.
     
 
   </dd>
@@ -1377,7 +1328,7 @@ Note:
 <p>The use of <{symbol}> elements for graphics that are used multiple
 times in the same document adds structure and semantics.
 Closely related to the <{symbol}> element are the
-{{marker element}} and {{pattern}} elements;
+<{marker}> element and <{pattern}> elements;
 all three define a container of graphical content
 that can be rendered repeatedly at various positions and scales in the SVG.
 However, while [=re-used graphics=] in a pattern and marker
@@ -1387,7 +1338,7 @@ as fully interactive content, within a [=use-element shadow tree=].
 
 
 <p>The <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
-the [[#OverflowAndClipProperties|overflow]] property for {{symbol element}} elements to
+the [[#OverflowAndClipProperties|overflow]] property for <{symbol}> element elements to
 <span class="prop-value">hidden</span>, which causes a rectangular clipping
 path to be created at the bounds of symbol's SVG viewport.  Unless the
 [[#OverflowAndClipProperties|overflow]] property is overridden, any graphics within the symbol which
@@ -1464,10 +1415,7 @@ behaves as a symbol definition, and must not be rendered.
                  id="struct-elementdef-use">use</dfn>’</span></div>
         <dl>
           <dt>Categories:</dt>
-          <dd><a href="#struct-TermGraphicsReferencingElement">Graphics referencing element</a>, <a
-               href="#render-TermRenderableElement">renderable element</a>, <a
-               href="#struct-TermStructuralElement">structural element</a>, <a
-               href="#struct-TermStructurallyExternalElement">structurally external element</a></dd>
+          <dd>[=graphics referencing element|Graphics referencing element=], [=renderable element=], [=structural element=], [=structurally external element=]</dd>
           <dt>Content model:</dt>
           <dd>Any number of the following elements, in any order:<ul class="no-bullets">
               <li><a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a><span
@@ -1479,21 +1427,21 @@ behaves as a symbol definition, and must not be rendered.
                        href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>,
                   <span class="element-name">‘<a
                        href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li>
-              <li><a href="#struct-TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span
-                        class="element-name">‘<a href="#struct-DescElement"><span>desc</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-TitleElement"><span>title</span></a>’</span>, <span
-                        class="element-name">‘<a href="#struct-MetadataElement"><span>metadata</span></a>’</span></span>
+              <li>[=descriptive element|descriptive elements=]<span class="expanding"> — <span
+                        class="element-name">‘<{desc}>’</span>, <span
+                        class="element-name">‘<{title}>’</span>, <span
+                        class="element-name">‘<{metadata}>’</span></span>
               </li>
             </ul><span class="element-name"><a
                  href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span
                   class="element-name"><a
                  href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span
-                  class="element-name"><a href="#interact-ScriptElement"><span>script</span></a></span>, <span
-                  class="element-name"><a href="#styling-StyleElement"><span>style</span></a></span></dd>
+                  class="element-name"><{script}></span>, <span
+                  class="element-name"><{style}></span></dd>
           <dt>Attributes:</dt>
           <dd>
             <ul class="no-bullets">
-              <li><a href="#struct-TermARIAAttribute">aria attributes</a><span class="expanding"> — <span
+              <li>[=aria attributes=]<span class="expanding"> — <span
                         class="attr-name">‘<a
                        href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>,
                   <span class="attr-name">‘<a
@@ -1590,114 +1538,102 @@ behaves as a symbol definition, and must not be rendered.
                        href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>,
                   <span class="attr-name">‘<a
                        href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#struct-RoleAttribute"><span>role</span></a>’</span></span></li>
-              <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                        class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                        class="attr-name">‘<a
-                       href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                        class="attr-name">‘<a
-                       href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
-              <li><a href="#struct-TermConditionalProcessingAttribute">conditional processing attributes</a><span
+                  <span class="attr-name">‘<a href="#RoleAttribute"><span>role</span></a>’</span></span></li>
+              <li>[=core attributes=]<span class="expanding"> — <span
+                        class="attr-name">‘<span>id</span>’</span>, <span
+                        class="attr-name">‘<span>tabindex</span>’</span>, <span
+                        class="attr-name">‘<span>autofocus</span>’</span>, <span
+                        class="attr-name">‘<span>lang</span>’</span>, <span
+                        class="attr-name">‘<span>xml:space</span>’</span>, <span
+                        class="attr-name">‘<span>class</span>’</span>, <span
+                        class="attr-name">‘<span>style</span>’</span></span></li>
+              <li>[=conditional processing attributes=]<span
                       class="expanding"> — <span class="attr-name">‘<a
-                       href="#struct-RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
+                       href="#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
                         class="attr-name">‘<a
-                       href="#struct-SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+                       href="#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
               <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                  attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                        class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                  <span class="attr-name">‘<a
-                       href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                  <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                        class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                  attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                        class="attr-name">‘<span>onchange</span>’</span>, <span
+                        class="attr-name">‘<span>onclick</span>’</span>, <span
+                        class="attr-name">‘<span>onclose</span>’</span>, <span
+                        class="attr-name">‘<span>oncopy</span>’</span>, <span
+                        class="attr-name">‘<span>oncuechange</span>’</span>,
+                  <span class="attr-name">‘<span>oncut</span>’</span>, <span
+                        class="attr-name">‘<span>ondblclick</span>’</span>,
+                  <span class="attr-name">‘<span>ondrag</span>’</span>, <span
+                        class="attr-name">‘<span>ondragend</span>’</span>, <span
+                        class="attr-name">‘<span>ondragenter</span>’</span>,
+                  <span class="attr-name">‘<span>ondragexit</span>’</span>,
+                  <span class="attr-name">‘<span>ondragleave</span>’</span>,
+                  <span class="attr-name">‘<span>ondragover</span>’</span>,
+                  <span class="attr-name">‘<span>ondragstart</span>’</span>,
+                  <span class="attr-name">‘<span>ondrop</span>’</span>, <span
+                        class="attr-name">‘<span>ondurationchange</span>’</span>, <span
+                        class="attr-name">‘<span>onemptied</span>’</span>, <span
+                        class="attr-name">‘<span>onended</span>’</span>, <span
+                        class="attr-name">‘<span>onerror</span>’</span>, <span
+                        class="attr-name">‘<span>onfocus</span>’</span>, <span
+                        class="attr-name">‘<span>oninput</span>’</span>, <span
+                        class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                        class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                        class="attr-name">‘<span>onkeypress</span>’</span>,
+                  <span class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                        class="attr-name">‘<span>onload</span>’</span>, <span
+                        class="attr-name">‘<span>onloadeddata</span>’</span>,
+                  <span class="attr-name">‘<span>onloadedmetadata</span>’</span>, <span
+                        class="attr-name">‘<span>onloadstart</span>’</span>,
+                  <span class="attr-name">‘<span>onmousedown</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseenter</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                  <span class="attr-name">‘<span>onmousemove</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseout</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseover</span>’</span>,
+                  <span class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                        class="attr-name">‘<span>onpaste</span>’</span>, <span
+                        class="attr-name">‘<span>onpause</span>’</span>, <span
+                        class="attr-name">‘<span>onplay</span>’</span>, <span
+                        class="attr-name">‘<span>onplaying</span>’</span>, <span
+                        class="attr-name">‘<span>onprogress</span>’</span>,
+                  <span class="attr-name">‘<span>onratechange</span>’</span>,
+                  <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                        class="attr-name">‘<span>onresize</span>’</span>, <span
+                        class="attr-name">‘<span>onscroll</span>’</span>, <span
+                        class="attr-name">‘<span>onseeked</span>’</span>, <span
+                        class="attr-name">‘<span>onseeking</span>’</span>, <span
+                        class="attr-name">‘<span>onselect</span>’</span>, <span
+                        class="attr-name">‘<span>onshow</span>’</span>, <span
+                        class="attr-name">‘<span>onstalled</span>’</span>, <span
+                        class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                        class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                        class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                  <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                        class="attr-name">‘<span>onvolumechange</span>’</span>,
+                  <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                        class="attr-name">‘<span>onwheel</span>’</span></span>
               </li>
-              <li><a href="#styling-TermPresentationAttribute">presentation attributes</a><span class="expanding"> —
+              <li>[=presentation attributes=]<span class="expanding"> —
                 </span></li>
-              <li><a href="#linking-XLinkRefAttrs">deprecated xlink attributes</a><span class="expanding"> — <span
-                        class="attr-name">‘<a href="#linking-XLinkHrefAttribute"><span>xlink:href</span></a>’</span>,
+              <li><a href="#XLinkRefAttrs">deprecated xlink attributes</a><span class="expanding"> — <span
+                        class="attr-name">‘<a href="#XLinkHrefAttribute"><span>xlink:href</span></a>’</span>,
                   <span class="attr-name">‘<a
-                       href="#linking-XLinkTitleAttribute"><span>xlink:title</span></a>’</span></span></li>
-              <li><span class="attr-name">‘<a href="#struct-UseElementHrefAttribute"><span>href</span></a>’</span></li>
+                       href="#XLinkTitleAttribute"><span>xlink:title</span></a>’</span></span></li>
+              <li><span class="attr-name">'<{use/href}>'</span></li>
             </ul>
           </dd>
           <dt>Geometry properties:</dt>
           <dd>
             <ul class="no-bullets">
-              <li><a class="property"
-                   href="#geometry-XProperty">x</a></li>
-              <li><a class="property"
-                   href="#geometry-YProperty">y</a></li>
-              <li><a class="property"
-                   href="#geometry-Sizing">width</a></li>
-              <li><a class="property"
-                   href="#geometry-Sizing">height</a></li>
+              <li>'x'</li>
+              <li>'y'</li>
+              <li>'width'</li>
+              <li>'height'</li>
             </ul>
           </dd>
           <dt>DOM Interfaces:</dt>
           <dd>
             <ul class="no-bullets">
-              <li><a class="idlinterface"
-                   href="#struct-InterfaceSVGUseElement">SVGUseElement</a></li>
+              <li>{{SVGUseElement}}</li>
             </ul>
           </dd>
         </dl>
@@ -1720,23 +1656,23 @@ also apply in the scope of the cloned [=shadow tree=].
 
 
 
-    <p>The {{x}}, {{y}}, {{width}} and {{height}}
+    <p>The 'x', 'y', 'width' and 'height'
     geometric properties specify the positioning of the referenced element.
-    The {{width}} and {{height}} attributes
+    The 'width' and 'height' attributes
     only have an effect if the [=referenced element=]
     defines a viewport (i.e., if it is a <{svg}> or <{symbol}>);
     if so, a value other than <span class="prop-value">auto</span>
     for the <{use}> element overrides the value
     of the corresponding geometric property on that element.
     
-    <p>A negative value for {{width}} or {{height}}
+    <p>A negative value for 'width' or 'height'
     is [=invalid=] and must be [=ignored=].
-    If {{width}} or {{height}} is zero,
+    If 'width' or 'height' is zero,
     and the properties have an effect on the [=referenced element=],
     then rendering of that element will be disabled.
 
     Note: 
-    The {{x}} and {{y}} properties
+    The 'x' and 'y' properties
     affect the user coordinate system for the element.
     See the <a href="#UseLayout">Layout</a> section for implementation details.
     
@@ -1751,7 +1687,7 @@ also apply in the scope of the cloned [=shadow tree=].
         <th>Animatable</th>
       </tr>
       <tr>
-        <td>href</td>
+        <td><dfn id="UseElementHrefAttribute" data-dfn-type="element-attr" data-dfn-for="use" data-export="">href</dfn></td>
         <td>URL <a href="types.html#attribute-url" class="syntax">&bs[;URL]</a></td>
         <td>(none)</td>
         <td>yes</td>
@@ -1814,7 +1750,7 @@ The target element that results from URL processing is the [=referenced element=
 are defined in terms of a [=shadow tree=].
 In terms of interactivity and style inheritance,
 they are therefore quite different from other types of [=re-used graphics=] in SVG,
-such as {{pattern}} and {{marker element}} content.
+such as <{pattern}> and <{marker}> element content.
 
 
 <p>
@@ -1844,21 +1780,20 @@ are rendered in the same way as if the shadow DOM was implemented.
 
 <dl>
   <dt><dfn id="TermReferencedElement">referenced element</dfn></dt>
-  <dd>The element specified by the {{href}} (or <a href="#linking-XLinkHrefAttribute">xlink:href</a>) attribute on the <{use}> element, or the root element of a document referenced by that attribute if the URL provided does not include a target fragment that links to a specific element <a element-attr for="core-attributes" spec="svg2">id</a>.</dd>
+  <dd>The element specified by the {{href}} (or <a href="#XLinkHrefAttribute">xlink:href</a>) attribute on the <{use}> element, or the root element of a document referenced by that attribute if the URL provided does not include a target fragment that links to a specific element <a element-attr for="core-attributes" spec="svg2">id</a>.</dd>
 
-  <dt><dfn id="TermReferencedDocumentSubtree">referenced document subtree</dfn></dt>
-  <dt>referenced graphics</dt>
+  <dt><dfn id="TermReferencedDocumentSubtree" data-dfn-type="dfn" data-export="" data-lt="referenced document subtree|referenced graphics">referenced document subtree</dfn></dt>
   <dd>The referenced element, and all of its descendent nodes.</dd>
 
   <dt><dfn id="TermShadowRoot">shadow root</dfn></dt>
-  <dd>A [=ShadowRoot=] object,
-  a type of [=DocumentFragment=] node which is associated with a host [=Attr/element|Element=],
+  <dd>A {{ShadowRoot}} object,
+  a type of {{DocumentFragment}} node which is associated with a host [=Attr/element|Element=],
   and which contains the content that will be used to render that host.
   A shadow root should be implemented in conformance with the <a href="refs.html#ref-dom">dom</a> specification <a href="refs.html#ref-dom">[dom]</a>,
   or its future replacement.
   </dd>
 
-  <dt><dfn id="TermShadowHost">shadow host</dfn></dt>
+  <dt><dfn id="TermShadowHost" data-export="">shadow host</dfn></dt>
   <dt>host</dt>
   <dd>An element that has an associated shadow root;
     usage is consistent the definition of <a href="https://dom.spec.whatwg.org/#concept-documentfragment-host">host</a> in the DOM standard.
@@ -1874,8 +1809,7 @@ are rendered in the same way as if the shadow DOM was implemented.
   which contains element instances generated by cloning the referenced graphics.
   </dd>
 
-  <dt><dfn dfn>element instance</dfn></dt>
-  <dt>instance</dt>
+  <dt><dfn id="TermElementInstance" data-dfn-type="dfn" data-export="" data-lt="element instance|instance">element instance</dfn></dt>
   <dd>An element in the [=use-element shadow tree=],
     which is generated by cloning a corresponding element in the referenced document subtree.
   </dd>
@@ -1928,7 +1862,7 @@ must throw a <code>NoModificationAllowedError</code>.
 
 <p>
 Within a [=use-element shadow tree=],
-{{script}} elements are inert (do not execute).
+<{script}> elements are inert (do not execute).
 
 
 Note: 
@@ -1977,7 +1911,7 @@ is in error and must not be rendered by the user agent.
 
 <h4 id="UseLayout">Layout of re-used graphics</h4>
 
-<p>The value of the {{x}}, {{y}}, {{width}} and {{height}} properties
+<p>The value of the 'x', 'y', 'width' and 'height' properties
 on a <{use}> element
 are used to position the re-used graphics
 and to set the viewport size
@@ -1988,7 +1922,7 @@ or from their effect in CSS box layout.
 
 
 <p>
-  The {{x}} and {{y}} properties define
+  The 'x' and 'y' properties define
   an additional transformation
   (<span class="attr-value">translate(x,y)</span>,
   where <span class="attr-value">x</span>
@@ -2010,14 +1944,14 @@ or from their effect in CSS box layout.
   
   <p>
   To apply <span class="attr-value">userSpaceOnUse</span> graphical effects in an un-transformed coordinate space,
-  while also using the {{x}} and {{y}} to position the graphics,
+  while also using the 'x' and 'y' to position the graphics,
   authors can nest the <{use}> element inside a <{g}>,
   and apply the graphical effects to the <{g}> element.
   
 </div>
 
 <p>
-  The {{width}} and {{height}} properties
+  The 'width' and 'height' properties
   on the <{use}> element
   override the values for the corresponding properties
   on a referenced <{svg}> or <{symbol}> element
@@ -2034,7 +1968,7 @@ or from their effect in CSS box layout.
   the values set on the <{svg}> or <{symbol}> will be used as defaults.
 
 <p>
-  The {{width}} and {{height}} properties
+  The 'width' and 'height' properties
   on the <{use}> element have no effect
   if the [=referenced element=] does not
   <a href="coords.html#EstablishingANewSVGViewport">establish a new viewport</a>.
@@ -2068,7 +2002,7 @@ or from their effect in CSS box layout.
 
 
 Note: 
-  Presentation attributes and the {{style attribute}} attribute
+  Presentation attributes and the <a element-attr for="core-attributes">style</a> attribute
   are cloned from the elements in the [=referenced graphics=]
   into the [=element instances=]
   in the same manner as other attributes.
@@ -2084,7 +2018,7 @@ Note:
   the <code>StyleSheetList</code> object accessed through the
   document and shadow root document fragment's
   <code>styleSheets</code> properties must be identical.
-  If a {{style element}} element is duplicated
+  If a <{style}> element element is duplicated
   as part of the [=referenced document subtree=],
   then the <code>styleSheet</code> property on the [=element instance=]
   points to the same object as for the [=corresponding element=].
@@ -2145,17 +2079,17 @@ Note:
     The original circle has styles set in various ways:
   
   <ul>
-    <li>{{stroke-width}} (20) is set in a presentation attribute on the circle itself.</li>
+    <li>'stroke-width' (20) is set in a presentation attribute on the circle itself.</li>
     <li>'stroke-opacity' (0.7) is set via a CSS rule with a simple selector matching the circle tag name.</li>
-    <li>{{stroke}} color (green) is set using a complex CSS selector, matching the circle as a descendent of an element with class <code>special</code>.</li>
-    <li>{{fill}} color is not set directly on the circle, so is inherited from the style set on the containing <{g}> element (blue).</li>
+    <li>'stroke' color (green) is set using a complex CSS selector, matching the circle as a descendent of an element with class <code>special</code>.</li>
+    <li>'fill' color is not set directly on the circle, so is inherited from the style set on the containing <{g}> element (blue).</li>
   </ul>
   <p>
     In the SVG 1.1 style-cloning model,
     the <a href="https://www.w3.org/TR/css-cascade-3/#specified">specified style values</a>
     would be cloned from the original element to the element instance.
     The re-used circle would have the same styles as the original,
-    except that the {{fill}} value would be inherited from the <{use}> (orange)
+    except that the 'fill' value would be inherited from the <{use}> (orange)
     instead of from the <{g}> (blue).
   
   <p>
@@ -2163,10 +2097,10 @@ Note:
     the styles for the re-used circle are calculated as follows:
   
   <ul>
-    <li>the {{stroke-width}} (20) presentation attribute is cloned to the element instance.</li>
+    <li>the 'stroke-width' (20) presentation attribute is cloned to the element instance.</li>
     <li>the CSS rule setting 'stroke-opacity' (0.7) is part of the CSS stylesheet cloned into the shadow tree; it matches the circle tag name of the [=element instance=], so is applied.</li>
-    <li>the CSS rule with the complex selector is also part of the cloned stylesheet, but it does not match the [=element instance=] of the circle, which is not a descendent of an element with class <code>special</code>; instead, {{stroke}} color on the circle is inherited from the host <{use}> element (purple).</li>
-    <li>{{fill}} color is still not set directly, so is once again inherited from the host <{use}> element.</li>
+    <li>the CSS rule with the complex selector is also part of the cloned stylesheet, but it does not match the [=element instance=] of the circle, which is not a descendent of an element with class <code>special</code>; instead, 'stroke' color on the circle is inherited from the host <{use}> element (purple).</li>
+    <li>'fill' color is still not set directly, so is once again inherited from the host <{use}> element.</li>
   </ul>
   <p>
     The re-used circle therefore differs from the original in both fill color (because it inherits from a different element) and stroke color (because the complex selector no longer matches).
@@ -2194,7 +2128,7 @@ highlight: xml
   Specifying <span
   class="prop-value">'visibility:hidden'</span> on a <{use}> element does not guarantee
   that the referenced content will not be rendered.
-  Unlike the 'display' or the {{opacity}} properties,
+  Unlike the 'display' or the 'opacity' properties,
   the 'visibility' property does not apply directly to container elements,
   and therefore does not apply directly to the <{use}> element.
   Because 'visibility' is normally inherited,
@@ -2238,7 +2172,7 @@ svg:hover .dark, svg:focus .dark {
 
   <p>
     The example also demonstrates inheritance of other style properties
-    ({{fill}} and {{stroke}})
+    ('fill' and 'stroke')
     specified on the <{use}> elements,
     and how these are also not used if any elements within the symbol
     specify explicit values (e.g., the pink noses and ears and the white tails).
@@ -2267,7 +2201,7 @@ svg:hover .dark, svg:focus .dark {
   <p>
     Scripted animations created by directly manipulating
     attributes on elements in the [=referenced graphics=]
-    (including the {{style attribute}} attribute or its IDL property)
+    (including the <a element-attr for="core-attributes">style</a> attribute or its IDL property)
     will be propagated to the [=element instances=]
     in the shadow tree in the same manner as any other DOM manipulations.
   
@@ -2293,27 +2227,27 @@ svg:hover .dark, svg:focus .dark {
   <a href="refs.html#ref-web-animations-1">[web-animations-1]</a>,
   if the target of the animation is a [=corresponding element=]
   to an [=element instance=] in a shadow tree,
-  the user agent must construct a [=ShadowAnimation=]
+  the user agent must construct a {{ShadowAnimation}}
   whose source is that [=Animation=] object
   and whose target is the [=element instance=].
   If there are multiple instances of the element in different trees,
   then there will be multiple shadow animations, one for each.
 
 <p>
-  The user agent must create such a [=ShadowAnimation=]
+  The user agent must create such a {{ShadowAnimation}}
   for all Web Animations API animations in effect
   (including pending and frozen animations)
   at the time the shadow tree is generated,
   and for any new animations applied while the shadow tree exists.
-  The user agent must not create [=ShadowAnimation=] objects
+  The user agent must not create {{ShadowAnimation}} objects
   for CSS animations or animation elements
   (as these are duplicated separately).
 
 
-Note: 
+Note:
   As part of the interface definition,
-  a [=ShadowAnimation=] is read-only,
-  and must reflect any changes to its [=ShadowAnimation::sourceAnimation=].
+  a {{ShadowAnimation}} is read-only,
+  and must reflect any changes to its [=sourceAnimation=].
 
 
 <p>
@@ -2504,8 +2438,8 @@ Note:
     [=corresponding element=])
     will receive the event with its <a href="https://www.w3.org/TR/dom/#dom-event-target"><code>target</code></a>
     pointing to a read-only [=element instance=] in the shadow tree.
-    The [=SVGElementInstance::correspondingElement=]
-    and [=SVGElementInstance::correspondingUseElement=]
+    The [=correspondingElement=]
+    and [=correspondingUseElement=]
     properties of that [=element instance=]
     can be used to connect it to the modifiable elements in the main DOM.
   
@@ -2521,6 +2455,7 @@ Note:
 attributes {{requiredExtensions}} and {{systemLanguage}} to provide an
 ability to specify alternate viewing depending on the
 capabilities of a given user agent or the user's language.
+This is known as <dfn id="TermConditionalProcessing" data-dfn-type="dfn" data-export="">conditional processing</dfn>.
 
 <p>Attributes {{requiredExtensions}} and {{systemLanguage}} act as tests and
 evaluate to either true or false. The <{switch}> renders the first of
@@ -2545,10 +2480,10 @@ other elements (such as via a <{use}>).
 
   <li>conditional processing will
   have no effect on [=never-rendered elements=];
-  in particular, conditional processing does not affect the processing of a {{style element}} or {{script}} element.</li>
+  in particular, conditional processing does not affect the processing of a <{style}> element or <{script}> element.</li>
 
   <li>conditional processing of child content of a never-rendered container element
-  (e.g., a {{pattern}} or a <a element spec="css-masking">mask</a> element)
+  (e.g., a <{pattern}> or a <a element spec="css-masking">mask</a> element)
   will affect whether that child content contributes to the graphical effect.</li>
 </ul>
 
@@ -2570,7 +2505,7 @@ other elements (such as via a <{use}>).
   but not all, may have conditional processing attributes specified
   on them.  See <a href="struct.html#ConditionalProcessing">Conditional processing</a>
   for details.  The conditional processing attributes defined in
-  SVG 2 are @@attributecategory conditional processing@@.</dd>
+  SVG 2 are '<a href="#RequiredExtensionsAttribute">requiredExtensions</a>', '<a href="#SystemLanguageAttribute">systemLanguage</a>'.</dd>
 </dl>
 
 <h4 id="SwitchElement">The <span class="element-name">switch</span> element</h4>
@@ -2581,8 +2516,7 @@ other elements (such as via a <{use}>).
                id="struct-elementdef-switch">switch</dfn>’</span></div>
       <dl>
         <dt>Categories:</dt>
-        <dd><a href="#struct-TermContainerElement">Container element</a>, <a
-             href="#render-TermRenderableElement">renderable element</a></dd>
+        <dd>[=container element=], [=renderable element=]</dd>
         <dt>Content model:</dt>
         <dd>Any number of the following elements, in any order:<ul class="no-bullets">
             <li><a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a><span
@@ -2594,26 +2528,24 @@ other elements (such as via a <{use}>).
                      href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>,
                 <span class="element-name">‘<a
                      href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li>
-            <li><a href="#shapes-TermShapeElement">shape elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#shapes-CircleElement"><span>circle</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-EllipseElement"><span>ellipse</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-LineElement"><span>line</span></a>’</span>, <span
-                      class="element-name">‘<a href="#paths-PathElement"><span>path</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-PolygonElement"><span>polygon</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-PolylineElement"><span>polyline</span></a>’</span>, <span
-                      class="element-name">‘<a href="#shapes-RectElement"><span>rect</span></a>’</span></span></li>
-          </ul><span class="element-name"><a href="#linking-AElement"><span>a</span></a></span>, <span
-                class="element-name"><a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a></span>,
-          <span class="element-name"><a href="#struct-GElement"><span>g</span></a></span>, <span class="element-name"><a
-               href="#embedded-ImageElement"><span>image</span></a></span>, <span class="element-name"><a
-               href="#struct-SVGElement"><span>svg</span></a></span>, <span class="element-name"><a
-               href="#struct-SwitchElement"><span>switch</span></a></span>, <span class="element-name"><a
-               href="#text-TextElement"><span>text</span></a></span>, <span class="element-name"><a
-               href="#struct-UseElement"><span>use</span></a></span></dd>
+            <li>[=shape elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{circle}>’</span>, <span
+                      class="element-name">‘<{ellipse}>’</span>, <span
+                      class="element-name">‘<{line}>’</span>, <span
+                      class="element-name">‘<{path}>’</span>, <span
+                      class="element-name">‘<{polygon}>’</span>, <span
+                      class="element-name">‘<{polyline}>’</span>, <span
+                      class="element-name">‘<{rect}>’</span></span></li>
+          </ul><span class="element-name"><{a}></span>, <span
+                class="element-name"><a href="#ForeignObjectElement"><span>foreignObject</span></a></span>,
+          <span class="element-name"><{g}></span>, <span class="element-name"><{image}></span>, <span class="element-name"><a
+               href="#SVGElement"><span>svg</span></a></span>, <span class="element-name"><a
+               href="#SwitchElement"><span>switch</span></a></span>, <span class="element-name"><a
+               href="#TextElement"><span>text</span></a></span>, <span class="element-name"><{use}></span></dd>
         <dt>Attributes:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a href="#struct-TermARIAAttribute">aria attributes</a><span class="expanding"> — <span
+            <li>[=aria attributes=]<span class="expanding"> — <span
                       class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>,
                 <span class="attr-name">‘<a
@@ -2710,100 +2642,94 @@ other elements (such as via a <{use}>).
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>,
                 <span class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
-                <span class="attr-name">‘<a href="#struct-RoleAttribute"><span>role</span></a>’</span></span></li>
-            <li><a href="#struct-TermConditionalProcessingAttribute">conditional processing attributes</a><span
+                <span class="attr-name">‘<a href="#RoleAttribute"><span>role</span></a>’</span></span></li>
+            <li>[=conditional processing attributes=]<span
                     class="expanding"> — <span class="attr-name">‘<a
-                     href="#struct-RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
+                     href="#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
                       class="attr-name">‘<a
-                     href="#struct-SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
-            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+                     href="#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+            <li>[=core attributes=]<span class="expanding"> — <span
+                      class="attr-name">‘<span>id</span>’</span>, <span
+                      class="attr-name">‘<span>tabindex</span>’</span>, <span
+                      class="attr-name">‘<span>autofocus</span>’</span>, <span
+                      class="attr-name">‘<span>lang</span>’</span>, <span
+                      class="attr-name">‘<span>xml:space</span>’</span>, <span
+                      class="attr-name">‘<span>class</span>’</span>, <span
+                      class="attr-name">‘<span>style</span>’</span></span></li>
             <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                      class="attr-name">‘<span>onchange</span>’</span>, <span
+                      class="attr-name">‘<span>onclick</span>’</span>, <span
+                      class="attr-name">‘<span>onclose</span>’</span>, <span
+                      class="attr-name">‘<span>oncopy</span>’</span>, <span
+                      class="attr-name">‘<span>oncuechange</span>’</span>, <span
+                      class="attr-name">‘<span>oncut</span>’</span>, <span
+                      class="attr-name">‘<span>ondblclick</span>’</span>, <span
+                      class="attr-name">‘<span>ondrag</span>’</span>, <span
+                      class="attr-name">‘<span>ondragend</span>’</span>, <span
+                      class="attr-name">‘<span>ondragenter</span>’</span>, <span
+                      class="attr-name">‘<span>ondragexit</span>’</span>, <span
+                      class="attr-name">‘<span>ondragleave</span>’</span>, <span
+                      class="attr-name">‘<span>ondragover</span>’</span>, <span
+                      class="attr-name">‘<span>ondragstart</span>’</span>, <span
+                      class="attr-name">‘<span>ondrop</span>’</span>, <span
+                      class="attr-name">‘<span>ondurationchange</span>’</span>,
+                <span class="attr-name">‘<span>onemptied</span>’</span>, <span
+                      class="attr-name">‘<span>onended</span>’</span>, <span
+                      class="attr-name">‘<span>onerror</span>’</span>, <span
+                      class="attr-name">‘<span>onfocus</span>’</span>, <span
+                      class="attr-name">‘<span>oninput</span>’</span>, <span
+                      class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                      class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                      class="attr-name">‘<span>onkeypress</span>’</span>, <span
+                      class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                      class="attr-name">‘<span>onload</span>’</span>, <span
+                      class="attr-name">‘<span>onloadeddata</span>’</span>,
+                <span class="attr-name">‘<span>onloadedmetadata</span>’</span>,
+                <span class="attr-name">‘<span>onloadstart</span>’</span>, <span
+                      class="attr-name">‘<span>onmousedown</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseenter</span>’</span>,
+                <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                <span class="attr-name">‘<span>onmousemove</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseout</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseover</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                      class="attr-name">‘<span>onpaste</span>’</span>, <span
+                      class="attr-name">‘<span>onpause</span>’</span>, <span
+                      class="attr-name">‘<span>onplay</span>’</span>, <span
+                      class="attr-name">‘<span>onplaying</span>’</span>, <span
+                      class="attr-name">‘<span>onprogress</span>’</span>, <span
+                      class="attr-name">‘<span>onratechange</span>’</span>,
+                <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                      class="attr-name">‘<span>onresize</span>’</span>, <span
+                      class="attr-name">‘<span>onscroll</span>’</span>, <span
+                      class="attr-name">‘<span>onseeked</span>’</span>, <span
+                      class="attr-name">‘<span>onseeking</span>’</span>, <span
+                      class="attr-name">‘<span>onselect</span>’</span>, <span
+                      class="attr-name">‘<span>onshow</span>’</span>, <span
+                      class="attr-name">‘<span>onstalled</span>’</span>, <span
+                      class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                      class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                      class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                      class="attr-name">‘<span>onvolumechange</span>’</span>,
+                <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                      class="attr-name">‘<span>onwheel</span>’</span></span>
             </li>
-            <li><a href="#styling-TermPresentationAttribute">presentation attributes</a><span class="expanding"> —
+            <li>[=presentation attributes=]<span class="expanding"> —
               </span></li>
           </ul>
         </dd>
         <dt>DOM Interfaces:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a class="idlinterface"
-                 href="#struct-InterfaceSVGSwitchElement">SVGSwitchElement</a></li>
+            <li>{{SVGSwitchElement}}</li>
           </ul>
         </dd>
       </dl>
     </div>
 
-<p>The <dfn dfn>switch</dfn> element evaluates
+<p>The <dfn dfn data-export="">switch</dfn> element evaluates
 the {{requiredExtensions}} and
 {{systemLanguage}} attributes on its direct child elements in
 order, and then processes and renders the first child for which these
@@ -2817,7 +2743,7 @@ In SVG, when evaluating the {{systemLanguage}} attribute, the order of
 evaluation of descendant elements of the <{switch}> element must be as if the
 <a href="https://www.w3.org/TR/REC-smil/smil-content.html#adef-allowReorder">allowReorder</a>
 attribute, defined in the SMIL specification [<a href="refs.html#ref-SMIL">SMIL</a>]
-always has a value of 'yes'.
+always has a value of <span class="attr-value">yes</span>.
 
 <p>Note that the values of properties 'display' and
 'visibility' have no effect on <{switch}> element
@@ -2827,13 +2753,13 @@ has no effect on true/false testing associated with <{switch}>
 element processing.
 
 <p>The <{switch}> element does not affect the processing of
-{{script}} and {{style element}} elements.
+<{script}> and <{style}> element elements.
 
 <p>For more information and an example, see
 <a href="embedded.html#ForeignObjectElement">Embedding foreign
 object types</a>.
 
-<h4 id="ConditionalProcessingRequiredExtensionsAttribute">The {{requiredExtensions}} attribute</h4>
+<h4 id="RequiredExtensionsAttribute">The {{requiredExtensions}} attribute</h4>
 
 <p>The {{requiredExtensions}}
 attribute defines a list of required language extensions.
@@ -2887,7 +2813,7 @@ information, such as "http://example.org/SVGExtensionXYZ/1.0",
 so that script writers can distinguish between different
 versions of a given extension.
 
-<h4 id="ConditionalProcessingSystemLanguageAttribute">The <span class="attr-name">systemLanguage</span> attribute</h4>
+<h4 id="SystemLanguageAttribute">The <span class="attr-name">systemLanguage</span> attribute</h4>
 
 <dl class="attrdef-list">
   <dt>
@@ -2985,23 +2911,23 @@ element whether to render the element or not.
 </dl>
 
 Note: Multilingual descriptive text selection, based on the {{lang}} attribute, was added to allow internationalization
-of the {{desc}} and {{title element}} elements.
+of the <{desc}> and <{title}> element elements.
 
-<p class="annotation">New in SVG 2. Adding 'lang' resolved at Rigi Kaltbad face-to-face.
-Removed text that limited number of 'desc' and 'title' elements. Status: Done.
+<p class="annotation">New in SVG 2. Adding <span class="attr-value">lang</span> resolved at Rigi Kaltbad face-to-face.
+Removed text that limited number of <{desc}> and <{title}> elements. Status: Done.
 
 <div class="ready-for-wider-review">
 <p>Any [=container element=] or [=graphics element=] in an SVG document
-can have zero or more {{desc}} and/or {{title}} elements as children,
-whose content is text. {{desc}} and {{title}} elements are
+can have zero or more <{desc}> and/or <{title}> elements as children,
+whose content is text. <{desc}> and <{title}> elements are
 not visually rendered as part of the graphics.
-The 'display' value for the {{title}} and {{desc}} elements
+The 'display' value for the <{title}> and <{desc}> elements
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
 
 
-<p>Multiple sibling {{desc}} or {{title}} elements must have
+<p>Multiple sibling <{desc}> or <{title}> elements must have
 different languages,
 as defined using a {{lang}} attribute (or <code>xml:lang</code> attribute) on the descriptive element or an ancestor.
 The user agent must select the element of each type whose language best
@@ -3010,7 +2936,7 @@ A descriptive element with an empty-string language tag
 (indicating no language, for example a text alternative consisting of emoji symbols)
 is a lowest-priority match for any user, ranked below all user-specified language preferences.
 If multiple equally valid matches exist, the first match should be used.
-If no match exists for either 'title' or 'desc', the first element of that type must be selected.
+If no match exists for either <{title}> or <span class="attr-value">desc</span>, the first element of that type must be selected.
 
 <div class="example">
   <p>The following example shows alternative language titles on a re-used star icon,
@@ -3043,20 +2969,20 @@ If no match exists for either 'title' or 'desc', the first element of that type 
   
 </div>
 
-<p class="issue" data-issue="67">The use of more than one {{title}} or {{desc}} element to
+<p class="issue" data-issue="67">The use of more than one <{title}> or <{desc}> element to
 provide localised information is at risk, with no known implementations.
 
-<p>User agents must make the text content of selected 'title' and 'desc' elements available to platform accessibility APIs as part of the name and description computation for the parent element, as defined in the <a href="https://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings &bs[;SVG-AAM]</cite></a> specification.
+<p>User agents must make the text content of selected <{title}> and <{desc}> elements available to platform accessibility APIs as part of the name and description computation for the parent element, as defined in the <a href="https://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings &bs[;SVG-AAM]</cite></a> specification.
 
-<p>Inclusion of any 'title' or 'desc' elements as a direct child of a [=rendered element=] indicates that the rendered element is of semantic importance in the graphic.
-Authors should not, and [=SVG generators=] must not, include empty 'title' or 'desc' elements with no text content or whitespace-only text content,
+<p>Inclusion of any <{title}> or <{desc}> elements as a direct child of a [=rendered element=] indicates that the rendered element is of semantic importance in the graphic.
+Authors should not, and [=SVG generators=] must not, include empty <{title}> or <{desc}> elements with no text content or whitespace-only text content,
 as this will result in a nameless object being presented to assistive technology users.
 
 
 <p>
 If an individual graphic element has no meaning on its own,
 alternative text should instead be provided for the nearest container element that describes a meaningful object.
-Authors should use grouping (<{g}>) elements to structure their drawing elements into meaningful objects, and name those groups with {{title}}.
+Authors should use grouping (<{g}>) elements to structure their drawing elements into meaningful objects, and name those groups with <{title}>.
 Conversely, if a container object is used simply to apply styles or layout,
 and neither defines an object nor provides meaningful grouping structure,
 it does not need alternative text.
@@ -3071,12 +2997,12 @@ However, authors should not rely on such markup to provide meaning to alternativ
 only the plain text content is currently required to be exposed to assistive technologies.
 
 Note: 
-  The HTML parser treats all markup within {{title}} and {{desc}}
+  The HTML parser treats all markup within <{title}> and <{desc}>
   the same way it treats markup in an HTML fragment;
   most elements will be assigned to the HTML namespace.
 
 
-<p>User agents may use markup within {{title}}
+<p>User agents may use markup within <{title}>
 to influence the visual presentation of titles (such as tooltips),
 but are not required to do so.
 
@@ -3088,105 +3014,95 @@ but are not required to do so.
                    id="struct-elementdef-title">title</dfn>’</span></div>
           <dl>
             <dt>Categories:</dt>
-            <dd><a href="#struct-TermDescriptiveElement">Descriptive element</a>, <a
-                 href="#render-TermNeverRenderedElement">never-rendered element</a></dd>
+            <dd>[=descriptive element|Descriptive element=], [=never-rendered element=]</dd>
             <dt>Content model:</dt>
             <dd>Any elements or character data.</dd>
             <dt>Attributes:</dt>
             <dd>
               <ul class="no-bullets">
-                <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                          class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                          class="attr-name">‘<a
-                         href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                          class="attr-name">‘<a
-                         href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span>
+                <li>[=core attributes=]<span class="expanding"> — <span
+                          class="attr-name">‘<span>id</span>’</span>, <span
+                          class="attr-name">‘<span>tabindex</span>’</span>, <span
+                          class="attr-name">‘<span>autofocus</span>’</span>, <span
+                          class="attr-name">‘<span>lang</span>’</span>, <span
+                          class="attr-name">‘<span>xml:space</span>’</span>,
+                    <span class="attr-name">‘<span>class</span>’</span>, <span
+                          class="attr-name">‘<span>style</span>’</span></span>
                 </li>
                 <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                    attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                         href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                         href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span
-                          class="attr-name">‘<a
-                         href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                          class="attr-name">‘<a
-                         href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                    <span class="attr-name">‘<a
-                         href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>,
-                    <span class="attr-name">‘<a
-                         href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                    attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span
+                          class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                          class="attr-name">‘<span>onchange</span>’</span>,
+                    <span class="attr-name">‘<span>onclick</span>’</span>, <span
+                          class="attr-name">‘<span>onclose</span>’</span>, <span
+                          class="attr-name">‘<span>oncopy</span>’</span>, <span
+                          class="attr-name">‘<span>oncuechange</span>’</span>,
+                    <span class="attr-name">‘<span>oncut</span>’</span>, <span
+                          class="attr-name">‘<span>ondblclick</span>’</span>,
+                    <span class="attr-name">‘<span>ondrag</span>’</span>, <span
+                          class="attr-name">‘<span>ondragend</span>’</span>,
+                    <span class="attr-name">‘<span>ondragenter</span>’</span>,
+                    <span class="attr-name">‘<span>ondragexit</span>’</span>,
+                    <span class="attr-name">‘<span>ondragleave</span>’</span>,
+                    <span class="attr-name">‘<span>ondragover</span>’</span>,
+                    <span class="attr-name">‘<span>ondragstart</span>’</span>,
+                    <span class="attr-name">‘<span>ondrop</span>’</span>, <span
+                          class="attr-name">‘<span>ondurationchange</span>’</span>, <span
+                          class="attr-name">‘<span>onemptied</span>’</span>,
+                    <span class="attr-name">‘<span>onended</span>’</span>, <span
+                          class="attr-name">‘<span>onerror</span>’</span>, <span
+                          class="attr-name">‘<span>onfocus</span>’</span>, <span
+                          class="attr-name">‘<span>oninput</span>’</span>, <span
+                          class="attr-name">‘<span>oninvalid</span>’</span>,
+                    <span class="attr-name">‘<span>onkeydown</span>’</span>,
+                    <span class="attr-name">‘<span>onkeypress</span>’</span>,
+                    <span class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                          class="attr-name">‘<span>onload</span>’</span>, <span
+                          class="attr-name">‘<span>onloadeddata</span>’</span>,
+                    <span class="attr-name">‘<span>onloadedmetadata</span>’</span>, <span
+                          class="attr-name">‘<span>onloadstart</span>’</span>,
+                    <span class="attr-name">‘<span>onmousedown</span>’</span>,
+                    <span class="attr-name">‘<span>onmouseenter</span>’</span>,
+                    <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                    <span class="attr-name">‘<span>onmousemove</span>’</span>,
+                    <span class="attr-name">‘<span>onmouseout</span>’</span>,
+                    <span class="attr-name">‘<span>onmouseover</span>’</span>,
+                    <span class="attr-name">‘<span>onmouseup</span>’</span>,
+                    <span class="attr-name">‘<span>onpaste</span>’</span>, <span
+                          class="attr-name">‘<span>onpause</span>’</span>, <span
+                          class="attr-name">‘<span>onplay</span>’</span>, <span
+                          class="attr-name">‘<span>onplaying</span>’</span>,
+                    <span class="attr-name">‘<span>onprogress</span>’</span>,
+                    <span class="attr-name">‘<span>onratechange</span>’</span>,
+                    <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                          class="attr-name">‘<span>onresize</span>’</span>,
+                    <span class="attr-name">‘<span>onscroll</span>’</span>,
+                    <span class="attr-name">‘<span>onseeked</span>’</span>,
+                    <span class="attr-name">‘<span>onseeking</span>’</span>,
+                    <span class="attr-name">‘<span>onselect</span>’</span>,
+                    <span class="attr-name">‘<span>onshow</span>’</span>, <span
+                          class="attr-name">‘<span>onstalled</span>’</span>,
+                    <span class="attr-name">‘<span>onsubmit</span>’</span>,
+                    <span class="attr-name">‘<span>onsuspend</span>’</span>,
+                    <span class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                    <span class="attr-name">‘<span>ontoggle</span>’</span>,
+                    <span class="attr-name">‘<span>onvolumechange</span>’</span>, <span
+                          class="attr-name">‘<span>onwaiting</span>’</span>,
+                    <span class="attr-name">‘<span>onwheel</span>’</span></span>
                 </li>
               </ul>
             </dd>
             <dt>DOM Interfaces:</dt>
             <dd>
               <ul class="no-bullets">
-                <li><a class="idlinterface"
-                     href="#struct-InterfaceSVGTitleElement">SVGTitleElement</a></li>
+                <li>{{SVGTitleElement}}</li>
               </ul>
             </dd>
           </dl>
         </div>
 </div>
 
-<p>The {{title}} child element represents a short text alternative for the
+<p>The <{title}> child element represents a short text alternative for the
 element.
 
 <p>On a link, this could be the title or a description of the target resource; on an
@@ -3194,16 +3110,16 @@ image or drawing object, it could be a short description of the
 graphic; on interactive content, it could be a label for, or instructions for, use
 of the element; and so forth.
 
-<p>Authors should not provide redundant information in a {{title}} element
-if there is also a visible label for the drawing element (e.g., using a {{text}} element).
+<p>Authors should not provide redundant information in a <{title}> element
+if there is also a visible label for the drawing element (e.g., using a <{text}> element).
 Instead, the visual label should be associated with the drawing element
-using an {{aria-labelledby}} attribute.
+using an <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-labelledby">aria-labelledby</a> attribute.
 
-<p>Interactive user agents should make the plain text content of {{title}} elements available in response to user interaction, in a manner consistent with platform conventions;
-existing user agents commonly render {{title}} elements as
+<p>Interactive user agents should make the plain text content of <{title}> elements available in response to user interaction, in a manner consistent with platform conventions;
+existing user agents commonly render <{title}> elements as
 a tooltip on hovering the parent element.
 
-<p>Authors should provide a {{title}} child element to the root svg
+<p>Authors should provide a <{title}> child element to the root svg
 element within a stand-alone SVG document. Since users often consult documents
 out of context, authors should provide context-rich titles. Thus, instead of a
 title such as "Introduction", which doesn't provide much contextual background,
@@ -3220,118 +3136,108 @@ However, this is typically done through other means than the tooltips used for n
                    id="struct-elementdef-desc">desc</dfn>’</span></div>
           <dl>
             <dt>Categories:</dt>
-            <dd><a href="#struct-TermDescriptiveElement">Descriptive element</a>, <a
-                 href="#render-TermNeverRenderedElement">never-rendered element</a></dd>
+            <dd>[=descriptive element|Descriptive element=], [=never-rendered element=]</dd>
             <dt>Content model:</dt>
             <dd>Any elements or character data.</dd>
             <dt>Attributes:</dt>
             <dd>
               <ul class="no-bullets">
-                <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                          class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                          class="attr-name">‘<a
-                         href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                          class="attr-name">‘<a
-                         href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span>
+                <li>[=core attributes=]<span class="expanding"> — <span
+                          class="attr-name">‘<span>id</span>’</span>, <span
+                          class="attr-name">‘<span>tabindex</span>’</span>, <span
+                          class="attr-name">‘<span>autofocus</span>’</span>, <span
+                          class="attr-name">‘<span>lang</span>’</span>, <span
+                          class="attr-name">‘<span>xml:space</span>’</span>,
+                    <span class="attr-name">‘<span>class</span>’</span>, <span
+                          class="attr-name">‘<span>style</span>’</span></span>
                 </li>
                 <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                    attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                         href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                         href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span
-                          class="attr-name">‘<a
-                         href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                          class="attr-name">‘<a
-                         href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                    <span class="attr-name">‘<a
-                         href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>,
-                    <span class="attr-name">‘<a
-                         href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>, <span
-                          class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>,
-                    <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                    attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span
+                          class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                          class="attr-name">‘<span>onchange</span>’</span>,
+                    <span class="attr-name">‘<span>onclick</span>’</span>, <span
+                          class="attr-name">‘<span>onclose</span>’</span>, <span
+                          class="attr-name">‘<span>oncopy</span>’</span>, <span
+                          class="attr-name">‘<span>oncuechange</span>’</span>,
+                    <span class="attr-name">‘<span>oncut</span>’</span>, <span
+                          class="attr-name">‘<span>ondblclick</span>’</span>,
+                    <span class="attr-name">‘<span>ondrag</span>’</span>, <span
+                          class="attr-name">‘<span>ondragend</span>’</span>,
+                    <span class="attr-name">‘<span>ondragenter</span>’</span>,
+                    <span class="attr-name">‘<span>ondragexit</span>’</span>,
+                    <span class="attr-name">‘<span>ondragleave</span>’</span>,
+                    <span class="attr-name">‘<span>ondragover</span>’</span>,
+                    <span class="attr-name">‘<span>ondragstart</span>’</span>,
+                    <span class="attr-name">‘<span>ondrop</span>’</span>, <span
+                          class="attr-name">‘<span>ondurationchange</span>’</span>, <span
+                          class="attr-name">‘<span>onemptied</span>’</span>,
+                    <span class="attr-name">‘<span>onended</span>’</span>, <span
+                          class="attr-name">‘<span>onerror</span>’</span>, <span
+                          class="attr-name">‘<span>onfocus</span>’</span>, <span
+                          class="attr-name">‘<span>oninput</span>’</span>, <span
+                          class="attr-name">‘<span>oninvalid</span>’</span>,
+                    <span class="attr-name">‘<span>onkeydown</span>’</span>,
+                    <span class="attr-name">‘<span>onkeypress</span>’</span>,
+                    <span class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                          class="attr-name">‘<span>onload</span>’</span>, <span
+                          class="attr-name">‘<span>onloadeddata</span>’</span>,
+                    <span class="attr-name">‘<span>onloadedmetadata</span>’</span>, <span
+                          class="attr-name">‘<span>onloadstart</span>’</span>,
+                    <span class="attr-name">‘<span>onmousedown</span>’</span>,
+                    <span class="attr-name">‘<span>onmouseenter</span>’</span>,
+                    <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                    <span class="attr-name">‘<span>onmousemove</span>’</span>,
+                    <span class="attr-name">‘<span>onmouseout</span>’</span>,
+                    <span class="attr-name">‘<span>onmouseover</span>’</span>,
+                    <span class="attr-name">‘<span>onmouseup</span>’</span>,
+                    <span class="attr-name">‘<span>onpaste</span>’</span>, <span
+                          class="attr-name">‘<span>onpause</span>’</span>, <span
+                          class="attr-name">‘<span>onplay</span>’</span>, <span
+                          class="attr-name">‘<span>onplaying</span>’</span>,
+                    <span class="attr-name">‘<span>onprogress</span>’</span>,
+                    <span class="attr-name">‘<span>onratechange</span>’</span>,
+                    <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                          class="attr-name">‘<span>onresize</span>’</span>,
+                    <span class="attr-name">‘<span>onscroll</span>’</span>,
+                    <span class="attr-name">‘<span>onseeked</span>’</span>,
+                    <span class="attr-name">‘<span>onseeking</span>’</span>,
+                    <span class="attr-name">‘<span>onselect</span>’</span>,
+                    <span class="attr-name">‘<span>onshow</span>’</span>, <span
+                          class="attr-name">‘<span>onstalled</span>’</span>,
+                    <span class="attr-name">‘<span>onsubmit</span>’</span>,
+                    <span class="attr-name">‘<span>onsuspend</span>’</span>,
+                    <span class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                    <span class="attr-name">‘<span>ontoggle</span>’</span>,
+                    <span class="attr-name">‘<span>onvolumechange</span>’</span>, <span
+                          class="attr-name">‘<span>onwaiting</span>’</span>,
+                    <span class="attr-name">‘<span>onwheel</span>’</span></span>
                 </li>
               </ul>
             </dd>
             <dt>DOM Interfaces:</dt>
             <dd>
               <ul class="no-bullets">
-                <li><a class="idlinterface"
-                     href="#struct-InterfaceSVGDescElement">SVGDescElement</a></li>
+                <li>{{SVGDescElement}}</li>
               </ul>
             </dd>
           </dl>
         </div>
   </div>
 
-<p>The {{desc}} element represents more detailed textual
+<p>The <{desc}> element represents more detailed textual
 information for the element such as a description. This is typically exposed to assistive
 technologies to provide more detailed information, such as a description of the visual appearance of a graphic or help to explain the functionality of a complex widget.  It is not typically available to other users, so should not be used for essential instructions.
 
 
 <p>
 Authors may associate detailed information, including visible text, with part of the graphic
-using {{aria-describedby}} attribute
+using <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-describedby">aria-describedby</a> attribute
 (on the described element or a parent container),
 with the value being an ID reference to one or more SVG or HTML elements containing the description.
-The {{aria-describedby}} attribute takes precedence
-over the child {{desc}} when providing a description.
-If an element has both visible description and a child {{desc}} element providing supplementary information,
-authors should explicitly include the <a element-attr for="core-attributes" spec="svg2">id</a> of the element itself in its own {{aria-describedby}} list, in order to concatenate the two descriptions together.
+The <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-describedby">aria-describedby</a> attribute takes precedence
+over the child <{desc}> when providing a description.
+If an element has both visible description and a child <{desc}> element providing supplementary information,
+authors should explicitly include the <a element-attr for="core-attributes" spec="svg2">id</a> of the element itself in its own <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-describedby">aria-describedby</a> list, in order to concatenate the two descriptions together.
 
 
 
@@ -3341,8 +3247,8 @@ authors should explicitly include the <a element-attr for="core-attributes" spec
 <h3 id="MetadataElement">The <span class="element-name">metadata</span> element</h3>
 
 <p>Metadata which is included with SVG content should be
-specified within {{metadata}}
-elements. The contents of the {{metadata}} should be elements from
+specified within <{metadata}>
+elements. The contents of the <{metadata}> should be elements from
 other XML namespaces, with these elements from these namespaces
 expressed in a manner conforming with the [[xml-names|<cite>Namespaces in XML</cite>]] Recommendation
 [[!xml-names]].
@@ -3356,99 +3262,92 @@ elements in any particular way.
                id="struct-elementdef-metadata">metadata</dfn>’</span></div>
       <dl>
         <dt>Categories:</dt>
-        <dd><a href="#struct-TermDescriptiveElement">Descriptive element</a>, <a
-             href="#render-TermNeverRenderedElement">never-rendered element</a></dd>
+        <dd>[=descriptive element|Descriptive element=], [=never-rendered element=]</dd>
         <dt>Content model:</dt>
         <dd>Any elements or character data.</dd>
         <dt>Attributes:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+            <li>[=core attributes=]<span class="expanding"> — <span
+                      class="attr-name">‘<span>id</span>’</span>, <span
+                      class="attr-name">‘<span>tabindex</span>’</span>, <span
+                      class="attr-name">‘<span>autofocus</span>’</span>, <span
+                      class="attr-name">‘<span>lang</span>’</span>, <span
+                      class="attr-name">‘<span>xml:space</span>’</span>, <span
+                      class="attr-name">‘<span>class</span>’</span>, <span
+                      class="attr-name">‘<span>style</span>’</span></span></li>
             <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                      class="attr-name">‘<span>onchange</span>’</span>, <span
+                      class="attr-name">‘<span>onclick</span>’</span>, <span
+                      class="attr-name">‘<span>onclose</span>’</span>, <span
+                      class="attr-name">‘<span>oncopy</span>’</span>, <span
+                      class="attr-name">‘<span>oncuechange</span>’</span>, <span
+                      class="attr-name">‘<span>oncut</span>’</span>, <span
+                      class="attr-name">‘<span>ondblclick</span>’</span>, <span
+                      class="attr-name">‘<span>ondrag</span>’</span>, <span
+                      class="attr-name">‘<span>ondragend</span>’</span>, <span
+                      class="attr-name">‘<span>ondragenter</span>’</span>, <span
+                      class="attr-name">‘<span>ondragexit</span>’</span>, <span
+                      class="attr-name">‘<span>ondragleave</span>’</span>, <span
+                      class="attr-name">‘<span>ondragover</span>’</span>, <span
+                      class="attr-name">‘<span>ondragstart</span>’</span>, <span
+                      class="attr-name">‘<span>ondrop</span>’</span>, <span
+                      class="attr-name">‘<span>ondurationchange</span>’</span>,
+                <span class="attr-name">‘<span>onemptied</span>’</span>, <span
+                      class="attr-name">‘<span>onended</span>’</span>, <span
+                      class="attr-name">‘<span>onerror</span>’</span>, <span
+                      class="attr-name">‘<span>onfocus</span>’</span>, <span
+                      class="attr-name">‘<span>oninput</span>’</span>, <span
+                      class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                      class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                      class="attr-name">‘<span>onkeypress</span>’</span>, <span
+                      class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                      class="attr-name">‘<span>onload</span>’</span>, <span
+                      class="attr-name">‘<span>onloadeddata</span>’</span>,
+                <span class="attr-name">‘<span>onloadedmetadata</span>’</span>,
+                <span class="attr-name">‘<span>onloadstart</span>’</span>, <span
+                      class="attr-name">‘<span>onmousedown</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseenter</span>’</span>,
+                <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                <span class="attr-name">‘<span>onmousemove</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseout</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseover</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                      class="attr-name">‘<span>onpaste</span>’</span>, <span
+                      class="attr-name">‘<span>onpause</span>’</span>, <span
+                      class="attr-name">‘<span>onplay</span>’</span>, <span
+                      class="attr-name">‘<span>onplaying</span>’</span>, <span
+                      class="attr-name">‘<span>onprogress</span>’</span>, <span
+                      class="attr-name">‘<span>onratechange</span>’</span>,
+                <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                      class="attr-name">‘<span>onresize</span>’</span>, <span
+                      class="attr-name">‘<span>onscroll</span>’</span>, <span
+                      class="attr-name">‘<span>onseeked</span>’</span>, <span
+                      class="attr-name">‘<span>onseeking</span>’</span>, <span
+                      class="attr-name">‘<span>onselect</span>’</span>, <span
+                      class="attr-name">‘<span>onshow</span>’</span>, <span
+                      class="attr-name">‘<span>onstalled</span>’</span>, <span
+                      class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                      class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                      class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                      class="attr-name">‘<span>onvolumechange</span>’</span>,
+                <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                      class="attr-name">‘<span>onwheel</span>’</span></span>
             </li>
           </ul>
         </dd>
         <dt>DOM Interfaces:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a class="idlinterface"
-                 href="#struct-InterfaceSVGMetadataElement">SVGMetadataElement</a></li>
+            <li>{{SVGMetadataElement}}</li>
           </ul>
         </dd>
       </dl>
     </div>
 <p>Metadata content is not directly rendered;
-the 'display' value for the {{metadata}} element
+the 'display' value for the <{metadata}> element
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
@@ -3554,7 +3453,7 @@ unknown attributes.
   To add custom attributes in a way that will result in consistent parsing
   in both XML and HTML documents,
   authors may use the <a href="#DataAttributes"><span class='attr-name'>data-*</span> attributes</a>.
-  These can be added to SVG {{metadata}} elements
+  These can be added to SVG <{metadata}> elements
   if the information they encode is not associated with any other element in the document.
   
 </div>
@@ -3614,7 +3513,7 @@ this case) upon reading it back in:
   <dt><dfn id="TermCoreAttribute" data-dfn-type="dfn" data-export="">core attributes</dfn></dt>
   <dd>The core attributes are those attributes that can be specified
   on any SVG element.
-  The core attributes are @@attributecategory core@@, along with all
+  The core attributes are '<span>id</span>', '<span>tabindex</span>', '<span>autofocus</span>', '<span>lang</span>', '<span>xml:space</span>', '<span>class</span>', '<span>style</span>', along with all
   <a href="struct.html#DataAttributes">custom data attributes</a>.
   </dd>
 
@@ -3634,7 +3533,7 @@ this case) upon reading it back in:
         <th>Animatable</th>
       </tr>
       <tr>
-        <td><dfn dfn element-attr export for="core-attributes">id</dfn></td>
+        <td><dfn id="IDAttribute" dfn element-attr export for="core-attributes">id</dfn></td>
         <td>(see below)</td>
         <td>(none)</td>
         <td>no</td>
@@ -3765,11 +3664,11 @@ or the empty string. Setting the attribute to the empty string indicates that th
     Recommendation [[!xml]] and to the
     discussion <a href="text.html#WhiteSpace">white space
     handling</a> in SVG.
-    <p>New content should use the {{white-space}} property instead.
+    <p>New content should use the 'white-space' property instead.
   </dd>
 </dl>
 
-<h4 id="tabindexattribute">The <span class="attr-name">tabindex</span> attribute</h4>
+<h4 id="SVGElementTabindexAttribute">The <span class="attr-name">tabindex</span> attribute</h4>
 
 <dl class='attrdef-list'>
    <dt>
@@ -3854,13 +3753,13 @@ for custom data attributes</a> in the HTML specification.
   <a href="https://www.w3.org/TR/wai-aria-1.1/#role_definitions">Definition of Roles</a>, the WAI-ARIA
 Graphics Module <a href="https://www.w3.org/TR/graphics-aria-1.0/#roles">Graphics Roles</a>,
  and the WAI-ARIA <a href="https://www.w3.org/TR/wai-aria/#states_and_properties">Supported States and Properties</a>.
-  The aria attributes are @@attributecategory aria@@.</dd>
+  The aria attributes are '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant">aria-activedescendant</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-atomic">aria-atomic</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-autocomplete">aria-autocomplete</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-busy">aria-busy</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-checked">aria-checked</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-colcount">aria-colcount</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-colindex">aria-colindex</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-colspan">aria-colspan</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-controls">aria-controls</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-current">aria-current</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-describedby">aria-describedby</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-details">aria-details</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-disabled">aria-disabled</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-dropeffect">aria-dropeffect</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-errormessage">aria-errormessage</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-expanded">aria-expanded</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-flowto">aria-flowto</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-grabbed">aria-grabbed</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-haspopup">aria-haspopup</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-hidden">aria-hidden</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-invalid">aria-invalid</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-keyshortcuts">aria-keyshortcuts</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-label">aria-label</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-labelledby">aria-labelledby</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-level">aria-level</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-live">aria-live</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-modal">aria-modal</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-multiline">aria-multiline</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-multiselectable">aria-multiselectable</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-orientation">aria-orientation</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-owns">aria-owns</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-placeholder">aria-placeholder</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-posinset">aria-posinset</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-pressed">aria-pressed</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-readonly">aria-readonly</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-relevant">aria-relevant</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-required">aria-required</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-roledescription">aria-roledescription</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowcount">aria-rowcount</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowindex">aria-rowindex</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowspan">aria-rowspan</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-selected">aria-selected</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-setsize">aria-setsize</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-sort">aria-sort</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuemax">aria-valuemax</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuemin">aria-valuemin</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow">aria-valuenow</a>', '<a href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext">aria-valuetext</a>', '<a href="#RoleAttribute">role</a>'.</dd>
 </dl>
 
 Note: Note that the above list of ARIA attributes may be expanded by future WAI-ARIA specifications.
 
 
-<h4 id="roleattribute">Role attribute</h4>
+<h4 id="RoleAttribute">Role attribute</h4>
 
 <p>Any [=renderable element=] may have an ARIA role attribute specified; the role attribute is ignored on [=non-rendered elements=].
 The attribute, if specified, must have a value that is a <a>set of space-separated
@@ -3950,8 +3849,8 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
   The complete <dfn id="TermInclusionCriteria" data-dfn-type="dfn" data-export="">inclusion criteria</dfn> for the accessibility tree
   are defined by the <a href="https://www.w3.org/TR/svg-aam-1.0/"><cite>SVG Accessibility API Mappings</cite></a> specification for user agents [<a href="refs.html#ref-svg-aam-1.0">svg-aam-1.0</a>].
   For authors, the preferred means of indicating semantic importance is to provide an accessible name for the element.
-  This can be done through a direct child {{title}} element,
-  or through the {{aria-label}} or {{aria-labelledby}} attributes.
+  This can be done through a direct child <{title}> element,
+  or through the <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-label">aria-label</a> or <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-labelledby">aria-labelledby</a> attributes.
   Authors should use one of these methods to provide an accessible name
   for any content that is essential to the comprehension of the SVG,
   and especially for any interactive content.
@@ -3975,7 +3874,7 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
         <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{circle}}</td>
+      <td><{circle}></td>
       <td><code>graphics-symbol</code> role
         if the element meets the [=inclusion criteria=],
         otherwise <code>none</code></td>
@@ -3987,149 +3886,149 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{defs}}</td>
+      <td><{defs}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{desc}}</td>
+      <td><{desc}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{ellipse}}</td>
+      <td><{ellipse}></td>
       <td><code>graphics-symbol</code> role
         if the element meets the [=inclusion criteria=],
         otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{feBlend}}</td>
+      <td><{feBlend}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feColorMatrix}}</td>
+      <td><{feColorMatrix}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feComponentTransfer}}</td>
+      <td><{feComponentTransfer}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feComposite}}</td>
+      <td><{feComposite}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feConvolveMatrix}}</td>
+      <td><{feConvolveMatrix}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feDiffuseLighting}}</td>
+      <td><{feDiffuseLighting}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feDisplacementMap}}</td>
+      <td><{feDisplacementMap}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feDistantLight}}</td>
+      <td><a element spec=filter-effects-1>feDistantLight</a></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feDropShadow}}</td>
+      <td><a element spec=filter-effects-1>feDropShadow</a></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feFlood}}</td>
+      <td><{feFlood}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feFuncA}}</td>
+      <td><a element spec=filter-effects-1>feFuncA</a></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feFuncB}}</td>
+      <td><a element spec=filter-effects-1>feFuncB</a></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feFuncG}}</td>
+      <td><a element spec=filter-effects-1>feFuncG</a></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feFuncR}}</td>
+      <td><a element spec=filter-effects-1>feFuncR</a></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feGaussianBlur}}</td>
+      <td><{feGaussianBlur}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feImage}}</td>
+      <td><{feImage}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feMerge}}</td>
+      <td><{feMerge}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feMergeNode}}</td>
+      <td><a element spec=filter-effects-1>feMergeNode</a></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feMorphology}}</td>
+      <td><{feMorphology}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feOffset}}</td>
+      <td><{feOffset}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{fePointLight}}</td>
+      <td><a element spec=filter-effects-1>fePointLight</a></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feSpecularLighting}}</td>
+      <td><{feSpecularLighting}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feSpotLight}}</td>
+      <td><a element spec=filter-effects-1>feSpotLight</a></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feTile}}</td>
+      <td><{feTile}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{feTurbulence}}</td>
+      <td><{feTurbulence}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{filter element}}</td>
+      <td><{filter}> element</td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
@@ -4148,24 +4047,24 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{image}}</td>
+      <td><{image}></td>
       <td><code title="attr-aria-role-img">img</code> role</td>
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{line}}</td>
+      <td><{line}></td>
       <td><code>graphics-symbol</code> role
         if the element meets the [=inclusion criteria=],
         otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{linearGradient}}</td>
+      <td><{linearGradient}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{marker element}}</td>
+      <td><{marker}> element</td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
@@ -4175,43 +4074,43 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{metadata}}</td>
+      <td><{metadata}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{mpath}}</td>
+      <td><a element href="https://svgwg.org/specs/animations/#MPathElement">mpath</a></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{path}}</td>
+      <td><{path}></td>
       <td><code>graphics-symbol</code> role
         if the element meets the [=inclusion criteria=],
         otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{pattern}}</td>
+      <td><{pattern}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{polygon}}</td>
+      <td><{polygon}></td>
       <td><code>graphics-symbol</code> role
         if the element meets the [=inclusion criteria=],
         otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{polyline}}</td>
+      <td><{polyline}></td>
       <td><code>graphics-symbol</code> role
         if the element meets the [=inclusion criteria=],
         otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{radialGradient}}</td>
+      <td><{radialGradient}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
@@ -4223,17 +4122,17 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{script}}</td>
+      <td><{script}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{stop}}</td>
+      <td><{stop}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{style element}}</td>
+      <td><{style}> element</td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
@@ -4256,26 +4155,26 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{text}}</td>
+      <td><{text}></td>
       <td><code>group</code>role,
         with platform-specific role mappings,
         as defined in the <a href="https://w3c.github.io/svg-aam/#details-id-69">SVG Accessibility API Mappings</a> specification</td>
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{textPath}}</td>
+      <td><{textPath}></td>
       <td><code>group</code> role
         if the element meets the [=inclusion criteria=],
         otherwise <code>none</code></td>
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{title}}</td>
+      <td><{title}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
     <tr>
-      <td>{{tspan}}</td>
+      <td><{tspan}></td>
       <td><code>group</code> role
         if the element meets the [=inclusion criteria=],
         otherwise <code>none</code></td>
@@ -4289,14 +4188,14 @@ specifications. [<a href="refs.html#ref-wai-aria">wai-aria</a>] [<a href="refs.h
       <td>no restrictions</td>
     </tr>
     <tr>
-      <td>{{view}}</td>
+      <td><{view}></td>
       <td>none</td>
       <td>no role may be applied</td>
     </tr>
    </tbody>
   </table>
 
-<h3 id="DOMInterfaces">DOM interfaces</h3>
+<h3 id="struct-dom">DOM interfaces</h3>
 
 <div class='ready-for-wider-review'>
 <h4 id="InterfaceDocumentExtensions">Extensions to the Document interface</h4>
@@ -4319,7 +4218,7 @@ partial interface <a>Document</a> {
 
 <p>The <b id="__svg__SVGDocument__rootElement">rootElement</b> IDL attribute
 represents the root <{svg}> element.  On getting
-<a href="#__svg__SVGDocument__rootElement">rootElement</a>, the root element
+rootElement, the root element
 of the document is returned, if it is an <{svg}> element, or null
 otherwise.
 
@@ -4354,7 +4253,7 @@ miscellaneous utility methods, such as data type object factory methods.
 <p>An [[#InterfaceSVGSVGElement|SVGSVGElement]] object maintains an internal
 {{DOMPoint}} object, called its
 <dfn id="CurrentTranslatePointObject" data-dfn-type="dfn" data-export="">current translate point object</dfn>,
-which is the object returned from the <a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>
+which is the object returned from the currentTranslate
 IDL attribute.
 
 <pre class="idl">
@@ -4404,8 +4303,8 @@ interface <b>SVGSVGElement</b> : <a>SVGGraphicsElement</a> {
 <b id="__svg__SVGSVGElement__y">y</b>,
 <b id="__svg__SVGSVGElement__width">width</b> and
 <b id="__svg__SVGSVGElement__height">height</b> IDL attributes
-[=reflect=] the computed values of the {{x}}, {{y}}, {{width}} and
-{{height}} properties and their corresponding
+[=reflect=] the computed values of the 'x', 'y', 'width' and
+'height' properties and their corresponding
 presentation attributes, respectively.
 
 <p>The <b id="__svg__SVGSVGElement__currentScale">currentScale</b> and
@@ -4417,8 +4316,8 @@ They only have an effect on the [=outermost svg element=] of an [=SVG document f
 transform is a 2x3 matrix of the form
 <code>[currentScale 0 0 currentScale currentTranslate.x currentTranslate.y]</code>.
 The value of the [[#TransformProperty|transform]] property does not affect
-<a href="#__svg__SVGSVGElement__currentScale">currentScale</a> or
-<a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>.
+currentScale or
+currentTranslate.
 
 <div class="note">
 <p>Previous versions of SVG recommended that user agents implement controls, by default,
@@ -4440,7 +4339,7 @@ is poorly defined.
 See the <a href="https://github.com/w3c/svgwg/issues/360">GitHub issue</a> for more.
 
 
-<p>On getting <a href="#__svg__SVGSVGElement__currentScale">currentScale</a>,
+<p>On getting currentScale,
 the following steps are run:
 
 <ol class='algorithm'>
@@ -4452,14 +4351,14 @@ the following steps are run:
   <li>Return <var>a</var>.</li>
 </ol>
 
-<p>On setting <a href="#__svg__SVGSVGElement__currentScale">currentScale</a>,
+<p>On setting currentScale,
 the following steps are run:
 
 <ol class='algorithm'>
   <li>If the current <{svg}> element is not the [=outermost svg element=],
   then return.</li>
   <li>Let <var>scale</var> be the value being assigned to
-  <a href="#__svg__SVGSVGElement__currentScale">currentScale</a>.</li>
+  currentScale.</li>
   <li>Let [<var>a</var> <var>b</var> <var>c</var> <var>d</var> <var>e</var> <var>f</var>]
   be the 2x3 matrix that represents the document's magnification and panning
   transform.</li>
@@ -4467,7 +4366,7 @@ the following steps are run:
   [<var>scale</var> 0 0 <var>scale</var> <var>e</var> <var>f</var>].</li>
 </ol>
 
-<p>On getting <a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>,
+<p>On getting currentTranslate,
 the [[#InterfaceSVGSVGElement|SVGSVGElement]] object's <a href="#CurrentTranslatePointObject">current
 translate point object</a> is returned.  This object
 <a href="shapes.html#PointMode">represents the current translation</a>
@@ -4496,7 +4395,7 @@ changes, the following steps are run:
 
 Note: Running these steps when the [=outermost svg element=]
 changes will ensure that if the document element is replaced with a different
-<{svg}> element, that its <a href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>
+<{svg}> element, that its currentTranslate
 will be immediately updated to reflect the translation component of
 the document's magnification and panning transform.
 
@@ -4519,7 +4418,7 @@ used to perform geometry operations on [=graphics elements=] to find
 those whose (or check whether their) graphical content lies partially or
 completely within a given rectangle.
 
-<p>To <dfn id="TermFindIntersectingOrEnclosedDescendants" data-dfn-type="dfn" data-export="">find the intersecting
+<p>To <dfn id="TermFindIntersectingOrEnclosedDescendants" data-dfn-type="dfn" data-export="" lt="finding the intersecting descendants|finding the enclosed descendants">find the intersecting
 or enclosed descendants</dfn> of a given element <var>element</var>
 with a given rectangle <var>rectangle</var> using <var>ancestor</var>
 as the element in whose coordinate space <var>rectangle</var> is
@@ -4536,8 +4435,8 @@ to be interpreted, the following steps are run:
       <li>If <var>child</var> is an <{svg}> or <{g}> element, then:
         <ol>
           <li>Let <var>descendants</var> be the result of
-          <a href="#TermFindIntersectingOrEnclosedDescendants">finding the
-          intersecting (or enclosed) descendants</a> of <var>child</var> with
+          [=finding the intersecting or enclosed descendants|finding the
+          intersecting (or enclosed) descendants=] of <var>child</var> with
           <var>rectangle</var> in <var>ancestor</var>'s coordinate space.</li>
           <li>Append to <var>result</var> all the elements of <var>descendants</var>.</li>
         </ol>
@@ -4546,8 +4445,7 @@ to be interpreted, the following steps are run:
         <ol>
           <li>Let <var>root</var> be the root of the <var>child</var>'s shadow tree.</li>
           <li>Let <var>descendants</var> be the result of
-          <a href="#TermFindIntersectingOrEnclosedDescendants">finding the
-          intersecting (or enclosed) descendants</a> of <var>root</var> with
+          [=finding the intersecting or enclosed descendants|finding the intersecting (or enclosed) descendants=] of <var>root</var> with
           <var>rectangle</var> in <var>ancestor</var>'s coordinate space.</li>
           <li>If <var>descendants</var> is not empty, then append <var>child</var>
           to <var>result</var>.
@@ -4563,7 +4461,7 @@ to be interpreted, the following steps are run:
         <ol>
           <li>Let <var>region</var> be the shape in <var>child</var>'s coordinate
           system that is sensitive to hit detection, taking into account the
-          rules for interpreting <var>child</var>'s {{pointer-events}} value.</li>
+          rules for interpreting <var>child</var>'s 'pointer-events' value.</li>
           <li>Transform <var>region</var> into <var>ancestor</var>'s coordinate system.</li>
           <li>If we are finding intersecting descendants and <var>region</var> lies partially
           or fully within <var>rectangle</var>, then append <var>child</var> to <var>result</var>.</li>
@@ -4587,8 +4485,7 @@ steps are run:
   in document order:
     <ol>
       <li>Let <var>descendants</var> be the result of
-      <a href="#TermFindNonContainerGraphicsElements">finding the non-container
-      graphics elements</a> within <var>child</var>.</li>
+      [=finding the non-container graphics elements=] within <var>child</var>.</li>
       <li>Append to <var>result</var> all the elements of <var>descendants</var>.</li>
     </ol>
   </li>
@@ -4604,14 +4501,14 @@ the following steps are run:
 <ol class='algorithm'>
   <li>Let <var>descendants</var> be a list, depending on what method we are in:
     <dl class='switch'>
-      <dt><a href="#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a></dt>
+      <dt>getIntersectionList</dt>
       <dd><var>descendants</var> is the result of
-      <a href="#TermFindIntersectingOrEnclosedDescendants">finding the intersecting descendants</a>
+      [=finding the intersecting descendants=]
       of the current <{svg}> element with rectangle <var>rect</var>
       in the current <{svg}> element's coordinate system.</dd>
-      <dt><a href="#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a></dt>
+      <dt>getEnclosureList</dt>
       <dd><var>descendants</var> is the result of
-      <a href="#TermFindIntersectingOrEnclosedDescendants">finding the enclosed descendants</a>
+      [=finding the enclosed descendants=]
       of the current <{svg}> element with rectangle <var>rect</var>
       in the current <{svg}> element's coordinate system.</dd>
     </dl>
@@ -4620,7 +4517,7 @@ the following steps are run:
   <var>descendants</var> any element that does not have <var>referenceElement</var>
   as an ancestor.</li>
   <li>Return a <a href="https://www.w3.org/TR/dom/#concept-collection-static">static</a>
-  [=NodeList=] that contains all of the elements in <var>descendants</var>.
+  {{NodeList}} that contains all of the elements in <var>descendants</var>.
   ([[DOM]], section 5.2.7)</li>
 </ol>
 
@@ -4631,21 +4528,20 @@ the following steps are run:
 <ol class='algorithm'>
   <li>Let <var>descendants</var> be a list, depending on what method we are in:
     <dl class='switch'>
-      <dt><a href="#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a></dt>
+      <dt>getIntersectionList</dt>
       <dd><var>descendants</var> is the result of
-      <a href="#TermFindIntersectingOrEnclosedDescendants">finding the intersecting descendants</a>
+      [=finding the intersecting descendants=]
       of the current <{svg}> element with rectangle <var>rect</var>
       in the current <{svg}> element's coordinate system.</dd>
-      <dt><a href="#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a></dt>
+      <dt>getEnclosureList</dt>
       <dd><var>descendants</var> is the result of
-      <a href="#TermFindIntersectingOrEnclosedDescendants">finding the enclosed descendants</a>
+      [=finding the enclosed descendants=]
       of the current <{svg}> element with rectangle <var>rect</var>
       in the current <{svg}> element's coordinate system.</dd>
     </dl>
   </li>
   <li>Let <var>elements</var> be the result of
-  <a href="#TermFindNonContainerGraphicsElements">finding the non-container
-  graphics elements</a> within <var>element</var>.</li>
+  [=finding the non-container graphics elements=] within <var>element</var>.</li>
   <li>If <var>elements</var> is empty, then return false.</li>
   <li>If any element in <var>elements</var> is not also in <var>descendants</var>,
   then return false.</li>
@@ -4680,18 +4576,18 @@ object is returned according to the following table:
 
 <table class='vert'>
   <tr><th>Method</th><th>Object and details</th></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGNumber">createSVGNumber</a></td><td>A new, <a href="types.html#NumberMode">detached</a> [[#InterfaceSVGNumber|SVGNumber]] object whose value is 0.</td></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGLength">createSVGLength</a></td><td>A new, <a href="types.html#LengthMode">detached</a> [[#InterfaceSVGLength|SVGLength]] object whose value is the unitless <<number>> 0.</td></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGAngle">createSVGAngle</a></td><td>A new, <a href="types.html#AngleMode">detached</a> [[#InterfaceSVGAngle|SVGAngle]] object whose value is the unitless <<number>> 0.</td></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGPoint">createSVGPoint</a></td><td>A new, <a href="shapes.html#PointMode">detached</a> {{DOMPoint}} object whose coordinates are all 0.</td></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGMatrix">createSVGMatrix</a></td><td>A new, <a href="#MatrixMode">detached</a> [[geometry-1#DOMMatrix|DOMMatrix]] object representing the identity matrix.</td></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGRect">createSVGRect</a></td><td>A new, {{DOMRect}} object whose x, y, width and height are all 0.</td></tr>
-  <tr><td><a href="#__svg__SVGSVGElement__createSVGTransform">createSVGTransform</a></td><td>A new, <a href="coords.html#TransformMode">detached</a> [[#InterfaceSVGTransform|SVGTransform]] object whose value is <span class='prop-value'>matrix(1, 0, 0, 1, 0, 0)</span>.</td></tr>
+  <tr><td>createSVGNumber</td><td>A new, <a href="types.html#NumberMode">detached</a> [[#InterfaceSVGNumber|SVGNumber]] object whose value is 0.</td></tr>
+  <tr><td>createSVGLength</td><td>A new, <a href="types.html#LengthMode">detached</a> [[#InterfaceSVGLength|SVGLength]] object whose value is the unitless <<number>> 0.</td></tr>
+  <tr><td>createSVGAngle</td><td>A new, <a href="types.html#AngleMode">detached</a> [[#InterfaceSVGAngle|SVGAngle]] object whose value is the unitless <<number>> 0.</td></tr>
+  <tr><td>createSVGPoint</td><td>A new, <a href="shapes.html#PointMode">detached</a> {{DOMPoint}} object whose coordinates are all 0.</td></tr>
+  <tr><td>createSVGMatrix</td><td>A new, <a href="#MatrixMode">detached</a> [[geometry-1#DOMMatrix|DOMMatrix]] object representing the identity matrix.</td></tr>
+  <tr><td>createSVGRect</td><td>A new, {{DOMRect}} object whose x, y, width and height are all 0.</td></tr>
+  <tr><td>createSVGTransform</td><td>A new, <a href="coords.html#TransformMode">detached</a> [[#InterfaceSVGTransform|SVGTransform]] object whose value is <span class='prop-value'>matrix(1, 0, 0, 1, 0, 0)</span>.</td></tr>
 </table>
 
-<p>The <a href="#__svg__SVGSVGElement__createSVGPoint">createSVGPoint</a>,
-<a href="#__svg__SVGSVGElement__createSVGMatrix">createSVGMatrix</a> and
-<a href="#__svg__SVGSVGElement__createSVGRect">createSVGRect</a> methods
+<p>The createSVGPoint,
+createSVGMatrix and
+createSVGRect methods
 are all deprecated and kept only for compatibility with legacy content.
 Authors are encouraged to use the {{DOMPoint}}, [[geometry-1#DOMMatrix|DOMMatrix]] and
 {{DOMRect}} constructors instead.
@@ -4699,13 +4595,13 @@ Authors are encouraged to use the {{DOMPoint}}, [[geometry-1#DOMMatrix|DOMMatrix
 <p>The <b id="__svg__SVGSVGElement__createSVGTransformFromMatrix">createSVGTransformFromMatrix</b>
 method is used to create a new [[#InterfaceSVGTransform|SVGTransform]] object from a matrix object.
 Its behavior is the same as the
-<a href="#__svg__SVGTransformList__createSVGTransformFromMatrix">createSVGTransformFromMatrix</a>
+createSVGTransformFromMatrix
 method on [[#InterfaceSVGTransformList|SVGTransformList]].
 
 <div class='ready-for-wider-review'>
 <p>The <b id="__svg__SVGSVGElement__getElementById">getElementById</b> method,
 must return the first element in [=tree order=], within the
-<{svg}> element's descendants, whose ID is <var>elementId</var>, or
+<{svg}> element's descendants, whose ID is <var ignore=''>elementId</var>, or
 null if there is no such element.
 </div>
 
@@ -4731,7 +4627,7 @@ interface <b>SVGGElement</b> : <a>SVGGraphicsElement</a> {
 
 
 
-<p>An [[#InterfaceSVGDefsElement|SVGDefsElement]] object represents a {{defs}} element in the DOM.
+<p>An [[#InterfaceSVGDefsElement|SVGDefsElement]] object represents a <{defs}> element in the DOM.
 
 <pre class="idl">
 [<a>Exposed</a>=Window]
@@ -4746,7 +4642,7 @@ interface <b>SVGDefsElement</b> : <a>SVGGraphicsElement</a> {
 
 
 
-<p>An [[#InterfaceSVGDescElement|SVGDescElement]] object represents a {{desc}} element in the DOM.
+<p>An [[#InterfaceSVGDescElement|SVGDescElement]] object represents a <{desc}> element in the DOM.
 
 <pre class="idl">
 [<a>Exposed</a>=Window]
@@ -4761,7 +4657,7 @@ interface <b>SVGDescElement</b> : <a>SVGElement</a> {
 
 
 
-<p>An [[#InterfaceSVGMetadataElement|SVGMetadataElement]] object represents a {{metadata}} element in the DOM.
+<p>An [[#InterfaceSVGMetadataElement|SVGMetadataElement]] object represents a <{metadata}> element in the DOM.
 
 <pre class="idl">
 [<a>Exposed</a>=Window]
@@ -4776,7 +4672,7 @@ interface <b>SVGMetadataElement</b> : <a>SVGElement</a> {
 
 
 
-<p>An [[#InterfaceSVGTitleElement|SVGTitleElement]] object represents a {{title}} element in the DOM.
+<p>An [[#InterfaceSVGTitleElement|SVGTitleElement]] object represents a <{title}> element in the DOM.
 
 <pre class="idl">
 [<a>Exposed</a>=Window]
@@ -4835,8 +4731,8 @@ interface <b>SVGUseElement</b> : <a>SVGGraphicsElement</a> {
 <b id="__svg__SVGUseElement__y">y</b>,
 <b id="__svg__SVGUseElement__width">width</b> and
 <b id="__svg__SVGUseElement__height">height</b> IDL attributes
-[=reflect=] the computed values of the {{x}}, {{y}}, {{width}} and
-{{height}} properties and their corresponding
+[=reflect=] the computed values of the 'x', 'y', 'width' and
+'height' properties and their corresponding
 presentation attributes, respectively.
 
 <p>The <b id="__svg__SVGUseElement__instanceRoot">instanceRoot</b> and
@@ -4859,7 +4755,7 @@ then getting these attributes returns null.
   implements the [[#InterfaceSVGUseElementShadowRoot|SVGUseElementShadowRoot]] interface.
   This interface does not currently define any extensions
   to the properties and methods defined for the
-  [=ShadowRoot=] interface
+  {{ShadowRoot}} interface
   and <a href="https://dom.spec.whatwg.org/#mixin-documentorshadowroot">DocumentOrShadowRoot</a> mixin.
   However, the tree rooted at this node
   is entirely read-only from the perspective of author scripts.
@@ -4891,12 +4787,12 @@ Note:
 
 <pre class="idl">
 interface mixin <b>SVGElementInstance</b> {
-  [<a>SameObject</a>] readonly attribute <a>SVGElement</a>? <a href="#__svg__SVGElementInstance__correspondingElement">correspondingElement</a>;
-  [<a>SameObject</a>] readonly attribute <a>SVGUseElement</a>? <a href="#__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</a>;
+  [<a>SameObject</a>] readonly attribute <a>SVGElement</a>? correspondingElement;
+  [<a>SameObject</a>] readonly attribute <a>SVGUseElement</a>? correspondingUseElement;
 };
 </pre>
 
-<p>The <b id="__svg__SVGElementInstance__correspondingElement">correspondingElement</b> IDL attribute
+<p>The <dfn id="__svg__SVGElementInstance__correspondingElement" data-dfn-type="dfn" data-export="">correspondingElement</dfn> IDL attribute
 points to the [=corresponding element=] if this element is an [=element instance=] in a [=use-element shadow tree=],
 or is null otherwise.
 
@@ -4912,14 +4808,14 @@ or is null otherwise.
   with [=external file references=] to be at-risk.
 
 
-<p>The <b id="__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</b> IDL attribute
+<p>The <dfn id="__svg__SVGElementInstance__correspondingUseElement" data-dfn-type="dfn" data-export="">correspondingUseElement</dfn> IDL attribute
 points to the [=corresponding use element=] if this element is an [=element instance=] in a [=use-element shadow tree=],
 or is null otherwise.
 
 <h4 id="InterfaceShadowAnimation">Interface ShadowAnimation</h4>
 
-<p>The [=ShadowAnimation=] interface defines a read-only [=Animation=] object,
-  which mirrors all changes to the [=ShadowAnimation::sourceAnimation=] object
+<p>The {{ShadowAnimation}} interface defines a read-only [=Animation=] object,
+  which mirrors all changes to the [=sourceAnimation=] object
   from which it was constructed.
   They are used to mirror author-initiated animation objects in the
   [=use-element shadow tree=].
@@ -4930,34 +4826,34 @@ or is null otherwise.
 [Exposed=Window]
 interface <b>ShadowAnimation</b> : <a>Animation</a> {
   constructor(<a>Animation</a> source, (<a>Element</a> or <a>CSSPseudoElement</a>) newTarget);
-  [<a>SameObject</a>] readonly attribute <a>Animation</a> <a href="#__svg__ShadowAnimation__sourceAnimation">sourceAnimation</a>;
+  [<a>SameObject</a>] readonly attribute <a>Animation</a> sourceAnimation;
 };
 </pre>
 
-<p>The <b id="__svg__ShadowAnimation__sourceAnimation">sourceAnimation</b> IDL property
+<p>The <dfn id="__svg__ShadowAnimation__sourceAnimation" data-dfn-type="dfn" data-export="">sourceAnimation</dfn> IDL property
   points to the [=Animation=] object passed in the constructor.
 
 
 <p>
-  The constructor generates a new [=ShadowAnimation=] object,
-  which reflects all properties on the [=ShadowAnimation::sourceAnimation=],
+  The constructor generates a new {{ShadowAnimation}} object,
+  which reflects all properties on the [=sourceAnimation=],
   except that its <a href="https://www.w3.org/TR/web-animations-1/#dom-animation-effect"><code>effect</code></a> is created by constructing a new
   <a href="https://www.w3.org/TR/web-animations-1/#keyframeeffectreadonly"><code>KeyframeEffectReadOnly</code></a>
-  using the keyframe effect of the [=ShadowAnimation::sourceAnimation=] as its source,
+  using the keyframe effect of the [=sourceAnimation=] as its source,
   and then modifying its <a href="https://www.w3.org/TR/web-animations-1/#dom-keyframeeffectreadonly-target"><code>target</code></a>
   to match the <code>newTarget</code> parameter.
 
 
 
 <p>
-  A [=ShadowAnimation=] is read-only.
+  A {{ShadowAnimation}} is read-only.
   Any attempt to set any of the inherited IDL properties,
   or call any of the [=Animation=] methods that change its state,
   must throw a <code>NoModificationAllowedError</code>.
   However, the user agent must ensure that
   any changes to the properties or state
-  of the [=ShadowAnimation::sourceAnimation=] are reflected
-  in changes to the [=ShadowAnimation=].
+  of the [=sourceAnimation=] are reflected
+  in changes to the {{ShadowAnimation}}.
 
 
 <h4 id="InterfaceSVGSwitchElement">Interface SVGSwitchElement</h4>
@@ -4986,11 +4882,11 @@ the SVG specification.  To access the SVG document inside an
 <span class="element-name">iframe</span> or
 <span class="element-name">object</span> element,
 authors are suggested to use the <code>contentDocument</code>
-attribute on the [=HTMLIFrameElement=] or [=HTMLObjectElement=]
+attribute on the {{HTMLIFrameElement}} or {{HTMLObjectElement}}
 interface, respectively.
 
-Note: The [=HTMLIFrameElement=], [=HTMLEmbedElement=]
-and [=HTMLObjectElement=] interfaces all define their own getSVGDocument
+Note: The {{HTMLIFrameElement}}, {{HTMLEmbedElement}}
+and {{HTMLObjectElement}} interfaces all define their own getSVGDocument
 method, which provides access to the SVG document in the same way that
 the [=GetSVGDocument=] does.  Those three interfaces therefore do not need
 to implement [=GetSVGDocument=].  Still, authors are strongly recommended
@@ -5002,7 +4898,7 @@ interface mixin <b>GetSVGDocument</b> {
 };
 </pre>
 
-<p>The <b id="__svg__GetSVGDocument__getSVGDocument">getSVGDocument</b> method
+<p>The <dfn id="__svg__GetSVGDocument__getSVGDocument" data-dfn-type="dfn" data-export="">getSVGDocument</dfn> method
 is used to return a referenced SVG document.  When getSVGDocument() is called,
 it must return the [=Document=] object referenced by the embedding element
 that implements the [=GetSVGDocument=] interface; if there is no document,

@@ -6,17 +6,17 @@ Styling</h2>
 <p>Elements in an SVG document can be styled using CSS.
 Most visual characteristics and some aspects of element
 geometry are controlled using CSS <dfn id="TermProperty" data-dfn-type="dfn">properties</dfn>.
-For example, the {{fill}} property controls the paint used to
-fill the inside of a shape, and the {{width}} and
-{{height}} properties are used to control the size
+For example, the 'fill' property controls the paint used to
+fill the inside of a shape, and the 'width' and
+'height' properties are used to control the size
 of a <{rect}> element.
 
 <p>SVG user agents must support all of the CSS styling
 mechanisms described in this chapter.
 
 Note: In SVG 1.1, support for inline style sheets
-using the {{style element}} element and
-{{style attribute}} was not required.  In SVG 2,
+using the <{style}> element element and
+<a element-attr for="core-attributes">style</a> was not required.  In SVG 2,
 these are required.
 
 
@@ -26,7 +26,7 @@ these are required.
   <table>
     <tr>
       <th>SVG 2 Requirement:</th>
-      <td>Add HTML5 <span class='element-name'>style</span> element attributes to SVG's {{style element}} element.</td>
+      <td>Add HTML5 <span class='element-name'>style</span> element attributes to SVG's <{style}> element element.</td>
     </tr>
     <tr>
       <th>Resolution:</th>
@@ -43,9 +43,9 @@ these are required.
   </table>
 </div>
 
-<p>The {{style element}} element allows
+<p>The <{style}> element element allows
 style sheets to be embedded directly within SVG content.
-SVG's {{style element}} element has the same
+SVG's <{style}> element element has the same
 attributes as the
 <a href="https://html.spec.whatwg.org/multipage/semantics.html#the-style-element">corresponding
 element in HTML</a>.
@@ -56,97 +56,91 @@ element in HTML</a>.
                id="styling-elementdef-style">style</dfn>’</span></div>
       <dl>
         <dt>Categories:</dt>
-        <dd><a href="#render-TermNeverRenderedElement">Never-rendered element</a></dd>
+        <dd>[=never-rendered element|Never-rendered element=]</dd>
         <dt>Content model:</dt>
         <dd>Character data.</dd>
         <dt>Attributes:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+            <li>[=core attributes=]<span class="expanding"> — <span
+                      class="attr-name">‘<span>id</span>’</span>, <span
+                      class="attr-name">‘<span>tabindex</span>’</span>, <span
+                      class="attr-name">‘<span>autofocus</span>’</span>, <span
+                      class="attr-name">‘<span>lang</span>’</span>, <span
+                      class="attr-name">‘<span>xml:space</span>’</span>, <span
+                      class="attr-name">‘<span>class</span>’</span>, <span
+                      class="attr-name">‘<span>style</span>’</span></span></li>
             <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                      class="attr-name">‘<span>onchange</span>’</span>, <span
+                      class="attr-name">‘<span>onclick</span>’</span>, <span
+                      class="attr-name">‘<span>onclose</span>’</span>, <span
+                      class="attr-name">‘<span>oncopy</span>’</span>, <span
+                      class="attr-name">‘<span>oncuechange</span>’</span>, <span
+                      class="attr-name">‘<span>oncut</span>’</span>, <span
+                      class="attr-name">‘<span>ondblclick</span>’</span>, <span
+                      class="attr-name">‘<span>ondrag</span>’</span>, <span
+                      class="attr-name">‘<span>ondragend</span>’</span>, <span
+                      class="attr-name">‘<span>ondragenter</span>’</span>, <span
+                      class="attr-name">‘<span>ondragexit</span>’</span>, <span
+                      class="attr-name">‘<span>ondragleave</span>’</span>, <span
+                      class="attr-name">‘<span>ondragover</span>’</span>, <span
+                      class="attr-name">‘<span>ondragstart</span>’</span>, <span
+                      class="attr-name">‘<span>ondrop</span>’</span>, <span
+                      class="attr-name">‘<span>ondurationchange</span>’</span>,
+                <span class="attr-name">‘<span>onemptied</span>’</span>, <span
+                      class="attr-name">‘<span>onended</span>’</span>, <span
+                      class="attr-name">‘<span>onerror</span>’</span>, <span
+                      class="attr-name">‘<span>onfocus</span>’</span>, <span
+                      class="attr-name">‘<span>oninput</span>’</span>, <span
+                      class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                      class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                      class="attr-name">‘<span>onkeypress</span>’</span>, <span
+                      class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                      class="attr-name">‘<span>onload</span>’</span>, <span
+                      class="attr-name">‘<span>onloadeddata</span>’</span>,
+                <span class="attr-name">‘<span>onloadedmetadata</span>’</span>,
+                <span class="attr-name">‘<span>onloadstart</span>’</span>, <span
+                      class="attr-name">‘<span>onmousedown</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseenter</span>’</span>,
+                <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                <span class="attr-name">‘<span>onmousemove</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseout</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseover</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                      class="attr-name">‘<span>onpaste</span>’</span>, <span
+                      class="attr-name">‘<span>onpause</span>’</span>, <span
+                      class="attr-name">‘<span>onplay</span>’</span>, <span
+                      class="attr-name">‘<span>onplaying</span>’</span>, <span
+                      class="attr-name">‘<span>onprogress</span>’</span>, <span
+                      class="attr-name">‘<span>onratechange</span>’</span>,
+                <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                      class="attr-name">‘<span>onresize</span>’</span>, <span
+                      class="attr-name">‘<span>onscroll</span>’</span>, <span
+                      class="attr-name">‘<span>onseeked</span>’</span>, <span
+                      class="attr-name">‘<span>onseeking</span>’</span>, <span
+                      class="attr-name">‘<span>onselect</span>’</span>, <span
+                      class="attr-name">‘<span>onshow</span>’</span>, <span
+                      class="attr-name">‘<span>onstalled</span>’</span>, <span
+                      class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                      class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                      class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                      class="attr-name">‘<span>onvolumechange</span>’</span>,
+                <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                      class="attr-name">‘<span>onwheel</span>’</span></span>
             </li>
-            <li><span class="attr-name">‘<a href="#styling-StyleElementTypeAttribute"><span>type</span></a>’</span></li>
-            <li><span class="attr-name">‘<a href="#styling-StyleElementMediaAttribute"><span>media</span></a>’</span>
+            <li><span class="attr-name">‘<{style/type}>’</span></li>
+            <li><span class="attr-name">‘<{style/media}>’</span>
             </li>
-            <li><span class="attr-name">‘<a href="#styling-StyleElementTitleAttribute"><span>title</span></a>’</span>
+            <li><span class="attr-name">‘<{style/title}>’</span>
             </li>
           </ul>
         </dd>
         <dt>DOM Interfaces:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a class="idlinterface"
-                 href="#styling-InterfaceSVGStyleElement">SVGStyleElement</a></li>
+            <li>{{SVGStyleElement}}</li>
           </ul>
         </dd>
       </dl>
@@ -223,13 +217,13 @@ element in HTML</a>.
   </dd>
 </dl>
 
-<p>The semantics and processing of a {{style element}} and its
+<p>The semantics and processing of a <{style}> element and its
 attributes must be the same as is defined for the
 <a href="https://html.spec.whatwg.org/multipage/semantics.html#the-style-element">HTML
 <span class='element-name'>style</span> element</a>.
 
 <p>The style sheet's text content is never directly rendered;
-the 'display' value for the {{style element}} element
+the 'display' value for the <{style}> element element
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
@@ -285,7 +279,7 @@ can be used to place the element in the HTML namespace.
 
 <h3 id="StyleSheetsInHTMLDocuments">Style sheets in HTML documents</h3>
 
-<p>When an SVG {{style element}} or an HTML
+<p>When an SVG <{style}> element or an HTML
 <span class="attr-name">style</span> element is used in an HTML
 document, those style sheets must apply to all HTML and
 inline SVG content in the document.  Similarly, any HTML
@@ -294,7 +288,7 @@ document must also apply its style sheet to the document.
 
 <h3 id="ElementSpecificStyling">Element-specific styling: the <span class="attr-name">class</span> and <span class="attr-name">style</span> attributes</h3>
 
-<p>As with HTML, SVG supports the <a element-attr for="core-attributes">class</a> and {{style attribute}}
+<p>As with HTML, SVG supports the <a element-attr for="core-attributes">class</a> and <a element-attr for="core-attributes">style</a>
 attributes on all elements to support element-specific styling.
 
 <p><em>Attribute definitions:</em>
@@ -337,7 +331,7 @@ attributes on all elements to support element-specific styling.
     </table>
   </dt>
   <dd>
-    <p>The {{style attribute}} attribute is used to supply a
+    <p>The <a element-attr for="core-attributes">style</a> attribute is used to supply a
     CSS declaration of an element.  The attribute is
     <a href="https://www.w3.org/TR/2013/REC-css-style-attr-20131107/#syntax">parsed as a declaration-list</a>.
   </dd>
@@ -346,12 +340,12 @@ attributes on all elements to support element-specific styling.
 <p>Aside from the way that the <a element-attr for="core-attributes">class</a> attribute is reflected in the
 SVG DOM (in the <a href="types.html#__svg__SVGElement__className">className</a>
 IDL attribute on [[#InterfaceSVGElement|SVGElement]]), the semantics and behavior of the
-<a element-attr for="core-attributes">class</a> and {{style attribute}} attributes must be the same
+<a element-attr for="core-attributes">class</a> and <a element-attr for="core-attributes">style</a> attributes must be the same
 as that for <a href="https://html.spec.whatwg.org/multipage/dom.html#global-attributes">the corresponding
 attributes in HTML</a>.
 
 <div class='example'>
-  <p>In the following example, the {{text}} element is used in
+  <p>In the following example, the <{text}> element is used in
   conjunction with the <a element-attr for="core-attributes">class</a>
   attribute to markup document messages. Messages appear in both
   English and French versions.
@@ -378,8 +372,8 @@ text.error   { fill: red; }</pre>
 </div>
 
 <div class='example'>
-  <p>This example shows how the {{style attribute}} attribute can be
-  used to style {{text}} elements similarly to the previous example:
+  <p>This example shows how the <a element-attr for="core-attributes">style</a> attribute can be
+  used to style <{text}> elements similarly to the previous example:
 
   <pre>
 &lt;text style="fill: green;" lang="en"&gt;Variable declared twice&lt;/text&gt;
@@ -391,7 +385,7 @@ text.error   { fill: red; }</pre>
 <h3 id="PresentationAttributes">Presentation attributes</h3>
 
 <p>Some styling properties can be specified not only in style sheets
-and {{style attribute}} attributes, but also in
+and <a element-attr for="core-attributes">style</a> attributes, but also in
 <dfn id="TermPresentationAttribute" data-dfn-type="dfn" data-export="">presentation attributes</dfn>.
 These are attributes whose name matches (or is similar to) a given CSS property
 and whose value is parsed as a value of that property. Presentation
@@ -429,20 +423,20 @@ the presentation attribute name is the same as the property name, in lower-case 
   </tr>
    <tr>
     <td>
-      {{cx}},
-      {{cy}}
+      'cx',
+      'cy'
     </td>
     <td>
-      {{circle}} and {{ellipse}}
+      <{circle}> and <{ellipse}>
     </td>
   </tr>
   <tr>
     <td>
-      {{height}}, {{width}}, {{x}}, {{y}}
+      'height', 'width', 'x', 'y'
     </td>
     <td>
       <{foreignObject}>,
-      {{image}},
+      <{image}>,
       <{rect}>,
       <{svg}>,
       <{symbol}>, and
@@ -451,31 +445,31 @@ the presentation attribute name is the same as the property name, in lower-case 
   </tr>
   <tr>
     <td>
-      {{r}}
+      'r'
     </td>
     <td>
-      {{circle}}
-    </td>
-  </tr>
-  <tr>
-    <td>
-      {{rx}}, {{ry}}
-    </td>
-    <td>
-      {{ellipse}} and <{rect}>
+      <{circle}>
     </td>
   </tr>
   <tr>
     <td>
-      {{d}}
+      'rx', 'ry'
     </td>
     <td>
-      {{path}}
+      <{ellipse}> and <{rect}>
     </td>
   </tr>
   <tr>
     <td>
-      {{fill}}
+      'd'
+    </td>
+    <td>
+      <{path}>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      'fill'
     </td>
     <td>
       Any element in the SVG namespace except for <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a>,
@@ -491,18 +485,18 @@ the presentation attribute name is the same as the property name, in lower-case 
       <dl>
         <dt>[[#TransformProperty|transform]]</dt>
         <dd>
-          Any element in the SVG namespace with the exception of the {{pattern}},
-          {{linearGradient}} and {{radialGradient}} elements.
+          Any element in the SVG namespace with the exception of the <{pattern}>,
+          <{linearGradient}> and <{radialGradient}> elements.
         </dd>
         <dt><{pattern/patternTransform}></dt>
         <dd>
-            <{pattern}}. {{pattern/patternTransform}> gets mapped to the
+            <{pattern}>. <{pattern/patternTransform}> gets mapped to the
             [[#TransformProperty|transform]] CSS property
             [<a href='refs.html#ref-css-transforms-1'>css-transforms-1</a>].
         </dd>
         <dt><{linearGradient/gradientTransform}></dt>
         <dd>
-            {{linearGradient}} and {{radialGradient}} elements.
+            <{linearGradient}> and <{radialGradient}> elements.
             <{linearGradient/gradientTransform}> gets mapped to the [[#TransformProperty|transform]]
             CSS property [<a href='refs.html#ref-css-transforms-1'>css-transforms-1</a>].
         </dd>
@@ -511,64 +505,64 @@ the presentation attribute name is the same as the property name, in lower-case 
   </tr>
   <tr>
     <td>
-      {{alignment-baseline}},
-      {{baseline-shift}},
-      {{clip-path}},
-      {{clip-rule}},
-      {{color}},
-      {{color-interpolation}},
-      {{color-interpolation-filters}},
-      {{cursor property}},
-      {{direction}},
+      'alignment-baseline',
+      'baseline-shift',
+      'clip-path',
+      'clip-rule',
+      'color',
+      'color-interpolation',
+      'color-interpolation-filters',
+      'cursor',
+      'direction',
       'display',
-      {{dominant-baseline}},
+      'dominant-baseline',
       'fill-opacity',
       'fill-rule',
-      {{filter property}},
-      {{flood-color}},
-      {{flood-opacity}},
-      {{font-family}},
-      {{font-size}},
-      {{font-size-adjust}},
-      {{font-stretch}},
-      {{font-style}},
-      {{font-variant}},
-      {{font-weight}},
-      {{glyph-orientation-vertical}},
+      'filter',
+      'flood-color',
+      'flood-opacity',
+      'font-family',
+      'font-size',
+      'font-size-adjust',
+      'font-stretch',
+      'font-style',
+      'font-variant',
+      'font-weight',
+      'glyph-orientation-vertical',
       [[SVG2#ImageRendering|image-rendering]],
-      {{letter-spacing}},
-      {{lighting-color}},
-      {{marker-end}},
-      {{marker-mid}},
-      {{marker-start}},
-      {{mask property}},
-      {{mask-type}},
-      {{opacity}},
+      'letter-spacing',
+      'lighting-color',
+      'marker-end',
+      'marker-mid',
+      'marker-start',
+      'mask',
+      'mask-type',
+      'opacity',
       [[#OverflowAndClipProperties|overflow]],
-      [=paint-order=],
-      {{pointer-events}},
-      {{shape-rendering}},
-      {{stop-color}},
+      'paint-order',
+      'pointer-events',
+      'shape-rendering',
+      'stop-color',
       'stop-opacity',
-      {{stroke}},
-      {{stroke-dasharray}},
-      {{stroke-dashoffset}},
-      {{stroke-linecap}},
-      {{stroke-linejoin}},
-      {{stroke-miterlimit}},
+      'stroke',
+      'stroke-dasharray',
+      'stroke-dashoffset',
+      'stroke-linecap',
+      'stroke-linejoin',
+      'stroke-miterlimit',
       'stroke-opacity',
-      {{stroke-width}},
-      {{text-anchor}},
-      {{text-decoration}},
-      {{text-overflow}},
-      {{text-rendering}},
-      {{transform-origin}},
-      {{unicode-bidi}},
-      {{vector-effect}},
+      'stroke-width',
+      'text-anchor',
+      'text-decoration',
+      'text-overflow',
+      'text-rendering',
+      'transform-origin',
+      'unicode-bidi',
+      'vector-effect',
       'visibility',
-      {{white-space}},
-      {{word-spacing}},
-      {{writing-mode}}
+      'white-space',
+      'word-spacing',
+      'writing-mode'
     </td>
     <td>
       Any element in the SVG namespace.
@@ -585,10 +579,10 @@ the presentation attribute name is the same as the property name, in lower-case 
 <span class="attr-name">width</span> and
 <span class="attr-name">height</span> attributes are not
 always presentation attributes.
-For example, the <{tspan/x}> attribute on {{text}} and {{tspan}}
-is not a presentation attribute for the {{x}} property,
-and the <{radialGradient/r}> attribute on a {{radialGradient}}
-is not a presentation attribute for the {{r}} property.
+For example, the <{text/x}> attribute on <{text}> and <{tspan}>
+is not a presentation attribute for the 'x' property,
+and the <{radialGradient/r}> attribute on a <{radialGradient}>
+is not a presentation attribute for the 'r' property.
 
 
 <!--
@@ -599,15 +593,15 @@ their property.
 
 <table class='vert' style='font-size: 90%'>
   <tr><th>Property</th><th>Element</th><th>Presentation attribute name</th></tr>
-  <tr><td>[[#TransformProperty|transform]]</td><td>{{linearGradient}} and {{radialGradient}}</td><td><span class="attr-name">gradientTransform</span></td></tr>
-  <tr><td>[[#TransformProperty|transform]]</td><td>{{pattern}}</td><td><span class="attr-name">patternTransform</span></td></tr>
+  <tr><td>[[#TransformProperty|transform]]</td><td><{linearGradient}> and <{radialGradient}></td><td><span class="attr-name">gradientTransform</span></td></tr>
+  <tr><td>[[#TransformProperty|transform]]</td><td><{pattern}></td><td><span class="attr-name">patternTransform</span></td></tr>
 </table>
 -->
 
 <p class='note'>In the future, any new properties that apply
 to SVG content will not gain presentation attributes.  Therefore,
 authors are suggested to use styling properties, either through
-inline {{style attribute}} properties or style sheets,
+inline <a element-attr for="core-attributes">style</a> properties or style sheets,
 rather than presentation attributes, for styling SVG content.
 
 <p>Animation of presentation attributes is equivalent to
@@ -623,51 +617,51 @@ animating the corresponding property.
   <li>the 'display', [[#OverflowAndClipProperties|overflow]] and 'visibility' properties
     [<a href='refs.html#ref-css2'>CSS2</a>]</li>
 
-  <li>the {{cursor property}} and {{text-overflow}} property
+  <li>the 'cursor' and 'text-overflow' property
     [<a href='refs.html#ref-css-overflow-3'>css-overflow-3</a>]</li>
 
-  <li>the {{clip-path}}, {{clip-rule}} and
-    {{mask property}} properties
+  <li>the 'clip-path', 'clip-rule' and
+    'mask' properties
     [<a href='refs.html#ref-css-masking-1'>css-masking-1</a>]</li>
 
-  <li>the {{color}} and {{opacity}} properties
+  <li>the 'color' and 'opacity' properties
     [<a href='refs.html#ref-css-color-3'>css-color-3</a>]</li>
 
-  <li>the {{color-interpolation-filters}}, {{filter property}},
-    {{flood-color}}, {{flood-opacity}}
-    and {{lighting-color}} properties
+  <li>the 'color-interpolation-filters', 'filter',
+    'flood-color', 'flood-opacity'
+    and 'lighting-color' properties
     [<a href='refs.html#ref-filter-effects-1'>filter-effects-1</a>]</li>
 
-  <li>the {{isolation property}} property
+  <li>the 'isolation' property
     [<a href='refs.html#ref-compositing-1'>compositing-1</a>]</li>
 
-  <li>the [[#TransformProperty|transform]], {{transform-box}} and {{transform-origin}} properties
+  <li>the [[#TransformProperty|transform]], 'transform-box' and 'transform-origin' properties
     [<a href='refs.html#ref-css-transforms-1'>css-transforms-1</a>]</li>
 
-  <li>the {{letter-spacing}}, {{text-align}},
-    {{text-align-last}}, {{text-indent}}
-    and {{word-spacing}} properties
+  <li>the 'letter-spacing', 'text-align',
+    'text-align-last', 'text-indent'
+    and 'word-spacing' properties
     [<a href='refs.html#ref-css-text-3'>css-text-3</a>]</li>
 
-  <li>the {{white-space}} property
+  <li>the 'white-space' property
     [<a href='refs.html#ref-css-text-4'>css-text-4</a>]</li>
 
-  <li>the {{vertical-align}}, {{dominant-baseline}},
-    {{alignment-baseline}}, and {{baseline-shift}} properties
+  <li>the 'vertical-align', 'dominant-baseline',
+    'alignment-baseline', and 'baseline-shift' properties
     [<a href='refs.html#ref-css-inline-3'>css-inline-3</a>]</li>
 
-  <li>the {{direction}}, {{text-orientation}} and
-    {{writing-mode}} properties
+  <li>the 'direction', 'text-orientation' and
+    'writing-mode' properties
     [<a href='refs.html#ref-css-writing-modes-3'>css-writing-modes-3</a>]</li>
 
-  <li>the {{font}}, {{font-family}}, {{font-feature-settings}},
-    {{font-kerning}}, {{font-size}}, {{font-size-adjust}},
-    {{font-stretch}}, {{font-style}}, {{font-variant}} (along with its subproperties)
-    and {{font-weight}} properties
+  <li>the 'font', 'font-family', 'font-feature-settings',
+    'font-kerning', 'font-size', 'font-size-adjust',
+    {{font-stretch}}, 'font-style', 'font-variant' (along with its subproperties)
+    and 'font-weight' properties
     [<a href='refs.html#ref-css-fonts-3'>css-fonts-3</a>]</li>
 
-  <li>the {{text-decoration}}, {{text-decoration-line}}, {{text-decoration-style}}
-    and {{text-decoration-color}} properties
+  <li>the 'text-decoration', 'text-decoration-line', 'text-decoration-style'
+    and 'text-decoration-color' properties
     [<a href='refs.html#ref-css-text-decor-3'>css-text-decor-3</a>]</li>
 
 </ul>
@@ -675,8 +669,7 @@ animating the corresponding property.
 
 <h3 id="UAStyleSheet">User agent style sheet</h3>
 
-<p>The following <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/cascade.html#cascade">user
-agent style sheet</a> must be applied in all SVG user agents.
+<p>The following <dfn id="TermUserAgentStyleSheet" data-dfn-type="dfn" data-export="">user agent style sheet</dfn> must be applied in all SVG user agents.
 
 <pre>
 @namespace url(http://www.w3.org/2000/svg);
@@ -734,9 +727,9 @@ The other elements, and their child content, are never rendered directly.
 
 
 <p class='note'>CSS Transforms defines that the initial value for
-{{transform-origin}} is <span class='prop-value' style='white-space: nowrap'>50% 50%</span>.
+'transform-origin' is <span class='prop-value' style='white-space: nowrap'>50% 50%</span>.
 Since elements in SVG must, by default, transform around their origin at (0, 0),
-{{transform-origin}} is overridden and set to a default value of
+'transform-origin' is overridden and set to a default value of
 <span class='prop-value' style='white-space: nowrap'>0 0</span> for all SVG elements
 (except for root <{svg}> elements and <{svg}> elements that are the child of a
 <{foreignObject}> element or an element in a non-SVG namespace; these elements
@@ -799,34 +792,34 @@ also supported in SVG user agents:
 
   <li>all pseudo-classes defined in CSS 2.1 (including :hover, :link, :active, :visited, :focus, :first-child and :lang)</li>
 
-  <li>the ::first-letter and ::first-line pseudo-elements defined in CSS 2.1 (on {{text}} elements)</li>
+  <li>the ::first-letter and ::first-line pseudo-elements defined in CSS 2.1 (on <{text}> elements)</li>
 </ul>
 
 
 
-<h3 id="DOMInterfaces">DOM interfaces</h3>
+<h3 id="styling-dom">DOM interfaces</h3>
 
 <h4 id="InterfaceSVGStyleElement">Interface SVGStyleElement</h4>
 
 
 
-<p>An [[#InterfaceSVGStyleElement|SVGStyleElement]] object represents a {{style element}} element
+<p>An [[#InterfaceSVGStyleElement|SVGStyleElement]] object represents a <{style}> element element
 in the DOM.
 
 <pre class="idl">
 [<a>Exposed</a>=Window]
 interface <b>SVGStyleElement</b> : <a>SVGElement</a> {
-  attribute DOMString <a href="styling.html#__svg__SVGStyleElement__type">type</a>;
-  attribute DOMString <a href="styling.html#__svg__SVGStyleElement__media">media</a>;
-  attribute DOMString <a href="styling.html#__svg__SVGStyleElement__title">title</a>;
-  attribute boolean <a href="styling.html#__svg__SVGStyleElement__disabled">disabled</a>;
+  attribute DOMString <b id="__svg__SVGStyleElement__type">type</b>;
+  attribute DOMString <b id="__svg__SVGStyleElement__media">media</b>;
+  attribute DOMString <b id="__svg__SVGStyleElement__title">title</b>;
+  attribute boolean <b id="__svg__SVGStyleElement__disabled">disabled</b>;
 };
 
 <a>SVGStyleElement</a> includes <a>LinkStyle</a>;
 </pre>
 
-<p>The <b id="__svg__SVGStyleElement__type">type</b>,
-<b id="__svg__SVGStyleElement__media">media</b> and
-<b id="__svg__SVGStyleElement__title">title</b> IDL attributes
-[=reflect=] the {{type}}, {{media}} and {{title}}
+<p>The type,
+media and
+title IDL attributes
+[=reflect=] the <code>type</code>, <code>media</code> and <{title}>
 content attributes, respectively.

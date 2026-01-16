@@ -103,7 +103,7 @@ Features</h4>
             [=event attribute|onclick=] on SVG elements), or any other 
             script defined 
             by other Web platform features used in the document, such 
-            as any HTML {{script}} elements. When script execution is 
+            as any HTML <{script}> elements. When script execution is 
             disabled in an SVG document, no script in the document 
             must be run.
 
@@ -474,7 +474,7 @@ Processing modes for SVG sub-resource documents</h3>
                 <iframe sandbox="" class="embedcontext" src="images/conform/smiley.svg" style="border: 0"  aria-label="smiley face, as an iframe">This browser does not support embedded SVG images.</iframe>
             </td>
             <td>
-                <img id="js-embed-img" class="embedcontext" alt="smiley face, as an image" src="images/conform/smiley.svg">
+                <img no-autosize id="js-embed-img" class="embedcontext" alt="smiley face, as an image" src="images/conform/smiley.svg">
             </td>
             <td>
                 <div class="embedcontext" style="background-image: url(images/conform/smiley.svg);"  aria-label="smiley face, as a background image">&#xA0;</div>

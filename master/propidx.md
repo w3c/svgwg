@@ -20,7 +20,7 @@
       </thead>
       <tbody>
         <tr>
-          <th>{{color-interpolation}}</th>
+          <th>'color-interpolation'</th>
           <td>auto | sRGB | linearRGB </td>
           <td>sRGB</td>
           <td>[=container elements=], [=graphics elements=], [=gradient elements=], <{use}> and <{animate}></td>
@@ -31,10 +31,10 @@
           <td>as specified</td>
         </tr>
         <tr>
-          <th>{{cx}}</th>
+          <th>'cx'</th>
           <td><<length-percentage>></td>
           <td>0</td>
-          <td>{{circle}} and {{ellipse}} elements</td>
+          <td><{circle}> and <{ellipse}> elements</td>
           <td>no</td>
           <td>refer to the width of the current SVG viewport (see
               <a href="coords.html#Units">Units</a>)</td>
@@ -42,10 +42,10 @@
           <td>an absolute length or percentage</td>
         </tr>
         <tr>
-          <th>{{cy}}</th>
+          <th>'cy'</th>
           <td><<length-percentage>></td>
           <td>0</td>
-          <td>{{circle}} and {{ellipse}} elements</td>
+          <td><{circle}> and <{ellipse}> elements</td>
           <td>no</td>
           <td>refer to the height of the current SVG viewport (see
               <a href="coords.html#Units">Units</a>)</td>
@@ -54,7 +54,7 @@
           <td>an absolute length or percentage</td>
         </tr>
         <tr>
-          <th>{{fill}}</th>
+          <th>'fill'</th>
           <td>&lt;paint&gt; (See <a href="painting.html#SpecifyingPaint">Specifying
           paint</a>)</td>
           <td>black</td>
@@ -67,7 +67,7 @@
         </tr>
         <tr>
           <th>'fill-opacity'</th>
-          <td>&lt;‘{{opacity}}’&gt;</td>
+          <td>&lt;‘'opacity'’&gt;</td>
           <td>1</td>
           <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
@@ -99,7 +99,7 @@
           <td>as specified</td>
         </tr>
         <tr>
-          <th>{{marker property}}</th>
+          <th>'marker'</th>
           <td>see individual properties</td>
           <td>see individual properties</td>
           <td>[=shapes=]</td>
@@ -110,9 +110,9 @@
           <td>see individual properties</td>
         </tr>
         <tr>
-          <th>{{marker-end}}<br />
-           {{marker-mid}}<br />
-           {{marker-start}}</th>
+          <th>'marker-end'<br />
+           'marker-mid'<br />
+           'marker-start'</th>
           <td>none | <a>&lt;url&gt;</a></td>
           <td>none</td>
           <td>[=shapes=]</td>
@@ -134,7 +134,7 @@
           <td>as specified</td>
         </tr>
         <tr>
-          <th>{{pointer-events}}</th>
+          <th>'pointer-events'</th>
           <td>auto | bounding-box | visiblePainted | visibleFill | visibleStroke |
           visible |<br />
            painted | fill | stroke | all | none </td>
@@ -147,10 +147,10 @@
           <td>as specified</td>
         </tr>
         <tr>
-          <th>{{r}}</th>
+          <th>'r'</th>
           <td><<length-percentage>></td>
           <td>0</td>
-          <td>{{circle}} element</td>
+          <td><{circle}> element</td>
           <td>no</td>
           <td>refer to the normalized diagonal of the current SVG viewport (see
               <a href="coords.html#Units">Units</a>)</td>
@@ -158,10 +158,10 @@
           <td>an absolute length or percentage</td>
         </tr>
         <tr>
-          <th>{{rx}}</th>
+          <th>'rx'</th>
           <td><<length-percentage>> | auto</td>
           <td>auto</td>
-          <td>{{ellipse}}, <{rect}> elements</td>
+          <td><{ellipse}>, <{rect}> elements</td>
           <td>no</td>
           <td>refer to the width of the current SVG viewport (see
               <a href="coords.html#Units">Units</a>)</td>
@@ -169,10 +169,10 @@
           <td>an absolute length or percentage</td>
         </tr>
         <tr>
-          <th>{{ry}}</th>
+          <th>'ry'</th>
           <td><<length-percentage>> | auto</td>
           <td>auto</td>
-          <td>{{ellipse}}, <{rect}> elements</td>
+          <td><{ellipse}>, <{rect}> elements</td>
           <td>no</td>
           <td>refer to the height of the current SVG viewport (see
               <a href="coords.html#Units">Units</a>)</td>
@@ -181,7 +181,7 @@
           <td>an absolute length or percentage</td>
         </tr>
         <tr>
-          <th>{{shape-rendering}}</th>
+          <th>'shape-rendering'</th>
           <td>auto | optimizeSpeed | crispEdges |<br />
            geometricPrecision </td>
           <td>auto</td>
@@ -193,10 +193,10 @@
           <td>as specified</td>
         </tr>
         <tr>
-          <th>{{stop-color}}</th>
-          <td>&lt;‘{{color}}’&gt;</td>
+          <th>'stop-color'</th>
+          <td>&lt;‘'color'’&gt;</td>
           <td>black</td>
-          <td>{{stop}} elements</td>
+          <td><{stop}> elements</td>
           <td>no</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -205,9 +205,9 @@
         </tr>
         <tr>
           <th>'stop-opacity'</th>
-          <td>&lt;‘{{opacity}}’&gt;</td>
+          <td>&lt;‘'opacity'’&gt;</td>
           <td>1</td>
-          <td>{{stop}} elements</td>
+          <td><{stop}> elements</td>
           <td>no</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -215,7 +215,7 @@
           <td>the specified value converted to a number, clamped to the range [0,1]</td>
         </tr>
         <tr>
-          <th>{{stroke}}</th>
+          <th>'stroke'</th>
           <td>&lt;paint&gt; (See <a href="painting.html#SpecifyingPaint">Specifying
           paint</a>)</td>
           <td>none</td>
@@ -227,7 +227,7 @@
           <td>as specified, but with [=&lt;color>=] values computed and [=&lt;url>=] values made absolute</td>
         </tr>
         <tr>
-          <th>{{stroke-dasharray}}</th>
+          <th>'stroke-dasharray'</th>
           <td>none | &lt;dasharray&gt; </td>
           <td>none</td>
           <td>[=shapes=] and [=text content elements=]</td>
@@ -238,7 +238,7 @@
           <td>as comma separated list of absolute lengths or percentages, numbers converted to absolute lengths first, or keyword specified</td>
         </tr>
         <tr>
-          <th>{{stroke-dashoffset}}</th>
+          <th>'stroke-dashoffset'</th>
           <td><<length-percentage>> | <<number>></td>
           <td>0</td>
           <td>[=shapes=] and [=text content elements=]</td>
@@ -249,7 +249,7 @@
           <td>as absolute length or percentage; numbers converted to absolute length first</td>
         </tr>
         <tr>
-          <th>{{stroke-linecap}}</th>
+          <th>'stroke-linecap'</th>
           <td>butt | round | square </td>
           <td>butt</td>
           <td>[=shapes=] and [=text content elements=]</td>
@@ -260,7 +260,7 @@
           <td>as specified</td>
         </tr>
         <tr>
-          <th>{{stroke-linejoin}}</th>
+          <th>'stroke-linejoin'</th>
           <td>miter | round | bevel </td>
           <td>miter</td>
           <td>[=shapes=] and [=text content elements=]</td>
@@ -271,7 +271,7 @@
           <td>as specified</td>
         </tr>
         <tr>
-          <th>{{stroke-miterlimit}}</th>
+          <th>'stroke-miterlimit'</th>
           <td><<number>> (non-negative)</td>
           <td>4</td>
           <td>[=shapes=] and [=text content elements=]</td>
@@ -283,7 +283,7 @@
         </tr>
         <tr>
           <th>'stroke-opacity'</th>
-          <td>&lt;‘{{opacity}}’&gt;</td>
+          <td>&lt;‘'opacity'’&gt;</td>
           <td>1</td>
           <td>[=shapes=] and [=text content elements=]</td>
           <td>yes</td>
@@ -293,7 +293,7 @@
           <td>the specified value converted to a number, clamped to the range [0,1]</td>
         </tr>
         <tr>
-          <th>{{stroke-width}}</th>
+          <th>'stroke-width'</th>
           <td><<length-percentage>> | <<number>></td>
           <td>1px</td>
           <td>[=shapes=] and [=text content elements=]</td>
@@ -304,7 +304,7 @@
           <td>as absolute length or percentage; numbers converted to absolute length first</td>
         </tr>
         <tr>
-          <th>{{text-anchor}}</th>
+          <th>'text-anchor'</th>
           <td>start | middle | end </td>
           <td>start</td>
           <td>[=text content elements=]</td>
@@ -315,11 +315,11 @@
           <td>as specified</td>
         </tr>
         <tr>
-          <th>{{text-rendering}}</th>
+          <th>'text-rendering'</th>
           <td>auto | optimizeSpeed | optimizeLegibility |<br />
            geometricPrecision </td>
           <td>auto</td>
-          <td>{{text}} elements</td>
+          <td><{text}> elements</td>
           <td>yes</td>
           <td>N/A</td>
           <td><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/media.html#visual-media-group">visual</a></td>
@@ -327,7 +327,7 @@
           <td>as specified</td>
         </tr>
         <tr>
-          <th>{{vector-effect}}</th>
+          <th>'vector-effect'</th>
           <td>non-scaling-stroke | none</td>
           <td>none</td>
           <td>[=graphics elements=] and <{use}></td>
@@ -338,11 +338,11 @@
           <td>as specified</td>
         </tr>
         <tr>
-          <th>{{x}}</th>
+          <th>'x'</th>
           <td><<length-percentage>></td>
           <td>0</td>
           <td><{svg}>, <{rect}>,
-            {{image}}, <{foreignObject}> elements</td>
+            <{image}>, <{foreignObject}> elements</td>
           <td>no</td>
           <td>refer to the width of the current SVG viewport (see
               <a href="coords.html#Units">Units</a>)</td>
@@ -350,11 +350,11 @@
           <td>an absolute length or percentage</td>
         </tr>
         <tr>
-          <th>{{y}}</th>
+          <th>'y'</th>
           <td><<length-percentage>></td>
           <td>0</td>
           <td><{svg}>, <{rect}>,
-            {{image}}, <{foreignObject}> elements</td>
+            <{image}>, <{foreignObject}> elements</td>
           <td>no</td>
           <td>refer to the height of the current SVG viewport (see
               <a href="coords.html#Units">Units</a>)</td>
@@ -366,6 +366,6 @@
     </table>
 
 <ol class='notes'>
-  <li id="note1"><sup>[1]</sup> The {{font property}}, {{font-size-adjust}} and {{stroke-dasharray}}
+  <li id="note1"><sup>[1]</sup> The {{font property}}, 'font-size-adjust' and 'stroke-dasharray'
   properties are animatable but do not support additive animation.</li>
 </ol>

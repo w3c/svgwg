@@ -1,6 +1,6 @@
 <h2 id="scripting-interactivity">Scripting and Interactivity</h2>
 
-<h3 id="Introduction">Introduction</h3>
+<h3 id="interact-intro">Introduction</h3>
 
 <p>SVG content can be interactive (i.e., responsive to
 user-initiated events) by utilizing the following features in
@@ -278,7 +278,7 @@ and the event types defined in
 All elements in the SVG namespace support
 [=event attributes=] for these events;
 matching IDL properties are included in the base [[#InterfaceSVGElement|SVGElement]] interface
-via the [=GlobalEventHandlers=] mixin.
+via the {{GlobalEventHandlers}} mixin.
 
 
 <p>
@@ -338,7 +338,7 @@ equivalent to a mouse click.
 <em>target element</em> of a given pointer event. The target
 element is the topmost graphics element whose relevant
 graphical content is under the pointer at the time of the
-event. (See property {{pointer-events}} for a description
+event. (See property 'pointer-events' for a description
 of how to determine whether an element's relevant graphical
 content is under the pointer, and thus in which circumstances
 that graphic element can be the target element for a pointer
@@ -372,7 +372,7 @@ then the event is ignored.
   moving the pointing device, or by changes in the position, shape and
   other attributes of elements in the document.  Hit-testing is also known
   as <em>hit detection</em> or <em>picking</em>.  See also the definition of the
-  {{pointer-events}} property.</dd>
+  'pointer-events' property.</dd>
 
 </dl>
 
@@ -387,8 +387,8 @@ then the event is ignored.
 
 <p>Determining whether a pointer event results in a positive [=hit-test=]
 depends upon the position of the pointer, the size and shape of the
-[=graphics element=], and the computed value of the {{pointer-events}}
-property on the element.  The definition of the {{pointer-events}}
+[=graphics element=], and the computed value of the 'pointer-events'
+property on the element.  The definition of the 'pointer-events'
 property below describes the exact region that is sensitive to pointer
 events for a given type of graphics element.
 
@@ -422,7 +422,7 @@ DOM event, is as follows:
   DOM method, then no further processing for this element is performed, and the
   event follows the <a href="https://www.w3.org/TR/uievents/#event-flow">event dispatch and DOM event flow processing</a> ([<a href="refs.html#ref-uievents">uievents</a>]);</li>
 
-  <li>If the element has an associated title or description, such as a {{title element}}
+  <li>If the element has an associated title or description, such as a <{title}> element
   element, and the user agent supports the display
   of such information (e.g. via a tooltip or status-bar message), that information
   should be displayed, as appropriate to the type of pointer event;</li>
@@ -485,21 +485,21 @@ opacity.  If an author wishes to achieve an effect where the transparent parts
 of a mask allow pointer events to pass to an element below, a combination of
 masking and clipping may be used.
 
-<p>The {{filter property}} property has no effect on pointer events
-processing, and must in this context be treated as if the {{filter property}}
+<p>The 'filter' property has no effect on pointer events
+processing, and must in this context be treated as if the 'filter'
 wasn't specified.
 
-<p>For example, suppose a circle with a {{stroke}} of
+<p>For example, suppose a circle with a 'stroke' of
 <span class="prop-value">red</span> (i.e., the outline is solid red) and a
-{{fill}} of <span class="prop-value">none</span> (i.e., the interior is not
-painted) is rendered directly on top of a rectangle with a {{fill}} of
+'fill' of <span class="prop-value">none</span> (i.e., the interior is not
+painted) is rendered directly on top of a rectangle with a 'fill' of
 <span class="prop-value">blue</span>. The author might want the circle to be
 the target of pointer events only when the pointer is over the perimeter of
 the circle. When the pointer is over the interior of the circle, the author
 might want the underlying rectangle to be the target element of pointer
 events.
 
-<p>The {{pointer-events}} property specifies under what circumstances a
+<p>The 'pointer-events' property specifies under what circumstances a
 given element can be the target element for a pointer event. It affects
 the circumstances under which the following are processed:
 
@@ -568,9 +568,9 @@ the circumstances under which the following are processed:
   the 'visibility' property is set to
   <span class="prop-value">visible</span> and when the pointer is over a
   "painted" area. The pointer is over a painted area if it is over the
-  interior (i.e., fill) of the element and the {{fill}} property has
+  interior (i.e., fill) of the element and the 'fill' property has
   an actual value other than <span class="prop-value">none</span> or it
-  is over the perimeter (i.e., stroke) of the element and the {{stroke}}
+  is over the perimeter (i.e., stroke) of the element and the 'stroke'
   property is set to a value other than <span class="prop-value">none</span>.</dd>
 
   <dt><span class="prop-value">visibleFill</span></dt>
@@ -578,47 +578,47 @@ the circumstances under which the following are processed:
   'visibility'
   property is set to <span class="prop-value">visible</span> and when the
   pointer is over the interior (i.e., fill) of the element. The value of
-  the {{fill}} property does not affect event processing.</dd>
+  the 'fill' property does not affect event processing.</dd>
 
   <dt><span class="prop-value">visibleStroke</span></dt>
   <dd>The given element can be the target element for pointer events when the
   'visibility' property is set to <span class="prop-value">visible</span>
   and when the pointer is over the perimeter (i.e., stroke) of the element.
-  The value of the {{stroke}} property does not affect event processing.</dd>
+  The value of the 'stroke' property does not affect event processing.</dd>
 
   <dt><span class="prop-value">visible</span></dt>
   <dd>The given element can be the target element for pointer events when the
   'visibility' property is set to <span class="prop-value">visible</span>
   and the pointer is over either the interior (i.e., fill) or the perimeter
-  (i.e., stroke) of the element. The values of the {{fill}} and
-  {{stroke}} do not affect event processing.</dd>
+  (i.e., stroke) of the element. The values of the 'fill' and
+  'stroke' do not affect event processing.</dd>
 
   <dt><span class="prop-value">painted</span></dt>
   <dd>The given element can be the target element for pointer events when the
   pointer is over a "painted" area. The pointer is over a painted area if
-  it is over the interior (i.e., fill) of the element and the {{fill}}
+  it is over the interior (i.e., fill) of the element and the 'fill'
   property has an actual value other than
   <span class="prop-value">none</span> or it is over the perimeter (i.e.,
-  stroke) of the element and the {{stroke}} property has an actual
+  stroke) of the element and the 'stroke' property has an actual
   value other than <span class="prop-value">none</span>. The value of the
   'visibility' property does not affect event processing.</dd>
 
   <dt><span class="prop-value">fill</span></dt>
   <dd>The given element can be the target element for pointer events when the
   pointer is over the interior (i.e., fill) of the element. The values of
-  the {{fill}} and 'visibility' properties do not affect event
+  the 'fill' and 'visibility' properties do not affect event
   processing.</dd>
 
   <dt><span class="prop-value">stroke</span></dt>
   <dd>The given element can be the target element for pointer events when the
   pointer is over the perimeter (i.e., stroke) of the element. The values
-  of the {{stroke}} and 'visibility' properties do not affect
+  of the 'stroke' and 'visibility' properties do not affect
   event processing.</dd>
 
   <dt><span class="prop-value">all</span></dt>
   <dd>The given element can be the target element for pointer events whenever
   the pointer is over either the interior (i.e., fill) or the perimeter
-  (i.e., stroke) of the element. The values of the {{fill}}, {{stroke}}
+  (i.e., stroke) of the element. The values of the 'fill', 'stroke'
   and 'visibility' properties do not affect event processing.</dd>
 
   <dt><span class="prop-value">none</span></dt>
@@ -630,8 +630,8 @@ the circumstances under which the following are processed:
 <ul>
   <li>The value <span class="prop-value">visiblePainted</span> means that the
   text string can receive events anywhere within the character cell if
-  either the {{fill}} property is set to a value other than
-  <span class="prop-value">none</span> or the {{stroke}} property is set
+  either the 'fill' property is set to a value other than
+  <span class="prop-value">none</span> or the 'stroke' property is set
   to a value other than <span class="prop-value">none</span>, with the
   additional requirement that the 'visibility' property is set to
   <span class="prop-value">visible</span>.</li>
@@ -641,20 +641,20 @@ the circumstances under which the following are processed:
   <span class="prop-value">visible</span> are equivalent and indicate that the
   text string can receive events anywhere within the character cell if the
   'visibility' property is set to <span class="prop-value">visible</span>.
-  The values of the {{fill}} and {{stroke}} properties do not affect
+  The values of the 'fill' and 'stroke' properties do not affect
   event processing.</li>
 
   <li>The value <span class="prop-value">painted</span> means that the text
   string can receive events anywhere within the character cell if either
-  the {{fill}} property is set to a value other than
-  <span class="prop-value">none</span> or the {{stroke}} property is set to
+  the 'fill' property is set to a value other than
+  <span class="prop-value">none</span> or the 'stroke' property is set to
   a value other than <span class="prop-value">none</span>.  The value of the
   'visibility' property does not affect event processing.</li>
 
   <li>The values <span class="prop-value">fill</span>,
   <span class="prop-value">stroke</span> and <span class="prop-value">all</span>
   are equivalent and indicate that the text string can receive events anywhere
-  within the character cell.  The values of the {{fill}}, {{stroke}}
+  within the character cell.  The values of the 'fill', 'stroke'
   and 'visibility' properties do not affect event processing.</li>
 
   <li>The value <span class="prop-value">none</span> indicates that the given
@@ -699,9 +699,9 @@ area, the [=object bounding box=], of the element. See processing for raster
 images above. Useragents may allow the foreign content of a <{foreignObject}>
 element to be target of hit-testing as well.
 
-<p>The values of properties {{opacity}},
-'fill-opacity', 'stroke-opacity', {{fill}} and
-{{stroke}} do not affect event processing.
+<p>The values of properties 'opacity',
+'fill-opacity', 'stroke-opacity', 'fill' and
+'stroke' do not affect event processing.
 
 
 <div class='ready-for-wider-review'>
@@ -765,7 +765,7 @@ element to be target of hit-testing as well.
     User agents may treat other elements as focusable,
     particularly if keyboard interaction is the only or primary means of user input.
     In particular, user agents may support using keyboard focus
-    to reveal {{title}} element text as tooltips,
+    to reveal <{title}> element text as tooltips,
     and may allow focus to reach elements which have been assigned
     listeners for mouse, pointer, or focus events.
     Authors should not rely on this behavior;
@@ -853,19 +853,19 @@ attribute.
   <p>Event attributes are not <a href="https://svgwg.org/specs/animations/#Animatable">animatable</a>.
 
   <p>Implementors may view the setting of event attributes as the
-  creation and registration of an [=EventListener=] on the
-  [=EventTarget=].  Such event listeners are invoked only for
+  creation and registration of an {{EventListener}} on the
+  {{EventTarget}}.  Such event listeners are invoked only for
   the "bubbling" and "at target" phases, as if false were specified
   for the <code>useCapture</code> argument to <code>addEventListener</code>.
-  This [=EventListener=] behaves in the same manner as any other
-  which may be registered on the [=EventTarget=].
+  This {{EventListener}} behaves in the same manner as any other
+  which may be registered on the {{EventTarget}}.
 
   <p>If the attribute representing the event listener is changed,
   this may be viewed as the removal of the previously registered
-  [=EventListener=] and the registration of a new one. Furthermore, no
+  {{EventListener}} and the registration of a new one. Furthermore, no
   specification is made as to the order in which event attributes
   will receive the event with regards to the other EventListeners
-  on the [=EventTarget=].
+  on the {{EventTarget}}.
 
   <div class="example">
   <p>In ECMAScript, one way to establish an event listener is to
@@ -938,7 +938,7 @@ myElement.addEventListener("click", myAction1, false)
     <table>
       <tr>
         <th>SVG 2 Requirement:</th>
-        <td>Consider allowing async/defer on {{script}}.</td>
+        <td>Consider allowing async/defer on <{script}>.</td>
       </tr>
       <tr>
         <th>Resolution:</th>
@@ -976,27 +976,27 @@ myElement.addEventListener("click", myAction1, false)
     </table>
   </div>
 
-  <p>A {{script}} element is equivalent to the {{script}} element in
+  <p>A <{script}> element is equivalent to the <{script}> element in
   HTML and thus is the place for scripts (e.g., ECMAScript). Any functions
-  defined within any {{script}} element have a "global" scope across the
+  defined within any <{script}> element have a "global" scope across the
   entire current document.
 
   <p>The script's text content is never directly rendered;
-  the 'display' value for the {{script element}} element
+  the 'display' value for the <{script}> element
   must always be set to <span class="prop-value">none</span>
   by the [=user agent style sheet=],
   and this declaration must have importance over any other CSS rule or presentation attribute.
   
 
-  <p id="ScriptElementExecution">Before attempting to execute the {{script}}
+  <p id="ScriptElementExecution">Before attempting to execute the <{script}>
   element the resolved media type value for <{script/type}> must be inspected.
   If the [=SVG user agent=] does not support the scripting language then the
-  {{script}} element must not be executed.
+  <{script}> element must not be executed.
 
     <div class="example">
         <p id="ExampleScript01">This example defines a function
         <code>circle_click</code> which is called by the
-        {{onclick}} event attribute on the {{circle}} element. The drawing
+        {{onclick}} event attribute on the <{circle}> element. The drawing
         below on the left is the initial image. The drawing below on the right shows
         the result after clicking on the circle.
 
@@ -1057,103 +1057,95 @@ myElement.addEventListener("click", myAction1, false)
                id="interact-elementdef-script">script</dfn>’</span></div>
       <dl>
         <dt>Categories:</dt>
-        <dd><a href="#render-TermNeverRenderedElement">Never-rendered element</a>, <a
-             href="#struct-TermStructurallyExternalElement">structurally external element</a></dd>
+        <dd>[=never-rendered element|Never-rendered element=], [=structurally external element=]</dd>
         <dt>Content model:</dt>
         <dd>Character data.</dd>
         <dt>Attributes:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+            <li>[=core attributes=]<span class="expanding"> — <span
+                      class="attr-name">‘<span>id</span>’</span>, <span
+                      class="attr-name">‘<span>tabindex</span>’</span>, <span
+                      class="attr-name">‘<span>autofocus</span>’</span>, <span
+                      class="attr-name">‘<span>lang</span>’</span>, <span
+                      class="attr-name">‘<span>xml:space</span>’</span>, <span
+                      class="attr-name">‘<span>class</span>’</span>, <span
+                      class="attr-name">‘<span>style</span>’</span></span></li>
             <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                      class="attr-name">‘<span>onchange</span>’</span>, <span
+                      class="attr-name">‘<span>onclick</span>’</span>, <span
+                      class="attr-name">‘<span>onclose</span>’</span>, <span
+                      class="attr-name">‘<span>oncopy</span>’</span>, <span
+                      class="attr-name">‘<span>oncuechange</span>’</span>, <span
+                      class="attr-name">‘<span>oncut</span>’</span>, <span
+                      class="attr-name">‘<span>ondblclick</span>’</span>, <span
+                      class="attr-name">‘<span>ondrag</span>’</span>, <span
+                      class="attr-name">‘<span>ondragend</span>’</span>, <span
+                      class="attr-name">‘<span>ondragenter</span>’</span>, <span
+                      class="attr-name">‘<span>ondragexit</span>’</span>, <span
+                      class="attr-name">‘<span>ondragleave</span>’</span>, <span
+                      class="attr-name">‘<span>ondragover</span>’</span>, <span
+                      class="attr-name">‘<span>ondragstart</span>’</span>, <span
+                      class="attr-name">‘<span>ondrop</span>’</span>, <span
+                      class="attr-name">‘<span>ondurationchange</span>’</span>,
+                <span class="attr-name">‘<span>onemptied</span>’</span>, <span
+                      class="attr-name">‘<span>onended</span>’</span>, <span
+                      class="attr-name">‘<span>onerror</span>’</span>, <span
+                      class="attr-name">‘<span>onfocus</span>’</span>, <span
+                      class="attr-name">‘<span>oninput</span>’</span>, <span
+                      class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                      class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                      class="attr-name">‘<span>onkeypress</span>’</span>, <span
+                      class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                      class="attr-name">‘<span>onload</span>’</span>, <span
+                      class="attr-name">‘<span>onloadeddata</span>’</span>,
+                <span class="attr-name">‘<span>onloadedmetadata</span>’</span>,
+                <span class="attr-name">‘<span>onloadstart</span>’</span>, <span
+                      class="attr-name">‘<span>onmousedown</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseenter</span>’</span>,
+                <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                <span class="attr-name">‘<span>onmousemove</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseout</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseover</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                      class="attr-name">‘<span>onpaste</span>’</span>, <span
+                      class="attr-name">‘<span>onpause</span>’</span>, <span
+                      class="attr-name">‘<span>onplay</span>’</span>, <span
+                      class="attr-name">‘<span>onplaying</span>’</span>, <span
+                      class="attr-name">‘<span>onprogress</span>’</span>, <span
+                      class="attr-name">‘<span>onratechange</span>’</span>,
+                <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                      class="attr-name">‘<span>onresize</span>’</span>, <span
+                      class="attr-name">‘<span>onscroll</span>’</span>, <span
+                      class="attr-name">‘<span>onseeked</span>’</span>, <span
+                      class="attr-name">‘<span>onseeking</span>’</span>, <span
+                      class="attr-name">‘<span>onselect</span>’</span>, <span
+                      class="attr-name">‘<span>onshow</span>’</span>, <span
+                      class="attr-name">‘<span>onstalled</span>’</span>, <span
+                      class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                      class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                      class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                      class="attr-name">‘<span>onvolumechange</span>’</span>,
+                <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                      class="attr-name">‘<span>onwheel</span>’</span></span>
             </li>
-            <li><a href="#linking-XLinkRefAttrs">deprecated xlink attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#linking-XLinkHrefAttribute"><span>xlink:href</span></a>’</span>,
+            <li><a href="#XLinkRefAttrs">deprecated xlink attributes</a><span class="expanding"> — <span
+                      class="attr-name">‘<a href="#XLinkHrefAttribute"><span>xlink:href</span></a>’</span>,
                 <span class="attr-name">‘<a
-                     href="#linking-XLinkTitleAttribute"><span>xlink:title</span></a>’</span></span></li>
-            <li><span class="attr-name">‘<a href="#interact-ScriptElementTypeAttribute"><span>type</span></a>’</span>
+                     href="#XLinkTitleAttribute"><span>xlink:title</span></a>’</span></span></li>
+            <li><span class="attr-name">‘<{script/type}>’</span>
             </li>
-            <li><span class="attr-name">‘<a href="#interact-ScriptElementHrefAttribute"><span>href</span></a>’</span>
+            <li><span class="attr-name">‘<{script/href}>’</span>
             </li>
-            <li><span class="attr-name">‘<a
-                   href="#interact-ScriptElementCrossoriginAttribute"><span>crossorigin</span></a>’</span></li>
+            <li><span class="attr-name">‘<{script/crossorigin}>’</span></li>
           </ul>
         </dd>
         <dt>DOM Interfaces:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a class="idlinterface"
-                 href="#interact-InterfaceSVGScriptElement">SVGScriptElement</a></li>
+            <li>{{SVGScriptElement}}</li>
           </ul>
         </dd>
       </dl>
@@ -1179,7 +1171,7 @@ myElement.addEventListener("click", myAction1, false)
       </table>
     </dt>
     <dd>
-      <p>The crossorigin attribute is a [=CORS settings attribute=], and unless otherwise specified follows the same processing rules as in html [[!HTML]].
+      <p>The crossorigin attribute is a <a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#cors-settings-attribute">CORS settings attribute</a>, and unless otherwise specified follows the same processing rules as in html [[!HTML]].
     </dd>
     <dt>
       <table class="attrdef def">
@@ -1198,7 +1190,7 @@ myElement.addEventListener("click", myAction1, false)
       </table>
     </dt>
     <dd>
-      Identifies the scripting language for the given {{script}} element. The value
+      Identifies the scripting language for the given <{script}> element. The value
       must be a valid media type, per
       <a href="http://www.ietf.org/rfc/rfc2046.txt">Multipurpose Internet Mail Extensions
       (MIME) Part Two</a> [<a href="refs.html#ref-rfc2046">rfc2046</a>].
@@ -1235,17 +1227,17 @@ myElement.addEventListener("click", myAction1, false)
     </dd>
   </dl>
 
-<h3 id="DOMInterfaces">DOM interfaces</h3>
+<h3 id="interact-dom">DOM interfaces</h3>
 
 <h4 id="InterfaceSVGScriptElement">Interface SVGScriptElement</h4>
 
 
 
-<p>An <a>SVGScriptElement</a> object represents a [[SVG2#InterfaceSVGScriptElement|&lt;script>]] element in the DOM.</p>
+<p>An {{SVGScriptElement}} object represents a [[SVG2#InterfaceSVGScriptElement|&lt;script>]] element in the DOM.</p>
 
 <pre class="idl">
 [<a>Exposed</a>=Window]
-interface <b>SVGScriptElement</b> : <a>SVGElement</a> {
+interface SVGScriptElement : <a>SVGElement</a> {
   attribute DOMString <a href="interact.html#__svg__SVGScriptElement__type">type</a>;
   attribute DOMString? <a href="interact.html#__svg__SVGScriptElement__crossOrigin">crossOrigin</a>;
 };
@@ -1254,7 +1246,7 @@ interface <b>SVGScriptElement</b> : <a>SVGElement</a> {
 </pre>
 
 <p>The <b id="__svg__SVGScriptElement__type">type</b> IDL attribute
-<a>reflects</a> the <a>type</a> content attribute.</p>
+<a>reflects</a> the <code>type</code> content attribute.</p>
 
 <p>The <b id="__svg__SVGScriptElement__crossOrigin">crossOrigin</b> IDL
-attribute <a>reflects</a> the <a>crossorigin</a> content attribute.</p>
+attribute <a>reflects</a> the <a href="#ScriptElementCrossoriginAttribute">crossorigin</a> content attribute.</p>

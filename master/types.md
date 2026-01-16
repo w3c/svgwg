@@ -412,7 +412,7 @@ Reflecting content attributes in the DOM</h4>
     property on the corresponding element, meaning that content and
     IDL attributes represent the same underlying data. For example,
     the [[#InterfaceSVGAnimatedLength|SVGAnimatedLength]]
-    <{SVGRectElement/ry}> in an
+    <a href="shapes.html#__svg__SVGRectElement__ry">ry</a> in an
     [[#InterfaceSVGRectElement|SVGRectElement]] reflects the 'ry'
     presentation attribute on the associated <{rect}> element.
 
@@ -422,10 +422,10 @@ Reflecting content attributes in the DOM</h4>
     <ul>
         <li>
             If the type of the reflecting IDL attribute is a
-            [=primitive type=] (such as <b>long</b>, as used by 
-            <{HTMLOrSVGElement/tabIndex}> on
+            [=primitive type=] (such as <b>long</b>, as used by
+            <a element-attr for="core-attributes">tabindex</a> on
             [[#InterfaceSVGElement|SVGElement]]) or <b>DOMString</b>
-            (as used by <{SVGStyleElement/title}> on
+            (as used by <a href="styling.html#__svg__SVGStyleElement__title">title</a> on
             [[#InterfaceSVGStyleElement|SVGStyleElement]]), then the
             rules for <a
             href="https://html.spec.whatwg.org/#reflect">reflecting
@@ -496,7 +496,7 @@ Synchronizing reflected values</h4>
             [=initial value=] if it is not present or invalid).
 
             Note: This will, for example, update the
-            <{LengthValue/value}> of an
+            value of an
             [[#InterfaceSVGLength|SVGLength]] object.
     </ol>
 
@@ -568,14 +568,12 @@ Synchronizing reflected values</h4>
 
                 <dt>[[#InterfaceSVGLength|SVGLength]]</dt>
                 <dd>Set the content attribute to the value that would
-                be returned from getting <var>value</var>'s <a
-                href="#__svg__SVGLength__valueAsString">valueAsString</a>
+                be returned from getting <var>value</var>'s {{SVGLength/valueAsString}}
                 member.</dd>
 
                 <dt>[[#InterfaceSVGAngle|SVGAngle]]</dt>
                 <dd>Set the content attribute to the value that would
-                be returned from getting <var>value</var>'s <a
-                href="#__svg__SVGAngle__valueAsString">valueAsString</a>
+                be returned from getting <var>value</var>'s valueAsString
                 member.</dd>
 
                 <dt>{{DOMRect}}</dt>
@@ -584,10 +582,10 @@ Synchronizing reflected values</h4>
                         <li>
                             Let <var>components</var> be a list of
                             four values, being the values of the
-                            <{DOMRectReadOnly/x}>,
-                            <{DOMRectReadOnly/y}>,
-                            <{DOMRectReadOnly/width}> and
-                            <{DOMRectReadOnly/height}> members of
+                            <code>x</code>,
+                            <code>y</code>,
+                            <code>width</code> and
+                            <code>height</code> members of
                             <var>value</var>.
 
                         <li>
@@ -649,8 +647,7 @@ Synchronizing reflected values</h4>
                                 <<number>> using CSS syntax, would
                                 return the number value closest to the
                                 [[#InterfaceSVGNumber|SVGNumber]]
-                                object's <a
-                                href="#__svg__SVGNumber__value">value</a>
+                                object's value
                                 member, given the implementation's
                                 supported <a href="#Precision">real
                                 number precision</a>.
@@ -658,8 +655,7 @@ Synchronizing reflected values</h4>
                             <dt>an [[#InterfaceSVGLength|SVGLength]]
                             object</dt>
                             <dd>The string is the value that would be
-                            returned from getting the value's <a
-                            href="#__svg__SVGLength__valueAsString">valueAsString</a>
+                            returned from getting the value's {{SVGLength/valueAsString}}
                             member.</dd>
                             
                             <dt>a {{DOMPoint}} object</dt>
@@ -772,8 +768,7 @@ Reflecting an empty initial value</h4>
         <dt class="DOMInterfaceName">[[#InterfaceSVGLength|SVGLength]]</dt>
         <dd>
             Initialized as <span class="attr-value">0 user units</span>
-        (<a
-        href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</a>).
+        ({{SVGLength/SVG_LENGTHTYPE_NUMBER}}).
 
         <dt class="DOMInterfaceName">[[#InterfaceSVGLengthList|SVGLengthList]]</dt>
         <dt class="DOMInterfaceName">[[#InterfaceSVGNumberList|SVGNumberList]]</dt>
@@ -787,7 +782,7 @@ Reflecting an empty initial value</h4>
         <dd>
             Initialized as <span class="attr-value">0 in unspecified
             units</span>
-        (<a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNSPECIFIED">SVG_ANGLETYPE_UNSPECIFIED</a>).
+        ({{SVGAngle/SVG_ANGLETYPE_UNSPECIFIED}}).
 
         <dt class="DOMInterfaceName">[[#InterfaceSVGPreserveAspectRatio|SVGPreserveAspectRatio]]</dt>
         <dd>
@@ -828,7 +823,7 @@ Interface SVGElement</h4>
     All of the SVG DOM interfaces that correspond directly to elements
     in the SVG language (such as the
     [[#InterfaceSVGPathElement|SVGPathElement]] interface for the
-    <{SVG2/path}> element) derive from the
+    <{path}> element) derive from the
     [[#InterfaceSVGElement|SVGElement]] interface.
 
     Note: The CSSOM specification
@@ -864,7 +859,7 @@ Interface SVGElement</h4>
     version of this specification.  Authors are advised to use
     Element.classList instead.
 
-    Note: The <a href="#__svg__SVGElement__className">className</a>
+    Note: The className
     attribute on [[#InterfaceSVGElement|SVGElement]] overrides the
     correspond attribute on [=Attr/element|Element=], following the
     WebIDL rules for [=interface/inherit|inheritance=].
@@ -872,14 +867,14 @@ Interface SVGElement</h4>
     The <b id="__svg__SVGElement__ownerSVGElement">ownerSVGElement</b>
     IDL attribute represents the nearest ancestor <{svg}> element.  On
     getting
-    <a href="#__svg__SVGElement__ownerSVGElement">ownerSVGElement</a>,
+    ownerSVGElement,
     the nearest ancestor <{svg}> element is returned; if the current
     element is the [=outermost svg element=], then null is returned.
 
     The <b id="__svg__SVGElement__viewportElement">viewportElement</b>
     IDL attribute represents the element that provides the SVG
     viewport for the current element.  On getting
-    <a href="#__svg__SVGElement__viewportElement">viewport</a>, the
+    viewport, the
     nearest ancestor element that establishes an SVG viewport is
     returned; if the current element is the [=outermost svg element=],
     then null is returned.
@@ -981,10 +976,8 @@ Interface SVGGraphicsElement</h4>
                     [[#ViewBoxAttribute|viewBox]] and
                     [[#PreserveAspectRatioAttribute|preserveAspectRatio]]
                     attributes, the [[#TransformProperty|transform]]
-                    property, and any transform due to <a
-                    href="#__svg__SVGSVGElement__currentScale">currentScale</a>
-                    and <a
-                    href="#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>
+                    property, and any transform due to currentScale
+                    and currentTranslate
                     properties on the
                     [[#InterfaceSVGSVGElement|SVGSVGElement]].
 
@@ -1121,15 +1114,15 @@ Interface SVGGeometryElement</h4>
     SVG context allows it to be.
 
     @@NEXT
-    The <b
-    id="__svg__SVGGeometryElement__isPointInStroke">isPointInStroke</b>
+    The <dfn
+    id="__svg__SVGGeometryElement__isPointInStroke" data-dfn-type="dfn" data-export="">isPointInStroke</dfn>
     method, when invoked, must return true if the point given by
     <var>point</var> passed to the method, in the coordinate space of
     an element, is in or on the outline path of an applied stroke on
     an element; and must return false otherwise. The outline path must
-    take the stroke properties {{stroke-width}}, {{stroke-linecap}},
-    {{stroke-linejoin}}, {{stroke-miterlimit}}, {{stroke-dasharray}},
-    {{stroke-dashoffset}} and {{vector-effect}} of an element into
+    take the stroke properties 'stroke-width', 'stroke-linecap',
+    'stroke-linejoin', 'stroke-miterlimit', 'stroke-dasharray',
+    'stroke-dashoffset' and 'vector-effect' of an element into
     account. See sections
     <a href="#StrokeShape">Computing the shape of the stroke</a> and
     <a href="#PaintingVectorEffects">Vector effects</a> for details.
@@ -1177,8 +1170,7 @@ Interface SVGGeometryElement</h4>
         <li>
             Let <var>length</var> be the user agent's computed value
             for the total length of the path, in user units. Note: As
-            with <a
-            href="#__svg__SVGGeometryElement__getTotalLength">getTotalLength</a>,
+            with getTotalLength,
             this does not take into account the {{pathLength}}
             attribute.
         
@@ -1256,24 +1248,23 @@ Interface SVGNumber</h4>
     </pre>
 
     The <b id="__svg__SVGNumber__value">value</b> IDL attribute
-    represents the number.  On getting <a
-    href="#__svg__SVGNumber__value">value</a>, the
+    represents the number.  On getting value, the
     [[#InterfaceSVGNumber|SVGNumber]]'s <a
     href='#NumberValue'>value</a> is returned.
 
-    On setting <a href="#__svg__SVGNumber__value">value</a>, the
+    On setting value, the
     following steps are run:
 
     <ol class='algorithm'>
         <li>
             If the [[#InterfaceSVGNumber|SVGNumber]] is <a
             href="#ReadOnlyNumber">read only</a>, then [=throw=] a
-            [=NoModificationAllowedError=].
+            {{NoModificationAllowedError}}.
 
         <li>
             Set the [[#InterfaceSVGNumber|SVGNumber]]'s <a
             href='#NumberValue'>value</a> to the value being assigned
-            to the <a href="#__svg__SVGNumber__value">value</a>
+            to the value
             member.
 
         <li>
@@ -1341,54 +1332,53 @@ Interface SVGLength</h4>
 
     An [[#InterfaceSVGLength|SVGLength]] object maintains an internal
     <<length>> or
-    <a>&lt;percentage&gt;</a> or <<number>> value, which is called its
-    <dfn attribute for=LengthValue>value</dfn>.
+    <a>&lt;percentage&gt;</a> or <<number>> value.
 
     <pre class="idl">
-        [<a>Exposed</a>=Window]
-        interface <b>SVGLength</b> {
+        [Exposed=Window]
+        interface SVGLength {
 
         // Length Unit Types
-        const unsigned short <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a> = 0;
-        const unsigned short <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</a> = 1;
-        const unsigned short <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_PERCENTAGE">SVG_LENGTHTYPE_PERCENTAGE</a> = 2;
-        const unsigned short <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_EMS">SVG_LENGTHTYPE_EMS</a> = 3;
-        const unsigned short <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_EXS">SVG_LENGTHTYPE_EXS</a> = 4;
-        const unsigned short <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_PX">SVG_LENGTHTYPE_PX</a> = 5;
-        const unsigned short <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_CM">SVG_LENGTHTYPE_CM</a> = 6;
-        const unsigned short <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_MM">SVG_LENGTHTYPE_MM</a> = 7;
-        const unsigned short <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_IN">SVG_LENGTHTYPE_IN</a> = 8;
-        const unsigned short <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_PT">SVG_LENGTHTYPE_PT</a> = 9;
-        const unsigned short <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_PC">SVG_LENGTHTYPE_PC</a> = 10;
+        const unsigned short SVG_LENGTHTYPE_UNKNOWN = 0;
+        const unsigned short SVG_LENGTHTYPE_NUMBER = 1;
+        const unsigned short SVG_LENGTHTYPE_PERCENTAGE = 2;
+        const unsigned short SVG_LENGTHTYPE_EMS = 3;
+        const unsigned short SVG_LENGTHTYPE_EXS = 4;
+        const unsigned short SVG_LENGTHTYPE_PX = 5;
+        const unsigned short SVG_LENGTHTYPE_CM = 6;
+        const unsigned short SVG_LENGTHTYPE_MM = 7;
+        const unsigned short SVG_LENGTHTYPE_IN = 8;
+        const unsigned short SVG_LENGTHTYPE_PT = 9;
+        const unsigned short SVG_LENGTHTYPE_PC = 10;
 
-        readonly attribute unsigned short <a href="types.html#__svg__SVGLength__unitType">unitType</a>;
-                attribute float <a href="types.html#__svg__SVGLength__value">value</a>;
-                attribute float <a href="types.html#__svg__SVGLength__valueInSpecifiedUnits">valueInSpecifiedUnits</a>;
-                attribute DOMString <a href="types.html#__svg__SVGLength__valueAsString">valueAsString</a>;
+        readonly attribute unsigned short unitType;
+                attribute float value;
+                attribute float valueInSpecifiedUnits;
+                attribute DOMString valueAsString;
 
-        undefined <a href="types.html#__svg__SVGLength__newValueSpecifiedUnits">newValueSpecifiedUnits</a>(unsigned short unitType, float valueInSpecifiedUnits);
-        undefined <a href="types.html#__svg__SVGLength__convertToSpecifiedUnits">convertToSpecifiedUnits</a>(unsigned short unitType);
+        undefined newValueSpecifiedUnits(unsigned short unitType, float valueInSpecifiedUnits);
+        undefined convertToSpecifiedUnits(unsigned short unitType);
         };
     </pre>
 
     The numeric length unit type constants defined on
     [[#InterfaceSVGLength|SVGLength]] are used to represent the type
-    of an [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}>.
+    of an [[#InterfaceSVGLength|SVGLength]]'s value.
     Their meanings are as follows:
 
     <table class='vert'>
     <tr><th>Constant</th><th>Meaning</th></tr>
-    <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</b></td><td>A unitless <<number>> interpreted as a value in <span class='prop-value'>px</span>.</td></tr>
-    <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_PERCENTAGE">SVG_LENGTHTYPE_PERCENTAGE</b></td><td>A <a>&lt;percentage&gt;</a>.</td></tr>
-    <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_EMS">SVG_LENGTHTYPE_EMS</b></td><td>A <<length>> with an <span class='prop-value'>em</span> unit.</td></tr>
-    <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_EXS">SVG_LENGTHTYPE_EXS</b></td><td>A <<length>> with an <span class='prop-value'>ex</span> unit.</td></tr>
-    <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_PX">SVG_LENGTHTYPE_PX</b></td><td>A <<length>> with a <span class='prop-value'>px</span> unit.</td></tr>
-    <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_CM">SVG_LENGTHTYPE_CM</b></td><td>A <<length>> with a <span class='prop-value'>cm</span> unit.</td></tr>
-    <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_MM">SVG_LENGTHTYPE_MM</b></td><td>A <<length>> with a <span class='prop-value'>mm</span> unit.</td></tr>
-    <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_IN">SVG_LENGTHTYPE_IN</b></td><td>A <<length>> with an <span class='prop-value'>in</span> unit.</td></tr>
-    <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_PT">SVG_LENGTHTYPE_PT</b></td><td>A <<length>> with a <span class='prop-value'>pt</span> unit.</td></tr>
-    <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_PC">SVG_LENGTHTYPE_PC</b></td><td>A <<length>> with a <span class='prop-value'>pc</span> unit.</td></tr>
-    <tr><td><b id="__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</b></td><td>Some other type of value.</td></tr>
+    <tr><td>SVG_LENGTHTYPE_NUMBER</td><td>A unitless <<number>> interpreted as a value in <span class='prop-value'>px</span>.</td></tr>
+    <tr><td>SVG_LENGTHTYPE_PERCENTAGE</td><td>A <a>&lt;percentage&gt;</a>.</td></tr>
+    <tr><td>SVG_LENGTHTYPE_EMS</td><td>A <<length>> with an <span class='prop-value'>em</span> unit.</td></tr>
+    <tr><td>SVG_LENGTHTYPE_EXS</td><td>A <<length>> with an <span class='prop-value'>ex</span> unit.</td></tr>
+    <tr><td>SVG_LENGTHTYPE_PX</td><td>A <<length>> with a <span class='prop-value'>px</span> unit.</td></tr>
+    <tr><td>SVG_LENGTHTYPE_CM</td><td>A <<length>> with a <span class='prop-value'>cm</span> unit.</td></tr>
+    <tr><td>SVG_LENGTHTYPE_MM</td><td>A <<length>> with a <span class='prop-value'>mm</span> unit.</td></tr>
+    <tr><td>SVG_LENGTHTYPE_IN</td><td>A <<length>> with an <span class='prop-value'>in</span> unit.</td></tr>
+    <tr><td>SVG_LENGTHTYPE_PT</td><td>A <<length>> with a <span class='prop-value'>pt</span> unit.</td></tr>
+    <tr><td>SVG_LENGTHTYPE_PC</td><td>A <<length>> with a <span class='prop-value'>pc</span> unit.</td></tr>
+    <tr><td>SVG_LENGTHTYPE_UNKNOWN</td><td>Some other type of value.</td></tr>
     </table>
 
     Note: The use of numeric length unit type constants is an
@@ -1396,21 +1386,20 @@ Interface SVGLength</h4>
     any other units or length types supported by
     [[#InterfaceSVGLength|SVGLength]].  If other types of lengths are
     supported and used, the [[#InterfaceSVGLength|SVGLength]] uses the
-    <a
-    href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a>
+    {{SVGLength/SVG_LENGTHTYPE_UNKNOWN}}
     unit type.  See below for details on how the other properties of an [[#InterfaceSVGLength|SVGLength]]
     operate with these types of lengths.
 
-    The <b id="__svg__SVGLength__unitType">unitType</b> IDL attribute
+    The <b >unitType</b> IDL attribute
     represents the type of value that the
-    [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}> is. On
-    getting <a href='#__svg__SVGLength__unitType'>unitType</a>, the
+    [[#InterfaceSVGLength|SVGLength]]'s value is. On
+    getting {{SVGLength/unitType}}, the
     following steps are run:
 
     <ol class='algorithm'>
         <li>
             If the [[#InterfaceSVGLength|SVGLength]]'s
-            <{LengthValue/value}> is a unitless <<number>>, a
+            value is a unitless <<number>>, a
             <a>&lt;percentage&gt;</a>, or a <<length>> with an
             <span class='prop-value'>em</span>,
             <span class='prop-value'>ex</span>,
@@ -1424,27 +1413,24 @@ Interface SVGLength</h4>
             table above.
 
         <li>
-            Otherwise, return <a
-            href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a>.
+            Otherwise, return {{SVGLength/SVG_LENGTHTYPE_UNKNOWN}}.
             <p class='note'>For example, for a <<length>> with a <span
             class='prop-value'>ch</span>
             unit or one that has a non-scalar value such as <span
             class='attr-value'>calc()</span>,
-            <a
-            href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a>
+            {{SVGLength/SVG_LENGTHTYPE_UNKNOWN}}
             would be returned.
     </ol>
 
-    The <b id="__svg__SVGLength__value">value</b> IDL attribute
+    The <b >value</b> IDL attribute
     represents the [[#InterfaceSVGLength|SVGLength]]'s
-    <{LengthValue/value}> in user units. On getting <a
-    href='#__svg__SVGLength__value'>value</a>, the following steps are
+    value in user units. On getting {{SVGLength/value}}, the following steps are
     run:
 
     <ol class='algorithm'>
         <li>
             Let <var>value</var> be the
-            [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}>.
+            [[#InterfaceSVGLength|SVGLength]]'s value.
 
         <li>
             If <var>value</var> is a <<number>>, return that number.
@@ -1477,9 +1463,9 @@ Interface SVGLength</h4>
 
             <dl class='switch'>
                 <dt>has no <a href='#LengthAssociatedElement'>associated element</a></dt>
-                <dd><var>font size</var> is the absolute length of the initial value of the {{font-size}} property</dd>
+                <dd><var>font size</var> is the absolute length of the initial value of the 'font-size' property</dd>
                 <dt>has an <a href='#LengthAssociatedElement'>associated element</a></dt>
-                <dd><var>size</var> is the computed value of the <a href='#LengthAssociatedElement'>associated element</a>'s {{font-size}} property</dd>
+                <dd><var>size</var> is the computed value of the <a href='#LengthAssociatedElement'>associated element</a>'s 'font-size' property</dd>
             </dl>
         
         <li>
@@ -1489,15 +1475,15 @@ Interface SVGLength</h4>
         <a href='#LengthAssociatedElement'>associated element</a>, return 0.
     </ol>
 
-    On setting <a href='#__svg__SVGLength__value'>value</a>, the following steps
+    On setting {{SVGLength/value}}, the following steps
     are run:
 
     <ol class='algorithm'>
     <li>If the [[#InterfaceSVGLength|SVGLength]] object is <a href='#ReadOnlyLength'>read only</a>, then
-    [=throw=] a [=NoModificationAllowedError=].
+    [=throw=] a {{NoModificationAllowedError}}.
     <li>Let <var>value</var> be the value being assigned to
-    <a href='#__svg__SVGLength__value'>value</a>.
-    <li>Set the [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}> to a
+    {{SVGLength/value}}.
+    <li>Set the [[#InterfaceSVGLength|SVGLength]]'s value to a
     <<number>> whose value is <var>value</var>.
     <li>If the [[#InterfaceSVGLength|SVGLength]]
     <a href='#LengthMode'>reflects the base value</a> of a [=reflected=] attribute,
@@ -1507,18 +1493,18 @@ Interface SVGLength</h4>
     
     </ol>
 
-    The <b id="__svg__SVGLength__valueInSpecifiedUnits">valueInSpecifiedUnits</b> IDL attribute represents
-    the numeric factor of the [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}>.
-    On getting <a href='#__svg__SVGLength__valueInSpecifiedUnits'>valueInSpecifiedUnits</a>, the following steps
+    The <b >valueInSpecifiedUnits</b> IDL attribute represents
+    the numeric factor of the [[#InterfaceSVGLength|SVGLength]]'s value.
+    On getting {{SVGLength/valueInSpecifiedUnits}}, the following steps
     are run:
 
     <ol class='algorithm'>
-    <li>Let <var>value</var> be the [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}>.
+    <li>Let <var>value</var> be the [[#InterfaceSVGLength|SVGLength]]'s value.
     <li>If <var>value</var> is a <<number>>, return that number.
     <li>Otherwise, if <var>value</var> is a <a>&lt;percentage&gt;</a> or any scalar <<length>>
     value, return the numeric factor before its unit.
     <li>Otherwise, return 0.
-        <p class='note'>Thus <a href='#__svg__SVGLength__valueInSpecifiedUnits'>valueInSpecifiedUnits</a>
+        <p class='note'>Thus {{SVGLength/valueInSpecifiedUnits}}
         would return 12 for both <code class='attr-value'>12%</code> and
         <span class='attr-value'>12em</span>, but
         0 would be returned for non-scalar values like
@@ -1526,20 +1512,20 @@ Interface SVGLength</h4>
     
     </ol>
 
-    On setting <a href='#__svg__SVGLength__valueInSpecifiedUnits'>valueInSpecifiedUnits</a>, the following steps
+    On setting {{SVGLength/valueInSpecifiedUnits}}, the following steps
     are run:
 
     <ol class='algorithm'>
     <li>If the [[#InterfaceSVGLength|SVGLength]] object is <a href='#ReadOnlyLength'>read only</a>, then
-    [=throw=] a [=NoModificationAllowedError=].
+    [=throw=] a {{NoModificationAllowedError}}.
     <li>Let <var>value</var> be the value being assigned to
-    <a href='#__svg__SVGLength__valueInSpecifiedUnits'>valueInSpecifiedUnits</a>.
-    <li>If the [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}> is a
+    {{SVGLength/valueInSpecifiedUnits}}.
+    <li>If the [[#InterfaceSVGLength|SVGLength]]'s value is a
     <<number>>, then update its value to <var>value</var>.
-    <li>Otherwise, if the [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}>
+    <li>Otherwise, if the [[#InterfaceSVGLength|SVGLength]]'s value
     is a <a>&lt;percentage&gt;</a> or a scalar-valued <<length>>,
     then update its numeric factor to <var>value</var>.
-    <li>Otherwise, the [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}>
+    <li>Otherwise, the [[#InterfaceSVGLength|SVGLength]]'s value
     is of some other type.  Set it to a <<number>>
     whose value is <var>value</var>.
     <li>If the [[#InterfaceSVGLength|SVGLength]]
@@ -1549,13 +1535,13 @@ Interface SVGLength</h4>
     
     </ol>
 
-    The <b id="__svg__SVGLength__valueAsString">valueAsString</b> IDL attribute represents
-    the [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}> as a string.
-    On getting <a href='#__svg__SVGLength__valueAsString'>valueAsString</a>, the following steps
+    The <b >valueAsString</b> IDL attribute represents
+    the [[#InterfaceSVGLength|SVGLength]]'s value as a string.
+    On getting {{SVGLength/valueAsString}}, the following steps
     are run:
 
     <ol class='algorithm'>
-    <li>Let <var>value</var> be the [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}>.
+    <li>Let <var>value</var> be the [[#InterfaceSVGLength|SVGLength]]'s value.
     <li>Let <var>string</var> be an empty string.
     <li>If <var>value</var> is a <<number>>, <a>&lt;percentage&gt;</a>
     or scalar <<length>> value, then:
@@ -1581,18 +1567,18 @@ Interface SVGLength</h4>
     implementation's supported <a href="#Precision">real number precision</a>.
     </ol>
 
-    On setting <a href='#__svg__SVGLength__valueAsString'>valueAsString</a>, the following steps
+    On setting {{SVGLength/valueAsString}}, the following steps
     are run:
 
     <ol class='algorithm'>
     <li>If the [[#InterfaceSVGLength|SVGLength]] object is <a href='#ReadOnlyLength'>read only</a>, then
-    [=throw=] a [=NoModificationAllowedError=].
+    [=throw=] a {{NoModificationAllowedError}}.
     <li>Let <var>value</var> be the value being assigned to
-    <a href='#__svg__SVGLength__valueAsString'>valueAsString</a>.
+    {{SVGLength/valueAsString}}.
     <li>Parse <var>value</var> using the CSS syntax
     [ <<number>> | <<length>> | <a>&lt;percentage&gt;</a> ].
-    <li>If parsing failed, then [=throw=] a [=SyntaxError=].
-    <li>Otherwise, parsing succeeded.  Set [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}>
+    <li>If parsing failed, then [=throw=] a {{SyntaxError}}.
+    <li>Otherwise, parsing succeeded.  Set [[#InterfaceSVGLength|SVGLength]]'s value
     to the parsed value.
     <li>If the [[#InterfaceSVGLength|SVGLength]]
     <a href='#LengthMode'>reflects the base value</a> of a [=reflected=] attribute or
@@ -1601,24 +1587,24 @@ Interface SVGLength</h4>
     
     </ol>
 
-    The <b id="__svg__SVGLength__newValueSpecifiedUnits">newValueSpecifiedUnits</b>
+    The <b >newValueSpecifiedUnits</b>
     method is used to set the [[#InterfaceSVGLength|SVGLength]]'s value in a typed manner.  When
     newValueSpecifiedUnits(unitType, valueInSpecifiedUnits) is called, the following
     steps are run:
 
     <ol class='algorithm'>
     <li>If the [[#InterfaceSVGLength|SVGLength]] object is <a href='#ReadOnlyLength'>read only</a>, then
-    [=throw=] a [=NoModificationAllowedError=].
+    [=throw=] a {{NoModificationAllowedError}}.
     <li>If <var>unitType</var> is
-    <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a>
+    {{SVGLength/SVG_LENGTHTYPE_UNKNOWN}}
     or is a value that does not appear in the length unit type table above,
-    then [=throw=] a [=NotSupportedError=].
-    <li>Set [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}> depending
+    then [=throw=] a {{NotSupportedError}}.
+    <li>Set [[#InterfaceSVGLength|SVGLength]]'s value depending
     on the value of <var>unitType</var>:
         <dl class='switch'>
-        <dt><a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</a></dt>
+        <dt>{{SVGLength/SVG_LENGTHTYPE_NUMBER}}</dt>
         <dd>a <<number>> whose value is <var>valueInSpecifiedUnits</var></dd>
-        <dt><a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_PERCENTAGE">SVG_LENGTHTYPE_PERCENTAGE</a></dt>
+        <dt>{{SVGLength/SVG_LENGTHTYPE_PERCENTAGE}}</dt>
         <dd>a <a>&lt;percentage&gt;</a> whose numeric factor is <var>valueInSpecifiedUnits</var></dd>
         <dt>anything else</dt>
         <dd>a <<length>> whose numeric factor is <var>valueInSpecifiedUnits</var>
@@ -1632,26 +1618,26 @@ Interface SVGLength</h4>
     
     </ol>
 
-    The <b id="__svg__SVGLength__convertToSpecifiedUnits">convertToSpecifiedUnits</b>
+    The <b >convertToSpecifiedUnits</b>
     method is used to convert the [[#InterfaceSVGLength|SVGLength]]'s value to a specific type.
     When convertToSpecifiedUnits(unitType) is called, the following steps are run:
 
     <ol class='algorithm'>
     <li>If the [[#InterfaceSVGLength|SVGLength]] object is <a href='#ReadOnlyLength'>read only</a>, then
-    [=throw=] a [=NoModificationAllowedError=].
+    [=throw=] a {{NoModificationAllowedError}}.
     <li>If <var>unitType</var> is
-    <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</a>
+    {{SVGLength/SVG_LENGTHTYPE_UNKNOWN}}
     or is a value that does not appear in the length unit type table above,
-    then [=throw=] a [=NotSupportedError=].
+    then [=throw=] a {{NotSupportedError}}.
     <li>Let <var>absolute</var> be the value that would be returned from the
-    <a href='#__svg__SVGLength__value'>value</a> member.
-    <li>If <var>unitType</var> is <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</a>, then:
+    {{SVGLength/value}} member.
+    <li>If <var>unitType</var> is {{SVGLength/SVG_LENGTHTYPE_NUMBER}}, then:
         <ol>
-        <li>Set the [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}> to a <<number>>
+        <li>Set the [[#InterfaceSVGLength|SVGLength]]'s value to a <<number>>
         whose value is <var>absolute</var>.
         </ol>
     
-    <li>Otherwise, if <var>unitType</var> is <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_PERCENTAGE">SVG_LENGTHTYPE_PERCENTAGE</a>, then:
+    <li>Otherwise, if <var>unitType</var> is {{SVGLength/SVG_LENGTHTYPE_PERCENTAGE}}, then:
         <ol>
         <li>Let <var>viewport size</var> be a basis to resolve percentages against, based on the [[#InterfaceSVGLength|SVGLength]]'s
         <a href='#LengthAssociatedElement'>associated element</a> and
@@ -1668,32 +1654,32 @@ Interface SVGLength</h4>
             diagonal (see <a href='coords.html#Units'>Units</a>)</dd>
             </dl>
         
-        <li>Set the [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}> to the result of
+        <li>Set the [[#InterfaceSVGLength|SVGLength]]'s value to the result of
         converting <var>absolute</var> to a <a>&lt;percentage&gt;</a>, using <var>viewport size</var>
         as the percentage basis.
         </ol>
     
-    <li>Otherwise, if <var>unitType</var> is <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_EMS">SVG_LENGTHTYPE_EMS</a>
-    or <a href="types.html#__svg__SVGLength__SVG_LENGTHTYPE_EXS">SVG_LENGTHTYPE_EXS</a>, then:
+    <li>Otherwise, if <var>unitType</var> is {{SVGLength/SVG_LENGTHTYPE_EMS}}
+    or {{SVGLength/SVG_LENGTHTYPE_EXS}}, then:
         <ol>
         <li>Let <var>font size</var> be a basis to resolve font size values against,
         based on the [[#InterfaceSVGLength|SVGLength]]'s <a href='#LengthAssociatedElement'>associated element</a>:
             <dl class='switch'>
             <dt>has no <a href='#LengthAssociatedElement'>associated element</a></dt>
-            <dd><var>font size</var> is the absolute length of the initial value of the {{font-size}} property</dd>
+            <dd><var>font size</var> is the absolute length of the initial value of the 'font-size' property</dd>
             <dt>has an <a href='#LengthAssociatedElement'>associated element</a></dt>
-            <dd><var>size</var> is the computed value of the <a href='#LengthAssociatedElement'>associated element</a>'s {{font-size}} property</dd>
+            <dd><var>size</var> is the computed value of the <a href='#LengthAssociatedElement'>associated element</a>'s 'font-size' property</dd>
             </dl>
         
-        <li>Set the [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}> to the result of
+        <li>Set the [[#InterfaceSVGLength|SVGLength]]'s value to the result of
         converting <var>absolute</var> to a <<length>> with an <span class='prop-value'>em</span>
         or <span class='prop-value'>ex</span> unit (depending on <var>unitType</var>),
-        using <var>font size</var> as the {{font-size}} basis.
+        using <var>font size</var> as the 'font-size' basis.
         </ol>
     
     <li>Otherwise:
         <ol>
-        <li>Set the [[#InterfaceSVGLength|SVGLength]]'s <{LengthValue/value}> to the result of
+        <li>Set the [[#InterfaceSVGLength|SVGLength]]'s value to the result of
         converting <var>absolute</var> to a <<length>> with the unit
         found by looking up <var>unitType</var> in the length unit type table above.
         </ol>
@@ -1735,88 +1721,88 @@ Interface SVGAngle</h4>
     </ol>
 
     An [[#InterfaceSVGAngle|SVGAngle]] object maintains an internal <<angle>> or
-    <<number>> value, which is called its <dfn attribute for=AngleValue>value</dfn>.
+    <<number>> value.
 
     <pre class="idl">
     [<a>Exposed</a>=Window]
     interface <b>SVGAngle</b> {
 
     // Angle Unit Types
-    const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</a> = 0;
-    const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNSPECIFIED">SVG_ANGLETYPE_UNSPECIFIED</a> = 1;
-    const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_DEG">SVG_ANGLETYPE_DEG</a> = 2;
-    const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_RAD">SVG_ANGLETYPE_RAD</a> = 3;
-    const unsigned short <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_GRAD">SVG_ANGLETYPE_GRAD</a> = 4;
+    const unsigned short SVG_ANGLETYPE_UNKNOWN = 0;
+    const unsigned short SVG_ANGLETYPE_UNSPECIFIED = 1;
+    const unsigned short SVG_ANGLETYPE_DEG = 2;
+    const unsigned short SVG_ANGLETYPE_RAD = 3;
+    const unsigned short SVG_ANGLETYPE_GRAD = 4;
 
-    readonly attribute unsigned short <a href="types.html#__svg__SVGAngle__unitType">unitType</a>;
-            attribute float <a href="types.html#__svg__SVGAngle__value">value</a>;
-            attribute float <a href="types.html#__svg__SVGAngle__valueInSpecifiedUnits">valueInSpecifiedUnits</a>;
-            attribute DOMString <a href="types.html#__svg__SVGAngle__valueAsString">valueAsString</a>;
+    readonly attribute unsigned short unitType;
+            attribute float value;
+            attribute float valueInSpecifiedUnits;
+            attribute DOMString valueAsString;
 
-    undefined <a href="types.html#__svg__SVGAngle__newValueSpecifiedUnits">newValueSpecifiedUnits</a>(unsigned short unitType, float valueInSpecifiedUnits);
-    undefined <a href="types.html#__svg__SVGAngle__convertToSpecifiedUnits">convertToSpecifiedUnits</a>(unsigned short unitType);
+    undefined newValueSpecifiedUnits(unsigned short unitType, float valueInSpecifiedUnits);
+    undefined convertToSpecifiedUnits(unsigned short unitType);
     };
     </pre>
 
     The numeric angle unit type constants defined on [[#InterfaceSVGAngle|SVGAngle]] are used
-    to represent the type of an [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}>.
+    to represent the type of an [[#InterfaceSVGAngle|SVGAngle]]'s value.
     Their meanings are as follows:
 
     <table class='vert'>
     <tr><th>Constant</th><th>Meaning</th></tr>
-    <tr><td><b id="__svg__SVGAngle__SVG_ANGLETYPE_UNSPECIFIED">SVG_ANGLETYPE_UNSPECIFIED</b></td><td>A unitless <<number>> interpreted as a value in degrees.</td></tr>
-    <tr><td><b id="__svg__SVGAngle__SVG_ANGLETYPE_DEG">SVG_ANGLETYPE_DEG</b></td><td>An <<angle>> with a <span class='prop-value'>deg</span> unit.</td></tr>
-    <tr><td><b id="__svg__SVGAngle__SVG_ANGLETYPE_RAD">SVG_ANGLETYPE_RAD</b></td><td>An <<angle>> with a <span class='prop-value'>rad</span> unit.</td></tr>
-    <tr><td><b id="__svg__SVGAngle__SVG_ANGLETYPE_GRAD">SVG_ANGLETYPE_GRAD</b></td><td>An <<angle>> with a <span class='prop-value'>grad</span> unit.</td></tr>
-    <tr><td><b id="__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</b></td><td>Some other type of value.</td></tr>
+    <tr><td>SVG_ANGLETYPE_UNSPECIFIED</td><td>A unitless <<number>> interpreted as a value in degrees.</td></tr>
+    <tr><td>SVG_ANGLETYPE_DEG</td><td>An <<angle>> with a <span class='prop-value'>deg</span> unit.</td></tr>
+    <tr><td>SVG_ANGLETYPE_RAD</td><td>An <<angle>> with a <span class='prop-value'>rad</span> unit.</td></tr>
+    <tr><td>SVG_ANGLETYPE_GRAD</td><td>An <<angle>> with a <span class='prop-value'>grad</span> unit.</td></tr>
+    <tr><td>SVG_ANGLETYPE_UNKNOWN</td><td>Some other type of value.</td></tr>
     </table>
 
     Note: The use of numeric angle unit type constants is an anti-pattern and
     new constant values will not be introduced for any other units or angle types supported by
     [[#InterfaceSVGAngle|SVGAngle]].  If other types of angles are supported and used, the [[#InterfaceSVGAngle|SVGAngle]]
-    uses the <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</a>
+    uses the {{SVGAngle/SVG_ANGLETYPE_UNKNOWN}}
     unit type.  See below for details on how the other properties of an [[#InterfaceSVGAngle|SVGAngle]]
     operate with these types of angles.
 
-    The <b id="__svg__SVGAngle__unitType">unitType</b> IDL attribute represents
-    the type of value that the [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}> is.
-    On getting <a href='#__svg__SVGAngle__unitType'>unitType</a>, the following steps
+    The <b >unitType</b> IDL attribute represents
+    the type of value that the [[#InterfaceSVGAngle|SVGAngle]]'s value is.
+    On getting unitType, the following steps
     are run:
 
     <ol class='algorithm'>
-    <li>If the [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}> is a unitless
+    <li>If the [[#InterfaceSVGAngle|SVGAngle]]'s value is a unitless
     <<number>> or a <<length>> with a
     <span class='prop-value'>deg</span>,
     <span class='prop-value'>rad</span> or
     <span class='prop-value'>grad</span> unit, then return the corresponding constant
     value from the angle unit type table above.
-    <li>Otherwise, return <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</a>.
+    <li>Otherwise, return {{SVGAngle/SVG_ANGLETYPE_UNKNOWN}}.
         <p class='note'>For example, for an <<angle>> with a <span class='prop-value'>turn</span>
-        unit, <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</a>
+        unit, {{SVGAngle/SVG_ANGLETYPE_UNKNOWN}}
         would be returned.
     
     </ol>
 
-    The <b id="__svg__SVGAngle__value">value</b> IDL attribute represents
-    the [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}> in degrees.
-    On getting <a href='#__svg__SVGAngle__value'>value</a>, the following steps
+    The <b >value</b> IDL attribute represents
+    the [[#InterfaceSVGAngle|SVGAngle]]'s value in degrees.
+    On getting value, the following steps
     are run:
 
     <ol class='algorithm'>
-    <li>Let <var>value</var> be the [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}>.
+    <li>Let <var>value</var> be the [[#InterfaceSVGAngle|SVGAngle]]'s value.
     <li>If <var>value</var> is a <<number>>, return that number.
     <li>Return the result of converting <var>value</var> to an angle in degrees.
     </ol>
 
-    On setting <a href='#__svg__SVGAngle__value'>value</a>, the following steps
+    On setting value, the following steps
     are run:
 
     <ol class='algorithm'>
     <li>If the [[#InterfaceSVGAngle|SVGAngle]] object is <a href='#ReadOnlyAngle'>read only</a>, then
-    [=throw=] a [=NoModificationAllowedError=].
+    [=throw=] a {{NoModificationAllowedError}}.
     <li>Let <var>value</var> be the value being assigned to
-    <a href='#__svg__SVGAngle__value'>value</a>.
-    <li>Set the [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}> to a
+    value.
+    <li>Set the [[#InterfaceSVGAngle|SVGAngle]]'s value to a
     <<number>> whose value is <var>value</var>.
     <li>If the [[#InterfaceSVGAngle|SVGAngle]]
     <a href='#AngleMode'>reflects the base value</a> of a [=reflected=] attribute,
@@ -1824,29 +1810,29 @@ Interface SVGAngle</h4>
     
     </ol>
 
-    The <b id="__svg__SVGAngle__valueInSpecifiedUnits">valueInSpecifiedUnits</b> IDL attribute represents
-    the numeric factor of the [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}>.
-    On getting <a href='#__svg__SVGAngle__valueInSpecifiedUnits'>valueInSpecifiedUnits</a>, the following steps
+    The <b >valueInSpecifiedUnits</b> IDL attribute represents
+    the numeric factor of the [[#InterfaceSVGAngle|SVGAngle]]'s value.
+    On getting valueInSpecifiedUnits, the following steps
     are run:
 
     <ol class='algorithm'>
-    <li>Let <var>value</var> be the [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}>.
+    <li>Let <var>value</var> be the [[#InterfaceSVGAngle|SVGAngle]]'s value.
     <li>If <var>value</var> is a <<number>>, return that number.
     <li>Otherwise, <var>value</var> is an <<angle>> value.  Return
     the numeric factor before its unit.
     </ol>
 
-    On setting <a href='#__svg__SVGAngle__valueInSpecifiedUnits'>valueInSpecifiedUnits</a>, the following steps
+    On setting valueInSpecifiedUnits, the following steps
     are run:
 
     <ol class='algorithm'>
     <li>If the [[#InterfaceSVGAngle|SVGAngle]] object is <a href='#ReadOnlyAngle'>read only</a>, then
-    [=throw=] a [=NoModificationAllowedError=].
+    [=throw=] a {{NoModificationAllowedError}}.
     <li>Let <var>value</var> be the value being assigned to
-    <a href='#__svg__SVGAngle__valueInSpecifiedUnits'>valueInSpecifiedUnits</a>.
-    <li>If the [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}> is a
+    valueInSpecifiedUnits.
+    <li>If the [[#InterfaceSVGAngle|SVGAngle]]'s value is a
     <<number>>, then update its value to <var>value</var>.
-    <li>Otherwise, if the [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}>
+    <li>Otherwise, if the [[#InterfaceSVGAngle|SVGAngle]]'s value
     is an <<angle>>,
     then update its numeric factor to <var>value</var>.
     <li>If the [[#InterfaceSVGAngle|SVGAngle]]
@@ -1856,13 +1842,13 @@ Interface SVGAngle</h4>
     
     </ol>
 
-    The <b id="__svg__SVGAngle__valueAsString">valueAsString</b> IDL attribute represents
-    the [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}> as a string.
-    On getting <a href='#__svg__SVGAngle__valueAsString'>valueAsString</a>, the following steps
+    The <b >valueAsString</b> IDL attribute represents
+    the [[#InterfaceSVGAngle|SVGAngle]]'s value as a string.
+    On getting valueAsString, the following steps
     are run:
 
     <ol class='algorithm'>
-    <li>Let <var>value</var> be the [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}>.
+    <li>Let <var>value</var> be the [[#InterfaceSVGAngle|SVGAngle]]'s value.
     <li>Let <var>string</var> be an empty string.
     <li>Let <var>factor</var> be <var>value</var>'s numeric factor,
     if it is an <<angle>>,
@@ -1877,18 +1863,18 @@ Interface SVGAngle</h4>
     <li>Return <var>string</var>.
     </ol>
 
-    On setting <a href='#__svg__SVGAngle__valueAsString'>valueAsString</a>, the following steps
+    On setting valueAsString, the following steps
     are run:
 
     <ol class='algorithm'>
     <li>If the [[#InterfaceSVGAngle|SVGAngle]] object is <a href='#ReadOnlyAngle'>read only</a>, then
-    [=throw=] a [=NoModificationAllowedError=].
+    [=throw=] a {{NoModificationAllowedError}}.
     <li>Let <var>value</var> be the value being assigned to
-    <a href='#__svg__SVGAngle__valueAsString'>valueAsString</a>.
+    valueAsString.
     <li>Parse <var>value</var> using the CSS syntax
     [ <<number>> | <<angle>> ].
-    <li>If parsing failed, then [=throw=] a [=SyntaxError=].
-    <li>Otherwise, parsing succeeded.  Set [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}>
+    <li>If parsing failed, then [=throw=] a {{SyntaxError}}.
+    <li>Otherwise, parsing succeeded.  Set [[#InterfaceSVGAngle|SVGAngle]]'s value
     to the parsed value.
     <li>If the [[#InterfaceSVGAngle|SVGAngle]]
     <a href='#AngleMode'>reflects the base value</a> of a [=reflected=] attribute or
@@ -1897,22 +1883,22 @@ Interface SVGAngle</h4>
     
     </ol>
 
-    The <b id="__svg__SVGAngle__newValueSpecifiedUnits">newValueSpecifiedUnits</b>
+    The <b >newValueSpecifiedUnits</b>
     method is used to set the [[#InterfaceSVGAngle|SVGAngle]]'s value in a typed manner.  When
     newValueSpecifiedUnits(unitType, valueInSpecifiedUnits) is called, the following
     steps are run:
 
     <ol class='algorithm'>
     <li>If the [[#InterfaceSVGAngle|SVGAngle]] object is <a href='#ReadOnlyAngle'>read only</a>, then
-    [=throw=] a [=NoModificationAllowedError=].
+    [=throw=] a {{NoModificationAllowedError}}.
     <li>If <var>unitType</var> is
-    <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</a>
+    {{SVGAngle/SVG_ANGLETYPE_UNKNOWN}}
     or is a value that does not appear in the angle unit type table above,
-    then [=throw=] a [=NotSupportedError=].
-    <li>Set [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}> depending
+    then [=throw=] a {{NotSupportedError}}.
+    <li>Set [[#InterfaceSVGAngle|SVGAngle]]'s value depending
     on the value of <var>unitType</var>:
         <dl class='switch'>
-        <dt><a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNSPECIFIED">SVG_ANGLETYPE_UNSPECIFIED</a></dt>
+        <dt>{{SVGAngle/SVG_ANGLETYPE_UNSPECIFIED}}</dt>
         <dd>a <<number>> whose value is <var>valueInSpecifiedUnits</var></dd>
         <dt>anything else</dt>
         <dd>an <<angle>> whose numeric factor is <var>valueInSpecifiedUnits</var>
@@ -1926,28 +1912,28 @@ Interface SVGAngle</h4>
     
     </ol>
 
-    The <b id="__svg__SVGAngle__convertToSpecifiedUnits">convertToSpecifiedUnits</b>
+    The <b >convertToSpecifiedUnits</b>
     method is used to convert the [[#InterfaceSVGAngle|SVGAngle]]'s value to a specific type.
     When convertToSpecifiedUnits(unitType) is called, the following steps are run:
 
     <ol class='algorithm'>
     <li>If the [[#InterfaceSVGAngle|SVGAngle]] object is <a href='#ReadOnlyAngle'>read only</a>, then
-    [=throw=] a [=NoModificationAllowedError=].
+    [=throw=] a {{NoModificationAllowedError}}.
     <li>If <var>unitType</var> is
-    <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</a>
+    {{SVGAngle/SVG_ANGLETYPE_UNKNOWN}}
     or is a value that does not appear in the angle unit type table above,
-    then [=throw=] a [=NotSupportedError=].
+    then [=throw=] a {{NotSupportedError}}.
     <li>Let <var>degrees</var> be the value that would be returned from the
-    <a href='#__svg__SVGAngle__value'>value</a> member.
-    <li>If <var>unitType</var> is <a href="types.html#__svg__SVGAngle__SVG_ANGLETYPE_UNSPECIFIED">SVG_ANGLETYPE_UNSPECIFIED</a>, then:
+    value member.
+    <li>If <var>unitType</var> is {{SVGAngle/SVG_ANGLETYPE_UNSPECIFIED}}, then:
         <ol>
-        <li>Set the [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}> to a <<number>>
+        <li>Set the [[#InterfaceSVGAngle|SVGAngle]]'s value to a <<number>>
         whose value is <var>degrees</var>.
         </ol>
     
     <li>Otherwise:
         <ol>
-        <li>Set the [[#InterfaceSVGAngle|SVGAngle]]'s <{AngleValue/value}> to the result of
+        <li>Set the [[#InterfaceSVGAngle|SVGAngle]]'s value to the result of
         converting <var>degrees</var> to an <<angle>> with the unit
         found by looking up <var>unitType</var> in the angle unit type table above.
         </ol>
@@ -2012,7 +1998,7 @@ List interfaces</h4>
     <var>Type</var> <a href="types.html#__svg__SVGNameList__replaceItem">replaceItem</a>(<var>Type</var> newItem, unsigned long index);
     <var>Type</var> <a href="types.html#__svg__SVGNameList__removeItem">removeItem</a>(unsigned long index);
     <var>Type</var> <a href="types.html#__svg__SVGNameList__appendItem">appendItem</a>(<var>Type</var> newItem);
-    <a href="#__svg__SVGNameList__setter">setter</a> undefined (unsigned long index, <var>Type</var> newItem);
+    setter undefined (unsigned long index, <var>Type</var> newItem);
     };</pre>
 
     where <var>Name</var> is a descriptive name for the list element's
@@ -2219,7 +2205,7 @@ List interfaces</h4>
     remove all items in the list.  When clear() is called, the following steps are run:
     <ol class="algorithm">
     <li>If the list is <a href="#ReadOnlyList">read only</a>, then [=throw=] a
-    [=NoModificationAllowedError=].
+    {{NoModificationAllowedError}}.
     <li>[=Detach=] and then remove all elements in the list.
     <li>If the list [=reflects=] an attribute, or represents the
     base value of an object that [=reflects=] an attribute, then
@@ -2232,7 +2218,7 @@ List interfaces</h4>
 
     <ol class="algorithm">
     <li>If the list is <a href="#ReadOnlyList">read only</a>, then [=throw=] a
-    [=NoModificationAllowedError=].
+    {{NoModificationAllowedError}}.
     <li>[=Detach=] and then remove all elements in the list.
     <li>If <var>newItem</var> is an object type, and <var>newItem</var>
     is not a detached object,  then set <var>newItem</var> to be
@@ -2252,7 +2238,7 @@ List interfaces</h4>
 
     <ol class="algorithm">
     <li>If <var>index</var> is greater than or equal to the length
-    of the list, then [=throw=] an [=IndexSizeError=].
+    of the list, then [=throw=] an {{IndexSizeError}}.
     <li>Return the element in the list at position <var>index</var>.
         Note: Note that if the list's element type is an object type,
         such as [[#InterfaceSVGLength|SVGLength]], then a reference to that object and not
@@ -2266,7 +2252,7 @@ List interfaces</h4>
 
     <ol class="algorithm">
     <li>If the list is <a href="#ReadOnlyList">read only</a>, then [=throw=] a
-    [=NoModificationAllowedError=].
+    {{NoModificationAllowedError}}.
     <li>If <var>newItem</var> is an object type, and <var>newItem</var>
     is not a detached object,  then set <var>newItem</var> to be
     a newly created object of the same type as <var>newItem</var>
@@ -2288,9 +2274,9 @@ List interfaces</h4>
 
     <ol class="algorithm">
     <li>If the list is <a href="#ReadOnlyList">read only</a>, then [=throw=] a
-    [=NoModificationAllowedError=].
+    {{NoModificationAllowedError}}.
     <li>If <var>index</var> is greater than or equal to the length of
-    the list, then [=throw=] an [=IndexSizeError=].
+    the list, then [=throw=] an {{IndexSizeError}}.
     <li>If <var>newItem</var> is an object type, and <var>newItem</var>
     is not a detached object, then set <var>newItem</var> to be
     a newly created object of the same type as <var>newItem</var>
@@ -2311,9 +2297,9 @@ List interfaces</h4>
 
     <ol class="algorithm">
     <li>If the list is <a href="#ReadOnlyList">read only</a>, then [=throw=] a
-    [=NoModificationAllowedError=].
+    {{NoModificationAllowedError}}.
     <li>If <var>index</var> is greater than or equal to the length of
-    the list, then [=throw=] an [=IndexSizeError=] with code.
+    the list, then [=throw=] an {{IndexSizeError}} with code.
     <li>Let <var>item</var> be the list element at index <var>index</var>.
     <li>[=Detach=] <var>item</var>.
     <li>Remove the list element at index <var>index</var>.
@@ -2326,7 +2312,7 @@ List interfaces</h4>
 
     <ol class="algorithm">
     <li>If the list is <a href="#ReadOnlyList">read only</a>, then [=throw=] a
-    [=NoModificationAllowedError=].
+    {{NoModificationAllowedError}}.
     <li>If <var>newItem</var> is an object type, and <var>newItem</var>
     is not a detached object, then set <var>newItem</var> to be
     a newly created object of the same type as <var>newItem</var>
@@ -2341,7 +2327,7 @@ List interfaces</h4>
     </ol>
 
     The behavior of the <b id="__svg__SVGNameList__setter">indexed property setter</b>
-    is the same as that for the <a href="#__svg__SVGNameList__replaceItem">replaceItem</a>
+    is the same as that for the replaceItem
     method.
 
 <h4 id="InterfaceSVGNumberList">
@@ -2365,7 +2351,7 @@ Interface SVGNumberList</h4>
     <a>SVGNumber</a> <a href="types.html#__svg__SVGNameList__replaceItem">replaceItem</a>(<a>SVGNumber</a> newItem, unsigned long index);
     <a>SVGNumber</a> <a href="types.html#__svg__SVGNameList__removeItem">removeItem</a>(unsigned long index);
     <a>SVGNumber</a> <a href="types.html#__svg__SVGNameList__appendItem">appendItem</a>(<a>SVGNumber</a> newItem);
-    <a href="#__svg__SVGNameList__setter">setter</a> undefined (unsigned long index, <a>SVGNumber</a> newItem);
+    setter undefined (unsigned long index, <a>SVGNumber</a> newItem);
     };
     </pre>
 
@@ -2394,7 +2380,7 @@ Interface SVGLengthList</h4>
     <a>SVGLength</a> <a href="types.html#__svg__SVGNameList__replaceItem">replaceItem</a>(<a>SVGLength</a> newItem, unsigned long index);
     <a>SVGLength</a> <a href="types.html#__svg__SVGNameList__removeItem">removeItem</a>(unsigned long index);
     <a>SVGLength</a> <a href="types.html#__svg__SVGNameList__appendItem">appendItem</a>(<a>SVGLength</a> newItem);
-    <a href="#__svg__SVGNameList__setter">setter</a> undefined (unsigned long index, <a>SVGLength</a> newItem);
+    setter undefined (unsigned long index, <a>SVGLength</a> newItem);
     };
     </pre>
 
@@ -2423,7 +2409,7 @@ Interface SVGStringList</h4>
     DOMString <a href="types.html#__svg__SVGNameList__replaceItem">replaceItem</a>(DOMString newItem, unsigned long index);
     DOMString <a href="types.html#__svg__SVGNameList__removeItem">removeItem</a>(unsigned long index);
     DOMString <a href="types.html#__svg__SVGNameList__appendItem">appendItem</a>(DOMString newItem);
-    <a href="#__svg__SVGNameList__setter">setter</a> undefined (unsigned long index, DOMString newItem);
+    setter undefined (unsigned long index, DOMString newItem);
     };
     </pre>
 
@@ -2489,10 +2475,10 @@ Interface SVGAnimatedEnumeration</h4>
 
     An [[#InterfaceSVGAnimatedEnumeration|SVGAnimatedEnumeration]] object is used to [=reflect=]
     an animatable attribute that takes a keyword value (such as
-    the <{textPath/method}> attribute on {{textPath}}) or to reflect
+    the <{textPath/method}> attribute on <{textPath}>) or to reflect
     the type of value that an animatable attribute has (done
     only by the <a href='painting.html#__svg__SVGMarkerElement__orientType'>orientType</a>
-    IDL attribute for the {{marker element}} element's
+    IDL attribute for the <{marker}> element element's
     <{marker/orient}> attribute).
 
     <pre class="idl">
@@ -2511,8 +2497,8 @@ Interface SVGAnimatedEnumeration</h4>
     For <a href='painting.html#__svg__SVGMarkerElement__orientType'>orientType</a>,
     they represent the type of the current non-animated value of the
     reflected <{marker/orient}> attribute.  On getting
-    <a href='#__svg__SVGAnimatedEnumeration__baseVal'>baseVal</a> or
-    <a href='#__svg__SVGAnimatedEnumeration__animVal'>animVal</a>, the
+    baseVal or
+    animVal, the
     following steps are run:
 
     <ol class='algorithm'>
@@ -2546,10 +2532,10 @@ Interface SVGAnimatedInteger</h4>
 
     An [[#InterfaceSVGAnimatedInteger|SVGAnimatedInteger]] object is used to [=reflect=] an
     animatable attribute that takes an integer value (such as
-    <{feTurbulence/numOctaves}> on {{feTurbulence}}).  It is also
+    <{feTurbulence/numOctaves}> on <{feTurbulence}>).  It is also
     used to reflect one part of an animatable attribute that takes
     an integer followed by an optional second integer (such as
-    <{feConvolveMatrix/order}> on {{feConvolveMatrix}}).
+    <{feConvolveMatrix/order}> on <{feConvolveMatrix}>).
 
     Note: This [[#InterfaceSVGAnimatedInteger|SVGAnimatedInteger]] interface
     is not used in this specification, however the
@@ -2572,8 +2558,8 @@ Interface SVGAnimatedInteger</h4>
     For those that reflect one integer of an attribute that takes an
     integer followed by an optional second integer, they represent the
     current non-animated value of one of the two integers.  On getting
-    <a href="#__svg__SVGAnimatedInteger__baseVal">baseVal</a> or
-    <a href="#__svg__SVGAnimatedInteger__animVal">animVal</a>, the
+    baseVal or
+    animVal, the
     following steps are run:
 
     <ol class="algorithm">
@@ -2598,7 +2584,7 @@ Interface SVGAnimatedInteger</h4>
     integer value.  Return <var>value</var>.
     </ol>
 
-    On setting <a href="#__svg__SVGAnimatedInteger__baseVal">baseVal</a>,
+    On setting baseVal,
     the following steps are run:
 
     <ol class='algorithm'>
@@ -2635,10 +2621,10 @@ Interface SVGAnimatedNumber</h4>
 
     An [[#InterfaceSVGAnimatedNumber|SVGAnimatedNumber]] object is used to [=reflect=] an
     animatable attribute that takes a number value (such as
-    <{path/pathLength}> on {{path}}).  It is also
+    <{path/pathLength}> on <{path}>).  It is also
     used to reflect one part of an animatable attribute that takes
     an number followed by an optional second number (such as
-    <{feDiffuseLighting/kernelUnitLength}> on {{feDiffuseLighting}}).
+    <{feDiffuseLighting/kernelUnitLength}> on <{feDiffuseLighting}>).
 
     <pre class="idl">
     [<a>Exposed</a>=Window]
@@ -2656,8 +2642,8 @@ Interface SVGAnimatedNumber</h4>
     For those that reflect one number of an attribute that takes a
     number followed by an optional second number, they represent the
     current non-animated value of one of the two numbers.  On getting
-    <a href="#__svg__SVGAnimatedNumber__baseVal">baseVal</a> or
-    <a href="#__svg__SVGAnimatedNumber__animVal">animVal</a>, the
+    baseVal or
+    animVal, the
     following steps are run:
 
     <ol class="algorithm">
@@ -2682,7 +2668,7 @@ Interface SVGAnimatedNumber</h4>
     number value.  Return <var>value</var>.
     </ol>
 
-    On setting <a href="#__svg__SVGAnimatedNumber__baseVal">baseVal</a>,
+    On setting baseVal,
     the following steps are run:
 
     <ol class='algorithm'>
@@ -2750,8 +2736,8 @@ Interface SVGAnimatedLength</h4>
     <p class='ready-for-wider-review'>The <b id="__svg__SVGAnimatedLength__baseVal">baseVal</b> and
     <b id="__svg__SVGAnimatedLength__animVal">animVal</b> IDL attributes
     represent the current value of the reflected content attribute.
-    On getting <a href="#__svg__SVGAnimatedLength__baseVal">baseVal</a> or
-    <a href="#__svg__SVGAnimatedLength__animVal">animVal</a>,
+    On getting baseVal or
+    animVal,
     an [[#InterfaceSVGLength|SVGLength]] object is returned that:
 
     <ul>
@@ -2770,7 +2756,7 @@ Interface SVGAnimatedAngle</h4>
 
     An [[#InterfaceSVGAnimatedAngle|SVGAnimatedAngle]] object is used to [=reflect=]
     the <<angle>> value of the animated <{marker/orient}>
-    attribute on {{marker element}}, through the
+    attribute on <{marker}> element, through the
     <a href='painting.html#__svg__SVGMarkerElement__orientAngle'>orientAngle</a>
     IDL attribute.
 
@@ -2787,14 +2773,14 @@ Interface SVGAnimatedAngle</h4>
     <b id="__svg__SVGAnimatedAngle__animVal">animVal</b> IDL attributes represent
     the current non-animated <<angle>> value of the
     reflected <{marker/orient}> attribute.  On getting
-    <a href="#__svg__SVGAnimatedAngle__baseVal">baseVal</a> or
-    <a href="#__svg__SVGAnimatedAngle__animVal">animVal</a>, an
+    baseVal or
+    animVal, an
     [[#InterfaceSVGAngle|SVGAngle]] object is returned that:
 
     <ul>
     <li><a href='#AngleMode'>reflects the base value</a> of the
     reflected <{marker/orient}> attribute, and
-    <li>is <a href='#AngleAssociatedElement'>associated with</a> the SVG {{marker element}}
+    <li>is <a href='#AngleAssociatedElement'>associated with</a> the SVG <{marker}> element
     element that the object with the reflecting IDL attribute of type
     [[#InterfaceSVGAnimatedAngle|SVGAnimatedAngle]] was obtained from.
     </ul>
@@ -2835,9 +2821,9 @@ Interface SVGAnimatedString</h4>
     <li>Otherwise, the reflected attribute is present.  Return its value.
     </ol>
 
-    <p class='note'>For the <a href='#__svg__SVGURIReference__href'>href</a>
+    <p class='note'>For the href
     member on the [[#InterfaceSVGURIReference|SVGURIReference]] interface, this will result in
-    the deprecated <a href="#linking-XLinkHrefAttribute">xlink:href</a> attribute being returned if it is
+    the deprecated <a href="#XLinkHrefAttribute">xlink:href</a> attribute being returned if it is
     present and the <span class="attr-name">href</span> attribute is not,
     and in the <span class="attr-name">href</span> attribute being
     returned in all other cases.
@@ -2849,7 +2835,7 @@ Interface SVGAnimatedString</h4>
     <li>If the reflected attribute’s element is an [[#InterfaceSVGScriptElement|SVGScriptElement]], let <var>value</var> be the result of
         executing the <a href="https://www.w3.org/TR/trusted-types/#get-trusted-type-compliant-string-algorithm">Get Trusted Type compliant string</a>
         algorithm, with <a href="https://www.w3.org/TR/trusted-types/#trustedscripturl">TrustedScriptURL</a>,
-        reflected attribute’s Document's relevant global object, 'SVGScriptElement href', and 'script'.
+        reflected attribute’s Document's relevant global object, <span class="attr-value">SVGScriptElement href</span>, and <span class="attr-value">script</span>.
     <li>Otherwise, let value be the specified value.
     <li>If the reflected attribute is not present,
     the [[#InterfaceSVGAnimatedString|SVGAnimatedString]] object is defined to additionally reflect
@@ -2862,9 +2848,9 @@ Interface SVGAnimatedString</h4>
     <a href="https://www.w3.org/TR/trusted-types/">Trusted Types</a> assumes that the attribute and
     text body modification protections behave similarly to ones for HTML scripts.
 
-    <p class='note'>For the <a href='#__svg__SVGURIReference__href'>href</a>
+    <p class='note'>For the href
     member on the [[#InterfaceSVGURIReference|SVGURIReference]] interface, this will result in
-    the deprecated <a href="#linking-XLinkHrefAttribute">xlink:href</a> attribute being set if it is
+    the deprecated <a href="#XLinkHrefAttribute">xlink:href</a> attribute being set if it is
     present and the <span class="attr-name">href</span> attribute is not,
     and in the <span class="attr-name">href</span> attribute being
     set in all other cases.
@@ -2890,12 +2876,12 @@ Interface SVGAnimatedRect</h4>
     <p class='ready-for-wider-review'>The <b id="__svg__SVGAnimatedRect__baseVal">baseVal</b>
     and <b id="__svg__SVGAnimatedRect__animVal">animVal</b> IDL
     attributes represent the current non-animated rectangle value of
-    the reflected attribute.  On getting <a href="#__svg__SVGAnimatedRect__baseVal">baseVal</a>
-    or <a href="#__svg__SVGAnimatedRect__animVal">animVal</a>,
+    the reflected attribute.  On getting baseVal
+    or animVal,
     a {{DOMRect}} object is returned.
 
-    <p class='ready-for-wider-review'>Upon creation of the <a href="#__svg__SVGAnimatedRect__baseVal">baseVal</a>
-    or <a href="#__svg__SVGAnimatedRect__animVal">animVal</a>
+    <p class='ready-for-wider-review'>Upon creation of the baseVal
+    or animVal
     {{DOMRect}} objects, and afterwards whenever the reflected content attribute
     is added, removed, or changed, the following steps are run:
 
@@ -2919,8 +2905,8 @@ Interface SVGAnimatedRect</h4>
     <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#y-coordinate">y coordinate</a>,
     <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#width">width</a> or
     <a href="https://www.w3.org/TR/2014/WD-geometry-1-20140522/#height">height</a> property
-    of the <a href="#__svg__SVGAnimatedRect__baseVal">baseVal</a> or
-    <a href="#__svg__SVGAnimatedRect__animVal">animVal</a>
+    of the baseVal or
+    animVal
     {{DOMRect}} object changes, except as part of the previous algorithm that
     reflects the value of the content attribute into the {{DOMRect}}, the reflected
     content attribute must be [=reserialized=].
@@ -2942,8 +2928,8 @@ Interface SVGAnimatedNumberList</h4>
     <p class='ready-for-wider-review'>The <b id="__svg__SVGAnimatedNumberList__baseVal">baseVal</b>
     and <b id="__svg__SVGAnimatedNumberList__animVal">animVal</b> IDL attributes
     represent the current non-animated value of the reflected attribute.
-    On getting <a href="#__svg__SVGAnimatedNumberList__baseVal">baseVal</a> or
-    <a href="#__svg__SVGAnimatedNumberList__animVal">animVal</a>,
+    On getting baseVal or
+    animVal,
     an [[#InterfaceSVGNumberList|SVGNumberList]] object is returned that reflects the base value
     of the reflected attribute.
 
@@ -2965,8 +2951,8 @@ Interface SVGAnimatedLengthList</h4>
     <p class='ready-for-wider-review'>The <b id="__svg__SVGAnimatedLengthList__baseVal">baseVal</b>
     or <b id="__svg__SVGAnimatedLengthList__animVal">animVal</b> IDL attributes
     represent the current non-animated value of the reflected attribute.
-    On getting <a href="#__svg__SVGAnimatedLengthList__baseVal">baseVal</a> or
-    <a href="#__svg__SVGAnimatedLengthList__animVal">animVal</a>,
+    On getting baseVal or
+    animVal,
     an [[#InterfaceSVGLengthList|SVGLengthList]] object is returned that reflects the base value
     of the reflected attribute.
 
@@ -3052,7 +3038,7 @@ Mixin SVGURIReference</h3>
 
     The [[#InterfaceSVGURIReference|SVGURIReference]] interface is used to reflect
     the <span class="attr-name">href</span> attribute and the deprecated
-    <a href="#linking-XLinkHrefAttribute">xlink:href</a> attribute.
+    <a href="#XLinkHrefAttribute">xlink:href</a> attribute.
 
     <pre class="idl">
     interface mixin <b>SVGURIReference</b> {
@@ -3063,20 +3049,20 @@ Mixin SVGURIReference</h3>
     The <b id="__svg__SVGURIReference__href">href</b> IDL attribute
     represents the value of the <span class="attr-name">href</span>
     attribute, and, on elements that are defined to support it,
-    the deprecated <a href="#linking-XLinkHrefAttribute">xlink:href</a> attribute.  On getting
-    <a href='#__svg__SVGURIReference__href'>href</a>, an
+    the deprecated <a href="#XLinkHrefAttribute">xlink:href</a> attribute.  On getting
+    href, an
     [[#InterfaceSVGAnimatedString|SVGAnimatedString]] object is returned that:
 
     <ul>
     <li>reflects the <span class="attr-name">href</span> attribute, and
     <li>if the element is defined to support the deprecated
-    <a href="#linking-XLinkHrefAttribute">xlink:href</a> attribute, additionally reflects that deprecated attribute.
+    <a href="#XLinkHrefAttribute">xlink:href</a> attribute, additionally reflects that deprecated attribute.
     </ul>
 
     <p class='note'>The [[#InterfaceSVGAnimatedString|SVGAnimatedString]] interface is defined
-    to reflect, through its <a href='#__svg__SVGAnimatedString__baseVal'>baseVal</a>
-    and <a href='#__svg__SVGAnimatedString__animVal'>animVal</a> members, the deprecated
-    <a href="#linking-XLinkHrefAttribute">xlink:href</a> attribute, if that attribute is
+    to reflect, through its baseVal
+    and animVal members, the deprecated
+    <a href="#XLinkHrefAttribute">xlink:href</a> attribute, if that attribute is
     present and the <span class="attr-name">href</span> is not, and to
     reflect the <span class="attr-name">href</span> attribute in all
     other circumstances. <a href="https://svgwg.org/specs/animations/">Animation elements</a>

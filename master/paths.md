@@ -1,6 +1,6 @@
-<h2>Paths</h2>
+<h2 id="chap-paths">Paths</h2>
 
-<h3 id="Introduction">Introduction</h3>
+<h3 id="paths-intro">Introduction</h3>
 
 <p>
   A path represents the outline of a shape which can be filled or
@@ -36,12 +36,12 @@ href="paths.html#PathElementImplementationNotes"><span
 class="element-name">path</span> element implementation
 Notes</a>.
 
-<p>A path is defined in SVG using the {{path}} element.
+<p>A path is defined in SVG using the <{path}> element.
 
 <p>The [=basic shapes=] are all described in terms of what their
 <dfn id="TermEquivalentPath">equivalent path</dfn> is, which is
 what their shape is as a path.  (The equivalent path of a
-{{path}} element is simply the path itself.)
+<{path}> element is simply the path itself.)
 In order to define the basic shapes as equivalent paths,
 a [=segment-completing close path=] operation is defined,
 which cannot currently be represented in the basic path syntax.
@@ -55,8 +55,7 @@ which cannot currently be represented in the basic path syntax.
                id="paths-elementdef-path">path</dfn>’</span></div>
       <dl>
         <dt>Categories:</dt>
-        <dd><a href="#struct-TermGraphicsElement">Graphics element</a>, <a
-             href="#render-TermRenderableElement">renderable element</a>, <a href="#shapes-TermShapeElement">shape
+        <dd><a href="#TermGraphicsElement">Graphics element</a>, [=renderable element=], <a href="#TermShapeElement">shape
             element</a></dd>
         <dt>Content model:</dt>
         <dd>Any number of the following elements, in any order:<ul class="no-bullets">
@@ -69,29 +68,27 @@ which cannot currently be represented in the basic path syntax.
                      href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>,
                 <span class="element-name">‘<a
                      href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li>
-            <li><a href="#struct-TermDescriptiveElement">descriptive elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a href="#struct-DescElement"><span>desc</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-TitleElement"><span>title</span></a>’</span>, <span
-                      class="element-name">‘<a href="#struct-MetadataElement"><span>metadata</span></a>’</span></span>
+            <li>[=descriptive element|descriptive elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{desc}>’</span>, <span
+                      class="element-name">‘<{title}>’</span>, <span
+                      class="element-name">‘<{metadata}>’</span></span>
             </li>
-            <li><a href="#painting-TermPaintServerElement">paint server elements</a><span class="expanding"> — <span
-                      class="element-name">‘<a
-                     href="#pservers-LinearGradientElement"><span>linearGradient</span></a>’</span>, <span
-                      class="element-name">‘<a
-                     href="#pservers-RadialGradientElement"><span>radialGradient</span></a>’</span>, <span
-                      class="element-name">‘<a href="#pservers-PatternElement"><span>pattern</span></a>’</span></span>
+            <li>[=paint server element|paint server elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{linearGradient}>’</span>, <span
+                      class="element-name">‘<{radialGradient}>’</span>, <span
+                      class="element-name">‘<{pattern}>’</span></span>
             </li>
           </ul><span class="element-name"><a
                href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span
-                class="element-name"><a href="#painting-MarkerElement"><span>marker</span></a></span>, <span
+                class="element-name"><{marker}></span>, <span
                 class="element-name"><a
                href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span
-                class="element-name"><a href="#interact-ScriptElement"><span>script</span></a></span>, <span
-                class="element-name"><a href="#styling-StyleElement"><span>style</span></a></span></dd>
+                class="element-name"><{script}></span>, <span
+                class="element-name"><{style}></span></dd>
         <dt>Attributes:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a href="#struct-TermARIAAttribute">aria attributes</a><span class="expanding"> — <span
+            <li>[=aria attributes=]<span class="expanding"> — <span
                       class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>,
                 <span class="attr-name">‘<a
@@ -188,117 +185,110 @@ which cannot currently be represented in the basic path syntax.
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>,
                 <span class="attr-name">‘<a
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
-                <span class="attr-name">‘<a href="#struct-RoleAttribute"><span>role</span></a>’</span></span></li>
-            <li><a href="#struct-TermConditionalProcessingAttribute">conditional processing attributes</a><span
+                <span class="attr-name">‘<a href="#RoleAttribute"><span>role</span></a>’</span></span></li>
+            <li>[=conditional processing attributes=]<span
                     class="expanding"> — <span class="attr-name">‘<a
-                     href="#struct-RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
+                     href="#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
                       class="attr-name">‘<a
-                     href="#struct-SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
-            <li><a href="#struct-TermCoreAttribute">core attributes</a><span class="expanding"> — <span
-                      class="attr-name">‘<a href="#struct-IDAttribute"><span>id</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#struct-SVGElementAutofocusAttribute"><span>autofocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-LangAttribute"><span>lang</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#struct-XMLSpaceAttribute"><span>xml:space</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-ClassAttribute"><span>class</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#styling-StyleAttribute"><span>style</span></a>’</span></span></li>
+                     href="#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+            <li>[=core attributes=]<span class="expanding"> — <span
+                      class="attr-name">‘<span>id</span>’</span>, <span
+                      class="attr-name">‘<span>tabindex</span>’</span>, <span
+                      class="attr-name">‘<span>autofocus</span>’</span>, <span
+                      class="attr-name">‘<span>lang</span>’</span>, <span
+                      class="attr-name">‘<span>xml:space</span>’</span>, <span
+                      class="attr-name">‘<span>class</span>’</span>, <span
+                      class="attr-name">‘<span>style</span>’</span></span></li>
             <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
-                attributes</a><span class="expanding"> — <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncancel</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplay</span></a>’</span>, <span class="attr-name">‘<a
-                     href="#interact-EventAttributes"><span>oncanplaythrough</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onchange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onclose</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncopy</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncuechange</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oncut</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondblclick</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrag</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragenter</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragexit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragleave</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondragstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondrop</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ondurationchange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onemptied</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onended</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onerror</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onfocus</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninput</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>oninvalid</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeydown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeypress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onkeyup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onload</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadeddata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadedmetadata</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onloadstart</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousedown</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseenter</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseleave</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onmousemove</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseout</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseover</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onmouseup</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpaste</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onpause</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplay</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onplaying</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onprogress</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onratechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onreset</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onresize</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onscroll</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeked</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onseeking</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onselect</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onshow</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onstalled</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsubmit</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onsuspend</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>ontimeupdate</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>ontoggle</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onvolumechange</span></a>’</span>,
-                <span class="attr-name">‘<a href="#interact-EventAttributes"><span>onwaiting</span></a>’</span>, <span
-                      class="attr-name">‘<a href="#interact-EventAttributes"><span>onwheel</span></a>’</span></span>
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                      class="attr-name">‘<span>onchange</span>’</span>, <span
+                      class="attr-name">‘<span>onclick</span>’</span>, <span
+                      class="attr-name">‘<span>onclose</span>’</span>, <span
+                      class="attr-name">‘<span>oncopy</span>’</span>, <span
+                      class="attr-name">‘<span>oncuechange</span>’</span>, <span
+                      class="attr-name">‘<span>oncut</span>’</span>, <span
+                      class="attr-name">‘<span>ondblclick</span>’</span>, <span
+                      class="attr-name">‘<span>ondrag</span>’</span>, <span
+                      class="attr-name">‘<span>ondragend</span>’</span>, <span
+                      class="attr-name">‘<span>ondragenter</span>’</span>, <span
+                      class="attr-name">‘<span>ondragexit</span>’</span>, <span
+                      class="attr-name">‘<span>ondragleave</span>’</span>, <span
+                      class="attr-name">‘<span>ondragover</span>’</span>, <span
+                      class="attr-name">‘<span>ondragstart</span>’</span>, <span
+                      class="attr-name">‘<span>ondrop</span>’</span>, <span
+                      class="attr-name">‘<span>ondurationchange</span>’</span>,
+                <span class="attr-name">‘<span>onemptied</span>’</span>, <span
+                      class="attr-name">‘<span>onended</span>’</span>, <span
+                      class="attr-name">‘<span>onerror</span>’</span>, <span
+                      class="attr-name">‘<span>onfocus</span>’</span>, <span
+                      class="attr-name">‘<span>oninput</span>’</span>, <span
+                      class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                      class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                      class="attr-name">‘<span>onkeypress</span>’</span>, <span
+                      class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                      class="attr-name">‘<span>onload</span>’</span>, <span
+                      class="attr-name">‘<span>onloadeddata</span>’</span>,
+                <span class="attr-name">‘<span>onloadedmetadata</span>’</span>,
+                <span class="attr-name">‘<span>onloadstart</span>’</span>, <span
+                      class="attr-name">‘<span>onmousedown</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseenter</span>’</span>,
+                <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                <span class="attr-name">‘<span>onmousemove</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseout</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseover</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                      class="attr-name">‘<span>onpaste</span>’</span>, <span
+                      class="attr-name">‘<span>onpause</span>’</span>, <span
+                      class="attr-name">‘<span>onplay</span>’</span>, <span
+                      class="attr-name">‘<span>onplaying</span>’</span>, <span
+                      class="attr-name">‘<span>onprogress</span>’</span>, <span
+                      class="attr-name">‘<span>onratechange</span>’</span>,
+                <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                      class="attr-name">‘<span>onresize</span>’</span>, <span
+                      class="attr-name">‘<span>onscroll</span>’</span>, <span
+                      class="attr-name">‘<span>onseeked</span>’</span>, <span
+                      class="attr-name">‘<span>onseeking</span>’</span>, <span
+                      class="attr-name">‘<span>onselect</span>’</span>, <span
+                      class="attr-name">‘<span>onshow</span>’</span>, <span
+                      class="attr-name">‘<span>onstalled</span>’</span>, <span
+                      class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                      class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                      class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                      class="attr-name">‘<span>onvolumechange</span>’</span>,
+                <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                      class="attr-name">‘<span>onwheel</span>’</span></span>
             </li>
-            <li><a href="#styling-TermPresentationAttribute">presentation attributes</a><span class="expanding"> —
+            <li>[=presentation attributes=]<span class="expanding"> —
               </span></li>
-            <li><span class="attr-name">‘<a href="#paths-PathLengthAttribute"><span>pathLength</span></a>’</span></li>
+            <li><span class="attr-name">‘<a href="#PathLengthAttribute"><span>pathLength</span></a>’</span></li>
           </ul>
         </dd>
         <dt>Geometry properties:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a class="property"
-                 href="#paths-DProperty">d</a></li>
+            <li><a property>d</a></li>
           </ul>
         </dd>
         <dt>DOM Interfaces:</dt>
         <dd>
           <ul class="no-bullets">
-            <li><a class="idlinterface"
-                 href="#paths-InterfaceSVGPathElement">SVGPathElement</a></li>
+            <li>{{SVGPathElement}}</li>
           </ul>
         </dd>
       </dl>
     </div>
 
-<p>The outline of a shape for a {{path}} element is specified using the {{d}}
+<p>The outline of a shape for a <{path}> element is specified using the {{d}}
 property.  See <a href="#PathData">Path data</a> below.
 
 <h3 id="PathData">Path data</h3>
 
 <h4 id="PathDataGeneralInformation">General information about path data</h4>
 
-<p>A path is defined by including a {{path}}
+<p>A path is defined by including a <{path}>
 element on which the {{d}} property specifies the
-path data.  The path data contains the
+<dfn id="TermPathData" data-dfn-type="dfn" data-export="">path data</dfn>. The path data contains the
 <em>moveto</em>, <em>lineto</em>, <em>curveto</em> (both cubic and
 quadratic Béziers), <em>arc</em> and <em>closepath</em>
 instructions.
@@ -413,7 +403,7 @@ describe the syntax of a given path command:
   </tr>
   <tr>
     <th>Applies to:</th>
-    <td>{{path}}</td>
+    <td><{path}></td>
   </tr>
   <tr>
     <th>Inherited:</th>
@@ -437,10 +427,10 @@ describe the syntax of a given path command:
   </tr>
 </table>
 
-<p>The {{d}} property is used to specify the shape of a {{path}} element.
+<p>The {{d}} property is used to specify the shape of a <{path}> element.
 
 <p>The value <span class='prop-value'>none</span> indicates that there is no
-path data for the element.  For {{path}} elements, this means that the
+path data for the element.  For <{path}> elements, this means that the
 element does not render or contribute to the [=bounding box=] of ancestor
 [=container elements=].
 
@@ -624,8 +614,8 @@ of the subpath.
 The first and last [=path segments=] of an [=open subpath=] will not be
 joined, even when the final coordinate of the last [=path segment=] is the
 [=initial point=] of the subpath. This will result in the first and last
-[=path segments=] being capped using the current value of {{stroke-linecap}}
-rather than joined using the current value of {{stroke-linejoin}}.
+[=path segments=] being capped using the current value of 'stroke-linecap'
+rather than joined using the current value of 'stroke-linejoin'.
 
 <p>If a "closepath" is followed immediately by a
 "moveto", then the "moveto" identifies the start point of the
@@ -998,12 +988,12 @@ arcs are drawn, as follows:
   arc sweep of greater than or equal to 180 degrees (the
   "large-arc"), and two will represent an arc sweep of less
   than or equal to 180 degrees (the "small-arc"). If
-  <strong>large-arc-flag</strong> is '1', then one of the two
+  <strong>large-arc-flag</strong> is <span class="attr-value">1</span>, then one of the two
   larger arc sweeps will be chosen; otherwise, if
-  <strong>large-arc-flag</strong> is '0', one of the smaller
+  <strong>large-arc-flag</strong> is <span class="attr-value">0</span>, one of the smaller
   arc sweeps will be chosen,</li>
 
-  <li>If <strong>sweep-flag</strong> is '1', then the arc will
+  <li>If <strong>sweep-flag</strong> is <span class="attr-value">1</span>, then the arc will
   be drawn in a "positive-angle" direction (i.e., the ellipse
   formula x=<strong>cx</strong>+<strong>rx</strong>*cos(theta)
   and y=<strong>cy</strong>+<strong>ry</strong>*sin(theta) is
@@ -1193,7 +1183,7 @@ of [=markers=] and the <a href="painting.html#TermCapShape">shapes</a> of
 the direction of the path at a given distance along the path or at the
 start or end of an individual segment.
 
-<p>The <dfn id="TermPathDirection">direction of a path</dfn> at a specified
+<p>The <dfn id="TermPathDirection" data-export="">direction of a path</dfn> at a specified
 distance along the path is defined as follows:
 
 <ul>
@@ -1348,10 +1338,10 @@ values ensures that:
   follows.
 
 <p>
-  If the current point is (<var>curx</var>, <var>cury</var>) and the
+  If the current point is (<var ignore=''>curx</var>, <var ignore=''>cury</var>) and the
   final control point of the previous [=path segment=] is
-  (<var>oldx2</var>, <var>oldy2</var>), then the reflected point (i.e., (<var>newx1</var>,
-  <var>newy1</var>), the first control point of the current <a>path
+  (<var ignore=''>oldx2</var>, <var ignore=''>oldy2</var>), then the reflected point (i.e., (<var ignore=''>newx1</var>,
+  <var ignore=''>newy1</var>), the first control point of the current <a>path
   segment</a>) is:
 
 <pre>
@@ -1372,7 +1362,7 @@ and will affect rendering in the following cases:
 
   <li>As mentioned in <a href="painting.html#StrokeProperties">Stroke Properties</a>,
   linecaps must be painted for zero-length subpaths when
-  {{stroke-linecap}} has a value of
+  'stroke-linecap' has a value of
   <span class='prop-value'>round</span> or
   <span class='prop-value'>square</span>.</li>
 </ul>
@@ -1386,7 +1376,7 @@ and will affect rendering in the following cases:
 
   <ul>
     <li>The general rule for error handling in path data is
-    that the SVG user agent shall render a {{path}} element up
+    that the SVG user agent shall render a <{path}> element up
     to (but not including) the path command containing the
     first error in the path data specification. This will
     provide a visual clue to the user or developer about
@@ -1418,7 +1408,7 @@ href="text.html#TextLayoutPath">text on a path</a> and <a
 href="https://svgwg.org/specs/animations/#AnimateMotionElement">motion animation</a>
 and various <a href="painting.html#StrokeProperties">stroke
 operations</a>, require that the user agent compute the
-distance along the geometry of a graphics element, such as a {{path}}.
+distance along the geometry of a graphics element, such as a <{path}>.
 
 <p>Exact mathematics exist for computing distance along a path,
 but the formulas are highly complex and require substantial
@@ -1432,7 +1422,7 @@ path so that the user agent can scale distance-along-a-path
 computations by the ratio of {{pathLength}} to the user agent's own
 computed value for total path length.
 
-<p>A "moveto" operation within a {{path}} element is defined to have
+<p>A "moveto" operation within a <{path}> element is defined to have
 zero length. Only the various "lineto", "curveto" and "arcto"
 commands contribute to path length calculations.
 
@@ -1448,7 +1438,7 @@ commands contribute to path length calculations.
         <th>Animatable</th>
       </tr>
       <tr>
-        <td>{{pathLength}}</td>
+        <td><dfn element-attr dfn-for="path, rect, circle, ellipse, line, polyline, polygon" export>pathLength</dfn></td>
         <td><<number>></td>
         <td>(none)</td>
         <td>yes</td>
@@ -1480,11 +1470,11 @@ commands contribute to path length calculations.
 
 
 <div class='ready-for-wider-review'>
-<h3 id="DOMInterfaces">DOM interfaces</h3>
+<h3 id="paths-dom">DOM interfaces</h3>
 
 <h4 id="InterfaceSVGPathElement">Interface SVGPathElement</h4>
 
-<p>An [[#InterfaceSVGPathElement|SVGPathElement]] object represents a {{path}} in the DOM.
+<p>An [[#InterfaceSVGPathElement|SVGPathElement]] object represents a <{path}> in the DOM.
 
 <pre class="idl">
 [<a>Exposed</a>=Window]

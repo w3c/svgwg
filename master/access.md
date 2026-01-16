@@ -41,7 +41,7 @@ on each <a href="types.html#InterfaceSVGElement">SVG Element</a> in the DOM</li>
   <dd>
     <ul>
       <li>To enable bypassing of blocks of content SVG supports the: WAI-ARIA <a href="https://www.w3.org/TR/wai-aria-1.1/#landmark_roles">landmark</a> roles.</li>
-      <li>Supports {{title}} to provide page titles.</li>
+      <li>Supports <{title}> to provide page titles.</li>
       <li>Supports <a element-attr for="core-attributes">tabindex</a> to provide a sequential focus navigation order.</li>
       <li>Supports the <a element spec="svg2">a</a> element, enabling authors to supply the link purpose both from its content.</li>
       <li>Supports headings and labels through the use of the <a href="https://www.w3.org/TR/wai-aria-1.1/#heading">heading</a> role with <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-level">aria-level</a>, <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-labelledby">aria-labelledby</a> and <a href="https://www.w3.org/TR/wai-aria-1.1/#aria-label">aria-label</a>.</li>
@@ -62,7 +62,7 @@ on each <a href="types.html#InterfaceSVGElement">SVG Element</a> in the DOM</li>
 </a></span></dt>
   <dd>
     <ul>
-      <li>Supports Name, Role, and Value through the use of <a href="struct.html#WAIARIAAttributes">WAI-ARIA attributes</a> and the {{title}} element.</li>
+      <li>Supports Name, Role, and Value through the use of <a href="struct.html#WAIARIAAttributes">WAI-ARIA attributes</a> and the <{title}> element.</li>
     </ul>
   </dd>
 </dl>

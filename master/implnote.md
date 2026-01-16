@@ -1,6 +1,6 @@
-<h2>Appendix B: Implementation Notes</h2>
+<h2 id="chap-implnote">Appendix B: Implementation Notes</h2>
 
-<h3 id="Introduction">Introduction</h3>
+<h3 id="implnote-intro">Introduction</h3>
 
 <p>The following notes describe algorithms and other strategies
 which can be used by software developers when converting content
@@ -1686,7 +1686,7 @@ The steps for generating content that takes advantage of this are:
   the coordinate system which the original content has originally will be called source space. </li>
   <li>Generate a coordinate transformation matrix per tile to transform from
   source space to tile space, where tile space is a coordinate system with origin
-  <var>(0,0)</var> at the top left of the tile. Each element of the
+  <var ignore=''>(0,0)</var> at the top left of the tile. Each element of the
   transformation matrix must be within the range of single precision.</li>
   <li>Transform the contents of each tile from source space to tile space using
   the generated coordinate transformation matrix. The result is that the parameters of each object can now be

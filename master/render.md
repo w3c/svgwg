@@ -87,18 +87,18 @@ Definitions</h4>
             elements that have no  visual paint may still be in the 
             rendering tree.
 
-        <dt><dfn>rendered element</dfn>
+        <dt><dfn data-dfn-type="dfn" data-export="" data-lt="rendered">rendered element</dfn>
         <dd>
             An element that has a direct representation in the
             [=rendering tree=] for the current document.
-            Includes a rendered [=element instance|instance=] of an 
-            element in a [=use-element shadow tree=]. Does not include 
-            elements that affect rendering as the source definition of 
+            Includes a rendered [=element instance|instance=] of an
+            element in a [=use-element shadow tree=]. Does not include
+            elements that affect rendering as the source definition of
             re-used graphics but are not directly rendered themselves.
-            See [[#Rendered-vs-NonRendered|Rendered versus 
+            See [[#Rendered-vs-NonRendered|Rendered versus
             non-rendered elements]]
 
-        <dt><dfn>non-rendered element</dfn>
+        <dt><dfn data-dfn-type="dfn" data-export="" data-lt="non-rendered element|not rendered">non-rendered element</dfn>
         <dd>
             An element that does not have a direct representation in the
             [=rendering tree=] for the current document. It may 
@@ -126,7 +126,7 @@ Definitions</h4>
             the [=instance root=] of a [=use-element shadow tree=].
             
         </dd>
-        <dt><dfn>renderable element</dfn>
+        <dt id="TermRenderableElement"><dfn>renderable element</dfn>
         <dd>
             Any element type that <em>can</em> have a direct 
             representation in the [=rendering tree=], as a graphic, 
@@ -576,7 +576,7 @@ Object and group opacity: the effect of the
         </pre>
 
         <div class='figure'>
-        <img class='bordered' src='images/masking/opacity01.svg' 
+        <img no-autosize class='bordered' src='images/masking/opacity01.svg' 
         alt='Image showing different groups of circles blended into 
         the background.'>
         <p class='caption'>Each group of red and green circles is 
