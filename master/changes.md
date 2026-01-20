@@ -737,7 +737,7 @@ have been made.
 
   <li>
     Clarify image and foreignObject sizing to be consistent with CSS and with geometry properties;
-    allow embedded HTML elements to be positioned using 'x', 'y', 'width', and 'height' geometric properties.
+    allow embedded HTML elements to be positioned using 'x', 'y', <a href="#Sizing">width</a>, and <a href="#Sizing">height</a> geometric properties.
   </li>
 
   <li>

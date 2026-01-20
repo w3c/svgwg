@@ -2937,7 +2937,7 @@ Interface SVGAnimatedNumberList</h4>
 Interface SVGAnimatedLengthList</h4>
 
     An [[#InterfaceSVGAnimatedLengthList|SVGAnimatedLengthList]] object is used to [=reflect=] an animatable
-    attribute that takes a list of <<length>>, <a>&lt;percentage&gt;</a>
+    attribute that takes a list of <<length>>, <<percentage>>
     or <<number>> values.
 
     <pre class="idl">
@@ -2990,8 +2990,8 @@ Interface SVGUnitTypes</h4>
     </table>
 
 
-<h3 id="InterfaceSVGTests" data-dfn-type="interface" data-lt="SVGTests">
-Mixin SVGTests</h3>
+<h4 id="InterfaceSVGTests" data-dfn-type="interface" data-lt="SVGTests">
+Mixin SVGTests</h4>
 
     The [[#InterfaceSVGTests|SVGTests]] interface is used to reflect
     [=conditional processing attributes=], and is mixed in to other
@@ -3011,8 +3011,8 @@ Mixin SVGTests</h3>
     [=reflects=] the {{systemLanguage}} content attribute.
 
 
-<h3 id="InterfaceSVGFitToViewBox" data-dfn-type="interface" data-lt="SVGFitToViewBox">
-Mixin SVGFitToViewBox</h3>
+<h4 id="InterfaceSVGFitToViewBox" data-dfn-type="interface" data-lt="SVGFitToViewBox">
+Mixin SVGFitToViewBox</h4>
 
     The [[#InterfaceSVGFitToViewBox|SVGFitToViewBox]] interface is used to reflect
     the [[#ViewBoxAttribute|viewBox]] and [[#PreserveAspectRatioAttribute|preserveAspectRatio]] attributes,
@@ -3033,8 +3033,8 @@ Mixin SVGFitToViewBox</h3>
     [=reflects=] the [[#PreserveAspectRatioAttribute|preserveAspectRatio]] content attribute.
 
 
-<h3 id="InterfaceSVGURIReference" data-dfn-type="interface" data-lt="SVGURIReference">
-Mixin SVGURIReference</h3>
+<h4 id="InterfaceSVGURIReference" data-dfn-type="interface" data-lt="SVGURIReference">
+Mixin SVGURIReference</h4>
 
     The [[#InterfaceSVGURIReference|SVGURIReference]] interface is used to reflect
     the <span class="attr-name">href</span> attribute and the deprecated

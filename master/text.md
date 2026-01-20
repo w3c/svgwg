@@ -244,7 +244,7 @@ Text Module Level 3</a>,
     A text content element is an SVG element that causes a text
     string to be rendered onto the canvas. The SVG text content
     elements are:
-    @@elementcategory text content@@.
+    <{text}>, <{textPath}> and <{tspan}>.
   </dd>
 
   <dt><dfn id="TermTextContentChildElement">text content child element</dfn></dt>
@@ -252,7 +252,7 @@ Text Module Level 3</a>,
     A text content child element is a [=text content element=]
     that is allowed as a descendant of another <a>text content
     element</a>. In SVG the text content child elements are:
-    @@elementcategory text content child@@.
+    <{textPath}> and <{tspan}>.
   </dd>
 
   <dt><dfn id="TermTextContentBlockElement">text content block element</dfn></dt>

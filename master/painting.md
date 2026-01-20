@@ -134,7 +134,7 @@ Four types of paints within these paint layers are supported:
   <dt><a>&lt;url&gt;</a> [none | <a>&lt;color&gt;</a>]?</dt>
   <dd>A URL reference to a <dfn id="TermPaintServerElement" dfn export>paint server element</dfn>,
   which is an element that defines a <a href="pservers.html">paint server</a>:
-  @@elementcategory paint server@@, optionally followed by a fall-back
+  <{linearGradient}>, <{radialGradient}> or <{pattern}>, optionally followed by a fall-back
   value that is used if the paint server reference cannot be resolved.</dd>
 
   <dt><a>&lt;color&gt;</a></dt>

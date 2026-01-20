@@ -25,17 +25,10 @@ content embedded inline as a fragment within a parent XML document.
 Note the use of XML namespaces to indicate that the <{svg}> and
 <{ellipse}> elements belong to the [=SVG namespace=]:
 
-<xmp>
-<?xml version="1.0" standalone="yes"?>
-<parent xmlns="http://example.org"
-        xmlns:svg="http://www.w3.org/2000/svg">
-   <!-- parent contents here -->
-   <svg:svg width="4cm" height="8cm">
-      <svg:ellipse cx="2cm" cy="4cm" rx="2cm" ry="1cm" />
-   </svg:svg>
-   <!-- ... -->
-</parent>
-</xmp>
+<pre class=include-code>
+path: images/struct/parent-xml-doc.xml
+highlight: xml
+</pre>
 
 <p>This example shows a slightly more complex (i.e., it contains
 multiple rectangles) stand-alone, self-contained SVG document:
@@ -64,13 +57,10 @@ as belonging to the SVG namespace.
 
 <p>When using the HTML syntax, the namespace is provided automatically by the HTML parser.
 
-<xmp>
-<html>
-<svg viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="50" fill="green">
-</svg>
-</html>
-</xmp>
+<pre class=include-code>
+path: images/struct/html-doc-with-svg.html
+highlight: html
+</pre>
 
 <p>As the example shows there's no need to have an <span class="attr-name">xmlns</span>
   attribute declaring that the element is in the SVG namespace when using the HTML parser.
@@ -90,22 +80,20 @@ attribute without a namespace prefix could be specified on an
 <{svg}> element, which means that SVG is the default namespace
 for all elements within the scope of the element with the <span class="attr-name">xmlns</span> attribute:
 
-<xmp>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect x="10" y="10" width="80" height="80" fill="green" />
-</svg>
-</xmp>
+<pre class=include-code>
+path: images/struct/svg-namespace-example.svg
+highlight: xml
+</pre>
 
 <p>If a namespace prefix is specified on the <span class="attr-name">xmlns</span>
 attribute (e.g., <code class='xml'>xmlns:svg="http://www.w3.org/2000/svg"</code>),
 then the corresponding namespace is not the default namespace, so an
 explicit namespace prefix must be assigned to the elements:
 
-<xmp>
-<svg:svg xmlns:svg="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <svg:rect x="10" y="10" width="80" height="80" fill="green" />
-</svg:svg>
-</xmp>
+<pre class=include-code>
+path: images/struct/svg-namespace-example-02.svg
+highlight: xml
+</pre>
 
 <p>Namespace prefixes can be specified on ancestor elements (illustrated
 in the <a href="#EmbeddedSVGExample">above example</a>). For more
@@ -119,13 +107,13 @@ information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommend
   <dd>The structural elements are those which define the primary
   structure of an SVG document.  Specifically, the following
   elements are structural elements:
-  @@elementcategory name=<span class="attr-value">structural</span>@@.</dd>
+  <{defs}>, <{g}>, <{svg}>, <{symbol}> and <{use}>.</dd>
 
   <dt><dfn id="TermStructurallyExternalElement" data-dfn-type="dfn" data-export="">structurally external element</dfn></dt>
   <dd>Elements that define its structure by reference to an external resource.
   Specifically, the following elements are structurally external elements when
   they have an <span class="attr-name">href</span> attribute:
-  @@elementcategory structurally external@@.</dd>
+  <{foreignObject}>, <{image}>, <{script}> and <{use}>.</dd>
 
   <dt><dfn id="TermCurrentSVGDocumentFragment" data-dfn-type="dfn" data-export="">current SVG document fragment</dfn></dt>
   <dd>The document sub-tree which starts with the outermost
@@ -155,12 +143,12 @@ information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommend
   <dt id="TermGraphicsElement"><dfn id="graphics-element" data-dfn-type="dfn" data-export="">graphics element</dfn></dt>
   <dd>One of the element types that can cause graphics to be
   drawn onto the target canvas. Specifically:
-  @@elementcategory graphics@@.</dd>
+  <{circle}>, <{ellipse}>, <{foreignObject}>, <{image}>, <{line}>, <{path}>, <{polygon}>, <{polyline}>, <{rect}>, <{text}>, <{textPath}> and <{tspan}>.</dd>
 
   <dt id="TermGraphicsReferencingElement"><dfn id="graphics-referencing-element" data-dfn-type="dfn" data-export="">graphics referencing element</dfn></dt>
   <dd>A graphics element which uses a reference to a different
   document or element as the source of its graphical content.
-  Specifically: @@elementcategory graphics referencing@@.</dd>
+  Specifically: <{image}> and <{use}>.</dd>
 
 </dl>
 
@@ -442,8 +430,8 @@ information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommend
           <ul class="no-bullets">
             <li><a property>x</a></li>
             <li><a property>y</a></li>
-            <li><a property>width</a></li>
-            <li><a property>height</a></li>
+            <li><a href="#Sizing">width</a></li>
+            <li><a href="#Sizing">height</a></li>
           </ul>
         </dd>
         <dt>DOM Interfaces:</dt>
@@ -464,7 +452,7 @@ information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommend
 
 <p>
   For [=outermost svg elements=],
-  the 'width' and 'height' attributes specify
+  the <a href="#Sizing">width</a> and <a href="#Sizing">height</a> attributes specify
   the intrinsic size of the SVG document fragment.
   For embedded <{svg}> elements, they specify the size
   of the rectangular region into which the <{svg}> element
@@ -493,7 +481,7 @@ replace the generic [=event handlers=] with the same names normally supported by
   <dt id="TermContainerElement"><dfn id="container-element" data-dfn-type="dfn" data-export="">container element</dfn></dt>
   <dd>An element which can have [=graphics elements=] and other
   container elements as child elements. Specifically:
-  @@elementcategory container@@.</dd>
+  <{a}>, <{clipPath}>, <{defs}>, <{g}>, <{marker}>, <{mask}>, <{pattern}>, <{svg}>, <{switch}> and <{symbol}>.</dd>
 </dl>
 
 <p>The <{g}> element is a [=container element=] for grouping together
@@ -1205,10 +1193,10 @@ directly.
           <dt>Geometry properties:</dt>
           <dd>
             <ul class="no-bullets">
-              <li>'x'</li>
-              <li>'y'</li>
-              <li>'width'</li>
-              <li>'height'</li>
+              <li><a property>x</a></li>
+              <li><a property>y</a></li>
+              <li><a href="#Sizing">width</a></li>
+              <li><a href="#Sizing">height</a></li>
             </ul>
           </dd>
           <dt>DOM Interfaces:</dt>
@@ -1220,10 +1208,10 @@ directly.
         </dl>
       </div>
 
-<p>The 'x', 'y', 'width', and 'height' geometry properties
+<p>The 'x', 'y', <a href="#Sizing">width</a>, and <a href="#Sizing">height</a> geometry properties
   have the same effect as on an <{svg}> element,
   when the <{symbol}> is instantiated by a <{use}> element.
-  In particular, if 'width' and 'height'
+  In particular, if <a href="#Sizing">width</a> and <a href="#Sizing">height</a>
   compute to <span class="prop-value">auto</span>
   (and are not over-ridden by values on the instantiating <{use}> element),
   then they will be treated as a value of <span class="prop-value">100%</span>.
@@ -1265,6 +1253,7 @@ Note:
     </table>
   </dt>
   <dd>
+
     Note: 
       New in SVG 2. Added to make it easier to align symbols to a
       particular point, as is often done in maps. Similar to the
@@ -1624,10 +1613,10 @@ behaves as a symbol definition, and must not be rendered.
           <dt>Geometry properties:</dt>
           <dd>
             <ul class="no-bullets">
-              <li>'x'</li>
-              <li>'y'</li>
-              <li>'width'</li>
-              <li>'height'</li>
+              <li><a property>x</a></li>
+              <li><a property>y</a></li>
+              <li><a href="#Sizing">width</a></li>
+              <li><a href="#Sizing">height</a></li>
             </ul>
           </dd>
           <dt>DOM Interfaces:</dt>
@@ -1656,18 +1645,18 @@ also apply in the scope of the cloned [=shadow tree=].
 
 
 
-    <p>The 'x', 'y', 'width' and 'height'
+    <p>The 'x', 'y', <a href="#Sizing">width</a> and <a href="#Sizing">height</a>
     geometric properties specify the positioning of the referenced element.
-    The 'width' and 'height' attributes
+    The <a href="#Sizing">width</a> and <a href="#Sizing">height</a> attributes
     only have an effect if the [=referenced element=]
     defines a viewport (i.e., if it is a <{svg}> or <{symbol}>);
     if so, a value other than <span class="prop-value">auto</span>
     for the <{use}> element overrides the value
     of the corresponding geometric property on that element.
     
-    <p>A negative value for 'width' or 'height'
+    <p>A negative value for <a href="#Sizing">width</a> or <a href="#Sizing">height</a>
     is [=invalid=] and must be [=ignored=].
-    If 'width' or 'height' is zero,
+    If <a href="#Sizing">width</a> or <a href="#Sizing">height</a> is zero,
     and the properties have an effect on the [=referenced element=],
     then rendering of that element will be disabled.
 
@@ -1911,7 +1900,7 @@ is in error and must not be rendered by the user agent.
 
 <h4 id="UseLayout">Layout of re-used graphics</h4>
 
-<p>The value of the 'x', 'y', 'width' and 'height' properties
+<p>The value of the 'x', 'y', <a href="#Sizing">width</a> and <a href="#Sizing">height</a> properties
 on a <{use}> element
 are used to position the re-used graphics
 and to set the viewport size
@@ -1951,7 +1940,7 @@ or from their effect in CSS box layout.
 </div>
 
 <p>
-  The 'width' and 'height' properties
+  The <a href="#Sizing">width</a> and <a href="#Sizing">height</a> properties
   on the <{use}> element
   override the values for the corresponding properties
   on a referenced <{svg}> or <{symbol}> element
@@ -1968,7 +1957,7 @@ or from their effect in CSS box layout.
   the values set on the <{svg}> or <{symbol}> will be used as defaults.
 
 <p>
-  The 'width' and 'height' properties
+  The <a href="#Sizing">width</a> and <a href="#Sizing">height</a> properties
   on the <{use}> element have no effect
   if the [=referenced element=] does not
   <a href="coords.html#EstablishingANewSVGViewport">establish a new viewport</a>.
@@ -2105,11 +2094,15 @@ Note:
   <p>
     The re-used circle therefore differs from the original in both fill color (because it inherits from a different element) and stroke color (because the complex selector no longer matches).
   
-
+<div class="example">
 <pre class=include-code>
 path: images/struct/Use-changed-styles.svg
 highlight: xml
 </pre>
+<pre class=include>
+path: images/struct/Use-changed-styles.svg
+</pre>
+</div>
 
   <p>
     Previous versions of SVG
@@ -2907,11 +2900,11 @@ element whether to render the element or not.
   <dt><dfn id="TermDescriptiveElement" data-dfn-type="dfn" data-export="">descriptive element</dfn></dt>
   <dd>An element which provides supplementary descriptive information about
   its parent.  Specifically, the following elements are descriptive elements:
-  @@elementcategory descriptive@@.</dd>
+  <{desc}>, <{metadata}> and <{title}>.</dd>
 </dl>
 
 Note: Multilingual descriptive text selection, based on the {{lang}} attribute, was added to allow internationalization
-of the <{desc}> and <{title}> element elements.
+of the <{desc}> and <{title}> elements.
 
 <p class="annotation">New in SVG 2. Adding <span class="attr-value">lang</span> resolved at Rigi Kaltbad face-to-face.
 Removed text that limited number of <{desc}> and <{title}> elements. Status: Done.

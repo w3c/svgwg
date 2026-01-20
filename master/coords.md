@@ -181,7 +181,6 @@ unit in the initial coordinate system must equal one
 <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/syndata.html#length-units">CSS 2.1 px</a>
 ([[CSS2]], section 4.3.2)
 in the SVG viewport.
-
 In stand-alone SVG documents and in SVG document fragments embedded
 (by reference or inline) within parent documents where the parent's
 layout is determined by CSS [[CSS2]],
@@ -215,8 +214,8 @@ pointing down. The initial user coordinate system has one user
 unit equal to the parent (implicit or explicit) user agent's
 "pixel".
 
-@@fix
-<!-- <pre class=include-code>
+<!-- @@fix
+<pre class=include-code>
 path: images/coords/InitialCoords.svg
 highlight: xml
 </pre>

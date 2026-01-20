@@ -292,7 +292,7 @@ Where, for each channel:
   <dt><dfn id="TermGradientElement" data-dfn-type="dfn" data-export="">gradient element</dfn></dt>
   <dd>A gradient element is one that defines a gradient paint server.
     This specification defines the following gradient elements:
-    @@elementcategory gradient@@.
+    <{linearGradient}> and <{radialGradient}>.
   </dd>
 </dl>
 

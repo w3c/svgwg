@@ -82,8 +82,8 @@ Definitions</h4>
             document tree by excluding [=non-rendered elements=] and 
             inserting additional fragments for [=re-used graphics=].
             Graphics are painted and composited in rendering-tree 
-            order, subject to re-ordering based on the @@fix
-            [[SVG2#PaintOrder|paint-order]] property. Note that 
+            order, subject to re-ordering based on the 
+            [[#PaintOrder|paint-order]] property. Note that 
             elements that have no  visual paint may still be in the 
             rendering tree.
 
@@ -199,9 +199,9 @@ Rendered versus non-rendered elements</h4>
             layout]]
     </ul>
 
-    Non-rendered elements are not represented in the document 
-    accessibility tree. Nonetheless, they remain part of the document 
-    model, and participate in [[#styling|inheritance and cascade]].
+    Non-rendered elements are not represented in the document
+    accessibility tree. Nonetheless, they remain part of the document
+    model, and participate in [[#styling|style inheritance and cascade]].
 
 
 
@@ -682,13 +682,12 @@ Painting shapes and text</h4>
 <h4 id="PaintingRasterImages">
 Painting raster images</h4>
 
-    @@fix unknown reference to 10.4.2
-
     When a raster image is rendered, the original samples are
     "resampled" using standard algorithms to produce samples at the
     positions required on the output device. Resampling requirements
-    are discussed under [[#conformance|conformance requirements]]. As
-    in HTML ([[HTML]], 10.4.2), all animated images with the same
+    are discussed under [[#conformance|conformance requirements]]. 
+    
+    As in HTML ([[HTML]], 15.4.2 Images), all animated images with the same
     absolute URL and the same image data are expected to be rendered
     synchronised to the same timeline as a group, with the timeline
     starting at the time of the least recent addition to the group.

@@ -15,7 +15,7 @@ of a <{rect}> element.
 mechanisms described in this chapter.
 
 Note: In SVG 1.1, support for inline style sheets
-using the <{style}> element element and
+using the <{style}> element and
 <a element-attr for="core-attributes">style</a> was not required.  In SVG 2,
 these are required.
 
@@ -26,7 +26,7 @@ these are required.
   <table>
     <tr>
       <th>SVG 2 Requirement:</th>
-      <td>Add HTML5 <span class='element-name'>style</span> element attributes to SVG's <{style}> element element.</td>
+      <td>Add HTML5 <span class='element-name'>style</span> element attributes to SVG's <{style}> element.</td>
     </tr>
     <tr>
       <th>Resolution:</th>
@@ -43,9 +43,9 @@ these are required.
   </table>
 </div>
 
-<p>The <{style}> element element allows
+<p>The <{style}> element allows
 style sheets to be embedded directly within SVG content.
-SVG's <{style}> element element has the same
+SVG's <{style}> element has the same
 attributes as the
 <a href="https://html.spec.whatwg.org/multipage/semantics.html#the-style-element">corresponding
 element in HTML</a>.
@@ -223,7 +223,7 @@ attributes must be the same as is defined for the
 <span class='element-name'>style</span> element</a>.
 
 <p>The style sheet's text content is never directly rendered;
-the 'display' value for the <{style}> element element
+the 'display' value for the <{style}> element
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
@@ -803,7 +803,7 @@ also supported in SVG user agents:
 
 
 
-<p>An [[#InterfaceSVGStyleElement|SVGStyleElement]] object represents a <{style}> element element
+<p>An [[#InterfaceSVGStyleElement|SVGStyleElement]] object represents a <{style}> element
 in the DOM.
 
 <pre class="idl">

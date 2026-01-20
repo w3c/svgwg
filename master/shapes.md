@@ -8,7 +8,7 @@
   <dt id="TermShapeElement"><dfn data-lt="shapes|shape" data-export="">shape elements</dfn></dt><!--keep that for Bikeshed! -->
   <dd>A graphics element that is defined by some combination of
   straight lines and curves. Specifically:
-  @@elementcategory shape@@.</dd>
+  <{circle}>, <{ellipse}>, <{line}>, <{path}>, <{polygon}>, <{polyline}> and <{rect}>.</dd>
 </dl>
 
 <p>SVG contains the following set of basic shape elements:

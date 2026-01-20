@@ -11,12 +11,12 @@ Note: Content embedded with <{image}> is compatible with <a href="https://www.w3
 <h3 id="Placement">Placement of the embedded content</h3>
 
   <p>
-    The 'x', 'y', 'width', and 'height' geometry properties specify the rectangular region into which the embedded content is positioned
+    The 'x', 'y', <a href="#Sizing">width</a>, and <a href="#Sizing">height</a> geometry properties specify the rectangular region into which the embedded content is positioned
     (the <dfn id="TermPositioningRectangle"  data-dfn-type="dfn" data-export="">positioning rectangle</dfn>).
     The [=positioning rectangle=] is used as the bounding box of the element;
     note, however, that graphics may overflow the positioning rectangle,
     depending on the value of the [[#OverflowAndClipProperties|overflow]] property.
-  
+
 
   <p>
     When the embedded content consists of a single referenced resource
