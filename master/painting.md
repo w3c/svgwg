@@ -2895,18 +2895,18 @@ the mouse is clicked or moved over a rendered marker.
 <p>Markers are not rendered directly
 and must be referenced by one of the [=marker properties=]
 to be rendered.
-The 'display' value for the <{marker}> element element
+The '<a href="#VisibilityControl">display</a>' value for the <{marker}> element element
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
   <!--
-The 'display' property does not apply to the
+The '<a href="#VisibilityControl">display</a>' property does not apply to the
 <{marker}> element element; thus, <{marker}> element elements are not
-directly rendered even if the 'display' property is
+directly rendered even if the '<a href="#VisibilityControl">display</a>' property is
 set to a value other than <span class="prop-value">none</span>, and
 -->
 <{marker}> element elements are available for referencing even when the
-'display' property on the <{marker}> element element or any of its
+'<a href="#VisibilityControl">display</a>' property on the <{marker}> element element or any of its
 ancestors is set to <span class="prop-value">none</span>.
 
 <p>The rendering effect of a marker is as if the contents of the

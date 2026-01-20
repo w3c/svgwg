@@ -154,7 +154,7 @@ Note:
     <a href="https://www.w3.org/TR/css-text-3/#white-space-phase-1">collapsed
     white space characters</a> are not addressable, neither are characters
     within an element with a value of <span class='prop-value'>none</span> for
-    the 'display' property.
+    the '<a href="#VisibilityControl">display</a>' property.
 
     Addressable characters are addressed by their index. Indexes are
     determined prior to applying any 'text-transform'
@@ -3140,7 +3140,7 @@ is unconstrained in width and height.
   </li>
 
   <li>
-    If the computed value of the 'display' property on a
+    If the computed value of the '<a href="#VisibilityControl">display</a>' property on a
     correctly parented [=text content block element=] is anything
     other than
     <span class='prop-value'>none</span>, then its used value must
@@ -3154,7 +3154,7 @@ it were a block element.
   </li>
 
   <li>
-    If the computed value of the 'display' property on a
+    If the computed value of the '<a href="#VisibilityControl">display</a>' property on a
     correctly parented [=text content child element=]
     or <a element spec="svg2">a</a> element,
     is anything other than
@@ -3171,7 +3171,7 @@ inline elements.
   </li>
 
   <li>
-    The used value of the 'display' property on an element
+    The used value of the '<a href="#VisibilityControl">display</a>' property on an element
     that is a descendant of a [=text content block element=] and
     is not a correctly parented [=text content child element=]
     or <a element spec="svg2">a</a> element must be

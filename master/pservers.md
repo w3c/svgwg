@@ -70,17 +70,17 @@ no-autosize alt="Image of two types of paint servers."
   Paint-server elements are never rendered directly; their only usage is
   as something that can be referenced using
   the 'fill' and 'stroke' properties.
-  The 'display' value for these elements
+  The '<a href="#VisibilityControl">display</a>' value for these elements
   must always be set to <span class="prop-value">none</span>
   by the [=user agent style sheet=],
   and this declaration must have importance over any other CSS rule or presentation attribute.
   <!--The
-  'display' property does not apply to a paint-server element;
+  '<a href="#VisibilityControl">display</a>' property does not apply to a paint-server element;
   thus, paint-server elements are not directly rendered even if
-  the 'display' property is set to a value other
+  the '<a href="#VisibilityControl">display</a>' property is set to a value other
   than <span class="prop-value">none</span>, and -->
   Paint-server elements
-  are available for referencing even when the 'display'
+  are available for referencing even when the '<a href="#VisibilityControl">display</a>'
   property on the paint-server element or any of its ancestors is set
   to <span class="prop-value">none</span>.
 

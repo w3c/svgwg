@@ -223,7 +223,7 @@ attributes must be the same as is defined for the
 <span class='element-name'>style</span> element</a>.
 
 <p>The style sheet's text content is never directly rendered;
-the 'display' value for the <{style}> element
+the '<a href="#VisibilityControl">display</a>' value for the <{style}> element
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.

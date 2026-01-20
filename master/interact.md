@@ -982,7 +982,7 @@ myElement.addEventListener("click", myAction1, false)
   entire current document.
 
   <p>The script's text content is never directly rendered;
-  the 'display' value for the <{script}> element
+  the '<a href="#VisibilityControl">display</a>' value for the <{script}> element
   must always be set to <span class="prop-value">none</span>
   by the [=user agent style sheet=],
   and this declaration must have importance over any other CSS rule or presentation attribute.

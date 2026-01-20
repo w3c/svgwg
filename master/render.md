@@ -120,11 +120,11 @@ Definitions</h4>
         <dt><dfn>never-rendered element</dfn>
         <dd>
             Any element type that is <em>never directly rendered</em>,
-            regardless of context or 'display' style value.
+            regardless of context or '<a href="#VisibilityControl">display</a>' style value.
             It includes the following elements: [NEVERRENDERED];
             it also includes a <{symbol}> element that is not
             the [=instance root=] of a [=use-element shadow tree=].
-            
+
         </dd>
         <dt id="TermRenderableElement"><dfn>renderable element</dfn>
         <dd>

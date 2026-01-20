@@ -338,10 +338,10 @@ information, refer to the [[xml-names|<cite>Namespaces in XML</cite>]] Recommend
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
                 <span class="attr-name">‘<a href="#RoleAttribute"><span>role</span></a>’</span></span></li>
             <li>[=conditional processing attributes=]<span
-                    class="expanding"> — <span class="attr-name">‘<a
-                     href="#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+                    class="expanding"> — <span class="attr-name">'<a
+                     href="#RequiredExtensionsAttributeDef"><span>requiredExtensions</span></a>'</span>, <span
+                      class="attr-name">'<a
+                     href="#SystemLanguageAttributeDef"><span>systemLanguage</span></a>'</span></span></li>
             <li>[=core attributes=]<span class="expanding"> — <span
                       class="attr-name">‘<span>id</span>’</span>, <span
                       class="attr-name">‘<span>tabindex</span>’</span>, <span
@@ -663,10 +663,10 @@ within it, to an arbitrary depth.
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
                 <span class="attr-name">‘<a href="#RoleAttribute"><span>role</span></a>’</span></span></li>
             <li>[=conditional processing attributes=]<span
-                    class="expanding"> — <span class="attr-name">‘<a
-                     href="#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+                    class="expanding"> — <span class="attr-name">'<a
+                     href="#RequiredExtensionsAttributeDef"><span>requiredExtensions</span></a>'</span>, <span
+                      class="attr-name">'<a
+                     href="#SystemLanguageAttributeDef"><span>systemLanguage</span></a>'</span></span></li>
             <li>[=core attributes=]<span class="expanding"> — <span
                       class="attr-name">‘<span>id</span>’</span>, <span
                       class="attr-name">‘<span>tabindex</span>’</span>, <span
@@ -929,13 +929,13 @@ of a <{defs}>.
 <{g}> can also be a child of a <{defs}>, and vice versa.
 
 <p>Elements that are descendants of a <{defs}> are not rendered directly;
-the 'display' value for the <{defs}> element
+the '<a href="#VisibilityControl">display</a>' value for the <{defs}> element
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
 Note, however, that the descendants of a <{defs}> are
 always present in the source tree and thus can always be
-referenced by other elements; thus, the value of the 'display'
+referenced by other elements; thus, the value of the '<a href="#VisibilityControl">display</a>'
 property on the <{defs}> element does not
 prevent those elements from being referenced by other elements.
 
@@ -1275,13 +1275,13 @@ Note:
     
 
     <p>
-      The {{refX}} and {{refY}} attributes define the
+      The <a href="#SymbolElementRefXAttribute">refX</a> and <a href="#SymbolElementRefYAttribute">refY</a> attributes define the
       reference point of the symbol which is to be placed exactly at
       the symbol's <span class="prop-value">x,y</span> positioning coordinate,
       as defined by the cumulative effect of the 'x' and 'y'
       properties and any transformations on the <{symbol}>
       and its [=host=] <{use}> element.
-    
+
     <p>
       Keyword values have the same meaning as for the
       <{marker/refX}> and <{marker/refY}> attributes on the <{marker}> element element,
@@ -1289,7 +1289,7 @@ Note:
     
     <p>
       Unlike other positioning attributes,
-      {{refX}} and {{refY}}
+      <a href="#SymbolElementRefXAttribute">refX</a> and <a href="#SymbolElementRefYAttribute">refY</a>
       are interpreted as being in the coordinate system of the
       symbol contents, after application of the [[#ViewBoxAttribute|viewBox]]
       and [[#PreserveAspectRatioAttribute|preserveAspectRatio]] attributes.
@@ -1300,14 +1300,14 @@ Note:
       is positioned at the <span class="prop-value">x,y</span> point.
     
 
-    Note: 
+    Note:
       For backwards compatibility,
-      the behavior when {{refX}} and {{refY}}
+      the behavior when <a href="#SymbolElementRefXAttribute">refX</a> and <a href="#SymbolElementRefYAttribute">refY</a>
       are not specified on a <{symbol}>
       is different from when they are specified with a value of <span class="attr-value">0</span>,
       and therefore different from the behavior
       when equivalent attributes are not specified on a <{marker}> element.
-    
+
 
   </dd>
 </dl>
@@ -1346,7 +1346,7 @@ elements are available for referencing even when the
 ancestors is set to <span class="prop-value">none</span>.
 -->
 The user agent must set the
-'display' property on the <{symbol}> element
+'<a href="#VisibilityControl">display</a>' property on the <{symbol}> element
 to <span class="prop-value">none</span>,
 as part of the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
@@ -1355,7 +1355,7 @@ and this declaration must have importance over any other CSS rule or presentatio
 <p>The generated [=instance=] of a <{symbol}>
 that is the direct [=referenced element=] of a <{use}> element
 must always have a computed value of <span class="prop-value">inline</span>
-for the 'display' property.
+for the '<a href="#VisibilityControl">display</a>' property.
 In other words, it must be rendered whenever the host <{use}> element is rendered.
 The [=user agent style sheet=] again defines this
 declaration to have importance over any other CSS rule or presentation attribute.
@@ -1688,7 +1688,7 @@ also apply in the scope of the cloned [=shadow tree=].
     element/fragment within an SVG document to be cloned for
     rendering.
     <p>The <{use}> element can reference an entire SVG document
-    by specifying an {{href}} value without a fragment.
+    by specifying an <a href="#UseElementHrefAttribute">href</a> value without a fragment.
     Such references are taken to be referring to the root element
     of the referenced document.
     Refer to the common handling defined for <a
@@ -1698,7 +1698,7 @@ also apply in the scope of the cloned [=shadow tree=].
 </dl>
 
 Note: New in SVG 2.
-An {{href}} without a fragment allows an entire SVG document to be referenced
+An <a href="#UseElementHrefAttribute">href</a> without a fragment allows an entire SVG document to be referenced
 without having to ensure that it has an ID on its root element.
 
 <p>
@@ -1706,8 +1706,8 @@ User agents may restrict external resource documents for security
 reasons. In particular, this specification does not allow cross-origin and <a href="linking.html#TermDataURL">data URL</a> resource requests in <{use}>.
 
 
-<p>When the {{href}} attribute is set
-(or, in the absence of an {{href}} attribute, an <a href="linking-XLinkHrefAttribute">xlink:href</a> attribute),
+<p>When the <a href="#UseElementHrefAttribute">href</a> attribute is set
+(or, in the absence of an <a href="#UseElementHrefAttribute">href</a> attribute, an <a href="linking-XLinkHrefAttribute">xlink:href</a> attribute),
 the user agent must <a href="linking.html#processingURL">process the URL</a>.
 The target element that results from URL processing is the [=referenced element=] of the <{use}>.
 
@@ -1769,7 +1769,7 @@ are rendered in the same way as if the shadow DOM was implemented.
 
 <dl>
   <dt><dfn id="TermReferencedElement">referenced element</dfn></dt>
-  <dd>The element specified by the {{href}} (or <a href="#XLinkHrefAttribute">xlink:href</a>) attribute on the <{use}> element, or the root element of a document referenced by that attribute if the URL provided does not include a target fragment that links to a specific element <a element-attr for="core-attributes" spec="svg2">id</a>.</dd>
+  <dd>The element specified by the <a href="#UseElementHrefAttribute">href</a> (or <a href="#XLinkHrefAttribute">xlink:href</a>) attribute on the <{use}> element, or the root element of a document referenced by that attribute if the URL provided does not include a target fragment that links to a specific element <a element-attr for="core-attributes" spec="svg2">id</a>.</dd>
 
   <dt><dfn id="TermReferencedDocumentSubtree" data-dfn-type="dfn" data-export="" data-lt="referenced document subtree|referenced graphics">referenced document subtree</dfn></dt>
   <dd>The referenced element, and all of its descendent nodes.</dd>
@@ -1832,7 +1832,7 @@ The shadow tree must be created even if
 the <{use}> element is not rendered
 because it is a descendent of a [=never-rendered element=],
 because of conditional processing,
-or because of the 'display' property being set to <span class="prop-value">none</span>
+or because of the '<a href="#VisibilityControl">display</a>' property being set to <span class="prop-value">none</span>
 on it or an ancestor element.
 
 
@@ -2121,7 +2121,7 @@ path: images/struct/Use-changed-styles.svg
   Specifying <span
   class="prop-value">'visibility:hidden'</span> on a <{use}> element does not guarantee
   that the referenced content will not be rendered.
-  Unlike the 'display' or the 'opacity' properties,
+  Unlike the '<a href="#VisibilityControl">display</a>' or the 'opacity' properties,
   the 'visibility' property does not apply directly to container elements,
   and therefore does not apply directly to the <{use}> element.
   Because 'visibility' is normally inherited,
@@ -2439,26 +2439,25 @@ Note:
 </div>
 
 
-
 <h3 id="ConditionalProcessing">Conditional processing</h3>
 
 <h4 id="ConditionalProcessingOverview">Conditional processing overview</h4>
 
 <p>SVG contains a <{switch}> element along with
-attributes {{requiredExtensions}} and {{systemLanguage}} to provide an
+attributes <a href="#RequiredExtensionsAttributeDef">requiredExtensions</a> and <a href="#SystemLanguageAttributeDef">systemLanguage</a> to provide an
 ability to specify alternate viewing depending on the
 capabilities of a given user agent or the user's language.
 This is known as <dfn id="TermConditionalProcessing" data-dfn-type="dfn" data-export="">conditional processing</dfn>.
 
-<p>Attributes {{requiredExtensions}} and {{systemLanguage}} act as tests and
+<p>Attributes <a href="#RequiredExtensionsAttributeDef">requiredExtensions</a> and <a href="#SystemLanguageAttributeDef">systemLanguage</a> act as tests and
 evaluate to either true or false. The <{switch}> renders the first of
 its children for which all of these attributes test true. If
 the given attribute is not specified, then a true value is
 assumed.
 
 <p>When an element is excluded because of conditional processing,
-it is treated as if it had a used value of <code>none</code> for the 'display' property.
-Similar to the 'display' property, conditional processing
+it is treated as if it had a used value of <code>none</code> for the '<a href="#VisibilityControl">display</a>' property.
+Similar to the '<a href="#VisibilityControl">display</a>' property, conditional processing
 attributes only affect the direct rendering of elements and do
 not prevent elements from being successfully referenced by
 other elements (such as via a <{use}>).
@@ -2498,7 +2497,7 @@ other elements (such as via a <{use}>).
   but not all, may have conditional processing attributes specified
   on them.  See <a href="struct.html#ConditionalProcessing">Conditional processing</a>
   for details.  The conditional processing attributes defined in
-  SVG 2 are '<a href="#RequiredExtensionsAttribute">requiredExtensions</a>', '<a href="#SystemLanguageAttribute">systemLanguage</a>'.</dd>
+  SVG 2 are '<a href="#RequiredExtensionsAttributeDef">requiredExtensions</a>', '<a href="#SystemLanguageAttributeDef">systemLanguage</a>'.</dd>
 </dl>
 
 <h4 id="SwitchElement">The <span class="element-name">switch</span> element</h4>
@@ -2637,10 +2636,10 @@ other elements (such as via a <{use}>).
                      href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
                 <span class="attr-name">‘<a href="#RoleAttribute"><span>role</span></a>’</span></span></li>
             <li>[=conditional processing attributes=]<span
-                    class="expanding"> — <span class="attr-name">‘<a
-                     href="#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
-                      class="attr-name">‘<a
-                     href="#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+                    class="expanding"> — <span class="attr-name">'<a
+                     href="#RequiredExtensionsAttributeDef"><span>requiredExtensions</span></a>'</span>, <span
+                      class="attr-name">'<a
+                     href="#SystemLanguageAttributeDef"><span>systemLanguage</span></a>'</span></span></li>
             <li>[=core attributes=]<span class="expanding"> — <span
                       class="attr-name">‘<span>id</span>’</span>, <span
                       class="attr-name">‘<span>tabindex</span>’</span>, <span
@@ -2723,8 +2722,8 @@ other elements (such as via a <{use}>).
     </div>
 
 <p>The <dfn dfn data-export="">switch</dfn> element evaluates
-the {{requiredExtensions}} and
-{{systemLanguage}} attributes on its direct child elements in
+the <a href="#RequiredExtensionsAttributeDef">requiredExtensions</a> and
+<a href="#SystemLanguageAttributeDef">systemLanguage</a> attributes on its direct child elements in
 order, and then processes and renders the first child for which these
 attributes evaluate to true. All others will be bypassed and therefore
 not rendered. If the child element is a container element such as a
@@ -2732,15 +2731,15 @@ not rendered. If the child element is a container element such as a
 bypassed/not rendered.
 
 <p class='ready-for-wider-review'>
-In SVG, when evaluating the {{systemLanguage}} attribute, the order of
+In SVG, when evaluating the <a href="#SystemLanguageAttributeDef">systemLanguage</a> attribute, the order of
 evaluation of descendant elements of the <{switch}> element must be as if the
 <a href="https://www.w3.org/TR/REC-smil/smil-content.html#adef-allowReorder">allowReorder</a>
 attribute, defined in the SMIL specification [<a href="refs.html#ref-SMIL">SMIL</a>]
 always has a value of <span class="attr-value">yes</span>.
 
-<p>Note that the values of properties 'display' and
+<p>Note that the values of properties '<a href="#VisibilityControl">display</a>' and
 'visibility' have no effect on <{switch}> element
-processing. In particular, setting 'display' to
+processing. In particular, setting '<a href="#VisibilityControl">display</a>' to
 <span class="prop-value">none</span> on a child of a <{switch}> element
 has no effect on true/false testing associated with <{switch}>
 element processing.
@@ -2752,9 +2751,9 @@ element processing.
 <a href="embedded.html#ForeignObjectElement">Embedding foreign
 object types</a>.
 
-<h4 id="RequiredExtensionsAttribute">The {{requiredExtensions}} attribute</h4>
+<h4 id="RequiredExtensionsAttribute">The <span class="attr-name">requiredExtensions</span> attribute</h4>
 
-<p>The {{requiredExtensions}}
+<p>The <a href="#RequiredExtensionsAttributeDef">requiredExtensions</a>
 attribute defines a list of required language extensions.
 Language extensions are capabilities within a user agent that
 go beyond the feature set defined in this specification. Each
@@ -2770,7 +2769,7 @@ extension is identified by an [=URL Reference=].
         <th>Animatable</th>
       </tr>
       <tr>
-        <td>requiredExtensions @@something to fix for the ref@@</td>
+        <td><dfn id="RequiredExtensionsAttributeDef" data-dfn-type="element-attr" data-dfn-for="conditional-processing-attributes" data-export="">requiredExtensions</dfn></td>
         <td>[=set of space-separated tokens=] <span class="syntax">&bs[;HTML]</span></td>
         <td>(none)</td>
         <td>no</td>
@@ -2793,11 +2792,11 @@ extension is identified by an [=URL Reference=].
 space must be escaped.
 
 <p>If the attribute is not present, then it implicitly evaluates to "true". If a null string or empty string value is
-given to attribute {{requiredExtensions}}, the attribute
+given to attribute <a href="#RequiredExtensionsAttributeDef">requiredExtensions</a>, the attribute
 evaluates to "false".
 
-<p>{{requiredExtensions}} is often
-used in conjunction with the <{switch}> element. If the {{requiredExtensions}} is used in other
+<p><a href="#RequiredExtensionsAttributeDef">requiredExtensions</a> is often
+used in conjunction with the <{switch}> element. If the <a href="#RequiredExtensionsAttributeDef">requiredExtensions</a> is used in other
 situations, then it represents a simple switch on the given
 element whether to render the element or not.
 
@@ -2818,7 +2817,7 @@ versions of a given extension.
         <th>Animatable</th>
       </tr>
       <tr>
-        <td>systemLanguage</td>
+        <td><dfn id="SystemLanguageAttributeDef" data-dfn-type="element-attr" data-dfn-for="conditional-processing-attributes" data-export="">systemLanguage</dfn></td>
         <td>[=set of comma-separated tokens=] <span class="syntax">&bs[;HTML]</span></td>
         <td>(none)</td>
         <td>no</td>
@@ -2843,7 +2842,7 @@ the first tag character following the prefix is "-".
 
 <p>If the attribute is not present, then it implicitly evaluates to "true".
 If a null string or empty string value is
-given to attribute {{systemLanguage}}, the attribute evaluates to
+given to attribute <a href="#SystemLanguageAttributeDef">systemLanguage</a>, the attribute evaluates to
 "false".
 
 <p>Note: This use of a prefix matching rule does not imply that
@@ -2873,12 +2872,12 @@ versions, would call for:
 <pre>&lt;text systemLanguage="mi, en"&gt;&lt;!-- content goes here --&gt;&lt;/text&gt;</pre>
 
 <p>However, just because multiple languages are present within
-the object on which the {{systemLanguage}} test
+the object on which the <a href="#SystemLanguageAttributeDef">systemLanguage</a> test
 attribute is placed, this does not mean that it is intended for
 multiple linguistic audiences. An example would be a beginner's
 language primer, such as "A First Lesson in Latin," which is
 clearly intended to be used by an English-literate audience. In
-this case, the {{systemLanguage}} test attribute
+this case, the <a href="#SystemLanguageAttributeDef">systemLanguage</a> test attribute
 should only include "en".
 
 Note: Authoring note: Authors should realize that if several
@@ -2888,8 +2887,8 @@ displayed. It is thus recommended to include a "catch-all"
 choice at the end of such a <{switch}> which is acceptable in
 all cases.
 
-<p>{{systemLanguage}} is often used
-in conjunction with the <{switch}> element. If the {{systemLanguage}} is used in other
+<p><a href="#SystemLanguageAttributeDef">systemLanguage</a> is often used
+in conjunction with the <{switch}> element. If the <a href="#SystemLanguageAttributeDef">systemLanguage</a> is used in other
 situations, then it represents a simple switch on the given
 element whether to render the element or not.
 
@@ -2903,7 +2902,7 @@ element whether to render the element or not.
   <{desc}>, <{metadata}> and <{title}>.</dd>
 </dl>
 
-Note: Multilingual descriptive text selection, based on the {{lang}} attribute, was added to allow internationalization
+Note: Multilingual descriptive text selection, based on the <a href="#LangAttribute">lang</a> attribute, was added to allow internationalization
 of the <{desc}> and <{title}> elements.
 
 <p class="annotation">New in SVG 2. Adding <span class="attr-value">lang</span> resolved at Rigi Kaltbad face-to-face.
@@ -2914,7 +2913,7 @@ Removed text that limited number of <{desc}> and <{title}> elements. Status: Don
 can have zero or more <{desc}> and/or <{title}> elements as children,
 whose content is text. <{desc}> and <{title}> elements are
 not visually rendered as part of the graphics.
-The 'display' value for the <{title}> and <{desc}> elements
+The '<a href="#VisibilityControl">display</a>' value for the <{title}> and <{desc}> elements
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
@@ -2922,7 +2921,7 @@ and this declaration must have importance over any other CSS rule or presentatio
 
 <p>Multiple sibling <{desc}> or <{title}> elements must have
 different languages,
-as defined using a {{lang}} attribute (or <code>xml:lang</code> attribute) on the descriptive element or an ancestor.
+as defined using a <a href="#LangAttribute">lang</a> attribute (or <code>xml:lang</code> attribute) on the descriptive element or an ancestor.
 The user agent must select the element of each type whose language best
 matches language preferences set by the user.
 A descriptive element with an empty-string language tag
@@ -3340,7 +3339,7 @@ elements in any particular way.
       </dl>
     </div>
 <p>Metadata content is not directly rendered;
-the 'display' value for the <{metadata}> element
+the '<a href="#VisibilityControl">display</a>' value for the <{metadata}> element
 must always be set to <span class="prop-value">none</span>
 by the [=user agent style sheet=],
 and this declaration must have importance over any other CSS rule or presentation attribute.
@@ -4419,7 +4418,7 @@ to be interpreted, the following steps are run:
 
 <ol class='algorithm'>
   <li>Let <var>result</var> be an initially empty list.</li>
-  <li>If <var>element</var> is not displayed, due to having a 'display' value
+  <li>If <var>element</var> is not displayed, due to having a '<a href="#VisibilityControl">display</a>' value
   of <span class='prop-value'>none</span> or being in a subtree that has
   failing [=conditional processing attributes=] or a failing branch
   of a <{switch}>, then return <var>result</var>.</li>
