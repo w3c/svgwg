@@ -1,0 +1,289 @@
+<pre class='metadata'>
+Title: Scalable Vector Graphics (SVG) 2
+Shortname: svg2
+Level: none
+Status: ED
+Work Status: Testing
+Group: svg
+Org: w3c
+TR: https://www.w3.org/TR/SVG2/
+ED: https://w3c.github.io/svg2/
+Former Editor: Nikos Andronikos, Canon Inc.
+Former Editor: Rossen Atanassov, Microsoft Co.
+Former Editor: Tavmjong Bah, Invited Expert
+Former Editor: Amelia Bellamy-Royds, Invited Expert
+Former Editor: Brian Birtles, Mozilla Japan
+Former Editor: Bogdan Brinza, Microsoft Co.
+Former Editor: Cyril Concolato, Telecom ParisTech
+Former Editor: Erik Dahlström, Invited Expert
+Editor: Karl Dubost, Apple, https://www.la-grange.net/karl/, w3cid 14760
+Former Editor: Chris Lilley, W3C
+Former Editor: Cameron McCormack, Mozilla Corporation
+Former Editor: David Storey, Microsoft Co.
+Former Editor: Doug Schepers, W3C
+Editor: Dirk Schulze, Adobe Systems
+Editor: Vinay Singh, Microsoft
+Former Editor: Richard Schwerdtfeger, IBM
+Former Editor: Satoru Takagi, KDDI Corporation
+Former Editor: Jonathan Watt, Mozilla Corporation
+Former Editor: Eric Willigers, Google
+Abstract: This specification defines the features and syntax for Scalable Vector Graphics (SVG) Version 2. SVG is a language based on XML for describing two-dimensional vector and mixed vector/raster graphics. SVG content is stylable, scalable to different display resolutions, and can be viewed stand-alone, mixed with HTML content, or embedded using XML namespaces within other XML languages. SVG also supports dynamic changes; script can be used to create interactive documents, and animations can be performed using declarative animation features or by using script.
+Repository: w3c/svgwg
+Markup Shorthands: idl yes
+Text Macro: NEVERRENDERED <a element spec="css-masking">clipPath</a>, <a element spec="svg2">defs</a>, <a element spec="svg2">desc</a>, <a element spec="svg2">linearGradient</a>, <a element spec="svg2">marker</a>, <a element spec="css-masking">mask</a>, <a element spec="svg2">metadata</a>, <a element spec="svg2">pattern</a>, <a element spec="svg2">radialGradient</a>, <a element spec="svg2">script</a>, <a element spec="svg2">style</a>, <a element spec="svg2">title</a>
+Text Macro: RENDERABLE <a element spec="svg2">a</a>, <a element spec="svg2">circle</a>, <a element spec="svg2">ellipse</a>, <a element spec="svg2">foreignObject</a>, <a element spec="svg2">g</a>, <a element spec="svg2">image</a>, <a element spec="svg2">line</a>, <a element spec="svg2">path</a>, <a element spec="svg2">polygon</a>, <a element spec="svg2">polyline</a>, <a element spec="svg2">rect</a>, <a element spec="svg2">svg</a>, <a element spec="svg2">switch</a>, <a element spec="svg2">text</a>, <a element spec="svg2">textPath</a>, <a element spec="svg2">tspan</a>, <a element spec="svg2">use</a>
+</pre>
+
+<link rel="stylesheet" title="Default" href="style/base.css" type="text/css" media="screen"/>
+<link rel="stylesheet" title="Default" href="style/svg.css" type="text/css" media="screen"/>
+<link rel="alternate stylesheet" title="Only annotations for publication" href="style/default_no_maturity.css" type="text/css" media="screen"/>
+<link rel="alternate stylesheet" title="No issues/annotations" href="style/default_no_issues.css" type="text/css" media="screen"/>
+
+<pre class=link-defaults>
+spec:css-animations-1; type:property; text:animation-delay
+spec:webidl; type:exception
+    text: NoModificationAllowedError
+    text: IndexSizeError
+    text: SyntaxError
+    text: NotSupportedError
+spec:web-animations-1; type:dfn
+    text: animatable
+spec:web-animations-1; type:interface
+    text: ShadowAnimation
+spec:css-shapes-1; type:dfn
+    text: shapes
+    text: shape
+    text: CSS basic shape
+spec:css-images-3; type:dfn
+    text: intrinsic aspect ratio
+    text: intrinsic width
+    text: intrinsic height
+spec:css-transforms-2; type:dfn
+    text: 3d rendering context
+spec:geometry-1; type:attribute; for:DOMRectReadOnly
+    text: x
+    text: y
+    text: width
+    text: height
+spec:geometry-1; type:interface
+    text: DOMRectReadOnly
+    text: DOMPointReadOnly
+    text: DOMMatrixReadOnly
+spec:geometry-1; type:dictionary
+    text: DOMPointInit
+spec:dom; type:interface
+    text: ShadowRoot
+    text: NodeList
+    text: DocumentFragment
+    text: CharacterData
+    text: EventTarget
+spec:dom; type:callback
+    text: EventListener
+spec:html; type:interface
+    text: GlobalEventHandlers
+    text: HTMLOrSVGElement
+    text: HTMLObjectElement
+    text: HTMLIFrameElement
+    text: HTMLEmbedElement
+spec:html; type:dfn
+    text: CORS settings attribute
+    text: set of comma-separated tokens
+spec:html; type:element-attr
+    text: crossorigin
+spec:cssom; type:interface
+    text: LinkStyle
+spec:filter-effects-1; type:element
+    text: feDistantLight
+    text: feDropShadow
+    text: feFuncA
+    text: feFuncB
+    text: feFuncG
+    text: feFuncR
+    text: feMergeNode
+    text: fePointLight
+    text: feSpotLight
+spec:filter-effects-1; type:dfn
+    text: filter effects region
+spec:svg-animations; type:element
+    text: mpath
+spec:svg-animations; type:dfn
+    text: animation event attributes
+spec:wai-aria-1.2; type:property
+    text: aria-labelledby
+    text: aria-describedby
+    text: aria-label
+spec:url; type:dfn; for:URL
+    text: urls
+spec:css-writing-modes-4; type:property
+    text: direction
+spec:css-overflow-4; type:property
+    text: text-overflow
+spec:geometry-1; type:dict-member; for:DOMMatrix2DInit
+    text: d
+spec:html; type:dfn
+    text: window
+    text: document
+spec:html; type:attribute; for:GlobalEventHandlers
+    text: onclick
+    text: onerror
+    text: onload
+    text: onscroll
+spec:html; type:attribute; for:HTMLElement
+    text: lang
+spec:dom; type:dfn
+    text: host
+    text: event
+    text: type
+spec:dom; type:dfn; for:/
+    text: document
+spec:wai-aria-1.2; type:attribute
+    text: role
+spec:css-lists-3; type:dfn
+    text: marker
+    text: markers
+spec:svg2; type:dfn; for:/
+    text: wrapping area
+spec:url; type:dfn; for:URL
+    text: url
+spec:css-fonts-4; type:property
+    text: font-size-adjust
+    text: font
+spec:css2; type:property
+    text: margin-top
+    text: border-top-style
+    text: border-style
+spec:css-backgrounds-3; type:property
+    text: background
+spec:css-content-3; type:property
+    text: content
+</pre>
+
+
+<pre class=include>
+path: intro.md
+</pre>
+<pre class=include>
+path: conform.md
+</pre>
+<pre class=include>
+path: render.md
+</pre>
+<pre class=include>
+path: types.md
+</pre>
+<pre class=include>
+path: struct.md
+</pre>
+<pre class=include>
+path: styling.md
+</pre>
+<pre class=include>
+path: geometry.md
+</pre>
+<pre class=include>
+path: coords.md
+</pre>
+<pre class=include>
+path: paths.md
+</pre>
+<pre class=include>
+path: shapes.md
+</pre>
+<pre class=include>
+path: text.md
+</pre>
+<pre class=include>
+path: embedded.md
+</pre>
+<pre class=include>
+path: painting.md
+</pre>
+<pre class=include>
+path: pservers.md
+</pre>
+<pre class=include>
+path: interact.md
+</pre>
+<pre class=include>
+path: linking.md
+</pre>
+
+# Appendix A: IDL Definitions {#appendix-idl}
+
+@@Should we let bikeshed do things here?@@
+
+<pre class=include>
+path: implnote.md
+</pre>
+<pre class=include>
+path: access.md
+</pre>
+<pre class=include>
+path: animate.md
+</pre>
+
+# Appendix E: References {#appendix-refs}
+
+@@Already Handled by bikeshed@@
+
+# Appendix F: Element Index {#appendix-eltindex}
+
+@@Already Handled by bikeshed@@
+
+# Appendix G: Attribute Index {#appendix-attindex}
+
+@@Already Handled by bikeshed@@
+
+# Appendix H: Property Index {#appendix-propidx}
+
+@@Already Handled by bikeshed@@
+
+# Appendix I: Property Index {#appendix-propidx2}
+
+@@Already Handled by bikeshed@@
+
+<pre class=include>
+path: mimereg.md
+</pre>
+
+<pre class=include>
+path: changes.md
+</pre>
+
+
+
+<h2 id="Acknowledgments">
+Acknowledgments</h2>
+
+    The SVG Working Group would like to thank the following people 
+    for contributing to this specification with patches or by 
+    participating in discussions that resulted in changes to the 
+    document: David Dailey, Eric Eastwood, Jarek Foksa, 
+    Daniel Holbert, Paul LeBeau, Robert Longson, Henri Manson, 
+    Ms2ger, Kari Pihkala, Philip Rogers, David Zbarsky.
+
+    In addition, the SVG Working Group would like to acknowledge 
+    the contributions of the editors and authors of the previous 
+    versions of SVG – as much of the text in this document derives 
+    from these earlier specifications – including:
+
+    * Patrick Dengler, Microsoft Corporation (Version 1.1 Second Edition)
+    * Jon Ferraiolo, ex Adobe Systems (Versions 1.0 and 1.1 First Edition; until 10 May 2006)
+    * Anthony Grasso, ex Canon Inc. (Version 1.1 Second Edition)
+    * Dean Jackson, ex W3C (Version 1.1 First Edition; until February 2007)
+    * 藤沢 淳 (FUJISAWA Jun), Canon Inc. (Version 1.1 First Edition)
+
+    Finally, the SVG Working Group would like to acknowledge the 
+    great many people outside of the SVG Working Group who help 
+    with the process of developing the SVG specifications. These 
+    people are too numerous to list individually. They include but 
+    are not limited to the early implementers of the SVG 1.0 and 1.1 
+    languages (including viewers, authoring tools, and server-side 
+    transcoders), developers of SVG content, people who have 
+    contributed on the www-svg@w3.org and 
+    svg-developers@yahoogroups.com email lists, other Working Groups 
+    at the W3C, and the W3C Team. SVG 1.1 is truly a cooperative 
+    effort between the SVG Working Group, the rest of the W3C, and 
+    the public and benefits greatly from the pioneering work of early 
+    implementers and content developers, feedback from the public, 
+    and help from the W3C team.

@@ -1,0 +1,55 @@
+<h2 id="animation">Appendix D: Animating SVG Documents</h2>
+
+
+<p>SVG supports the ability to change vector graphics over time,
+to create animated effects.
+SVG content can be animated in the following ways:
+
+<ul>
+  <li>Using SVG's <a href="https://svgwg.org/specs/animations/">animation elements</a>
+  [<a href="refs.html#ref-svg-animation">svg-animation</a>].
+  SVG document fragments can describe time-based modifications
+  to the document's elements. Using the various animation
+  elements, authors can define motion paths, or interpolate the element's
+  attributes and style properties. These effects can be chained together
+  or triggered in response to other events in the document.</li>
+
+  <li>Using <a href="http://www.w3.org/TR/css-animations-1/"><cite>CSS Animations</cite></a>
+  [<a href="refs.html#ref-css-animations-1">css-animations-1</a>].
+  This CSS module defines a way for authors to animate the values of
+  CSS properties over time, using keyframes. The behavior of these
+  keyframe animations can be controlled by specifying their duration,
+  number of repeats, and repeating behavior.</li>
+
+  <li>Using <a href="https://www.w3.org/TR/css-transitions-1/"><cite>CSS Transitions</cite></a>
+  [<a href="refs.html#ref-css-transitions-1">css-transitions-1</a>].
+  This CSS module defines properties to specify
+  that changes to values of CSS properties occur
+  progressively over a specified duration.</li>
+
+  <li>Using the [[#SVGDOMOverview|SVG DOM]].
+  The SVG DOM is defined as an extension of the DOM4 specification
+  [[DOM]].
+  Every attribute and style sheet setting is
+  accessible to scripting, and SVG offers a set of additional
+  DOM interfaces to support efficient animation via scripting.
+  Ideally, user agents that support scripting will also implement
+  the <a href="https://html.spec.whatwg.org/multipage/imagebitmap-and-animations.html#animation-frames">animation frames</a> APIs
+  defined in HTML [[!HTML]].</li>
+
+  <li>Using the <a href="https://www.w3.org/TR/web-animations-1/">Web Animations API</a>
+  [<a href="refs.html#ref-web-animations-1">web-animations-1</a>].
+  This DOM API provides a scripted interface to trigger user-agent optimized animations
+  of style properties and attributes,
+  without the need for authors to calculate values for individual frames.</li>
+
+</ul>
+
+<p>SVG does not mandate support for any of these animation methods.
+However, user agents that do support them are expected to support them for SVG documents
+and SVG fragments in other documents.
+User agents that support declarative or scripted animation are required to conform
+to the restrictions based on [=processing mode=]
+as defined in the <a href="conform.html">Conformance</a> chapter,
+and to the special requirements for <a href="struct.html#UseAnimations">animations in use-element shadow trees</a>.
+

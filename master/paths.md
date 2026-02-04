@@ -1,0 +1,1485 @@
+<h2 id="chap-paths">Paths</h2>
+
+<h3 id="paths-intro">Introduction</h3>
+
+<p>
+  A path represents the outline of a shape which can be filled or
+  stroked. A path can also be used as a clipping path, to describe
+  animation, or position text. A path can be used for more than one of
+  these functions at the same time. (See
+  <a href="painting.html">Filling, Stroking and Paint Servers</a>,
+  <a href="render.html#ClippingAndMasking">Clipping and Masking</a>,
+  Animation (<a href="https://svgwg.org/specs/animations/#AnimateMotionElement">animateMotion</a>),
+  and <a href="text.html#TextLayoutPath">Text on a Path</a>.)
+
+
+<p>A path is described using the concept of a current point. In
+an analogy with drawing on paper, the current point can be
+thought of as the location of the pen. The position of the pen
+can be changed, and the outline of a shape (open or closed) can
+be traced by dragging the pen in either straight lines or
+curves.
+
+<p>Paths represent the geometry of the outline of an object,
+defined in terms of <em>moveto</em> (set a new current point),
+<em>lineto</em> (draw a straight line), <em>curveto</em> (draw
+a curve using a cubic Bézier), <em>arc</em> (elliptical
+or circular arc) and <em>closepath</em> (close the current
+shape by connecting to the last <em>moveto</em>) commands.
+Compound paths (i.e., a path with multiple subpaths) are
+possible to allow effects such as "donut holes" in objects.
+
+<p>This chapter describes the syntax, behavior and DOM
+interfaces for SVG paths. Various implementation notes for SVG
+paths can be found in <a
+href="paths.html#PathElementImplementationNotes"><span
+class="element-name">path</span> element implementation
+Notes</a>.
+
+<p>A path is defined in SVG using the <{path}> element.
+
+<p>The [=basic shapes=] are all described in terms of what their
+<dfn id="TermEquivalentPath">equivalent path</dfn> is, which is
+what their shape is as a path.  (The equivalent path of a
+<{path}> element is simply the path itself.)
+In order to define the basic shapes as equivalent paths,
+a [=segment-completing close path=] operation is defined,
+which cannot currently be represented in the basic path syntax.
+
+
+<h3 id="PathElement">The <span class="element-name">path</span> element</h3>
+
+    <div class="element-summary">
+      <div class="element-summary-name"><span class="element-name">‘<dfn data-dfn-type="element"
+               data-export=""
+               id="paths-elementdef-path">path</dfn>’</span></div>
+      <dl>
+        <dt>Categories:</dt>
+        <dd><a href="#TermGraphicsElement">Graphics element</a>, [=renderable element=], <a href="#TermShapeElement">shape
+            element</a></dd>
+        <dt>Content model:</dt>
+        <dd>Any number of the following elements, in any order:<ul class="no-bullets">
+            <li><a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a><span
+                    class="expanding"> — <span class="element-name">‘<a
+                     href="https://svgwg.org/specs/animations/#AnimateElement"><span>animate</span></a>’</span>, <span
+                      class="element-name">‘<a
+                     href="https://svgwg.org/specs/animations/#AnimateMotionElement"><span>animateMotion</span></a>’</span>,
+                <span class="element-name">‘<a
+                     href="https://svgwg.org/specs/animations/#AnimateTransformElement"><span>animateTransform</span></a>’</span>,
+                <span class="element-name">‘<a
+                     href="https://svgwg.org/specs/animations/#SetElement"><span>set</span></a>’</span></span></li>
+            <li>[=descriptive element|descriptive elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{desc}>’</span>, <span
+                      class="element-name">‘<{title}>’</span>, <span
+                      class="element-name">‘<{metadata}>’</span></span>
+            </li>
+            <li>[=paint server element|paint server elements=]<span class="expanding"> — <span
+                      class="element-name">‘<{linearGradient}>’</span>, <span
+                      class="element-name">‘<{radialGradient}>’</span>, <span
+                      class="element-name">‘<{pattern}>’</span></span>
+            </li>
+          </ul><span class="element-name"><a
+               href="https://drafts.fxtf.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a></span>, <span
+                class="element-name"><{marker}></span>, <span
+                class="element-name"><a
+               href="https://drafts.fxtf.org/css-masking-1/#MaskElement"><span>mask</span></a></span>, <span
+                class="element-name"><{script}></span>, <span
+                class="element-name"><{style}></span></dd>
+        <dt>Attributes:</dt>
+        <dd>
+          <ul class="no-bullets">
+            <li>[=aria attributes=]<span class="expanding"> — <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-activedescendant"><span>aria-activedescendant</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-atomic"><span>aria-atomic</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-autocomplete"><span>aria-autocomplete</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-busy"><span>aria-busy</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-checked"><span>aria-checked</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-colcount"><span>aria-colcount</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-colindex"><span>aria-colindex</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-colspan"><span>aria-colspan</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-controls"><span>aria-controls</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-current"><span>aria-current</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-describedby"><span>aria-describedby</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-details"><span>aria-details</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-disabled"><span>aria-disabled</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-dropeffect"><span>aria-dropeffect</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-errormessage"><span>aria-errormessage</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-expanded"><span>aria-expanded</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-flowto"><span>aria-flowto</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-grabbed"><span>aria-grabbed</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-haspopup"><span>aria-haspopup</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-hidden"><span>aria-hidden</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-invalid"><span>aria-invalid</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-keyshortcuts"><span>aria-keyshortcuts</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-label"><span>aria-label</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-labelledby"><span>aria-labelledby</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-level"><span>aria-level</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-live"><span>aria-live</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-modal"><span>aria-modal</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-multiline"><span>aria-multiline</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-multiselectable"><span>aria-multiselectable</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-orientation"><span>aria-orientation</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-owns"><span>aria-owns</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-placeholder"><span>aria-placeholder</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-posinset"><span>aria-posinset</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-pressed"><span>aria-pressed</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-readonly"><span>aria-readonly</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-relevant"><span>aria-relevant</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-required"><span>aria-required</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-roledescription"><span>aria-roledescription</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowcount"><span>aria-rowcount</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowindex"><span>aria-rowindex</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-rowspan"><span>aria-rowspan</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-selected"><span>aria-selected</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-setsize"><span>aria-setsize</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-sort"><span>aria-sort</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuemax"><span>aria-valuemax</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuemin"><span>aria-valuemin</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuenow"><span>aria-valuenow</span></a>’</span>,
+                <span class="attr-name">‘<a
+                     href="https://www.w3.org/TR/wai-aria-1.1/#aria-valuetext"><span>aria-valuetext</span></a>’</span>,
+                <span class="attr-name">‘<a href="#RoleAttribute"><span>role</span></a>’</span></span></li>
+            <li>[=conditional processing attributes=]<span
+                    class="expanding"> — <span class="attr-name">‘<a
+                     href="#RequiredExtensionsAttribute"><span>requiredExtensions</span></a>’</span>, <span
+                      class="attr-name">‘<a
+                     href="#SystemLanguageAttribute"><span>systemLanguage</span></a>’</span></span></li>
+            <li>[=core attributes=]<span class="expanding"> — <span
+                      class="attr-name">‘<span>id</span>’</span>, <span
+                      class="attr-name">‘<span>tabindex</span>’</span>, <span
+                      class="attr-name">‘<span>autofocus</span>’</span>, <span
+                      class="attr-name">‘<span>lang</span>’</span>, <span
+                      class="attr-name">‘<span>xml:space</span>’</span>, <span
+                      class="attr-name">‘<span>class</span>’</span>, <span
+                      class="attr-name">‘<span>style</span>’</span></span></li>
+            <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers">global event
+                attributes</a><span class="expanding"> — <span class="attr-name">‘<span>oncancel</span>’</span>, <span class="attr-name">‘<span>oncanplay</span>’</span>, <span class="attr-name">‘<span>oncanplaythrough</span>’</span>, <span
+                      class="attr-name">‘<span>onchange</span>’</span>, <span
+                      class="attr-name">‘<span>onclick</span>’</span>, <span
+                      class="attr-name">‘<span>onclose</span>’</span>, <span
+                      class="attr-name">‘<span>oncopy</span>’</span>, <span
+                      class="attr-name">‘<span>oncuechange</span>’</span>, <span
+                      class="attr-name">‘<span>oncut</span>’</span>, <span
+                      class="attr-name">‘<span>ondblclick</span>’</span>, <span
+                      class="attr-name">‘<span>ondrag</span>’</span>, <span
+                      class="attr-name">‘<span>ondragend</span>’</span>, <span
+                      class="attr-name">‘<span>ondragenter</span>’</span>, <span
+                      class="attr-name">‘<span>ondragexit</span>’</span>, <span
+                      class="attr-name">‘<span>ondragleave</span>’</span>, <span
+                      class="attr-name">‘<span>ondragover</span>’</span>, <span
+                      class="attr-name">‘<span>ondragstart</span>’</span>, <span
+                      class="attr-name">‘<span>ondrop</span>’</span>, <span
+                      class="attr-name">‘<span>ondurationchange</span>’</span>,
+                <span class="attr-name">‘<span>onemptied</span>’</span>, <span
+                      class="attr-name">‘<span>onended</span>’</span>, <span
+                      class="attr-name">‘<span>onerror</span>’</span>, <span
+                      class="attr-name">‘<span>onfocus</span>’</span>, <span
+                      class="attr-name">‘<span>oninput</span>’</span>, <span
+                      class="attr-name">‘<span>oninvalid</span>’</span>, <span
+                      class="attr-name">‘<span>onkeydown</span>’</span>, <span
+                      class="attr-name">‘<span>onkeypress</span>’</span>, <span
+                      class="attr-name">‘<span>onkeyup</span>’</span>, <span
+                      class="attr-name">‘<span>onload</span>’</span>, <span
+                      class="attr-name">‘<span>onloadeddata</span>’</span>,
+                <span class="attr-name">‘<span>onloadedmetadata</span>’</span>,
+                <span class="attr-name">‘<span>onloadstart</span>’</span>, <span
+                      class="attr-name">‘<span>onmousedown</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseenter</span>’</span>,
+                <span class="attr-name">‘<span>onmouseleave</span>’</span>,
+                <span class="attr-name">‘<span>onmousemove</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseout</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseover</span>’</span>, <span
+                      class="attr-name">‘<span>onmouseup</span>’</span>, <span
+                      class="attr-name">‘<span>onpaste</span>’</span>, <span
+                      class="attr-name">‘<span>onpause</span>’</span>, <span
+                      class="attr-name">‘<span>onplay</span>’</span>, <span
+                      class="attr-name">‘<span>onplaying</span>’</span>, <span
+                      class="attr-name">‘<span>onprogress</span>’</span>, <span
+                      class="attr-name">‘<span>onratechange</span>’</span>,
+                <span class="attr-name">‘<span>onreset</span>’</span>, <span
+                      class="attr-name">‘<span>onresize</span>’</span>, <span
+                      class="attr-name">‘<span>onscroll</span>’</span>, <span
+                      class="attr-name">‘<span>onseeked</span>’</span>, <span
+                      class="attr-name">‘<span>onseeking</span>’</span>, <span
+                      class="attr-name">‘<span>onselect</span>’</span>, <span
+                      class="attr-name">‘<span>onshow</span>’</span>, <span
+                      class="attr-name">‘<span>onstalled</span>’</span>, <span
+                      class="attr-name">‘<span>onsubmit</span>’</span>, <span
+                      class="attr-name">‘<span>onsuspend</span>’</span>, <span
+                      class="attr-name">‘<span>ontimeupdate</span>’</span>,
+                <span class="attr-name">‘<span>ontoggle</span>’</span>, <span
+                      class="attr-name">‘<span>onvolumechange</span>’</span>,
+                <span class="attr-name">‘<span>onwaiting</span>’</span>, <span
+                      class="attr-name">‘<span>onwheel</span>’</span></span>
+            </li>
+            <li>[=presentation attributes=]<span class="expanding"> —
+              </span></li>
+            <li><span class="attr-name">‘<a href="#PathLengthAttribute"><span>pathLength</span></a>’</span></li>
+          </ul>
+        </dd>
+        <dt>Geometry properties:</dt>
+        <dd>
+          <ul class="no-bullets">
+            <li><a property>d</a></li>
+          </ul>
+        </dd>
+        <dt>DOM Interfaces:</dt>
+        <dd>
+          <ul class="no-bullets">
+            <li>{{SVGPathElement}}</li>
+          </ul>
+        </dd>
+      </dl>
+    </div>
+
+<p>The outline of a shape for a <{path}> element is specified using the {{d}}
+property.  See <a href="#PathData">Path data</a> below.
+
+<h3 id="PathData">Path data</h3>
+
+<h4 id="PathDataGeneralInformation">General information about path data</h4>
+
+<p>A path is defined by including a <{path}>
+element on which the {{d}} property specifies the
+<dfn id="TermPathData" data-dfn-type="dfn" data-export="">path data</dfn>. The path data contains the
+<em>moveto</em>, <em>lineto</em>, <em>curveto</em> (both cubic and
+quadratic Béziers), <em>arc</em> and <em>closepath</em>
+instructions.
+
+<p><span class="example-ref">Example triangle01</span>
+specifies a path in the shape of a triangle. (The
+<strong>M</strong> indicates a <em>moveto</em>, the
+<strong>L</strong>s indicate <em>lineto</em>s, and the
+<strong>z</strong> indicates a <em>closepath</em>).
+
+<pre class=include-raw>
+path: images/paths/triangle01.svg
+</pre>
+<!--
+@@fix
+<pre class=include>
+path: images/paths/triangle01.svg
+</pre>
+-->
+
+<p>Path data can contain newline characters and thus can be
+broken up into multiple lines to improve readability.
+Newlines inside attributes in markup will be normalized to space
+characters while parsing.
+
+<p>The syntax of path data is concise in order to allow for
+minimal file size and efficient downloads, since many SVG files
+will be dominated by their path data. Some of the ways that SVG
+attempts to minimize the size of path data are as follows:
+
+<ul>
+  <li>All instructions are expressed as one character (e.g., a
+  <em>moveto</em> is expressed as an <strong>M</strong>).</li>
+
+  <li>
+    <div>Superfluous white space and separators (such as commas) may
+    be eliminated; for instance, the following contains unnecessary
+    spaces:</div>
+    <div style="margin-left: 2em"><code>M 100 100 L 200 200</code></div>
+    <div>It may be expressed more compactly as:</div>
+    <div style="margin-left: 2em"><code>M100 100L200 200</code></div>
+  </li>
+
+  <li>
+    <div>A command letter may be eliminated if an identical command
+    letter would otherwise precede it; for instance, the following
+    contains an unnecessary second "L" command:</div>
+    <div style="margin-left: 2em"><code>M 100 200 L 200 100 L -100 -200</code></div>
+    <div>It may be expressed more compactly as:</div>
+    <div style="margin-left: 2em"><code>M 100 200 L 200 100 -100 -200</code></div>
+  </li>
+
+  <li>For most commands there are absolute and relative
+  versions available (uppercase means absolute coordinates,
+  lowercase means relative coordinates).</li>
+
+  <li>Alternate forms of <em>lineto</em> are available to
+  optimize the special cases of horizontal and vertical lines
+  (absolute and relative).</li>
+
+  <li>Alternate forms of <em>curve</em> are available to
+  optimize the special cases where some of the control points
+  on the current segment can be determined automatically from
+  the control points on the previous segment.</li>
+</ul>
+
+<p>The path data syntax is a prefix notation (i.e., commands
+followed by parameters). The only allowable decimal point is a
+Unicode
+U+002E FULL STOP (".") character (also referred to in Unicode as
+PERIOD, dot and decimal point) and no other delimiter
+characters are allowed [<a href='refs.html#ref-unicode'>UNICODE</a>].
+(For example, the following is an
+invalid numeric value in a path data stream: "13,000.56".
+Instead, say: "13000.56".)
+
+<p>For the relative versions of the commands, all coordinate
+values are relative to the current point at the start of the
+command.
+
+<p>In the tables below, the following notation is used to
+describe the syntax of a given path command:
+
+<ul>
+  <li>(): grouping of parameters</li>
+  <li>+: 1 or more of the given parameter(s) is required</li>
+</ul>
+
+<div class="ready-for-wider-review">
+
+<p>In the description of the path commands, <var>cpx</var> and
+<var>cpy</var> represent the coordinates of the current point.
+
+</div>
+
+<div class='ready-for-wider-review'>
+
+<h4 id="TheDProperty">Specifying path data: the <span class="property">d</span> property</h4>
+
+<table class="propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="DProperty" data-dfn-type="property" data-export="">d</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td>none | <a>&lt;string&gt;</a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>none</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><{path}></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>as specified</td>
+  </tr>
+  <tr>
+    <th>[=Animation type=]:</th>
+    <td>See prose</td>
+  </tr>
+</table>
+
+<p>The {{d}} property is used to specify the shape of a <{path}> element.
+
+<p>The value <span class='prop-value'>none</span> indicates that there is no
+path data for the element.  For <{path}> elements, this means that the
+element does not render or contribute to the [=bounding box=] of ancestor
+[=container elements=].
+
+<p>A path is made up of multiple segments, and every command, either explicit
+or implicit, other than moveto or closepath,
+defines one <dfn id="TermPathSegment">path segment</dfn>.
+
+<p>All coordinates and lengths specified within path data must be treated as
+being in [=user units=] in the current user coordinate system.
+
+<p>The <span class='prop-value'><a>&lt;string&gt;</a></span> value
+specifies a shape using a path data string.  The contents of the
+<a>&lt;string&gt;</a> value must match the <a href="#PathDataBNF">svg-path</a>
+<a href="types.html#syntax">EBNF grammar</a> defined below, and errors within the string are handled according to
+the rules in the <a href="paths.html#PathDataErrorHandling">Path Data Error Handling</a> section.
+If the path data string contains no valid commands, then the behavior
+is the same as the <span class='prop-value'>none</span> value.
+
+<p>
+  For animation, two {{d}} property values can only be
+  interpolated smoothly when the path data strings contain have the
+  same structure, (i.e. exactly the same number and types of path data
+  commands which are in the same order). If an animation is specified
+  and the lists of path data commands do not have the same structure,
+  then the values must be
+  <a href="https://drafts.csswg.org/web-animations/#animation-interpolation">interpolated</a>
+  using the
+  <a href="https://drafts.csswg.org/web-animations/#discrete-animation-type-section">discrete</a>
+  animation type.
+
+<p>
+  If the list of path data commands have the same structure, then each
+  parameter to each path data command must be
+  <a href="https://drafts.csswg.org/web-animations/#animation-interpolation">interpolated</a>
+  separately <a href="https://drafts.csswg.org/web-animations/#real-number-animation-type">as
+  real numbers</a>.  Flags and booleans must be interpolated as
+  fractions between zero and one, with any non-zero value considered
+  to be a value of one/true.
+
+
+<p class="annotation">
+  Resolved that "d will become a presentation attribute (no name
+  change) with path data string as value" at
+  <a href="https://www.w3.org/2016/04/21-svg-minutes.html">London
+  Editor's Meeting</a>.
+
+
+</div>
+
+<p>The following sections list the commands that can be used
+in path data strings.  Those that
+draw straight line segments include the <a href="paths.html#PathDataLinetoCommands">lineto commands</a>
+(<strong>L</strong>, <strong>l</strong>,
+<strong>H</strong>, <strong>h</strong>, <strong>V</strong> and <strong>v</strong>)
+and the <a href="paths.html#PathDataClosePathCommand">close path commands</a>
+(<strong>Z</strong> and <strong>z</strong>).  These three groups of commands draw curves:
+
+<ul>
+  <li><a href="paths.html#PathDataCubicBezierCommands">Cubic
+  Bézier commands</a> (<strong>C</strong>,
+  <strong>c</strong>, <strong>S</strong> and
+  <strong>s</strong>). A cubic Bézier segment is defined
+  by a start point, an end point, and two control points.</li>
+
+  <li><a
+  href="paths.html#PathDataQuadraticBezierCommands">Quadratic
+  Bézier commands</a> (<strong>Q</strong>,
+  <strong>q</strong>, <strong>T</strong> and
+  <strong>t</strong>). A quadratic Bézier segment is
+  defined by a start point, an end point, and one control
+  point.</li>
+
+  <li><a
+  href="paths.html#PathDataEllipticalArcCommands">Elliptical
+  arc commands</a> (<strong>A</strong> and <strong>a</strong>).
+  An elliptical arc segment draws a segment of an ellipse.</li>
+</ul>
+
+<h4 id="PathDataMovetoCommands">The <strong>"moveto"</strong> commands</h4>
+
+<p>The "moveto" commands (<strong>M</strong> or
+<strong>m</strong>) must establish a new <dfn id="TermInitialPoint">initial point</dfn>
+and a new current point. The effect is as if the "pen" were lifted and moved to
+a new location. A path data segment (if there is one) must begin with a "moveto"
+command. Subsequent "moveto" commands (i.e., when the "moveto"
+is not the first command) represent the start of a new
+<em>subpath</em>:
+
+<table class="PathDataTable">
+  <tr>
+    <th>Command</th>
+    <th>Name</th>
+    <th>Parameters</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>M</strong> (absolute)<br />
+     <strong>m</strong> (relative)</td>
+    <td>moveto</td>
+    <td>(x y)+</td>
+    <td>
+      Start a new sub-path at the given (x,y) coordinates.
+      <strong>M</strong> (uppercase) indicates that absolute
+      coordinates will follow; <strong>m</strong> (lowercase)
+      indicates that relative coordinates will follow. If a moveto is
+      followed by multiple pairs of coordinates, the subsequent pairs
+      are treated as implicit lineto commands. Hence, implicit lineto
+      commands will be relative if the moveto is relative, and
+      absolute if the moveto is absolute. If a relative moveto
+      (<strong>m</strong>) appears as the first element of the path,
+      then it is treated as a pair of absolute coordinates. In this
+      case, subsequent pairs of coordinates are treated as relative
+      even though the initial moveto is interpreted as an absolute moveto.
+    </td>
+  </tr>
+</table>
+
+<div class="ready-for-wider-review">
+
+<p>When a relative <strong>m</strong> command is used, the
+position moved to is (<var>cpx</var> + <var>x</var>,
+<var>cpy</var> + <var>y</var>).
+
+</div>
+
+<h4 id="PathDataClosePathCommand">The <strong>"closepath"</strong> command</h4>
+
+<p>The "closepath" (<strong>Z</strong> or <strong>z</strong>)
+  ends the current subpath by connecting it back to its [=initial point=].
+  An automatic
+  straight line is drawn from the current point to the [=initial point=]
+  of the current subpath. This [=path segment=] may be of zero
+  length.
+
+
+<p>If a "closepath" is followed immediately by a "moveto", then the
+  "moveto" identifies the start point of the next subpath.
+  If a "closepath" is followed immediately by any other command, then
+  the next subpath starts at the same initial point as the current
+  subpath.
+
+<p>When a subpath ends in a "closepath," it differs in behavior
+  from what happens when "manually" closing a subpath via a
+  "lineto" command in how <a href="painting.html#StrokeLinejoinProperty"><span class="prop-name">‘stroke-linejoin’</span></a>
+  and <a href="painting.html#StrokeLinecapProperty"><span class="prop-name">‘stroke-linecap’</span></a> are implemented. With "closepath", the end of the final segment
+  of the subpath is "joined" with the start of the initial
+  segment of the subpath using the current value of <a href="painting.html#StrokeLinejoinProperty"><span class="prop-name">‘stroke-linejoin’</span></a>.
+  If you instead "manually" close the subpath via a "lineto"
+  command, the start of the first segment and the end of the last
+  segment are not joined but instead are each capped using the
+  current value of <a href="painting.html#StrokeLinecapProperty"><span class="prop-name">‘stroke-linecap’</span></a>.
+  At the end of the command, the new current point is set to the
+  initial point of the current subpath.
+
+<table class="PathDataTable">
+  <tr>
+    <th>Command</th>
+    <th>Name</th>
+    <th>Parameters</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>Z</strong> or<br />
+     <strong>z</strong></td>
+    <td>closepath</td>
+    <td>(none)</td>
+    <td>Close the current subpath by connecting it back to the current
+    subpath's [=initial point=] (see prose above). Since the
+    <strong>Z</strong> and <strong>z</strong>
+    commands take no parameters, they have an identical effect.</td>
+  </tr>
+</table>
+
+<p>A <dfn id="TermClosedSubpath">closed subpath</dfn> must be closed with a
+"closepath" command, this "joins" the first and last [=path segments=].
+Any other path is an <dfn id="TermOpenSubpath">open subpath</dfn>.
+
+<p class="note ready-for-wider-review">A [=closed subpath=] differs in behavior
+from an [=open subpath=] whose final coordinate is the [=initial point=]
+of the subpath.
+The first and last [=path segments=] of an [=open subpath=] will not be
+joined, even when the final coordinate of the last [=path segment=] is the
+[=initial point=] of the subpath. This will result in the first and last
+[=path segments=] being capped using the current value of 'stroke-linecap'
+rather than joined using the current value of 'stroke-linejoin'.
+
+<p>If a "closepath" is followed immediately by a
+"moveto", then the "moveto" identifies the start point of the
+next subpath. If a "closepath" is followed immediately by any
+other command, then the next subpath must start at the same [=initial point=]
+as the current subpath.
+
+<h5 id="Segment-CompletingClosePath">Segment-completing close path operation</h5>
+
+<p>
+In order to represent the basic shapes as equivalent paths,
+there must be a way to close curved shapes
+without introducing an additional straight-line segment
+(even if that segment would have zero length).
+For that purpose, a segment-completing close path operation is defined here.
+
+<p>
+A <dfn id="TermSegment-CompletingClosePath">segment-completing close path</dfn> operation <em>combines</em> with the previous path command,
+with two effects:
+
+<ul>
+  <li>It ensures that the final coordinate point of the previous command exactly matches
+  the [=initial point=] of the current subpath.</li>
+  <li>It joins the final and initial points of the subpath, making it a closed subpath.</li>
+</ul>
+
+Note: 
+Segment-completing close path operations are not currently supported
+as a command in the path data syntax.
+The working group has proposed such a syntax for future versions of the specification.
+
+
+<h4 id="PathDataLinetoCommands">The <strong>"lineto"</strong> commands</h4>
+
+<p>The various "lineto" commands draw straight lines from the
+current point to a new point:
+
+<table  class="PathDataTable">
+  <tr>
+    <th>Command</th>
+    <th>Name</th>
+    <th>Parameters</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>L</strong> (absolute)<br />
+     <strong>l</strong> (relative)</td>
+    <td>lineto</td>
+    <td>(x y)+</td>
+    <td>Draw a line from the current point to the given (x,y)
+    coordinate which becomes the new current point.
+    <strong>L</strong> (uppercase) indicates that absolute
+    coordinates will follow; <strong>l</strong> (lowercase)
+    indicates that relative coordinates will follow. A number
+    of coordinates pairs may be specified to draw a polyline.
+    At the end of the command, the new current point is set to
+    the final set of coordinates provided.</td>
+  </tr>
+  <tr>
+    <td><strong>H</strong> (absolute)<br />
+     <strong>h</strong> (relative)</td>
+    <td>horizontal lineto</td>
+    <td>x+</td>
+    <td>Draws a horizontal line from the current point.
+    <strong>H</strong> (uppercase) indicates
+    that absolute coordinates will follow; <strong>h</strong>
+    (lowercase) indicates that relative coordinates will
+    follow. Multiple x values can be provided (although usually
+    this doesn't make sense). An <strong>H</strong> or <strong>h</strong>
+    command is equivalent to an <strong>L</strong> or <strong>l</strong>
+    command with 0 specified for the y coordinate.
+    At the end of the command, the new current point is
+    taken from the final coordinate value.</td>
+  </tr>
+  <tr>
+    <td><strong>V</strong> (absolute)<br />
+     <strong>v</strong> (relative)</td>
+    <td>vertical lineto</td>
+    <td>y+</td>
+    <td>Draws a vertical line from the current point.
+    <strong>V</strong> (uppercase) indicates that
+    absolute coordinates will follow; <strong>v</strong>
+    (lowercase) indicates that relative coordinates will
+    follow. Multiple y values can be provided (although usually
+    this doesn't make sense).  A <strong>V</strong> or <strong>v</strong>
+    command is equivalent to an <strong>L</strong> or <strong>l</strong>
+    command with 0 specified for the x coordinate.
+    At the end of the command, the new current point is
+    taken from the final coordinate value.</td>
+  </tr>
+</table>
+
+<div class="ready-for-wider-review">
+
+<p>When a relative <strong>l</strong> command is used, the
+end point of the line is (<var>cpx</var> + <var>x</var>,
+<var>cpy</var> + <var>y</var>).
+
+<p>When a relative <strong>h</strong> command is used,
+the end point of the line is (<var>cpx</var> + <var>x</var>,
+<var>cpy</var>).  This means
+that an <strong>h</strong> command with a positive <var>x</var>
+value draws a horizontal line in the direction of the positive x-axis.
+
+<p>When a relative <strong>v</strong> command is used,
+the end point of the line is (<var>cpx</var>,
+<var>cpy</var> + <var>y</var>).
+
+</div>
+
+<h4 id="PathDataCubicBezierCommands">The cubic Bézier curve commands</h4>
+
+<p>The cubic Bézier commands are as follows:
+
+<table class="PathDataTable">
+  <tr>
+    <th>Command</th>
+    <th>Name</th>
+    <th>Parameters</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>C</strong> (absolute)<br />
+     <strong>c</strong> (relative)</td>
+    <td>curveto</td>
+    <td>(x1 y1 x2 y2 x y)+</td>
+    <td>Draws a cubic Bézier curve from the current
+    point to (x,y) using (x1,y1) as the control point at the
+    beginning of the curve and (x2,y2) as the control point at
+    the end of the curve. <strong>C</strong> (uppercase)
+    indicates that absolute coordinates will follow;
+    <strong>c</strong> (lowercase) indicates that relative
+    coordinates will follow. Multiple sets of coordinates may
+    be specified to draw a polybézier. At the end of the
+    command, the new current point becomes the final (x,y)
+    coordinate pair used in the polybézier.</td>
+  </tr>
+  <tr>
+    <td><strong>S</strong> (absolute)<br />
+     <strong>s</strong> (relative)</td>
+    <td>shorthand/smooth curveto</td>
+    <td>(x2 y2 x y)+</td>
+    <td>Draws a cubic Bézier curve from the current
+    point to (x,y). The first control point is assumed to be
+    the reflection of the second control point on the previous
+    command relative to the current point. (If there is no
+    previous command or if the previous command was not an C,
+    c, S or s, assume the first control point is coincident
+    with the current point.) (x2,y2) is the second control
+    point (i.e., the control point at the end of the curve).
+    <strong>S</strong> (uppercase) indicates that absolute
+    coordinates will follow; <strong>s</strong> (lowercase)
+    indicates that relative coordinates will follow. Multiple
+    sets of coordinates may be specified to draw a
+    polybézier. At the end of the command, the new
+    current point becomes the final (x,y) coordinate pair used
+    in the polybézier.</td>
+  </tr>
+</table>
+
+<div class="ready-for-wider-review">
+
+<p>When a relative <strong>c</strong> or <strong>s</strong>
+command is used, each of the relative coordinate pairs
+is computed as for those in an <strong>m</strong> command.
+For example, the final control point of the curve of
+both commands is (<var>cpx</var> + <var>x</var>,
+<var>cpy</var> + <var>y</var>).
+
+</div>
+
+<p><span class="example-ref">Example cubic01</span> shows some
+simple uses of cubic Bézier commands within a path. The
+example uses an internal CSS style sheet to assign styling
+properties. Note that the control point for the "S" command is
+computed automatically as the reflection of the control point
+for the previous "C" command relative to the start point of the
+"S" command.
+
+<pre class=include-raw>
+path: images/paths/cubic01.svg
+</pre>
+<!--
+@@fix
+<pre class=include>
+path: images/paths/cubic01.svg
+</pre>
+-->
+
+<p>The following picture shows some how cubic Bézier
+curves change their shape depending on the position of the
+control points. The first five examples illustrate a single
+cubic Bézier [=path segment=]. The example at the lower
+right shows a "C" command followed by an "S" command.
+<p><img
+alt="Example cubic02 - cubic Bézier commands in path data"
+ src="images/paths/cubic02.png" width="355" height="355">
+<p class="view-as-svg"><a href="images/paths/cubic02.svg">View
+this example as SVG (SVG-enabled browsers only)</a><br />
+ &nbsp;
+
+<h4 id="PathDataQuadraticBezierCommands">The quadratic Bézier curve commands</h4>
+
+<p>The quadratic Bézier commands are as follows:
+
+<table class="PathDataTable">
+  <tr>
+    <th>Command</th>
+    <th>Name</th>
+    <th>Parameters</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>Q</strong> (absolute)<br />
+     <strong>q</strong> (relative)</td>
+    <td>quadratic Bézier curveto</td>
+    <td>(x1 y1 x y)+</td>
+    <td>Draws a quadratic Bézier curve from the current
+    point to (x,y) using (x1,y1) as the control point.
+    <strong>Q</strong> (uppercase) indicates that absolute
+    coordinates will follow; <strong>q</strong> (lowercase)
+    indicates that relative coordinates will follow. Multiple
+    sets of coordinates may be specified to draw a
+    polybézier. At the end of the command, the new
+    current point becomes the final (x,y) coordinate pair used
+    in the polybézier.</td>
+  </tr>
+  <tr>
+    <td><strong>T</strong> (absolute)<br />
+     <strong>t</strong> (relative)</td>
+    <td>Shorthand/smooth quadratic Bézier curveto</td>
+    <td>(x y)+</td>
+    <td>Draws a quadratic Bézier curve from the current
+    point to (x,y). The control point is assumed to be the
+    reflection of the control point on the previous command
+    relative to the current point. (If there is no previous
+    command or if the previous command was not a Q, q, T or t,
+    assume the control point is coincident with the current
+    point.) <strong>T</strong> (uppercase) indicates that
+    absolute coordinates will follow; <strong>t</strong>
+    (lowercase) indicates that relative coordinates will
+    follow. At the end of the command, the new current point
+    becomes the final (x,y) coordinate pair used in the
+    polybézier.</td>
+  </tr>
+</table>
+
+<div class="ready-for-wider-review">
+
+<p>When a relative <strong>q</strong> or <strong>t</strong>
+command is used, each of the relative coordinate pairs
+is computed as for those in an <strong>m</strong> command.
+For example, the final control point of the curve of
+both commands is (<var>cpx</var> + <var>x</var>,
+<var>cpy</var> + <var>y</var>).
+
+</div>
+
+<p><span class="example-ref">Example quad01</span> shows some
+simple uses of quadratic Bézier commands within a path.
+Note that the control point for the "T" command is computed
+automatically as the reflection of the control point for the
+previous "Q" command relative to the start point of the "T"
+command.
+
+<pre class=include-raw>
+path: images/paths/quad01.svg
+</pre>
+<!--
+@@fix
+<pre class=include>
+path: images/paths/quad01.svg
+</pre>
+-->
+<h4 id="PathDataEllipticalArcCommands">The elliptical arc curve commands</h4>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Make it simpler to draw arcs in SVG path syntax.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="http://www.w3.org/2011/11/04-svg-minutes.html#item08">Make arcs in paths easier.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To make it easier for authors to write path data with arcs by hand.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (<a href="http://www.w3.org/Graphics/SVG/WG/track/actions/3151">ACTION-3151</a>)</td>
+    </tr>
+  </table>
+</div>
+
+<p>The elliptical arc commands are as follows:
+
+<table  class="PathDataTable">
+  <tr>
+    <th>Command</th>
+    <th>Name</th>
+    <th>Parameters</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><strong>A</strong> (absolute)<br />
+     <strong>a</strong> (relative)</td>
+    <td>elliptical arc</td>
+    <td>(rx ry x-axis-rotation large-arc-flag sweep-flag x
+    y)+</td>
+    <td>Draws an elliptical arc from the current point to
+    (<strong>x</strong>, <strong>y</strong>). The size and
+    orientation of the ellipse are defined by two radii
+    (<strong>rx</strong>, <strong>ry</strong>) and an
+    <strong>x-axis-rotation</strong>, which indicates how the
+    ellipse as a whole is rotated, in degrees, relative to the current
+    coordinate system. The center (<strong>cx</strong>,
+    <strong>cy</strong>) of the ellipse is calculated
+    automatically to satisfy the constraints imposed by the
+    other parameters. <strong>large-arc-flag</strong> and
+    <strong>sweep-flag</strong> contribute to the automatic
+    calculations and help determine how the arc is drawn.</td>
+  </tr>
+</table>
+
+<div class="ready-for-wider-review">
+
+<p>When a relative <strong>a</strong> command is used, the end point
+of the arc is (<var>cpx</var> + <var>x</var>,
+<var>cpy</var> + <var>y</var>).
+
+</div>
+
+<p><span class="example-ref">Example arcs01</span> shows some
+simple uses of arc commands within a path.
+
+<pre class=include-raw>
+path: images/paths/arcs01.svg
+</pre>
+<!--
+@@fix
+<pre class=include>
+path: images/paths/arcs01.svg
+</pre>
+-->
+<p>The elliptical arc command draws a section of an ellipse
+which must meet the following constraints:
+
+<ul>
+  <li>the arc starts at the current point</li>
+  <li>the arc ends at point (<strong>x</strong>,
+  <strong>y</strong>)</li>
+  <li>the ellipse has the two radii (<strong>rx</strong>,
+  <strong>ry</strong>)</li>
+  <li>the x-axis of the ellipse is rotated by
+  <strong>x-axis-rotation</strong> degrees relative to the x-axis of
+  the current coordinate system.</li>
+</ul>
+
+<p>For most situations, there are actually four different arcs
+(two different ellipses, each with two different arc sweeps)
+that satisfy these constraints. <strong>large-arc-flag</strong>
+and <strong>sweep-flag</strong> indicate which one of the four
+arcs are drawn, as follows:
+
+<ul>
+  <li>Of the four candidate arc sweeps, two will represent an
+  arc sweep of greater than or equal to 180 degrees (the
+  "large-arc"), and two will represent an arc sweep of less
+  than or equal to 180 degrees (the "small-arc"). If
+  <strong>large-arc-flag</strong> is <span class="attr-value">1</span>, then one of the two
+  larger arc sweeps will be chosen; otherwise, if
+  <strong>large-arc-flag</strong> is <span class="attr-value">0</span>, one of the smaller
+  arc sweeps will be chosen,</li>
+
+  <li>If <strong>sweep-flag</strong> is <span class="attr-value">1</span>, then the arc will
+  be drawn in a "positive-angle" direction (i.e., the ellipse
+  formula x=<strong>cx</strong>+<strong>rx</strong>*cos(theta)
+  and y=<strong>cy</strong>+<strong>ry</strong>*sin(theta) is
+  evaluated such that theta starts at an angle corresponding to
+  the current point and increases positively until the arc
+  reaches (x,y)). A value of 0 causes the arc to be drawn in a
+  "negative-angle" direction (i.e., theta starts at an angle
+  value corresponding to the current point and decreases until
+  the arc reaches (x,y)).</li>
+</ul>
+
+<p>The following illustrates the four combinations of
+<strong>large-arc-flag</strong> and <strong>sweep-flag</strong>
+and the four different arcs that will be drawn based on the
+values of these flags. For each case, the following path data
+command was used:
+
+<pre>
+&lt;path d="M 125,75 a100,50 0 ?,? 100,50"
+      style="fill:none; stroke:red; stroke-width:6"/&gt;
+</pre>
+
+<p>where "?,?" is replaced by "0,0" "0,1" "1,0" and "1,1" to
+generate the four possible cases.
+
+<p><img alt="Illustration of flags in arc commands"
+src="images/paths/arcs02.png" width="426" height="187">
+<p class="view-as-svg"><a href="images/paths/arcs02.svg">View
+this example as SVG (SVG-enabled browsers only)</a>
+
+<p>Refer to the section on <a
+href="#ArcOutOfRangeParameters">Out-of-range elliptical arc parameters</a>
+for detailed implementation notes for
+the path data elliptical arc commands.
+
+Note: 
+The <a href="implnote.html#ArcImplementationNotes">Implementation Notes appendix</a>
+has relevant formulae for software that needs to convert
+SVG arc notation to a format that uses center points and arc sweeps.
+
+
+
+<h4 id="PathDataBNF">The grammar for path data</h4>
+
+<p>SVG path data matches the following EBNF grammar.
+<pre class='grammar ready-for-wider-review'>
+svg_path::= wsp* (moveto (wsp* drawto_command)*)? wsp*
+
+drawto_command::=
+    moveto
+    | closepath
+    | lineto
+    | horizontal_lineto
+    | vertical_lineto
+    | curveto
+    | smooth_curveto
+    | quadratic_bezier_curveto
+    | smooth_quadratic_bezier_curveto
+    | elliptical_arc
+
+moveto::=
+    ( "M" | "m" ) wsp* coordinate_pair_sequence
+
+closepath::=
+    ("Z" | "z")
+
+lineto::=
+    ("L"|"l") wsp* coordinate_pair_sequence
+
+horizontal_lineto::=
+    ("H"|"h") wsp* coordinate_sequence
+
+vertical_lineto::=
+    ("V"|"v") wsp* coordinate_sequence
+
+curveto::=
+    ("C"|"c") wsp* curveto_coordinate_sequence
+
+curveto_coordinate_sequence::=
+    coordinate_pair_triplet
+    | (coordinate_pair_triplet comma_wsp? curveto_coordinate_sequence)
+
+smooth_curveto::=
+    ("S"|"s") wsp* smooth_curveto_coordinate_sequence
+
+smooth_curveto_coordinate_sequence::=
+    coordinate_pair_double
+    | (coordinate_pair_double comma_wsp? smooth_curveto_coordinate_sequence)
+
+quadratic_bezier_curveto::=
+    ("Q"|"q") wsp* quadratic_bezier_curveto_coordinate_sequence
+
+quadratic_bezier_curveto_coordinate_sequence::=
+    coordinate_pair_double
+    | (coordinate_pair_double comma_wsp? quadratic_bezier_curveto_coordinate_sequence)
+
+smooth_quadratic_bezier_curveto::=
+    ("T"|"t") wsp* coordinate_pair_sequence
+
+elliptical_arc::=
+    ( "A" | "a" ) wsp* elliptical_arc_argument_sequence
+
+elliptical_arc_argument_sequence::=
+    elliptical_arc_argument
+    | (elliptical_arc_argument comma_wsp? elliptical_arc_argument_sequence)
+
+elliptical_arc_argument::=
+    number comma_wsp? number comma_wsp? number comma_wsp
+    flag comma_wsp? flag comma_wsp? coordinate_pair
+
+coordinate_pair_double::=
+    coordinate_pair comma_wsp? coordinate_pair
+
+coordinate_pair_triplet::=
+    coordinate_pair comma_wsp? coordinate_pair comma_wsp? coordinate_pair
+
+coordinate_pair_sequence::=
+    coordinate_pair | (coordinate_pair comma_wsp? coordinate_pair_sequence)
+
+coordinate_sequence::=
+    coordinate | (coordinate comma_wsp? coordinate_sequence)
+
+coordinate_pair::= coordinate comma_wsp? coordinate
+
+coordinate::= sign? number
+
+sign::= "+"|"-"
+
+exponent::= ("e" | "E") sign? digit+
+
+fractional-constant::= (digit* "." digit+) | digit+
+
+number::= fractional-constant exponent?
+
+flag::= ("0" | "1")
+
+comma_wsp::= (wsp+ ","? wsp*) | ("," wsp*)
+
+wsp::= (#x9 | #x20 | #xA | #xC | #xD)
+
+digit::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+</pre>
+
+<p>The processing of the EBNF must consume as much of a given
+EBNF production as possible, stopping at the point when a
+character is encountered which no longer satisfies the
+production. Thus, in the string "M 100-200", the first
+coordinate for the "moveto" consumes the characters "100" and
+stops upon encountering the minus sign because the minus sign
+cannot follow a digit in the production of a "coordinate". The
+result is that the first coordinate will be "100" and the
+second coordinate will be "-200".
+
+<p>Similarly, for the string "M 0.6.5", the first coordinate of
+the "moveto" consumes the characters "0.6" and stops upon
+encountering the second decimal point because the production of
+a "coordinate" only allows one decimal point. The result is
+that the first coordinate will be "0.6" and the second
+coordinate will be ".5".
+
+<p class="advisement">The
+<a href="https://www.w3.org/Graphics/SVG/1.1/paths.html#PathDataBNF">grammar
+of previous specifications</a> allowed a trailing decimal point without
+any decimal digits for numbers (e.g. <code>23.</code>). SVG 2 harmonizes number parsing
+with CSS [<a href="refs.html#ref-css-syntax-3">css-syntax-3</a>],
+disallowing the relaxed grammar for numbers. However, user agents may continue
+to accept numbers with trailing decimal points when parsing is unambiguous.
+Authors and authoring tools must not use the disallowed number format.
+
+<p>The EBNF allows the path data string in the
+{{d}} property to be empty. An empty path data string
+disables rendering of the path.
+Rendering is also disabled when the {{d}} property
+has the value <span class='prop-value'>none</span>.
+
+<p class="ready-for-wider-review">
+If path data not matching the grammar is encountered, then the path data is in error
+(see <a href="paths.html#PathDataErrorHandling">Error Handling</a>).
+
+
+<div class="ready-for-wider-review">
+<h3 id="PathDirectionality">Path directionality</h3>
+
+<p>Some features, such as the <a href="painting.html#OrientAttribute">orientation</a>
+of [=markers=] and the <a href="painting.html#TermCapShape">shapes</a> of
+<a href="painting.html#LineCaps">line caps</a>, are defined in terms of
+the direction of the path at a given distance along the path or at the
+start or end of an individual segment.
+
+<p>The <dfn id="TermPathDirection" data-export="">direction of a path</dfn> at a specified
+distance along the path is defined as follows:
+
+<ul>
+  <li>If the given distance is zero, then the direction of the path is
+  the <a href="#TermPathSegmentStartDirection">direction at the start of
+  the path's first segment</a>.</li>
+
+  <li>Otherwise, if the given distance is the length of the path, then
+  the direction of the path is the
+  <a href="#TermPathSegmentEndDirection">direction at the end of the path's
+  last segment</a>.</li>
+
+  <li>Otherwise, if the given distance along the path occurs at a path
+  segment boundary, then the direction of the path is the
+  <a href="#TermPathSegmentStartDirection">direction at the start of
+  the segment at the given distance</a>, considering each segment to
+  be endpoint exclusive.
+
+  <div class="note">This will "move past"
+  zero length segments, and choose the later segment if the distance
+  is at the boundary between two non-zero length segments.</div>
+  <div class="note">The default direction at segment boundaries is overriden
+  when calculating a [=cap shape=] and when <a href="painting.html#RenderingMarkers">rendering markers</a>.
+  </div></li>
+
+  <li>Otherwise, the given distance along the path occurs in the middle
+  of a non-zero length [=path segment=].  The direction is simply the direction
+  of the curve at that point.  If the point lies at a discontinuity, such as
+  a cusp in a Bézier segment, then the direction is undefined; in this case,
+  a direction between the incoming and outgoing direction around the discontinuity
+  should be used.</li>
+</ul>
+
+<p>The <dfn id="TermPathSegmentStartDirection">direction at the start
+of a [=path segment=]</dfn> is defined as follows:
+
+<ul>
+  <li>If length of the entire path the segment belongs to is zero, then the
+  direction at the start of the segment points in the same direction as the
+  positive x-axis.</li>
+
+  <li>Otherwise, if the [=path segment=] is zero length and the segment does not
+  have any preceding non-zero length segments, then the direction at the
+  start of the segment is the same as the
+  <a href="#TermPathSegmentEndDirection">direction at the end of the segment</a>.</li>
+
+  <li>Otherwise, if the [=path segment=] is zero length and there is some non-zero
+  length segment preceding this segment, then the direction at the start of
+  this segment is the same as the
+  <a href="#TermPathSegmentEndDirection">direction at the end of the closest
+  preceding non-zero length segment</a>.</li>
+
+  <li>Otherwise, the [=path segment=] is non-zero length.  The direction at the
+  start of the segment is simply the direction coming out of the segment's start
+  point.</li>
+</ul>
+
+<p>The <dfn id="TermPathSegmentEndDirection">direction at the end of a path
+segment</dfn> is defined as follows:
+
+<ul>
+  <li>If length of the entire path the segment belongs to is zero, then the
+  direction at the end of the segment points in the same direction as the
+  positive x-axis.</li>
+
+  <li>Otherwise, if the [=path segment=] is zero length and the segment does not
+  have any following non-zero length segments, then the direction at the
+  end of the segment is the same as the
+  <a href="#TermPathSegmentStartDirection">direction at the start of the segment</a>.</li>
+
+  <li>Otherwise, if the [=path segment=] is zero length and there is some non-zero
+  length segment following this segment, then the direction at the end of
+  this segment is the same as the
+  <a href="#TermPathSegmentStartDirection">direction at the start of the closest
+  following non-zero length segment</a>.</li>
+
+  <li>Otherwise, the [=path segment=] is non-zero length.  The direction at the
+  end of the segment is simply the direction coming in to the segment's end
+  point.</li>
+</ul>
+</div>
+
+
+<h3 id="PathElementImplementationNotes">Implementation notes</h3>
+
+<p>A conforming SVG user agent must implement features that use path data
+according to the following details:
+
+<h4 id="ArcOutOfRangeParameters">Out-of-range elliptical arc parameters</h4>
+
+<p>Arbitrary numerical values are permitted for all elliptical arc parameters
+(other than the boolean flags),
+but user agents must make the following adjustments for invalid values
+when rendering curves or calculating their geometry:
+
+<ul>
+  <li>
+    <p>If the endpoint (<strong>x</strong>, <strong>y</strong>) of the segment
+    is identical to the current point
+    (e.g., the endpoint of the previous segment),
+    then this is equivalent to omitting the elliptical arc segment entirely.
+  </li>
+  <li>
+    <p>If either <strong>rx</strong> or <strong>ry</strong> is 0,
+    then this arc is treated as a straight line segment
+    (a "lineto") joining the endpoints.
+  </li>
+  <li>
+    <p>If either <strong>rx</strong> or <strong>ry</strong>
+    have negative signs, these are dropped;
+    the absolute value is used instead.
+  </li>
+  <li>
+    <p>If <strong>rx</strong>, <strong>ry</strong> and <strong>x-axis-rotation</strong>
+    are such that there is no solution
+    (basically, the ellipse is not big enough to reach
+    from the current point to the new endpoint)
+    then the ellipse is scaled up
+    uniformly until there is exactly one solution (until the
+    ellipse is just big enough).
+    Note: See the appendix section
+    <a href="implnote.html#ArcCorrectionOutOfRangeRadii">Correction of out-of-range radii</a>
+    for mathematical formula for this scaling operation.
+  </li>
+</ul>
+
+<div class="note">
+<p>This forgiving yet consistent treatment of out-of-range
+values ensures that:
+
+<ul>
+  <li>The inevitable approximations arising from computer
+  arithmetic cannot cause a valid set of values written by one
+  SVG implementation to be treated as invalid when read by
+  another SVG implementation. This would otherwise be a
+  problem for common boundary cases such as a semicircular
+  arc.</li>
+
+  <li>Continuous animations that cause parameters to pass
+  through invalid values are not a problem. The motion
+  remains continuous.</li>
+</ul>
+</div>
+
+<h4 id="ReflectedControlPoints">Reflected control points</h4>
+
+<p>
+  The S/s and T/t commands indicate that the first control point of
+  the given cubic Bézier segment is calculated by
+  reflecting the previous path segment's final control point
+  relative to the current point. The exact math is as
+  follows.
+
+<p>
+  If the current point is (<var ignore=''>curx</var>, <var ignore=''>cury</var>) and the
+  final control point of the previous [=path segment=] is
+  (<var ignore=''>oldx2</var>, <var ignore=''>oldy2</var>), then the reflected point (i.e., (<var ignore=''>newx1</var>,
+  <var ignore=''>newy1</var>), the first control point of the current <a>path
+  segment</a>) is:
+
+<pre>
+(newx1, newy1) = (curx - (oldx2 - curx), cury - (oldy2 - cury))
+               = (2*curx - oldx2, 2*cury - oldy2)
+</pre>
+
+<h4 id="ZeroLengthSegments">Zero-length path segments</h4>
+
+<p>Path segments with zero length are not invalid,
+and will affect rendering in the following cases:
+
+<ul>
+  <li>If markers are specified, then a marker is drawn on
+  every applicable vertex, even if the given vertex is the
+  end point of a zero-length [=path segment=] and even if
+  "moveto" commands follow each other.</li>
+
+  <li>As mentioned in <a href="painting.html#StrokeProperties">Stroke Properties</a>,
+  linecaps must be painted for zero-length subpaths when
+  'stroke-linecap' has a value of
+  <span class='prop-value'>round</span> or
+  <span class='prop-value'>square</span>.</li>
+</ul>
+
+<h4 id="PathDataErrorHandling">Error handling in path data</h4>
+  
+  Unrecognized contents within a path data stream (i.e.,
+  contents that are not part of the path data grammar) is an
+  error.
+  In such a case, the following error-handling rules must be used:
+
+  <ul>
+    <li>The general rule for error handling in path data is
+    that the SVG user agent shall render a <{path}> element up
+    to (but not including) the path command containing the
+    first error in the path data specification. This will
+    provide a visual clue to the user or developer about
+    where the error might be in the path data specification.
+    This rule will greatly discourage generation of invalid
+    SVG path data.</li>
+
+    <li>If a path data command contains an incorrect set of
+    parameters, then the given path data command is rendered
+    up to and including the last correctly defined [=path segment=],
+    even if that [=path segment=] is a sub-component of
+    a compound path data command, such as a "lineto" with
+    several pairs of coordinates. For example, for the path
+    data string <code class='attr-value'>M 10,10 L 20,20,30</code>,
+    there is an odd number of parameters for the "L" command, which requires an even
+    number of parameters. The user agent is required to draw
+    the line from (10,10) to (20,20) and then perform error
+    reporting since <code class='attr-value'>L 20 20</code>
+    is the last correctly defined segment of the path data specification.</li>
+
+    <li>Wherever possible, all SVG user agents shall report
+    all errors to the user.</li>
+  </ul>
+
+<h3 id="DistanceAlongAPath">Distance along a path</h3>
+
+<p>Various operations, including <a
+href="text.html#TextLayoutPath">text on a path</a> and <a
+href="https://svgwg.org/specs/animations/#AnimateMotionElement">motion animation</a>
+and various <a href="painting.html#StrokeProperties">stroke
+operations</a>, require that the user agent compute the
+distance along the geometry of a graphics element, such as a <{path}>.
+
+<p>Exact mathematics exist for computing distance along a path,
+but the formulas are highly complex and require substantial
+computation. It is recommended that authoring products and user
+agents employ algorithms that produce as precise results as
+possible; however, to accommodate implementation differences
+and to help distance calculations produce results that
+approximate author intent, the {{pathLength}} attribute can be used
+to provide the author's computation of the total length of the
+path so that the user agent can scale distance-along-a-path
+computations by the ratio of {{pathLength}} to the user agent's own
+computed value for total path length.
+
+<p>A "moveto" operation within a <{path}> element is defined to have
+zero length. Only the various "lineto", "curveto" and "arcto"
+commands contribute to path length calculations.
+
+<h4 id="PathLengthAttribute">The <span class="attr-name">pathLength</span> attribute</h4>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn element-attr dfn-for="path, rect, circle, ellipse, line, polyline, polygon" export>pathLength</dfn></td>
+        <td><<number>></td>
+        <td>(none)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>The author's computation of the total length of the
+    path, in user units. This value is used to calibrate the
+    user agent's own <a href="paths.html#DistanceAlongAPath">distance-along-a-path</a>
+    calculations with that of the author. The user agent will
+    scale all distance-along-a-path computations by the ratio
+    of {{pathLength}} to the user
+    agent's own computed value for total path length. {{pathLength}} potentially affects
+    calculations for <a href="text.html#TextLayoutPath">text on a path</a>,
+    <a href="https://svgwg.org/specs/animations/#AnimateMotionElement">motion animation</a> and
+    various <a href="painting.html#StrokeProperties">stroke operations</a>.
+    <p class="ready-for-wider-review">
+    A value of zero is valid and must be treated as a scaling factor of infinity.
+    A value of zero scaled infinitely must remain zero, while any non-percentage value greater
+    than zero must become +Infinity.
+    
+    <p>A negative value is an error (see <a href="paths.html#PathDataErrorHandling">Error handling</a>).
+    <p>{{pathLength}} has no effect on percentage
+    <a href="paths.html#DistanceAlongAPath">distance-along-a-path</a> calculations.
+  </dd>
+</dl>
+
+
+
+<div class='ready-for-wider-review'>
+<h3 id="paths-dom">DOM interfaces</h3>
+
+<h4 id="InterfaceSVGPathElement">Interface SVGPathElement</h4>
+
+<p>An [[#InterfaceSVGPathElement|SVGPathElement]] object represents a <{path}> in the DOM.
+
+<pre class="idl">
+[<a>Exposed</a>=Window]
+interface <b>SVGPathElement</b> : <a>SVGGeometryElement</a> {
+};
+</pre>
+
+</div>

@@ -1,0 +1,1265 @@
+<h2 id="chap-changes">Appendix K: Changes from SVG 1.1</h2>
+
+<p class="normativity"><em>This appendix is informative, not normative.</em>
+
+<p>This appendix summarizes the changes that have been made since the
+<a href="https://www.w3.org/TR/2011/REC-SVG11-20110816/">SVG 1.1 Second Edition Recommendation</a>.
+Changes made since the initial <a href="https://www.w3.org/TR/2016/CR-SVG2-20160915/">SVG 2 Candidate Recommendation</a> are highlighted.
+
+
+<h3 id="editorial">Editorial changes</h3>
+
+<p>A number of stylistic changes have been made to the specification to make it more readable. These include the following:
+
+<ul>
+  <li>A change towards using styling similar to contemporary CSS specifications, removing mention of XSL-FO.</li>
+
+  <li>Annotations have been added to the specification to reflect features that the Working Group
+  has resolved on including and for which a member of the group has committed to drive that feature.</li>
+
+  <li>Changes to highlight that SVG can be used in HTML as well as in XML.</li>
+
+  <li>Removed chapters whose normative content has either been moved to other specifications or deprecated: Filters, Clipping and Masking, Animation, Fonts, Color.</li>
+
+  <li>Removed the (informative) Concepts and Backwards Compatibility chapters, as well as multiple appendices.</li>
+
+  <li>Merged and re-organized multiple chapters:
+    <ul>
+      <li>Made the (normative) Conformance appendix a chapter.</li>
+      <li>Moved sections on 'display' and 'visibility' properties from the Painting chapter to the Rendering Model chapter.</li>
+      <li>Moved remaining sections from Clipping, Masking, and Compositing chapter into the Rendering Model chapter.</li>
+      <li>Merged the SVG 1.1 Metadata chapter into the Document Structure chapter.</li>
+      <li>Moved the <{image}> element definition from the Document Structure chapter to the new Embedded Content chapter.</li>
+      <li>Moved Foreign namespaces and private data section from the SVG 1.1 Extensibility chapter to Document Structure chapter.</li>
+      <li>Created the Geometry Properties chapter, and moved relevant definitions to it from the Basic Shapes and Paths chapters.</li>
+      <li>Created the Embedded Content chapter, and merged all content from the SVG 1 Extensibility chapter into it.</li>
+      <li>Merged the SVG 1.1 Scripting and Interactivity chapters.</li>
+    </ul>
+  </li>
+</ul>
+<div class="changed-since-cr1 cr2">
+  <ul>
+    <li>Tidied up the changes list, adding missing changes,
+      and adding links to issue discussion for changes since the initial Candidate Recommendation.
+      <a href="https://github.com/w3c/svgwg/pull/521">Edits</a>
+    </li>
+    <li>Consistently use the term "user coordinate system" (previously, the
+      synonymous term "local coordinate system" was also used).
+      <a href="https://github.com/w3c/svgwg/issues/519">Issue discussion</a>
+      <a href="https://github.com/w3c/svgwg/pull/552">Edits</a>
+    </li>
+  </ul>
+</div>
+
+<h3 id="substantial">Substantial changes</h3>
+
+<p>In additional to the editorial changes listed above, the following substantial additions, changes and removals
+have been made.
+
+<h4 id="whole">Across the whole document</h4>
+
+<ul>
+  <li>References to the SVG DTD have been removed.</li>
+
+  <li>IDL has been updated to use Web IDL syntax.</li>
+
+  <li>Added "length" attribute and indexed property access to all list interfaces.</li>
+
+  <li>Remove definition of <<angle>> type and reference CSS3-values.</li>
+
+  <li>Change all coordinate types to <<length>> in preparation for referencing css3-values.</li>
+
+  <li>Add the <{script}> element to the content model of all elements.</li>
+
+  <li>Changed the initialize, appendItem, replaceItem and insertItemBefore methods
+  on list objects to make a copy of any list item being inserted that is already
+  in another list.</li>
+
+  <li>The <{image}> and <{script}> elements have gained a <span class="attr-name">crossorigin</span> attribute,
+  for use with the <em>CORS-enabled fetch</em> algorithm.</li>
+</ul>
+<div class='changed-since-cr1'>
+<ul>
+  <li>Use mixins over NoInterfaceObject.
+    <a href="https://github.com/w3c/svgwg/issues/353">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/376">Edits</a></li>
+</ul>
+</div>
+
+<div class='changed-since-cr1 cr2'>
+  <ul>
+    <li>Refer to HTML LS throughout.
+      <a href="https://github.com/w3c/svgwg/issues/514">Issue discussion</a>
+      <a href="https://github.com/w3c/svgwg/pull/544">Edits</a>
+    </li>
+  </ul>
+</div>
+
+<h4 id="concepts">Concepts chapter (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Removed this chapter.</li>
+</ul>
+
+<h4 id="conform">Conformance Criteria chapter (Appendix in SVG 1.1)</h4>
+
+<ul>
+  <li>Animations do not run in documents processed
+  as resource documents.</li>
+  <li>Made the appendix a chapter.</li>
+  <li>Integrate content on processing modes from the SVG Integration specification.</li>
+  <li>Define required processing modes for different types of SVG cross-references,
+  with suggested processing modes for similar references from HTML/CSS.
+  (Replaces the "referencing modes" section from SVG Integration.)
+  </li>
+  <li>Update and re-organize all the conformance classes,
+    to be consistent with changes to other parts of this specification
+    and changes to other specifications.
+  </li>
+  <li>Make clear that a [=SVG viewer=] for conformance purposes
+    is the [=user agent=] / [=SVG user agent=] mentioned everywhere else in the spec;
+    move the corresponding definitions from the Document structure chapter to here.
+  </li>
+  <li>Move the non-normative section on suggested methods for generating
+    high-precision graphics to the Implementation Notes appendix.
+  </li>
+</ul>
+<div class='changed-since-cr1 cr2'>
+  <ul>
+    <li>Add informative references to ICC and to CSS Color 4
+      <a href="https://github.com/w3c/svgwg/issues/532">Issue discussion</a>
+      <a href="https://github.com/w3c/svgwg/pull/549">Edits</a>
+    </li>
+  </ul>
+</div>
+
+<h4 id="rendering">Rendering Model chapter</h4>
+<ul>
+  <li>Update rendering model to refer to <a href="https://www.w3.org/TR/compositing/">Compositing and Blending Specification</a>.</li>
+  <li>Added new definitions regarding rendered and renderable elements.</li>
+  <li>Moved the section on 'display' and 'visibility' to this chapter.</li>
+  <li>Moved z-index to this chapter. Removed non-normative text, keeping examples.</li>
+  <li>Resolve issue 2 - removed reference to knock-out.</li>
+  <li>Resolve issue 3 - rewrote description of how elements and groups are rendered.</li>
+  <li>Resolve issue 4 - Don't mention each paint server type explicitly.</li>
+  <li>Resolve issue 6 - No changes required.</li>
+  <li>Merge Clipping, Masking and Compositing chapter into this chapter (resolved issue 7 in process).</li>
+  <li>Update 'Parent Compositing' section to
+    explicitly mention how each referencing mode composites.</li>
+  <li>SVG root and foreignObject are no longer overflow:hidden in User Agent style sheet.</li>
+  <li>overflow:auto may clip and show scroll bars in some cases.</li>
+  <li>overflow:scroll may show scroll bars on svg elements.</li>
+  <li>Removed definition of initial clipping path.</li>
+  <li>Updated rendering requirements to reflect shadow DOM model for use elements.</li>
+  <li class='changed-since-cr1'>Deferred z-index support to a future version of SVG.
+    <a href="https://github.com/w3c/svgwg/issues/483">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/489">Edits</a></li>
+  <li class='changed-since-cr1 cr3'>Clarify that <{foreignObject}> is, and its content may be, hit-testing target.</li>
+  <li class='changed-since-cr1 cr2'>Removed the use element from list of elements that the 'visibility' property directly affects.
+    <a href="https://github.com/w3c/svgwg/issues/405">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/430">Edits</a></li>
+</ul>
+
+<h4 id="changes-types">Basic Data Types and Interfaces chapter</h4>
+
+<ul>
+  <li>All appearance of SVGMatrix (deprecated) were replaced by [[geometry-1#DOMMatrix|DOMMatrix]] or {{DOMMatrixReadOnly}}.</li>
+
+  <li>All appearance of SVGRect (deprecated) were replaced by {{DOMRect}} or {{DOMRectReadOnly}}.</li>
+
+  <li>All appearance of SVGPoint (deprecated) were replaced by {{DOMPoint}} or {{DOMPointReadOnly}}.</li>
+
+  <li>Removed the SVGStylable and SVGLangSpace interfaces and moved all of their members on to [[#InterfaceSVGElement|SVGElement]].</li>
+
+  <li>Turned SVGLocatable and SVGTransformable into [[#InterfaceSVGGraphicsElement|SVGGraphicsElement]],
+  which directly inherits from [[#InterfaceSVGElement|SVGElement]].</li>
+
+  <li>Added an [[#InterfaceSVGGraphicsElement|SVGGraphicsElement]] interface.</li>
+
+  <li>Added an [[#InterfaceSVGGeometryElement|SVGGeometryElement]] interface with isPointInFill and isPointInStroke methods.</li>
+
+  <li>Removed the SVGExternalResourcesRequired interface.</li>
+
+  <li>Added getStrokeBBox on [[#InterfaceSVGGraphicsElement|SVGGraphicsElement]] to get the tight stroke bounding box.</li>
+
+  <li>Make viewportElement and ownerSVGElement on [[#InterfaceSVGElement|SVGElement]] nullable.</li>
+
+  <li>Removed the getPresentationAttribute operation on [[#InterfaceSVGElement|SVGElement]] and the SVGColor and SVGICCColor interfaces.</li>
+
+  <li>Added focus and blur operations and tabIndex attribute to [[#InterfaceSVGElement|SVGElement]].</li>
+
+  <li>Added <a href="struct.html#__svg__SVGDocument__activeElement">activeElement</a> attribute to [=Document=].</li>
+
+  <li>Made [[#InterfaceSVGElement|SVGElement]] include the {{GlobalEventHandlers}} interface from HTML.</li>
+
+  <li>Removed getStrokeBBox from [[#InterfaceSVGGraphicsElement|SVGGraphicsElement]] and extended <a href="types.html#__svg__SVGGraphicsElement__getBBox">getBBox</a> with a dictionary argument that controls which parts of the element are included in the returned bounding box.</li>
+
+  <li>Allow leading and trailing whitespace in <<length>>, <<angle>>, <<number>> and <a>&lt;integer&gt;</a>.</li>
+
+  <li>Make whitespace include form feed (U+000C) to align with CSS and HTML.</li>
+
+  <li>Remove basic data types already defined by CSS Values and Units.</li>
+
+  <li>Remove list of color keywords. The list is part of CSS Colors 3 which is referenced normatively and a REC.</li>
+
+  <li>Allow a single trailing comma-wsp in various list-typed attributes.</li>
+
+  <li>Removed the xmlbase, xmllang and xmlspace attributes from the [[#InterfaceSVGElement|SVGElement]] interface.</li>
+
+  <li>Removed the SVGViewSpec interface.</li>
+
+  <li>Removed the style IDL attribute from [[#InterfaceSVGElement|SVGElement]],
+  since CSSOM defines that for us.</li>
+
+  <li>Removed the getTransformToElement method on
+  [[#InterfaceSVGGraphicsElement|SVGGraphicsElement]].</li>
+
+  <li>Defined that getCTM on an [=outermost svg element=]
+  should work, and listed which transforms it should include.</li>
+
+  <li>Defined attribute reflection in more depth,
+  including the effect it has on SVG DOM object liveness.</li>
+
+  <li>animVal IDL attributes on all interfaces now alias baseVal.</li>
+
+  <li>Added the dataset IDL attribute to [[#InterfaceSVGElement|SVGElement]].</li>
+
+  <li>Moved the <a href='types.html#__svg__SVGGeometryElement__pathLength'>pathLength</a> attribute,
+  <a href='types.html#__svg__SVGGeometryElement__getTotalLength'>getTotalLength()</a>,
+  and <a href='types.html#__svg__SVGGeometryElement__getPointAtLength'>getPointAtLength()</a> methods from SVGPathElement
+  onto SVGGeometryElement.</li>
+
+  <li>Move definition of wsp and comma-wsp to
+  path grammar since that's the only EBNF grammar in the spec.</li>
+</ul>
+<div class='changed-since-cr1'>
+<ul>
+  <li>[[#InterfaceSVGUnitTypes|SVGUnitTypes]] is no longer NoInterfaceObject.
+    <a href="https://github.com/w3c/svgwg/issues/291">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/295">Edits</a></li>
+  <li>Clarified that [[#InterfaceSVGElement|SVGElement]].<a href="types.html#__svg__SVGElement__className">className</a>
+      overrides [=Attr/element|Element=].className. Not normative.
+    <a href="https://github.com/w3c/svgwg/issues/298">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/301">Edits</a></li>
+  <li>Specify {{DOMPointInit}} as argument type for isPointInFill() and isPointInStroke() instead of {{DOMPoint}}, and
+    specify algorithm used for isPointInFill() and isPointInStroke().
+    <a href="https://github.com/w3c/svgwg/issues/416">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/443">Edits</a></li>
+  <li>Moved dataset, tabIndex, focus(), and blur() to a shared {{HTMLOrSVGElement}} mixin defined in the HTML specification.
+    <a href="https://github.com/w3c/svgwg/issues/60">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/415">Edits</a></li>
+  <li>Made [[#InterfaceSVGElement|SVGElement]] include the DocumentAndElementEventHandlers interface from HTML.
+    <a href="https://github.com/w3c/svgwg/issues/395">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/413">Edits</a></li>
+</ul>
+</div>
+<div class='changed-since-cr1 cr2'>
+<ul>
+  <li>Merged in content from the former normative <a href="#svgdom">SVG DOM appendix</a>
+    (after edits),
+    with sections on reflecting attributes re-arranged to fit.
+    <a href="https://github.com/w3c/svgwg/issues/520">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/548">Edits</a>
+  </li>
+</ul>
+</div>
+<div class='changed-since-cr1 cr2 cr3'>
+<ul>
+  <li>Clarify possible UA behavior on getTotalLength, getPointAtLength, getBBox, getCTM, getScreenCTM, isPointInFill
+    and isPointInStroke if the current element is a [=non-rendered element=].</li>
+  <li>Removed the text-decoration-fill and text-decoration-stroke properties.</li>
+  <li>
+    Setting the DOM property for an enumerated attribute
+    to an out-of-range integer or 0 throws a TypeError.
+    <a href="https://github.com/w3c/svgwg/issues/547">Issue discussion</a>
+  </li>
+  <li>
+    Remove <code>zoomAndPan</code> attribute and related text.
+    <a href="https://github.com/w3c/svgwg/issues/56">Issue discussion</a>
+  </li>
+</ul>
+</div>
+
+<h4 id="structure">Document Structure chapter</h4>
+
+<ul>
+  <li>Updated IDL for [[#InterfaceSVGSVGElement|SVGSVGElement]] marking the referenceElement argument in <a href="struct.html#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a> and <a href="struct.html#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a> as nullable.</li>
+
+  <li>Deprecated the <code>suspendRedraw</code>, <code>unsuspendRedraw</code> and <code>unsuspendRedrawAll</code> methods on the SVGSVGElement interface.</li>
+
+  <li>Removed the <span class="attr-name">externalResourcesRequired</span> attribute.</li>
+
+  <li>Added the ability to use <span class="attr-value">auto</span> for the 'width' and 'height' attributes on <{image}>.</li>
+
+  <li>Lifted the restriction on <{use}> not being able to reference an entire document.</li>
+
+  <li>Added {{lang}} attribute on <{desc}> and <{title}> elements.</li>
+
+  <li>Added section on WAI-ARIA attributes.</li>
+
+  <li>Clarified that CSS transforms on an [=outermost svg element=] do not affect <a href="struct.html#__svg__SVGSVGElement__currentScale">currentScale</a> or <a href="struct.html#__svg__SVGSVGElement__currentTranslate">currentTranslate</a>. Defined the returned values on <{svg}> elements that are not [=outermost svg element=].</li>
+
+  <li>Deprecated the <a href="struct.html#__svg__SVGDocument__rootElement">rootElement</a> attribute.</li>
+
+  <li>Defined event handler content attributes and IDL attributes on the root <{svg}> element to be for events fired at the [=Window=], like HTML's event handler content attributes and IDL attribute on <code>body</code>.</li>
+
+  <li>Moved the <{image}> element to the <a href='embedded.html'>Embedded Content chapter</a>.</li>
+
+  <li>Removed the <code>SVGElementInstance</code> and <code>SVGElementInstanceList</code> interfaces, and the corresponding attributes on the [[#InterfaceSVGUseElement|SVGUseElement]] interface.</li>
+
+  <li>Changed the <{use}> element event flow to follow the Shadow DOM spec.</li>
+
+  <li>Clarified that the <{switch}> element does not affect processing of <{script}> elements.</li>
+
+  <li>Made the <span class="attr-name">width</span> and <span class="attr-name">height</span> attributes on the <{svg}> element presentation attributes, and changed the initial value to
+      <span class="attr-value">auto</span>.
+  </li>
+
+  <li>Removed the <span class="attr-name">baseProfile</span> and <span class="attr-name">version</span> attributes from the <{svg}> element.</li>
+
+  <li>Deprecated the <a href="struct.html#__svg__SVGSVGElement__forceRedraw">forceRedraw</a> method on the [[#InterfaceSVGSVGElement|SVGSVGElement]] interface and defined it to have no effect when called.</li>
+
+  <li>Defined the
+  <a href="struct.html#__svg__SVGSVGElement__deselectAll">deselectAll</a> method
+  on the [[#InterfaceSVGSVGElement|SVGSVGElement]] interface in terms of the Selection API
+  and simultaneously deprecated it.</li>
+
+  <li>Clarified that the <{switch}> element does not affect the processing of <{style}> element elements.</li>
+
+  <li>Clarified that the <a href="struct.html#__svg__SVGSVGElement__getIntersectionList">getIntersectionList</a> and <a href="struct.html#__svg__SVGSVGElement__getEnclosureList">getEnclosureList</a> methods on the [[#InterfaceSVGSVGElement|SVGSVGElement]] interface do not return shadow tree elements.</li>
+
+  <li>Removed the <span class="attr-name">requiredFeatures</span> attribute.</li>
+
+  <li>Removed the currentView and useCurrentView properties on [[#InterfaceSVGSVGElement|SVGSVGElement]].</li>
+
+  <li>Added SVGUnknownElement for handling unknown elements in the svg namespace.</li>
+  <div class="changed-since-cr1 cr2 cr3">
+    <li>Removed SVGUnknownElement due to lack of implementations.</li>
+  </div>
+
+  <li>Added the {{lang}} attribute in no namespace.</li>
+
+  <li>Removed the <code>viewport</code> attribute from the [[#InterfaceSVGSVGElement|SVGSVGElement]] interface.</li>
+
+  <li>Removed the <span class="attr-name">xml:base</span> attribute.</li>
+
+  <li>Moved the <span class="element-name">discard</span> element to
+  the split-out SVG Animations module.</li>
+
+  <li>Allowed <a href='struct.html#DataAttributes'>custom data attributes</a>
+  on all SVG elements.</li>
+
+  <li>Rewrite <{desc}> and <{title}> description
+  to reflect ARIA and accessibility mapping.</li>
+
+  <li>Remove recommendation on how to structure metadata elements
+  within the SVG document.</li>
+
+  <li>Remove requirement for SVGDocument property on the Document interface object.</li>
+
+  <li>Descendent elements of <{switch}> that have
+  the {{systemLanguage}} attribute should be reordered according to the
+  definition of the SMIL <span class="attr-value">allowReorder</span> attribute.</li>
+
+  <li>Add <{tspan}> and <{textPath}> to
+  the [=graphics element=] category. This allows filters, masks, etc to
+  be applied to them.</li>
+
+  <li>Update section on element roles to conform to latest SVG Accessibility API Mappings specification.</li>
+
+  <li>Soften recommendation to put pre-defined content in a defs element even if not required.</li>
+
+  <li>Change display behavior of defs, title, desc, metadata, and symbol elements to be defined using user agent styles.</li>
+
+  <li>Allow x, y, width, and height presentation attributes on a symbol, with the same effect on a rendered instance as on a nested svg element.</li>
+
+  <li>Specify a backwards-compatible default behavior for <{symbol/refX}> and <{symbol/refY}> on a symbol (which will be different from marker); clarify that keywords have same behavior as marker.</li>
+
+  <li>Re-define use-element shadow trees to be consistent with the shadow DOM spec,
+    to integrate better with other SVG 2 changes,
+    and to clarify much related behavior, including:
+    <ul>
+      <li>x/y/width/height are presentation attributes, albeit ones with a unique effect on final layout</li>
+      <li>zero values for width and height are only significant through their impact on the used value of a cloned svg/symbol; negative values are parse errors</li>
+      <li>Allow use elements to reference any element that can be a valid child of an SVG container, rather than only graphics elements</li>
+      <li>Define the SVGUseElementShadowRoot interface as an extension of the ShadowRoot interface, and require it to be used for use-element shadow trees</li>
+      <li>Define a number of terms related to shadow DOM and use elements, referencing the DOM standard where applicable</li>
+      <li>Clarify that use-element shadow trees are generated even if the element is in a conditional processing failed branch (consistent with previous guidance re display:none)</li>
+      <li>Element instances in the shadow tree must appear to be regular Element nodes, except they are read-only.</li>
+      <li>Properties formerly defined on the SVGElementInstance object are now defined as a mixin interface extending SVGElement</li>
+      <li>Clarify that URL references in cloned content are made absolute relative to the source file.</li>
+      <li>Clarify that the shadow tree is discarded if the cross-references change, including due to declarative animation (the original and animated shadow trees are not preserved in parallel).</li>
+      <li>Clarify that circular references only block the rendering of the use-element that would connect the circle, and not it's own host.</li>
+      <li>Added warning about x/y behaving as a transformation on the use element, and the impact on userSpaceOnUse graphical effects.</li>
+      <li>Redefine the way width/height on use elements impact svg/symbol to be consistent with geometry properties and auto values.</li>
+      <li>Clarify that for other re-used graphics (not svg/symbol), the shadow elements are laid out in the use element's coordinate system, including for the resolution of percentage lengths.</li>
+      <li>Redefine style cloning in shadow trees to be consistent with style scoping in shadow DOM, including by requiring style sheets to be cloned into the shadow DOM's scope.</li>
+      <li>Add warning and example regarding the cases where this results in different styles than an SVG 1.1-conforming user agent.</li>
+      <li>Add example regarding the inherited behavior of the visibility property.</li>
+      <li>Require multimedia in use-element copies to be synchronized with all other instances of the same original element.</li>
+      <li>Clarify that the shadow tree shares the document timeline for animations with its host document.</li>
+      <li>Define a ShadowAnimation interface to represent the cloning of Web Animations API animations</li>
+      <li>Prohibit WAAPI animations from being directly applied to element instances in the use-element shadow tree.</li>
+      <li>Define the propagation of SMIL-style animations through the cloning of animation elements; require that animations elements affecting the referenced graphic be cloned into the shadow tree, even if they are not descendents of the referenced element.</li>
+      <li>Define how event-based animation element triggers and animation element href attributes behave when there are multiple elements with the same <a element-attr for="core-attributes" spec="svg2">id</a> in different node trees.</li>
+      <li>Require event handling in use-element shadow trees to follow the event retargetting rules from the Shadow DOM spec.</li>
+      <li>Clarify that the copying of event listeners from referenced graphics to their element instances applies to listeners added by script as well as by event attributes.</li>
+      <li>Prohibit event listeners from being directly added to elements in the use-element shadow tree.</li>
+      <li>Make use elements and symbols map to the graphics-object role by default, so the shadow content will be accessible.</li>
+      <li>Make the SVGSymbolElement interface extend from SVGGraphicsElement, so that rendered symbol element instances have all the behavior of graphics elements (e.g., getBBox)</li>
+      <li>Restore the (animated)instanceRoot properties on the SVGUseElement interface.</li>
+    </ul>
+  </li>
+  <li>Change role mapping for the <a element spec="svg2">a</a> element to depend on whether it is actually a valid link.</li>
+  <li>Mark ARIA state and property attributes as animatable.</li>
+  <li>Update requirements for <a element-attr for="core-attributes" spec="svg2">id</a> values to harmonize with HTML, with extra warning about requirements for validity in an XML document.</li>
+  <li>Moved the <a href="struct.html#ForeignNamespaces">Foreign namespaces and private data</a> section to this chapter and added some new cross-references and notes.</li>
+</ul>
+<div class='changed-since-cr1'>
+<ul>
+  <li>Corrected incorrect interface name for definition of [[#InterfaceSVGUseElementShadowRoot|SVGUseElementShadowRoot]].
+    <a href="https://github.com/w3c/svgwg/issues/290">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/296">Edits</a></li>
+</ul>
+</div>
+<div class='changed-since-cr1 cr2'>
+  <ul>
+    <li>Make it clear that language-tag matching for {{systemLanguage}}
+      is case-insensitive, as required by BCP 47.
+    <a href="https://github.com/w3c/svgwg/issues/517">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/528">Edits</a>
+    </li>
+    <li>Added the {{autofocus}} attribute in no namespace.</li>
+  </ul>
+</div>
+
+<div class='changed-since-cr1 cr2 cr3'>
+  <ul>
+    <li>
+      Remove <code>zoomAndPan</code> attribute and related text.
+      <a href="https://github.com/w3c/svgwg/issues/56">Issue discussion</a>
+    </li>
+  </ul>
+</div>
+
+<h4 id="changes-styling">Styling chapter</h4>
+
+<ul>
+  <li>Removed the <span class="attr-name">contentStyleType</span> attribute.</li>
+  <li>[[#InterfaceSVGStyleElement|SVGStyleElement]] now implements {{LinkStyle}}.</li>
+  <li>Updated user agent style sheet - inner svg elements and foreignObject elements are no longer set as overflow:hidden.</li>
+  <li>Added hatch to list of elements with overflow:hidden in User Agent style sheet.</li>
+  <li>Set the default value of transform-origin to '0 0' for all elements except root svg elements and svg elements that are the child of a foreignObject element.</li>
+  <li>Substantially rewrote the chapter to be more concise.</li>
+  <li>Defined that HTML <span class="element-name">link</span> elements
+  must load external style sheets.</li>
+  <li>Specified the exact set of properties
+  that have presentation attributes, their names (when the presentation
+  attribute name does not match the property name), and on which elements
+  they are allowed.</li>
+  <li>Added a list of properties defined in other
+  specifications that conforming SVG 2 user agents must support.</li>
+  <li>Added User Agent style sheet rule to map the
+  deprecated <span class="attr-name">xml:space</span> attribute to the
+  'white-space' property.</li>
+  <li>Required that @font-face rules and
+  ::first-letter &amp; ::first-line pseudo-elements on <{text}>
+  elements must be supported.</li>
+  <li>Required that all SVG and HTML
+  style sheets in an HTML document with inline SVG content must
+  apply to all content in the document.</li>
+  <li>Allow presentation attributes on any svg namespaced element.</li>
+  <li>Change display behavior of style element to be defined using user agent styles.</li>
+  <li>Add !important user agent style rules controlling never-rendered elements,
+    with a note explaining their impact.</li>
+  <li>Require interactive user agents to include :focus and ::selection styles.</li>
+  <li>Clean-up presentation attributes table to be consistent with other sections of the spec:
+    remove <a element spec="css-masking">mask</a> element from elements that treat x/y/width/height attributes as presentation attributes,
+    add <{use}> and <{symbol}>;
+    exclude <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a> from those that treat 'fill' as a presentation attribute;
+    remove {{d}} as a presentation attribute for <{textPath}>;
+    merge the discussion of gradientTransform and patternTransform into the main table.
+  </li>
+  <li>Removed requirement for 'clip' property support.</li>
+</ul>
+<div class='changed-since-cr1'>
+  <ul>
+    <li>Specify that [[#TransformProperty|transform]], <{pattern/patternTransform}> and <{linearGradient/gradientTransform}>
+      are presentation attributes for [[#TransformProperty|transform]] that can be specified to certain sets of elements in the SVG namespace.
+    <a href="https://github.com/w3c/csswg-drafts/issues/919">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/378">Edits</a></li>
+  </ul>
+</div>
+<div class='changed-since-cr1 cr2'>
+  <ul>
+    <li>Add a user-agent stylesheet requirement for a pointer cursor on links, consistent with HTML and CSS.
+    <a href="https://github.com/w3c/svgwg/issues/468">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/536">Edits</a></li>
+  </ul>
+</div>
+
+<h4 id="geometry">Geometry Properties chapter (SVG 2 only)</h4>
+
+<ul>
+  <li>Removed <{pattern}> and <{filter}> element from the set of elements that the 'x' and 'y' properties
+  apply to.</li>
+
+  <li>Defined that 'width' and
+  'height' property values of <span class='prop-value'>auto</span>
+  are computed to <span class='prop-value'>0</span> for SVG elements that
+  the properties apply to.</li>
+  <li>auto equates to 100% for width and height on the <{svg}> element, and to auto-sizing for images.</li>
+  <li>Remove <a element spec="css-masking">mask</a> element from the list of elements where width and height are sizing properties.</li>
+  <li>Clarify that width and height sizing properties
+  can be constrained with the corresponding max/min properties.</li>
+</ul>
+
+<h4 id="coords">Coordinate Systems, Transformations and Units chapter</h4>
+
+<ul>
+  <li>Make SVGMatrix (deprecated).skew{X,Y} throw an exception on bad values.</li>
+  <li>Added improved wording on bounding box
+  from SVG Tiny 1.2, and an algorithm which can compute a bounding box for an element.</li>
+  <li>Define bounding box for element with no position to be at (0,0).</li>
+  <li>Removed the defer keyword from [[#PreserveAspectRatioAttribute|preserveAspectRatio]].</li>
+  <li>Add definition for 'current viewport'. Change SVG viewport to mean all viewports created by SVG elements.</li>
+  <li>Add <span class='prop-value'>non-scaling-size</span>, <span class='prop-value'>non-rotation</span>,
+  and <span class='prop-value'>fixed-position</span> values for 'vector-effect'</li>
+  <li>Changed requirement for co-ordinate system layout to be mandatory.</li>
+  <li>'vector-effect' has no effect within a [=3d rendering context=].</li>
+  <li>Define SVG sizing in CSS contexts with reference to the CSS [=Default Sizing Algorithm=].</li>
+  <li>Clarify that percentages are relative to the width and height of the specified viewBox.</li>
+  <li>Mark unimplemented 'vector-effect' options at-risk.</li>
+  <div class='changed-since-cr1 cr2 cr3'>
+      <li>Adapt 'vector-effect' host coordinate space definition to actual implemented behavior. Remove screen and viewport values.</li>
+  </div>
+  <li>Change bounding box algorithm to include the effect of overflow and clip properties when the "clipped" flag is set.</li>
+</ul>
+
+<div class="changed-since-cr1 cr2 cr3">
+  <ul>
+    <li>Use DOMMatrix2DInit as parameters for methods</li>
+    <li>
+      Setting the enumerated parts of an [[#InterfaceSVGPreserveAspectRatio|SVGPreserveAspectRatio]] object
+      to an out-of-range integer or 0 throws a TypeError.
+      <a href="https://github.com/w3c/svgwg/issues/547">Issue discussion</a>
+    </li>
+  </ul>
+</div>
+
+<h4 id="changes-paths">Paths chapter</h4>
+
+<ul>
+  <li>Define <{path}>, <{polygon}> and <{polyline}> elements with no data set (empty or zero valid commands) to not render.</li>
+
+  <!--
+  <li>Define how <a href="paths.html#__svg__SVGPathElement__getPathSegAtLength">getPathSegAtLength</a> and
+  <a href="paths.html#__svg__SVGPathElement__getPointAtLength">getPointAtLength</a> handle out-of-range input, and what to do in case there's no valid path data.</li>
+
+  <li>Removed the <code>normalizedPathSegList</code> and <code>animatedNormalizedPathSegList</code> attributes from [[#InterfaceSVGAnimatedPathData|SVGAnimatedPathData]].</li>
+  -->
+
+  <li>Removed the <code>SVGPathSeg*</code> and <code>SVGAnimatedPathData</code> interfaces and the related methods on [[#InterfaceSVGPathElement|SVGPathElement]].</li>
+
+  <li>Promoted the <span class="attr-name">d</span> attribute
+  to a property.</li>
+
+  <li>Removed the <a href='types.html#__svg__SVGGeometryElement__pathLength'>pathLength</a> attribute,
+  <a href='types.html#__svg__SVGGeometryElement__getTotalLength'>getTotalLength()</a>,
+  and <a href='types.html#__svg__SVGGeometryElement__getPointAtLength'>getPointAtLength()</a> methods from SVGPathElement,
+  they are now on SVGGeometryElement.</li>
+
+  <li>Clarified that a value of zero for {{pathLength}} is valid.</li>
+</ul>
+<div class='changed-since-cr1 cr2'>
+<ul>
+  <li>Clarified that percentage distances are not affected by zero {{pathLength}}.
+    <a href="https://github.com/w3c/svgwg/issues/383">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/485">Edits</a></li>
+  <li>Reorganized the Implementation Notes section into logical subsections
+  (including the section on out-of-bounds arc parameters,
+  which was formerly in the Implementation Notes appendix).
+    <a href="https://github.com/w3c/svgwg/pull/548">Edits</a>
+  </li>
+</ul>
+</div>
+
+<h4 id="changes-shapes">Basic Shapes chapter</h4>
+
+<ul>
+  <li>The <a href="shapes.html#__svg__SVGAnimatedPoints__animatedPoints">animatedPoints</a>
+  IDL attributes of SVGAnimatedPoints now aliases the <a href="shapes.html#__svg__SVGAnimatedPoints__points">points</a>
+  attribute.</li>
+  <li>Added the {{pathLength}} attribute to all basic shapes.</li>
+  <li>Added auto behavior for 'rx' and 'ry' to <{ellipse}>.</li>
+</ul>
+
+<h4 id="changes-text">Text chapter</h4>
+
+<ul>
+
+  <li>
+    Require support for WOFF fonts.
+  </li>
+
+  <li>
+    Adopt the CSS3 changes to the 'text-decoration' property.
+  </li>
+
+  <li>Added a number of missing attributes to the element summary boxes of the
+  <{text}> and <{textPath}> elements.</li>
+
+  <li>Added {{inline-size}} presentation attribute to <{text}>.</li>
+
+  <li>Added a section about 'text-overflow' processing.</li>
+
+  <li>
+    Added 'shape-inside' property.
+  </li>
+
+  <li>
+    Added 'shape-subtract' property (replaces 'shape-outside').
+  </li>
+
+  <li>Added 'white-space' property and deprecated <code>xml:space</code> attribute.</li>
+
+  <li>Removed the <span class="property">kerning</span> property.</li>
+
+  <li>Added a <span class="attr-name">path</span>
+    attribute to <{textPath}>.</li>
+
+  <li>Added ability to reference basic shapes to <{textPath}>.</li>
+
+  <li>
+    Added the <{textPath/side}> attribute to allow placing text on
+    either side of a path.
+  </li>
+
+  <li>
+    Render characters for one loop of a single closed path, effected by the
+    <{textPath/startOffset}> attribute and 'text-anchor' property.
+  </li>
+
+  <li>Removed the <span class='element'><span class="attr-value">tref</span></span> element.</li>
+
+  <li>Removed the <span class='element'><span class="attr-value">altGlyph</span></span>, <span class='element'><span class="attr-value">altGlyphDef</span></span>,
+  <span class='element'><span class="attr-value">altGlyphItem</span></span> and <span class='element'><span class="attr-value">glyphRef</span></span> elements.</li>
+
+  <li>Defined the
+  <a href="text.html#__svg__SVGTextContentElement__selectSubString">selectSubString</a>
+  method on the [[#InterfaceSVGTextContentElement|SVGTextContentElement]] interface in terms of the
+  Selection API and simultaneously deprecated it.</li>
+
+  <li>Changed getComputedTextLength() to not include
+  <{tspan/dx}> and <{tspan/dy}> values.</li>
+
+  <li>Moved the discussion of 'width'
+  and 'height' properties to the Geometry Properties chapter.</li>
+
+  <li>Require support for ::selection in interactive user agents.</li>
+
+  <li>Require that text in non-rendered elements are not included in [=addressable characters=]
+    and therefore are not counted when assigning positioning attributes
+    and in the [=getNumberOfChars=] methods.
+  </li>
+
+  <li>Require that Unknown elements within text render as unpositioned spans,
+    but that known-but-invalidly-positioned elements do not.
+  </li>
+
+  <li>Clarify that when text is positioned along a transformed path,
+    offset distances should be measured in the text element's coordinate system,
+    not the path element's.
+  </li>
+</ul>
+
+<div class='changed-since-cr1'>
+<ul>
+
+  <li>Specify {{DOMPointInit}} as argument type for getCharNumAtPosition() instead of
+    {{DOMPoint}}.
+    <a href="https://github.com/w3c/svgwg/issues/389">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/414">Edits</a>
+  </li>
+  <li>
+    Remove <span class="attr-value">number</span> value from {{inline-size}} property for consistency with CSS.
+    <a href="https://github.com/w3c/svgwg/issues/436">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/482">Edits</a>
+  </li>
+  <li>Removed unintended restriction that <{path/pathLength}> applied only to <span class='element'>path</span>s
+    and not [=shapes=] when computing <{textPath/startOffset}>.
+    <a href="https://github.com/w3c/svgwg/issues/382">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/476">Edits</a>
+  </li>
+
+</ul>
+</div>
+
+<div class='changed-since-cr1 cr2'>
+<ul>
+  <li>Clarify the initial value for {{textLength}},
+  and add note about its impact on the reflected IDL attribute.
+  </li>
+</ul>
+</div>
+
+<div class='changed-since-cr1 cr3'>
+<ul>
+  <li>Reverted to SVG 1.1 definition of addressable character for the
+    purposes of text positioning attributes (e.g. counting by Unicode
+    code points).
+  </li>
+</ul>
+</div>
+
+<h4 id="embedded">Embedded Content chapter (SVG 2 only)</h4>
+
+<ul>
+  <div class="changed-since-cr1 cr2 cr3">
+    <li>Removed HTML multimedia section and the use of the audio, video, iframe, canvas elements due to lack of implementations.</li>
+  </div>
+  <li>Added this chapter, which includes new
+  <span class="attr-value">video</span>, <span class="attr-value">audio</span>, <span class="attr-value">iframe</span>, <span class="attr-value">canvas</span>,
+  <span class="attr-value">source</span> and track'
+  elements that behave almost identically
+  to the equivalent HTML elements.</li>
+
+  <li>Removed the SVG copies of
+  HTML's embedded content elements and instead allowed those
+  elements to be used in the HTML namespace within SVG
+  container elements.</li>
+
+  <li>Removed the requirement to
+  ignore 'clip' and [[#OverflowAndClipProperties|overflow]] on an SVG document
+  when referenced by an <{image}> element.</li>
+
+  <li>Allow image height and width to be "auto", determined from intrinsic dimensions or aspect ratio of the image file.</li>
+
+  <li>
+    Clarify image and foreignObject sizing to be consistent with CSS and with geometry properties;
+    allow embedded HTML elements to be positioned using 'x', 'y', <a href="#Sizing">width</a>, and <a href="#Sizing">height</a> geometric properties.
+  </li>
+
+  <li>
+    Clarify that 'object-fit' and 'object-position' properties
+    apply to embedded HTML elements;
+    add warning note that they are not defined for <{image}>.
+  </li>
+
+  <li>Moved the "Foreign namespaces and private data" section to the Document Structure chapter.</li>
+
+  <li>Updated the reference to the (abandoned) Resource Priorities spec to instead refer to the (working draft) Resource Hints spec.</li>
+
+  <li>Define unified layout model for all embedded elements,
+    including behavior of 'object-fit' and 'object-position' properties for <{image}>.
+  </li>
+</ul>
+
+<h4 id="painting">Painting chapter</h4>
+
+<ul>
+  <li>Added more detail to the descriptions of the stroke properties and added algorithms
+  defining the exact shape a stroke must have.</li>
+
+  <li>Added the 'paint-order' property.</li>
+
+  <li>Moved the <span class='property'>color-interpolation-filters</span> property
+  to the Filter Effects specification.</li>
+
+  <li>Added the <span class="prop-value">context-fill</span> and <span class="prop-value">context-stroke</span>
+  paint values.</li>
+
+  <li>Allowed <a>&lt;paint&gt;</a> values and marker properties to take the
+  <span class="prop-value">child</span> keyword and
+  &lt;child-selector&gt; values to support ID-less referencing.</li>
+
+  <li>Move normative definition of 'vector-effect' property
+  <span class='prop-value'>non-scaling</span> into SVG 2.</li>
+
+  <li>Added arcs value on 'stroke-linejoin'.</li>
+
+  <li>Added the <span class="attr-value">auto-start-reverse</span>
+  attribute to the <{marker/orient}> attribute on <{marker}> element.</li>
+
+  <li>Removed the SVGPaint interface.</li>
+
+  <li>Added the 'z-index' property. (Later removed.)</li>
+
+  <li>Split out some new marker and stroke related
+  features into the <a href="https://www.w3.org/TR/2015/WD-svg-markers-20150407/">SVG Markers</a>
+  and <a href="https://www.w3.org/TR/2015/WD-svg-strokes-20150407/">SVG Strokes</a>
+  specifications.</li>
+
+  <li>Removed &lt;child-selector&gt; paint values.</li>
+
+  <li>Removed the
+  <span class='prop-name'><span class="attr-value">buffered-rendering</span></span> property and replaced it
+  with a short discussion of the <span class='prop-name'>'will-change'</span>
+  property.</li>
+
+  <li>Added a <span class='prop-value'>child(&lt;integer&gt;)</span>
+  paint value to support the use cases that &lt;child-selector&gt; was intended for.</li>
+
+  <li>Clarify that for all zero length subpaths,
+  whether open or closed, the rendered result is based on the
+  'stroke-linecap' attribute.</li>
+
+  <li>Allow markers on all [=shapes=].</li>
+
+  <li>Clarify the description of context-stroke and context-fill, particularly re use element shadow content.</li>
+
+  <li>Change display behavior of marker elements to be defined using user agent styles.</li>
+
+  <li>[Since last WD] Roll back the change allowing
+  [=fill=] and [=stroke=] to take multiple paints.</li>
+
+  <li>Remove the 'markable elements' category.</li>
+
+
+  <div class='changed-since-cr1 cr2'>
+    <ul>
+      <li>Remove <span class="prop-value">child</span>, <span class='prop-value'>child(&lt;integer&gt;)</span> as
+        they are deferred to the next level of the spec.
+        <a href="https://github.com/w3c/svgwg/pull/533/">Edits and discussion</a>
+      </li>
+      <li>
+        Make any non-negative number a valid value for 'stroke-miterlimit'.
+        <a href="https://github.com/w3c/svgwg/issues/545">Issue discussion</a>
+        <a href="https://github.com/w3c/svgwg/pull/551">Edits</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class='changed-since-cr1 cr2 cr3'>
+    <ul>
+      <li>
+        Remove the color-rendering CSS property.
+        <a href="https://github.com/w3c/svgwg/issues/647">Issue discussion</a>
+      </li>
+    </ul>
+  </div>
+</ul>
+
+<h4 id="color">Color chapter (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Removed this chapter, replaced with normative reference to CSS Color.</li>
+</ul>
+
+
+<h4 id="pservers">Paint Servers chapter (called Gradients and Patterns in SVG 1.1)</h4>
+
+<ul>
+  <li>Added the solidcolor element and its two properties solid-color
+    and solid-opacity, ported over from SVG Tiny 1.2. (Renamed <span class="attr-value">solidColor</span> to
+  <span class="attr-value">solidcolor</span>.)</li>
+
+  <li>Added an <{radialGradient/fr}> attribute to the <{radialGradient}> element,
+  which allows specifying the radius of the focal circle.</li>
+
+  <li>Added a section for mesh gradients, defining the mesh, meshrow
+    and meshpatch elements. (Renamed <span class="attr-value">meshGradient</span> to <span class="attr-value">mesh</span>, <span class="attr-value">meshRow</span> to <span class="attr-value">meshrow</span>,
+    and <span class="attr-value">meshPatch</span> to <span class="attr-value">meshpatch</span>.)</li>
+
+  <li>Added a section for hatches, defining the hatch and hatchpath elements.
+  (Renamed <span class="attr-value">hatchPath</span> to <span class="attr-value">hatchpath</span>.)</li>
+
+  <li>Renamed <span class="attr-name">gradientTransform</span> on the <span class="attr-value">mesh</span> element
+  and <span class="attr-name">hatchTransform</span> on the <span class="attr-value">hatch</span> element to <span class="attr-name">transform</span>.</li>
+
+  <li>Change display behavior of paint server elements to be defined using user agent styles.</li>
+
+  <li>Define common handling of paint server template cross-references,
+    allowing [=external file references=],
+    using a use-element shadow DOM model for cloned child content,
+    defining consistent behavior for whether title and desc affect child cloning,
+    and explicitly defining which attributes are derived from the template for each element.
+  </li>
+
+  <li>Add notes warning about attributes that look like presentation attributes, but aren't.</li>
+</ul>
+<div class='changed-since-cr1'>
+<ul>
+  <li>[[#InterfaceSVGGradientElement|SVGGradientElement]] and [[#InterfaceSVGPatternElement|SVGPatternElement]] no longer implement [[#InterfaceSVGUnitTypes|SVGUnitTypes]].
+    <a href="https://github.com/w3c/svgwg/issues/291">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/295">Edits</a></li>
+  <li>Deferred hatch and hatchpath elements to a future version of SVG.
+    <a href="https://github.com/w3c/svgwg/issues/449">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/451">Edits</a></li>
+  <li>Deferred mesh gradients, including mesh, meshrow, and meshpath elements to a future version of SVG.
+    <a href="https://github.com/w3c/svgwg/issues/449">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/452">Edits</a></li>
+  <li>Removed the solidcolor element and the solid-color and solid-opacity properties.
+    <a href="https://github.com/w3c/svgwg/issues/449">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/450">Edits</a></li>
+</ul>
+</div>
+
+<h4 id="masking">Clipping, Masking and Compositing chapter (SVG 1.1 only)</h4>
+<ul>
+  <li>SVG now references CSS Masking [<a href="refs.html#ref-css-masking-1">css-masking-1</a>] specification.
+    <ul>
+      <li>Removed definition of clipping/masking properties and elements.</li>
+      <li>Keep short introduction to clipping/masking and add reference to CSS Masking</li>
+    </ul>
+  </li>
+  <li>Added reference to Compositing and Blending spec. Simple alpha compositing is mandatory.</li>
+  <li>The [[#OverflowAndClipProperties|overflow]] property should be respected on the outermost svg elements inline in html.</li>
+  <li>Merge Clipping, Masking and Compositing chapter into Rendering Model chapter.</li>
+</ul>
+
+<h4 id="filters">Filter Effects chapter (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Removed this chapter (replaced by Filter Effects specification [[filter-effects-1|Filter Effects Module Level 1]]).</li>
+</ul>
+
+<h4 id="interact">Scripting and Interactivity chapter (separate chapters in SVG 1.1)</h4>
+
+<ul>
+  <li>Added the <span class="attr-name">tabindex</span> attribute.</li>
+  <li>Corrected the definition of the 'cursor/href' attribute on
+  the 'cursor element' element to take an URL that is not in a CSS-like
+  functional form.</li>
+  <li>Added the <span class="prop-value">bounding-box</span> keyword to 'pointer-events'.</li>
+  <li>Replaced SVGLoad, SVGAbort, SVGError and SVGUnload with load, abort, error and unload respectively.</li>
+  <li>Required that only [=structurally external elements=] and the [=outermost svg element=] must fire load events.</li>
+  <li>Replaced SVGResize and SVGScroll with resize and scroll respectively.</li>
+  <li>Removed DOMActivate.</li>
+  <li>Replaced DOMFocusIn and DOMFocusOut with focusin and focusout, and added the blur event.</li>
+  <li>Added keyboard events.</li>
+  <li>Removed mutation events.</li>
+  <li>Removed SVGZoomEvent.</li>
+  <li>Clarify that shadow DOM content is focusable and interactive.</li>
+  <li>Change display behavior of script elements to be defined using user agent styles.</li>
+  <li>Mark cursor element as deprecated, update description of 'cursor'.</li>
+</ul>
+
+<div class='changed-since-cr1'>
+  <ul>
+    <li>Removed the cursor element and the SVG specific definition of the 'cursor'
+    <a href="https://github.com/w3c/svgwg/issues/449">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/455">Edits</a></li>
+  </ul>
+</div>
+
+<div class='changed-since-cr1 cr2'>
+  <ul>
+    <li>Merged in content on events from the removed SVG DOM appendix.
+        <a href="https://github.com/w3c/svgwg/issues/520">Issue discussion</a>
+        <a href="https://github.com/w3c/svgwg/pull/548">Edits</a>
+    </li>
+    <li>Added the <span class="prop-value">auto</span> keyword to 'pointer-events'.</li>
+  </ul>
+</div>
+
+<div class='changed-since-cr1 cr2 cr3'>
+  <ul>
+    <li>Remove requirements on 'pointer-events' for raster images to check individual pixels for transparency.</li>
+    <li>Remove <code>zoomAndPan</code> attribute and related text.</li>
+    <li>Removed the onfocusin and onfocusout event attributes.</li>
+  </ul>
+</div>
+
+<h4 id="changes-linking">Linking chapter</h4>
+
+<ul>
+  <li>Added <a href="https://svgwg.org/specs/animations/#TermAnimationElement">animation elements</a> to the content model of <{view}>.</li>
+  <li>Added the possibility to link to SVG resources with fragment identifiers defined by the Media Fragments specification.</li>
+  <li>Removed the <span class="attr-name">xlink:type</span>, <span class="attr-name">xlink:role</span>, <span class="attr-name">xlink:arcrole</span>, <span class="attr-name">xlink:show</span> and <span class="attr-name">xlink:actuate</span> attributes.</li>
+  <li>Deprecated the <a href="#XLinkHrefAttribute">xlink:href</a> attribute in favor of using <span
+   class="attr-name">href</span> without a namespace.
+  </li>
+  <li>Deprecated the <a href="#XLinkTitleAttribute">xlink:title</a> attribute in favor of using child
+  <{title}> elements.</li>
+  <li>Allowed spaces in SVG view fragments.</li>
+  <li>Defined how "pixel:" and "percent:" spatial media
+  fragments are interpreted.</li>
+  <li>Made linking to <{view}> elements not
+  cause an implicit view box transformation to show the nearest ancestor
+  <{svg}> element.</li>
+  <li>Clarified that unspecified SVG view fragment
+  parameters do not cause the corresponding attributes to be reset to their
+  initial values.</li>
+  <li>Removed the <span class="attr-name">viewTarget</span> attribute
+  on the <{view}> element and the corresponding SVG view fragment
+  parameter.</li>
+
+  <li>Fragment-only URLs are always same-document.</li>
+  <li>Added additional attributes on <a element spec="svg2">a</a> element to synchronize with HTML.</li>
+
+  <li>Create detailed instructions for processing URLs and external resource files.</li>
+</ul>
+
+<div class='changed-since-cr1 cr2'>
+  <ul>
+    <li>Harmonized attributes and IDL properties on <a element spec="svg2">a</a> element with HTML,
+      other than <{a/href}> and <{a/target}>
+      (which are maintained as-is for legacy reasons).
+      Specifically:
+      <ul>
+        <li>Added the <{a/ping}> and <{a/referrerpolicy}> attributes
+          and their matching IDL properties.</li>
+        <li>Added the <code>text</code> IDL property.</li>
+        <li>Specified the meaning of a non-empty value for <{a/download}>.</li>
+        <li>Made all attributes except <{a/href}> and <{a/target}> non-animatable,
+          with a simple read/write DOMString representation in the IDL.</li>
+      </ul>
+    <a href="https://github.com/w3c/svgwg/issues/315">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/409">Edits</a>
+    </li>
+  </ul>
+</div>
+
+<h4 id="script">Scripting chapter (in SVG 1.1)</h4>
+
+<ul>
+  <li>Removed the <span class="attr-name">contentScriptType</span> attribute.</li>
+  <li>Removed <span class="attr-name">onload</span> from AnimationEvents.</li>
+  <li>Merged this entire chapter into the Interactivity chapter.</li>
+</ul>
+
+<h4 id="animate">Animation chapter (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Moved this chapter to a separate
+  <a href="https://svgwg.org/specs/animations/">SVG Animations</a> module.</li>
+  <li>Some informative text moved to a new Animation appendix.</li>
+</ul>
+
+<h4 id="fonts">Fonts chapter (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Added WOFF requirement, rearranged content.</li>
+
+  <li>Removed this chapter and the SVG Fonts
+  feature it contained, including the
+  <span class="element-name">font</span>,
+  <span class="element-name">glyph</span>,
+  <span class="element-name">missing-glyph</span>,
+  <span class="element-name">hkern</span>,
+  <span class="element-name">vkern</span>,
+  <span class="element-name">font-face</span>,
+  <span class="element-name">font-face-src</span>,
+  <span class="element-name">font-face-uri</span>,
+  <span class="element-name">font-face-format</span> and
+  <span class="element-name">font-face-name</span> elements
+  and their corresponding IDL interfaces.
+  (Remaining content merged into the Text chapter.)</li>
+</ul>
+
+<h4 id="metadata">Metadata chapter (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Merged the metadata chapter with the document structure chapter.</li>
+</ul>
+
+<h4 id="backward">Backwards Compatibility chapter (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Removed this chapter (which had been effectively informative).</li>
+</ul>
+
+<h4 id="extend">Extensibility chapter (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Made <{foreignObject}> a [=graphics element=].</li>
+  <li>Made <span class="attr-name">width</span> and <span class="attr-name">height</span> presentation attributes on the <{foreignObject}> element.</li>
+  <li>Merge this chapter into the new <a href='embedded.html'>Embedded Content chapter</a>
+    (and then later moved the "Foreign namespaces and private data" section to the Document Structure chapter.)
+  </li>
+</ul>
+
+<h4 id="svgdtd">Document Type Definition appendix (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Removed this appendix, as SVG 2 is not defined in terms of a DTD.</li>
+</ul>
+
+<h4 id="svgdom">SVG Document Object Model (DOM)(SVG 1.1 Only)</h4>
+
+<ul>
+  <li>Update core DOM support requirement to DOM4, DOM Level 2 Views, UI Events, and DOM Level 2 Style/CSS.</li>
+  <li><span class="attr-value">SVGException</span> interface is removed.</li>
+  <li>Section on (deprecated) <span class="attr-value">hasFeature</span> method removed.</li>
+  <li>Non-SVG specific text about event and error handling removed.</li>
+  <li>Interfaces and methods that relied on the <span class="attr-value">CSSValue</span> type removed (they were already deprecated in SVG 1.1).</li>
+</ul>
+
+
+<div class="changed-since-cr1 cr2">
+  <ul>
+    <li>Dependencies on other DOM specifications updated as follows:
+      <ul>
+        <li>Make DOM 4 a minimum requirement, with DOM living standard a "should".</li>
+        <li>Remove requirement for support of obsolete DOM View spec.</li>
+        <li>Update the requirement on DOM Level 2 Style to
+            only include interfaces also defined in CSSOM,
+            with full support for CSSOM as a "should".
+            (And remove the "Relationship with DOM Level 2 CSS" section.)
+        </li>
+        <li>Add Geometry Interfaces Module Level 1 as a requirement.</li>
+        <li>Add Clipboard API and events as a normative requirement,
+        complementary to the UI Events requirement.</li>
+      </ul>
+    </li>
+    <li>Clarify that SVG DOM requirements extend to elements defined in other specifications.</li>
+    <li>Add a requirement for handling unknown elements in the SVG namespace:
+      "must" handle as browsers currently do (as SVGElement instances);
+      "should" implement SVGUnknownElement interface (though that is at risk).
+    </li>
+    <li>Remove the special rule for initializing [=textLength=],
+      in favor of a clearer definition of the attribute's dynamic initial value.
+    </li>
+    <li>Clarify that rules about initializing objects
+      only apply when reflecting <code>(none)</code> initial values,
+      and also apply to interfaces defined in other specifications (e.g., Geometry).
+    </li>
+    <li>Update section "Relationship with UI Events"
+    to reflect that most event handler attributes are available on all elements,
+    that clipboard API events are available.
+    Wording is updated to clarify normative requirements on software.
+    </li>
+    <li>Merge the entire content of this appendix
+    into the Basic Data Types chapter,
+    except for the section "Relationship with UI Events",
+    which is merged into the Interactivity chapter.</li>
+  </ul>
+  <p>
+    <a href="https://github.com/w3c/svgwg/issues/520">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/548">Edits</a>
+  
+</div>
+
+<h4 id="idl">IDL Definitions appendix</h4>
+
+<ul>
+  <li>Converted to the standard WebIDL format.</li>
+  <li>Other changes as defined in the relevant chapters.</li>
+</ul>
+
+<h4 id="java">Java Language Binding appendix (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Removed this appendix, as language bindings are now defined by
+  Web IDL.</li>
+</ul>
+
+<h4 id="escript">ECMAScript Language Binding appendix (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Removed this appendix, as language bindings are now defined by
+  Web IDL.</li>
+</ul>
+
+<h4 id="impreqs">Implementation Notes appendix (was Implementation Requirements in SVG 1.1)</h4>
+
+<div class="changed-since-cr1">
+<ul>
+  <li>Removed un-implemented out-of-range flag values note.
+    <a href="https://github.com/w3c/svgwg/issues/324">Issue discussion</a>
+    <a href="https://github.com/w3c/svgwg/pull/516">Edits</a></li>
+</ul>
+</div>
+
+<div class="changed-since-cr1 cr2">
+  <ul>
+    <li>Moved normative sections into chapters,
+        and renamed appendix to Implementation Notes:
+      <ul>
+        <li>Error Processing is now in Conformance Criteria.</li>
+        <li>Clamping Values is now in Data Types and Interfaces,
+        and sections re colors and opacity have been removed
+        (clamping behavior of these properties is defined in CSS Color).
+        </li>
+        <li>The normative parts of the Elliptical Arc Implementation Notes
+        are now in the Paths chapter, with other implementation requirements for paths</li>
+        <li>Text selection implementation notes is now in Text,
+        with the main section on Text Selection.</li>
+        <li>Printing Implementation Notes is now in Conformance Criteria.</li>
+      </ul>
+      <a href="https://github.com/w3c/svgwg/issues/520">Issue discussion</a>
+      <a href="https://github.com/w3c/svgwg/pull/548">Edits</a>
+    </li>
+  </ul>
+</div>
+
+<h4 id="access">Accessibility Support appendix</h4>
+
+<ul>
+  <li>Completely re-written and updated.</li>
+</ul>
+
+<h4 id="i18n">Internationalization Support appendix (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Removed this appendix.</li>
+</ul>
+
+<h4 id="minimize">Minimizing SVG File Sizes appendix (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Removed this appendix.</li>
+</ul>
+
+<h4 id="animate-appendix">Animating SVG Documents appendix (SVG 2 only)</h4>
+
+<ul>
+  <li>Added this appendix.</li>
+</ul>
+
+<h4 id="refs">References appendix</h4>
+
+<ul>
+  <li>Removed normative reference to CSS2.</li>
+
+  <li>Removed informative reference to DOM Level 3 Core.</li>
+
+  <li>Changed normative reference to DOM Level 1 Core to be informative.</li>
+
+  <li>Changed normative reference from DOM Level 2 Core to DOM4.</li>
+
+  <li>Changed informative reference to SMIL 3 to be normative.</li>
+
+  <li>Added normative references to CSS3 Color, CSS3 Fonts, CSS3 Line Box, CSS3 Transforms, CSS3 UI, CSS3 Values and Units, CSS4 Images, Filter Effects, WOFF, Web IDL.</li>
+
+  <li>Added informative references to CSS 3 Transitions and Animations.</li>
+
+  <li>Replaced references from DOM Level 2 Events and DOM Level 3 Events to normative references to UI Events and DOM 4.</li>
+
+  <li>Added normative reference to WAI-ARIA 1.1.</li>
+
+  <li>Added normative reference to Shadow DOM.</li>
+</ul>
+
+<div class="changed-since-cr1 cr2">
+  <ul>
+    <li>Removed normative reference to DOM Level 2 Views.</li>
+
+    <li>Added normative reference to Geometry Interfaces.</li>
+
+    <li>Added normative reference to CSSOM.</li>
+
+    <li>Added normative reference to Clipboard API and events.</li>
+  </ul>
+</div>
+
+<h4 id="other-appendix">Element, Attribute, and Property index appendices</h4>
+
+<ul>
+  <li>Changes as described in the relevant chapters.</li>
+
+  <li>Mouse wheel event attribute is named "onwheel".</li>
+</ul>
+
+<h4 id="idlindex">IDL Index appendix (SVG 2 only)</h4>
+
+<ul>
+  <li>Added this appendix.</li>
+</ul>
+
+<h4 id="feature">Feature Strings (SVG 1.1 only)</h4>
+
+<ul>
+  <li>Removed this appendix.</li>
+</ul>
