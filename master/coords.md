@@ -93,9 +93,9 @@ a scale that is applied to content contained by the element.
   (<var>e-width</var> - <var>vb-width</var> * <var>scale-x</var>) / 2 to <var>translate-x</var>.</li>
   <li>If <var>align</var> contains <span class="attr-value">xMax</span>, add
   (<var>e-width</var> - <var>vb-width</var> * <var>scale-x</var>) to <var>translate-x</var>.</li>
-  <li>If <var>align</var> contains <span class="attr-value">yMid</span>, add
+  <li>If <var>align</var> contains <span class="attr-value">YMid</span>, add
   (<var>e-height</var> - <var>vb-height</var> * <var>scale-y</var>) / 2 to <var>translate-y</var>.</li>
-  <li>If <var>align</var> contains <span class="attr-value">yMax</span>, add
+  <li>If <var>align</var> contains <span class="attr-value">YMax</span>, add
   (<var>e-height</var> - <var>vb-height</var> * <var>scale-y</var>) to <var ignore=''>translate-y.</var></li>
 </ol>
 
