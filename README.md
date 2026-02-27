@@ -7,13 +7,13 @@ Editor's drafts:
 * [SVG 2](https://w3c.github.io/svgwg/svg2-draft/)
 * [SVG-AAM](https://w3c.github.io/svg-aam/)
 <!--
-* [SVG Animations](https://svgwg.org/specs/animations/)
-* [SVG Integration](https://svgwg.org/specs/integration/)
-* [SVG Streaming](https://svgwg.org/specs/streaming/)
-* [svg:transform for Mapping](https://svgwg.org/specs/transform/)
-* [SVG Markers](https://svgwg.org/specs/markers/)
-* [SVG Paths](https://svgwg.org/specs/paths/)
-* [SVG Strokes](https://svgwg.org/specs/strokes/)
+* [SVG Animations](https://w3c.github.io/svgwg/specs/animations/)
+* [SVG Integration](https://w3c.github.io/svgwg/specs/integration/)
+* [SVG Streaming](https://w3c.github.io/svgwg/specs/streaming/)
+* [svg:transform for Mapping](https://w3c.github.io/svgwg/specs/transform/)
+* [SVG Markers](https://w3c.github.io/svgwg/specs/markers/)
+* [SVG Paths](https://w3c.github.io/svgwg/specs/paths/)
+* [SVG Strokes](https://w3c.github.io/svgwg/specs/strokes/)
 -->
 
 The SVG2 spec draft is automatically rebuilt on pushes to this repository.
