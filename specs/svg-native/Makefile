@@ -1,4 +1,4 @@
-# Make the svgwg.org build machine prefer the online version of Bikeshed.
+# Make the w3c.github.io/svgwg build machine prefer the online version of Bikeshed.
 all : $(if $(BUILD_MACHINE),online,local)
 
 local : index.bs
