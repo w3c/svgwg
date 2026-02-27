@@ -377,10 +377,18 @@ properties</h2>
 
 <p>The CSS <a>'width'</a> and <a>'height'</a> properties are used for
 sizing some SVG elements.  Specifically, they are used to size
-<a>'rect'</a>, <a>'svg'</a>, <a>'image'</a> and
-<a>'foreignObject'</a>.  All of these elements have <span class='attr-name'>'width'</span>
+<a>'rect'</a>, <a>'image'</a>, <a>'foreignObject'</a>, and
+the outermost <a>'svg'</a> element.  All of these elements have <span class='attr-name'>'width'</span>
 and <span class='attr-name'>'height'</span> presentation attributes.
 The properties are also used for laying out embedded elements from the HTML namespace.
+</p>
+
+<p class='note'>
+Other SVG elements, such as nested <a>'svg'</a> elements, the <a>'use'</a> element, and
+the <a>'symbol'</a> element, also have <span class='attr-name'>'width'</span> and
+<span class='attr-name'>'height'</span> attributes, but do not accept them as CSS properties.
+On these elements, the width and height must be specified as XML attributes; CSS properties
+with the same names are ignored.
 </p>
 
 <p>The used value of <a>'width'</a>
@@ -393,22 +401,41 @@ may be constrained by the value of the
 <a href="https://www.w3.org/TR/CSS21/visudet.html#propdef-max-height"><span class="prop-name">min-height</span></a> properties.
 </p>
 
-<p>The value <span class='prop-value'>auto</span> for <a>'width'</a>
-and <a>'height'</a> on the <a>'svg'</a> element is treated as 100%.</p>
+<p>The following table summarizes how the value
+<span class='prop-value'>auto</span> for <a>'width'</a> and <a>'height'</a>
+is treated on different elements:</p>
 
-<p>The value <span class='prop-value'>auto</span> for <a>'width'</a>
-and <a>'height'</a> on the <a>'image'</a> element is calculated from the referenced image's intrinsic dimensions and aspect ratio, according to the CSS <a>Default Sizing Algorithm</a>.</p>
-
-<p>Content dependent units used in 'width' and 'height' for inner SVG elements resolve to SVG's definition of <a><span class='prop-value'>auto</span></a>. These content dependent units include 
-<a href="https://drafts.csswg.org/css-sizing-3/#valdef-width-min-content">'min-content'</a>, <a href="https://drafts.csswg.org/css-sizing-3/#valdef-width-max-content">'max-content'</a>, 
-<a href="https://drafts.csswg.org/css-sizing-3/#funcdef-width-fit-content">'fit-content()'</a> and <a href="https://drafts.csswg.org/css-sizing-3/#funcdef-width-calc-size">'calc-size()'</a>.</p>
+<table class="data">
+  <thead>
+    <tr>
+      <th>Element</th>
+      <th>Value</th>
+      <th>Treated as</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a>'svg'</a></td>
+      <td><span class='prop-value'>auto</span></td>
+      <td><span class='prop-value'>100%</span></td>
+    </tr>
+    <tr>
+      <td><a>'image'</a></td>
+      <td><span class='prop-value'>auto</span></td>
+      <td>Calculated from the referenced image's intrinsic dimensions and aspect ratio,
+        according to the CSS <a>Default Sizing Algorithm</a></td>
+    </tr>
+    <tr>
+      <td>All other elements</td>
+      <td><span class='prop-value'>auto</span></td>
+      <td><span class='prop-value'>0</span></td>
+    </tr>
+  </tbody>
+</table>
 
 <p class="note">
     New in SVG 2.  Images embedded in SVG can now be auto-sized to the intrinsic size, or scaled to a fixed height or width according to the intrinsic aspect ratio.  This matches the behavior of embedded images in HTML.
 </p>
-
-<p>The value <span class='prop-value'>auto</span> for <a>'width'</a>
-and <a>'height'</a> on other elements is treated as 0.</p>
 
 <p class='note'>This means that, for example, a <a>'foreignObject'</a>
 object element will not shrink-wrap to its contents if
