@@ -54,7 +54,7 @@
 <div class="head">
   <p><a href="https://www.w3.org/"><img height="48" width="72" alt="W3C" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C"/></a></p>
   <h1 id="Overview-pagetitle">Scalable Vector Graphics (SVG) 2</h1>
-  <h2 id="Overview-pagesubtitle">W3C Editor’s Draft <em>04 February 2026</em></h2>
+  <h2 id="Overview-pagesubtitle">W3C Editor’s Draft <em>27 February 2026</em></h2>
   <dl>
     <dt>This version:</dt>
     <dd><a href="https://svgwg.org/svg2-draft/" class="url">https://svgwg.org/svg2-draft/</a></dd>
@@ -115,7 +115,7 @@ publication. Other documents may supersede this document. A list of current W3C
 publications and the latest revision of this technical report can be found in
 the <a href="https://www.w3.org/TR/">W3C technical reports index</a> at https://www.w3.org/TR/</em>.</p>
 
-<p>This document is the 04 February 2026 <strong>Editor’s Draft</strong> of SVG 2.  This version of SVG
+<p>This document is the 27 February 2026 <strong>Editor’s Draft</strong> of SVG 2.  This version of SVG
 builds upon <a href="https://www.w3.org/TR/2011/REC-SVG11-20110816/">SVG 1.1 Second Edition</a>
 by improving the usability of the language and by adding new features commonly
 requested by authors.  The <a href="#chapter-changes">Changes</a> appendix lists all
@@ -9789,10 +9789,18 @@ properties<a class="self-link" href="#geometry-Sizing"></a></h2>
 
 <p>The CSS <a class="property" href="#geometry-Sizing">width</a> and <a class="property" href="#geometry-Sizing">height</a> properties are used for
 sizing some SVG elements.  Specifically, they are used to size
-<span class="element-name">‘<a href="#shapes-RectElement"><span>rect</span></a>’</span>, <span class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span>, <span class="element-name">‘<a href="#embedded-ImageElement"><span>image</span></a>’</span> and
-<span class="element-name">‘<a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a>’</span>.  All of these elements have <span class="attr-name">‘width’</span>
+<span class="element-name">‘<a href="#shapes-RectElement"><span>rect</span></a>’</span>, <span class="element-name">‘<a href="#embedded-ImageElement"><span>image</span></a>’</span>, <span class="element-name">‘<a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a>’</span>, and
+the outermost <span class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span> element.  All of these elements have <span class="attr-name">‘width’</span>
 and <span class="attr-name">‘height’</span> presentation attributes.
 The properties are also used for laying out embedded elements from the HTML namespace.
+</p>
+
+<p class="note">
+Other SVG elements, such as nested <span class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span> elements, the <span class="element-name">‘<a href="#struct-UseElement"><span>use</span></a>’</span> element, and
+the <span class="element-name">‘<a href="#struct-SymbolElement"><span>symbol</span></a>’</span> element, also have <span class="attr-name">‘width’</span> and
+<span class="attr-name">‘height’</span> attributes, but do not accept them as CSS properties.
+On these elements, the width and height must be specified as XML attributes; CSS properties
+with the same names are ignored.
 </p>
 
 <p>The used value of <a class="property" href="#geometry-Sizing">width</a>
@@ -9805,22 +9813,41 @@ may be constrained by the value of the
 <a href="https://www.w3.org/TR/CSS21/visudet.html#propdef-max-height"><span class="prop-name">min-height</span></a> properties.
 </p>
 
-<p>The value <span class="prop-value">auto</span> for <a class="property" href="#geometry-Sizing">width</a>
-and <a class="property" href="#geometry-Sizing">height</a> on the <span class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span> element is treated as 100%.</p>
+<p>The following table summarizes how the value
+<span class="prop-value">auto</span> for <a class="property" href="#geometry-Sizing">width</a> and <a class="property" href="#geometry-Sizing">height</a>
+is treated on different elements:</p>
 
-<p>The value <span class="prop-value">auto</span> for <a class="property" href="#geometry-Sizing">width</a>
-and <a class="property" href="#geometry-Sizing">height</a> on the <span class="element-name">‘<a href="#embedded-ImageElement"><span>image</span></a>’</span> element is calculated from the referenced image's intrinsic dimensions and aspect ratio, according to the CSS <a href="https://www.w3.org/TR/css3-images/#default-sizing-algorithm">Default Sizing Algorithm</a>.</p>
-
-<p>Content dependent units used in 'width' and 'height' for inner SVG elements resolve to SVG's definition of <span class="xxx">@@ unknown term "auto"</span>. These content dependent units include 
-<a href="https://drafts.csswg.org/css-sizing-3/#valdef-width-min-content">'min-content'</a>, <a href="https://drafts.csswg.org/css-sizing-3/#valdef-width-max-content">'max-content'</a>, 
-<a href="https://drafts.csswg.org/css-sizing-3/#funcdef-width-fit-content">'fit-content()'</a> and <a href="https://drafts.csswg.org/css-sizing-3/#funcdef-width-calc-size">'calc-size()'</a>.</p>
+<table class="data">
+  <thead>
+    <tr>
+      <th>Element</th>
+      <th>Value</th>
+      <th>Treated as</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span></td>
+      <td><span class="prop-value">auto</span></td>
+      <td><span class="prop-value">100%</span></td>
+    </tr>
+    <tr>
+      <td><span class="element-name">‘<a href="#embedded-ImageElement"><span>image</span></a>’</span></td>
+      <td><span class="prop-value">auto</span></td>
+      <td>Calculated from the referenced image's intrinsic dimensions and aspect ratio,
+        according to the CSS <a href="https://www.w3.org/TR/css3-images/#default-sizing-algorithm">Default Sizing Algorithm</a></td>
+    </tr>
+    <tr>
+      <td>All other elements</td>
+      <td><span class="prop-value">auto</span></td>
+      <td><span class="prop-value">0</span></td>
+    </tr>
+  </tbody>
+</table>
 
 <p class="note">
     New in SVG 2.  Images embedded in SVG can now be auto-sized to the intrinsic size, or scaled to a fixed height or width according to the intrinsic aspect ratio.  This matches the behavior of embedded images in HTML.
 </p>
-
-<p>The value <span class="prop-value">auto</span> for <a class="property" href="#geometry-Sizing">width</a>
-and <a class="property" href="#geometry-Sizing">height</a> on other elements is treated as 0.</p>
 
 <p class="note">This means that, for example, a <span class="element-name">‘<a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a>’</span>
 object element will not shrink-wrap to its contents if
