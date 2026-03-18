@@ -706,21 +706,138 @@ are rendered in the same way as if the shadow DOM was implemented.
     it is always a direct child of the <a>'use'</a> element's shadow root.
   </dd>
 
-  <dt><dfn id="TermCorrespondingElement">corresponding element</dfn></dt>
-  <dd>For each element instance,
-    the element in the referenced document subtree from which it is cloned.</dd>
-
-  <dt><dfn id="TermCorrespondingUseElement">corresponding use element</dfn></dt>
-  <dd>For each element instance,
-    the <a>'use'</a> element which causes it to be rendered in the document.
-    This is the instance's shadow root's host <a>'use'</a> element
-    <em>if</em> that element is not itself an element instance within a <a>'use'</a> element shadow tree,
-    or is that element's corresponding use element otherwise,
-    recursively exiting shadow trees as many times as necessary
-    to reach a <a>'use'</a> element that was not itself generated
-    as part of the shadow tree of another <a>'use'</a> element.
-  </dd>
 </dl>
+
+<p>The following example and diagram illustrate how these definitions
+relate to each other when a <a>'use'</a> element references a group:</p>
+
+<div class="figure">
+<pre><code>&lt;svg&gt;
+  &lt;defs&gt;
+    &lt;g id="icon"&gt;
+      &lt;circle/&gt;
+      &lt;rect/&gt;
+    &lt;/g&gt;
+  &lt;/defs&gt;
+  &lt;use href="#icon"/&gt;
+&lt;/svg&gt;</code></pre>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 430" width="820" height="430"
+     font-family="sans-serif" font-size="13">
+  <title>Diagram showing the relationship between a use element's document tree and its shadow tree, with defined terms labeled.</title>
+
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 6" refX="10" refY="3"
+            markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,3 L0,6" fill="#4a90d9"/>
+    </marker>
+    <marker id="arrow-gold" viewBox="0 0 10 6" refX="10" refY="3"
+            markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,3 L0,6" fill="#d4a017"/>
+    </marker>
+  </defs>
+
+  <!-- ==================== Document tree side ==================== -->
+  <text x="170" y="24" text-anchor="middle" font-size="15" font-weight="bold" fill="#345">Document tree</text>
+
+  <!-- <svg> node -->
+  <rect x="120" y="40" width="100" height="32" rx="6" fill="#e8f0fe" stroke="#a0bfe0" stroke-width="1.2"/>
+  <text x="170" y="61" text-anchor="middle" fill="#234">&lt;svg&gt;</text>
+
+  <!-- tree lines: svg → defs, svg → use -->
+  <line x1="150" y1="72" x2="90" y2="110" stroke="#a0bfe0" stroke-width="1.2"/>
+  <line x1="190" y1="72" x2="280" y2="110" stroke="#a0bfe0" stroke-width="1.2"/>
+
+  <!-- <defs> node -->
+  <rect x="40" y="110" width="100" height="32" rx="6" fill="#e8f0fe" stroke="#a0bfe0" stroke-width="1.2"/>
+  <text x="90" y="131" text-anchor="middle" fill="#234">&lt;defs&gt;</text>
+
+  <!-- <use> node (shadow host) -->
+  <rect x="200" y="110" width="160" height="32" rx="6" fill="#fff3cd" stroke="#d4a017" stroke-width="1.5"/>
+  <text x="280" y="131" text-anchor="middle" fill="#234">&lt;use href="#icon"/&gt;</text>
+  <text x="280" y="158" text-anchor="middle" font-size="11" fill="#856404" font-weight="bold">shadow host</text>
+
+  <!-- tree line: defs → g (enters pink box) -->
+  <line x1="90" y1="142" x2="115" y2="210" stroke="#a0bfe0" stroke-width="1.2"/>
+
+  <!-- Referenced document subtree box (pink/rose dashed) -->
+  <rect x="22" y="178" width="250" height="210" rx="10" fill="#fef5f5" stroke="#d4a0a8" stroke-width="1" stroke-dasharray="6,3" fill-opacity="0.5"/>
+  <text x="147" y="198" text-anchor="middle" font-size="11" fill="#a04058" font-weight="bold">referenced document subtree</text>
+
+  <!-- <g id="icon"> node (referenced element) -->
+  <rect x="55" y="210" width="155" height="32" rx="6" fill="#dceefb" stroke="#4a90d9" stroke-width="1.5"/>
+  <text x="132" y="231" text-anchor="middle" fill="#234">&lt;g id="icon"&gt;</text>
+
+  <!-- tree lines: g → circle, g → rect -->
+  <line x1="110" y1="242" x2="90" y2="280" stroke="#a0bfe0" stroke-width="1.2"/>
+  <line x1="155" y1="242" x2="200" y2="340" stroke="#a0bfe0" stroke-width="1.2"/>
+
+  <!-- <circle/> child (higher) -->
+  <rect x="40" y="280" width="100" height="32" rx="6" fill="#e8f0fe" stroke="#a0bfe0" stroke-width="1.2"/>
+  <text x="90" y="301" text-anchor="middle" fill="#234">&lt;circle/&gt;</text>
+
+  <!-- <rect/> child (lower) -->
+  <rect x="155" y="340" width="100" height="32" rx="6" fill="#e8f0fe" stroke="#a0bfe0" stroke-width="1.2"/>
+  <text x="205" y="361" text-anchor="middle" fill="#234">&lt;rect/&gt;</text>
+
+  <!-- ==================== Shadow tree side ==================== -->
+  <text x="600" y="24" text-anchor="middle" font-size="15" font-weight="bold" fill="#2a5">use-element shadow tree</text>
+
+  <!-- Green dashed bounding box -->
+  <rect x="430" y="36" width="380" height="385" rx="10" fill="#f0faf0" stroke="#8ecba0" stroke-width="1" stroke-dasharray="6,3" fill-opacity="0.5"/>
+
+  <!-- shadow root label + node -->
+  <text x="600" y="105" text-anchor="middle" font-size="11" fill="#3a7d4a" font-weight="bold">shadow root</text>
+  <rect x="535" y="110" width="130" height="32" rx="6" fill="#d4edda" stroke="#6cbf84" stroke-width="1.5"/>
+  <text x="600" y="131" text-anchor="middle" fill="#234">#shadow-root</text>
+
+  <!-- tree line: shadow root → g instance -->
+  <line x1="600" y1="142" x2="600" y2="210" stroke="#6cbf84" stroke-width="1.2"/>
+
+  <!-- instance root label (with white knockout over tree line) -->
+  <rect x="555" y="170" width="90" height="15" rx="2" fill="white"/>
+  <text x="600" y="182" text-anchor="middle" font-size="11" fill="#2d6e3f" font-weight="bold">instance root</text>
+
+  <!-- <g> instance (aligned with document-side g at y=210) -->
+  <rect x="525" y="210" width="150" height="32" rx="6" fill="#c3e6cb" stroke="#48a868" stroke-width="1.8"/>
+  <text x="600" y="231" text-anchor="middle" fill="#234">&lt;g&gt;</text>
+
+  <!-- tree lines: g instance → circle instance, g instance → rect instance -->
+  <line x1="575" y1="242" x2="545" y2="280" stroke="#6cbf84" stroke-width="1.2"/>
+  <line x1="625" y1="242" x2="670" y2="340" stroke="#6cbf84" stroke-width="1.2"/>
+
+  <!-- <circle/> instance (aligned with document circle at y=280) -->
+  <rect x="495" y="280" width="100" height="32" rx="6" fill="#d4edda" stroke="#6cbf84" stroke-width="1.2"/>
+  <text x="545" y="301" text-anchor="middle" fill="#234">&lt;circle/&gt;</text>
+  <text x="545" y="326" text-anchor="middle" font-size="11" fill="#3a7d4a" font-weight="bold">element instance</text>
+
+  <!-- <rect/> instance (aligned with document rect at y=340) -->
+  <rect x="625" y="340" width="100" height="32" rx="6" fill="#d4edda" stroke="#6cbf84" stroke-width="1.2"/>
+  <text x="675" y="361" text-anchor="middle" fill="#234">&lt;rect/&gt;</text>
+  <text x="675" y="386" text-anchor="middle" font-size="11" fill="#3a7d4a" font-weight="bold">element instance</text>
+
+  <!-- ==================== Arrows ==================== -->
+
+  <!-- host arrow: use → shadow root (straight horizontal) -->
+  <path d="M360,126 L533,126" fill="none" stroke="#d4a017" stroke-width="1.5" marker-end="url(#arrow-gold)"/>
+  <text x="422" y="118" text-anchor="end" font-size="11" fill="#856404" font-style="italic">host</text>
+
+  <!-- cloned-from: g → g instance (straight horizontal at y=226) -->
+  <path d="M210,226 L523,226" fill="none" stroke="#4a90d9" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#arrow-blue)"/>
+  <text x="422" y="220" text-anchor="end" font-size="11" fill="#4a90d9" font-style="italic">cloned from</text>
+
+  <!-- cloned-from: circle → circle instance (straight horizontal at y=296) -->
+  <path d="M140,296 L493,296" fill="none" stroke="#4a90d9" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#arrow-blue)"/>
+
+  <!-- cloned-from: rect → rect instance (straight horizontal at y=356) -->
+  <path d="M255,356 L623,356" fill="none" stroke="#4a90d9" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#arrow-blue)"/>
+</svg>
+<p class="caption">The relationship between a document tree containing a
+  <a>'use'</a> element and its <a>use-element shadow tree</a>.
+  Blue dashed arrows show that each <a>element instance</a> in the shadow tree
+  is a clone of an element in the <a>referenced document subtree</a>.
+  The <a>'use'</a> element is the <a>shadow host</a>,
+  and the <a>instance root</a> is the direct child of the <a>shadow root</a>.</p>
+</div>
 
 <p>When the user agent successfully resolves a <a>'use'</a> element
 to identify a <a>referenced element</a>,
@@ -908,7 +1025,7 @@ or from their effect in CSS box layout.
   If a <a>'style element'</a> element is duplicated
   as part of the <a>referenced document subtree</a>,
   then the <code>styleSheet</code> property on the <a>element instance</a>
-  points to the same object as for the <a>corresponding element</a>.
+  points to the same object as for the source element in the <a>referenced document subtree</a>.
 </p>
 
 <p>
@@ -940,7 +1057,7 @@ or from their effect in CSS box layout.
   CSS media queries within a shadow tree's scope
   are evaluated using the same device features and dimensions
   as the corresponding "light" document
-  (that is, the document that contains the <a>corresponding use element</a>
+  (that is, the document that contains the host <a>'use'</a> element
   for the shadow tree, after recursively exiting all nested shadow trees).
 </p>
 
@@ -948,7 +1065,7 @@ or from their effect in CSS box layout.
   <p>
     In most cases,
     the <a>element instance</a> in the shadow tree will match the same style rules
-    as its <a>corresponding element</a> in the original document.
+    as its source element in the <a>referenced document subtree</a>.
     However, if a CSS rule uses a <a href="https://drafts.csswg.org/selectors/#complex">complex selector</a>
     to match an element based on its ancestors or siblings,
     and those ancestors or siblings are not cloned as part of the shadow tree,
@@ -1002,7 +1119,7 @@ or from their effect in CSS box layout.
     should apply to element instances.
     The shadow tree model requires that all such pseudo-classes
     are matched independently to the
-    <a>element instance</a> or to its <a>corresponding element</a>,
+    <a>element instance</a> or to its source element in the <a>referenced document subtree</a>,
     depending on which element the user is interacting with.
   </p>
 </div>
@@ -1100,7 +1217,7 @@ svg:hover .dark, svg:focus .dark {
 <p>
   All animations within a <a>use-element shadow tree</a>
   operate in the same document timeline as for the
-  <a>corresponding use element</a>,
+  host <a>'use'</a> element,
   regardless of whether the <a>referenced element</a>
   is from the same or an external document.
 </p>
@@ -1109,7 +1226,7 @@ svg:hover .dark, svg:focus .dark {
   For animation effects applied
   using a <a href="https://www.w3.org/TR/web-animations-1/">Web Animations API</a> method
   <a href="refs.html#ref-web-animations-1">[web-animations-1]</a>,
-  if the target of the animation is a <a>corresponding element</a>
+  if the target of the animation is an element in the <a>referenced document subtree</a>
   to an <a>element instance</a> in a shadow tree,
   the user agent must construct a <a>ShadowAnimation</a>
   whose source is that <a>Animation</a> object
@@ -1154,7 +1271,7 @@ svg:hover .dark, svg:focus .dark {
   for the animation element
   that has the same effect as if it was a node in the shadow tree.
   The effective document order for these generated animation elements
-  must be the same as the document order for their <a>corresponding elements</a>.
+  must be the same as the document order for their source elements in the <a>referenced document subtree</a>.
 </p>
 
 <p>
@@ -1168,7 +1285,7 @@ svg:hover .dark, svg:focus .dark {
 
 <p class="note">
   The <a>'id'</a> attribute is cloned, like any other attribute,
-  from the <a>corresponding element</a> to the <a>element instance</a>;
+  from the source element to the <a>element instance</a>;
   This does not conflict with the requirement for <a>'id'</a> to be unique,
   because the clone and the original are in distinct node trees.
 </p>
@@ -1192,20 +1309,20 @@ svg:hover .dark, svg:focus .dark {
 <p>
   At the time an <a>instance</a> of an animation element
   is generated within a shadow tree,
-  if there is an active animation associated with the <a>corresponding element</a>
+  if there is an active animation associated with the source element in the <a>referenced document subtree</a>
   (including a frozen animation),
   and the timing event that initiated that animation would also have initiated the instance if it existed,
   then the animation for the <a>element instance</a> must be initiated,
   with its begin time
   adjusted backwards in the document timeline
-  to match the timing of the <a>corresponding element</a>.
+  to match the timing of the source element.
 </p>
 
 <div class="note">
   <p>
     In many cases,
     the requirements of this section mean that
-    the <a>element instance</a> and its <a>corresponding element</a>
+    the <a>element instance</a> and its source element
     will animate synchronously.
     This will be the case if the animation is purely time-based,
     or if it begins and ends in response to user interaction
@@ -1217,7 +1334,7 @@ svg:hover .dark, svg:focus .dark {
   </p>
   <p>
     This is a change from previous versions of SVG,
-    which required all animations on the <a>corresponding element</a> to be mirrored,
+    which required all animations on the source element to be mirrored,
     regardless of user interaction,
     but which did not offer clear guidance for responding to
     user interactions with the element instances.
@@ -1269,7 +1386,7 @@ svg:hover .dark, svg:focus .dark {
   and also event listeners assigned using the <a href="https://www.w3.org/TR/dom/#dom-eventtarget-addeventlistener"><code>addEventListener</code></a> method.
   The user agent must ensure that the list of event listeners
   for each <a>element instance</a> is synchronized to match
-  its <a>corresponding element</a>.
+  its source element in the <a>referenced document subtree</a>.
   An event listener cannot be directly assigned
   to a read-only <a>element instance</a> in a <a>use-element shadow tree</a>.
   Any attempt to add an event listener to such an element
@@ -1319,13 +1436,9 @@ svg:hover .dark, svg:focus .dark {
     In contrast, event listeners that process the event
     while it is propagating through the shadow tree
     (because the listener has been added to a
-    <a>corresponding element</a>)
+    source element in the <a>referenced document subtree</a>)
     will receive the event with its <a href="https://www.w3.org/TR/dom/#dom-event-target"><code>target</code></a>
     pointing to a read-only <a>element instance</a> in the shadow tree.
-    The <a>SVGElementInstance::correspondingElement</a>
-    and <a>SVGElementInstance::correspondingUseElement</a>
-    properties of that <a>element instance</a>
-    can be used to connect it to the modifiable elements in the main DOM.
   </p>
 </div>
 
@@ -2852,7 +2965,7 @@ to be interpreted, the following steps are run:</p>
           to <var>result</var>.
             <p class="note">This means that although we look at the
             elements in the <a>use-element shadow tree</a>,
-            we don't place the <a>element instances</a> or their <a>corresponding element</a>
+            we don't place the <a>element instances</a> or their source elements in the <a>referenced document subtree</a>
             in the <var>result</var> list; only the <a>'use'</a>
             element itself is returned.</p>
           </li>
@@ -3127,7 +3240,7 @@ presentation attributes, respectively.</p>
 <p>The <b id="__svg__SVGUseElement__instanceRoot">instanceRoot</b> and
 <b id="__svg__SVGUseElement__animatedInstanceRoot">animatedInstanceRoot</b>
 IDL attributes both point to the <a>instance root</a>,
-the <a>SVGElementInstance</a> that is a direct child
+the <a>element instance</a> that is a direct child
 of this element's shadow root
 (<code>u.instanceRoot</code> is equivalent to getting <code>u.shadowRoot.firstChild</code>).
 If this element does not have a shadow tree
@@ -3152,50 +3265,6 @@ then getting these attributes returns null.</p>
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGUseElementShadowRoot</b> : <a>ShadowRoot</a> {
 };</pre>
-
-<h3 id="InterfaceSVGElementInstance" data-dfn-type="interface" data-lt="SVGElementInstance">Mixin SVGElementInstance</h3>
-
-<p>The <a>SVGElementInstance</a> interface defines extensions to the <a>SVGElement</a> interface,
-  which are only used for elements in a <a>use-element shadow tree</a>.</p>
-
-<p class="note">
-  In previous versions of SVG,
-  SVG element instances were defined as non-element objects
-  that were valid event targets but not full DOM nodes.
-  This specification re-defines the <a>use-element shadow tree</a>
-  to be consistent with the Shadow DOM specification,
-  which means that instances are actual SVGElement objects.
-  This interface adds the missing functionality for backwards compatibility.
-  However, authors should be aware that compatibility is not perfect,
-  and design their scripts accordingly.
-  Also note that these properties will not be available
-  on HTML-namespaced element objects in the shadow tree.
-</p>
-
-<pre class="idl">interface mixin <b>SVGElementInstance</b> {
-  [<a>SameObject</a>] readonly attribute <a>SVGElement</a>? <a href="#__svg__SVGElementInstance__correspondingElement">correspondingElement</a>;
-  [<a>SameObject</a>] readonly attribute <a>SVGUseElement</a>? <a href="#__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</a>;
-};</pre>
-
-<p>The <b id="__svg__SVGElementInstance__correspondingElement">correspondingElement</b> IDL attribute
-points to the <a>corresponding element</a> if this element is an <a>element instance</a> in a <a>use-element shadow tree</a>,
-or is null otherwise.</p>
-
-<p class="issue" data-issue="71">
-  When the <a>referenced element</a> is in an external file,
-  the presence of this pointer
-  implies that the entire DOM of the external file
-  must be maintained in memory.
-  However, as currently specified, the external DOM is read-only.
-  It therefore offers limited functionality and a potentially large performance impact.
-  Pending feedback from implementers,
-  authors should consider the use of <code>correspondingElement</code>
-  with external file references to be at-risk.
-</p>
-
-<p>The <b id="__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</b> IDL attribute
-points to the <a>corresponding use element</a> if this element is an <a>element instance</a> in a <a>use-element shadow tree</a>,
-or is null otherwise.</p>
 
 <h3 id="InterfaceShadowAnimation">Interface ShadowAnimation</h3>
 
