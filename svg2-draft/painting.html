@@ -30,9 +30,7 @@ property</a></li><li><a href="painting.html#StrokeWidth"><span class="secno">13.
 property</a></li><li><a href="painting.html#LineCaps"><span class="secno">13.5.4.</span> Drawing caps at the ends of strokes: the ‘<span class="property">stroke-linecap</span>’
 property</a></li><li><a href="painting.html#LineJoin"><span class="secno">13.5.5.</span> Controlling line joins: the ‘<span class="property">stroke-linejoin</span>’
 and ‘<span class="property">stroke-miterlimit</span>’ properties</a></li><li><a href="painting.html#StrokeDashing"><span class="secno">13.5.6.</span> Dashing strokes: the ‘<span class="property">stroke-dasharray</span>’ and
-‘<span class="property">stroke-dashoffset</span>’ properties</a></li><li><a href="painting.html#StrokeShape"><span class="secno">13.5.7.</span> Computing the shape of the stroke</a></li><li><a href="painting.html#CurvatureCalculation"><span class="secno">13.5.8.</span> Computing the circles for the <span class="prop-value">arcs</span>
-'stroke-linejoin'</a></li><li><a href="painting.html#ArcsLinejoinFallback"><span class="secno">13.5.9.</span> Adjusting the circles for the <span class="prop-value">arcs</span>
-'stroke-linejoin' when the initial circles do not intersect</a></li></ol></li><li><a href="painting.html#PaintingVectorEffects"><span class="secno">13.6.</span> Vector effects</a></li><li><a href="painting.html#Markers"><span class="secno">13.7.</span> Markers</a><ol class="toc"><li><a href="painting.html#MarkerElement"><span class="secno">13.7.1.</span> The <span class="element-name">‘marker’</span> element</a></li><li><a href="painting.html#VertexMarkerProperties"><span class="secno">13.7.2.</span> Vertex markers: the ‘<span class="property">marker-start</span>’,
+‘<span class="property">stroke-dashoffset</span>’ properties</a></li><li><a href="painting.html#StrokeShape"><span class="secno">13.5.7.</span> Computing the shape of the stroke</a></li></ol></li><li><a href="painting.html#PaintingVectorEffects"><span class="secno">13.6.</span> Vector effects</a></li><li><a href="painting.html#Markers"><span class="secno">13.7.</span> Markers</a><ol class="toc"><li><a href="painting.html#MarkerElement"><span class="secno">13.7.1.</span> The <span class="element-name">‘marker’</span> element</a></li><li><a href="painting.html#VertexMarkerProperties"><span class="secno">13.7.2.</span> Vertex markers: the ‘<span class="property">marker-start</span>’,
 ‘<span class="property">marker-mid</span>’ and ‘<span class="property">marker-end</span>’
 properties</a></li><li><a href="painting.html#MarkerShorthand"><span class="secno">13.7.3.</span> Marker shorthand: the ‘<span class="property">marker</span>’
 property</a></li><li><a href="painting.html#RenderingMarkers"><span class="secno">13.7.4.</span> Rendering markers</a></li></ol></li><li><a href="painting.html#PaintOrder"><span class="secno">13.8.</span> Controlling paint operation order: the
@@ -888,11 +886,6 @@ description of the shape a line cap will have.</p>
 <h3 id="LineJoin" class="heading">13.5.5. Controlling line joins: the ‘<span class="property">stroke-linejoin</span>’
 and ‘<span class="property">stroke-miterlimit</span>’ properties<a class="self-link" href="#LineJoin"></a></h3>
 
-<p class="issue" data-issue="592" id="issue592"><a class="self-link" href="#issue592"></a>
-    The values <span class="prop-value">miter-clip</span> and <span class="prop-value">arcs</span>
-    of the <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a> property are at risk. There are no known browser implementations.
-    See issue <a href="https://github.com/w3c/svgwg/issues/592">GitHub issue #592</a>.</p>
-
 <table class="propdef def">
   <tr>
     <th>Name:</th>
@@ -900,7 +893,7 @@ and ‘<span class="property">stroke-miterlimit</span>’ properties<a class="se
   </tr>
   <tr>
     <th>Value:</th>
-    <td>miter | miter-clip | round | bevel | arcs </td>
+    <td>miter | round | bevel</td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -944,13 +937,6 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
   is exceeded, the line join falls back to <span class="prop-value">bevel</span>
   (see below).</dd>
 
-  <dt><span class="prop-value">miter-clip</span></dt>
-  <dd>This value is the same as <span class="prop-value">miter</span> but if
-    the <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> is exceeded, the miter is clipped at a
-    distance equal to half the <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> value multiplied
-    by the stroke width from the intersection of the path segments
-    (see below).</dd>
-
   <dt><span class="prop-value">round</span></dt>
   <dd>This value indicates that a round corner is to be used to join path segments.
   The corner is a circular sector centered on the join point.</dd>
@@ -959,38 +945,11 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
   <dd>This value indicates that a bevelled corner is to be used to join path segments.
   The bevel shape is a triangle that fills the area between the two stroked segments.</dd>
 
-  <dt><span class="prop-value">arcs</span></dt>
-  <dd>This value indicates that an arcs corner is to be used to join
-    path segments. The arcs shape is formed by extending the outer
-    edges of the stroke at the join point with arcs that have the same
-    curvature as the outer edges at the join point.</dd>
 </dl>
 
-<p class="note">
-  The <span class="prop-value">miter-clip</span> and
-  <span class="prop-value">arcs</span> values are new in SVG 2.
-  The <span class="prop-value">miter-clip</span> value offers a more
-  consistent presentation for a path with multiple joins as well as
-  better behavior when a path is animated.
-  The <span class="prop-value">arcs</span> value provides a better
-  looking join when the path segments at the join are curved.
-</p>
-
-<p class="annotation">
-  Adding 'arcs' line join was resolved at the
-  <a href="http://www.w3.org/2012/09/19-svg-minutes.html#item08">Rigi
-  Kaltbad group meeting</a>.
-</p>
-
-<p class="annotation">
-  Adding 'miter-clip' line join was resolved at the
-  <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item03">Sydney
-  (2015) group meeting</a>.
-</p>
-
 <div class="figure">
-  <img class="bordered" src="images/painting/linejoin-four.svg" alt="Image showing four paths, each with a different line join."/>
-  <p class="caption">Four types of line joins.</p>
+  <img class="bordered" src="images/painting/linejoin.svg" alt="Image showing three paths, each with a different line join."/>
+  <p class="caption">Three types of line joins.</p>
 </div>
 
 <table class="propdef def">
@@ -1034,9 +993,7 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
 
 <p>
   When two line segments meet at a sharp angle and a value of
-  <span class="prop-value">miter</span>,
-  <span class="prop-value">miter-clip</span>, or
-  <span class="prop-value">arcs</span> has been specified for
+  <span class="prop-value">miter</span> has been specified for
   <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a>, it is possible for the join to extend
   far beyond the thickness of the line stroking the path. The
   <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> imposes a limit on the extent of the
@@ -1047,9 +1004,7 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
   <dt><span class="prop-value">&lt;number></span></dt>
   <dd>
     The limit on the extent of a
-    <span class="prop-value">miter</span>,
-    <span class="prop-value">miter-clip</span>, or
-    <span class="prop-value">arcs</span> line join as a multiple of
+    <span class="prop-value">miter</span> line join as a multiple of
     the <a class="property" href="painting.html#StrokeWidthProperty">stroke-width</a> value.
     A negative value for <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> is <a href="types.html#TermInvalidValue">invalid</a> and must be <a href="https://drafts.csswg.org/css-syntax/#css-ignored">ignored</a>.
   </dd>
@@ -1063,8 +1018,7 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
 </p>
 
 <p>
-  For the <span class="prop-value">miter</span> or the
-  <span class="prop-value">miter-clip</span> values, given
+  For the <span class="prop-value">miter</span> value, given
   the angle <var>θ</var> between the segments in user coordinate system,
   the miter length is calculated by:
 </p>
@@ -1098,13 +1052,7 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
     segments. The above definition of miter length based on angles
     depends only on the tangents to the path segments at the join and
     thus gives consistent results independent of the curvature of the
-    path segments. To be consistent with this definition, the clipping
-    point of the
-    <span class="prop-value">miter-clip</span> and
-    <span class="prop-value">arcs</span> line joins is at a distance
-    or arc length equal to half the <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> times
-    the stroke width from the point the two path segments join.
-  </p>
+    path segments.</p>
   <div class="figure">
     <img class="bordered" src="images/painting/miter-limit-def.svg" alt="Image showing the definition of the stroke miter length
 	      and consistency of clipping between different shaped
@@ -1130,12 +1078,6 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
   <dd>
     the join is converted to a bevel;
   </dd>
-  <dt><span class="prop-value">miter-clip</span></dt>
-  <dd>
-    the miter is clipped by a line perpendicular to the line bisecting
-    the angle between the two path segments at a distance of half the value
-    of miter length from the intersection of the two path segments.
-  </dd>
 </dl>
 
 <div class="figure">
@@ -1148,23 +1090,6 @@ the <a href="paths.html#PathElementImplementationNotes">path implementation note
     limit.
   </p>
 </div>
-
-<p>
-  For the <span class="prop-value">arcs</span> value, the
-  <em>miter length</em> is calculated along a circular arc that is
-  tangent to the line bisecting the angle between the two segments at
-  the point the two segments intersect and passes through the end
-  point of the join. The line join is clipped, if necessary, by a line
-  perpendicular to this arc at an arc length from the intersection
-  point equal to half the value of the <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> value
-  multiplied by the stroke width.
-</p>
-
-<p class="annotation">
-  The effect of 'stroke-miterlimit' on an 'arcs' line join was resolved
-  at <a href="http://www.w3.org/2015/02/12-svg-minutes.html#item12">Sydney
-  (2015) group meeting</a>.
-</p>
 
 <p>
   See the definition of the <a href="painting.html#TermLineJoinShape">line join shape</a> below for a more
@@ -1706,39 +1631,8 @@ a subpath is determined as follows:</p>
   <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> as the two endpoints of
   the arc.</li>
 
-  <li>If <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a> is <span class="prop-value">arcs</span>,
-    then find the circles that are tangent to the stroke edges at
-    <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> with the
-    same curvature as the edges at those points (see below). If both
-    curvatures are zero fall through to <span class="prop-value">miter-clip</span>.
-    If either curvature is greater than 2/(stroke width), fallback to
-    <span class="prop-value">round</span>.
-
-    Extend the stroke edges using these circles (or a line, in the case
-    of zero curvature).
-
-    If the two circles (or circle and line) do not intersect, adjust
-    the radii of the two circles by an equal amount (or just the circle
-    in case of a circle and line) until they do intersect (see below).
-
-    The line join
-    region is defined by the lines that connect <var>P</var>
-    with <var>P</var><sub>1</sub> and <var>P</var><sub>2</sub> and the
-    arcs defined by the circles (or arc and line) between the closest
-    intersection point to <var>P</var>, and <var>P</var><sub>1</sub>
-    and <var>P</var><sub>2</sub>.
-
-    Next calculate the <em>miter limit</em> as defined in
-    the <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a> section. Clip any part of the line
-    join region that extends past the miter limit. Return the
-    resulting region.
-
-    Note that the curvatures are calculated in user-space before any
-    transforms are applied.</li>
-
   <li>
-    If <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a> is <span class="prop-value">miter</span> or
-    <span class="prop-value">miter-clip</span> then the line join
+    If <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a> is <span class="prop-value">miter</span> then the line join
     region is the union of <var>bevel</var> and the triangle formed
     from the three points <var>P</var><sub>1</sub>,
     <var>P</var><sub>2</sub> and <var>P</var><sub>3</sub>.
@@ -1750,12 +1644,6 @@ a subpath is determined as follows:</p>
     the line join region.
   </li>
 
-  <li>
-    If <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a> is <span class="prop-value">miter-clip</span>,
-    then clip any part of the line join region that extends past the
-    miter limit and return this region.
-  </li>
-
   <li>Return <var>bevel</var>.</li>
 </ol>
 
@@ -1765,509 +1653,6 @@ a subpath is determined as follows:</p>
   The white line is the original path, which has two segments that come to a
   point, and the gray region is the stroke.</p>
 </div>
-
-<div class="figure">
-  <img class="bordered" src="images/painting/linejoin-construction-arcs.svg" alt="Image showing the lines and points computed to construct an arcs line join."/>
-  <p class="caption">Construction of an arcs line join shape, shown in
-    pink. The white line is the original path, which has two segments
-    that come to a point, and the dark gray region is the stroke. The
-    dashed lines show circles that are tangent to and have the
-    curvature of the segments at the join.  The olive-green circles
-    (concentric with the dashed circles) define the join shape.</p>
-</div>
-
-<h3 id="CurvatureCalculation" class="heading">13.5.8. Computing the circles for the <span class="prop-value">arcs</span>
-'stroke-linejoin'<a class="self-link" href="#CurvatureCalculation"></a></h3>
-
-<p>The <span class="prop-value">arcs</span> <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a>
-  requires finding circles that are both tangent to and have the same
-  curvatures as the outer stroke edges at the ends of path
-  segments. To find one of these circles, first calculate the
-  curvature <var>κ</var> of the path segment at its end (see
-  below). Next, find the radius of a circle corresponding to this
-  curvature: <var>r</var> = 1/<var>κ</var>. Increase or
-  decrease the radius by one half of the stroke width to account for
-  the stroke: <var>r<sub>c</sub></var> = <var>r</var> ± ½
-  stroke-width. The center of the circle will be on a line normal to
-  the path end a distance of <var>r<sub>c</sub></var> away from the
-  outer stroke edge at the end.</p>
-
-<p>For a line: the curvature is zero. Extend the outer stroke edge by a line.</p>
-
-<p>For an elliptical arc:</p>
-
-  <div role="math" aria-describedby="math-curvature-of-ellipse">
-    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-      <mi>κ<!-- κ --></mi>
-      <mo stretchy="false">(</mo>
-      <mi>t</mi>
-      <mo stretchy="false">)</mo>
-      <mo>=</mo>
-      <mrow class="MJX-TeXAtom-ORD">
-	<mfrac>
-	  <mrow class="MJX-TeXAtom-ORD">
-            <msub>
-              <mi>r</mi>
-              <mi>x</mi>
-            </msub>
-            <msub>
-              <mi>r</mi>
-              <mi>y</mi>
-            </msub>
-	  </mrow>
-	  <mrow class="MJX-TeXAtom-ORD">
-            <mo stretchy="false">(</mo>
-            <msubsup>
-              <mi>r</mi>
-              <mi>x</mi>
-              <mn>2</mn>
-            </msubsup>
-            <msup>
-              <mi>sin</mi>
-              <mn>2</mn>
-            </msup>
-            <mo>⁡<!-- ⁡ --></mo>
-            <mi>t</mi>
-            <mo>+</mo>
-            <msubsup>
-              <mi>r</mi>
-              <mi>y</mi>
-              <mn>2</mn>
-            </msubsup>
-            <msup>
-              <mi>cos</mi>
-              <mn>2</mn>
-            </msup>
-            <mo>⁡<!-- ⁡ --></mo>
-            <mi>t</mi>
-            <msup>
-              <mo stretchy="false">)</mo>
-              <mrow class="MJX-TeXAtom-ORD">
-		<mn>3</mn>
-		<mrow class="MJX-TeXAtom-ORD">
-		  <mo>/</mo>
-		</mrow>
-		<mn>2</mn>
-              </mrow>
-            </msup>
-	  </mrow>
-	</mfrac>
-      </mrow>
-    </math>
-    <pre id="math-curvature-of-ellipse">$$\kappa(t) = {{r_x r_y}\over{(r_x^2 \sin^2 t + r_y^2 \cos^2 t)^{3/2}}}$$</pre>
-  </div>
-
-  <p>where:</p>
-
-  <div role="math" aria-describedby="math-curvature-t">
-    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-      <mi>t</mi>
-      <mo>=</mo>
-      <mi>arctan</mi>
-      <mo>⁡<!-- ⁡ --></mo>
-      <mrow>
-        <mo>(</mo>
-        <mrow>
-          <mrow class="MJX-TeXAtom-ORD">
-	    <mfrac>
-	      <msub>
-                <mi>r</mi>
-                <mi>y</mi>
-	      </msub>
-	      <msub>
-                <mi>r</mi>
-                <mi>x</mi>
-	      </msub>
-	    </mfrac>
-          </mrow>
-          <mi>tan</mi>
-          <mo>⁡<!-- ⁡ --></mo>
-          <mi>θ<!-- θ --></mi>
-        </mrow>
-        <mo>)</mo>
-      </mrow>
-    </math>
-    <pre id="math-curvature-t">$$t = \arctan \left( {r_y \over r_x} \tan \theta \right)$$</pre>
-  </div>
-
-  <p>The parameter <var>θ</var> at the beginning or end of an
-    arc segment can be found by using the formulas in
-    the <a href="implnote.html#ArcImplementationNotes">Elliptical arc
-    implementation notes</a>. (Note, some renderers convert elliptical
-    arcs to cubic Béziers prior to rendering so the equations here may
-    not be needed.)</p>
-
-<p>For a quadratic Bézier:</p>
-
-  <div role="math" aria-describedby="math-quadratic-start">
-    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-      <mi>κ<!-- κ --></mi>
-      <mo stretchy="false">(</mo>
-      <mn>0</mn>
-      <mo stretchy="false">)</mo>
-      <mo>=</mo>
-      <mrow class="MJX-TeXAtom-ORD">
-	<mfrac>
-	  <mn>1</mn>
-	  <mn>2</mn>
-	</mfrac>
-      </mrow>
-      <mrow class="MJX-TeXAtom-ORD">
-	<mfrac>
-	  <mrow>
-            <mo stretchy="false">(</mo>
-            <msub>
-              <mi>P</mi>
-              <mn>1</mn>
-            </msub>
-            <mo>−<!-- − --></mo>
-            <msub>
-              <mi>P</mi>
-              <mn>0</mn>
-            </msub>
-            <mo stretchy="false">)</mo>
-            <mo>×<!-- × --></mo>
-            <mo stretchy="false">(</mo>
-            <msub>
-              <mi>P</mi>
-              <mn>2</mn>
-            </msub>
-            <mo>−<!-- − --></mo>
-            <msub>
-              <mi>P</mi>
-              <mn>1</mn>
-            </msub>
-            <mo stretchy="false">)</mo>
-	  </mrow>
-	  <mrow>
-            <mrow class="MJX-TeXAtom-ORD">
-              <mo stretchy="false">|</mo>
-            </mrow>
-            <msub>
-              <mi>P</mi>
-              <mn>1</mn>
-            </msub>
-            <mo>−<!-- − --></mo>
-            <msub>
-              <mi>P</mi>
-              <mn>0</mn>
-            </msub>
-            <msup>
-              <mrow class="MJX-TeXAtom-ORD">
-		<mo stretchy="false">|</mo>
-              </mrow>
-              <mn>3</mn>
-            </msup>
-	  </mrow>
-	</mfrac>
-      </mrow>
-    </math>
-    <pre id="math-quadratic-start">$$\kappa(0) = {2\over3}{(P_1-P_0)\times((P_0-P_1)+(P_2-P_1))\over|P_1-P_0|^3}$$</pre>
-  </div>
-
-  <div role="math" aria-describedby="math-quadratic-end">
-    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-      <mi>κ<!-- κ --></mi>
-      <mo stretchy="false">(</mo>
-      <mn>1</mn>
-      <mo stretchy="false">)</mo>
-      <mo>=</mo>
-      <mrow class="MJX-TeXAtom-ORD">
-	<mfrac>
-	  <mn>1</mn>
-	  <mn>2</mn>
-	</mfrac>
-      </mrow>
-      <mrow class="MJX-TeXAtom-ORD">
-	<mfrac>
-	  <mrow>
-            <mo stretchy="false">(</mo>
-            <msub>
-              <mi>P</mi>
-              <mn>2</mn>
-            </msub>
-            <mo>−<!-- − --></mo>
-            <msub>
-              <mi>P</mi>
-              <mn>1</mn>
-            </msub>
-            <mo stretchy="false">)</mo>
-            <mo>×<!-- × --></mo>
-            <mo stretchy="false">(</mo>
-            <msub>
-              <mi>P</mi>
-              <mn>0</mn>
-            </msub>
-            <mo>−<!-- − --></mo>
-            <msub>
-              <mi>P</mi>
-              <mn>1</mn>
-            </msub>
-            <mo stretchy="false">)</mo>
-	  </mrow>
-	  <mrow>
-            <mrow class="MJX-TeXAtom-ORD">
-              <mo stretchy="false">|</mo>
-            </mrow>
-            <msub>
-              <mi>P</mi>
-              <mn>2</mn>
-            </msub>
-            <mo>−<!-- − --></mo>
-            <msub>
-              <mi>P</mi>
-              <mn>1</mn>
-            </msub>
-            <msup>
-              <mrow class="MJX-TeXAtom-ORD">
-		<mo stretchy="false">|</mo>
-              </mrow>
-              <mn>3</mn>
-            </msup>
-	  </mrow>
-	</mfrac>
-      </mrow>
-    </math>
-    <pre id="math-quadratic-end">$$\kappa(0) = {2\over3}{(P_1-P_0)\times((P_0-P_1)+(P_2-P_1))\over|P_1-P_0|^3}$$</pre>
-  </div>
-
-  <p>Where <var>κ(0)</var> and <var>κ(1)</var> are the
-  signed curvatures at the start and end of the path segment
-  respectively, and the <var>P</var>'s are the three points that
-  define the quadratic Bézier.</p>
-
-<p>For a cubic Bézier:</p>
-
-  <div role="math" aria-describedby="math-cubic-start">
-    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-      <mi>κ<!-- κ --></mi>
-      <mo stretchy="false">(</mo>
-      <mn>0</mn>
-      <mo stretchy="false">)</mo>
-      <mo>=</mo>
-      <mrow class="MJX-TeXAtom-ORD">
-	<mfrac>
-	  <mn>2</mn>
-	  <mn>3</mn>
-	</mfrac>
-      </mrow>
-      <mrow class="MJX-TeXAtom-ORD">
-	<mfrac>
-	  <mrow>
-            <mo stretchy="false">(</mo>
-            <msub>
-              <mi>P</mi>
-              <mn>1</mn>
-            </msub>
-            <mo>−<!-- − --></mo>
-            <msub>
-              <mi>P</mi>
-              <mn>0</mn>
-            </msub>
-            <mo stretchy="false">)</mo>
-            <mo>×<!-- × --></mo>
-            <mo stretchy="false">(</mo>
-            <msub>
-              <mi>P</mi>
-              <mn>2</mn>
-            </msub>
-            <mo>−<!-- − --></mo>
-            <msub>
-              <mi>P</mi>
-              <mn>1</mn>
-            </msub>
-            <mo stretchy="false">)</mo>
-	  </mrow>
-	  <mrow>
-            <mrow class="MJX-TeXAtom-ORD">
-              <mo stretchy="false">|</mo>
-            </mrow>
-            <msub>
-              <mi>P</mi>
-              <mn>1</mn>
-            </msub>
-            <mo>−<!-- − --></mo>
-            <msub>
-              <mi>P</mi>
-              <mn>0</mn>
-            </msub>
-            <msup>
-              <mrow class="MJX-TeXAtom-ORD">
-		<mo stretchy="false">|</mo>
-              </mrow>
-              <mn>3</mn>
-            </msup>
-	  </mrow>
-	</mfrac>
-      </mrow>
-    </math>
-    <pre id="math-cubic-start">$$\kappa(0) = {2\over3}{(P_1-P_0)\times((P_0-P_1)+(P_2-P_1))\over|P_1-P_0|^3}$$</pre>
-  </div>
-
-  <div role="math" aria-describedby="math-cubic-end">
-    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-      <mi>κ<!-- κ --></mi>
-      <mo stretchy="false">(</mo>
-      <mn>1</mn>
-      <mo stretchy="false">)</mo>
-      <mo>=</mo>
-      <mrow class="MJX-TeXAtom-ORD">
-	<mfrac>
-	  <mn>2</mn>
-	  <mn>3</mn>
-	</mfrac>
-      </mrow>
-      <mrow class="MJX-TeXAtom-ORD">
-	<mfrac>
-	  <mrow>
-            <mo stretchy="false">(</mo>
-            <msub>
-              <mi>P</mi>
-              <mn>3</mn>
-            </msub>
-            <mo>−<!-- − --></mo>
-            <msub>
-              <mi>P</mi>
-              <mn>2</mn>
-            </msub>
-            <mo stretchy="false">)</mo>
-            <mo>×<!-- × --></mo>
-            <mo stretchy="false">(</mo>
-            <msub>
-              <mi>P</mi>
-              <mn>1</mn>
-            </msub>
-            <mo>−<!-- − --></mo>
-            <msub>
-              <mi>P</mi>
-              <mn>2</mn>
-            </msub>
-            <mo stretchy="false">)</mo>
-	  </mrow>
-	  <mrow>
-            <mrow class="MJX-TeXAtom-ORD">
-              <mo stretchy="false">|</mo>
-            </mrow>
-            <msub>
-              <mi>P</mi>
-              <mn>3</mn>
-            </msub>
-            <mo>−<!-- − --></mo>
-            <msub>
-              <mi>P</mi>
-              <mn>2</mn>
-            </msub>
-            <msup>
-              <mrow class="MJX-TeXAtom-ORD">
-		<mo stretchy="false">|</mo>
-              </mrow>
-              <mn>3</mn>
-            </msup>
-	  </mrow>
-	</mfrac>
-      </mrow>
-    </math>
-    <pre id="math-cubic-end">$$\kappa(1) = {2\over3}{(P_3-P_2)\times((P_1-P_2)+(P_3-P_2))\over|P_3-P_2|^3}$$</pre>
-  </div>
-
-  <p>Where <var>κ(0)</var> and <var>κ(1)</var> are the
-  signed curvatures at the start and end of the path segment
-  respectively, and the <var>P</var>'s are the four points that define
-  the cubic Bézier. Note, if
-  <var>P<sub>0</sub></var> and <var>P<sub>1</sub></var>, or
-  <var>P<sub>2</sub></var> and <var>P<sub>3</sub></var> are degenerate, the
-  curvature will be infinite and a line should be used in constructing the join.</p>
-
-<h3 id="ArcsLinejoinFallback" class="heading">13.5.9. Adjusting the circles for the <span class="prop-value">arcs</span>
-'stroke-linejoin' when the initial circles do not intersect<a class="self-link" href="#ArcsLinejoinFallback"></a></h3>
-
-  <p class="annotation">
-    The fallback behavior was resolved at
-    the <a href="https://www.w3.org/2016/02/03-svg-minutes.html#item02">Sydney
-    2016 F2F</a>. It gives a smooth transition between the fallback
-    and non-fallback states.
-  </p>
-
-  <p>
-    When the initial circles calculated for the
-    <span class="prop-value">arcs</span> <a class="property" href="painting.html#StrokeLinejoinProperty">stroke-linejoin</a> do
-    not intersect, they need to be adjusted by changing both radii by
-    the same magnitude (moving the circle centers to keep the circles
-    tangent to the offset paths) until the circles just touch. There
-    are two cases to consider. The first is when one circle encloses
-    the other circle. In this case the larger circle is reduced in
-    size while the smaller circle is increased in size:
-  </p>
-
-  <div class="figure">
-    <img class="bordered" src="images/painting/linejoin-construction-fallback.svg" alt="Image showing the lines and points computed to construct an arcs line join
-	      when the original offset circles do not intersect."/>
-    <p class="caption">Construction of an arcs line join shape, shown
-      in pink. The white line is the original path and the dark gray
-      region is the stroke. The dashed lines show circles that are
-      tangent to and have the curvature of the segments at the
-      join. Note the circles do not intersect. Two new circles are
-      constructed by adjusting the radii of the original circles by
-      the same magnitude with the larger circle being made smaller and
-      the smaller circle being made larger until the new circles just
-      touch as shown by the olive-green circles. These new circles
-      then define the join shape.
-    </p>
-  </div>
-
-  <p>
-    The second case is when there is no overlap between the circles.
-    In this case the radii of both circles are increased by the same
-    amount:
-  </p>
-
-  <div class="figure">
-    <img class="bordered" src="images/painting/linejoin-construction-fallback2.svg" alt="Image showing the lines and points computed to construct an arcs line join
-	      when the original offset circles do not intersect."/>
-    <p class="caption">Construction of an arcs line join shape, shown
-      in pink. The white line is the original path and the dark gray
-      region is the stroke. The dashed lines show circles that are
-      tangent to and have the curvature of the segments at the
-      join. Note they do not intersect. Two new circles are
-      constructed by increasing the radii of the original circles by
-      the same amount until the new circles just touch as shown by the
-      olive-green circles. These new circles then define the join
-      shape.
-    </p>
-  </div>
-
-  <p>
-    If in this latter case, the tangents of the offset paths at the
-    line join are parallel, the circles cannot be adjusted so that
-    they touch. The line join should then be constructed as a
-    rectangle whose width is the stroke width and whose length is the
-    stroke width times one half of the value of the
-    <a class="property" href="painting.html#StrokeMiterlimitProperty">stroke-miterlimit</a>:
-  </p>
-
-  <div class="figure">
-    <img class="bordered" src="images/painting/linejoin-construction-fallback3.svg" alt="Image showing the lines and points computed to construct an arcs line join
-	      when the original offset circles do not intersect."/>
-    <p class="caption">Construction of an arcs line join shape, shown
-      in pink. The white line is the original path, which has two
-      segments that come to a point, and the dark gray region is the
-      stroke. The dashed lines show circles that are tangent to and
-      have the curvature of the segments at the join. Note they do not
-      intersect. Even if the radii of the circles are increased to infinity,
-      the circles will not intersect. The line join is then a rectangle
-      with the length determined by the miter limit (shown as a vertical
-      dashed line).
-    </p>
-  </div>
-
-  <p class="note">
-    There are a couple of ways to implement the fallback algorithm. The first
-    way is by recursive trial and error on the magnitude of the radius change.
-    The second is by an exact calculation utilizing the <em>touching circle
-      condition</em> and the constraints that the centers of the circles must
-    remain on lines normal to the path segments at the join. This leads to
-    a quadratic equation where one solution is the required radius change.
-  </p>
 
 </div>
 
