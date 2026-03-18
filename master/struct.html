@@ -1322,10 +1322,6 @@ svg:hover .dark, svg:focus .dark {
     <a>corresponding element</a>)
     will receive the event with its <a href="https://www.w3.org/TR/dom/#dom-event-target"><code>target</code></a>
     pointing to a read-only <a>element instance</a> in the shadow tree.
-    The <a>SVGElementInstance::correspondingElement</a>
-    and <a>SVGElementInstance::correspondingUseElement</a>
-    properties of that <a>element instance</a>
-    can be used to connect it to the modifiable elements in the main DOM.
   </p>
 </div>
 
@@ -3127,7 +3123,7 @@ presentation attributes, respectively.</p>
 <p>The <b id="__svg__SVGUseElement__instanceRoot">instanceRoot</b> and
 <b id="__svg__SVGUseElement__animatedInstanceRoot">animatedInstanceRoot</b>
 IDL attributes both point to the <a>instance root</a>,
-the <a>SVGElementInstance</a> that is a direct child
+the <a>element instance</a> that is a direct child
 of this element's shadow root
 (<code>u.instanceRoot</code> is equivalent to getting <code>u.shadowRoot.firstChild</code>).
 If this element does not have a shadow tree
@@ -3152,50 +3148,6 @@ then getting these attributes returns null.</p>
 <pre class="idl">[<a>Exposed</a>=Window]
 interface <b>SVGUseElementShadowRoot</b> : <a>ShadowRoot</a> {
 };</pre>
-
-<h3 id="InterfaceSVGElementInstance" data-dfn-type="interface" data-lt="SVGElementInstance">Mixin SVGElementInstance</h3>
-
-<p>The <a>SVGElementInstance</a> interface defines extensions to the <a>SVGElement</a> interface,
-  which are only used for elements in a <a>use-element shadow tree</a>.</p>
-
-<p class="note">
-  In previous versions of SVG,
-  SVG element instances were defined as non-element objects
-  that were valid event targets but not full DOM nodes.
-  This specification re-defines the <a>use-element shadow tree</a>
-  to be consistent with the Shadow DOM specification,
-  which means that instances are actual SVGElement objects.
-  This interface adds the missing functionality for backwards compatibility.
-  However, authors should be aware that compatibility is not perfect,
-  and design their scripts accordingly.
-  Also note that these properties will not be available
-  on HTML-namespaced element objects in the shadow tree.
-</p>
-
-<pre class="idl">interface mixin <b>SVGElementInstance</b> {
-  [<a>SameObject</a>] readonly attribute <a>SVGElement</a>? <a href="#__svg__SVGElementInstance__correspondingElement">correspondingElement</a>;
-  [<a>SameObject</a>] readonly attribute <a>SVGUseElement</a>? <a href="#__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</a>;
-};</pre>
-
-<p>The <b id="__svg__SVGElementInstance__correspondingElement">correspondingElement</b> IDL attribute
-points to the <a>corresponding element</a> if this element is an <a>element instance</a> in a <a>use-element shadow tree</a>,
-or is null otherwise.</p>
-
-<p class="issue" data-issue="71">
-  When the <a>referenced element</a> is in an external file,
-  the presence of this pointer
-  implies that the entire DOM of the external file
-  must be maintained in memory.
-  However, as currently specified, the external DOM is read-only.
-  It therefore offers limited functionality and a potentially large performance impact.
-  Pending feedback from implementers,
-  authors should consider the use of <code>correspondingElement</code>
-  with external file references to be at-risk.
-</p>
-
-<p>The <b id="__svg__SVGElementInstance__correspondingUseElement">correspondingUseElement</b> IDL attribute
-points to the <a>corresponding use element</a> if this element is an <a>element instance</a> in a <a>use-element shadow tree</a>,
-or is null otherwise.</p>
 
 <h3 id="InterfaceShadowAnimation">Interface ShadowAnimation</h3>
 
