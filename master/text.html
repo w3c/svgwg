@@ -287,29 +287,17 @@
 
     <dt><dfn id="TermContentArea">content area</dfn></dt>
     <dd>
-      The area in which the text is normally laid out. This is
+      The area in which the text is laid out. This is
       equivalent to the
       <a href="https://www.w3.org/TR/css3-exclusions/#content-area">CSS
-      content area</a>. The actual region where text layout occurs may
-      be smaller due to padding and/or exclusions.
+      content area</a>.
       <!-- CSS 2 reference: href="https://www.w3.org/TR/CSS2/box.html#box-dimensions" -->
-    </dd>
-
-    <dt><dfn id="TermWrappingContext">wrapping context</dfn></dt>
-    <dd>
-      One or more regions (shapes) to be excluded from the content
-      area during text layout. This is the same as the
-      <a href="https://www.w3.org/TR/css3-exclusions/#wrapping-context">
-	CSS wrapping context</a>.
     </dd>
 
     <dt><dfn id="TermWrappingArea">wrapping area</dfn></dt>
     <dd>
-      The area in which the text is laid out after subtracting any
-      padding or exclude areas (<a>wrapping context</a>). This is the
-      same as the
-      <a href="https://www.w3.org/TR/css3-exclusions/#wrapping-area">
-	CSS wrapping area</a>.
+      The area in which the text is laid out. This is the
+      same as the <a>content area</a>.
     </dd>
 
     <dt><dfn id="TermLineBox">line box</dfn></dt>
@@ -1300,8 +1288,8 @@
       </p>
       <p>
 	The <a>'textLength'</a> attribute is only applied when the <a>wrapping
-	area</a> is not defined by the <a>'shape-inside'</a> or
-	the <a>'inline-size'</a> properties. It is also not applied for
+	area</a> is not defined by
+	the <a>'inline-size'</a> property. It is also not applied for
 	any <a>'text'</a> or <a>'tspan'</a> element that has forced line breaks
 	(due to a <a>'white-space'</a> value of
 	<span class="prop-value">pre</span> or
@@ -1728,9 +1716,7 @@
 
   <p>
     The <a>content area</a> may be explicitly declared by setting the
-    <a>'inline-size'</a> property, or by setting
-    the <a>'shape-inside'</a> property that defines or references an
-    SVG <a>shape</a>. If a <a>content area</a> is not declared, it
+    <a>'inline-size'</a> property. If a <a>content area</a> is not declared, it
     defaults to a rectangle of infinite width and height.
   </p>
 
@@ -1885,87 +1871,23 @@
 
   <p>
     A <dfn>content area</dfn> is defined by specifying in
-    a <a>'text'</a> element an <a>'inline-size'</a> property,
-    or a <a>'shape-inside'</a> property that defines
-    or references an SVG <a>shape</a>. If no <a>content area</a> is
+    a <a>'text'</a> element an <a>'inline-size'</a> property.
+    If no <a>content area</a> is
     provided, the <a>content area</a> defaults to a rectangle of
     infinite width and height (see the
     <a href="text.html#TextLayoutPre">pre-formatted text</a> section).
-    If both an <a>'inline-size'</a> property and a
-    <a>'shape-inside'</a> property with value other than 'none' are
-    given, the <a>'shape-inside'</a> property is used.
   </p>
 
   <p id="TextLayoutWrappingArea">
     Wrapped text is laid out in a <dfn>wrapping area</dfn>. The
-    <a>wrapping area</a> is normally the same as the <a>content
-    area</a>. When the <a>content area</a> is defined using
-    the <a>'shape-inside'</a> property, the <a>wrapping area</a>
-    may be smaller due to the presence of a <a>'shape-subtract'</a>
-    property and/or a <a>'shape-padding'</a> property. The
-    <a>'shape-subtract'</a> property (along with the
-    <a>'shape-margin'</a> property) defines a <dfn>wrapping
-    context</dfn>. The <a>wrapping area</a> is found by
-    insetting the <a>content area</a> by the <a>'shape-padding'</a> distance,
-    and then subtracting the <a>wrapping context</a>.
+    <a>wrapping area</a> is the same as the <a>content
+    area</a>.
   </p>
   <p>
     Once a <a>wrapping area</a> is defined, the text is laid out
     inside the <a>wrapping area</a> according to the rules of CSS
     (respecting any special rules given in this section).
   </p>
-
-  <div class="note">
-    <p>
-      Constructing equivalent wrapping areas in SVG and HTML. The text
-      inside the wrapping areas is rendered the same in both cases.
-    </p>
-    <div class="figure">
-      <img class="bordered" src="images/text/text-layout-svg.svg"
-           alt="Image showing the creation of an hour glass shape
-           using a circle with two semicircles spaced out
-           horizontally. Text is wrapped in the circle after
-           the left and right semicircles exclude part of the
-           circle."/>
-      <p class="caption">
-	Defining a <a>wrapping area</a> in SVG.
-
-	The <a>'text'</a> element has both a <a>'shape-inside'</a>
-	property and a <a>'shape-subtract'</a> property.
-	The <a>'shape-inside'</a> property references a circle that
-	defines a <a>content area</a> (dotted purple line). The
-	<a>'shape-subtract'</a> property referencing two semicircles
-	defines a <a>wrapping context</a> (dotted green line) which when
-	subtracted from the <a>content area</a> results in
-	the <a>wrapping area</a> (light blue line).
-      </p>
-    </div>
-    <div class="figure">
-      <img class="bordered" src="images/text/text-layout-html.svg"
-           alt="Image showing the creation of an hour glass shape
-           using a circle with two semicircles spaced out
-           horizontally. Text is wrapped in the circle after
-           the left and right semicircles exclude part of the
-           circle."/>
-      <p class="caption">
-	Defining a <a>wrapping area</a> in HTML.
-
-	A <q>wrapper</q> &lt;div&gt; contains two <q>float</q>
-	&lt;div&gt;s. The wrapper &lt;div&gt; defines a rectangular
-	region (solid purple line). Its <a>'shape-inside'</a> property
-	defines a <a>content area</a> within the &lt;div&gt; (dotted
-	purple line). The two other &lt;div&gt;s define two floats,
-	one on the left (solid green line) and the right (solid pink
-	line). The floats are rectangular in shape. Each float has a
-	<a>'shape-outside'</a> property which defines the
-	<a>wrapping context</a> for each float (dotted green and pink
-	  lines). The combined <a>wrapping context</a> is subtracted
-	  from the <a>content area</a> to defined the
-	<a>wrapping area</a> (light blue line).
-      </p>
-    </div>
-
-  </div>
 
 <h3 id='InlineSize'>The <span class="property">'inline-size'</span> property</h3>
 
@@ -2016,9 +1938,7 @@
     a limit to the width or height of the block of text; thus the use
     of the <a>'tspan/x'</a> and <a>'tspan/y'</a> attributes along with
     the <a>'direction'</a> and <a>'text-anchor'</a> properties to
-    position the first line of text. If full justification is needed,
-    the <a>'shape-inside'</a> property should be used to create
-    the <a>wrapping area</a>.
+    position the first line of text.
   </p>
 
   <table class="propdef def">
@@ -2177,431 +2097,6 @@
     </div>
   </div>
 
-<h3 id='TextShapeInside'>The <span class="property">'shape-inside'</span> property</h3>
-
-  <p>
-    The <a>'shape-inside'</a> property allows one to set the
-    <a>content area</a> to a <a>CSS basic shape</a> or to an
-    SVG <a>shape</a>.
-  </p>
-  <p class="note">
-    In CSS/HTML <a>'shape-inside'</a> applies to block-level elements
-    and absolute and percentage values are defined relative to the
-    block-level element.
-
-    In SVG absolute and percentage values are defined relative to the
-    current <a>user coordinate system</a> and the <a>'viewBox'</a>.
-  </p>
-
-  <p class="issue" data-issue="76">Do nor re-specify shape-inside but reference CSS Shapes.</p>
-
-  <table class="propdef def">
-    <tr>
-      <th>Name:</th>
-      <td><dfn id="ShapeInsideProperty" data-dfn-type="property" data-export="">shape-inside</dfn></td>
-    </tr>
-    <tr>
-      <th>Value:</th>
-      <td>auto | [ &lt;basic-shape&gt; | &lt;uri&gt; ]+</td>
-    </tr>
-    <tr>
-      <th>Initial:</th>
-      <td>auto</td>
-    </tr>
-    <tr>
-      <th>Applies to:</th>
-      <td><a>'text'</a> elements</td>
-    </tr>
-    <tr>
-      <th>Inherited:</th>
-      <td>no</td>
-    </tr>
-    <tr>
-      <th>Percentages:</th>
-      <td>Relative to the <a>'viewBox'</a></td>
-    </tr>
-    <tr>
-      <th>Media:</th>
-      <td>visual</td>
-    </tr>
-    <tr>
-      <th>Computed value:</th>
-      <td>computed lengths for &lt;shape&gt;, the absolute URI for &lt;uri&gt;, otherwise as specified </td>
-    </tr>
-    <tr>
-      <th><a>Animation type</a>:</th>
-      <td>See <a href="https://www.w3.org/TR/css-shapes/#basic-shape-interpolation">Interpolation of Basic Shapes</a></td>
-    </tr>
-  </table>
-
-  <dl>
-    <dt><span class="attr-value">auto</span></dt>
-    <dd>
-      For the purposes of SVG, the 'auto' value indicates that the
-      content area should be defined using the <a>'inline-size'</a>
-      property or as for pre-formatted text.
-    </dd>
-
-    <dt><span class="attr-value">&lt;basic-shape&gt;</span></dt>
-    <dd>
-      The shape is computed based on the values of one of 'circle()',
-      'ellipse()' or 'polygon()'. The CSS value of 'inset()' is
-      invalid for SVG.
-
-      <div class="example">
-	<p>
-	  An example of using a CSS basic-shape for wrapping horizontal text.
-	</p>
-
-	<pre><![CDATA[
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="300" height="300" viewBox="0 0 300 300">
-
-  <text style="font: 20px/25px sans-serif;
-               text-align: center;
-               shape-inside: circle(120px at 150px 150px);">
-    Lorem ipsum dolor sit amet, consec-tetuer adipiscing elit...</text>
-
-</svg>
-]]></pre>
-
-	<div class="figure">
-	  <img class="bordered" src="images/text/text-wrap-circle.png"
-	       alt="Image showing text wrapped inside a circle."/>
-	  <p class="caption">
-	    Horizontal text wrapping inside a CSS circle shape.
-	    The light-blue circle indicates the limit of the
-	    <a>content area</a>.
-	  </p>
-	</div>
-      </div>
-
-    </dd>
-
-    <dt><span class="attr-value">&lt;uri&gt;</span></dt>
-    <dd>
-      If the &lt;uri&gt; references an SVG <a>shape</a> element,
-      that element defines the shape. Otherwise, if the &lt;uri&gt;
-      references an image, the shape is extracted and computed based
-      on the alpha channel of the specified image using the
-      <a>'shape-image-threshold'</a>. If the
-      &lt;uri&gt; does not reference an SVG shape element or an
-      image, the effect is as if the value ‘auto’ had been
-      specified.
-
-      <div class="example">
-	<p>
-	  An example of using a reference to an SVG <a>shape</a> for wrapping horizontal text.
-	</p>
-
-	<pre><![CDATA[
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="300" height="100" viewBox="0 0 300 100">
-
-  <defs>
-    <rect id="wrap" x="50" y="10" width="200" height="80"/>
-  </defs>
-
-  <text style="font: 20px sans-serif; shape-inside: url(#wrap);">
-    This text wraps in a rectangle.</text>
-
-</svg>
-]]></pre>
-
-	<div class="figure">
-	  <img class="bordered" src="images/text/text-wrap-rectangle.svg"
-	       alt="Image showing text wrapped inside a rectangle."/>
-	  <p class="caption">
-	    Horizontal text wrapping inside an SVG rectangle shape.
-	    The light-blue lines indicate the limits of the
-	    <a>content area</a>.
-	  </p>
-	</div>
-      </div>
-    </dd>
-
-  </dl>
-
-  <p>
-    The CSS values of 'outside-shape', 'shape-box', and 'display' are
-    invalid for SVG.
-  </p>
-
-  <p>
-    SVG allows the <a>'shape-inside'</a> property to have a list of
-    shapes. Each shape defines an independent <a>content area</a>.
-    Text is first laid out in the content area of the first shape. If
-    the text overflows the first shape, the overflow text is laid out
-    in the next shape until all text is laid out or no more shapes are
-    available.
-  </p>
-  <p class="note">
-    The effect is similar to CSS columns,
-    except that the columns can have arbitrary shapes.
-  </p>
-  <p>
-    It is recommended that an <q>overflow</q> shape be provided to
-    ensure the accessibility of all text in cases; for example, if a user
-    increases the font size.
-  </p>
-
-  <p class="note">
-    Except as noted, see the CSS Shapes Module Level 2 for the definition of
-    <a href="http://dev.w3.org/csswg/css-shapes-2/#shape-inside-property">'shape-inside'</a>.
-    [<a href="refs.html#ref-css-shapes-2">css-shapes-2</a>]
-  </p>
-
-  <p class="annotation">
-    'shape-inside' was removed when the CSS Exclusions and Shapes
-    Module was split into separate Exclusions and Shapes modules. At
-    the Tokyo joint SVG/CSS F2F meeting, it was agreed that it would
-    reappear in CSS Shapes Module Level 2.
-  </p>
-
-<h3 id='TextShapeSubtract'>The <span class="property">'shape-subtract'</span> property</h3>
-
-  <p>
-    The <a>'shape-subtract'</a> property allows one to exclude part of
-    the <a>content area</a> from the <a>wrapping area</a>. The
-    excluded area is the addition of all the areas defined in a list
-    of <a>CSS basic shape</a>s and/or SVG <a>shapes</a>.
-  </p>
-  <p class="annotation">
-    It was resolved at the 2016 Sydney F2F that 'shape-subtract' should
-    be uses instead of 'shape-outside' due to the different behavior
-    required. ('shape-outside' reduces the area of an exclusion.)
-  </p>
-
-  <p class="note">
-    Absolute and percentage values are defined relative to the
-    current <a>user coordinate system</a> and the <a>'viewBox'</a>.
-  </p>
-
-  <table class="propdef def">
-    <tr>
-      <th>Name:</th>
-      <td><dfn id="ShapesubtractProperty" data-dfn-type="property" data-export="">shape-subtract</dfn></td>
-    </tr>
-    <tr>
-      <th>Value:</th>
-      <td>none | [ &lt;basic-shape&gt; | &lt;uri&gt; ]+</td>
-    </tr>
-    <tr>
-      <th>Initial:</th>
-      <td>none</td>
-    </tr>
-    <tr>
-      <th>Applies to:</th>
-      <td><a>'text'</a> elements</td>
-    </tr>
-    <tr>
-      <th>Inherited:</th>
-      <td>no</td>
-    </tr>
-    <tr>
-      <th>Percentages:</th>
-      <td>Relative to the <a>'viewBox'</a></td>
-    </tr>
-    <tr>
-      <th>Media:</th>
-      <td>visual</td>
-    </tr>
-    <tr>
-      <th>Computed value:</th>
-      <td>computed lengths for any &lt;basic-shape&gt;, the absolute URI for &lt;uri&gt;, otherwise as specified </td>
-    </tr>
-    <tr>
-      <th><a>Animation type</a>:</th>
-      <td>See <a href="https://www.w3.org/TR/css-shapes/#basic-shape-interpolation">Interpolation of Basic Shapes</a></td>
-    </tr>
-  </table>
-
-  <dl>
-    <dt><span class="attr-value">&lt;basic-shape&gt;</span></dt>
-    <dd>
-      The shape is computed based on the values of one of 'circle()',
-      'ellipse()' or 'polygon()'.
-    </dd>
-
-    <dt><span class="attr-value">&lt;uri&gt;</span></dt>
-    <dd>
-      For any &lt;uri&gt; that references an SVG <a>shape</a> element,
-      that element defines the contributing shape,
-      expanded by the value of its <a>'shape-margin'</a> distance.
-      For any &lt;uri&gt;
-      that references an image, the contributing shape is extracted
-      and computed based on the alpha channel of the specified image
-      using the <a>'shape-image-threshold'</a>. If an &lt;uri&gt; does
-      not reference an SVG shape element or an image, that &lt;uri&gt;
-      is ignored.
-    </dd>
-
-  </dl>
-
-  <div class="example">
-    <p>
-      An example of using <a>'shape-subtract'</a>.
-    </p>.
-
-    <pre><![CDATA[
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="450" height="300" viewBox="0 0 450 300">
-
-  <rect id="rect1" x="25"  y="25"  width="225" height="175" fill="white" stroke="black"/>
-  <rect id="rect2" x="200" y="125" width="225" height="150" fill="white" stroke="black"
-        style="shape-margin:25px;"/>
-
-  <text style="shape-inside:url(#rect1);
-	       shape-subtract:url(#rect2);
-	       shape-padding:25px;
-           font-family:DejaVu Sans;
-	       font-size:12px;
-	       text-align:justified;
-	       line-height:110%">Lorem ipsum ...</text>
-  <text style="shape-inside:url(#rect2);
-	       shape-padding:25px;
-               font-family:DejaVu Sans;
-	       font-size:12px;
-	       text-align:justified;
-	       line-height:110%">Lorem ipsum ...</text>
-</svg>
-]]></pre>
-
-    <div class="figure">
-      <img class="bordered" src="images/text/text-wrap-complex.png"
-           alt="Image showing horizontal text wrapped inside two overlapping rectangles."/>
-      <p class="caption">
-	Horizontal text wrapping inside two overlapping rectangles
-	using <a>'shape-subtract'</a> as well as
-	<a>'shape-inside'</a>, <a>'shape-padding'</a> and
-        <a>'shape-margin'</a>. The black rectangles show
-	the <a>content area</a>s. The inner blue lines show
-	the <a>wrapping area</a>s.
-      </p>
-    </div>
-  </div>
-
-<h3 id='TextShapeImageThreshold'>The <span class='property'>'shape-image-threshold'</span> property</h3>
-
-  <p>
-    The <a>'shape-image-threshold'</a> defines the alpha channel threshold used
-    to extract the shape using an image. A value of 0.5 means that the
-    shape will enclose all the pixels that are more than 50% opaque.
-  </p>
-
-  <p>
-    For the purposes of SVG, this property applies to <a>'text'</a> elements.
-  </p>
-
-  <p class="note">
-    Except as noted, see the CSS Shapes Module Level 1 for the definition of
-    <a href="https://www.w3.org/TR/css-shapes/#shape-image-threshold-property">'shape-image-threshold'</a>.
-    [<a href="refs.html#ref-css-shapes-1">css-shapes-1</a>]
-  </p>
-
-<h3 id='TextShapeMargin'>The <span class="property">'shape-margin'</span> property</h3>
-
-  <p>
-    The <a>'shape-margin'</a> property adds a margin to a shape referenced with
-    <a>'shape-subtract'</a>. It defines
-    a new shape where every point is the specified distance from
-    the original shape. This property takes on positive values only.
-  </p>
-
-  <p class="issue" data-issue="77">Do nor re-specify shape-margin but reference CSS Shapes.</p>
-
-  <table class="propdef def">
-    <tr>
-      <th>Name:</th>
-      <td><dfn id="ShapeMarginProperty" data-dfn-type="property" data-export="">shape-margin</dfn></td>
-    </tr>
-    <tr>
-      <th>Value:</th>
-      <td><a>&lt;length-percentage&gt;</a></td>
-    </tr>
-    <tr>
-      <th>Initial:</th>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>Applies to:</th>
-      <td><a>'text'</a> elements</td>
-    </tr>
-    <tr>
-      <th>Inherited:</th>
-      <td>no</td>
-    </tr>
-    <tr>
-      <th>Percentages:</th>
-      <td>N/A</td>
-    </tr>
-    <tr>
-      <th>Media:</th>
-      <td>visual</td>
-    </tr>
-    <tr>
-      <th>Computed value:</th>
-      <td>an absolute length</td>
-    </tr>
-    <tr>
-      <th><a>Animation type</a>:</th>
-      <td>by computed value</td>
-    </tr>
-  </table>
-
-  <p class="note">
-    Except as noted, see the CSS Shapes Module Level 1 for the definition of
-    See <a href="https://www.w3.org/TR/css-shapes/#shape-margin-property">'shape-margin'</a>.
-    [<a href="refs.html#ref-css-shapes-1">css-shapes-1</a>]
-  </p>
-
-<h3 id='TextShapePadding'>The <span class="property">'shape-padding'</span> property</h3>
-
-  <p>
-    The <a>'shape-padding'</a> property can be used to offset the
-    inline flow content wrapping on the inside of elements. Offsets
-    created by the ‘wrap-padding’ property are offset from the content
-    area of the element. This property takes on positive values only.
-  </p>
-
-  <div class="example">
-    <p>An example of using <a>'shape-padding'</a></p>.
-
-    <pre><![CDATA[
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="300" height="300" viewBox="0 0 300 300">
-
-  <circle id="circle" cx="150" cy="150" r="125" fill="none" stroke="black"/>
-  <text style="shape-inside: url(#circle);
-	       shape-padding: 25px;
-	       font: 18px DejaVu Sans;
-	       text-align: justified;
-	       line-height: 110%;">This is an
-  example of wrapped text in SVG 2! There should
-  be 25 pixel padding around the text. The text is
-  justified on both sides. It looks good!</text>
-
-</svg>
-]]></pre>
-
-    <div class="figure">
-      <img class="bordered" src="images/text/text-shape-padding.png"
-           alt="Image showing horizontal text wrapped inside a circle with a padding."/>
-      <p class="caption">
-	Horizontal text wrapping inside a circle with
-	a <a>'shape-padding'</a>. The outer black circle shows
-	the <a>content area</a>. The inner blue circle shows
-	the <a>wrapping area</a>.
-      </p>
-    </div>
-    <p class="annotation">This image is a PNG. Figure out how to make a good SVG.
-      Note: Chrome supports 'textLength' on 'tspan' but Firefox does not.</p>
-  </div>
-
-  <p class="note">
-    Except as noted, see the CSS Shapes Module Level 2 for the definition of
-    <a href="http://dev.w3.org/csswg/css-shapes-2/#shape-padding-property">'shape-padding'</a>.
-  </p>
 
 <h2 id="TextLayoutAlgorithm">Text layout – Algorithm</h2>
 
@@ -2632,18 +2127,6 @@
   </p>
 
   <ul class='algorithm'>
-    <li>
-      For text where the <a>content area</a> is defined by the
-      <a>'shape-inside'</a> property, layout the text in one or more
-      areas per CSS rules for laying out text in a CSS <a>wrapping
-      area</a>.
-
-      <p class="note">
-	SVG allows the <a>'shape-inside'</a> property to reference
-	more than one shape. Each shape should be filled in turn until
-	there is no more text or no more shapes.
-      </p>
-    </li>
     <li>
       For text where the <a>content area</a> is defined by the
       <a>'inline-size'</a> property, layout the text in a CSS content
@@ -2736,12 +2219,6 @@
   </p>
 
   <ul>
-    <li>
-      For text where the <a>content area</a> is defined by the
-      <a>'shape-inside'</a> property, the <a>typographic
-      characters</a> are rendered with positions as returned from the
-      CSS-based text renderer.
-    </li>
     <li>
       For text where the <a>content area</a> is defined by the
       <a>'inline-size'</a> property, each <a>line box</a> is
@@ -3889,14 +3366,8 @@
   <p>
     Text is automatically wrapped when a <a>content area</a> is
     specified in the <a>'text'</a> element. The <a>content area</a>
-    defines the outermost container for wrapping text. A <a>wrapping
-    context</a> (set of exclusion areas) may also be given. The
-    actual <a>wrapping area</a> is defined by subtracting the
-    <a>wrapping context</a> from the <a>content area</a>. The
-    <a>wrapping context</a> may also be reduced by the value of the
-    <a>'shape-padding'</a> property. The effective area of an
-    exclusion may be enlarged by the value of the
-    <a>'shape-margin'</a> property.
+    defines the outermost container for wrapping text. The
+    <a>wrapping area</a> is the same as the <a>content area</a>.
   </p>
 
   <p>
@@ -3905,11 +3376,7 @@
     the <a>'tspan/x'</a> and <a>'tspan/y'</a> attributes
     corresponding to the first rendered
     <a>typographic character</a> define the initial <a>current
-    text position</a>. When the <a>content area</a> is inside
-    a <a>shape</a>, the initial <a>current text position</a> is
-    determined from the position of the first rendered <a>typographic
-    character</a> after laying out the first line box inside the
-    shape.
+    text position</a>.
   </p>
 
   <p>
