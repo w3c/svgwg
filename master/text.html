@@ -3561,8 +3561,17 @@
     <li><a>'xlink:href'</a> attribute</li>
   </ol>
   <p>
-    If the <a>'path'</a> attribute contains an error, the
-    <a>'href'</a> attribute must be used.
+    If the <a>'path'</a> attribute is specified but
+    the <a href="paths.html#PathDataBNF" class="syntax">path data</a>
+    results in no valid path segments (e.g., the value is an empty
+    string, or an error in the path data occurs before any
+    valid path segments are produced), then the
+    <a>'href'</a> attribute must be used instead.
+    If the <a>'path'</a> attribute contains valid path segments
+    before the first error, the path is used up to the error
+    following the rules in
+    <a href="paths.html#PathDataErrorHandling">Error handling in path data</a>,
+    and the <a>'href'</a> attribute is not used as a fallback.
   </p>
 
 <h3 id="TextPathAttributes">Attributes</h3>
@@ -3818,11 +3827,15 @@
       <p>A <a href="paths.html#PathDataBNF" class="syntax">path data</a>
         string describing the path onto which the <a>typographic characters</a>
 	will be rendered.
-        An empty string indicates that there is no path data for the element.
-        This means that the text within the <a>'textPath'</a> does not render or
-        contribute to the <a>bounding box</a> of the <a>'text'</a> element.
-        If the attribute is not specified,
+        If the attribute is not specified, or if the
+        <a href="paths.html#PathDataBNF" class="syntax">path data</a>
+        results in no valid path segments (e.g., the value is an empty
+        string or an error occurs before any valid path segments),
         the path specified with <a>'href'</a> is used instead.
+        If the path data contains an error but produces at least one valid
+        path segment before the error, the valid portion of the path
+        is used following the rules in
+        <a href="paths.html#PathDataErrorHandling">Error handling in path data</a>.
       </p>
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                  <dd><a href="paths.html#PathDataBNF" class="syntax">path data</a></dd>
