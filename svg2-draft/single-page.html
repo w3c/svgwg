@@ -19735,8 +19735,17 @@ interface <b>SVGPolygonElement</b> : <a class="idlinterface" href="#types-Interf
     <li><span class="attr-name">‘<a href="#linking-XLinkHrefAttribute"><span>xlink:href</span></a>’</span> attribute</li>
   </ol>
   <p>
-    If the <span class="attr-name">‘<a href="#text-TextPathElementPathAttribute"><span>path</span></a>’</span> attribute contains an error, the
-    <span class="attr-name">‘<a href="#text-TextPathElementHrefAttribute"><span>href</span></a>’</span> attribute must be used.
+    If the <span class="attr-name">‘<a href="#text-TextPathElementPathAttribute"><span>path</span></a>’</span> attribute is specified but
+    the <a href="#paths-PathDataBNF" class="syntax">path data</a>
+    results in no valid path segments (e.g., the value is an empty
+    string, or an error in the path data occurs before any
+    valid path segments are produced), then the
+    <span class="attr-name">‘<a href="#text-TextPathElementHrefAttribute"><span>href</span></a>’</span> attribute must be used instead.
+    If the <span class="attr-name">‘<a href="#text-TextPathElementPathAttribute"><span>path</span></a>’</span> attribute contains valid path segments
+    before the first error, the path is used up to the error
+    following the rules in
+    <a href="#paths-PathDataErrorHandling">Error handling in path data</a>,
+    and the <span class="attr-name">‘<a href="#text-TextPathElementHrefAttribute"><span>href</span></a>’</span> attribute is not used as a fallback.
   </p>
 
 <h3 id="text-TextPathAttributes" class="heading">11.8.2. Attributes<a class="self-link" href="#text-TextPathAttributes"></a></h3>
@@ -19984,11 +19993,15 @@ interface <b>SVGPolygonElement</b> : <a class="idlinterface" href="#types-Interf
       <p>A <a href="#paths-PathDataBNF" class="syntax">path data</a>
         string describing the path onto which the <a href="#text-TermTypographicCharacterUnit">typographic characters</a>
 	will be rendered.
-        An empty string indicates that there is no path data for the element.
-        This means that the text within the <span class="element-name">‘<a href="#text-TextPathElement"><span>textPath</span></a>’</span> does not render or
-        contribute to the <a href="#coords-TermBoundingBox">bounding box</a> of the <span class="element-name">‘<a href="#text-TextElement"><span>text</span></a>’</span> element.
-        If the attribute is not specified,
+        If the attribute is not specified, or if the
+        <a href="#paths-PathDataBNF" class="syntax">path data</a>
+        results in no valid path segments (e.g., the value is an empty
+        string or an error occurs before any valid path segments),
         the path specified with <span class="attr-name">‘<a href="#text-TextPathElementHrefAttribute"><span>href</span></a>’</span> is used instead.
+        If the path data contains an error but produces at least one valid
+        path segment before the error, the valid portion of the path
+        is used following the rules in
+        <a href="#paths-PathDataErrorHandling">Error handling in path data</a>.
       </p>
       <dl class="attrdef-svg2">
 	<dt>Value</dt>                  <dd><a href="#paths-PathDataBNF" class="syntax">path data</a></dd>
