@@ -5,7 +5,7 @@ local : index.bs
 	bikeshed -f spec index.bs
 
 online : index.bs
-	curl -s https://api.csswg.org/bikeshed/ -F file=@index.bs -F force=1 > index.html
+	curl -s https://www.w3.org/publications/spec-generator/ -F file=@index.bs -F type=bikeshed-spec -F die-on=nothing > index.html
 
 clean :
 	rm -f index.html
