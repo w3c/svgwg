@@ -117,6 +117,7 @@ function Config(filename) {
   this.title = text(root, 'title');
   this.shortTitle = text(root, 'short-title');
   this.maturity = text(root, 'maturity');
+  this.minimalreviewdate = text(root, 'minimal-review-date');
 
   this.usePublishDirectory = attr(root, 'output', 'use-publish-directory') == 'true';
   this.publishDirectory = attr(root, 'output', 'publish-directory');

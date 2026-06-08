@@ -672,6 +672,10 @@ function doCopyright(conf, page, n) {
                                { year: conf.publicationYear }));
 }
 
+function doReviewDate(conf, page, n) {
+  utils.replace(n, n.ownerDocument.createTextNode(conf.minimalreviewdate));
+}
+
 function doLocalLink(conf, page, n) {
   var href = utils.resolveURL(conf.thisVersion, n.getAttribute('href'));
   utils.replace(n, utils.parse('<a href="{{href}}">{{content}}</a>',
@@ -792,6 +796,12 @@ function doWhenPublished(conf, page, n) {
   }
 }
 
+function doWhenMaturity(conf, page, n) {
+  if (conf.maturity == n.getAttribute('maturity')) {
+    return utils.replaceWithChildren(n);
+  }
+}
+
 function doShortTitle(conf, page, n) {
   return utils.replace(n, n.ownerDocument.createTextNode(conf.shortTitle));
 }
@@ -820,6 +830,7 @@ var replacementFunctions = {
   previousversion: doPreviousVersion,
   history: doHistory,
   copyright: doCopyright,
+  minimalreviewdate: doReviewDate,
   locallink: doLocalLink,
   attributetable: doAttributeTable,
   elementindex: doElementIndex,
@@ -828,6 +839,7 @@ var replacementFunctions = {
   attributecategory: doAttributeCategory,
   elementswithattributecategory: doElementsWithAttributeCategory,
   whenpublished: doWhenPublished,
+  whenmaturity: doWhenMaturity,
   shorttitle: doShortTitle,
   script: doScript
 };
