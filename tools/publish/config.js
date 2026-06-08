@@ -117,6 +117,7 @@ function Config(filename) {
   this.title = text(root, 'title');
   this.shortTitle = text(root, 'short-title');
   this.maturity = text(root, 'maturity');
+  this.minimalreviewdate = text(root, 'minimal-review-date');
 
   this.usePublishDirectory = attr(root, 'output', 'use-publish-directory') == 'true';
   this.publishDirectory = attr(root, 'output', 'publish-directory');
@@ -134,7 +135,7 @@ function Config(filename) {
   var vers = this.versions = { };
 
   var versions = child(root, 'versions');
-  ['cvs', 'cvs-single', 'this', 'this-single', 'previous', 'latest', 'latestRec'].forEach(function(name) {
+  ['cvs', 'cvs-single', 'this', 'this-single', 'previous', 'latest', 'latestRec', 'historyURL'].forEach(function(name) {
     var key = name.replace(/-[a-z]/, function(s) { return s.substr(1).toUpperCase(); });
     vers[key] = attr(versions, name, 'href');
     if (vers[key]) {
@@ -250,6 +251,13 @@ Config.prototype = {
     var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     var d = this._publicationDate;
     return (d.getUTCDate() < 10 ? '0' : '') + d.getUTCDate() + ' ' + months[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+  },
+
+  get publicationDateISO() {
+    var d = this._publicationDate;
+    var month = d.getUTCMonth() + 1;
+    var day = d.getUTCDate();
+    return d.getUTCFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
   },
 
   get thisVersion() {

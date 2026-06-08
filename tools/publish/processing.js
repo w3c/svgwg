@@ -66,7 +66,7 @@ exports.insertStyleSheets = function(conf, page, doc) {
   if (conf.localStyleSheets) {
     href = 'style/' + href + '.css';
   } else {
-    href = '//www.w3.org/StyleSheets/TR/2016/' + href;
+    href = '//www.w3.org/StyleSheets/TR/2021/' + href;
     if (conf.maturity != 'ED') {
       href = 'https:' + href;
     }
@@ -114,7 +114,7 @@ exports.insertW3CScript = function(conf, page, doc) {
   if (conf.localStyleSheets) {
     doc.body.appendChild(utils.parse('<script src="style/fixup.js"></script>'));
   } else {
-    doc.body.appendChild(utils.parse('<script src="//www.w3.org/scripts/TR/2016/fixup.js"></script>'));
+    doc.body.appendChild(utils.parse('<script src="//www.w3.org/scripts/TR/2021/fixup.js"></script>'));
   }
 }
 
@@ -663,9 +663,17 @@ function doPreviousVersion(conf, page, n) {
   replaceWithURLLink(n, conf.maturity == 'ED' ? conf.versions.this : conf.versions.previous);
 }
 
+function doHistory(conf, page, n) {
+  replaceWithURLLink(n, conf.versions.historyURL);
+}
+
 function doCopyright(conf, page, n) {
-  utils.replace(n, utils.parse('<p class="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © {{year}} <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>). W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply.</p>',
+  utils.replace(n, utils.parse('<p class="copyright"><a href="https://www.w3.org/policies/#copyright">Copyright</a> © {{year}} <a href="https://www.w3.org/">World Wide Web Consortium</a>. <abbr title="World Wide Web Consortium">W3C</abbr><sup>®</sup> <a href="https://www.w3.org/policies/#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/policies/#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/copyright/software-license/">permissive document license</a> rules apply.</p>',
                                { year: conf.publicationYear }));
+}
+
+function doReviewDate(conf, page, n) {
+  utils.replace(n, n.ownerDocument.createTextNode(conf.minimalreviewdate));
 }
 
 function doLocalLink(conf, page, n) {
@@ -788,6 +796,12 @@ function doWhenPublished(conf, page, n) {
   }
 }
 
+function doWhenMaturity(conf, page, n) {
+  if (conf.maturity == n.getAttribute('maturity')) {
+    return utils.replaceWithChildren(n);
+  }
+}
+
 function doShortTitle(conf, page, n) {
   return utils.replace(n, n.ownerDocument.createTextNode(conf.shortTitle));
 }
@@ -814,7 +828,9 @@ var replacementFunctions = {
   latestversion: doLatestVersion,
   includelatesteditorsdraft: doIncludeLatestEditorsDraft,
   previousversion: doPreviousVersion,
+  history: doHistory,
   copyright: doCopyright,
+  minimalreviewdate: doReviewDate,
   locallink: doLocalLink,
   attributetable: doAttributeTable,
   elementindex: doElementIndex,
@@ -823,6 +839,7 @@ var replacementFunctions = {
   attributecategory: doAttributeCategory,
   elementswithattributecategory: doElementsWithAttributeCategory,
   whenpublished: doWhenPublished,
+  whenmaturity: doWhenMaturity,
   shorttitle: doShortTitle,
   script: doScript
 };
@@ -844,6 +861,21 @@ exports.processReplacements = function(conf, page, doc) {
       } else {
         return replacementFunctions[n.localName](conf, page, n);
       }
+    }
+    if (n.nodeType == n.ELEMENT_NODE) {
+      var substitutions = { maturity: conf.maturity, date: conf.publicationDateISO, latest: conf.versions.latest };
+      var editAttrs = [];
+      for (var i = 0; i < n.attributes.length; i++) {
+        if (n.attributes[i].namespaceURI == namespaces.edit) {
+          editAttrs.push(n.attributes[i]);
+        }
+      }
+      editAttrs.forEach(function(attr) {
+        n.setAttribute(attr.localName, attr.value.replace(/\{\{(\w+)\}\}/g, function(_, key) {
+          return key in substitutions ? substitutions[key] : _;
+        }));
+        n.removeAttributeNS(namespaces.edit, attr.localName);
+      });
     }
   });
 };
