@@ -866,7 +866,7 @@ exports.processReplacements = function(conf, page, doc) {
       var substitutions = { maturity: conf.maturity, date: conf.publicationDateISO, latest: conf.versions.latest };
       var editAttrs = [];
       for (var i = 0; i < n.attributes.length; i++) {
-        if (n.attributes[i].namespaceURI == namespaces.edit) {
+        if (n.attributes[i].namespaceURI == namespaces.edit && !n.hasAttribute("edit:excludefromidl")) {
           editAttrs.push(n.attributes[i]);
         }
       }
