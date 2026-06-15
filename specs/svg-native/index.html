@@ -1,9 +1,15 @@
-<!doctype html><html>
+<!doctype html><html lang="en">
  <head>
-  <meta content="Bikeshed version e74aa0952, updated Fri Jun 5 23:16:28 2026 +0000" name="generator">
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+  <title>SVG Native</title>
+  <meta content="ED" name="w3c-status">
+  <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
+  <meta content="Bikeshed version d113b2e81, updated Tue Jun 9 14:57:55 2026 -0700" name="generator">
   <link href="https://www.w3.org/TR/svg-native" rel="canonical">
   <meta content="0793d0e033ec40f70be43be30f4868bf0cd0d532" name="revision">
   <meta content="dark light" name="color-scheme">
+  <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
@@ -566,217 +572,403 @@ a.self-link::before            { content: "¶"; }
 .heading > a.self-link::before { content: "§"; }
 dfn > a.self-link::before      { content: "#"; }
 </style>
- <body>
-  <p boilerplate="copyright">
+ <body class="h-entry">
+  <div class="head">
+   <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/">
+    <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72">
+</a>
+</p>
+   <h1 class="no-ref p-name" id="title">SVG Native</h1>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types/#ED">Editor’s Draft</a>,
+    <time class="dt-updated" datetime="2026-06-15">15 June 2026</time></p>
+   <details open>
+    <summary>More details about this document</summary>
+    <div data-fill-with="spec-metadata">
+     <dl>
+      <dt>This version:
+      <dd><a class="u-url" href="https://www.w3.org/TR/svg-native">http://www.w3.org/TR/svg-native</a>
+      <dt>Feedback:
+      <dd><span><a href="mailto:www-svg@w3.org?subject=%5Bsvg-native%5D%20YOUR%20TOPIC%20HERE">www-svg@w3.org</a> with subject line “<kbd>[svg-native] <i data-lt>… message topic …</i></kbd>” (<a href="http://lists.w3.org/Archives/Public/www-svg/" rel="discussion">archives</a>)</span>
+      <dt>Issue Tracking:
+      <dd><a href="#issues-index">Inline In Spec</a>
+      <dt class="editor">Editors:
+      <dd class="editor h-card p-author vcard"><a class="email fn p-name u-email" href="mailto:mmaxfield@apple.com">Myles C. Maxfield</a> (<a class="org p-org" href="https://apple.com">Apple Inc</a>)
+      <dd class="editor h-card p-author vcard"><a class="email fn p-name u-email" href="mailto:sppatel@adobe.com">Sairus Patel</a> (<a class="org p-org" href="https://adobe.com">Adobe</a>)
+     </dl>
+    </div>
+   </details>
+   <div data-fill-with="warning"></div>
+   <p class="copyright" data-fill-with="copyright">
 <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2019 <a href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="http://www.keio.ac.jp/">Keio</a>, <a href="https://ev.buaa.edu.cn/">Beihang</a>). W3C <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply. This document includes material copied from or derived from the <a href="https://www.w3.org/TR/SVG2/">Scalable Vector Graphics (SVG) 2.0 Specification</a>. Copyright 2018 W3C® (MIT, ERCIM, Keio, Beihang). It is subject to the <a href="https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document">W3C Software Document Notice and License</a>.
 </p>
-  <h2 class="heading settled" data-level="1" id="intro"><span class="secno">1. </span><span class="content">Introduction</span><a class="self-link" href="#intro"></a></h2>
-  <p><em>This section is non-normative</em></p>
-  <p>SVG Native is a profile of SVG designed with the requirements of native apps. The environment native apps run in is different than the environment of Web browsers in a few fundamental ways:</p>
-  <ol>
-   <li data-md>
-    <p><b>Security</b>: Web content is usually sandboxed, and has only a fraction of the capabilities that a native app has. One of the reasons for this sandboxing is to mitigate security risks that SVG content may contain. However, native apps are usually either not sandboxed or have a more permissive sandbox than Web content. Therefore, code that runs in a native app must be held to a higher standard of security.</p>
-   <li data-md>
-    <p><b>Performance</b>: Web content is usually run in a separate process, which means the performace of that process has only an indirect affect on the performance of the entire app. If this separate process stalls, the entire app can continue and gracefully degrade behavior. However, native code runs in the app’s process, which requires more stringent performance targets.</p>
-  </ol>
-  <p>SVG Native aims to adhere to the native app environment by meeting the above requirements.</p>
-  <p>SVG Native also has one additional goal:</p>
-  <ol start="3">
-   <li data-md>
-    <p><b>Ubiquity</b>: SVG Native should be implementable as a system component on any modern computing environment. This means it should be small, lightweight, and only have few dependencies. The dependencies it does have should be standard components that already exist in most computing environments.</p>
-  </ol>
-  <p>To meet these goals, SVG Native is a subset of SVG 1.1, which removes animation, interactivity, linking, remote resource loading, scripting, and CSS (among others).</p>
-  <h3 class="heading settled" data-level="1.1" id="usecases"><span class="secno">1.1. </span><span class="content">Use Cases</span><a class="self-link" href="#usecases"></a></h3>
-  <p><em>This section is non-normative</em></p>
-  <p>SVG Native is designed to fit a number of use cases.</p>
-  <ol>
-   <li data-md>
-    <p><b>Icons</b>: Icons are often small vector graphics containing few graphical elements.</p>
-   <li data-md>
-    <p><b>Emoji</b>: Emoji are often represented as small vector graphics.</p>
-   <li data-md>
-    <p><b>Color Fonts</b>: Each glyph in a font is represented as a series of vector contours. Color fonts allow the glyphs to include color, in addition to their contours.</p>
-   <li data-md>
-    <p><b>Drawings and sketches</b>: Drawings and sketches may be created with vector artwork tools. Depending on the complexity of the artwork, representing it using a series of vector drawing elements may result in a smaller file size than a raster format such as <a data-link-type="biblio" href="#biblio-png" title="Portable Network Graphics (PNG) Specification (Third Edition)">[PNG]</a>. Drawings and sketches often need to be viewed outside of the Web platform.</p>
-  </ol>
-  <h3 class="heading settled" data-level="1.2" id="basics"><span class="secno">1.2. </span><span class="content">Basics</span><a class="self-link" href="#basics"></a></h3>
-  <p>SVG Native is presented as a series of modifications of the <a href="https://w3c.github.io/svgwg/svg2-draft/conform.html#secure-static-mode">Secure Static Mode</a> of <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a>. These modifications are applied as differences from that specification. Rather than being a strict line-by-line diff, this specification describes the differences directly.</p>
-  <p>If functionality present in <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a> isn’t present in the SVG Native specification, SVG Native includes that functionality.</p>
-  <p>There are numerous differences between the SVG Native format and the <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a> format. Currently, all differences are reductive; all functionality in SVG Native is also present in <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a>. A conforming SVG Native document must only include functionality present in the SVG Native format. A conforming SVG Native renderer should ignore any functionality requested by a document that is not present in the SVG Native format. If a SVG Native renderer intentionally chooses to honor functionality beyond the SVG Native specification, it must do so in accordance with the <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a> specification. There are a few exceptions to this throughout this specification below, where an SVG Native renderer must not include some functionality from <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a>.</p>
-  <p class="note" role="note"><span class="marker">Note:</span> If a document uses parts of SVG that aren’t part of SVG Native, then it isn’t a conformant SVG Native document. When an SVG Native renderer opens such a file, it should ignore all of those parts. Therefore, all SVG Native renderers should produce the same rendering for the same document. However, there may be renderers which intentionally decide to honor parts of SVG that aren’t part of SVG Native. In order to make it more likely that a given document’s rendering is predictable, even in these renderers, SVG Native authoring tools are recommended to always emit documents that conform to this specification. The SVG Working Group is considering producing a validator to determine whether a given document is conformant to the SVG Native format.</p>
-  <p class="issue" id="issue-7110f720"><a class="self-link" href="#issue-7110f720"></a> The file type and mime type is being discussed in <a href="https://github.com/w3c/svgwg/issues/664">this GitHub issue</a>.</p>
-  <p>SVG Native is a standalone file type, expected to be rendered with a dedicated-purpose renderer. Therefore, SVG Native content must not be present as part of a larger XML (or HTML) document. If it is present as part of a larger XML (or HTML) document, the content should be interpreted as SVG proper.</p>
-  <p class="note" role="note"><span class="marker">Note:</span> This means that browsers encounting a SVG Native root element within the DOM must not interpret it as SVG Native, even if it has the <u class="link-error property" data-lt="baseAttribute" title="LINK ERROR: No &apos;property&apos; refs found for &apos;baseattribute&apos;.">baseAttribute</u> attribute set to <code>native</code>. If a Web author desires to use SVG Native on the Web, the <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/embedded-content.html#the-img-element" id="ref-for-the-img-element">img</a></code> element may be used instead. This matches other native image formats such as <a data-link-type="biblio" href="#biblio-png" title="Portable Network Graphics (PNG) Specification (Third Edition)">[PNG]</a>. A Web browser should implement SVG Native by linking with the system’s SVG Native facilities. This matches the implementation of other native image formats.</p>
-  <p>The root element of an SVG Native document must have the <u class="link-error property" data-lt="baseAttribute" title="LINK ERROR: No &apos;property&apos; refs found for &apos;baseattribute&apos;.">baseAttribute</u> attribute set to <code>native</code> and the <u class="link-error property" data-lt="version" title="LINK ERROR: No &apos;property&apos; refs found for &apos;version&apos;.">version</u> attribute set to <code>1.1</code>.</p>
-  <p>The file extension for SVG Native is <code>.svn</code>. The UTI for SVG Native is <code>public.svg.native</code>. The MIME type for SVG Native is <code>image/svgnative+xml</code>.</p>
-  <p>User agents may limit the reference depth of references to implementation-dependent maximas. However, this limit must be greater than or equal to 1 reference.</p>
-  <p>XSL Processing is not supported by SVG Native.</p>
-  <p>No namespaces other than <a href="https://www.w3.org/TR/xlink11/">xlink</a> are supported inside an SVG Native document. From the xlink namespace, only <u class="link-error property" data-lt="href" title="LINK ERROR: No &apos;property&apos; refs found for &apos;href&apos;.">href</u> is supported.</p>
-  <p>A valid SVG Native document must not contain any of the external or internal XML DTD subset.</p>
-  <h3 class="heading settled" data-level="1.3" id="commonattributes"><span class="secno">1.3. </span><span class="content">Common Attributes</span><a class="self-link" href="#commonattributes"></a></h3>
-  <p>SVG 2.0 defines sets of common attributes wich might apply to multiple elements. These sets of attributes are not supported by SVG Native:</p>
-  <ul>
-   <li data-md>
-    <p>aria attributes</p>
-   <li data-md>
-    <p>conditional processing attributes</p>
-   <li data-md>
-    <p>all core attributes except for <u class="link-error property" data-lt="id" title="LINK ERROR: No &apos;property&apos; refs found for &apos;id&apos;.">id</u></p>
-   <li data-md>
-    <p>global event attributes</p>
-   <li data-md>
-    <p>document element event attributes</p>
-   <li data-md>
-    <p>graphical event attributes</p>
-   <li data-md>
-    <p>deprecated xlink attributes except for 'xlink:href'</p>
-   <li data-md>
-    <p><u class="link-error property" data-lt="crossorigin" title="LINK ERROR: No &apos;property&apos; refs found for &apos;crossorigin&apos;.">crossorigin</u></p>
-  </ul>
-  <h3 class="heading settled" data-level="1.4" id="modules"><span class="secno">1.4. </span><span class="content">SVG Modules</span><a class="self-link" href="#modules"></a></h3>
-  <p>SVG Native is a subset of the content in the <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a> specification, and some associated modules. They are:</p>
-  <ul>
-   <li data-md>
-    <p><a href="https://www.w3.org/TR/2018/REC-css-color-3-20180619/">CSS Color</a></p>
-   <li data-md>
-    <p><a href="https://www.w3.org/TR/css-values-3/">CSS Values and Units</a></p>
-   <li data-md>
-    <p><a href="https://www.w3.org/TR/css-masking-1/">CSS Masking</a></p>
-  </ul>
-  <p>No other SVG modules are supported by SVG Native. This includes:</p>
-  <ul>
-   <li data-md>
-    <p><a href="https://www.w3.org/TR/filter-effects-1/">CSS Filter Effects</a></p>
-   <li data-md>
-    <p><a href="https://w3c.github.io/svgwg/specs/animations/">SVG Animations</a></p>
-  </ul>
-  <h2 class="heading settled" data-level="2" id="render"><span class="secno">2. </span><span class="content">Rendering Model</span><a class="self-link" href="#render"></a></h2>
-  <p>SVG Native does not support masking.</p>
-  <p>The following attributes are not supported by SVG Native:</p>
-  <ul>
-   <li data-md>
-    <p><u class="link-error property" data-lt="clipPathUnits" title="LINK ERROR: No &apos;property&apos; refs found for &apos;clippathunits&apos;.">clipPathUnits</u></p>
-   <li data-md>
-    <p><a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-masking-1/#propdef-clip" id="ref-for-propdef-clip">clip</a></p>
-  </ul>
-  <p>The <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-backgrounds-3/#valdef-background-attachment-scroll" id="ref-for-valdef-background-attachment-scroll">scroll</a> value on the <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-overflow-3/#propdef-overflow" id="ref-for-propdef-overflow">overflow</a> property behaves identically to <u class="link-error property" data-lt="hidden" title="LINK ERROR: No &apos;property&apos; refs found for &apos;hidden&apos;.">hidden</u>.</p>
-  <p>The <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-masking-1/#propdef-clip-path" id="ref-for-propdef-clip-path">clip-path</a> attribute is not supported on a <code><a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#elementdef-clippath" id="ref-for-elementdef-clippath">clipPath</a></code> element.</p>
-  <p>Every <code><a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#elementdef-clippath" id="ref-for-elementdef-clippath①">clipPath</a></code> element must have either exactly zero or exactly one child. Anything more than that is not supported by SVG Native.</p>
-  <p>The <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-backgrounds-3/#valdef-background-attachment-scroll" id="ref-for-valdef-background-attachment-scroll①">scroll</a> and the <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/animation-triggers-1/#valdef-timeline-trigger-active-range-auto" id="ref-for-valdef-timeline-trigger-active-range-auto">auto</a> values of the <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-overflow-3/#propdef-overflow" id="ref-for-propdef-overflow①">overflow</a> property are not supported by SVG Native.</p>
-  <h2 class="heading settled" data-level="3" id="struct"><span class="secno">3. </span><span class="content">Document Structure</span><a class="self-link" href="#struct"></a></h2>
-  <p>The root element must be an <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-svg" id="ref-for-elementdef-svg">svg</a></code> element, and all other <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-svg" id="ref-for-elementdef-svg①">svg</a></code> elements are not supported by SVG Native.</p>
-  <p>Conditional processesing attributes and elements are not supported in SVG Native. These include the <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-switch" id="ref-for-elementdef-switch">switch</a></code> element.</p>
-  <p>The <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/semantics.html#meta" id="ref-for-meta">meta</a></code> and <code><a data-link-type="element" href="https://w3c.github.io/epub-specs/epub33/core/#dfn-metadata" id="ref-for-dfn-metadata">metadata</a></code> elements are not supported in SVG Native.</p>
-  <p>Elements in foreign namespaces are not supported in SVG Native. Attributes in foreign namespaces, except the xlink (<code>http://www.w3.org/1999/xlink</code>) namespace, are not supported in SVG Native.</p>
-  <p>Because SVG Native is a subset of <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a>’s Secure Static mode, only <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/embedded.html#elementdef-image" id="ref-for-elementdef-image">image</a></code> elements which contain base64-encoded <code>data:</code> URLs of <a data-link-type="biblio" href="#biblio-jpeg" title="JPEG File Interchange Format">[JPEG]</a> or <a data-link-type="biblio" href="#biblio-png" title="Portable Network Graphics (PNG) Specification (Third Edition)">[PNG]</a> images are supported. <a data-link-type="biblio" href="#biblio-apng" title="APNG Specification">[APNG]</a> images are be rendered without animation, using standard backward-compatibility with static <a data-link-type="biblio" href="#biblio-png" title="Portable Network Graphics (PNG) Specification (Third Edition)">[PNG]</a> images. No other image format is supported by SVG Native.</p>
-  <p>All external resource loading is forbidden.</p>
-  <p>The <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-symbol" id="ref-for-elementdef-symbol">symbol</a></code> element is not supported by SVG Native.</p>
-  <h2 class="heading settled" data-level="4" id="styling"><span class="secno">4. </span><span class="content">Styling</span><a class="self-link" href="#styling"></a></h2>
-  <p>The <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/semantics.html#the-style-element" id="ref-for-the-style-element">style</a></code> element and the <u class="link-error property" data-lt="style" title="LINK ERROR: No &apos;property&apos; refs found for &apos;style&apos;.">style</u> attribute are not supported in SVG Native.</p>
-  <p class="note" role="note"><span class="marker">Note:</span> Style properties can be set by presentation attributes, which must be parsed and processed according to the SVG and CSS specifications, other than the specific restrictions outlined in this section.</p>
-  <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#funcdef-calc" id="ref-for-funcdef-calc">calc()</a> is not supported by SVG Native.</p>
-  <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-conditional-5/#funcdef-supports-env" id="ref-for-funcdef-supports-env">env()</a> and <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-variables-2/#funcdef-var" id="ref-for-funcdef-var">var()</a> are supported by SVG Native.</p>
-  <p class="note" role="note"><span class="marker">Note:</span> Because of the other restrictions on styling, there is no way to set new values to CSS custom properties inside an SVG Native document. However, some rendering environments (e.g., for SVG fonts) will expose custom property values from an external document, as if they were inherited by the root element of the SVG Native document; the `var()` function can therefore be used similar to the `env()` function, to access this value if it exists and set a fallback value if it doesn’t.</p>
-  <p>The CSS <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-cascade-5/#propdef-all" id="ref-for-propdef-all">all</a> property is not supported by SVG Native.</p>
-  <p>All the global CSS keywords are not supported by SVG Native. These include:</p>
-  <ol>
-   <li data-md>
-    <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-cascade-5/#valdef-all-initial" id="ref-for-valdef-all-initial">initial</a></p>
-   <li data-md>
-    <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-cascade-5/#valdef-all-inherit" id="ref-for-valdef-all-inherit">inherit</a></p>
-   <li data-md>
-    <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-cascade-5/#valdef-all-unset" id="ref-for-valdef-all-unset">unset</a></p>
-   <li data-md>
-    <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-cascade-5/#valdef-all-revert" id="ref-for-valdef-all-revert">revert</a></p>
-  </ol>
-  <p>Percentage length values are not supported by SVG Native.</p>
-  <p><u class="link-error" data-lt="relative length" title="LINK ERROR: No &apos;dfn&apos; refs found for &apos;relative length&apos; that are marked for export.
+   <hr title="Separator for header">
+  </div>
+  <div class="p-summary" data-fill-with="abstract">
+   <h2 class="heading no-num no-ref no-toc settled" id="abstract"><span class="content">Abstract</span></h2>
+   <p>SVG Native is a profile of SVG 1.1 designed for interoperability with native apps and system libraries that execute outside the Web environment, and thus cannot rely on features such as linking, interactivity, animation, or the Web security model.</p>
+  </div>
+  <h2 class="heading no-num no-ref no-toc settled" id="sotd"><span class="content">Status of this document</span></h2>
+  <div data-fill-with="status">
+   <p>
+	<em>This section describes the status of this document at the time of
+	its publication. A list of
+	current W3C publications and the latest revision of this technical report
+	can be found in the <a href="https://www.w3.org/TR/">W3C technical reports
+	index at http://www.w3.org/TR/.</a></em>
+
+</p>
+   <p>
+	This document is the 15 June 2026 <strong>Editor’s Draft</strong> of SVG Native. 
+
+</p>
+   <p>
+	Comments on this Editor’s Draft are welcome. Comments can be sent to
+	<a href="mailto:www-svg@w3.org?Subject=%5Bsvg-native%5D%20PUT%20SUBJECT%20HERE">www-svg@w3.org</a>,
+	the public email list for issues related to vector graphics on the Web. This list is
+	<a href="http://lists.w3.org/Archives/Public/www-svg/">archived</a> and senders must agree to have their message
+	publicly archived from their first posting. To subscribe send an email to
+	<a href="mailto:www-svg-request@w3.org?Subject=subscribe">www-svg-request@w3.org</a> with the word <code>subscribe</code>
+	in the subject line.
+
+</p>
+   <p>
+	This document has been produced by the <a href="https://www.w3.org/groups/wg/svg">SVG Working Group</a> as part of the
+	<a href="https://www.w3.org/Graphics/Activity">Graphics Activity</a> within the
+	<a href="https://www.w3.org/Interaction/">W3C Interaction Domain</a>. The goals of the W3C SVG Working Group are discussed in the
+	<a href="https://www.w3.org/2007/11/SVG_rechartering/SVG-WG-charter.html">W3C SVG Charter</a>. The W3C SVG Working Group maintains a
+	public Web page, <a href="https://www.w3.org/Graphics/SVG/">http://www.w3.org/Graphics/SVG/</a>, that contains further
+	background information. The authors of this document are the SVG Working Group participants.
+
+</p>
+   <p>
+	This document was produced by a group operating under
+	the <a href="https://www.w3.org/Consortium/Patent-Policy/">W3C Patent Policy</a>.
+	W3C maintains a <a href="https://www.w3.org/2004/01/pp-impl/19480/status" rel="disclosure">public list of any patent disclosures</a>
+	made in connection with the deliverables of each group;
+	these pages also includes instructions for disclosing a patent.
+	An individual who has actual knowledge of a patent that the individual believes contains
+	<a href="https://www.w3.org/Consortium/Patent-Policy/#def-essential">Essential Claim(s)</a>
+	must disclose the information in accordance with <a href="https://www.w3.org/Consortium/Patent-Policy/#sec-Disclosure">section 6 of the W3C Patent Policy</a>.
+
+</p>
+   <p>
+	A list of current W3C Recommendations and other technical documents can be found at
+	<a href="https://www.w3.org/TR/">http://www.w3.org/TR/</a>. W3C publications may be updated, replaced, or
+	obsoleted by other documents at any time.
+
+</p>
+   <p></p>
+  </div>
+  <div data-fill-with="at-risk"></div>
+  <nav data-fill-with="table-of-contents" id="toc">
+   <h2 class="no-num no-ref no-toc" id="contents">Table of Contents</h2>
+   <ol class="toc">
+    <li>
+     <a href="#intro"><span class="secno">1</span> <span class="content">Introduction</span></a>
+     <ol class="toc">
+      <li><a href="#usecases"><span class="secno">1.1</span> <span class="content">Use Cases</span></a>
+      <li><a href="#basics"><span class="secno">1.2</span> <span class="content">Basics</span></a>
+      <li><a href="#commonattributes"><span class="secno">1.3</span> <span class="content">Common Attributes</span></a>
+      <li><a href="#modules"><span class="secno">1.4</span> <span class="content">SVG Modules</span></a>
+     </ol>
+    <li><a href="#render"><span class="secno">2</span> <span class="content">Rendering Model</span></a>
+    <li><a href="#struct"><span class="secno">3</span> <span class="content">Document Structure</span></a>
+    <li><a href="#styling"><span class="secno">4</span> <span class="content">Styling</span></a>
+    <li><a href="#geometryproperties"><span class="secno">5</span> <span class="content">Geometry Properties</span></a>
+    <li><a href="#coords"><span class="secno">6</span> <span class="content">Coordinate Systems, Transformations, and Units</span></a>
+    <li><a href="#paths"><span class="secno">7</span> <span class="content">Paths</span></a>
+    <li><a href="#text"><span class="secno">8</span> <span class="content">Text</span></a>
+    <li><a href="#embedded"><span class="secno">9</span> <span class="content">Embedded Content</span></a>
+    <li><a href="#painting"><span class="secno">10</span> <span class="content">Painting: Filling, Stroking, and Marker Symbols</span></a>
+    <li><a href="#pservers"><span class="secno">11</span> <span class="content">Gradients and Patterns</span></a>
+    <li><a href="#interact"><span class="secno">12</span> <span class="content">Scripting and Interactivity</span></a>
+    <li><a href="#linking"><span class="secno">13</span> <span class="content">Linking</span></a>
+    <li>
+     <a href="#w3c-conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
+     <ol class="toc">
+      <li><a href="#w3c-conventions"><span class="secno"></span> <span class="content">Document conventions</span></a>
+      <li><a href="#w3c-conformant-algorithms"><span class="secno"></span> <span class="content">Conformant Algorithms</span></a>
+     </ol>
+    <li>
+     <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
+     <ol class="toc">
+      <li><a href="#index-defined-elsewhere"><span class="secno"></span> <span class="content">Terms defined by reference</span></a>
+     </ol>
+    <li>
+     <a href="#references"><span class="secno"></span> <span class="content">References</span></a>
+     <ol class="toc">
+      <li><a href="#normative"><span class="secno"></span> <span class="content">Normative References</span></a>
+      <li><a href="#informative"><span class="secno"></span> <span class="content">Non-Normative References</span></a>
+     </ol>
+    <li><a href="#issues-index"><span class="secno"></span> <span class="content">Issues Index</span></a>
+   </ol>
+  </nav>
+  <main>
+   <h2 class="heading settled" data-level="1" id="intro"><span class="secno">1. </span><span class="content">Introduction</span><a class="self-link" href="#intro"></a></h2>
+   <p><em>This section is non-normative</em></p>
+   <p>SVG Native is a profile of SVG designed with the requirements of native apps. The environment native apps run in is different than the environment of Web browsers in a few fundamental ways:</p>
+   <ol>
+    <li data-md>
+     <p><b>Security</b>: Web content is usually sandboxed, and has only a fraction of the capabilities that a native app has. One of the reasons for this sandboxing is to mitigate security risks that SVG content may contain. However, native apps are usually either not sandboxed or have a more permissive sandbox than Web content. Therefore, code that runs in a native app must be held to a higher standard of security.</p>
+    <li data-md>
+     <p><b>Performance</b>: Web content is usually run in a separate process, which means the performace of that process has only an indirect affect on the performance of the entire app. If this separate process stalls, the entire app can continue and gracefully degrade behavior. However, native code runs in the app’s process, which requires more stringent performance targets.</p>
+   </ol>
+   <p>SVG Native aims to adhere to the native app environment by meeting the above requirements.</p>
+   <p>SVG Native also has one additional goal:</p>
+   <ol start="3">
+    <li data-md>
+     <p><b>Ubiquity</b>: SVG Native should be implementable as a system component on any modern computing environment. This means it should be small, lightweight, and only have few dependencies. The dependencies it does have should be standard components that already exist in most computing environments.</p>
+   </ol>
+   <p>To meet these goals, SVG Native is a subset of SVG 1.1, which removes animation, interactivity, linking, remote resource loading, scripting, and CSS (among others).</p>
+   <h3 class="heading settled" data-level="1.1" id="usecases"><span class="secno">1.1. </span><span class="content">Use Cases</span><a class="self-link" href="#usecases"></a></h3>
+   <p><em>This section is non-normative</em></p>
+   <p>SVG Native is designed to fit a number of use cases.</p>
+   <ol>
+    <li data-md>
+     <p><b>Icons</b>: Icons are often small vector graphics containing few graphical elements.</p>
+    <li data-md>
+     <p><b>Emoji</b>: Emoji are often represented as small vector graphics.</p>
+    <li data-md>
+     <p><b>Color Fonts</b>: Each glyph in a font is represented as a series of vector contours. Color fonts allow the glyphs to include color, in addition to their contours.</p>
+    <li data-md>
+     <p><b>Drawings and sketches</b>: Drawings and sketches may be created with vector artwork tools. Depending on the complexity of the artwork, representing it using a series of vector drawing elements may result in a smaller file size than a raster format such as <a data-link-type="biblio" href="#biblio-png" title="Portable Network Graphics (PNG) Specification (Third Edition)">[PNG]</a>. Drawings and sketches often need to be viewed outside of the Web platform.</p>
+   </ol>
+   <h3 class="heading settled" data-level="1.2" id="basics"><span class="secno">1.2. </span><span class="content">Basics</span><a class="self-link" href="#basics"></a></h3>
+   <p>SVG Native is presented as a series of modifications of the <a href="https://w3c.github.io/svgwg/svg2-draft/conform.html#secure-static-mode">Secure Static Mode</a> of <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a>. These modifications are applied as differences from that specification. Rather than being a strict line-by-line diff, this specification describes the differences directly.</p>
+   <p>If functionality present in <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a> isn’t present in the SVG Native specification, SVG Native includes that functionality.</p>
+   <p>There are numerous differences between the SVG Native format and the <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a> format. Currently, all differences are reductive; all functionality in SVG Native is also present in <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a>. A conforming SVG Native document must only include functionality present in the SVG Native format. A conforming SVG Native renderer should ignore any functionality requested by a document that is not present in the SVG Native format. If a SVG Native renderer intentionally chooses to honor functionality beyond the SVG Native specification, it must do so in accordance with the <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a> specification. There are a few exceptions to this throughout this specification below, where an SVG Native renderer must not include some functionality from <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a>.</p>
+   <p class="note" role="note"><span class="marker">Note:</span> If a document uses parts of SVG that aren’t part of SVG Native, then it isn’t a conformant SVG Native document. When an SVG Native renderer opens such a file, it should ignore all of those parts. Therefore, all SVG Native renderers should produce the same rendering for the same document. However, there may be renderers which intentionally decide to honor parts of SVG that aren’t part of SVG Native. In order to make it more likely that a given document’s rendering is predictable, even in these renderers, SVG Native authoring tools are recommended to always emit documents that conform to this specification. The SVG Working Group is considering producing a validator to determine whether a given document is conformant to the SVG Native format.</p>
+   <p class="issue" id="issue-7110f720"><a class="self-link" href="#issue-7110f720"></a> The file type and mime type is being discussed in <a href="https://github.com/w3c/svgwg/issues/664">this GitHub issue</a>.</p>
+   <p>SVG Native is a standalone file type, expected to be rendered with a dedicated-purpose renderer. Therefore, SVG Native content must not be present as part of a larger XML (or HTML) document. If it is present as part of a larger XML (or HTML) document, the content should be interpreted as SVG proper.</p>
+   <p class="note" role="note"><span class="marker">Note:</span> This means that browsers encounting a SVG Native root element within the DOM must not interpret it as SVG Native, even if it has the <u class="link-error property" data-lt="baseAttribute" title="LINK ERROR: No &apos;property&apos; refs found for &apos;baseattribute&apos;.">baseAttribute</u> attribute set to <code>native</code>. If a Web author desires to use SVG Native on the Web, the <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/embedded-content.html#the-img-element" id="ref-for-the-img-element">img</a></code> element may be used instead. This matches other native image formats such as <a data-link-type="biblio" href="#biblio-png" title="Portable Network Graphics (PNG) Specification (Third Edition)">[PNG]</a>. A Web browser should implement SVG Native by linking with the system’s SVG Native facilities. This matches the implementation of other native image formats.</p>
+   <p>The root element of an SVG Native document must have the <u class="link-error property" data-lt="baseAttribute" title="LINK ERROR: No &apos;property&apos; refs found for &apos;baseattribute&apos;.">baseAttribute</u> attribute set to <code>native</code> and the <u class="link-error property" data-lt="version" title="LINK ERROR: No &apos;property&apos; refs found for &apos;version&apos;.">version</u> attribute set to <code>1.1</code>.</p>
+   <p>The file extension for SVG Native is <code>.svn</code>. The UTI for SVG Native is <code>public.svg.native</code>. The MIME type for SVG Native is <code>image/svgnative+xml</code>.</p>
+   <p>User agents may limit the reference depth of references to implementation-dependent maximas. However, this limit must be greater than or equal to 1 reference.</p>
+   <p>XSL Processing is not supported by SVG Native.</p>
+   <p>No namespaces other than <a href="https://www.w3.org/TR/xlink11/">xlink</a> are supported inside an SVG Native document. From the xlink namespace, only <u class="link-error property" data-lt="href" title="LINK ERROR: No &apos;property&apos; refs found for &apos;href&apos;.">href</u> is supported.</p>
+   <p>A valid SVG Native document must not contain any of the external or internal XML DTD subset.</p>
+   <h3 class="heading settled" data-level="1.3" id="commonattributes"><span class="secno">1.3. </span><span class="content">Common Attributes</span><a class="self-link" href="#commonattributes"></a></h3>
+   <p>SVG 2.0 defines sets of common attributes wich might apply to multiple elements. These sets of attributes are not supported by SVG Native:</p>
+   <ul>
+    <li data-md>
+     <p>aria attributes</p>
+    <li data-md>
+     <p>conditional processing attributes</p>
+    <li data-md>
+     <p>all core attributes except for <u class="link-error property" data-lt="id" title="LINK ERROR: No &apos;property&apos; refs found for &apos;id&apos;.">id</u></p>
+    <li data-md>
+     <p>global event attributes</p>
+    <li data-md>
+     <p>document element event attributes</p>
+    <li data-md>
+     <p>graphical event attributes</p>
+    <li data-md>
+     <p>deprecated xlink attributes except for 'xlink:href'</p>
+    <li data-md>
+     <p><u class="link-error property" data-lt="crossorigin" title="LINK ERROR: No &apos;property&apos; refs found for &apos;crossorigin&apos;.">crossorigin</u></p>
+   </ul>
+   <h3 class="heading settled" data-level="1.4" id="modules"><span class="secno">1.4. </span><span class="content">SVG Modules</span><a class="self-link" href="#modules"></a></h3>
+   <p>SVG Native is a subset of the content in the <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a> specification, and some associated modules. They are:</p>
+   <ul>
+    <li data-md>
+     <p><a href="https://www.w3.org/TR/2018/REC-css-color-3-20180619/">CSS Color</a></p>
+    <li data-md>
+     <p><a href="https://www.w3.org/TR/css-values-3/">CSS Values and Units</a></p>
+    <li data-md>
+     <p><a href="https://www.w3.org/TR/css-masking-1/">CSS Masking</a></p>
+   </ul>
+   <p>No other SVG modules are supported by SVG Native. This includes:</p>
+   <ul>
+    <li data-md>
+     <p><a href="https://www.w3.org/TR/filter-effects-1/">CSS Filter Effects</a></p>
+    <li data-md>
+     <p><a href="https://w3c.github.io/svgwg/specs/animations/">SVG Animations</a></p>
+   </ul>
+   <h2 class="heading settled" data-level="2" id="render"><span class="secno">2. </span><span class="content">Rendering Model</span><a class="self-link" href="#render"></a></h2>
+   <p>SVG Native does not support masking.</p>
+   <p>The following attributes are not supported by SVG Native:</p>
+   <ul>
+    <li data-md>
+     <p><u class="link-error property" data-lt="clipPathUnits" title="LINK ERROR: No &apos;property&apos; refs found for &apos;clippathunits&apos;.">clipPathUnits</u></p>
+    <li data-md>
+     <p><a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-masking-1/#propdef-clip" id="ref-for-propdef-clip">clip</a></p>
+   </ul>
+   <p>The <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-backgrounds-3/#valdef-background-attachment-scroll" id="ref-for-valdef-background-attachment-scroll">scroll</a> value on the <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-overflow-3/#propdef-overflow" id="ref-for-propdef-overflow">overflow</a> property behaves identically to <u class="link-error property" data-lt="hidden" title="LINK ERROR: No &apos;property&apos; refs found for &apos;hidden&apos;.">hidden</u>.</p>
+   <p>The <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-masking-1/#propdef-clip-path" id="ref-for-propdef-clip-path">clip-path</a> attribute is not supported on a <code><a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#elementdef-clippath" id="ref-for-elementdef-clippath">clipPath</a></code> element.</p>
+   <p>Every <code><a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#elementdef-clippath" id="ref-for-elementdef-clippath①">clipPath</a></code> element must have either exactly zero or exactly one child. Anything more than that is not supported by SVG Native.</p>
+   <p>The <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-backgrounds-3/#valdef-background-attachment-scroll" id="ref-for-valdef-background-attachment-scroll①">scroll</a> and the <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/animation-triggers-1/#valdef-timeline-trigger-active-range-auto" id="ref-for-valdef-timeline-trigger-active-range-auto">auto</a> values of the <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-overflow-3/#propdef-overflow" id="ref-for-propdef-overflow①">overflow</a> property are not supported by SVG Native.</p>
+   <h2 class="heading settled" data-level="3" id="struct"><span class="secno">3. </span><span class="content">Document Structure</span><a class="self-link" href="#struct"></a></h2>
+   <p>The root element must be an <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-svg" id="ref-for-elementdef-svg">svg</a></code> element, and all other <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-svg" id="ref-for-elementdef-svg①">svg</a></code> elements are not supported by SVG Native.</p>
+   <p>Conditional processesing attributes and elements are not supported in SVG Native. These include the <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-switch" id="ref-for-elementdef-switch">switch</a></code> element.</p>
+   <p>The <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/semantics.html#meta" id="ref-for-meta">meta</a></code> and <code><a data-link-type="element" href="https://w3c.github.io/epub-specs/epub33/core/#dfn-metadata" id="ref-for-dfn-metadata">metadata</a></code> elements are not supported in SVG Native.</p>
+   <p>Elements in foreign namespaces are not supported in SVG Native. Attributes in foreign namespaces, except the xlink (<code>http://www.w3.org/1999/xlink</code>) namespace, are not supported in SVG Native.</p>
+   <p>Because SVG Native is a subset of <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a>’s Secure Static mode, only <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/embedded.html#elementdef-image" id="ref-for-elementdef-image">image</a></code> elements which contain base64-encoded <code>data:</code> URLs of <a data-link-type="biblio" href="#biblio-jpeg" title="JPEG File Interchange Format">[JPEG]</a> or <a data-link-type="biblio" href="#biblio-png" title="Portable Network Graphics (PNG) Specification (Third Edition)">[PNG]</a> images are supported. <a data-link-type="biblio" href="#biblio-apng" title="APNG Specification">[APNG]</a> images are be rendered without animation, using standard backward-compatibility with static <a data-link-type="biblio" href="#biblio-png" title="Portable Network Graphics (PNG) Specification (Third Edition)">[PNG]</a> images. No other image format is supported by SVG Native.</p>
+   <p>All external resource loading is forbidden.</p>
+   <p>The <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-symbol" id="ref-for-elementdef-symbol">symbol</a></code> element is not supported by SVG Native.</p>
+   <h2 class="heading settled" data-level="4" id="styling"><span class="secno">4. </span><span class="content">Styling</span><a class="self-link" href="#styling"></a></h2>
+   <p>The <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/semantics.html#the-style-element" id="ref-for-the-style-element">style</a></code> element and the <u class="link-error property" data-lt="style" title="LINK ERROR: No &apos;property&apos; refs found for &apos;style&apos;.">style</u> attribute are not supported in SVG Native.</p>
+   <p class="note" role="note"><span class="marker">Note:</span> Style properties can be set by presentation attributes, which must be parsed and processed according to the SVG and CSS specifications, other than the specific restrictions outlined in this section.</p>
+   <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#funcdef-calc" id="ref-for-funcdef-calc">calc()</a> is not supported by SVG Native.</p>
+   <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-conditional-5/#funcdef-supports-env" id="ref-for-funcdef-supports-env">env()</a> and <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-variables-2/#funcdef-var" id="ref-for-funcdef-var">var()</a> are supported by SVG Native.</p>
+   <p class="note" role="note"><span class="marker">Note:</span> Because of the other restrictions on styling, there is no way to set new values to CSS custom properties inside an SVG Native document. However, some rendering environments (e.g., for SVG fonts) will expose custom property values from an external document, as if they were inherited by the root element of the SVG Native document; the `var()` function can therefore be used similar to the `env()` function, to access this value if it exists and set a fallback value if it doesn’t.</p>
+   <p>The CSS <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-cascade-5/#propdef-all" id="ref-for-propdef-all">all</a> property is not supported by SVG Native.</p>
+   <p>All the global CSS keywords are not supported by SVG Native. These include:</p>
+   <ol>
+    <li data-md>
+     <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-cascade-5/#valdef-all-initial" id="ref-for-valdef-all-initial">initial</a></p>
+    <li data-md>
+     <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-cascade-5/#valdef-all-inherit" id="ref-for-valdef-all-inherit">inherit</a></p>
+    <li data-md>
+     <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-cascade-5/#valdef-all-unset" id="ref-for-valdef-all-unset">unset</a></p>
+    <li data-md>
+     <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-cascade-5/#valdef-all-revert" id="ref-for-valdef-all-revert">revert</a></p>
+   </ol>
+   <p>Percentage length values are not supported by SVG Native.</p>
+   <p><u class="link-error" data-lt="relative length" title="LINK ERROR: No &apos;dfn&apos; refs found for &apos;relative length&apos; that are marked for export.
   (Possible specs this could be from: css-values-3 or css-values-4)">Relative units</u> are not supported by SVG Native.</p>
-  <h2 class="heading settled" data-level="5" id="geometryproperties"><span class="secno">5. </span><span class="content">Geometry Properties</span><a class="self-link" href="#geometryproperties"></a></h2>
-  <p>Keyword values, such as <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/animation-triggers-1/#valdef-timeline-trigger-active-range-auto" id="ref-for-valdef-timeline-trigger-active-range-auto①">auto</a>, are not supported in the <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#CxProperty" id="ref-for-CxProperty">cx</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#CyProperty" id="ref-for-CyProperty">cy</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#RProperty" id="ref-for-RProperty">r</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#RxProperty" id="ref-for-RxProperty">rx</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#RyProperty" id="ref-for-RyProperty">ry</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#XProperty" id="ref-for-XProperty">x</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#YProperty" id="ref-for-YProperty">y</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-sizing-3/#propdef-width" id="ref-for-propdef-width">width</a>, and <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-sizing-3/#propdef-height" id="ref-for-propdef-height">height</a> attributes.</p>
-  <p class="note" role="note"><span class="marker">Note:</span> Raw numbers are supported by these attributes, in accordance with the <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a> rules on parsing presentation attributes.</p>
-  <h2 class="heading settled" data-level="6" id="coords"><span class="secno">6. </span><span class="content">Coordinate Systems, Transformations, and Units</span><a class="self-link" href="#coords"></a></h2>
-  <p>Only the following units are supported by SVG Native:</p>
-  <ul>
-   <li data-md>
-    <p>(unitless)</p>
-   <li data-md>
-    <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#px" id="ref-for-px">px</a></p>
-   <li data-md>
-    <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#pt" id="ref-for-pt">pt</a></p>
-   <li data-md>
-    <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#pc" id="ref-for-pc">pc</a></p>
-   <li data-md>
-    <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#mm" id="ref-for-mm">mm</a></p>
-   <li data-md>
-    <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#cm" id="ref-for-cm">cm</a></p>
-   <li data-md>
-    <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#in" id="ref-for-in">in</a></p>
-  </ul>
-  <p>The <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-transforms-1/#propdef-transform" id="ref-for-propdef-transform">transform</a> property is only supported by SVG Native on the following elements:</p>
-  <ul>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-svg" id="ref-for-elementdef-svg②">svg</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-g" id="ref-for-elementdef-g">g</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-defs" id="ref-for-elementdef-defs">defs</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-use" id="ref-for-elementdef-use">use</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/embedded.html#elementdef-image" id="ref-for-elementdef-image①">image</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://svgwg.org/specs/paths/#elementdef-path" id="ref-for-elementdef-path">path</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/shapes.html#elementdef-rect" id="ref-for-elementdef-rect">rect</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/shapes.html#elementdef-circle" id="ref-for-elementdef-circle">circle</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/shapes.html#elementdef-ellipse" id="ref-for-elementdef-ellipse">ellipse</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/shapes.html#elementdef-line" id="ref-for-elementdef-line">line</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/shapes.html#elementdef-polyline" id="ref-for-elementdef-polyline">polyline</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/shapes.html#elementdef-polygon" id="ref-for-elementdef-polygon">polygon</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#elementdef-clippath" id="ref-for-elementdef-clippath②">clipPath</a></code></p>
-  </ul>
-  <p>The <u class="link-error property" data-lt="viewBox" title="LINK ERROR: No &apos;property&apos; refs found for &apos;viewbox&apos;.">viewBox</u> attribute is only supported by SVG Native on the <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-svg" id="ref-for-elementdef-svg③">svg</a></code> element.</p>
-  <p>The <u class="link-error property" data-lt="preserveAspectRatio" title="LINK ERROR: No &apos;property&apos; refs found for &apos;preserveaspectratio&apos;.">preserveAspectRatio</u> attribute is only supported by SVG Native on the following elements:</p>
-  <ul>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-svg" id="ref-for-elementdef-svg④">svg</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/embedded.html#elementdef-image" id="ref-for-elementdef-image②">image</a></code></p>
-   <li data-md>
-    <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/pservers.html#elementdef-pattern" id="ref-for-elementdef-pattern">pattern</a></code></p>
-  </ul>
-  <h2 class="heading settled" data-level="7" id="paths"><span class="secno">7. </span><span class="content">Paths</span><a class="self-link" href="#paths"></a></h2>
-  <p>The <u class="link-error property" data-lt="pathLength" title="LINK ERROR: No &apos;property&apos; refs found for &apos;pathlength&apos;.">pathLength</u> attribute on the <code><a data-link-type="element" href="https://svgwg.org/specs/paths/#elementdef-path" id="ref-for-elementdef-path①">path</a></code> element is not supported by SVG Native.</p>
-  <h2 class="heading settled" data-level="8" id="text"><span class="secno">8. </span><span class="content">Text</span><a class="self-link" href="#text"></a></h2>
-  <p>All text and fonts facilities are not supported by SVG Native. This includes <code><a data-link-type="element" href="https://w3c.github.io/epub-specs/epub33/core/#dfn-text" id="ref-for-dfn-text">text</a></code>, <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/text.html#elementdef-tspan" id="ref-for-elementdef-tspan">tspan</a></code>, <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/text.html#elementdef-textPath" id="ref-for-elementdef-textPath">textPath</a></code>, <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/obsolete.html#font" id="ref-for-font">font</a></code>, <code><u class="link-error" data-lt="glyph" title="LINK ERROR: No &apos;element&apos; refs found for &apos;glyph&apos;.">glyph</u></code>, <code><u class="link-error" data-lt="missingGlyph" title="LINK ERROR: No &apos;element&apos; refs found for &apos;missingglyph&apos;.">missingGlyph</u></code>, <code><u class="link-error" data-lt="hkern" title="LINK ERROR: No &apos;element&apos; refs found for &apos;hkern&apos;.">hkern</u></code>, <code><u class="link-error" data-lt="vkern" title="LINK ERROR: No &apos;element&apos; refs found for &apos;vkern&apos;.">vkern</u></code>, <code><u class="link-error" data-lt="font-face" title="LINK ERROR: No &apos;element&apos; refs found for &apos;font-face&apos;.">font-face</u></code>, <code><u class="link-error" data-lt="font-face-src" title="LINK ERROR: No &apos;element&apos; refs found for &apos;font-face-src&apos;.">font-face-src</u></code>, <code><u class="link-error" data-lt="font-face-uri" title="LINK ERROR: No &apos;element&apos; refs found for &apos;font-face-uri&apos;.">font-face-uri</u></code>, <code><u class="link-error" data-lt="font-face-format" title="LINK ERROR: No &apos;element&apos; refs found for &apos;font-face-format&apos;.">font-face-format</u></code>, <code><u class="link-error" data-lt="font-face-name" title="LINK ERROR: No &apos;element&apos; refs found for &apos;font-face-name&apos;.">font-face-name</u></code>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-logical-1/#propdef-inline-size" id="ref-for-propdef-inline-size">inline-size</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/text.html#TextAnchorProperty" id="ref-for-TextAnchorProperty">text-anchor</a>, <u class="link-error property" data-lt="glyph-orientation-horizontal" title="LINK ERROR: No &apos;property&apos; refs found for &apos;glyph-orientation-horizontal&apos;.">glyph-orientation-horizontal</u>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-writing-modes-4/#propdef-glyph-orientation-vertical" id="ref-for-propdef-glyph-orientation-vertical">glyph-orientation-vertical</a>, <u class="link-error property" data-lt="kerning" title="LINK ERROR: No &apos;property&apos; refs found for &apos;kerning&apos;.">kerning</u>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-overflow-4/#propdef-text-overflow" id="ref-for-propdef-text-overflow">text-overflow</a>, 'xml:space', <a class="css property" data-link-type="property" href="https://www.w3.org/TR/SVG2/text.html#TextDecorationFillProperty" id="ref-for-TextDecorationFillProperty">text-decoration-fill</a>, <a class="css property" data-link-type="property" href="https://www.w3.org/TR/SVG2/text.html#TextDecorationStrokeProperty" id="ref-for-TextDecorationStrokeProperty">text-decoration-stroke</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-4/#propdef-letter-spacing" id="ref-for-propdef-letter-spacing">letter-spacing</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-3/#propdef-text-align" id="ref-for-propdef-text-align">text-align</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-4/#propdef-text-align-last" id="ref-for-propdef-text-align-last">text-align-last</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-4/#propdef-text-indent" id="ref-for-propdef-text-indent">text-indent</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-4/#propdef-word-spacing" id="ref-for-propdef-word-spacing">word-spacing</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-4/#propdef-white-space" id="ref-for-propdef-white-space">white-space</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-inline-3/#propdef-vertical-align" id="ref-for-propdef-vertical-align">vertical-align</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-inline-3/#propdef-dominant-baseline" id="ref-for-propdef-dominant-baseline">dominant-baseline</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-inline-3/#propdef-alignment-baseline" id="ref-for-propdef-alignment-baseline">alignment-baseline</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-inline-3/#propdef-baseline-shift" id="ref-for-propdef-baseline-shift">baseline-shift</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-writing-modes-3/#propdef-direction" id="ref-for-propdef-direction">direction</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-writing-modes-4/#propdef-text-orientation" id="ref-for-propdef-text-orientation">text-orientation</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-writing-modes-4/#propdef-writing-mode" id="ref-for-propdef-writing-mode">writing-mode</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font" id="ref-for-propdef-font">font</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-family" id="ref-for-propdef-font-family">font-family</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-feature-settings" id="ref-for-propdef-font-feature-settings">font-feature-settings</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-kerning" id="ref-for-propdef-font-kerning">font-kerning</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-size" id="ref-for-propdef-font-size">font-size</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-5/#propdef-font-size-adjust" id="ref-for-propdef-font-size-adjust">font-size-adjust</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-stretch" id="ref-for-propdef-font-stretch">font-stretch</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-style" id="ref-for-propdef-font-style">font-style</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-variant" id="ref-for-propdef-font-variant">font-variant</a>, the subproperties of <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-variant" id="ref-for-propdef-font-variant①">font-variant</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-weight" id="ref-for-propdef-font-weight">font-weight</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-decor-4/#propdef-text-decoration" id="ref-for-propdef-text-decoration">text-decoration</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-decor-4/#propdef-text-decoration-line" id="ref-for-propdef-text-decoration-line">text-decoration-line</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-decor-4/#propdef-text-decoration-style" id="ref-for-propdef-text-decoration-style">text-decoration-style</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-decor-4/#propdef-text-decoration-color" id="ref-for-propdef-text-decoration-color">text-decoration-color</a>, and <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#TextRenderingProperty" id="ref-for-TextRenderingProperty">text-rendering</a>.</p>
-  <h2 class="heading settled" data-level="9" id="embedded"><span class="secno">9. </span><span class="content">Embedded Content</span><a class="self-link" href="#embedded"></a></h2>
-  <p>HTML elements in SVG subtrees are not supported by SVG Native.</p>
-  <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/embedded.html#elementdef-foreignObject" id="ref-for-elementdef-foreignObject">foreignObject</a></code> is not supported by SVG Native.</p>
-  <h2 class="heading settled" data-level="10" id="painting"><span class="secno">10. </span><span class="content">Painting: Filling, Stroking, and Marker Symbols</span><a class="self-link" href="#painting"></a></h2>
-  <p>The <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-display-4/#propdef-display" id="ref-for-propdef-display">display</a> attribute is not supported by SVG Native.</p>
-  <p class="note" role="note"><span class="marker">Note:</span> Hiding elements can be achieved with the <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-display-4/#propdef-visibility" id="ref-for-propdef-visibility">visibility</a> attribute.</p>
-  <p>The <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#elementdef-marker" id="ref-for-elementdef-marker">marker</a></code> element is not supported by SVG Native, nor are the <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#MarkerProperty" id="ref-for-MarkerProperty">marker</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#MarkerStartProperty" id="ref-for-MarkerStartProperty">marker-start</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#MarkerMidProperty" id="ref-for-MarkerMidProperty">marker-mid</a>, and <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#MarkerEndProperty" id="ref-for-MarkerEndProperty">marker-end</a> properties.</p>
-  <p>The <span class="css">context-fill</span> and <span class="css">context-stroke</span> values are not supported by SVG Native.</p>
-  <p class="note" role="note"><span class="marker">Note:</span> Authors wishing to use a contextual color from the environment may use <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-color-4/#valdef-color-currentcolor" id="ref-for-valdef-color-currentcolor">currentColor</a>.</p>
-  <p>The <code><u class="link-error" data-lt="color" title="LINK ERROR: No &apos;element&apos; refs found for &apos;color&apos;.">color</u></code> property is not supported by SVG Native.</p>
-  <p class="note" role="note"><span class="marker">Note:</span> The absence of <code><u class="link-error" data-lt="color" title="LINK ERROR: No &apos;element&apos; refs found for &apos;color&apos;.">color</u></code> makes it impossible to change the value of <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-color-4/#valdef-color-currentcolor" id="ref-for-valdef-color-currentcolor①">currentColor</a> from its initial value.</p>
-  <p>The <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/coords.html#VectorEffectProperty" id="ref-for-VectorEffectProperty">vector-effect</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#PaintOrderProperty" id="ref-for-PaintOrderProperty">paint-order</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#ColorInterpolationProperty" id="ref-for-ColorInterpolationProperty">color-interpolation</a>, and <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-will-change-1/#propdef-will-change" id="ref-for-propdef-will-change">will-change</a> attributes are not supported by SVG Native.</p>
-  <p>All color interpolation occurs in the sRGB color space.</p>
-  <h2 class="heading settled" data-level="11" id="pservers"><span class="secno">11. </span><span class="content">Gradients and Patterns</span><a class="self-link" href="#pservers"></a></h2>
-  <p>Only the <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-masking-1/#valdef-clippathunits-userspaceonuse" id="ref-for-valdef-clippathunits-userspaceonuse">userSpaceOnUse</a> value of <u class="link-error property" data-lt="gradientUnits" title="LINK ERROR: No &apos;property&apos; refs found for &apos;gradientunits&apos;.">gradientUnits</u> is supported. According to <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a>, the default value of <u class="link-error property" data-lt="gradientUnits" title="LINK ERROR: No &apos;property&apos; refs found for &apos;gradientunits&apos;.">gradientUnits</u> is <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-masking-1/#valdef-clippathunits-objectboundingbox" id="ref-for-valdef-clippathunits-objectboundingbox">objectBoundingBox</a>, which isn’t supported. This means that all <code><u class="link-error" data-lt="gradient" title="LINK ERROR: No &apos;element&apos; refs found for &apos;gradient&apos;.">gradient</u></code> elements must include <code>gradientUnits="userSpaceOnUse"</code> to be valid.</p>
-  <p>The <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/pservers.html#elementdef-pattern" id="ref-for-elementdef-pattern①">pattern</a></code> element is not supported by SVG Native.</p>
-  <h2 class="heading settled" data-level="12" id="interact"><span class="secno">12. </span><span class="content">Scripting and Interactivity</span><a class="self-link" href="#interact"></a></h2>
-  <p>All scripting and interactivity facilities are not supported by SVG Native. This includes the <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-ui-4/#propdef-pointer-events" id="ref-for-propdef-pointer-events">pointer-events</a> and <u class="link-error property" data-lt="zoomAndPan" title="LINK ERROR: No &apos;property&apos; refs found for &apos;zoomandpan&apos;.">zoomAndPan</u> attributes and the <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/scripting.html#script" id="ref-for-script">script</a></code> element. No contents of the SVG Native document are focusable.</p>
-  <h2 class="heading settled" data-level="13" id="linking"><span class="secno">13. </span><span class="content">Linking</span><a class="self-link" href="#linking"></a></h2>
-  <p>All external resource loading is forbidden. All URLs must either be a data URL or only consist of a fragment identifier.</p>
-  <p>The <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-a-element" id="ref-for-the-a-element">a</a></code> element and <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/linking.html#elementdef-view" id="ref-for-elementdef-view">view</a></code> elements are not supported by SVG Native.</p>
+   <h2 class="heading settled" data-level="5" id="geometryproperties"><span class="secno">5. </span><span class="content">Geometry Properties</span><a class="self-link" href="#geometryproperties"></a></h2>
+   <p>Keyword values, such as <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/animation-triggers-1/#valdef-timeline-trigger-active-range-auto" id="ref-for-valdef-timeline-trigger-active-range-auto①">auto</a>, are not supported in the <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#CxProperty" id="ref-for-CxProperty">cx</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#CyProperty" id="ref-for-CyProperty">cy</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#RProperty" id="ref-for-RProperty">r</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#RxProperty" id="ref-for-RxProperty">rx</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#RyProperty" id="ref-for-RyProperty">ry</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#XProperty" id="ref-for-XProperty">x</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/geometry.html#YProperty" id="ref-for-YProperty">y</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-sizing-3/#propdef-width" id="ref-for-propdef-width">width</a>, and <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-sizing-3/#propdef-height" id="ref-for-propdef-height">height</a> attributes.</p>
+   <p class="note" role="note"><span class="marker">Note:</span> Raw numbers are supported by these attributes, in accordance with the <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a> rules on parsing presentation attributes.</p>
+   <h2 class="heading settled" data-level="6" id="coords"><span class="secno">6. </span><span class="content">Coordinate Systems, Transformations, and Units</span><a class="self-link" href="#coords"></a></h2>
+   <p>Only the following units are supported by SVG Native:</p>
+   <ul>
+    <li data-md>
+     <p>(unitless)</p>
+    <li data-md>
+     <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#px" id="ref-for-px">px</a></p>
+    <li data-md>
+     <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#pt" id="ref-for-pt">pt</a></p>
+    <li data-md>
+     <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#pc" id="ref-for-pc">pc</a></p>
+    <li data-md>
+     <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#mm" id="ref-for-mm">mm</a></p>
+    <li data-md>
+     <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#cm" id="ref-for-cm">cm</a></p>
+    <li data-md>
+     <p><a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-values-4/#in" id="ref-for-in">in</a></p>
+   </ul>
+   <p>The <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-transforms-1/#propdef-transform" id="ref-for-propdef-transform">transform</a> property is only supported by SVG Native on the following elements:</p>
+   <ul>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-svg" id="ref-for-elementdef-svg②">svg</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-g" id="ref-for-elementdef-g">g</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-defs" id="ref-for-elementdef-defs">defs</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-use" id="ref-for-elementdef-use">use</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/embedded.html#elementdef-image" id="ref-for-elementdef-image①">image</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://svgwg.org/specs/paths/#elementdef-path" id="ref-for-elementdef-path">path</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/shapes.html#elementdef-rect" id="ref-for-elementdef-rect">rect</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/shapes.html#elementdef-circle" id="ref-for-elementdef-circle">circle</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/shapes.html#elementdef-ellipse" id="ref-for-elementdef-ellipse">ellipse</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/shapes.html#elementdef-line" id="ref-for-elementdef-line">line</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/shapes.html#elementdef-polyline" id="ref-for-elementdef-polyline">polyline</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/shapes.html#elementdef-polygon" id="ref-for-elementdef-polygon">polygon</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#elementdef-clippath" id="ref-for-elementdef-clippath②">clipPath</a></code></p>
+   </ul>
+   <p>The <u class="link-error property" data-lt="viewBox" title="LINK ERROR: No &apos;property&apos; refs found for &apos;viewbox&apos;.">viewBox</u> attribute is only supported by SVG Native on the <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-svg" id="ref-for-elementdef-svg③">svg</a></code> element.</p>
+   <p>The <u class="link-error property" data-lt="preserveAspectRatio" title="LINK ERROR: No &apos;property&apos; refs found for &apos;preserveaspectratio&apos;.">preserveAspectRatio</u> attribute is only supported by SVG Native on the following elements:</p>
+   <ul>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#elementdef-svg" id="ref-for-elementdef-svg④">svg</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/embedded.html#elementdef-image" id="ref-for-elementdef-image②">image</a></code></p>
+    <li data-md>
+     <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/pservers.html#elementdef-pattern" id="ref-for-elementdef-pattern">pattern</a></code></p>
+   </ul>
+   <h2 class="heading settled" data-level="7" id="paths"><span class="secno">7. </span><span class="content">Paths</span><a class="self-link" href="#paths"></a></h2>
+   <p>The <u class="link-error property" data-lt="pathLength" title="LINK ERROR: No &apos;property&apos; refs found for &apos;pathlength&apos;.">pathLength</u> attribute on the <code><a data-link-type="element" href="https://svgwg.org/specs/paths/#elementdef-path" id="ref-for-elementdef-path①">path</a></code> element is not supported by SVG Native.</p>
+   <h2 class="heading settled" data-level="8" id="text"><span class="secno">8. </span><span class="content">Text</span><a class="self-link" href="#text"></a></h2>
+   <p>All text and fonts facilities are not supported by SVG Native. This includes <code><a data-link-type="element" href="https://w3c.github.io/epub-specs/epub33/core/#dfn-text" id="ref-for-dfn-text">text</a></code>, <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/text.html#elementdef-tspan" id="ref-for-elementdef-tspan">tspan</a></code>, <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/text.html#elementdef-textPath" id="ref-for-elementdef-textPath">textPath</a></code>, <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/obsolete.html#font" id="ref-for-font">font</a></code>, <code><u class="link-error" data-lt="glyph" title="LINK ERROR: No &apos;element&apos; refs found for &apos;glyph&apos;.">glyph</u></code>, <code><u class="link-error" data-lt="missingGlyph" title="LINK ERROR: No &apos;element&apos; refs found for &apos;missingglyph&apos;.">missingGlyph</u></code>, <code><u class="link-error" data-lt="hkern" title="LINK ERROR: No &apos;element&apos; refs found for &apos;hkern&apos;.">hkern</u></code>, <code><u class="link-error" data-lt="vkern" title="LINK ERROR: No &apos;element&apos; refs found for &apos;vkern&apos;.">vkern</u></code>, <code><u class="link-error" data-lt="font-face" title="LINK ERROR: No &apos;element&apos; refs found for &apos;font-face&apos;.">font-face</u></code>, <code><u class="link-error" data-lt="font-face-src" title="LINK ERROR: No &apos;element&apos; refs found for &apos;font-face-src&apos;.">font-face-src</u></code>, <code><u class="link-error" data-lt="font-face-uri" title="LINK ERROR: No &apos;element&apos; refs found for &apos;font-face-uri&apos;.">font-face-uri</u></code>, <code><u class="link-error" data-lt="font-face-format" title="LINK ERROR: No &apos;element&apos; refs found for &apos;font-face-format&apos;.">font-face-format</u></code>, <code><u class="link-error" data-lt="font-face-name" title="LINK ERROR: No &apos;element&apos; refs found for &apos;font-face-name&apos;.">font-face-name</u></code>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-logical-1/#propdef-inline-size" id="ref-for-propdef-inline-size">inline-size</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/text.html#TextAnchorProperty" id="ref-for-TextAnchorProperty">text-anchor</a>, <u class="link-error property" data-lt="glyph-orientation-horizontal" title="LINK ERROR: No &apos;property&apos; refs found for &apos;glyph-orientation-horizontal&apos;.">glyph-orientation-horizontal</u>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-writing-modes-4/#propdef-glyph-orientation-vertical" id="ref-for-propdef-glyph-orientation-vertical">glyph-orientation-vertical</a>, <u class="link-error property" data-lt="kerning" title="LINK ERROR: No &apos;property&apos; refs found for &apos;kerning&apos;.">kerning</u>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-overflow-4/#propdef-text-overflow" id="ref-for-propdef-text-overflow">text-overflow</a>, 'xml:space', <a class="css property" data-link-type="property" href="https://www.w3.org/TR/SVG2/text.html#TextDecorationFillProperty" id="ref-for-TextDecorationFillProperty">text-decoration-fill</a>, <a class="css property" data-link-type="property" href="https://www.w3.org/TR/SVG2/text.html#TextDecorationStrokeProperty" id="ref-for-TextDecorationStrokeProperty">text-decoration-stroke</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-4/#propdef-letter-spacing" id="ref-for-propdef-letter-spacing">letter-spacing</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-3/#propdef-text-align" id="ref-for-propdef-text-align">text-align</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-4/#propdef-text-align-last" id="ref-for-propdef-text-align-last">text-align-last</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-4/#propdef-text-indent" id="ref-for-propdef-text-indent">text-indent</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-4/#propdef-word-spacing" id="ref-for-propdef-word-spacing">word-spacing</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-4/#propdef-white-space" id="ref-for-propdef-white-space">white-space</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-inline-3/#propdef-vertical-align" id="ref-for-propdef-vertical-align">vertical-align</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-inline-3/#propdef-dominant-baseline" id="ref-for-propdef-dominant-baseline">dominant-baseline</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-inline-3/#propdef-alignment-baseline" id="ref-for-propdef-alignment-baseline">alignment-baseline</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-inline-3/#propdef-baseline-shift" id="ref-for-propdef-baseline-shift">baseline-shift</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-writing-modes-3/#propdef-direction" id="ref-for-propdef-direction">direction</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-writing-modes-4/#propdef-text-orientation" id="ref-for-propdef-text-orientation">text-orientation</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-writing-modes-4/#propdef-writing-mode" id="ref-for-propdef-writing-mode">writing-mode</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font" id="ref-for-propdef-font">font</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-family" id="ref-for-propdef-font-family">font-family</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-feature-settings" id="ref-for-propdef-font-feature-settings">font-feature-settings</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-kerning" id="ref-for-propdef-font-kerning">font-kerning</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-size" id="ref-for-propdef-font-size">font-size</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-5/#propdef-font-size-adjust" id="ref-for-propdef-font-size-adjust">font-size-adjust</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-stretch" id="ref-for-propdef-font-stretch">font-stretch</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-style" id="ref-for-propdef-font-style">font-style</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-variant" id="ref-for-propdef-font-variant">font-variant</a>, the subproperties of <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-variant" id="ref-for-propdef-font-variant①">font-variant</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-fonts-4/#propdef-font-weight" id="ref-for-propdef-font-weight">font-weight</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-decor-4/#propdef-text-decoration" id="ref-for-propdef-text-decoration">text-decoration</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-decor-4/#propdef-text-decoration-line" id="ref-for-propdef-text-decoration-line">text-decoration-line</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-decor-4/#propdef-text-decoration-style" id="ref-for-propdef-text-decoration-style">text-decoration-style</a>, <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-text-decor-4/#propdef-text-decoration-color" id="ref-for-propdef-text-decoration-color">text-decoration-color</a>, and <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#TextRenderingProperty" id="ref-for-TextRenderingProperty">text-rendering</a>.</p>
+   <h2 class="heading settled" data-level="9" id="embedded"><span class="secno">9. </span><span class="content">Embedded Content</span><a class="self-link" href="#embedded"></a></h2>
+   <p>HTML elements in SVG subtrees are not supported by SVG Native.</p>
+   <p><code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/embedded.html#elementdef-foreignObject" id="ref-for-elementdef-foreignObject">foreignObject</a></code> is not supported by SVG Native.</p>
+   <h2 class="heading settled" data-level="10" id="painting"><span class="secno">10. </span><span class="content">Painting: Filling, Stroking, and Marker Symbols</span><a class="self-link" href="#painting"></a></h2>
+   <p>The <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-display-4/#propdef-display" id="ref-for-propdef-display">display</a> attribute is not supported by SVG Native.</p>
+   <p class="note" role="note"><span class="marker">Note:</span> Hiding elements can be achieved with the <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-display-4/#propdef-visibility" id="ref-for-propdef-visibility">visibility</a> attribute.</p>
+   <p>The <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#elementdef-marker" id="ref-for-elementdef-marker">marker</a></code> element is not supported by SVG Native, nor are the <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#MarkerProperty" id="ref-for-MarkerProperty">marker</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#MarkerStartProperty" id="ref-for-MarkerStartProperty">marker-start</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#MarkerMidProperty" id="ref-for-MarkerMidProperty">marker-mid</a>, and <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#MarkerEndProperty" id="ref-for-MarkerEndProperty">marker-end</a> properties.</p>
+   <p>The <span class="css">context-fill</span> and <span class="css">context-stroke</span> values are not supported by SVG Native.</p>
+   <p class="note" role="note"><span class="marker">Note:</span> Authors wishing to use a contextual color from the environment may use <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-color-4/#valdef-color-currentcolor" id="ref-for-valdef-color-currentcolor">currentColor</a>.</p>
+   <p>The <code><u class="link-error" data-lt="color" title="LINK ERROR: No &apos;element&apos; refs found for &apos;color&apos;.">color</u></code> property is not supported by SVG Native.</p>
+   <p class="note" role="note"><span class="marker">Note:</span> The absence of <code><u class="link-error" data-lt="color" title="LINK ERROR: No &apos;element&apos; refs found for &apos;color&apos;.">color</u></code> makes it impossible to change the value of <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-color-4/#valdef-color-currentcolor" id="ref-for-valdef-color-currentcolor①">currentColor</a> from its initial value.</p>
+   <p>The <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/coords.html#VectorEffectProperty" id="ref-for-VectorEffectProperty">vector-effect</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#PaintOrderProperty" id="ref-for-PaintOrderProperty">paint-order</a>, <a class="css property" data-link-type="property" href="https://w3c.github.io/svgwg/svg2-draft/painting.html#ColorInterpolationProperty" id="ref-for-ColorInterpolationProperty">color-interpolation</a>, and <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-will-change-1/#propdef-will-change" id="ref-for-propdef-will-change">will-change</a> attributes are not supported by SVG Native.</p>
+   <p>All color interpolation occurs in the sRGB color space.</p>
+   <h2 class="heading settled" data-level="11" id="pservers"><span class="secno">11. </span><span class="content">Gradients and Patterns</span><a class="self-link" href="#pservers"></a></h2>
+   <p>Only the <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-masking-1/#valdef-clippathunits-userspaceonuse" id="ref-for-valdef-clippathunits-userspaceonuse">userSpaceOnUse</a> value of <u class="link-error property" data-lt="gradientUnits" title="LINK ERROR: No &apos;property&apos; refs found for &apos;gradientunits&apos;.">gradientUnits</u> is supported. According to <a data-link-type="biblio" href="#biblio-svg2" title="Scalable Vector Graphics (SVG) 2">[SVG2]</a>, the default value of <u class="link-error property" data-lt="gradientUnits" title="LINK ERROR: No &apos;property&apos; refs found for &apos;gradientunits&apos;.">gradientUnits</u> is <a class="css" data-link-type="maybe" href="https://drafts.csswg.org/css-masking-1/#valdef-clippathunits-objectboundingbox" id="ref-for-valdef-clippathunits-objectboundingbox">objectBoundingBox</a>, which isn’t supported. This means that all <code><u class="link-error" data-lt="gradient" title="LINK ERROR: No &apos;element&apos; refs found for &apos;gradient&apos;.">gradient</u></code> elements must include <code>gradientUnits="userSpaceOnUse"</code> to be valid.</p>
+   <p>The <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/pservers.html#elementdef-pattern" id="ref-for-elementdef-pattern①">pattern</a></code> element is not supported by SVG Native.</p>
+   <h2 class="heading settled" data-level="12" id="interact"><span class="secno">12. </span><span class="content">Scripting and Interactivity</span><a class="self-link" href="#interact"></a></h2>
+   <p>All scripting and interactivity facilities are not supported by SVG Native. This includes the <a class="css property" data-link-type="property" href="https://drafts.csswg.org/css-ui-4/#propdef-pointer-events" id="ref-for-propdef-pointer-events">pointer-events</a> and <u class="link-error property" data-lt="zoomAndPan" title="LINK ERROR: No &apos;property&apos; refs found for &apos;zoomandpan&apos;.">zoomAndPan</u> attributes and the <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/scripting.html#script" id="ref-for-script">script</a></code> element. No contents of the SVG Native document are focusable.</p>
+   <h2 class="heading settled" data-level="13" id="linking"><span class="secno">13. </span><span class="content">Linking</span><a class="self-link" href="#linking"></a></h2>
+   <p>All external resource loading is forbidden. All URLs must either be a data URL or only consist of a fragment identifier.</p>
+   <p>The <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-a-element" id="ref-for-the-a-element">a</a></code> element and <code><a data-link-type="element" href="https://w3c.github.io/svgwg/svg2-draft/linking.html#elementdef-view" id="ref-for-elementdef-view">view</a></code> elements are not supported by SVG Native.</p>
+  </main>
+  <div data-fill-with="conformance">
+   <h2 class="heading no-num no-ref settled" id="w3c-conformance"><span class="content">Conformance</span><a class="self-link" href="#w3c-conformance"></a></h2>
+   <h3 class="heading no-num no-ref settled" id="w3c-conventions"><span class="content">Document conventions</span><a class="self-link" href="#w3c-conventions"></a></h3>
+   <p>Conformance requirements are expressed
+    with a combination of descriptive assertions
+    and RFC 2119 terminology.
+    The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL”
+    in the normative parts of this document
+    are to be interpreted as described in RFC 2119.
+    However, for readability,
+    these words do not appear in all uppercase letters in this specification.
+
+    </p>
+   <p>All of the text of this specification is normative
+    except sections explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119" title="Key words for use in RFCs to Indicate Requirement Levels">[RFC2119]</a>
+
+    </p>
+   <p>Examples in this specification are introduced with the words “for example”
+    or are set apart from the normative text
+    with <code>class="example"</code>,
+    like this:
+
+    </p>
+   <div class="example" id="w3c-example">
+    <a class="self-link" href="#w3c-example"></a>
+        
+    <p>This is an example of an informative example.
+    </p>
+   </div>
+   <p>Informative notes begin with the word “Note”
+    and are set apart from the normative text
+    with <code>class="note"</code>,
+    like this:
+
+    </p>
+   <p class="note" role="note">Note, this is an informative note.</p>
+   <section>
+    <h3 class="heading no-num no-ref settled" id="w3c-conformant-algorithms"><span class="content">Conformant Algorithms</span><a class="self-link" href="#w3c-conformant-algorithms"></a></h3>
+    <p>Requirements phrased in the imperative as part of algorithms
+    (such as "strip any leading space characters"
+    or "return false and abort these steps")
+    are to be interpreted with the meaning of the key word
+    ("must", "should", "may", etc)
+    used in introducing the algorithm.
+
+    </p>
+    <p>Conformance requirements phrased as algorithms or specific steps
+    can be implemented in any manner,
+    so long as the end result is equivalent.
+    In particular, the algorithms defined in this specification
+    are intended to be easy to understand
+    and are not intended to be performant.
+    Implementers are encouraged to optimize.
+</p>
+   </section>
+  </div>
+  <script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
   <h2 class="heading no-num no-ref settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="heading no-num no-ref settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
@@ -1057,6 +1249,8 @@ dfn > a.self-link::before      { content: "#"; }
    <dd>Eric Hamilton. <a href="https://www.w3.org/Graphics/JPEG/jfif3.pdf"><cite>JPEG File Interchange Format</cite></a>. September 1992. URL: <a href="https://www.w3.org/Graphics/JPEG/jfif3.pdf">https://www.w3.org/Graphics/JPEG/jfif3.pdf</a>
    <dt id="biblio-png">[PNG]
    <dd>Chris Lilley; et al. <a href="https://w3c.github.io/png/"><cite>Portable Network Graphics (PNG) Specification (Third Edition)</cite></a>. URL: <a href="https://w3c.github.io/png/">https://w3c.github.io/png/</a>
+   <dt id="biblio-rfc2119">[RFC2119]
+   <dd>S. Bradner. <a href="https://datatracker.ietf.org/doc/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>
    <dt id="biblio-svg-paths">[SVG-PATHS]
    <dd>Cyril Concolato; Cameron McCormack; Doug Schepers. <a href="https://svgwg.org/specs/paths/"><cite>SVG Paths</cite></a>. URL: <a href="https://svgwg.org/specs/paths/">https://svgwg.org/specs/paths/</a>
    <dt id="biblio-svg2">[SVG2]
