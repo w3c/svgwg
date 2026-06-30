@@ -370,64 +370,32 @@ The rules governing these painting operations are outlined in the
 </p>
 
 <h2 id="RenderingOrder">Rendering order</h2>
-<p>Elements in SVG are positioned in three dimensions. In addition to their
-position on the x and y axis of the <a>SVG viewport</a>, SVG elements are also
-positioned on the z axis. The position on the z-axis defines the order that
-they are painted.</p>
+<p>Elements in SVG are positioned on the x and y axes of
+the <a>SVG viewport</a>. When elements overlap, the order in which they
+are painted determines which one appears in front. This front-to-back
+ordering is sometimes described as the z-axis.</p>
 
-<p>Along the z axis, elements are grouped into <dfn id="TermStackingContext" data-dfn-type="dfn" data-export="">stacking contexts</dfn>.</p>
-</div>
+<p>By default, elements are painted in document order: an element that
+appears later in the markup is painted on top of an element that appears
+earlier. To control this ordering, elements are grouped into
+<dfn id="TermStackingContext" data-dfn-type="dfn" data-export="">stacking contexts</dfn>.
+A stacking context collects a set of elements and paints them as a
+unit — nothing from outside the stacking context can be painted between
+its members.</p>
 
-<h3 id="EstablishingStackingContex">Establishing a stacking context in SVG</h3>
-<p>A new stacking context must be established at an SVG element for its descendants if:</p>
+<p>Stacking contexts determine the order in which elements are painted
+on top of each other, and which element is the target of a pointer event.
+They do not affect the position of elements in the DOM tree, nor their
+size or orientation — only the order in which they are painted.</p>
 
-<ul>
-  <li>it is the root element</li>
-
-  <li>the element is an <a>outermost svg element</a>, or a <a>'foreignObject'</a>,
-  <a>'image'</a>, <a>'marker element'</a>, <a>'mask element'</a>, <a>'pattern'</a>,
-  <a>'symbol'</a> or <a>'use'</a> element</li>
-
-  <li>the element is an inner <a>'svg'</a> element and the computed value of its
-  <a>'overflow'</a> property is a value other than <span class='prop-value'>visible</span></li>
-
-  <li>the element is subject to explicit clipping:
-    <ul>
-      <li>the <a>'clip'</a> property applies to the element and it has a
-      computed value other than <span class='prop-value'>auto</span></li>
-
-      <li>the <a>'clip-path'</a> property applies to the element and it has a
-      computed value other than <span class='prop-value'>none</span></li>
-    </ul>
-  </li>
-
-  <li>the <a>'opacity'</a> property applies to the element and it has a
-  computed value other than <span class='prop-value'>1</span></li>
-
-  <li>the <a>'mask property'</a> property applies to the element and it has a computed
-  value other than <span class='prop-value'>none</span></li>
-
-  <li>the <a>'filter property'</a> property applies to the element and it has a
-  computed value other than <span class='prop-value'>none</span></li>
-
-  <li class="ready-for-wider-review">a property defined in another specification is
-  applied and that property is defined to establish a stacking context in SVG</li>
-</ul>
-
-<p>Stacking contexts are conceptual tools used to describe the
-order in which elements must be painted one on top of the other when the
-document is rendered, and for determining which element is highest when
-determining the target of a pointer event. Stacking contexts do
-not affect the position of elements in the DOM tree, and their presence or
-absence does not affect an element's position, size or orientation in the
-canvas' X-Y plane - only the order in which it is painted.</p>
+<p>Each element belongs to one stacking context. Elements in a given stacking
+context must be stacked according to document order.</p>
 
 <p>Stacking contexts can contain further stacking contexts. A stacking context is
-atomic from the point of view of its parent stacking context; elements in
-ancestor stacking contexts may not come between any of its elements.</p>
-
-<p>Each element belongs to one stacking context. Elements in a stacking context
-must be stacked according to document order.</p>
+atomic from the point of view of its parent stacking context: when the parent
+determines paint order, the child stacking context is treated as a single
+indivisible item. No element from outside can be painted between elements
+inside it.</p>
 
 <p>With the exception of the <a>'foreignObject'</a> element, the back to front
 stacking order for a stacking context created by an SVG element is:</p>
@@ -442,6 +410,104 @@ stacking order for a stacking context created by an SVG element is:</p>
 <p>Since the <a>'foreignObject'</a> element creates a "fixed position containing block" in
 CSS terms, the normative rules for the stacking order of the stacking context
 created by <a>'foreignObject'</a> elements are the rules in Appendix E of CSS 2.1.</p>
+</div>
+
+<h3 id="EstablishingStackingContex">Establishing a stacking context in SVG</h3>
+<p>A new stacking context must be established at an SVG element for its descendants if
+any of the following conditions are met:</p>
+
+<table class="data">
+  <thead>
+    <tr>
+      <th>Condition</th>
+      <th>Trigger value</th>
+      <th>Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://dom.spec.whatwg.org/#document-element">Root element</a></td>
+      <td>always</td>
+      <td>e.g., the <a>'svg'</a> element in a standalone SVG document</td>
+    </tr>
+    <tr>
+      <td><a>Outermost svg element</a></td>
+      <td>always</td>
+      <td>The top-level <a>'svg'</a> element of an <a>SVG document fragment</a>.
+      In an HTML document, each inline <a>'svg'</a> element is an outermost svg element.</td>
+    </tr>
+    <tr>
+      <td><a>'foreignObject'</a></td>
+      <td>always</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><a>'image'</a></td>
+      <td>always</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><a>'marker element'</a></td>
+      <td>always</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><a>'mask element'</a></td>
+      <td>always</td>
+      <td>The mask element, not the mask property</td>
+    </tr>
+    <tr>
+      <td><a>'pattern'</a></td>
+      <td>always</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><a>'symbol'</a></td>
+      <td>always</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><a>'use'</a></td>
+      <td>always</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Inner <a>'svg'</a> with <a>'overflow'</a></td>
+      <td>any value other than <span class='prop-value'>visible</span></td>
+      <td>Only applies to nested <a>'svg'</a> elements, not the <a>outermost svg element</a></td>
+    </tr>
+    <tr>
+      <td><a>'clip'</a> property</td>
+      <td>any value other than <span class='prop-value'>auto</span></td>
+      <td>Element is subject to explicit clipping</td>
+    </tr>
+    <tr>
+      <td><a>'clip-path'</a> property</td>
+      <td>any value other than <span class='prop-value'>none</span></td>
+      <td>Element is subject to explicit clipping</td>
+    </tr>
+    <tr>
+      <td><a>'opacity'</a> property</td>
+      <td>any value other than <span class='prop-value'>1</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><a>'mask property'</a> property</td>
+      <td>any value other than <span class='prop-value'>none</span></td>
+      <td>The mask property, not the mask element</td>
+    </tr>
+    <tr>
+      <td><a>'filter property'</a> property</td>
+      <td>any value other than <span class='prop-value'>none</span></td>
+      <td></td>
+    </tr>
+    <tr class="ready-for-wider-review">
+      <td>Property defined in another specification</td>
+      <td>as defined by that specification</td>
+      <td>When the property is defined to establish a stacking context in SVG</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id="Elements">How elements are rendered</h2>
 <div class="ready-for-wider-review">
