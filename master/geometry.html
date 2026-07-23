@@ -22,6 +22,70 @@ describe the position and dimension of the <a>graphics element</a>s <a>'circle'<
 <a>'ellipse'</a>, <a>'rect'</a>, <a>'image'</a>, <a>'foreignObject'</a> and the
 <a>'svg'</a> element.</p>
 
+<p id='geometry-negative-values'>The <a>'cx'</a>, <a>'cy'</a>, <a>'x'</a> and <a>'y'</a>
+properties accept negative values. The <a>'r'</a>, <a>'rx'</a>, <a>'ry'</a>, <a>'width'</a>
+and <a>'height'</a> properties do not: a negative <a>&lt;length-percentage&gt;</a> is
+<a>invalid</a>. When an invalid negative value is specified for one of these properties,
+whether through a presentation attribute or a CSS declaration, it must be treated as if the
+property's <a>initial value</a> had been specified: <span class="prop-value">auto</span> for
+<a>'rx'</a>, <a>'ry'</a>, <a>'width'</a> and <a>'height'</a>, and <span class="prop-value">0</span>
+for <a>'r'</a>. A negative value therefore never puts the element into an error state; the
+<a>used value</a> is determined by the property's normal resolution rules. The following table
+summarizes this handling.</p>
+
+<table class="data">
+  <caption>Handling of negative values for the geometry properties</caption>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Value</th>
+      <th>Initial</th>
+      <th>Negative allowed?</th>
+      <th>Negative computes to</th>
+      <th>Used value of a negative value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a>'cx'</a>, <a>'cy'</a></td>
+      <td><a>&lt;length-percentage&gt;</a></td>
+      <td>0</td>
+      <td>yes</td>
+      <td>the specified value (kept as-is)</td>
+      <td>the negative value (translates the shape)</td>
+    </tr>
+    <tr>
+      <td><a>'r'</a></td>
+      <td><a>&lt;length-percentage&gt;</a></td>
+      <td>0</td>
+      <td>no</td>
+      <td><span class="prop-value">0</span></td>
+      <td>0; a <a>'circle'</a> with <a>'r'</a> = 0 is not rendered</td>
+    </tr>
+    <tr>
+      <td><a>'rx'</a>, <a>'ry'</a></td>
+      <td><a>&lt;length-percentage&gt;</a> | auto</td>
+      <td>auto</td>
+      <td>no</td>
+      <td><span class="prop-value">auto</span></td>
+      <td>resolved as <span class="prop-value">auto</span>: equal to the used value of the
+          other radius, or 0 if the other radius is also <span class="prop-value">auto</span>
+          or negative. An <a>'ellipse'</a> with a resolved radius of 0 is not rendered.</td>
+    </tr>
+    <tr>
+      <td><a>'width'</a>, <a>'height'</a></td>
+      <td><a>&lt;length-percentage&gt;</a> | auto</td>
+      <td>auto</td>
+      <td>no</td>
+      <td><span class="prop-value">auto</span></td>
+      <td>resolved as <span class="prop-value">auto</span> per the
+          <a href="#Sizing">sizing table</a>: <span class="prop-value">100%</span> for the
+          outermost <a>'svg'</a>, the intrinsic size for <a>'image'</a>, and
+          <span class="prop-value">0</span> for all other elements.</td>
+    </tr>
+  </tbody>
+</table>
+
 <h2 id='CX'>Horizontal center coordinate: The
 <span class="property">'cx'</span> property</h2>
 <table class="propdef def">
@@ -67,6 +131,10 @@ describe the position and dimension of the <a>graphics element</a>s <a>'circle'<
 
 <p>The <a>'cx'</a> property describes the horizontal center coordinate
 of the position of the element.</p>
+
+<p class="note">Negative values are permitted for <a>'cx'</a>; a negative value translates the
+center of the shape and does not disable rendering, unlike <a>'r'</a>, <a>'rx'</a> and
+<a>'ry'</a> (see the <a href="#geometry-negative-values">handling of negative values</a>).</p>
 
 <h2 id='CY'>Vertical center coordinate: The <span class="property">'cy'</span>
 property</h2>
@@ -114,6 +182,10 @@ property</h2>
 <p>The <a>'cy'</a> property describes the vertical center coordinate
 of the position of the element. </p>
 
+<p class="note">Negative values are permitted for <a>'cy'</a>; a negative value translates the
+center of the shape and does not disable rendering (see the
+<a href="#geometry-negative-values">handling of negative values</a>).</p>
+
 <h2 id='R'>Radius: The <span class="property">'r'</span> property</h2>
 <table class="propdef def">
   <tr>
@@ -158,7 +230,10 @@ of the position of the element. </p>
 <p>The <a>'r'</a> property describes the radius of the <a>'circle'</a>
 element.</p>
 
-<p>A negative value for <a>'r'</a> is <a>invalid</a> and must be <a>ignored</a>.</p>
+<p>A negative value for <a>'r'</a> is <a>invalid</a>; it is treated as if
+<span class="prop-value">0</span> had been specified (see the
+<a href="#geometry-negative-values">handling of negative values</a>), so the
+<a>'circle'</a> is not rendered.</p>
 
 <h2 id='RX'>Horizontal radius: The <span class="property">'rx'</span>
 property</h2>
@@ -216,7 +291,11 @@ element.
     matching the behavior for <a>'rect'</a> elements when <a>'rx'</a> was not specified.
 </p>
 
-<p>A negative value for <a>'rx'</a> is <a>invalid</a> and must be <a>ignored</a>.</p>
+<p>A negative value for <a>'rx'</a> is <a>invalid</a>; it is treated as if
+<span class="prop-value">auto</span> had been specified (see the
+<a href="#geometry-negative-values">handling of negative values</a>). It therefore resolves
+like <span class="prop-value">auto</span>: to the used value of <a>'ry'</a>, or to 0 if
+<a>'ry'</a> is also <span class="prop-value">auto</span> or negative.</p>
 
 <h2 id='RY'>Vertical radius: The <span class="property">'ry'</span>
 property</h2>
@@ -274,7 +353,11 @@ property</h2>
     matching the behavior for <a>'rect'</a> elements when <a>'ry'</a> was not specified.
 </p>
 
-<p>A negative value for <a>'ry'</a> is <a>invalid</a> and must be <a>ignored</a>.</p>
+<p>A negative value for <a>'ry'</a> is <a>invalid</a>; it is treated as if
+<span class="prop-value">auto</span> had been specified (see the
+<a href="#geometry-negative-values">handling of negative values</a>). It therefore resolves
+like <span class="prop-value">auto</span>: to the used value of <a>'rx'</a>, or to 0 if
+<a>'rx'</a> is also <span class="prop-value">auto</span> or negative.</p>
 
 <h2 id='X'>Horizontal coordinate: The <span class="property">'x'</span> property</h2>
 <table class="propdef def">
