@@ -56,7 +56,7 @@
   <p><a href="https://www.w3.org/"><img height="48" width="72" alt="W3C" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C"/></a></p>
   <h1 id="Overview-pagetitle">Scalable Vector Graphics (SVG) 2</h1>
   <p id="Overview-w3c-state"><a href="https://www.w3.org/standards/types#ED">
-    W3C Editor’s Draft</a> <time class="dt-published" datetime="2026-07-22">22 July 2026</time>
+    W3C Editor’s Draft</a> <time class="dt-published" datetime="2026-07-27">27 July 2026</time>
   </p>
   <details open="open">
     <summary>More details about this document</summary>
@@ -122,7 +122,7 @@ publication. A list of current W3C
 publications and the latest revision of this technical report can be found in
 the <a href="https://www.w3.org/TR/">W3C standards and drafts index</a>.</em></p>
 
-<p>This document is the 22 July 2026 <strong>Editor’s Draft</strong> of SVG 2.  This version of SVG
+<p>This document is the 27 July 2026 <strong>Editor’s Draft</strong> of SVG 2.  This version of SVG
 builds upon <a href="https://www.w3.org/TR/2011/REC-SVG11-20110816/">SVG 1.1 Second Edition</a>
 by improving the usability of the language and by adding new features commonly
 requested by authors.  The <a href="#chapter-changes">Changes</a> appendix lists all
@@ -2176,64 +2176,32 @@ The rules governing these painting operations are outlined in the
 </p>
 
 <h2 id="render-RenderingOrder" class="heading">3.4. Rendering order<a class="self-link" href="#render-RenderingOrder"></a></h2>
-<p>Elements in SVG are positioned in three dimensions. In addition to their
-position on the x and y axis of the <a href="#coords-TermSVGViewport">SVG viewport</a>, SVG elements are also
-positioned on the z axis. The position on the z-axis defines the order that
-they are painted.</p>
+<p>Elements in SVG are positioned on the x and y axes of
+the <a href="#coords-TermSVGViewport">SVG viewport</a>. When elements overlap, the order in which they
+are painted determines which one appears in front. This front-to-back
+ordering is known as the z-axis.</p>
 
-<p>Along the z axis, elements are grouped into <dfn id="render-TermStackingContext" data-dfn-type="dfn" data-export="">stacking contexts</dfn>.</p>
-</div>
+<p>By default, elements are painted in document order: an element that
+appears later in the markup is painted on top of an element that appears
+earlier. Elements are grouped into
+<dfn id="render-TermStackingContext" data-dfn-type="dfn" data-export="">stacking contexts</dfn>,
+which collect a set of elements and paint them as a unit.</p>
 
-<h3 id="render-EstablishingStackingContex" class="heading">3.4.1. Establishing a stacking context in SVG<a class="self-link" href="#render-EstablishingStackingContex"></a></h3>
-<p>A new stacking context must be established at an SVG element for its descendants if:</p>
+<p>Stacking contexts determine the order in which elements are painted
+on top of each other, and which element is highest when determining the
+target of a pointer event. They do not affect the position of elements in
+the DOM tree, nor their size or orientation — only the order in which they
+are painted.</p>
 
-<ul>
-  <li>it is the root element</li>
-
-  <li>the element is an <a href="#struct-TermOutermostSVGElement">outermost svg element</a>, or a <span class="element-name">‘<a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a>’</span>,
-  <span class="element-name">‘<a href="#embedded-ImageElement"><span>image</span></a>’</span>, <span class="element-name">‘<a href="#painting-MarkerElement"><span>marker</span></a>’</span>, <span class="element-name">‘<a href="https://drafts.csswg.org/css-masking-1/#MaskElement"><span>mask</span></a>’</span>, <span class="element-name">‘<a href="#pservers-PatternElement"><span>pattern</span></a>’</span>,
-  <span class="element-name">‘<a href="#struct-SymbolElement"><span>symbol</span></a>’</span> or <span class="element-name">‘<a href="#struct-UseElement"><span>use</span></a>’</span> element</li>
-
-  <li>the element is an inner <span class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span> element and the computed value of its
-  <a class="property" href="#render-OverflowAndClipProperties">overflow</a> property is a value other than <span class="prop-value">visible</span></li>
-
-  <li>the element is subject to explicit clipping:
-    <ul>
-      <li>the <a class="property" href="https://drafts.csswg.org/css-masking-1/#propdef-clip">clip</a> property applies to the element and it has a
-      computed value other than <span class="prop-value">auto</span></li>
-
-      <li>the <a class="property" href="https://drafts.csswg.org/css-masking-1/#the-clip-path">clip-path</a> property applies to the element and it has a
-      computed value other than <span class="prop-value">none</span></li>
-    </ul>
-  </li>
-
-  <li>the <a class="property" href="#render-ObjectAndGroupOpacityProperties">opacity</a> property applies to the element and it has a
-  computed value other than <span class="prop-value">1</span></li>
-
-  <li>the <a class="property" href="https://drafts.csswg.org/css-masking-1/#propdef-mask">mask</a> property applies to the element and it has a computed
-  value other than <span class="prop-value">none</span></li>
-
-  <li>the <a class="property" href="https://drafts.csswg.org/filter-effects-1/#FilterProperty">filter</a> property applies to the element and it has a
-  computed value other than <span class="prop-value">none</span></li>
-
-  <li class="ready-for-wider-review">a property defined in another specification is
-  applied and that property is defined to establish a stacking context in SVG</li>
-</ul>
-
-<p>Stacking contexts are conceptual tools used to describe the
-order in which elements must be painted one on top of the other when the
-document is rendered, and for determining which element is highest when
-determining the target of a pointer event. Stacking contexts do
-not affect the position of elements in the DOM tree, and their presence or
-absence does not affect an element's position, size or orientation in the
-canvas' X-Y plane - only the order in which it is painted.</p>
+<p>Each element belongs to one stacking context. Elements in a given stacking
+context must be stacked according to document order.</p>
 
 <p>Stacking contexts can contain further stacking contexts. A stacking context is
-atomic from the point of view of its parent stacking context; elements in
-ancestor stacking contexts may not come between any of its elements.</p>
-
-<p>Each element belongs to one stacking context. Elements in a stacking context
-must be stacked according to document order.</p>
+atomic from the point of view of its parent stacking context: when the parent
+determines paint order, the child stacking context is treated as a single
+indivisible item. No element from outside can be painted between elements
+inside it.</p>
+</div>
 
 <p>With the exception of the <span class="element-name">‘<a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a>’</span> element, the back to front
 stacking order for a stacking context created by an SVG element is:</p>
@@ -2248,6 +2216,108 @@ stacking order for a stacking context created by an SVG element is:</p>
 <p>Since the <span class="element-name">‘<a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a>’</span> element creates a "fixed position containing block" in
 CSS terms, the normative rules for the stacking order of the stacking context
 created by <span class="element-name">‘<a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a>’</span> elements are the rules in Appendix E of CSS 2.1.</p>
+
+<h3 id="render-EstablishingStackingContex" class="heading">3.4.1. Establishing a stacking context in SVG<a class="self-link" href="#render-EstablishingStackingContex"></a></h3>
+<p>A new stacking context must be established at an SVG element for its descendants if
+any of the following conditions are met. For the property-based conditions, the
+property must apply to the element and have the given computed value.</p>
+
+<table class="data">
+  <thead>
+    <tr>
+      <th scope="col">Condition</th>
+      <th scope="col">Value condition</th>
+      <th scope="col">Note</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>The <a href="https://dom.spec.whatwg.org/#document-element">document element</a></td>
+      <td>always</td>
+      <td>Only when it is an <span class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span> element, as in a standalone SVG document</td>
+    </tr>
+    <tr>
+      <td>An <a href="#struct-TermOutermostSVGElement">outermost svg element</a></td>
+      <td>always</td>
+      <td>The <span class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span> element that starts an <a href="#struct-TermSVGDocumentFragment">SVG document fragment</a>, that is,
+      one whose parent element is not in the SVG namespace</td>
+    </tr>
+    <tr>
+      <td><span class="element-name">‘<a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a>’</span></td>
+      <td>always</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><span class="element-name">‘<a href="#embedded-ImageElement"><span>image</span></a>’</span></td>
+      <td>always</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><span class="element-name">‘<a href="#painting-MarkerElement"><span>marker</span></a>’</span></td>
+      <td>always</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><span class="element-name">‘<a href="https://drafts.csswg.org/css-masking-1/#MaskElement"><span>mask</span></a>’</span></td>
+      <td>always</td>
+      <td>The mask element, not the mask property</td>
+    </tr>
+    <tr>
+      <td><span class="element-name">‘<a href="#pservers-PatternElement"><span>pattern</span></a>’</span></td>
+      <td>always</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><span class="element-name">‘<a href="#struct-SymbolElement"><span>symbol</span></a>’</span></td>
+      <td>always</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><span class="element-name">‘<a href="#struct-UseElement"><span>use</span></a>’</span></td>
+      <td>always</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Inner <span class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span> with <a class="property" href="#render-OverflowAndClipProperties">overflow</a></td>
+      <td>computed value other than <span class="prop-value">visible</span></td>
+      <td>Only applies to nested <span class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span> elements, not the <a href="#struct-TermOutermostSVGElement">outermost svg element</a>.
+      Note that the <a href="#styling-UAStyleSheet">user agent style sheet</a> sets
+      <span class="prop-value">overflow: hidden</span> on nested <span class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span> elements.</td>
+    </tr>
+    <tr>
+      <td><a class="property" href="https://drafts.csswg.org/css-masking-1/#propdef-clip">clip</a> property</td>
+      <td>computed value other than <span class="prop-value">auto</span></td>
+      <td>Element is subject to explicit clipping. In SVG, <a class="property" href="https://drafts.csswg.org/css-masking-1/#propdef-clip">clip</a> only applies to
+      <a href="#coords-EstablishingANewSVGViewport">elements which establish a new
+      viewport</a>, <span class="element-name">‘<a href="#pservers-PatternElement"><span>pattern</span></a>’</span> elements and <span class="element-name">‘<a href="https://drafts.csswg.org/css-masking-1/#MaskElement"><span>mask</span></a>’</span> elements.</td>
+    </tr>
+    <tr>
+      <td><a class="property" href="https://drafts.csswg.org/css-masking-1/#the-clip-path">clip-path</a> property</td>
+      <td>computed value other than <span class="prop-value">none</span></td>
+      <td>Element is subject to explicit clipping</td>
+    </tr>
+    <tr>
+      <td><a class="property" href="#render-ObjectAndGroupOpacityProperties">opacity</a> property</td>
+      <td>computed value other than <span class="prop-value">1</span></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><a class="property" href="https://drafts.csswg.org/css-masking-1/#propdef-mask">mask</a> property</td>
+      <td>computed value other than <span class="prop-value">none</span></td>
+      <td>The mask property, not the mask element</td>
+    </tr>
+    <tr>
+      <td><a class="property" href="https://drafts.csswg.org/filter-effects-1/#FilterProperty">filter</a> property</td>
+      <td>computed value other than <span class="prop-value">none</span></td>
+      <td></td>
+    </tr>
+    <tr class="ready-for-wider-review">
+      <td>Property defined in another specification</td>
+      <td>as defined by that specification</td>
+      <td>When the property is defined to establish a stacking context in SVG</td>
+    </tr>
+  </tbody>
+</table>
 
 <h2 id="render-Elements" class="heading">3.5. How elements are rendered<a class="self-link" href="#render-Elements"></a></h2>
 <div class="ready-for-wider-review">
