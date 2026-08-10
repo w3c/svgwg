@@ -47,6 +47,18 @@ shapes.</p>
 <p>The <a>equivalent path</a> and algorithm to compute the stroke for each shape
   are defined in the shape sections below.</p>
 
+<p class="note">
+  The <a>equivalent paths</a> of <a>'rect'</a>, <a>'circle'</a> and <a>'ellipse'</a> below
+  each end with a <a href="paths.html#PathDataClosePathCommand">closepath</a>
+  that draws a line of zero length,
+  because the command before it already ends at the <a>initial point</a>.
+  A zero-length line does not change how the shape is filled or stroked.
+  It can affect where <a>vertex markers</a> go,
+  but markers on these elements are placed by the rules in
+  <a href="painting.html#VertexMarkerProperties">Vertex markers</a>,
+  not by counting the commands listed for each shape.
+</p>
+
 <h2 id="RectElement">The <span class="element-name">'rect'</span> element</h2>
 
 <edit:with element='rect'>
@@ -162,8 +174,11 @@ following the rules specified above and in <a href="coords.html#Units">Units</a>
 
   <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
   perform an absolute <a href="paths.html#PathDataEllipticalArcCommands">elliptical arc</a>
-  operation with a <a>segment-completing close path</a> operation,
-  using the same parameters as previously.</li>
+  operation to coordinate (<var>x+rx</var>,<var>y</var>),
+  using the same parameters as previously;</li>
+
+  <li>perform a <a href="paths.html#PathDataClosePathCommand">closepath</a>
+  command.</li>
 </ol>
 
 <p class="annotation">
@@ -226,7 +241,8 @@ radius.</p>
   <li>arc to <var>cx</var>,<var>cy+r</var>;</li>
   <li>arc to <var>cx-r</var>,<var>cy</var>;</li>
   <li>arc to <var>cx</var>,<var>cy-r</var>;</li>
-  <li>arc with a <a>segment-completing close path</a> operation.</li>
+  <li>arc to <var>cx+r</var>,<var>cy</var>;</li>
+  <li>a <a href="paths.html#PathDataClosePathCommand">closepath</a> command.</li>
 </ol>
 
 <p class="annotation">
@@ -307,7 +323,8 @@ with the current <a>user coordinate system</a> based on a center point and two r
   <li>arc to <var>cx</var>,<var>cy+ry</var>;</li>
   <li>arc to <var>cx-rx</var>,<var>cy</var>;</li>
   <li>arc to <var>cx</var>,<var>cy-ry</var>;</li>
-  <li>arc with a <a>segment-completing close path</a> operation.</li>
+  <li>arc to <var>cx+rx</var>,<var>cy</var>;</li>
+  <li>a <a href="paths.html#PathDataClosePathCommand">closepath</a> command.</li>
 </ol>
 
 <p class="annotation">
