@@ -56,7 +56,7 @@
   <p><a href="https://www.w3.org/"><img height="48" width="72" alt="W3C" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C"/></a></p>
   <h1 id="Overview-pagetitle">Scalable Vector Graphics (SVG) 2</h1>
   <p id="Overview-w3c-state"><a href="https://www.w3.org/standards/types#ED">
-    W3C Editor’s Draft</a> <time class="dt-published" datetime="2026-07-27">27 July 2026</time>
+    W3C Editor’s Draft</a> <time class="dt-published" datetime="2026-08-18">18 August 2026</time>
   </p>
   <details open="open">
     <summary>More details about this document</summary>
@@ -122,7 +122,7 @@ publication. A list of current W3C
 publications and the latest revision of this technical report can be found in
 the <a href="https://www.w3.org/TR/">W3C standards and drafts index</a>.</em></p>
 
-<p>This document is the 27 July 2026 <strong>Editor’s Draft</strong> of SVG 2.  This version of SVG
+<p>This document is the 18 August 2026 <strong>Editor’s Draft</strong> of SVG 2.  This version of SVG
 builds upon <a href="https://www.w3.org/TR/2011/REC-SVG11-20110816/">SVG 1.1 Second Edition</a>
 by improving the usability of the language and by adding new features commonly
 requested by authors.  The <a href="#chapter-changes">Changes</a> appendix lists all
@@ -13900,9 +13900,6 @@ Notes</a>.</p>
 <dfn id="paths-TermEquivalentPath">equivalent path</dfn> is, which is
 what their shape is as a path.  (The equivalent path of a
 <span class="element-name">‘<a href="#paths-PathElement"><span>path</span></a>’</span> element is simply the path itself.)
-In order to define the basic shapes as equivalent paths,
-a <span class="xxx">@@ unknown term "segment-completing close path"</span> operation is defined,
-which cannot currently be represented in the basic path syntax.
 </p>
 
 <h2 id="paths-PathElement" class="heading">9.2. The <span class="element-name">‘path’</span> element<a class="self-link" href="#paths-PathElement"></a></h2>
@@ -15277,6 +15274,18 @@ shapes.</p>
 <p>The <a href="#paths-TermEquivalentPath">equivalent path</a> and algorithm to compute the stroke for each shape
   are defined in the shape sections below.</p>
 
+<p class="note">
+  The <a href="#paths-TermEquivalentPath">equivalent paths</a> of <span class="element-name">‘<a href="#shapes-RectElement"><span>rect</span></a>’</span>, <span class="element-name">‘<a href="#shapes-CircleElement"><span>circle</span></a>’</span> and <span class="element-name">‘<a href="#shapes-EllipseElement"><span>ellipse</span></a>’</span> below
+  each end with a <a href="#paths-PathDataClosePathCommand">closepath</a>
+  that draws a line of zero length,
+  because the command before it already ends at the <a href="#paths-TermInitialPoint">initial point</a>.
+  A zero-length line does not change how the shape is filled or stroked.
+  It can affect where <a href="#painting-TermVertexMarker">vertex markers</a> go,
+  but markers on these elements are placed by the rules in
+  <a href="#painting-VertexMarkerProperties">Vertex markers</a>,
+  not by counting the commands listed for each shape.
+</p>
+
 <h2 id="shapes-RectElement" class="heading">10.2. The <span class="element-name">‘rect’</span> element<a class="self-link" href="#shapes-RectElement"></a></h2>
 
 
@@ -15391,8 +15400,11 @@ following the rules specified above and in <a href="#coords-Units">Units</a>: </
 
   <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
   perform an absolute <a href="#paths-PathDataEllipticalArcCommands">elliptical arc</a>
-  operation with a <span class="xxx">@@ unknown term "segment-completing close path"</span> operation,
-  using the same parameters as previously.</li>
+  operation to coordinate (<var>x+rx</var>,<var>y</var>),
+  using the same parameters as previously;</li>
+
+  <li>perform a <a href="#paths-PathDataClosePathCommand">closepath</a>
+  command.</li>
 </ol>
 
 <p class="annotation">
@@ -15482,7 +15494,8 @@ radius.</p>
   <li>arc to <var>cx</var>,<var>cy+r</var>;</li>
   <li>arc to <var>cx-r</var>,<var>cy</var>;</li>
   <li>arc to <var>cx</var>,<var>cy-r</var>;</li>
-  <li>arc with a <span class="xxx">@@ unknown term "segment-completing close path"</span> operation.</li>
+  <li>arc to <var>cx+r</var>,<var>cy</var>;</li>
+  <li>a <a href="#paths-PathDataClosePathCommand">closepath</a> command.</li>
 </ol>
 
 <p class="annotation">
@@ -15574,7 +15587,8 @@ with the current <a href="https://drafts.csswg.org/css-transforms/#user-coordina
   <li>arc to <var>cx</var>,<var>cy+ry</var>;</li>
   <li>arc to <var>cx-rx</var>,<var>cy</var>;</li>
   <li>arc to <var>cx</var>,<var>cy-ry</var>;</li>
-  <li>arc with a <span class="xxx">@@ unknown term "segment-completing close path"</span> operation.</li>
+  <li>arc to <var>cx+rx</var>,<var>cy</var>;</li>
+  <li>a <a href="#paths-PathDataClosePathCommand">closepath</a> command.</li>
 </ol>
 
 <p class="annotation">
@@ -34372,6 +34386,13 @@ have been made.</p>
     (<a href="https://github.com/w3c/csswg-drafts/issues/13901#issuecomment-4500370159">resolution, 20 May 2026</a>)</li>
     <li>Dropped section 9.3.4.1. Segment-completing close path operation per SVGWG resolution. <a href="https://github.com/w3c/svgwg/issues/893">svgwg-drafts#893</a>
     (<a href="https://github.com/w3c/csswg-drafts/issues/13901#issuecomment-4500370159">resolution, 18 June 2026</a>) </li>
+    <li>Removed the remaining references to the dropped
+    segment-completing close path operation.
+    The <a href="#paths-TermEquivalentPath">equivalent path</a> of <span class="element-name">‘<a href="#shapes-RectElement"><span>rect</span></a>’</span>, <span class="element-name">‘<a href="#shapes-CircleElement"><span>circle</span></a>’</span> and <span class="element-name">‘<a href="#shapes-EllipseElement"><span>ellipse</span></a>’</span>
+    now ends with an ordinary
+    <a href="#paths-PathDataClosePathCommand">closepath</a> command,
+    so every equivalent path can be expressed in the path data syntax.
+    <a href="https://github.com/w3c/svgwg/issues/893">Issue #893</a></li>
 </ul>
 </div>
 
