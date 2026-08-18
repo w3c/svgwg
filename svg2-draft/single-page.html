@@ -9579,6 +9579,70 @@ describe the position and dimension of the <a href="#struct-TermGraphicsElement"
 <span class="element-name">‘<a href="#shapes-EllipseElement"><span>ellipse</span></a>’</span>, <span class="element-name">‘<a href="#shapes-RectElement"><span>rect</span></a>’</span>, <span class="element-name">‘<a href="#embedded-ImageElement"><span>image</span></a>’</span>, <span class="element-name">‘<a href="#embedded-ForeignObjectElement"><span>foreignObject</span></a>’</span> and the
 <span class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span> element.</p>
 
+<p id="geometry-geometry-negative-values">The <a class="property" href="#geometry-CxProperty">cx</a>, <a class="property" href="#geometry-CyProperty">cy</a>, <a class="property" href="#geometry-XProperty">x</a> and <a class="property" href="#geometry-YProperty">y</a>
+properties accept negative values. The <a class="property" href="#geometry-RProperty">r</a>, <a class="property" href="#geometry-RxProperty">rx</a>, <a class="property" href="#geometry-RyProperty">ry</a>, <a class="property" href="#geometry-Sizing">width</a>
+and <a class="property" href="#geometry-Sizing">height</a> properties do not: a negative <a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> is
+<a href="#types-TermInvalidValue">invalid</a>. When an invalid negative value is specified for one of these properties,
+whether through a presentation attribute or a CSS declaration, it must be treated as if the
+property's <a href="#types-TermInitialValue">initial value</a> had been specified: <span class="prop-value">auto</span> for
+<a class="property" href="#geometry-RxProperty">rx</a>, <a class="property" href="#geometry-RyProperty">ry</a>, <a class="property" href="#geometry-Sizing">width</a> and <a class="property" href="#geometry-Sizing">height</a>, and <span class="prop-value">0</span>
+for <a class="property" href="#geometry-RProperty">r</a>. A negative value therefore never puts the element into an error state; the
+<span class="xxx">@@ unknown term "used value"</span> is determined by the property's normal resolution rules. The following table
+summarizes this handling.</p>
+
+<table class="data">
+  <caption>Handling of negative values for the geometry properties</caption>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Value</th>
+      <th>Initial</th>
+      <th>Negative allowed?</th>
+      <th>Negative computes to</th>
+      <th>Used value of a negative value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a class="property" href="#geometry-CxProperty">cx</a>, <a class="property" href="#geometry-CyProperty">cy</a></td>
+      <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a></td>
+      <td>0</td>
+      <td>yes</td>
+      <td>the specified value (kept as-is)</td>
+      <td>the negative value (translates the shape)</td>
+    </tr>
+    <tr>
+      <td><a class="property" href="#geometry-RProperty">r</a></td>
+      <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a></td>
+      <td>0</td>
+      <td>no</td>
+      <td><span class="prop-value">0</span></td>
+      <td>0; a <span class="element-name">‘<a href="#shapes-CircleElement"><span>circle</span></a>’</span> with <a class="property" href="#geometry-RProperty">r</a> = 0 is not rendered</td>
+    </tr>
+    <tr>
+      <td><a class="property" href="#geometry-RxProperty">rx</a>, <a class="property" href="#geometry-RyProperty">ry</a></td>
+      <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | auto</td>
+      <td>auto</td>
+      <td>no</td>
+      <td><span class="prop-value">auto</span></td>
+      <td>resolved as <span class="prop-value">auto</span>: equal to the used value of the
+          other radius, or 0 if the other radius is also <span class="prop-value">auto</span>
+          or negative. An <span class="element-name">‘<a href="#shapes-EllipseElement"><span>ellipse</span></a>’</span> with a resolved radius of 0 is not rendered.</td>
+    </tr>
+    <tr>
+      <td><a class="property" href="#geometry-Sizing">width</a>, <a class="property" href="#geometry-Sizing">height</a></td>
+      <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | auto</td>
+      <td>auto</td>
+      <td>no</td>
+      <td><span class="prop-value">auto</span></td>
+      <td>resolved as <span class="prop-value">auto</span> per the
+          <a href="#geometry-Sizing">sizing table</a>: <span class="prop-value">100%</span> for the
+          outermost <span class="element-name">‘<a href="#struct-SVGElement"><span>svg</span></a>’</span>, the intrinsic size for <span class="element-name">‘<a href="#embedded-ImageElement"><span>image</span></a>’</span>, and
+          <span class="prop-value">0</span> for all other elements.</td>
+    </tr>
+  </tbody>
+</table>
+
 <h2 id="geometry-CX" class="heading">7.1. Horizontal center coordinate: The
 ‘<span class="property">cx</span>’ property<a class="self-link" href="#geometry-CX"></a></h2>
 <table class="propdef def">
@@ -9624,6 +9688,10 @@ describe the position and dimension of the <a href="#struct-TermGraphicsElement"
 
 <p>The <a class="property" href="#geometry-CxProperty">cx</a> property describes the horizontal center coordinate
 of the position of the element.</p>
+
+<p class="note">Negative values are permitted for <a class="property" href="#geometry-CxProperty">cx</a>; a negative value translates the
+center of the shape and does not disable rendering, unlike <a class="property" href="#geometry-RProperty">r</a>, <a class="property" href="#geometry-RxProperty">rx</a> and
+<a class="property" href="#geometry-RyProperty">ry</a> (see the <a href="#geometry-geometry-negative-values">handling of negative values</a>).</p>
 
 <h2 id="geometry-CY" class="heading">7.2. Vertical center coordinate: The ‘<span class="property">cy</span>’
 property<a class="self-link" href="#geometry-CY"></a></h2>
@@ -9671,6 +9739,10 @@ property<a class="self-link" href="#geometry-CY"></a></h2>
 <p>The <a class="property" href="#geometry-CyProperty">cy</a> property describes the vertical center coordinate
 of the position of the element. </p>
 
+<p class="note">Negative values are permitted for <a class="property" href="#geometry-CyProperty">cy</a>; a negative value translates the
+center of the shape and does not disable rendering (see the
+<a href="#geometry-geometry-negative-values">handling of negative values</a>).</p>
+
 <h2 id="geometry-R" class="heading">7.3. Radius: The ‘<span class="property">r</span>’ property<a class="self-link" href="#geometry-R"></a></h2>
 <table class="propdef def">
   <tr>
@@ -9715,7 +9787,10 @@ of the position of the element. </p>
 <p>The <a class="property" href="#geometry-RProperty">r</a> property describes the radius of the <span class="element-name">‘<a href="#shapes-CircleElement"><span>circle</span></a>’</span>
 element.</p>
 
-<p>A negative value for <a class="property" href="#geometry-RProperty">r</a> is <a href="#types-TermInvalidValue">invalid</a> and must be <a href="https://drafts.csswg.org/css-syntax/#css-ignored">ignored</a>.</p>
+<p>A negative value for <a class="property" href="#geometry-RProperty">r</a> is <a href="#types-TermInvalidValue">invalid</a>; it is treated as if
+<span class="prop-value">0</span> had been specified (see the
+<a href="#geometry-geometry-negative-values">handling of negative values</a>), so the
+<span class="element-name">‘<a href="#shapes-CircleElement"><span>circle</span></a>’</span> is not rendered.</p>
 
 <h2 id="geometry-RX" class="heading">7.4. Horizontal radius: The ‘<span class="property">rx</span>’
 property<a class="self-link" href="#geometry-RX"></a></h2>
@@ -9773,7 +9848,11 @@ element.
     matching the behavior for <span class="element-name">‘<a href="#shapes-RectElement"><span>rect</span></a>’</span> elements when <a class="property" href="#geometry-RxProperty">rx</a> was not specified.
 </p>
 
-<p>A negative value for <a class="property" href="#geometry-RxProperty">rx</a> is <a href="#types-TermInvalidValue">invalid</a> and must be <a href="https://drafts.csswg.org/css-syntax/#css-ignored">ignored</a>.</p>
+<p>A negative value for <a class="property" href="#geometry-RxProperty">rx</a> is <a href="#types-TermInvalidValue">invalid</a>; it is treated as if
+<span class="prop-value">auto</span> had been specified (see the
+<a href="#geometry-geometry-negative-values">handling of negative values</a>). It therefore resolves
+like <span class="prop-value">auto</span>: to the used value of <a class="property" href="#geometry-RyProperty">ry</a>, or to 0 if
+<a class="property" href="#geometry-RyProperty">ry</a> is also <span class="prop-value">auto</span> or negative.</p>
 
 <h2 id="geometry-RY" class="heading">7.5. Vertical radius: The ‘<span class="property">ry</span>’
 property<a class="self-link" href="#geometry-RY"></a></h2>
@@ -9831,7 +9910,11 @@ property<a class="self-link" href="#geometry-RY"></a></h2>
     matching the behavior for <span class="element-name">‘<a href="#shapes-RectElement"><span>rect</span></a>’</span> elements when <a class="property" href="#geometry-RyProperty">ry</a> was not specified.
 </p>
 
-<p>A negative value for <a class="property" href="#geometry-RyProperty">ry</a> is <a href="#types-TermInvalidValue">invalid</a> and must be <a href="https://drafts.csswg.org/css-syntax/#css-ignored">ignored</a>.</p>
+<p>A negative value for <a class="property" href="#geometry-RyProperty">ry</a> is <a href="#types-TermInvalidValue">invalid</a>; it is treated as if
+<span class="prop-value">auto</span> had been specified (see the
+<a href="#geometry-geometry-negative-values">handling of negative values</a>). It therefore resolves
+like <span class="prop-value">auto</span>: to the used value of <a class="property" href="#geometry-RxProperty">rx</a>, or to 0 if
+<a class="property" href="#geometry-RxProperty">rx</a> is also <span class="prop-value">auto</span> or negative.</p>
 
 <h2 id="geometry-X" class="heading">7.6. Horizontal coordinate: The ‘<span class="property">x</span>’ property<a class="self-link" href="#geometry-X"></a></h2>
 <table class="propdef def">
@@ -10292,9 +10375,12 @@ being applied to the viewport coordinate system as described in
 </p>
 
 <p>A negative value for <span class="attr-value">&lt;width></span> or
-<span class="attr-value">&lt;height></span> is an error and invalidates
-the <span class="attr-name">‘<a href="#coords-ViewBoxAttribute"><span>viewBox</span></a>’</span> attribute. A value of zero disables rendering of the
-element.</p>
+<span class="attr-value">&lt;height></span> is an error: the <span class="attr-name">‘<a href="#coords-ViewBoxAttribute"><span>viewBox</span></a>’</span>
+attribute is <a href="#types-TermInvalidValue">invalid</a> and must be treated as if it had not been specified,
+so no viewBox transformation is applied. A value of zero for
+<span class="attr-value">&lt;width></span> or <span class="attr-value">&lt;height></span>
+disables rendering of the element, consistent with the treatment of other zero-sized
+viewports.</p>
 
 <div class="example">
 <p id="coords-ExampleViewBox"><span class="example-ref">Example ViewBox</span> illustrates
