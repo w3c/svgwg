@@ -56,7 +56,7 @@
   <p><a href="https://www.w3.org/"><img height="48" width="72" alt="W3C" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C"/></a></p>
   <h1 id="Overview-pagetitle">Scalable Vector Graphics (SVG) 2</h1>
   <p id="Overview-w3c-state"><a href="https://www.w3.org/standards/types#ED">
-    W3C Editor’s Draft</a> <time class="dt-published" datetime="2026-09-10">10 September 2026</time>
+    W3C Editor’s Draft</a> <time class="dt-published" datetime="2026-09-14">14 September 2026</time>
   </p>
   <details open="open">
     <summary>More details about this document</summary>
@@ -122,7 +122,7 @@ publication. A list of current W3C
 publications and the latest revision of this technical report can be found in
 the <a href="https://www.w3.org/TR/">W3C standards and drafts index</a>.</em></p>
 
-<p>This document is the 10 September 2026 <strong>Editor’s Draft</strong> of SVG 2.  This version of SVG
+<p>This document is the 14 September 2026 <strong>Editor’s Draft</strong> of SVG 2.  This version of SVG
 builds upon <a href="https://www.w3.org/TR/2011/REC-SVG11-20110816/">SVG 1.1 Second Edition</a>
 by improving the usability of the language and by adding new features commonly
 requested by authors.  The <a href="#chapter-changes">Changes</a> appendix lists all
@@ -4431,8 +4431,10 @@ the following steps:</p>
 
 <ol class="algorithm">
   <li class="ready-for-wider-review">Let <var>value</var> be the base value of the
-    reflected content attribute (using the attribute's <a href="#types-TermInitialValue">initial value</a>
-    if it is not present or invalid).</li>
+    reflected content attribute. If the attribute is not present, or if its
+    value cannot be parsed, let <var>value</var> be the attribute's
+    <a href="#types-TermInitialValue">initial value</a>, or an empty list if the attribute's
+    <a href="#types-TermInitialValue">initial value</a> is <span class="attr-value">(none)</span>.</li>
   <li>Let <var>length</var> be the number of items in the list.</li>
   <li>Let <var>new length</var> be the number of values in <var>value</var>.
   If <var>value</var> is the keyword <span class="prop-value">none</span>
@@ -16884,6 +16886,13 @@ interface <b>SVGPolygonElement</b> : <a class="idlinterface" href="#types-Interf
   </p>
 
   <p>
+    If no <span class="attr-name">‘<a href="#text-TextElementXAttribute"><span>x</span></a>’</span> (<span class="attr-name">‘<a href="#text-TextElementYAttribute"><span>y</span></a>’</span>) attribute establishes the
+    initial <a href="#text-TermCurrentTextPosition">current text position</a>, then its X (Y) coordinate is
+    <span class="attr-value">0</span> in the current user coordinate
+    system.
+  </p>
+
+  <p>
     A <dfn id="text-TermBaselineTable" data-dfn-type="dfn" data-export="">baseline-table</dfn> specifies the position of one or more
     baselines in the design space coordinate system. The function of
     the baseline table is to facilitate the alignment of different
@@ -17307,7 +17316,7 @@ interface <b>SVGPolygonElement</b> : <a class="idlinterface" href="#types-Interf
 	<tr>
           <td><dfn id="text-TextElementXAttribute" data-dfn-type="element-attr" data-dfn-for="text" data-export="">x</dfn>, <dfn id="text-TextElementYAttribute" data-dfn-type="element-attr" data-dfn-for="text" data-export="">y</dfn></td>
           <td>[ [ <a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> ]+ ]#</td>
-          <td>0 for <span class="element-name">‘<a href="#text-TextElement"><span>text</span></a>’</span>;<br/> (none) for <span class="element-name">‘<a href="#text-TextElement"><span>tspan</span></a>’</span></td>
+          <td>(none)</td>
           <td>yes</td>
 	</tr>
       </table>
@@ -17335,7 +17344,7 @@ interface <b>SVGPolygonElement</b> : <a class="idlinterface" href="#types-Interf
       </p>
       <p>
 	If more characters exist than <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>s,
-    or if the attribute is not specified on a <span class="element-name">‘<a href="#text-TextElement"><span>tspan</span></a>’</span>,
+    or if the attribute is not specified,
     then for each additional character:
       </p>
       <ol style="list-style-type: lower-alpha">
@@ -17351,7 +17360,9 @@ interface <b>SVGPolygonElement</b> : <a class="idlinterface" href="#types-Interf
 	    the starting X (Y) coordinate for rendering the glyphs
         corresponding to the given character is the X (Y) coordinate
         of the resulting <a href="#text-TermCurrentTextPosition">current text position</a> from the most
-        recently rendered glyph for the current <span class="element-name">‘<a href="#text-TextElement"><span>text</span></a>’</span> element.
+        recently rendered glyph for the current <span class="element-name">‘<a href="#text-TextElement"><span>text</span></a>’</span> element,
+        or the X (Y) coordinate of the initial <a href="#text-TermCurrentTextPosition">current text position</a> if no glyph has yet been rendered for that
+        element.
         </li>
       </ol>
       <p class="note">
@@ -34185,6 +34196,19 @@ have been made.</p>
 
 <ul><li>Adjust getBBox() to return 0 when any values are invalid. March 2026. <a href="https://github.com/w3c/svgwg/issues/1018">Issue #1018</a></li></ul>
 
+<ul>
+  <li>Clarified step 1 of the algorithm for
+    <a href="#types-TermSynchronizeList">synchronizing a list interface
+    object</a>, so that an attribute which is absent or unparsable gives an
+    empty list when its <a href="#types-TermInitialValue">initial value</a> is
+    <span class="attr-value">(none)</span>. Previously the step asked for the
+    <a href="#types-TermInitialValue">initial value</a> with no answer for the
+    <span class="attr-value">(none)</span> case, which left the reflected list
+    undefined for an attribute that had been removed by script.
+    <a href="https://github.com/w3c/svgwg/issues/1168">Issue #1168</a>
+  </li>
+</ul>
+
 <h3 id="changes-structure" class="heading">K.2.6. Document Structure chapter<a class="self-link" href="#changes-structure"></a></h3>
 
 <ul>
@@ -34643,6 +34667,14 @@ have been made.</p>
   <li>Reverted to SVG 1.1 definition of addressable character for the
     purposes of text positioning attributes (e.g. counting by Unicode
     code points).
+  </li>
+  <li>Changed the initial value of <span class="attr-name">‘<a href="#text-TextElementXAttribute"><span>x</span></a>’</span> and <span class="attr-name">‘<a href="#text-TextElementYAttribute"><span>y</span></a>’</span>
+    on <span class="element-name">‘<a href="#text-TextElement"><span>text</span></a>’</span> from <span class="attr-value">0</span> to
+    <span class="attr-value">(none)</span>, so that the reflected
+    <a class="idlinterface" href="#types-InterfaceSVGLengthList">SVGLengthList</a> is empty when the attribute is absent, as all
+    implementations do. The rendering default moved into the prose on
+    the initial <a href="#text-TermCurrentTextPosition">current text position</a>.
+    <a href="https://github.com/w3c/svgwg/issues/1168">Issue #1168</a>
   </li>
 </ul>
 </div>
