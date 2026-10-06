@@ -2406,7 +2406,7 @@ has the same rendering behavior as
   </tr>
   <tr>
     <th>Value:</th>
-    <td>auto | sRGB | linearRGB</td>
+    <td>auto | sRGB | linearRGB | <a>&lt;color-interpolation-method&gt;</a></td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -2439,30 +2439,39 @@ has the same rendering behavior as
   </tr>
 </table>
 
-<p>The SVG user agent performs color interpolations and compositing
-at various points as it processes SVG content.  The <a>'color-interpolation'</a>
-property controls which color space is used for the following graphics operations:</p>
+<p>The SVG user agent interpolates colors at various points as it processes SVG
+content.  The <a>'color-interpolation'</a> property specifies the
+<a href="https://drafts.csswg.org/css-color-4/#interpolation-color-space">interpolation
+color space</a> used for the following graphics operations:
+[<a href="refs.html#ref-css-color-4">css-color-4</a>]</p>
 
 <ul>
   <li>interpolating between <a href="pservers.html#Gradients">gradient</a> stops,</li>
 
-  <li>interpolating color when performing color animations with
-  <a>'animate'</a>,</li>
-  <li>and <a href="render.html#PaintersModel">compositing and blending</a> of
-  <a>graphics elements</a> into the current background.</li>
+  <li>and interpolating color when performing color animations with
+  <a>'animate'</a>.</li>
 </ul>
+
+<p class="note">In SVG 1.1 this property also selected the color space for
+<a href="render.html#PaintersModel">compositing and blending</a> of
+<a>graphics elements</a> into the current background.  No user agent implemented
+that, and the requirement has been removed.  Compositing and blending are
+performed as defined in Compositing and Blending.
+[<a href="refs.html#ref-compositing-1">compositing-1</a>]</p>
 
 <p class="note">For <a href="https://www.w3.org/TR/filter-effects/">filter effects</a>, the
 <a>'color-interpolation-filters'</a> property controls which color space is used.
 [<a href="refs.html#ref-filter-effects-1">filter-effects-1</a>]</p>
+
+<p class="note">The computed value of <a>'color-interpolation'</a> on a
+<a href="https://drafts.csswg.org/css-masking-1/#MaskElement">'mask'</a> element
+determines the color space in which mask luminance is computed.  See
+<a href="https://drafts.csswg.org/css-masking-1/#MaskValues">Mask processing</a>.
+[<a href="refs.html#ref-css-masking-1">css-masking-1</a>]</p>
 </div>
 
 <div class='ready-for-wider-review'>
-<p>The <a>'color-interpolation'</a> property chooses between color operations
-occurring in the sRGB color space or in a (light energy linear) linearized RGB
-color space. Having chosen the appropriate color space, component-wise linear
-interpolation is used.  Values for <a>'color-interpolation'</a> have the
-following meanings:</p>
+<p>Values for <a>'color-interpolation'</a> have the following meanings:</p>
 
 <dl>
   <dt><span class='prop-value'>auto</span></dt>
@@ -2473,107 +2482,65 @@ following meanings:</p>
   interpolation occur in a particular color space.</dd>
 
   <dt><span class='prop-value'>sRGB</span></dt>
-  <dd>Indicates that color interpolation occurs in the sRGB
-  color space.</dd>
+  <dd>Indicates that the interpolation color space is
+  <a href="https://drafts.csswg.org/css-color-4/#predefined-sRGB">sRGB</a>,
+  the gamma encoded sRGB color space.  Equivalent to
+  <span class='prop-value'>in srgb</span>.</dd>
 
   <dt><span class='prop-value'>linearRGB</span></dt>
-  <dd>Indicates that color interpolation occurs in the
-  linearized RGB color space as described below.</dd>
+  <dd>Indicates that the interpolation color space is
+  <a href="https://drafts.csswg.org/css-color-4/#predefined-sRGB-linear">srgb-linear</a>,
+  which has the same primaries and white point as
+  <span class='prop-value'>sRGB</span> and a linear transfer function, so that
+  its component values are proportional to light intensity.  Equivalent to
+  <span class='prop-value'>in srgb-linear</span>.</dd>
+
+  <dt><a>&lt;color-interpolation-method&gt;</a></dt>
+  <dd>Indicates the interpolation color space, and for a polar color space the
+  hue interpolation method, as defined in CSS Color 4.  For a polar color space
+  the hues are fixed up as described there before they are interpolated.
+  [<a href="refs.html#ref-css-color-4">css-color-4</a>]</dd>
 </dl>
 
-<p id="sRGBlinearRGBConversionFormulas">The conversion formulas between the
-sRGB color space (i.e., nonlinear with 2.2 gamma curve) and the linearized RGB
-color space (i.e., color values expressed as sRGB tristimulus values without a
-gamma curve) can be found in <a href="https://webstore.iec.ch/publication/6168">the sRGB specification</a>
-[<a href="refs.html#ref-srgb">SRGB</a>].
-For illustrative purposes, the following formula shows the conversion from
-sRGB to linearized RGB, where <var>C<sub>srgb</sub></var> is one of the
-three sRGB color components, <var>C<sub>linear</sub></var> is the corresponding
-linearized RGB color component, and all color values are between 0 and 1:</p>
+<p class="note">The <a>&lt;color-interpolation-method&gt;</a> values give access
+to the other interpolation color spaces of CSS Color 4, so that a gradient can
+be interpolated in a perceptually uniform space such as
+<span class='prop-value'>in oklab</span>, or around the hue circle with
+<span class='prop-value'>in oklch</span>.</p>
 
-<div role="math" aria-describedby="math-linearRGB">
-  <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-    <mrow>
-      <msub>
-        <mi>C</mi>
-        <mi>linear</mi>
-      </msub>
-      <mo>=</mo>
-      <mo>{</mo>
-      <mtable columnalign="left">
-        <mtr>
-          <mtd>
-            <mfrac>
-              <msub>
-                <mi>C</mi>
-                <mi>srgb</mi>
-              </msub>
-              <mn>12.92</mn>
-            </mfrac>
-          </mtd>
-          <mtd>
-            <mtext>if&#160;</mtext>
-            <msub>
-              <mi>C</mi>
-              <mi>srgb</mi>
-            </msub>
-            <mo>≤</mo>
-            <mn>0.04045</mn>
-          </mtd>
-        </mtr>
-        <mtr>
-          <mtd>
-            <msup>
-              <mfenced>
-                <mfrac>
-                  <mrow>
-                    <msub>
-                      <mi>C</mi>
-                      <mi>srgb</mi>
-                    </msub>
-                    <mo>+</mo>
-                    <mn>0.055</mn>
-                  </mrow>
-                  <mn>1.055</mn>
-                </mfrac>
-              </mfenced>
-              <mn>2.4</mn>
-            </msup>
-          </mtd>
-          <mtd>
-            <mtext>if&#160;</mtext>
-            <msub>
-              <mi>C</mi>
-              <mi>srgb</mi>
-            </msub>
-            <mo>></mo>
-            <mn>0.04045</mn>
-          </mtd>
-        </mtr>
-      </mtable>
-    </mrow>
-  </math>
-  <pre id="math-linearRGB">
-if C_srgb &lt;= 0.04045
-  C_linear = C_srgb / 12.92
-else if c_srgb &gt; 0.04045
-  C_linear = ((C_srgb + 0.055) / 1.055) ^ 2.4
-</pre>
-</div>
+<p id="sRGBlinearRGBConversionFormulas">The conversion between the
+<span class='prop-value'>sRGB</span> and the
+<span class='prop-value'>linearRGB</span> color spaces is the one defined for
+<a href="https://drafts.csswg.org/css-color-4/#predefined-sRGB-linear">srgb-linear</a>
+in CSS Color 4. [<a href="refs.html#ref-css-color-4">css-color-4</a>]</p>
 
-<p>Out-of-range color values, if supported by the user agent, also are
-converted using the above formulas.</p>
+<p>Having determined the interpolation color space, component-wise linear
+interpolation is used.</p>
 
-<p>When a child element is blended into a background, the value of the
-<a>'color-interpolation'</a> property on the child determines the type of
-blending, not the value of the <a>'color-interpolation'</a> on the parent.
-For <a href="pservers.html#Gradients">gradients</a> which make use of the
+<p class="annotation">CSS Color 4 defines a fuller
+<a href="https://drafts.csswg.org/css-color-4/#interpolation">color
+interpolation</a> procedure, which interpolates
+<a href="https://drafts.csswg.org/css-color-4/#premultiplied">premultiplied</a>
+values and defines the treatment of
+<a href="https://drafts.csswg.org/css-color-4/#missing">missing components</a>.
+It is not adopted here because it differs from what implementations do.  Gradient
+stops and color animations are interpolated straight rather than premultiplied,
+so the two procedures part company when the color and the alpha both change
+between one stop, or one animation value, and the next.  See
+<a href="https://github.com/w3c/svgwg/issues/366">issue 366</a>.</p>
+
+<p>For <a href="pservers.html#Gradients">gradients</a> which make use of the
 <span class='attr-name'>'href'</span> attribute to reference another
 gradient, the gradient uses the <a>'color-interpolation'</a> property value
 from the gradient element which is directly referenced by the <a>'fill'</a> or
 <a>'stroke'</a> property. When animating colors, color interpolation is
 performed according to the value of the <a>'color-interpolation'</a> property
 on the element being animated.</p>
+
+<p class="note">This property does not affect the interpolation of color
+properties by CSS Transitions or CSS Animations, which interpolate as defined
+by CSS Color 4 for those host syntaxes.
+[<a href="refs.html#ref-css-color-4">css-color-4</a>]</p>
 
 
 <h2 id="RenderingHints">Rendering hints</h2>
