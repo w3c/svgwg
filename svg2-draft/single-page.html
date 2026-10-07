@@ -56,7 +56,7 @@
   <p><a href="https://www.w3.org/"><img height="48" width="72" alt="W3C" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C"/></a></p>
   <h1 id="Overview-pagetitle">Scalable Vector Graphics (SVG) 2</h1>
   <p id="Overview-w3c-state"><a href="https://www.w3.org/standards/types#ED">
-    W3C Editor’s Draft</a> <time class="dt-published" datetime="2026-10-02">02 October 2026</time>
+    W3C Editor’s Draft</a> <time class="dt-published" datetime="2026-10-07">07 October 2026</time>
   </p>
   <details open="open">
     <summary>More details about this document</summary>
@@ -122,7 +122,7 @@ publication. A list of current W3C
 publications and the latest revision of this technical report can be found in
 the <a href="https://www.w3.org/TR/">W3C standards and drafts index</a>.</em></p>
 
-<p>This document is the 02 October 2026 <strong>Editor’s Draft</strong> of SVG 2.  This version of SVG
+<p>This document is the 07 October 2026 <strong>Editor’s Draft</strong> of SVG 2.  This version of SVG
 builds upon <a href="https://www.w3.org/TR/2011/REC-SVG11-20110816/">SVG 1.1 Second Edition</a>
 by improving the usability of the language and by adding new features commonly
 requested by authors.  The <a href="#chapter-changes">Changes</a> appendix lists all
@@ -4419,6 +4419,26 @@ changes to the reflected content attribute and to animation of
 the content attribute (or, for <a class="idlinterface" href="#coords-InterfaceSVGTransformList">SVGTransformList</a> objects,
 in response to changes to the computed value of the <a class="property" href="#coords-TransformProperty">transform</a>
 property).</p>
+
+<p id="types-ListItemIdentity">When the list's element type is an object type, the
+elements of the list are those objects and not copies of them.
+<a href="#types-__svg__SVGNameList__getItem">getItem</a>, the indexed property
+getter (declared as <a href="#types-__svg__SVGNameList__getItem">getItem</a> in the
+IDL above), and every method that returns an element of the list
+(<a href="#types-__svg__SVGNameList__initialize">initialize</a>,
+<a href="#types-__svg__SVGNameList__insertItemBefore">insertItemBefore</a>,
+<a href="#types-__svg__SVGNameList__replaceItem">replaceItem</a>,
+<a href="#types-__svg__SVGNameList__appendItem">appendItem</a> and
+<a href="#coords-__svg__SVGTransformList__consolidate">consolidate</a>)
+return that object.  Two accesses of the same index therefore return the same
+object, for as long as that object is the element at that index.  For a method
+that takes an item as its argument, the object returned is not necessarily the
+one that was passed, since the method's steps may have replaced it by a copy.
+Whether an object is still the element at an index after the reflected content
+attribute changes is decided by the steps for
+<a href="#types-TermSynchronizeList">synchronizing</a> a <a href="#types-TermListInterface">list interface</a>
+object.  When the element type is <b>DOMString</b>, elements are returned and
+compared by value.</p>
 
 <p id="types-ReadOnlyList" class="ready-for-wider-review">A <a href="#types-TermListInterface">list interface</a> object can be designated as
 <em>read only</em>, which means that attempts to modify the object will result
@@ -34206,6 +34226,17 @@ have been made.</p>
     <span class="attr-value">(none)</span> case, which left the reflected list
     undefined for an attribute that had been removed by script.
     <a href="https://github.com/w3c/svgwg/issues/1168">Issue #1168</a>
+  </li>
+</ul>
+
+<ul>
+  <li>Stated that a <a href="#types-TermListInterface">list interface</a> object whose elements are objects
+    returns the object itself, so that
+    <a href="#types-__svg__SVGNameList__getItem">getItem</a>, indexed
+    access and the methods returning an element all return the same object
+    for the same index. SVG 1.1 said this for each list; SVG 2 had kept it
+    only as a note.
+    <a href="https://github.com/w3c/svgwg/issues/1169">Issue #1169</a>
   </li>
 </ul>
 
