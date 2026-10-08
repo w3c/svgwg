@@ -6,6 +6,21 @@ include tools/spec.mk
 all-specs : all
 	@for spec in specs/*; do if [ -f $$spec/Makefile -a $$spec != 'specs/template' ]; then echo && echo "Building $$spec" && make -s -C $$spec/ all; fi; done
 
+# Bikeshed version of SVG 2, built side by side with the current one.
+# See tools/bikeshed/README.md.
+bikeshed :
+	./tools/bikeshed/build.sh
+
+bikeshed-check : all bikeshed
+	./tools/bikeshed/check.sh
+
+# Unit tests of the conversion scripts: standard library only, no Bikeshed,
+# no network, a few seconds. See "Tests" in tools/bikeshed/README.md.
+bikeshed-test :
+	python3 -m unittest discover -s tools/bikeshed/tests -t tools/bikeshed
+
+.PHONY : bikeshed bikeshed-check bikeshed-test
+
 pdf : all
 	prince --no-author-style -s build/publish/style/svg-style.css -s http://www.w3.org/StyleSheets/TR/W3C-REC -s build/publish/style/svg-style-print.css build/publish/single-page.html -o build/publish/single-page.pdf
 
