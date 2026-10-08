@@ -128,8 +128,20 @@ class ConvertTests(unittest.TestCase):
 
     def test_explicit_href_when_no_definition_to_land_on(self):
         # no dfn carries RectElementXAttribute: the link keeps its target
-        self.assertIn('<a href="#RectElementXAttribute">x</a>', self.shapes)
+        self.assertIn('<a href="#RectElementXAttribute" data-link-type="element-attr">x</a>', self.shapes)
         self.assertIn('<a href="#DataTypeLength">&lt;length></a>', self.intro)
+
+    def test_href_links_look_like_typed_links(self):
+        # Bikeshed shows typed element and attribute links in code font by
+        # their data-link-type; href links of the same kind get it too.
+        self.assertIn('<span class="element-name">‘<a href="#DescElement" data-link-type="element">desc</a>’</span>',
+                      self.shapes)
+        self.assertIn('<a href="#PathLengthAttribute" data-link-type="element-attr">pathLength</a>', self.shapes)
+        # other kinds are left alone
+        self.assertIn('<a href="#TermCoreAttribute">core attributes</a>', self.shapes)
+        self.assertIn('<a href="#XProperty" class="property">x</a>', self.shapes)
+        # a typed link keeps its own data-link-type, only once
+        self.assertNotIn('data-link-type="element-attr" data-link-for="rect" data-lt="rx" data-link-type', self.shapes)
 
     def test_external_definition_link(self):
         self.assertIn('<a href="https://drafts.csswg.org/filter-effects-1/#FilterProperty" class="property">filter</a>',
@@ -159,7 +171,7 @@ class ConvertTests(unittest.TestCase):
     def test_edit_with_becomes_link_for_hint(self):
         self.assertIn('<div link-for-hint="script">\n<p>Inside a script:', self.intro)
         # inside the hint, 'type' is the script element's attribute
-        self.assertIn('<a href="#ScriptElementTypeAttribute">type</a>', self.intro)
+        self.assertIn('<a href="#ScriptElementTypeAttribute" data-link-type="element-attr">type</a>', self.intro)
         # an edit:with holding a heading leaves no wrapper
         self.assertNotIn('link-for-hint="rect"', self.shapes)
 
@@ -185,9 +197,10 @@ class ConvertTests(unittest.TestCase):
                       self.shapes)
 
     def test_attribute_category_list(self):
-        self.assertIn('Core attributes are <span class="attr-name">‘<a href="#IDAttribute">id</a>’</span>, '
-                      '<span class="attr-name">‘<a href="#ClassAttribute">class</a>’</span> and '
-                      '<span class="attr-name">‘<a href="#CoreDupAttribute">dup</a>’</span>.', self.intro)
+        self.assertIn('Core attributes are <span class="attr-name">‘<a href="#IDAttribute" data-link-type="element-attr">id</a>’'
+                      '</span>, <span class="attr-name">‘<a href="#ClassAttribute" data-link-type="element-attr">class</a>’'
+                      '</span> and <span class="attr-name">‘<a href="#CoreDupAttribute" data-link-type="element-attr">dup</a>’'
+                      '</span>.', self.intro)
 
     def test_elements_with_attribute_category(self):
         self.assertIn('Elements with core attributes: <span class="element-name">'
@@ -339,7 +352,8 @@ class ConvertVariantTests(unittest.TestCase):
         intro = self.files["intro.bs"]
         self.assertIn('<a href="https://w3c.github.io/svgwg/svg2-draft/shapes.html#RectElement" data-svgtrace=',
                       intro)
-        self.assertNotIn('data-link-type="element"', intro)
+        # not typed: no Bikeshed autolink (data-lt), only the styling attribute
+        self.assertNotIn('data-link-type="element" data-lt=', intro)
 
     def test_trace_links(self):
         rows = json.loads(self.files["trace-links.json"])

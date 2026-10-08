@@ -46,6 +46,9 @@ PHRASING_OK = {"p", "li", "dt", "dd", "td", "th", "div", "span", "b", "i", "em",
                "a", "caption", "figcaption", "section", "code", "var", "dfn", "label",
                "h2", "h3", "h4", "h5", "h6", "details", "summary", "blockquote", "nav"}
 HEADINGS = {"h1", "h2", "h3", "h4", "h5", "h6"}
+# Link kinds (svgdefs.Link.kind) whose href links get the data-link-type that
+# Bikeshed's own typed links have, so that both kinds look the same.
+LOOK_LIKE_TYPED = {"element": "element", "attribute": "element-attr"}
 BLOCKS = {"p", "div", "dl", "table", "ul", "ol", "pre", "blockquote", "figure", "details",
           "section", "h1", "h2", "h3", "h4", "h5", "h6", "hr"}
 
@@ -822,6 +825,12 @@ class Converter(object):
             trace["n"] = len(self.trace_rows)
             self.trace_rows.append(trace)
             attrs.append(("data-svgtrace", str(trace["n"])))
+        if not any(k == "data-link-type" for k, _ in attrs) and kind in LOOK_LIKE_TYPED:
+            # Bikeshed shows element and attribute links in code font by their
+            # data-link-type. Links written with an href (to another spec, or
+            # not typed) get the same attribute, so they look the same.
+            attrs.append(("data-link-type", LOOK_LIKE_TYPED[kind]))
+            self.bump("links: href link styled as %s" % LOOK_LIKE_TYPED[kind])
         a = "<a" + "".join(' %s="%s"' % (k, esc_attr(v)) for k, v in attrs if v is not None) + ">"
         return a + inner_html + "</a>"
 
