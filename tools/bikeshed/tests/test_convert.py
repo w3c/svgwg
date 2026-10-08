@@ -177,7 +177,7 @@ class ConvertTests(unittest.TestCase):
 
     def test_element_summary(self):
         s = self.shapes
-        self.assertIn('<div class="element-summary"><div class="element-summary-name"><span class="element-name">'
+        self.assertIn('<div class="def element-summary"><div class="element-summary-name"><span class="element-name">'
                       '‘<dfn data-dfn-type="element" data-export="" id="elementdef-rect" '
                       'oldids="shapes-elementdef-rect">rect</dfn>’</span></div>', s)
         summary = s[s.index('id="elementdef-rect"'):s.index('id="elementdef-rect"') + 3000]

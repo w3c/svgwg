@@ -928,7 +928,9 @@ class Converter(object):
         oldids = ' oldids="%s"' % esc_attr(alias) if alias else ""
         mp = ' data-multipage-id="%s"' % did if nid != did else ""
         self.bump("generated: element summaries")
-        return ('<div class="element-summary"><div class="element-summary-name"><span class="element-name">'
+        # "def" is the W3C stylesheet's class for definition boxes: the same
+        # frame Bikeshed's property and IDL definitions get.
+        return ('<div class="def element-summary"><div class="element-summary-name"><span class="element-name">'
                 '%s<dfn data-dfn-type="element" data-export="" id="%s"%s%s>%s</dfn>%s</span></div><dl>'
                 '<dt>Categories:</dt><dd>%s</dd>'
                 '<dt>Content model:</dt><dd>%s</dd>'
