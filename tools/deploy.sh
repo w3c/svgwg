@@ -40,3 +40,9 @@ mv deploy/specs/integration/Overview.html deploy/specs/integration/index.html
 mv deploy/specs/markers/Overview.html deploy/specs/markers/index.html
 mv deploy/specs/paths/Overview.html deploy/specs/paths/index.html
 mv deploy/specs/strokes/Overview.html deploy/specs/strokes/index.html
+
+# Bikeshed version of SVG 2, published side by side while it is being
+# checked (see tools/bikeshed/README.md). Only present if it was built.
+if [ -f build/bikeshed/svg2-draft/index.html ]; then
+  cp -r build/bikeshed/svg2-draft deploy/svg2-draft-bikeshed
+fi

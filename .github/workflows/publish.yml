@@ -22,6 +22,19 @@ jobs:
       - name: Build all specs
         run: make all-specs
 
+      # Bikeshed version of SVG 2, published side by side at svg2-draft-bikeshed/
+      # while it is being checked. It must never block the publication of the
+      # current specs, hence continue-on-error. See tools/bikeshed/README.md.
+      - name: Set up Python for Bikeshed
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Build the Bikeshed version of SVG 2
+        continue-on-error: true
+        run: |
+          pip install bikeshed
+          make bikeshed
 
       - name: Prepare deployment to GitHub Pages
         run: ./tools/deploy.sh
@@ -33,3 +46,37 @@ jobs:
         with:
           branch: gh-pages
           folder: deploy
+
+  # Fails when the Bikeshed version loses an id or a link of the current
+  # SVG 2 build, on the chapter pages or on the single page.
+  # Does not block the publication above.
+  bikeshed-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Run the unit tests of the conversion scripts
+        run: make bikeshed-test
+
+      - name: Install Bikeshed
+        run: pip install bikeshed
+
+      - name: Build both versions of SVG 2 and compare them
+        run: make bikeshed-check
+
+      - name: Keep the check report and the Bikeshed log
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: bikeshed-check
+          path: |
+            build/bikeshed/losses.tsv
+            build/bikeshed/work/build.log
+          if-no-files-found: ignore
