@@ -77,8 +77,12 @@ publish_dir = join(build_dir, 'publish')
 tools_dir = join(repo_dir, 'tools')
 
 if not exists(master_dir):
-  exit(1, 'FAIL: build.py must be run from the root of the \'svg2\' repository '
-          'or from one of the directories under \'specs/\'.')
+  exit(1, 'FAIL: build.py must be run from one of the directories under \'specs/\'.')
+
+if not exists(join(master_dir, 'publish.xml')):
+  # SVG 2 itself (master/ at the root) moved to Bikeshed in 2026.
+  exit(1, 'FAIL: no master/publish.xml here. SVG 2 is built with Bikeshed: '
+          'run make at the root (see tools/svg2-build/README.md).')
 
 if not exists(tools_dir):
   tools_dir = normpath(join(repo_dir, '..', '..', 'tools'))

@@ -1,0 +1,2716 @@
+<h2 id="chapter-types" data-bs-page="types">Basic Data Types and Interfaces</h2>
+
+
+<h3 id="types-definitions" data-multipage-id="definitions">Definitions</h3>
+<dl class="definitions">
+  <dt><dfn id="TermInitialValue" data-export="" data-dfn-type="dfn" oldids="types-TermInitialValue">initial value</dfn></dt>
+  <dd>
+    <p>
+      The initial value of an attribute or property is the value used when
+      that attribute or property is not specified, or when it has an
+      [=invalid value=].
+      This value is to be used for the purposes of rendering, calculating
+      <a href="https://w3c.github.io/svgwg/specs/animations/">animation values</a>,
+      and when accessing the attribute or property via DOM interfaces.
+    </p>
+  </dd>
+
+  <dt><dfn id="TermInvalidValue" data-export="" data-dfn-type="dfn" oldids="types-TermInvalidValue">invalid value</dfn></dt>
+  <dd>An invalid value specified for a [=properties|property=], either in a style sheet
+  or a [=presentation attributes|presentation attribute=], is one that is either not allowed according
+  to the grammar defining the property's values, or is allowed by the grammar but
+  subsequently disallowed in prose.  A CSS declaration with an invalid value is
+  <a href="https://drafts.csswg.org/css-syntax/#css-ignored">ignored</a>.</dd>
+
+</dl>
+
+<h3 id="syntax" oldids="types-syntax">Attribute syntax</h3>
+
+<div class="ready-for-wider-review">
+
+<p>In this specification, attributes are defined with an attribute definition
+table, which looks like this:</p>
+
+<table class="attrdef def">
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Initial value</th>
+    <th>Animatable</th>
+  </tr>
+  <tr>
+    <td><dfn data-dfn-type="dfn" data-noexport="">exampleattr</dfn></td>
+    <td><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> | none</td>
+    <td>none</td>
+    <td>yes</td>
+  </tr>
+</table>
+
+<p>In the Value column is a description of the attribute's syntax.  There are
+six methods for describing an attribute's syntax:</p>
+
+<ol>
+  <li>Using the <a href="https://www.w3.org/TR/css-values/#value-defs">CSS Value
+  Definition Syntax</a> [<a href="#ref-css-values-3">css-values</a>].
+  This is the notation used to define the syntax for most attributes in this
+  specification and is the default.</li>
+
+  <li>By reference to an
+  <a href="https://www.w3.org/TR/REC-xml/#sec-notation">EBNF symbol</a> defined
+  in this or another specification [<a href="#ref-xml">xml</a>].
+  For external definitions, this is indicated by <span class="syntax">&#91;EBNF]</span>
+  appearing in the Value column.</li>
+
+  <li>By reference to an
+  <a href="https://tools.ietf.org/html/std68">ABNF symbol</a> defined
+  in another specification [<a href="#ref-rfc5234">rfc5234</a>].  This is
+  indicated by <span class="syntax">&#91;ABNF]</span> appearing in the Value
+  column.</li>
+
+  <li>As a URL as defined by the <a href="https://url.spec.whatwg.org/">URL
+  Standard</a> [<a href="#ref-URL">URL</a>].  This is indicated by
+  <span class="syntax">&#91;URL]</span> appearing in the Value column.</li>
+
+  <li>As a type as defined by the <a href="https://html.spec.whatwg.org/">HTML
+  Standard</a> [<a href="#ref-html">HTML</a>].  This is indicated by
+  <span class="syntax">&#91;HTML]</span> appearing in the Value column.</li>
+
+  <li>In prose, below the attribute definition table.  This is indicated by the
+  text "(see below)" appearing in the Value column.</li>
+</ol>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Consider relaxing case sensitivity of presentation attribute values.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="https://www.w3.org/2011/10/28-svg-irc#T16-40-11">We will make property values case insensitivity.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To align presentation attribute syntax parsing with parsing of the corresponding CSS property.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (<a href="https://www.w3.org/Graphics/SVG/WG/track/actions/3276">ACTION-3276</a>)</td>
+    </tr>
+    <tr>
+      <th>Status:</th>
+      <td>Done</td>
+    </tr>
+  </table>
+</div>
+
+<p id="presentation-attribute-css-value"><span id="types-presentation-attribute-css-value" class="bs-old-id"></span>When a [=presentation attributes|presentation attribute=]
+defined using the CSS Value Definition Syntax is parsed, this is done as
+follows:</p>
+
+<ol>
+  <li>Let <var>value</var> be the value of the attribute.</li>
+  <li>Let <var>grammar</var> be the grammar given in the attribute definition
+  table's Value column.</li>
+  <li>Replace all instances of <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> in <var>grammar</var> with
+  [<a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>].</li>
+  <li>Replace all instances of <a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> in <var>grammar</var> with
+    [<a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>].</li>
+  <li>Replace all instances of <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> in <var>grammar</var> with
+  [<a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>].</li>
+  <li>Return the result of
+  <a href="https://drafts.csswg.org/css-syntax/#parse-grammar">parsing
+  <var>value</var> with <var>grammar</var></a>.</li>
+</ol>
+
+<p class="note">The insertion of the <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> symbols allows for
+unitless length and angles to be used in presentation attribute while
+disallowing them in corresponding property values.</p>
+
+<p class="note">Note that all [=presentation attributes=], since they are
+defined by reference to their corresponding CSS properties, are defined using
+the CSS Value Definition Syntax.</p>
+
+<p id="attribute-css-value"><span id="types-attribute-css-value" class="bs-old-id"></span>When any other attribute defined using the CSS Value
+Definition Syntax is parsed, this is done by
+<a href="https://drafts.csswg.org/css-syntax/#parse-grammar">parsing the
+attribute's value according to the grammar given in attribute definition
+table</a>.</p>
+
+<p class="note">Note that this allows CSS comments and escapes to be used
+in such attributes.  For example, a value of <span class="attr-value">'10\px/**/'</span>
+would successfully parse as <span class="attr-value">\'10px'</span> in
+the <span class="attr-name">‘x’</span> presentation attribute of the <span class="element-name">‘<{rect}>’</span> element.</p>
+
+<p id="attribute-url"><span id="types-attribute-url" class="bs-old-id"></span>When an attribute defined as a URL is parsed, this is
+done by invoking the
+<a href="https://url.spec.whatwg.org/#concept-url-parser">URL parser</a> with
+the attribute's value as <var>input</var> and the document's URL as
+<var>base</var> [<a href="#ref-URL">URL</a>].</p>
+
+<p>The Initial value column gives the [=initial value=] for the attribute.
+When an attribute fails to parse according to the specified CSS Value Definition Syntax,
+ABNF or EBNF grammar, or if parsing according to the URL Standard
+or by the prose describing how to parse the attribute indicates failure,
+the attribute is assumed to have been specified as the given [=initial value=].</p>
+
+<div class="note">
+  <p>The initial value of a [=presentation attributes|presentation attribute=] is its
+  corresponding property's initial value.  Since the use of an [=invalid value=]
+  in a [=presentation attributes|presentation attribute=] will be treated as if the initial value
+  was specified, this value can override values that come from lower priority
+  style sheet rules, such as those from the user agent style sheet.</p>
+  <p>For example, although the user agent style sheet sets the value of the
+  <a href="#OverflowAndClipProperties" class="property">overflow</a> property to <span class="prop-value">hidden</span>
+  for <span class="element-name">‘<{svg}>’</span> elements, specifying an invalid presentation attribute such
+  as <span class="attr-value">overflow="invalid"</span> will result
+  in a rule setting <a href="#OverflowAndClipProperties" class="property">overflow</a> to <span class="prop-value">visible</span>,
+  overriding the user agent style sheet value.</p>
+</div>
+
+<p>The Animatable column indicates whether the attribute can be animated using
+<a href="https://w3c.github.io/svgwg/specs/animations/#TermAnimationElement">animation elements</a> as defined in the <a href="https://w3c.github.io/svgwg/specs/animations/">SVG Animation</a> module.</p>
+
+</div>
+
+<h4 id="Precision" oldids="types-Precision">Real number precision</h4>
+
+<p>Unless stated otherwise, numeric values in SVG attributes and in
+properties that are defined to have an effect on SVG elements must
+support at least all finite single-precision values supported by the host
+architecture.
+</p>
+
+<p>It is recommended that higher precision floating point
+storage and computation be performed on operations such as
+coordinate system transformations to provide the best
+possible precision and to prevent round-off errors.</p>
+
+<p class="ready-for-wider-review"><a href="#ConformingSVGViewers">conforming SVG viewers</a>
+are required to perform numerical computation in accordance with their
+conformance class, as described in <a href="#chapter-conform">Conformance Criteria</a>.</p>
+
+<h4 id="RangeClamping" oldids="types-RangeClamping">Clamping values which are restricted to a particular range</h4>
+
+<p>Some numeric attribute and property values have restricted ranges.
+Other values will be restricted by the capabilities of the device.
+If not otherwise specified,
+the user agent shall defer any out-of-range error checking until
+as late as possible in the rendering process.
+This is particularly important for device limitations,
+as compound operations
+might produce intermediate values which are out-of-range but
+final values which are within range.</p>
+
+<h3 id="SVGDOMOverview" oldids="types-SVGDOMOverview">SVG DOM overview</h3>
+
+<p>Conforming [=SVG viewers=] or [=SVG interpreters=]
+that support <a href="#processing-modes">script execution</a>
+must implement SVG DOM interfaces as defined throughout this specification,
+with the specific requirements and dependencies listed in this section.
+</p>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Improve the DOM.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="https://www.w3.org/2011/10/27-svg-irc#T18-35-49">We will generally improve the SVG DOM for SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>Help authors use the SVG DOM by making it less Java-oriented.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (<a href="https://www.w3.org/Graphics/SVG/WG/track/actions/3273">ACTION-3273</a>)</td>
+    </tr>
+    <tr>
+      <th>Note:</th>
+      <td>See <a href="https://www.w3.org/Graphics/SVG/WG/wiki/SVG_2_DOM">SVG 2 DOM</a> Wiki page.</td>
+    </tr>
+  </table>
+</div>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Improve the SVG path DOM APIs.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="https://www.w3.org/2011/10/27-svg-irc#T18-23-23">We will improve the SVG path DOM APIs in SVG 2.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>Clean up SVGPathSegList interface, and possibly share an API with Canvas.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Cameron (no action)</td>
+    </tr>
+  </table>
+</div>
+
+
+<h4 id="SVGDOMDependencies" oldids="types-SVGDOMDependencies">Dependencies for SVG DOM support</h4>
+
+<p class="ready-for-wider-review">The SVG DOM is defined in terms of <a href="https://webidl.spec.whatwg.org/">Web IDL</a>
+interfaces. All IDL fragments in this specification must be interpreted as
+required for <a href="https://webidl.spec.whatwg.org/#dfn-conforming-set-of-idl-fragments">conforming IDL fragments</a>,
+as described in the Web IDL specification. [<a href="#ref-webidl">WebIDL</a>]</p>
+
+<p>The SVG DOM builds upon a number of DOM specifications.  In particular:</p>
+
+<ul>
+  <li>The SVG DOM requires full support for the DOM,
+  as defined by the most recent <a href="https://dom.spec.whatwg.org/review-drafts/">Review Draft</a>
+  of the DOM living standard at the time this specification was published,
+  except for any features that have been removed or deprecated since.
+  SVG software with DOM support should implement
+  the <a href="https://dom.spec.whatwg.org/">latest DOM standard</a>
+  wherever possible
+  [<a href="#ref-dom">DOM</a>]</li>
+
+  <li>The SVG DOM requires support for relevant aspects of
+  <a href="https://www.w3.org/TR/uievents/">UI Events</a> and
+  <a href="https://www.w3.org/TR/clipboard-apis/">Clipboard API and events</a>
+  ([<a href="#ref-uievents">uievents</a>], [<a href="#ref-clipboard-apis">clipboard-apis</a>]).
+  (For the specific features that are required, see
+  <a href="#RelationshipWithUIEVENTS">Relationship with UI Events</a>.)</li>
+
+  <li>The SVG DOM requires, at a minimum, complete
+  support for all interfaces from
+  <a href="https://www.w3.org/TR/DOM-Level-2-Style/">DOM Level 2 Style</a>
+  ([<a href="#ref-dom-level-2-style">dom-level-2-style</a>])
+  that have not been dropped in the
+  <a href="https://drafts.csswg.org/cssom/">CSS Object Model (CSSOM)</a> specification.
+  SVG software should implement the latest version of
+  <a href="https://drafts.csswg.org/cssom/">CSS Object Model (CSSOM)</a>
+  wherever possible
+  ([<a href="#ref-cssom-1">cssom-1</a>])
+  </li>
+
+  <li>The SVG DOM requires complete support for
+  <a href="https://drafts.csswg.org/geometry-1/">Geometry Interfaces Module Level 1</a>
+  ([<a href="#ref-geometry-1">geometry-1</a>]).
+  </li>
+</ul>
+
+<h4 id="SVGDOMNamingConventions" oldids="types-SVGDOMNamingConventions">Naming conventions</h4>
+
+<p>The SVG DOM follows similar naming conventions to HTML and DOM standards
+([<a href="#ref-html">HTML</a>], [<a href="#ref-dom">DOM</a>]).</p>
+
+<p>All names are defined as one or more English words
+concatenated together to form a single string. Property or
+method names start with the initial keyword in lowercase, and
+each subsequent word starts with a capital letter. For example,
+a property that returns document meta information such as the
+date the file was created might be named "fileDateCreated".</p>
+
+<p>Interface names defined in this specification nearly all start with "SVG".
+Interfaces that represent the DOM <a href="https://dom.spec.whatwg.org/#interface-element" class="idlinterface">Element</a> object
+for an SVG-namespaced element follow the format
+<code>SVG<i>ElementName</i>Element</code>, where <code><i>ElementName</i></code>
+is the element's tag name with the initial letter capitalized.
+So {{SVGRadialGradientElement}} is the interface for an <span class="element-name">‘<{radialGradient}>’</span> element.
+</p>
+
+<p class="note">
+An exception to this casing convention is {{SVGSVGElement}},
+in which the entire tag name is capitalized.
+</p>
+
+<h4 id="ElementsInTheSVGDOM" oldids="types-ElementsInTheSVGDOM">Elements in the SVG DOM</h4>
+
+<p>Any SVG software that is required to support the SVG DOM
+must enhance the DOM elements created for [=SVG document fragment|SVG document fragments=]
+as follows:
+</p>
+
+<ul>
+<li>
+<p>Every <a href="https://dom.spec.whatwg.org/#interface-element" class="idlinterface">Element</a> object that corresponds to a supported SVG element (that is,
+an element with namespace URI "http://www.w3.org/2000/svg" and a
+local name that is one of the elements defined in this specification
+or another specification implemented by the software)
+must also implement the DOM interface identified in the element definition.
+</p>
+</li>
+<li>
+  <p>
+  Elements in the SVG namespace whose local name does not match an element
+  defined in any specification supported by the software
+  must nonetheless implement the {{SVGElement}} interface.
+  </p>
+  </li>
+</ul>
+
+
+<p class="example">
+In <a href="#RectElement">The <span class="element-name">‘rect’</span> element</a>,
+the {{SVGRectElement}} interface is identified.  This means that every
+<a href="https://dom.spec.whatwg.org/#interface-element" class="idlinterface">Element</a> object whose namespace URI is "http://www.w3.org/2000/svg"
+and whose local name is "rect" must also implement {{SVGRectElement}}.</p>
+
+
+<h4 id="ReflectingAttributes" oldids="types-ReflectingAttributes">Reflecting content attributes in the DOM</h4>
+
+<p>Many SVG DOM properties (IDL attributes)
+<dfn id="TermReflect" data-dfn-type="dfn" data-noexport="" oldids="types-TermReflect">reflect</dfn> a content attribute or property
+on the corresponding element,
+meaning that content and IDL attributes represent the same underlying data.
+For example,
+the {{SVGAnimatedLength}} {{SVGRectElement/ry}} in an
+{{SVGRectElement}}
+reflects the 'ry' presentation attribute on the associated <span class="element-name">‘<{rect}>’</span> element.
+</p>
+
+<p>The way this reflection is done depends on the type of the IDL attribute:</p>
+    <ul>
+      <li>If the type of the reflecting IDL attribute is a
+      <a href="https://webidl.spec.whatwg.org/#dfn-primitive-type">primitive type</a> (such as
+      <b>long</b>, as used by <a href="https://html.spec.whatwg.org/multipage/interaction.html#dom-tabindex">tabIndex</a>
+       on {{SVGElement}}) or <b>DOMString</b> (as used by
+      <a href="#__svg__SVGStyleElement__title">title</a> on {{SVGStyleElement}}),
+      then the rules for
+      <a href="https://html.spec.whatwg.org/multipage/common-dom-interfaces.html#reflect">reflecting
+      content attributes in IDL attributes</a> in HTML are used.</li>
+
+      <li>If the type of the reflecting IDL attribute is an {{SVGAnimatedBoolean}},
+      {{SVGAnimatedString}}, {{SVGAnimatedEnumeration}}, {{SVGAnimatedNumber}},
+      {{SVGAnimatedNumberList}}, {{SVGAnimatedLength}}, {{SVGAnimatedLengthList}},
+      {{SVGAnimatedAngle}}, {{SVGAnimatedRect}} or {{SVGAnimatedPreserveAspectRatio}},
+      then the rules in the corresponding
+      section defining the reflecting interface are used.
+
+      <p class="note">At a high level, the object's
+      <code>baseVal</code> is used to reflect the value of the content attribute.
+      For objects that reflect a CSS property, the <code>baseVal</code> is used
+      to reflect the presentation attribute.
+      </p>
+      </li>
+    </ul>
+
+<p>
+This relationship is live, and values must be synchronized
+(following the rules in <a href="#SynchronizingReflectedValues">Synchronizing reflected values</a>)
+when either the attribute or its reflected property is modified.
+</p>
+
+<p>
+If the attribute hasn't been specified explicitly in the document markup,
+the reflected object is nonetheless initialized upon access,
+to the attribute's initial value.
+If the attribute's initial value is <span class="attr-value">(none)</span>,
+the object is initialized as defined in
+<a href="#SVGObjectInitialization">Reflecting an empty initial value</a>.
+This newly constructed object does not generate an attribute on the element until
+it is modified for the first time. Modifications made to the corresponding
+attribute are immediately reflected in the object.</p>
+
+<p class="example">If <code>lineElement.x1.baseVal</code> is accessed
+(where <code>lineElement</code> is an instance of {{SVGLineElement}})
+and the <span class="attr-name">‘<{line/x1}>’</span> attribute was not specified in the document, the
+returned {{SVGLength}} object would represent the value <span class="attr-value">0 user units</span>,
+because the initial value for the attribute is <span class="attr-value">0</span>.</p>
+
+<h4 id="SynchronizingReflectedValues" oldids="types-SynchronizingReflectedValues">Synchronizing reflected values</h4>
+
+<p>Whenever a reflected content attribute's base value changes,
+then the reflecting object must be <dfn id="TermSynchronize" data-export="" data-dfn-type="dfn" oldids="types-TermSynchronize">synchronized</dfn>,
+immediately after the value changed, by running the following steps:</p>
+
+<ol class="algorithm">
+  <li>If the reflecting object is a [=list interfaces|list interface=] object,
+  then run the steps for <a data-link-type="dfn" data-lt="synchronized (TermSynchronizeList)">synchronizing
+  a list interface object</a>.</li>
+  <li>Otherwise, update the object's value to be the base value of the reflected
+  content attribute (using the attribute's [=initial value=] if it is not
+  present or invalid).
+  <p class="note">This will, for example, update the [=value (LengthValue)|value=]
+  of an {{SVGLength}} object.</p></li>
+</ol>
+
+<p>When a [=reflect|reflected=] content attribute is to be
+<dfn id="TermReserialize" data-export="" data-dfn-type="dfn" oldids="types-TermReserialize">reserialized</dfn>, optionally using a
+specific value, the following steps must be performed:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the specific value given, or
+  the value of the content attribute's reflecting IDL attribute
+  if a specific value was not provided.</li>
+
+  <li>Depending on <var>value</var>'s type:
+    <dl class="switch">
+      <dt>{{SVGAnimatedBoolean}}</dt>
+      <dt>{{SVGAnimatedNumber}}</dt>
+      <dt>{{SVGAnimatedLength}}</dt>
+      <dt>{{SVGAnimatedAngle}}</dt>
+      <dt>{{SVGAnimatedRect}}</dt>
+      <dt>{{SVGAnimatedString}}</dt>
+      <dt>{{SVGAnimatedNumberList}}</dt>
+      <dt>{{SVGAnimatedLengthList}}</dt>
+      <dt>{{SVGAnimatedTransformList}}</dt>
+      <dd>[=reserialized|Reserialize=] the content attribute using
+      <var>value</var>'s baseVal member.</dd>
+
+      <dt>{{SVGAnimatedEnumeration}}</dt>
+      <dd>
+        <ol>
+          <li>Let <var>number</var> be the value of <var>value</var>'s
+          baseVal member.</li>
+          <li>Let <var>keyword</var> be the content attribute's keyword
+          value corresponding to <var>number</var>, or the empty string
+          if <var>number</var> is 0.
+          <p class="note">This means that if the enumeration value is
+          somehow set to the "unknown" value, the content attribute will be
+          set to the empty string.
+          However, this unknown value can never be set directly on the <code>SVGAnimatedEnumeration</code> object;
+          it represents an unknown attribute value set in the markup.</p>
+          </li>
+          <li>Set the content attribute to <var>keyword</var>.</li>
+        </ol>
+      </dd>
+
+      <dt>boolean</dt>
+      <dd>Set the content attribute to "true" if <var>value</var> is true,
+      and "false" otherwise.</dd>
+
+      <dt>float</dt>
+      <dt>double</dt>
+      <dd>Set the content attribute to an implementation specific string
+      that, if parsed as a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> using CSS syntax,
+      would return the number value closest to <var>value</var>, given
+      the implementation's supported <a href="#Precision">real number precision</a>.</dd>
+
+      <dt>{{SVGLength}}</dt>
+      <dd>Set the content attribute to the value that would be returned
+      from getting <var>value</var>'s {{SVGLength/valueAsString}}
+      member.</dd>
+
+      <dt>{{SVGAngle}}</dt>
+      <dd>Set the content attribute to the value that would be returned
+      from getting <var>value</var>'s {{SVGAngle/valueAsString}}
+      member.</dd>
+
+      <dt><a href="https://drafts.csswg.org/geometry-1/#domrect" class="idlinterface">SVGRect</a></dt>
+      <dd>
+        <ol>
+          <li>Let <var>components</var> be a list of four values, being the values of the
+          <a href="https://drafts.csswg.org/geometry-1/#dom-domrect-x">x</a>,
+          <a href="https://drafts.csswg.org/geometry-1/#dom-domrect-y">y</a>,
+          <a href="https://drafts.csswg.org/geometry-1/#dom-domrect-width">width</a> and
+          <a href="https://drafts.csswg.org/geometry-1/#dom-domrect-height">height</a>
+          members of <var>value</var>.</li>
+
+          <li>Let <var>serialized components</var> be a list of four strings,
+          where each is an implementation specific string that, if parsed
+          as a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> using CSS syntax, would return the number
+          value closest to the corresponding value in <var>components</var>, given
+          the implementation's supported <a href="#Precision">real number precision</a>.</li>
+
+          <li>Set the content attribute to a string consisting of the strings in
+          <var>serialized components</var> joined and separated by single
+          U+0020 SPACE characters.</li>
+        </ol>
+      </dd>
+
+      <dt>DOMString</dt>
+      <dd>Set the content attribute to <var>value</var>.</dd>
+
+      <dt>{{SVGNumberList}}</dt>
+      <dt>{{SVGLengthList}}</dt>
+      <dt>{{SVGPointList}}</dt>
+      <dt>{{SVGTransformList}}</dt>
+      <dt>{{SVGStringList}}</dt>
+      <dd>
+        <ol>
+          <li>Let <var>elements</var> be the list of values in <var>value</var>.
+            <p class="note">The values will be {{SVGNumber}}, {{SVGLength}},
+            <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> or {{SVGTransform}} objects, or <b>DOMString</b> values,
+            depending on <var>value</var>'s type.</p>
+          </li>
+
+          <li>Let <var>serialized elements</var> be a list of strings, where each
+          string is formed based on the corresponding value in <var>elements</var>
+          and its type:
+            <dl class="switch">
+              <dt>an {{SVGNumber}} object</dt>
+              <dd>The string is an implementation specific string that, if parsed
+              as a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> using CSS syntax, would return the number
+              value closest to the {{SVGNumber}} object's
+              {{SVGNumber/value}} member, given
+              the implementation's supported <a href="#Precision">real number precision</a>.</dd>
+              <dt>an {{SVGLength}} object</dt>
+              <dd>The string is the value that would be returned
+              from getting the value's {{SVGLength/valueAsString}}
+              member.</dd>
+              <dt>a <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> object</dt>
+              <dd>The string value is computed as follows:
+                <ol>
+                  <li>Let <var>string</var> be an empty string.</li>
+                  <li>Let <var>x</var> and <var>y</var> be the values of the
+                  <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> object's x and y coordinates, respectively.</li>
+                  <li>Append to <var>string</var> an implementation specific string
+                  that, if parsed as <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> using CSS syntax, would return the number
+                  value closest to <var>x</var>, given
+                  the implementation's supported <a href="#Precision">real number precision</a>.</li>
+                  <li>Append a single U+002C COMMA character to <var>string</var>.</li>
+                  <li>Append to <var>string</var> an implementation specific string
+                  that, if parsed as <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> using CSS syntax, would return the number
+                  value closest to <var>y</var>, given
+                  the implementation's supported <a href="#Precision">real number precision</a>.</li>
+                  <li>The string is <var>string</var>.</li>
+                </ol>
+              </dd>
+              <dt>a {{SVGTransform}} object</dt>
+              <dd>The string is the <a href="https://drafts.csswg.org/css-transforms-1/#serialization-of-transform-functions">serialization</a>
+              of the {{SVGTransform}} object's [=matrix object=].</dd>
+              <dt>a <b>DOMString</b></dt>
+              <dd>The string is the <b>DOMString</b>'s value itself.</dd>
+            </dl>
+          </li>
+
+          <li>Set the content attribute to a string consisting of the strings in
+          <var>serialized elements</var> joined and separated by single
+          U+0020 SPACE characters.</li>
+        </ol>
+      </dd>
+    </dl>
+  </li>
+</ol>
+
+
+<h4 id="SVGObjectInitialization" oldids="types-SVGObjectInitialization">Reflecting an empty initial value</h4>
+
+<p>
+When initializing an SVG DOM attribute that [=reflect|reflects=] a null or empty initial value,
+then the property must be initialized according to its data type,
+as defined in this section.
+This occurs only if there is no explicit value for the reflected content attribute,
+and the initial value in the attribute's definition table is <span class="attr-value">(none)</span>.
+</p>
+
+<p>
+If an interface is not listed below that means
+that the object initialization shall be done using the values for the
+objects that the interface contains, e.g.,
+an {{SVGAnimatedString}} consists of two <span class="DOMInterfaceName">DOMString</span> members,
+while a <a href="https://drafts.csswg.org/geometry-1/#domrect" class="idlinterface">SVGRect</a> consists of many <span class="DOMInterfaceName">double</span>s.</p>
+
+<span id="types-SVGObjectInitValues" class="bs-old-id"></span><dl id="SVGObjectInitValues">
+  <dt class="DOMInterfaceName">DOMString</dt>
+  <dd>Initialized as the empty string (<span class="attr-value">""</span>).</dd>
+
+  <dt class="DOMInterfaceName">float</dt>
+  <dt class="DOMInterfaceName">long</dt>
+  <dt class="DOMInterfaceName">short</dt>
+  <dt>Any other <a href="https://webidl.spec.whatwg.org/#dfn-numeric-type">numeric type</a> defined in WebIDL</dt>
+  <dd>Initialized as <span class="attr-value">0</span>.</dd>
+
+  <dt class="DOMInterfaceName">boolean</dt>
+  <dd>Initialized as <span class="attr-value">false</span>.</dd>
+
+  <dt class="DOMInterfaceName">{{SVGLength}}</dt>
+  <dd>Initialized as <span class="attr-value">0 user units</span>
+  ({{SVGLength/SVG_LENGTHTYPE_NUMBER}}).</dd>
+
+  <dt class="DOMInterfaceName">{{SVGLengthList}}</dt>
+  <dt class="DOMInterfaceName">{{SVGNumberList}}</dt>
+  <dt class="DOMInterfaceName">{{SVGPointList}}</dt>
+  <dt class="DOMInterfaceName">{{SVGStringList}}</dt>
+  <dt class="DOMInterfaceName">{{SVGTransformList}}</dt>
+  <dd>Initialized as the empty list.</dd>
+
+  <dt class="DOMInterfaceName">{{SVGAngle}}</dt>
+  <dd>Initialized as <span class="attr-value">0 in unspecified units</span>
+  ({{SVGAngle/SVG_ANGLETYPE_UNSPECIFIED}}).</dd>
+
+  <dt class="DOMInterfaceName">{{SVGPreserveAspectRatio}}</dt>
+  <dd>Initialized as <span class="attr-value">'xMidYMid meet'</span>.</dd>
+</dl>
+
+<p class="example">If <code>textElement.dx.baseVal</code> is accessed
+(where <code>textElement</code> is an instance of {{SVGTextElement}})
+and the <span class="attr-name">‘<{text/dx}>’</span> attribute was not specified in the document, the
+returned {{SVGLengthList}} object would be empty.</p>
+
+<h4 id="InvalidValues" oldids="types-InvalidValues">Invalid values</h4>
+
+<p>If a script sets a [=reflect|reflected=] DOM attribute
+to an [=invalid value=] for the content attribute (e.g.,
+a negative number for an attribute that requires a non-negative
+number), unless
+this specification indicates otherwise, no exception shall be
+raised on setting, but the given document fragment shall become
+technically <em>in error</em> as described in
+<a href="#ErrorProcessing">Error processing</a>.</p>
+
+<p class="note">
+DOM attributes that reflect enumerated values using integer constants are an exception:
+these throw a <a href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror">TypeError</a> when set to an out-of-range integer,
+or to the constant (0) that represents an unknown attribute value.
+This is consistent with the
+<a href="https://webidl.spec.whatwg.org/#es-enumeration">behavior of the WebIDL enumeration type</a>
+[<a href="#ref-webidl">WebIDL</a>].
+</p>
+
+
+
+<h3 id="DOMInterfacesForSVGElements" oldids="types-DOMInterfacesForSVGElements">DOM interfaces for SVG elements</h3>
+
+<div class="ready-for-wider-review">
+<h4 id="InterfaceSVGElement" oldids="types-InterfaceSVGElement">Interface SVGElement</h4>
+
+<p>All of the SVG DOM interfaces that correspond directly to elements in the
+SVG language (such as the {{SVGPathElement}} interface for the
+<span class="element-name">‘<{path}>’</span> element) derive from the {{SVGElement}} interface.</p>
+
+<p class="note">The CSSOM specification
+<a href="https://drafts.csswg.org/cssom/#the-elementcssinlinestyle-interface">augments
+SVGElement with a style IDL attribute</a>, so that the <span class="attr-name">‘<{core-attributes/style}>’</span>
+attribute can be accessed in the same way as on HTML elements.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGElement : Element {
+
+  [SameObject] readonly attribute SVGAnimatedString className;
+
+  readonly attribute SVGSVGElement? ownerSVGElement;
+  readonly attribute SVGElement? viewportElement;
+};
+
+SVGElement includes GlobalEventHandlers;
+SVGElement includes HTMLOrSVGOrMathMLElement;</pre>
+
+<p>The <dfn id="__svg__SVGElement__className" data-dfn-type="attribute" data-dfn-for="SVGElement" data-lt="className" oldids="types-__svg__SVGElement__className">className</dfn> IDL attribute
+[=reflect|reflects=] the <span class="attr-name">‘<{core-attributes/class}>’</span> attribute.</p>
+
+<div class="note"><p>This attribute is deprecated and may be removed in a
+future version of this specification.  Authors are advised to use
+Element.classList instead.</p>
+<p>
+The {{SVGElement/className}}
+attribute on {{SVGElement}} overrides the correspond attribute on
+<a href="https://dom.spec.whatwg.org/#interface-element" class="idlinterface">Element</a>, following the WebIDL rules for
+<a href="https://www.w3.org/TR/WebIDL/#dfn-inherit">inheritance</a>.</p>
+</div>
+
+<p>The <dfn id="__svg__SVGElement__ownerSVGElement" data-dfn-type="attribute" data-dfn-for="SVGElement" data-lt="ownerSVGElement" oldids="types-__svg__SVGElement__ownerSVGElement">ownerSVGElement</dfn> IDL attribute
+represents the nearest ancestor <span class="element-name">‘<{svg}>’</span> element.  On getting
+{{SVGElement/ownerSVGElement}},
+the nearest ancestor <span class="element-name">‘<{svg}>’</span> element is returned; if the current
+element is the [=outermost svg element=], then null is returned.</p>
+
+<p>The <dfn id="__svg__SVGElement__viewportElement" data-dfn-type="attribute" data-dfn-for="SVGElement" data-lt="viewportElement" oldids="types-__svg__SVGElement__viewportElement">viewportElement</dfn> IDL attribute
+represents the element that provides the SVG viewport for the current element.  On getting
+{{SVGElement/viewportElement|viewport}},
+the nearest ancestor element that establishes an SVG viewport is returned; if the current
+element is the [=outermost svg element=], then null is returned.</p>
+
+<h4 id="InterfaceSVGGraphicsElement" oldids="types-InterfaceSVGGraphicsElement">Interface SVGGraphicsElement</h4>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr><th>SVG 2 Requirement:</th>
+    <td>Detect if a mouse event is on the fill or stroke of a shape.</td></tr>
+    <tr><th>Resolution:</th>
+    <td><a href="https://www.w3.org/2012/03/22-svg-irc#T20-20-03">SVG 2 will make it easier to detect if an mouse event is on the stroke or fill of an element.</a></td></tr>
+    <tr><th>Purpose:</th>
+    <td>To allow authors to discriminate between pointer events on the fill and stroke of an element without having to duplicate the element</td></tr>
+    <tr><th>Owner:</th>
+    <td>Cameron (<a href="https://www.w3.org/Graphics/SVG/WG/track/actions/3279">ACTION-3279</a>)</td></tr>
+    <tr><th>Status:</th>
+    <td>Done.</td></tr>
+  </table>
+</div>
+
+<p>The {{SVGGraphicsElement}} interface represents SVG elements whose primary purpose
+is to directly render graphics into a group.</p>
+
+<span id="SVGBoundingBoxOptions" class="bs-old-id"></span><span id="types-SVGBoundingBoxOptions" class="bs-old-id"></span><pre class="idl">dictionary SVGBoundingBoxOptions {
+  boolean fill = true;
+  boolean stroke = false;
+  boolean markers = false;
+  boolean clipped = false;
+};
+
+[Exposed=Window]
+interface SVGGraphicsElement : SVGElement {
+  [SameObject] readonly attribute SVGAnimatedTransformList transform;
+
+  SVGRect getBBox(optional SVGBoundingBoxOptions options = {});
+  SVGMatrix? getCTM();
+  SVGMatrix? getScreenCTM();
+};
+
+SVGGraphicsElement includes SVGTests;</pre>
+
+<p>The <dfn id="__svg__SVGGraphicsElement__transform" data-dfn-type="attribute" data-dfn-for="SVGGraphicsElement" data-lt="transform" oldids="types-__svg__SVGGraphicsElement__transform">transform</dfn> IDL attribute
+[=reflect|reflects=] the computed value of the <a href="#TransformProperty" class="property">transform</a> property and its
+corresponding <span class="attr-name">‘transform’</span> presentation attribute.</p>
+
+<p>The <dfn id="__svg__SVGGraphicsElement__getBBox" data-dfn-type="method" data-dfn-for="SVGGraphicsElement" data-lt="getBBox(options)" oldids="types-__svg__SVGGraphicsElement__getBBox">getBBox</dfn> method is used
+to compute the bounding box of the current element.  When the getBBox(<var>options</var>)
+method is called, the <a href="#BoundingBoxes">bounding box algorithm</a>
+is invoked for the current element,
+with <var>fill</var>, <var>stroke</var>, <var>markers</var>
+and <var>clipped</var> members of the <var>options</var> dictionary argument
+used to control which parts of the element are included in the bounding box,
+using the element's user coordinate system as the coordinate system to return the
+bounding box in. A newly created <a href="https://drafts.csswg.org/geometry-1/#domrect" class="idlinterface">SVGRect</a> object that defines the
+computed bounding box is returned. If the element's geometric attributes
+are missing or have invalid values (e.g. negative width or height),
+such that the element is not rendered, then a <a href="https://drafts.csswg.org/geometry-1/#domrect" class="idlinterface">SVGRect</a> with x, y,
+width and height all set to 0 is returned.</p>
+
+<p>The <dfn id="__svg__SVGGraphicsElement__getCTM" data-dfn-type="method" data-dfn-for="SVGGraphicsElement" data-lt="getCTM()" oldids="types-__svg__SVGGraphicsElement__getCTM">getCTM</dfn> method is used to
+get the matrix that transforms the current element's coordinate system to
+its SVG viewport's coordinate system.  When getCTM() is called, the following
+steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the current element is not in the document, then return null.</li>
+  <li>If the current element is a [=non-rendered element=], and the UA
+    is not able to resolve the style of the element, then return null.</li>
+  <li>Let <var>ctm</var> be a matrix determined based on what the
+  current element is:
+    <dl class="switch">
+      <dt>the current element is the [=outermost svg element=]</dt>
+      <dd><var>ctm</var> is a matrix that transforms the coordinate
+      space of the <span class="element-name">‘<{svg}>’</span> (including its <a href="#TransformProperty" class="property">transform</a> property)
+      to the coordinate space of the document's viewport.  The matrix includes the
+      transforms produced by the <span class="attr-name">‘<a href="#ViewBoxAttribute" data-link-type="element-attr">viewBox</a>’</span> and <span class="attr-name">‘<a href="#PreserveAspectRatioAttribute" data-link-type="element-attr">preserveAspectRatio</a>’</span>
+      attributes, the <a href="#TransformProperty" class="property">transform</a> property, and any transform
+      due to {{SVGSVGElement/currentScale}}
+      and {{SVGSVGElement/currentTranslate}}
+      properties on the {{SVGSVGElement}}.</dd>
+      <dt>any other element</dt>
+      <dd><var>ctm</var> is a matrix that transforms the coordinate
+      space of the current element (including its <a href="#TransformProperty" class="property">transform</a>
+      property) to the coordinate space of its closest ancestor
+      viewport-establishing element (also including its <a href="#TransformProperty" class="property">transform</a>
+      property).</dd>
+    </dl>
+  </li>
+  <li>Return a newly created, <a href="#MatrixMode">detached</a>
+  <a href="https://drafts.csswg.org/geometry-1/#dommatrix" class="idlinterface">SVGMatrix</a> object that represents the same matrix as <var>ctm</var>.</li>
+</ol>
+
+<p>The <dfn id="__svg__SVGGraphicsElement__getScreenCTM" data-dfn-type="method" data-dfn-for="SVGGraphicsElement" data-lt="getScreenCTM()" oldids="types-__svg__SVGGraphicsElement__getScreenCTM">getScreenCTM</dfn> method
+is used to get the matrix that transforms the current element's coordinate
+system to the coordinate system of the SVG viewport for the SVG document fragment.
+When getScreenCTM() is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the current element is not in the document, then return null.</li>
+  <li>If the current element is a [=non-rendered element=], and the UA
+    is not able to resolve the style of the element, then return null.</li>
+  <li>Let <var>ctm</var> be a matrix that transforms the coordinate
+  space of the current element (including its <a href="#TransformProperty" class="property">transform</a> property)
+  to the coordinate space of the document's viewport.
+    <div class="note">
+      <p>This will include:</p>
+      <ul>
+        <li>all of the transforms from the current element up to the
+        [=outermost svg element=]</li>
+        <li>any transforms due to <span class="attr-name">‘<a href="#ViewBoxAttribute" data-link-type="element-attr">viewBox</a>’</span>, <span class="attr-name">‘<a href="#PreserveAspectRatioAttribute" data-link-type="element-attr">preserveAspectRatio</a>’</span>,
+        the <a href="#TransformProperty" class="property">transform</a> property and any transform
+        due to {{SVGSVGElement/currentScale}}
+        and {{SVGSVGElement/currentTranslate}}
+        properties on the {{SVGSVGElement}} for the [=outermost svg element=]</li>
+        <li>any transforms from the SVG viewport's coordinate space
+        to the document's viewport, i.e. taking into account the positions of
+        all of the CSS boxes from the [=outermost svg element=]'s box
+        to the initial containing block when the SVG document fragment
+	is inline in an HTML document</li>
+      </ul>
+    </div>
+  </li>
+  <li>Return a newly created, <a href="#MatrixMode">detached</a>
+  <a href="https://drafts.csswg.org/geometry-1/#dommatrix" class="idlinterface">SVGMatrix</a> object that represents the same matrix as <var>ctm</var>.</li>
+</ol>
+
+<p class="note">This method would have been more aptly named as <code>getClientCTM</code>,
+but the name <code>getScreenCTM</code> is kept for historical reasons.</p>
+</div>
+
+
+<div class="ready-for-wider-review">
+
+<h4 id="InterfaceSVGGeometryElement" oldids="types-InterfaceSVGGeometryElement">Interface SVGGeometryElement</h4>
+
+<p>Interface {{SVGGeometryElement}} represents SVG elements whose rendering
+is defined by geometry with an [=equivalent path=],
+and which can be filled and stroked.
+This includes paths and the basic shapes.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGGeometryElement : SVGGraphicsElement {
+  [SameObject] readonly attribute SVGAnimatedNumber pathLength;
+
+  boolean isPointInFill(optional DOMPointInit point = {});
+  boolean isPointInStroke(optional DOMPointInit point = {});
+  float getTotalLength();
+  SVGPoint getPointAtLength(float distance);
+};</pre>
+
+<p>The <dfn id="__svg__SVGGeometryElement__isPointInFill" data-dfn-type="method" data-dfn-for="SVGGeometryElement" data-lt="isPointInFill(point)" oldids="types-__svg__SVGGeometryElement__isPointInFill">isPointInFill</dfn> method,
+when invoked, must return true if the point given by <var>point</var> passed to the method,
+in the coordinate space of an element, is inside the intended path as determined by the winding
+rule indicated by the 'fill-rule' property of an element; and must return false otherwise.
+Open subpaths must be implicitly closed when computing the area inside the path, without affecting
+the actual subpaths. Points on the path itself must be considered to be inside the path.
+The returned value is independent of any visual CSS property but 'fill-rule'
+If either of the <var>x</var> or <var>y</var> properties on <var>point</var> are infinite or NaN,
+then the method must return false. If current element is a [=non-rendered element=], and the UA is not able to compute the geometry of the element, then
+throw an <a href="https://webidl.spec.whatwg.org/#invalidstateerror">InvalidStateError</a>.
+</p>
+
+<p class="note">{{SVGGeometryElement/isPointInFill(point)|isPointInFill}} takes the winding
+rule indicated by the 'fill-rule' property of an element even if the element is a child
+of a <span class="element-name">‘<a href="https://drafts.csswg.org/css-masking-1/#ClipPathElement" data-link-type="element">clipPath</a>’</span> element.</p>
+
+<p class="note">{{SVGGeometryElement/isPointInFill(point)|isPointInFill}} is aligned
+with the <a href="https://html.spec.whatwg.org/multipage/canvas.html#dom-context-2d-ispointinpath" class="idlinterface">isPointInPath</a> method on the <a href="https://html.spec.whatwg.org/multipage/canvas.html#canvasdrawpath" class="idlinterface">CanvasDrawPath</a> mixin as much as the SVG context
+allows it to be.</p>
+
+<p>The <dfn id="__svg__SVGGeometryElement__isPointInStroke" data-dfn-type="method" data-dfn-for="SVGGeometryElement" data-lt="isPointInStroke(point)" oldids="types-__svg__SVGGeometryElement__isPointInStroke">isPointInStroke</dfn> method,
+when invoked, must return true if the point given by <var>point</var> passed to the method,
+in the coordinate space of an element, is in or on the outline path of an applied stroke on
+an element; and must return false otherwise.
+The outline path must take the stroke properties 'stroke-width',
+'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-dasharray',
+'stroke-dashoffset' and 'vector-effect' of an element into account. See sections
+<a href="https://w3c.github.io/svgwg/svg2-draft/painting.html#StrokeShape">Computing the shape of the stroke</a> and
+<a href="https://w3c.github.io/svgwg/svg2-draft/painting.html#PaintingVectorEffects">Vector effects</a> for details.
+The returned value is independent of any visual CSS property but the listed stroke properties.
+If either of the <var>x</var> or <var>y</var> properties on <var>point</var> are infinite or NaN,
+then the method must return false. If current element is a [=non-rendered element=], and the UA is not able to compute the geometry of the element, then
+throw an <a href="https://webidl.spec.whatwg.org/#invalidstateerror">InvalidStateError</a>.
+</p>
+
+<p class="note">{{SVGGeometryElement/isPointInStroke(point)|isPointInStroke}} is aligned
+with the <a href="https://html.spec.whatwg.org/multipage/canvas.html#dom-context-2d-ispointinstroke" class="idlinterface">isPointInStroke</a> method on the <a href="https://html.spec.whatwg.org/multipage/canvas.html#canvasdrawpath" class="idlinterface">CanvasDrawPath</a> mixin as much as the SVG context
+allows it to be.</p>
+
+<p>The <dfn id="__svg__SVGGeometryElement__pathLength" data-dfn-type="attribute" data-dfn-for="SVGGeometryElement" data-lt="pathLength" oldids="types-__svg__SVGGeometryElement__pathLength">pathLength</dfn> IDL attribute
+[=reflect|reflects=] the <span class="attr-name">‘<a href="#PathLengthAttribute" data-link-type="element-attr">pathLength</a>’</span> content attribute.</p>
+
+<p>The <dfn id="__svg__SVGGeometryElement__getTotalLength" data-dfn-type="method" data-dfn-for="SVGGeometryElement" data-lt="getTotalLength()" oldids="types-__svg__SVGGeometryElement__getTotalLength">getTotalLength</dfn> method
+is used to compute the length of the path.  When getTotalLength()
+is called, the user agent's computed value for the total length of the path,
+in user units, is returned. If current element is a [=non-rendered element=], and the UA is not able to compute the total length of the path, then
+throw an <a href="https://webidl.spec.whatwg.org/#invalidstateerror">InvalidStateError</a>.</p>
+
+<p class="note">The user agent's computed path length does not take the
+<span class="attr-name">‘<a href="#PathLengthAttribute" data-link-type="element-attr">pathLength</a>’</span> attribute into account.</p>
+
+<p>The <dfn id="__svg__SVGGeometryElement__getPointAtLength" data-dfn-type="method" data-dfn-for="SVGGeometryElement" data-lt="getPointAtLength(distance)" oldids="types-__svg__SVGGeometryElement__getPointAtLength">getPointAtLength</dfn> method
+is used to return the point at a given distance along the path.  When
+getPointAtLength(<var>distance</var>) is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If current element is a [=non-rendered element=], and the UA is not able to
+    compute the total length of the path, then throw an <a href="https://webidl.spec.whatwg.org/#invalidstateerror">InvalidStateError</a>.</li>
+  <li>Let <var>length</var> be the user agent's computed value for the total
+  length of the path, in user units.
+    <p class="note">As with {{SVGGeometryElement/getTotalLength()|getTotalLength}},
+    this does not take into account the <span class="attr-name">‘<a href="#PathLengthAttribute" data-link-type="element-attr">pathLength</a>’</span> attribute.</p>
+  </li>
+  <li>Clamp <var>distance</var> to [0, <var>length</var>].</li>
+  <li>Let (<var>x</var>, <var>y</var>) be the point on the path at distance
+  <var>distance</var>.</li>
+  <li>Return a newly created, <a href="#PointMode">detached</a>
+  <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> object representing the point
+  (<var>x</var>, <var>y</var>).</li>
+</ol>
+
+</div>
+
+
+<h3 id="DOMInterfacesForBasicDataTypes" oldids="types-DOMInterfacesForBasicDataTypes">DOM interfaces for basic data types</h3>
+
+<h4 id="InterfaceSVGNumber" oldids="types-InterfaceSVGNumber">Interface SVGNumber</h4>
+
+<p>The {{SVGNumber}} interface is used primarily to represent a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>
+value that is a part of an {{SVGNumberList}}.  Individual {{SVGNumber}}
+objects can also be created by script.</p>
+
+<p id="ReadOnlyNumber" class="ready-for-wider-review"><span id="types-ReadOnlyNumber" class="bs-old-id"></span>An {{SVGNumber}} object can be designated as <em>read only</em>,
+which means that attempts to modify the object will result in an exception
+being thrown, as described below.
+{{SVGNumber}} objects reflected through the animVal IDL attribute are always
+<em>read only</em>.</p>
+
+<p id="NumberAssociatedElement"><span id="types-NumberAssociatedElement" class="bs-old-id"></span>An {{SVGNumber}} object can be <em>associated</em>
+with a particular element.  The associated element is used to
+determine which element's content attribute to update if the object [=reflect|reflects=]
+an attribute.  Unless otherwise described, an {{SVGNumber}} object is not
+associated with any element.</p>
+
+<div class="ready-for-wider-review">
+<p id="NumberMode"><span id="types-NumberMode" class="bs-old-id"></span>Every {{SVGNumber}} object operates in one of two
+modes.  It can:</p>
+
+<ol>
+  <li><em>reflect an element of the base value</em> of a [=reflect|reflected=] animatable
+  attribute (being exposed through the methods on the
+  {{SVGAnimatedNumberList/baseVal}} member of
+  an {{SVGAnimatedNumberList}}),</li>
+  <li><em>be detached</em>, which is the case for {{SVGNumber}} objects created
+  with {{SVGSVGElement/createSVGNumber()|createSVGNumber}}.</li>
+</ol>
+</div>
+
+<p>An {{SVGNumber}} object maintains an internal number value,
+which is called its <dfn id="NumberValue" data-dfn-type="dfn" data-noexport="" oldids="types-NumberValue">value</dfn>.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGNumber {
+  attribute float value;
+};</pre>
+
+<p>The <dfn id="__svg__SVGNumber__value" data-dfn-type="attribute" data-dfn-for="SVGNumber" data-lt="value" oldids="types-__svg__SVGNumber__value">value</dfn> IDL attribute
+represents the number.  On getting {{SVGNumber/value}},
+the {{SVGNumber}}'s [=value=] is returned.</p>
+
+<p>On setting {{SVGNumber/value}}, the following
+steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the {{SVGNumber}} is <a href="#ReadOnlyNumber">read only</a>, then
+  <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>Set the {{SVGNumber}}'s [=value=] to the
+  value being assigned to the {{SVGNumber/value}}
+  member.</li>
+  <li>If the {{SVGNumber}} <a href="#NumberMode">reflects an element of the
+  base value</a> of a [=reflect|reflected=] attribute, then [=reserialized|reserialize=]
+  the reflected attribute.
+  </li>
+</ol>
+
+
+<h4 id="InterfaceSVGLength" oldids="types-InterfaceSVGLength">Interface SVGLength</h4>
+
+<p>The {{SVGLength}} interface is used to represent a value that
+can be a <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>, <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a> or
+<a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> value.</p>
+
+<p id="ReadOnlyLength" class="ready-for-wider-review"><span id="types-ReadOnlyLength" class="bs-old-id"></span>An {{SVGLength}} object can be designated as <em>read only</em>,
+which means that attempts to modify the object will result in an exception
+being thrown, as described below.
+{{SVGLength}} objects reflected through the animVal IDL attribute are always
+<em>read only</em>.</p>
+
+<p id="LengthAssociatedElement"><span id="types-LengthAssociatedElement" class="bs-old-id"></span>An {{SVGLength}} object can be <em>associated</em>
+with a particular element, as well as being designated with a <em>directionality</em>:
+horizontal, vertical or unspecified.  The associated element and the directionality of the
+length are used to resolve percentage values to user units and is also used to
+determine which element's content attribute to update if the object [=reflect|reflects=]
+an attribute.  Unless otherwise
+described, an {{SVGLength}} object is not associated with any element and
+has unspecified directionality.</p>
+
+<div class="ready-for-wider-review">
+<p id="LengthMode"><span id="types-LengthMode" class="bs-old-id"></span>Every {{SVGLength}} object operates in one of
+four modes.  It can:</p>
+
+<ol>
+  <li><em>reflect the base value</em> of a [=reflect|reflected=] animatable attribute
+  (being exposed through the {{SVGAnimatedLength/baseVal}}
+  member of an {{SVGAnimatedLength}}),</li>
+  <li><em>reflect a presentation attribute value</em>
+  (such as by {{SVGRectElement/width|SVGRectElement.width.baseVal}}),</li>
+  <li><em>reflect an element of the base value</em> of a [=reflect|reflected=] animatable
+  attribute (being exposed through the methods on the
+  {{SVGAnimatedLengthList/baseVal}} member of
+  an {{SVGAnimatedLengthList}}), or</li>
+  <li><em>be detached</em>, which is the case for {{SVGLength}} objects created
+  with {{SVGSVGElement/createSVGLength()|createSVGLength}}.</li>
+</ol>
+</div>
+
+<p>An {{SVGLength}} object maintains an internal <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> or
+<a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a> or <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> value, which is called its
+<dfn id="LengthValue" data-dfn-type="dfn" data-noexport="" data-lt="value (LengthValue)" oldids="types-LengthValue">value</dfn>.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGLength {
+
+  // Length Unit Types
+  const unsigned short SVG_LENGTHTYPE_UNKNOWN = 0;
+  const unsigned short SVG_LENGTHTYPE_NUMBER = 1;
+  const unsigned short SVG_LENGTHTYPE_PERCENTAGE = 2;
+  const unsigned short SVG_LENGTHTYPE_EMS = 3;
+  const unsigned short SVG_LENGTHTYPE_EXS = 4;
+  const unsigned short SVG_LENGTHTYPE_PX = 5;
+  const unsigned short SVG_LENGTHTYPE_CM = 6;
+  const unsigned short SVG_LENGTHTYPE_MM = 7;
+  const unsigned short SVG_LENGTHTYPE_IN = 8;
+  const unsigned short SVG_LENGTHTYPE_PT = 9;
+  const unsigned short SVG_LENGTHTYPE_PC = 10;
+
+  readonly attribute unsigned short unitType;
+           attribute float value;
+           attribute float valueInSpecifiedUnits;
+           attribute DOMString valueAsString;
+
+  undefined newValueSpecifiedUnits(unsigned short unitType, float valueInSpecifiedUnits);
+  undefined convertToSpecifiedUnits(unsigned short unitType);
+};</pre>
+
+<p>The numeric length unit type constants defined on {{SVGLength}} are used
+to represent the type of an {{SVGLength}}'s [=value (LengthValue)|value=].
+Their meanings are as follows:</p>
+
+<table class="vert">
+  <tr><th>Constant</th><th>Meaning</th></tr>
+  <tr><td><dfn id="__svg__SVGLength__SVG_LENGTHTYPE_NUMBER" data-dfn-type="const" data-dfn-for="SVGLength" data-lt="SVG_LENGTHTYPE_NUMBER" oldids="types-__svg__SVGLength__SVG_LENGTHTYPE_NUMBER">SVG_LENGTHTYPE_NUMBER</dfn></td><td>A unitless <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> interpreted as a value in <span class="prop-value">px</span>.</td></tr>
+  <tr><td><dfn id="__svg__SVGLength__SVG_LENGTHTYPE_PERCENTAGE" data-dfn-type="const" data-dfn-for="SVGLength" data-lt="SVG_LENGTHTYPE_PERCENTAGE" oldids="types-__svg__SVGLength__SVG_LENGTHTYPE_PERCENTAGE">SVG_LENGTHTYPE_PERCENTAGE</dfn></td><td>A <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a>.</td></tr>
+  <tr><td><dfn id="__svg__SVGLength__SVG_LENGTHTYPE_EMS" data-dfn-type="const" data-dfn-for="SVGLength" data-lt="SVG_LENGTHTYPE_EMS" oldids="types-__svg__SVGLength__SVG_LENGTHTYPE_EMS">SVG_LENGTHTYPE_EMS</dfn></td><td>A <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> with an <span class="prop-value">em</span> unit.</td></tr>
+  <tr><td><dfn id="__svg__SVGLength__SVG_LENGTHTYPE_EXS" data-dfn-type="const" data-dfn-for="SVGLength" data-lt="SVG_LENGTHTYPE_EXS" oldids="types-__svg__SVGLength__SVG_LENGTHTYPE_EXS">SVG_LENGTHTYPE_EXS</dfn></td><td>A <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> with an <span class="prop-value">ex</span> unit.</td></tr>
+  <tr><td><dfn id="__svg__SVGLength__SVG_LENGTHTYPE_PX" data-dfn-type="const" data-dfn-for="SVGLength" data-lt="SVG_LENGTHTYPE_PX" oldids="types-__svg__SVGLength__SVG_LENGTHTYPE_PX">SVG_LENGTHTYPE_PX</dfn></td><td>A <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> with a <span class="prop-value">px</span> unit.</td></tr>
+  <tr><td><dfn id="__svg__SVGLength__SVG_LENGTHTYPE_CM" data-dfn-type="const" data-dfn-for="SVGLength" data-lt="SVG_LENGTHTYPE_CM" oldids="types-__svg__SVGLength__SVG_LENGTHTYPE_CM">SVG_LENGTHTYPE_CM</dfn></td><td>A <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> with a <span class="prop-value">cm</span> unit.</td></tr>
+  <tr><td><dfn id="__svg__SVGLength__SVG_LENGTHTYPE_MM" data-dfn-type="const" data-dfn-for="SVGLength" data-lt="SVG_LENGTHTYPE_MM" oldids="types-__svg__SVGLength__SVG_LENGTHTYPE_MM">SVG_LENGTHTYPE_MM</dfn></td><td>A <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> with a <span class="prop-value">mm</span> unit.</td></tr>
+  <tr><td><dfn id="__svg__SVGLength__SVG_LENGTHTYPE_IN" data-dfn-type="const" data-dfn-for="SVGLength" data-lt="SVG_LENGTHTYPE_IN" oldids="types-__svg__SVGLength__SVG_LENGTHTYPE_IN">SVG_LENGTHTYPE_IN</dfn></td><td>A <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> with an <span class="prop-value">in</span> unit.</td></tr>
+  <tr><td><dfn id="__svg__SVGLength__SVG_LENGTHTYPE_PT" data-dfn-type="const" data-dfn-for="SVGLength" data-lt="SVG_LENGTHTYPE_PT" oldids="types-__svg__SVGLength__SVG_LENGTHTYPE_PT">SVG_LENGTHTYPE_PT</dfn></td><td>A <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> with a <span class="prop-value">pt</span> unit.</td></tr>
+  <tr><td><dfn id="__svg__SVGLength__SVG_LENGTHTYPE_PC" data-dfn-type="const" data-dfn-for="SVGLength" data-lt="SVG_LENGTHTYPE_PC" oldids="types-__svg__SVGLength__SVG_LENGTHTYPE_PC">SVG_LENGTHTYPE_PC</dfn></td><td>A <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> with a <span class="prop-value">pc</span> unit.</td></tr>
+  <tr><td><dfn id="__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN" data-dfn-type="const" data-dfn-for="SVGLength" data-lt="SVG_LENGTHTYPE_UNKNOWN" oldids="types-__svg__SVGLength__SVG_LENGTHTYPE_UNKNOWN">SVG_LENGTHTYPE_UNKNOWN</dfn></td><td>Some other type of value.</td></tr>
+</table>
+
+<p class="note">The use of numeric length unit type constants is an anti-pattern and
+new constant values will not be introduced for any other units or length types supported by
+{{SVGLength}}.  If other types of lengths are supported and used, the {{SVGLength}}
+uses the {{SVGLength/SVG_LENGTHTYPE_UNKNOWN}}
+unit type.  See below for details on how the other properties of an {{SVGLength}}
+operate with these types of lengths.</p>
+
+<p>The <dfn id="__svg__SVGLength__unitType" data-dfn-type="attribute" data-dfn-for="SVGLength" data-lt="unitType" oldids="types-__svg__SVGLength__unitType">unitType</dfn> IDL attribute represents
+the type of value that the {{SVGLength}}'s [=value (LengthValue)|value=] is.
+On getting {{SVGLength/unitType}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>If the {{SVGLength}}'s [=value (LengthValue)|value=] is a unitless
+  <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>, a <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a>, or a <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>
+  with an
+  <span class="prop-value">em</span>,
+  <span class="prop-value">ex</span>,
+  <span class="prop-value">px</span>,
+  <span class="prop-value">cm</span>,
+  <span class="prop-value">mm</span>,
+  <span class="prop-value">in</span>,
+  <span class="prop-value">pt</span> or
+  <span class="prop-value">pc</span> unit, then return the corresponding constant
+  value from the length unit type table above.</li>
+  <li>Otherwise, return {{SVGLength/SVG_LENGTHTYPE_UNKNOWN}}.
+    <p class="note">For example, for a <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> with a <span class="prop-value">ch</span>
+    unit or one that has a non-scalar value such as <span class="attr-value">calc()</span>,
+    {{SVGLength/SVG_LENGTHTYPE_UNKNOWN}}
+    would be returned.</p>
+  </li>
+</ol>
+
+<p>The <dfn id="__svg__SVGLength__value" data-dfn-type="attribute" data-dfn-for="SVGLength" data-lt="value" oldids="types-__svg__SVGLength__value">value</dfn> IDL attribute represents
+the {{SVGLength}}'s [=value (LengthValue)|value=] in user units.
+On getting {{SVGLength/value}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the {{SVGLength}}'s [=value (LengthValue)|value=].</li>
+  <li>If <var>value</var> is a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>, return that number.</li>
+  <li>Let <var>viewport size</var> be a basis to resolve percentages against, based on the {{SVGLength}}'s
+  <a href="#LengthAssociatedElement">associated element</a> and
+  <a href="#LengthAssociatedElement">directionality</a>:
+    <dl class="switch">
+      <dt>has no <a href="#LengthAssociatedElement">associated element</a></dt>
+      <dd><var>viewport size</var> is 100</dd>
+      <dt>has an <a href="#LengthAssociatedElement">associated element</a> and horizontal <a href="#LengthAssociatedElement">directionality</a></dt>
+      <dd><var>viewport size</var> is the width of the <a href="#LengthAssociatedElement">associated element</a>'s SVG viewport</dd>
+      <dt>has an <a href="#LengthAssociatedElement">associated element</a> and vertical <a href="#LengthAssociatedElement">directionality</a></dt>
+      <dd><var>viewport size</var> is the height of the <a href="#LengthAssociatedElement">associated element</a>'s SVG viewport</dd>
+      <dt>has an <a href="#LengthAssociatedElement">associated element</a> and unspecified <a href="#LengthAssociatedElement">directionality</a></dt>
+      <dd><var>viewport size</var> is the length of the <a href="#LengthAssociatedElement">associated element</a>'s SVG viewport
+      diagonal (see <a href="#Units">Units</a>)</dd>
+    </dl>
+  </li>
+  <li>Let <var>font size</var> be a basis to resolve font size values against,
+  based on the {{SVGLength}}'s <a href="#LengthAssociatedElement">associated element</a>:
+    <dl class="switch">
+      <dt>has no <a href="#LengthAssociatedElement">associated element</a></dt>
+      <dd><var>font size</var> is the absolute length of the initial value of the <a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop" class="property">font-size</a> property</dd>
+      <dt>has an <a href="#LengthAssociatedElement">associated element</a></dt>
+      <dd><var>font size</var> is the computed value of the <a href="#LengthAssociatedElement">associated element</a>'s <a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop" class="property">font-size</a> property</dd>
+    </dl>
+  </li>
+  <li>Return the result of converting <var>value</var> to an absolute length,
+  using <var>viewport size</var> and <var>font size</var> as percentage and font size
+  bases.  If the conversion is not possible due to the lack of an
+  <a href="#LengthAssociatedElement">associated element</a>, return 0.</li>
+</ol>
+
+<p>On setting {{SVGLength/value}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>If the {{SVGLength}} object is <a href="#ReadOnlyLength">read only</a>, then
+  <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>Let <var>value</var> be the value being assigned to
+  {{SVGLength/value}}.</li>
+  <li>Set the {{SVGLength}}'s [=value (LengthValue)|value=] to a
+  <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> whose value is <var>value</var>.</li>
+  <li>If the {{SVGLength}}
+  <a href="#LengthMode">reflects the base value</a> of a [=reflect|reflected=] attribute,
+  <a href="#LengthMode">reflects a presentation attribute</a>, or
+  <a href="#LengthMode">reflects an element of the base value</a> of a [=reflect|reflected=] attribute,
+  then [=reserialized|reserialize=] the reflected attribute.
+  </li>
+</ol>
+
+<p>The <dfn id="__svg__SVGLength__valueInSpecifiedUnits" data-dfn-type="attribute" data-dfn-for="SVGLength" data-lt="valueInSpecifiedUnits" oldids="types-__svg__SVGLength__valueInSpecifiedUnits">valueInSpecifiedUnits</dfn> IDL attribute represents
+the numeric factor of the {{SVGLength}}'s [=value (LengthValue)|value=].
+On getting {{SVGLength/valueInSpecifiedUnits}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the {{SVGLength}}'s [=value (LengthValue)|value=].</li>
+  <li>If <var>value</var> is a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>, return that number.</li>
+  <li>Otherwise, if <var>value</var> is a <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a> or any scalar <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>
+  value, return the numeric factor before its unit.</li>
+  <li>Otherwise, return 0.
+    <p class="note">Thus {{SVGLength/valueInSpecifiedUnits}}
+    would return 12 for both <span class="attr-value">'12%'</span> and
+    <span class="attr-value">12em</span>, but
+    0 would be returned for non-scalar values like
+    <span class="attr-value">calc(12px + 5%)</span>.</p>
+  </li>
+</ol>
+
+<p>On setting {{SVGLength/valueInSpecifiedUnits}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>If the {{SVGLength}} object is <a href="#ReadOnlyLength">read only</a>, then
+  <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>Let <var>value</var> be the value being assigned to
+  {{SVGLength/valueInSpecifiedUnits}}.</li>
+  <li>If the {{SVGLength}}'s [=value (LengthValue)|value=] is a
+  <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>, then update its value to <var>value</var>.</li>
+  <li>Otherwise, if the {{SVGLength}}'s [=value (LengthValue)|value=]
+  is a <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a> or a scalar-valued <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>,
+  then update its numeric factor to <var>value</var>.</li>
+  <li>Otherwise, the {{SVGLength}}'s [=value (LengthValue)|value=]
+  is of some other type.  Set it to a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>
+  whose value is <var>value</var>.</li>
+  <li>If the {{SVGLength}}
+  <a href="#LengthMode">reflects the base value</a> of a [=reflect|reflected=] attribute or
+  <a href="#LengthMode">reflects an element of the base value</a> of a [=reflect|reflected=] attribute,
+  then [=reserialized|reserialize=] the reflected attribute.
+  </li>
+</ol>
+
+<p>The <dfn id="__svg__SVGLength__valueAsString" data-dfn-type="attribute" data-dfn-for="SVGLength" data-lt="valueAsString" oldids="types-__svg__SVGLength__valueAsString">valueAsString</dfn> IDL attribute represents
+the {{SVGLength}}'s [=value (LengthValue)|value=] as a string.
+On getting {{SVGLength/valueAsString}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the {{SVGLength}}'s [=value (LengthValue)|value=].</li>
+  <li>Let <var>string</var> be an empty string.</li>
+  <li>If <var>value</var> is a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>, <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a>
+  or scalar <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> value, then:
+    <ol>
+      <li>Let <var>factor</var> be <var>value</var>'s numeric factor,
+      if it is a <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a> or <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>,
+      or <var>value</var> itself it is a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>.</li>
+      <li>Append to <var>string</var> an implementation
+      specific string that, if parsed as a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> using CSS syntax,
+      would return the number value closest to <var>factor</var>, given the
+      implementation's supported <a href="#Precision">real number precision</a>.</li>
+      <li>If <var>value</var> is a <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a> then append to
+      <var>string</var> a single U+0025 PERCENT SIGN character.</li>
+      <li>Otherwise, if <var>value</var> is a <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>,
+      then append to <var>string</var> the canonical spelling of
+      <var>value</var>'s unit.</li>
+      <li>Return <var>string</var>.</li>
+    </ol>
+  </li>
+  <li>Otherwise, return an implementation specific string that,
+  if parsed as a <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>, would return the closest
+  length value to <var>value</var>, given the
+  implementation's supported <a href="#Precision">real number precision</a>.</li>
+</ol>
+
+<p>On setting {{SVGLength/valueAsString}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>If the {{SVGLength}} object is <a href="#ReadOnlyLength">read only</a>, then
+  <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>Let <var>value</var> be the value being assigned to
+  {{SVGLength/valueAsString}}.</li>
+  <li>Parse <var>value</var> using the CSS syntax
+  [ <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> | <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> | <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a> ].</li>
+  <li>If parsing failed, then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#syntaxerror">SyntaxError</a>.</li>
+  <li>Otherwise, parsing succeeded.  Set {{SVGLength}}'s [=value (LengthValue)|value=]
+  to the parsed value.</li>
+  <li>If the {{SVGLength}}
+  <a href="#LengthMode">reflects the base value</a> of a [=reflect|reflected=] attribute or
+  <a href="#LengthMode">reflects an element of the base value</a> of a [=reflect|reflected=] attribute,
+  then [=reserialized|reserialize=] the reflected attribute.
+  </li>
+</ol>
+
+<p>The <dfn id="__svg__SVGLength__newValueSpecifiedUnits" data-dfn-type="method" data-dfn-for="SVGLength" data-lt="newValueSpecifiedUnits(unitType, valueInSpecifiedUnits)" oldids="types-__svg__SVGLength__newValueSpecifiedUnits">newValueSpecifiedUnits</dfn>
+method is used to set the {{SVGLength}}'s value in a typed manner.  When
+newValueSpecifiedUnits(unitType, valueInSpecifiedUnits) is called, the following
+steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the {{SVGLength}} object is <a href="#ReadOnlyLength">read only</a>, then
+  <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>If <var>unitType</var> is
+  {{SVGLength/SVG_LENGTHTYPE_UNKNOWN}}
+  or is a value that does not appear in the length unit type table above,
+  then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#notsupportederror">NotSupportedError</a>.</li>
+  <li>Set {{SVGLength}}'s [=value (LengthValue)|value=] depending
+  on the value of <var>unitType</var>:
+    <dl class="switch">
+      <dt>{{SVGLength/SVG_LENGTHTYPE_NUMBER}}</dt>
+      <dd>a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> whose value is <var>valueInSpecifiedUnits</var></dd>
+      <dt>{{SVGLength/SVG_LENGTHTYPE_PERCENTAGE}}</dt>
+      <dd>a <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a> whose numeric factor is <var>valueInSpecifiedUnits</var></dd>
+      <dt>anything else</dt>
+      <dd>a <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> whose numeric factor is <var>valueInSpecifiedUnits</var>
+      and whose unit is as indicated by the length unit type table above</dd>
+    </dl>
+  </li>
+  <li>If the {{SVGLength}}
+  <a href="#LengthMode">reflects the base value</a> of a [=reflect|reflected=] attribute or
+  <a href="#LengthMode">reflects an element of the base value</a> of a [=reflect|reflected=] attribute,
+  then [=reserialized|reserialize=] the reflected attribute.
+  </li>
+</ol>
+
+<p>The <dfn id="__svg__SVGLength__convertToSpecifiedUnits" data-dfn-type="method" data-dfn-for="SVGLength" data-lt="convertToSpecifiedUnits(unitType)" oldids="types-__svg__SVGLength__convertToSpecifiedUnits">convertToSpecifiedUnits</dfn>
+method is used to convert the {{SVGLength}}'s value to a specific type.
+When convertToSpecifiedUnits(unitType) is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the {{SVGLength}} object is <a href="#ReadOnlyLength">read only</a>, then
+  <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>If <var>unitType</var> is
+  {{SVGLength/SVG_LENGTHTYPE_UNKNOWN}}
+  or is a value that does not appear in the length unit type table above,
+  then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#notsupportederror">NotSupportedError</a>.</li>
+  <li>Let <var>absolute</var> be the value that would be returned from the
+  {{SVGLength/value}} member.</li>
+  <li>If <var>unitType</var> is {{SVGLength/SVG_LENGTHTYPE_NUMBER}}, then:
+    <ol>
+      <li>Set the {{SVGLength}}'s [=value (LengthValue)|value=] to a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>
+      whose value is <var>absolute</var>.</li>
+    </ol>
+  </li>
+  <li>Otherwise, if <var>unitType</var> is {{SVGLength/SVG_LENGTHTYPE_PERCENTAGE}}, then:
+    <ol>
+      <li>Let <var>viewport size</var> be a basis to resolve percentages against, based on the {{SVGLength}}'s
+      <a href="#LengthAssociatedElement">associated element</a> and
+      <a href="#LengthAssociatedElement">directionality</a>:
+        <dl class="switch">
+          <dt>has no <a href="#LengthAssociatedElement">associated element</a></dt>
+          <dd><var>viewport size</var> is 100</dd>
+          <dt>has an <a href="#LengthAssociatedElement">associated element</a> and horizontal <a href="#LengthAssociatedElement">directionality</a></dt>
+          <dd><var>viewport size</var> is the width of the <a href="#LengthAssociatedElement">associated element</a>'s SVG viewport</dd>
+          <dt>has an <a href="#LengthAssociatedElement">associated element</a> and vertical <a href="#LengthAssociatedElement">directionality</a></dt>
+          <dd><var>viewport size</var> is the height of the <a href="#LengthAssociatedElement">associated element</a>'s SVG viewport</dd>
+          <dt>has an <a href="#LengthAssociatedElement">associated element</a> and unspecified <a href="#LengthAssociatedElement">directionality</a></dt>
+          <dd><var>viewport size</var> is the length of the <a href="#LengthAssociatedElement">associated element</a>'s SVG viewport
+          diagonal (see <a href="#Units">Units</a>)</dd>
+        </dl>
+      </li>
+      <li>Set the {{SVGLength}}'s [=value (LengthValue)|value=] to the result of
+      converting <var>absolute</var> to a <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a>, using <var>viewport size</var>
+      as the percentage basis.</li>
+    </ol>
+  </li>
+  <li>Otherwise, if <var>unitType</var> is {{SVGLength/SVG_LENGTHTYPE_EMS}}
+  or {{SVGLength/SVG_LENGTHTYPE_EXS}}, then:
+    <ol>
+      <li>Let <var>font size</var> be a basis to resolve font size values against,
+      based on the {{SVGLength}}'s <a href="#LengthAssociatedElement">associated element</a>:
+        <dl class="switch">
+          <dt>has no <a href="#LengthAssociatedElement">associated element</a></dt>
+          <dd><var>font size</var> is the absolute length of the initial value of the <a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop" class="property">font-size</a> property</dd>
+          <dt>has an <a href="#LengthAssociatedElement">associated element</a></dt>
+          <dd><var>font size</var> is the computed value of the <a href="#LengthAssociatedElement">associated element</a>'s <a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop" class="property">font-size</a> property</dd>
+        </dl>
+      </li>
+      <li>Set the {{SVGLength}}'s [=value (LengthValue)|value=] to the result of
+      converting <var>absolute</var> to a <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> with an <span class="prop-value">em</span>
+      or <span class="prop-value">ex</span> unit (depending on <var>unitType</var>),
+      using <var>font size</var> as the <a href="https://www.w3.org/TR/css-fonts-3/#font-size-prop" class="property">font-size</a> basis.</li>
+    </ol>
+  </li>
+  <li>Otherwise:
+    <ol>
+      <li>Set the {{SVGLength}}'s [=value (LengthValue)|value=] to the result of
+      converting <var>absolute</var> to a <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> with the unit
+      found by looking up <var>unitType</var> in the length unit type table above.</li>
+    </ol>
+  </li>
+  <li>If the {{SVGLength}}
+  <a href="#LengthMode">reflects the base value</a> of a [=reflect|reflected=] attribute or
+  <a href="#LengthMode">reflects an element of the base value</a> of a [=reflect|reflected=] attribute,
+  then [=reserialized|reserialize=] the reflected attribute.
+  </li>
+</ol>
+
+
+<h4 id="InterfaceSVGAngle" oldids="types-InterfaceSVGAngle">Interface SVGAngle</h4>
+
+<p>The {{SVGAngle}} interface is used to represent a value that
+can be an <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> or <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> value.</p>
+
+<p id="ReadOnlyAngle" class="ready-for-wider-review"><span id="types-ReadOnlyAngle" class="bs-old-id"></span>An {{SVGAngle}} object can be designated as <em>read only</em>,
+which means that attempts to modify the object will result in an exception
+being thrown, as described below. An {{SVGAngle}} reflected through the
+animVal attribute is always <em>read only</em>.</p>
+
+<p id="AngleAssociatedElement"><span id="types-AngleAssociatedElement" class="bs-old-id"></span>An {{SVGAngle}} object can be <em>associated</em>
+with a particular element.  The associated element is used to
+determine which element's content attribute to update if the object [=reflect|reflects=]
+an attribute.  Unless otherwise described, an {{SVGAngle}} object is not
+associated with any element.</p>
+
+<div class="ready-for-wider-review">
+<p id="AngleMode"><span id="types-AngleMode" class="bs-old-id"></span>Every {{SVGAngle}} object operates in one of
+two modes.  It can:</p>
+
+<ol>
+  <li><em>reflect the base value</em> of a [=reflect|reflected=] animatable attribute
+  (being exposed through the {{SVGAnimatedAngle/baseVal}}
+  member of an {{SVGAnimatedAngle}}),</li>
+  <li><em>be detached</em>, which is the case for {{SVGAngle}} objects created
+  with {{SVGSVGElement/createSVGAngle()|createSVGAngle}}.</li>
+</ol>
+</div>
+
+<p>An {{SVGAngle}} object maintains an internal <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> or
+<a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> value, which is called its <dfn id="AngleValue" data-dfn-type="dfn" data-noexport="" data-lt="value (AngleValue)" oldids="types-AngleValue">value</dfn>.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGAngle {
+
+  // Angle Unit Types
+  const unsigned short SVG_ANGLETYPE_UNKNOWN = 0;
+  const unsigned short SVG_ANGLETYPE_UNSPECIFIED = 1;
+  const unsigned short SVG_ANGLETYPE_DEG = 2;
+  const unsigned short SVG_ANGLETYPE_RAD = 3;
+  const unsigned short SVG_ANGLETYPE_GRAD = 4;
+
+  readonly attribute unsigned short unitType;
+           attribute float value;
+           attribute float valueInSpecifiedUnits;
+           attribute DOMString valueAsString;
+
+  undefined newValueSpecifiedUnits(unsigned short unitType, float valueInSpecifiedUnits);
+  undefined convertToSpecifiedUnits(unsigned short unitType);
+};</pre>
+
+<p>The numeric angle unit type constants defined on {{SVGAngle}} are used
+to represent the type of an {{SVGAngle}}'s [=value (AngleValue)|value=].
+Their meanings are as follows:</p>
+
+<table class="vert">
+  <tr><th>Constant</th><th>Meaning</th></tr>
+  <tr><td><dfn id="__svg__SVGAngle__SVG_ANGLETYPE_UNSPECIFIED" data-dfn-type="const" data-dfn-for="SVGAngle" data-lt="SVG_ANGLETYPE_UNSPECIFIED" oldids="types-__svg__SVGAngle__SVG_ANGLETYPE_UNSPECIFIED">SVG_ANGLETYPE_UNSPECIFIED</dfn></td><td>A unitless <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> interpreted as a value in degrees.</td></tr>
+  <tr><td><dfn id="__svg__SVGAngle__SVG_ANGLETYPE_DEG" data-dfn-type="const" data-dfn-for="SVGAngle" data-lt="SVG_ANGLETYPE_DEG" oldids="types-__svg__SVGAngle__SVG_ANGLETYPE_DEG">SVG_ANGLETYPE_DEG</dfn></td><td>An <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> with a <span class="prop-value">deg</span> unit.</td></tr>
+  <tr><td><dfn id="__svg__SVGAngle__SVG_ANGLETYPE_RAD" data-dfn-type="const" data-dfn-for="SVGAngle" data-lt="SVG_ANGLETYPE_RAD" oldids="types-__svg__SVGAngle__SVG_ANGLETYPE_RAD">SVG_ANGLETYPE_RAD</dfn></td><td>An <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> with a <span class="prop-value">rad</span> unit.</td></tr>
+  <tr><td><dfn id="__svg__SVGAngle__SVG_ANGLETYPE_GRAD" data-dfn-type="const" data-dfn-for="SVGAngle" data-lt="SVG_ANGLETYPE_GRAD" oldids="types-__svg__SVGAngle__SVG_ANGLETYPE_GRAD">SVG_ANGLETYPE_GRAD</dfn></td><td>An <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> with a <span class="prop-value">grad</span> unit.</td></tr>
+  <tr><td><dfn id="__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN" data-dfn-type="const" data-dfn-for="SVGAngle" data-lt="SVG_ANGLETYPE_UNKNOWN" oldids="types-__svg__SVGAngle__SVG_ANGLETYPE_UNKNOWN">SVG_ANGLETYPE_UNKNOWN</dfn></td><td>Some other type of value.</td></tr>
+</table>
+
+<p class="note">The use of numeric angle unit type constants is an anti-pattern and
+new constant values will not be introduced for any other units or angle types supported by
+{{SVGAngle}}.  If other types of angles are supported and used, the {{SVGAngle}}
+uses the {{SVGAngle/SVG_ANGLETYPE_UNKNOWN}}
+unit type.  See below for details on how the other properties of an {{SVGAngle}}
+operate with these types of angles.</p>
+
+<p>The <dfn id="__svg__SVGAngle__unitType" data-dfn-type="attribute" data-dfn-for="SVGAngle" data-lt="unitType" oldids="types-__svg__SVGAngle__unitType">unitType</dfn> IDL attribute represents
+the type of value that the {{SVGAngle}}'s [=value (AngleValue)|value=] is.
+On getting {{SVGAngle/unitType}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>If the {{SVGAngle}}'s [=value (AngleValue)|value=] is a unitless
+  <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> or a <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> with a
+  <span class="prop-value">deg</span>,
+  <span class="prop-value">rad</span> or
+  <span class="prop-value">grad</span> unit, then return the corresponding constant
+  value from the angle unit type table above.</li>
+  <li>Otherwise, return {{SVGAngle/SVG_ANGLETYPE_UNKNOWN}}.
+    <p class="note">For example, for an <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> with a <span class="prop-value">turn</span>
+    unit, {{SVGAngle/SVG_ANGLETYPE_UNKNOWN}}
+    would be returned.</p>
+  </li>
+</ol>
+
+<p>The <dfn id="__svg__SVGAngle__value" data-dfn-type="attribute" data-dfn-for="SVGAngle" data-lt="value" oldids="types-__svg__SVGAngle__value">value</dfn> IDL attribute represents
+the {{SVGAngle}}'s [=value (AngleValue)|value=] in degrees.
+On getting {{SVGAngle/value}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the {{SVGAngle}}'s [=value (AngleValue)|value=].</li>
+  <li>If <var>value</var> is a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>, return that number.</li>
+  <li>Return the result of converting <var>value</var> to an angle in degrees.</li>
+</ol>
+
+<p>On setting {{SVGAngle/value}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>If the {{SVGAngle}} object is <a href="#ReadOnlyAngle">read only</a>, then
+  <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>Let <var>value</var> be the value being assigned to
+  {{SVGAngle/value}}.</li>
+  <li>Set the {{SVGAngle}}'s [=value (AngleValue)|value=] to a
+  <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> whose value is <var>value</var>.</li>
+  <li>If the {{SVGAngle}}
+  <a href="#AngleMode">reflects the base value</a> of a [=reflect|reflected=] attribute,
+  then [=reserialized|reserialize=] the reflected attribute.
+  </li>
+</ol>
+
+<p>The <dfn id="__svg__SVGAngle__valueInSpecifiedUnits" data-dfn-type="attribute" data-dfn-for="SVGAngle" data-lt="valueInSpecifiedUnits" oldids="types-__svg__SVGAngle__valueInSpecifiedUnits">valueInSpecifiedUnits</dfn> IDL attribute represents
+the numeric factor of the {{SVGAngle}}'s [=value (AngleValue)|value=].
+On getting {{SVGAngle/valueInSpecifiedUnits}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the {{SVGAngle}}'s [=value (AngleValue)|value=].</li>
+  <li>If <var>value</var> is a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>, return that number.</li>
+  <li>Otherwise, <var>value</var> is an <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> value.  Return
+  the numeric factor before its unit.</li>
+</ol>
+
+<p>On setting {{SVGAngle/valueInSpecifiedUnits}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>If the {{SVGAngle}} object is <a href="#ReadOnlyAngle">read only</a>, then
+  <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>Let <var>value</var> be the value being assigned to
+  {{SVGAngle/valueInSpecifiedUnits}}.</li>
+  <li>If the {{SVGAngle}}'s [=value (AngleValue)|value=] is a
+  <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>, then update its value to <var>value</var>.</li>
+  <li>Otherwise, if the {{SVGAngle}}'s [=value (AngleValue)|value=]
+  is an <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a>,
+  then update its numeric factor to <var>value</var>.</li>
+  <li>If the {{SVGAngle}}
+  <a href="#AngleMode">reflects the base value</a> of a [=reflect|reflected=] attribute or
+  <a href="#AngleMode">reflects an element of the base value</a> of a [=reflect|reflected=] attribute,
+  then [=reserialized|reserialize=] the reflected attribute.
+  </li>
+</ol>
+
+<p>The <dfn id="__svg__SVGAngle__valueAsString" data-dfn-type="attribute" data-dfn-for="SVGAngle" data-lt="valueAsString" oldids="types-__svg__SVGAngle__valueAsString">valueAsString</dfn> IDL attribute represents
+the {{SVGAngle}}'s [=value (AngleValue)|value=] as a string.
+On getting {{SVGAngle/valueAsString}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the {{SVGAngle}}'s [=value (AngleValue)|value=].</li>
+  <li>Let <var>string</var> be an empty string.</li>
+  <li>Let <var>factor</var> be <var>value</var>'s numeric factor,
+  if it is an <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a>,
+  or <var>value</var> itself it is a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>.</li>
+  <li>Append to <var>string</var> an implementation
+  specific string that, if parsed as a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> using CSS syntax,
+  would return the number value closest to <var>factor</var>, given the
+  implementation's supported <a href="#Precision">real number precision</a>.</li>
+  <li>If <var>value</var> is an <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a>,
+  then append to <var>string</var> the canonical spelling of
+  <var>value</var>'s unit.</li>
+  <li>Return <var>string</var>.</li>
+</ol>
+
+<p>On setting {{SVGAngle/valueAsString}}, the following steps
+are run:</p>
+
+<ol class="algorithm">
+  <li>If the {{SVGAngle}} object is <a href="#ReadOnlyAngle">read only</a>, then
+  <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>Let <var>value</var> be the value being assigned to
+  {{SVGAngle/valueAsString}}.</li>
+  <li>Parse <var>value</var> using the CSS syntax
+  [ <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> | <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> ].</li>
+  <li>If parsing failed, then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#syntaxerror">SyntaxError</a>.</li>
+  <li>Otherwise, parsing succeeded.  Set {{SVGAngle}}'s [=value (AngleValue)|value=]
+  to the parsed value.</li>
+  <li>If the {{SVGAngle}}
+  <a href="#AngleMode">reflects the base value</a> of a [=reflect|reflected=] attribute or
+  <a href="#AngleMode">reflects an element of the base value</a> of a [=reflect|reflected=] attribute,
+  then [=reserialized|reserialize=] the reflected attribute.
+  </li>
+</ol>
+
+<p>The <dfn id="__svg__SVGAngle__newValueSpecifiedUnits" data-dfn-type="method" data-dfn-for="SVGAngle" data-lt="newValueSpecifiedUnits(unitType, valueInSpecifiedUnits)" oldids="types-__svg__SVGAngle__newValueSpecifiedUnits">newValueSpecifiedUnits</dfn>
+method is used to set the {{SVGAngle}}'s value in a typed manner.  When
+newValueSpecifiedUnits(unitType, valueInSpecifiedUnits) is called, the following
+steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the {{SVGAngle}} object is <a href="#ReadOnlyAngle">read only</a>, then
+  <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>If <var>unitType</var> is
+  {{SVGAngle/SVG_ANGLETYPE_UNKNOWN}}
+  or is a value that does not appear in the angle unit type table above,
+  then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#notsupportederror">NotSupportedError</a>.</li>
+  <li>Set {{SVGAngle}}'s [=value (AngleValue)|value=] depending
+  on the value of <var>unitType</var>:
+    <dl class="switch">
+      <dt>{{SVGAngle/SVG_ANGLETYPE_UNSPECIFIED}}</dt>
+      <dd>a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> whose value is <var>valueInSpecifiedUnits</var></dd>
+      <dt>anything else</dt>
+      <dd>an <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> whose numeric factor is <var>valueInSpecifiedUnits</var>
+      and whose unit is as indicated by the angle unit type table above</dd>
+    </dl>
+  </li>
+  <li>If the {{SVGAngle}}
+  <a href="#AngleMode">reflects the base value</a> of a [=reflect|reflected=] attribute or
+  <a href="#AngleMode">reflects an element of the base value</a> of a [=reflect|reflected=] attribute,
+  then [=reserialized|reserialize=] the reflected attribute.
+  </li>
+</ol>
+
+<p>The <dfn id="__svg__SVGAngle__convertToSpecifiedUnits" data-dfn-type="method" data-dfn-for="SVGAngle" data-lt="convertToSpecifiedUnits(unitType)" oldids="types-__svg__SVGAngle__convertToSpecifiedUnits">convertToSpecifiedUnits</dfn>
+method is used to convert the {{SVGAngle}}'s value to a specific type.
+When convertToSpecifiedUnits(unitType) is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the {{SVGAngle}} object is <a href="#ReadOnlyAngle">read only</a>, then
+  <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>If <var>unitType</var> is
+  {{SVGAngle/SVG_ANGLETYPE_UNKNOWN}}
+  or is a value that does not appear in the angle unit type table above,
+  then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#notsupportederror">NotSupportedError</a>.</li>
+  <li>Let <var>degrees</var> be the value that would be returned from the
+  {{SVGAngle/value}} member.</li>
+  <li>If <var>unitType</var> is {{SVGAngle/SVG_ANGLETYPE_UNSPECIFIED}}, then:
+    <ol>
+      <li>Set the {{SVGAngle}}'s [=value (AngleValue)|value=] to a <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>
+      whose value is <var>degrees</var>.</li>
+    </ol>
+  </li>
+  <li>Otherwise:
+    <ol>
+      <li>Set the {{SVGAngle}}'s [=value (AngleValue)|value=] to the result of
+      converting <var>degrees</var> to an <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> with the unit
+      found by looking up <var>unitType</var> in the angle unit type table above.</li>
+    </ol>
+  </li>
+  <li>If the {{SVGAngle}}
+  <a href="#AngleMode">reflects the base value</a> of a [=reflect|reflected=] attribute or
+  <a href="#AngleMode">reflects an element of the base value</a> of a [=reflect|reflected=] attribute,
+  then [=reserialized|reserialize=] the reflected attribute.
+  </li>
+</ol>
+
+
+<h4 id="ListInterfaces" oldids="types-ListInterfaces">List interfaces</h4>
+
+<div class="annotation svg2-requirement">
+  <table>
+    <tr>
+      <th>SVG 2 Requirement:</th>
+      <td>Make the SVGList* interfaces a bit more like other lists/arrays.</td>
+    </tr>
+    <tr>
+      <th>Resolution:</th>
+      <td><a href="https://www.w3.org/2011/02/28-svg-minutes.html#item04">Add array style indexing and .length and .item to svg list types.</a></td>
+    </tr>
+    <tr>
+      <th>Purpose:</th>
+      <td>To align with other array types (e.g. NodeList).  Already implemented in Opera and Firefox.</td>
+    </tr>
+    <tr>
+      <th>Owner:</th>
+      <td>Erik (<a href="https://www.w3.org/Graphics/SVG/WG/track/actions/2975">ACTION-2975</a>)</td>
+    </tr>
+    <tr>
+      <th>Status:</th>
+      <td>Done</td>
+    </tr>
+  </table>
+</div>
+
+<p>Some SVG attributes contain lists of values, and to represent these values
+there are a number of SVG DOM <dfn id="TermListInterface" data-export="" data-dfn-type="dfn" oldids="types-TermListInterface">list interfaces</dfn>, one
+for each required element type – {{SVGNumberList}}, {{SVGLengthList}},
+{{SVGPointList}}, {{SVGTransformList}} and {{SVGStringList}}.
+The first four are used to represent the base and
+animated components of {{SVGAnimatedNumberList}}, {{SVGAnimatedLengthList}},
+{{SVGAnimatedPoints}} and {{SVGTransformList}} objects,
+while the fifth, {{SVGStringList}}, is used to [=reflect=] a
+few unanimated attributes that take a list of strings.</p>
+
+<p>Most [=list interfaces=] take the following form:</p>
+
+<pre class="example">interface <b>SVG<var>Name</var>List</b> {
+
+  readonly attribute unsigned long <a data-link-type="attribute" data-link-for="SVGNumberList" data-lt="length">length</a>;
+  readonly attribute unsigned long <a data-link-type="attribute" data-link-for="SVGNumberList" data-lt="numberOfItems">numberOfItems</a>;
+
+  undefined <a data-link-type="method" data-link-for="SVGNumberList" data-lt="clear()">clear</a>();
+  <var>Type</var> <a data-link-type="method" data-link-for="SVGNumberList" data-lt="initialize(newItem)">initialize</a>(<var>Type</var> newItem);
+  getter <var>Type</var> <a data-link-type="method" data-link-for="SVGNumberList" data-lt="getItem(index)">getItem</a>(unsigned long index);
+  <var>Type</var> <a data-link-type="method" data-link-for="SVGNumberList" data-lt="insertItemBefore(newItem, index)">insertItemBefore</a>(<var>Type</var> newItem, unsigned long index);
+  <var>Type</var> <a data-link-type="method" data-link-for="SVGNumberList" data-lt="replaceItem(newItem, index)">replaceItem</a>(<var>Type</var> newItem, unsigned long index);
+  <var>Type</var> <a data-link-type="method" data-link-for="SVGNumberList" data-lt="removeItem(index)">removeItem</a>(unsigned long index);
+  <var>Type</var> <a data-link-type="method" data-link-for="SVGNumberList" data-lt="appendItem(newItem)">appendItem</a>(<var>Type</var> newItem);
+  <a data-link-type="method" data-link-for="SVGNumberList" data-lt="__setter__(index, newItem)">setter</a> undefined (unsigned long index, <var>Type</var> newItem);
+};</pre>
+
+<p>where <var>Name</var> is a descriptive name for the list element's
+("Number", "Length", "Point", "Transform" or "String") and <var>Type</var> is the IDL type of the
+list's elements ({{SVGNumber}}, {{SVGLength}}, <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a>, {{SVGTransform}} or <b>DOMString</b>).</p>
+
+<p>The {{SVGTransformList}} interface takes the above form but has
+two additional methods on it.</p>
+
+<p class="ready-for-wider-review">All [=list interfaces|list interface=] objects apart from {{SVGTransformList}}
+reflect the base value of a reflected content
+attribute.  {{SVGTransformList}} objects reflect a presentation
+attribute (<span class="attr-name">‘transform’</span>,
+<span class="attr-name">‘<a href="#LinearGradientElementGradientTransformAttribute" data-link-type="element-attr">gradientTransform</a>’</span> or <span class="attr-name">‘<a href="#PatternElementPatternTransformAttribute" data-link-type="element-attr">patternTransform</a>’</span>).
+All [=list interfaces|list interface=] objects are associated with a particular element.
+Unlike {{SVGLength}} and similar objects, there are no "detached"
+[=list interfaces|list interface=] objects.</p>
+
+<p>A [=list interfaces|list interface=] object maintains an internal list of elements,
+which is referred to in the text below simply as "the list".
+The IDL attributes and methods are used to inspect and manipulate elements
+of the list.  The list can also be changed in response to
+changes to the reflected content attribute and to animation of
+the content attribute (or, for {{SVGTransformList}} objects,
+in response to changes to the computed value of the <a href="#TransformProperty" class="property">transform</a>
+property).</p>
+
+<p id="ListItemIdentity"><span id="types-ListItemIdentity" class="bs-old-id"></span>When the list's element type is an object type, the
+elements of the list are those objects and not copies of them.
+{{SVGNumberList/getItem(index)|getItem}}, the indexed property
+getter (declared as {{SVGNumberList/getItem(index)|getItem}} in the
+IDL above), and every method that returns an element of the list
+({{SVGNumberList/initialize(newItem)|initialize}},
+{{SVGNumberList/insertItemBefore(newItem, index)|insertItemBefore}},
+{{SVGNumberList/replaceItem(newItem, index)|replaceItem}},
+{{SVGNumberList/appendItem(newItem)|appendItem}} and
+{{SVGTransformList/consolidate()|consolidate}})
+return that object.  Two accesses of the same index therefore return the same
+object, for as long as that object is the element at that index.  For a method
+that takes an item as its argument, the object returned is not necessarily the
+one that was passed, since the method's steps may have replaced it by a copy.
+Whether an object is still the element at an index after the reflected content
+attribute changes is decided by the steps for
+[=synchronized (TermSynchronizeList)|synchronizing=] a [=list interfaces|list interface=]
+object.  When the element type is <b>DOMString</b>, elements are returned and
+compared by value.</p>
+
+<p id="ReadOnlyList" class="ready-for-wider-review"><span id="types-ReadOnlyList" class="bs-old-id"></span>A [=list interfaces|list interface=] object can be designated as
+<em>read only</em>, which means that attempts to modify the object will result
+in an exception being thrown, as described below. [=list interfaces|list interface=] objects
+reflected through the animVal IDL attribute are always <em>read only</em>.</p>
+
+<p id="ListSynchronize"><span id="types-ListSynchronize" class="bs-old-id"></span>A [=list interfaces|list interface=] object
+is <dfn id="TermSynchronizeList" data-export="" data-dfn-type="dfn" data-lt="synchronized (TermSynchronizeList)" oldids="types-TermSynchronizeList">synchronized</dfn> by running
+the following steps:</p>
+
+<ol class="algorithm">
+  <li class="ready-for-wider-review">Let <var>value</var> be the base value of the
+    reflected content attribute. If the attribute is not present, or if its
+    value cannot be parsed, let <var>value</var> be the attribute's
+    [=initial value=], or an empty list if the attribute's
+    [=initial value=] is <span class="attr-value">(none)</span>.</li>
+  <li>Let <var>length</var> be the number of items in the list.</li>
+  <li>Let <var>new length</var> be the number of values in <var>value</var>.
+  If <var>value</var> is the keyword <span class="prop-value">none</span>
+  (as supported by the <a href="#TransformProperty" class="property">transform</a> property), <var>new length</var>
+  is 0.</li>
+
+  <li>If the list element type is {{SVGNumber}}, {{SVGLength}}, <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> or {{SVGTransform}}, then:
+    <ol>
+      <li>If <var>length</var> > <var>new length</var>, then:
+        <ol>
+          <li>[=detached|Detach=] each object in the list at an index
+          greater than or equal to <var>new length</var>.</li>
+          <li>Truncate the list to length <var>new length</var>.</li>
+          <li>Set <var>length</var> to <var>new length</var>.</li>
+        </ol>
+      </li>
+      <li>While <var>length</var> &lt; <var>new length</var>:
+        <ol>
+          <li>Let <var>item</var> be a newly created
+          object of the list element type.</li>
+          <li>[=attached|Attach=] <var>item</var> to this [=list interfaces|list interface=]
+          object.</li>
+          <li>Append <var>item</var> to the list.</li>
+          <li>Set <var>length</var> to <var>length</var> + 1.</li>
+        </ol>
+      </li>
+      <li>Let <var>index</var> be 0.</li>
+      <li>While <var>index</var> &lt; <var>length</var>:
+        <ol>
+          <li>Let <var>item</var> be the object in the list at index
+          <var>index</var>.</li>
+          <li>Let <var>v</var> be the value in <var>value</var> at index
+          <var>index</var>.</li>
+          <li>Set <var>item</var>'s value to <var>v</var>.</li>
+          <li>If <var>item</var> is an {{SVGTransform}} object, then
+          set the components of its [=matrix object=]
+          to match the new transform function value.</li>
+          <li>Set <var>index</var> to <var>index</var> + 1.</li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+  <li>Otherwise, the list element type is <b>DOMString</b>:
+    <ol>
+      <li>Replace the list with a new list consisting
+      of the values in <var>value</var>.</li>
+    </ol>
+  </li>
+</ol>
+
+<p>Whenever a list element object is to be <dfn id="TermDetach" data-export="" data-dfn-type="dfn" oldids="types-TermDetach">detached</dfn>,
+the following steps are run, depending on the list element type:</p>
+
+<dl class="switch">
+  <dt>{{SVGNumber}}</dt>
+  <dd>
+    Set the {{SVGNumber}} to no longer be
+    <a href="#NumberAssociatedElement">associated</a> with any element.
+    If the {{SVGNumber}} is <a href="#ReadOnlyNumber">read only</a>,
+    set it to be no longer read only.
+  </dd>
+  <dt>{{SVGLength}}</dt>
+  <dd>
+    Set the {{SVGLength}} to no longer be
+    <a href="#LengthAssociatedElement">associated</a> with any element.
+    If the {{SVGLength}} is <a href="#ReadOnlyLength">read only</a>,
+    set it to be no longer read only.  Set the {{SVGLength}} to have
+    unspecified <a href="#LengthAssociatedElement">directionality</a>.
+  </dd>
+  <dt><a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a></dt>
+  <dd>
+    Set the <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> to no longer be
+    <a href="#PointAssociatedElement">associated</a> with any element.
+    If the <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> is <a href="#ReadOnlyPoint">read only</a>,
+    set it to be no longer read only.
+  </dd>
+  <dt>{{SVGTransform}}</dt>
+  <dd>
+    Set the {{SVGTransform}} to no longer be
+    <a href="#TransformAssociatedElement">associated</a> with any element.
+    If the {{SVGTransform}} is <a href="#ReadOnlyTransform">read only</a>,
+    set it to be no longer read only.
+  </dd>
+  <dt><b>DOMString</b></dt>
+  <dd>Nothing is done.</dd>
+</dl>
+
+<p>Whenever a list element object is to be <dfn id="TermAttach" data-export="" data-dfn-type="dfn" oldids="types-TermAttach">attached</dfn>,
+the following steps are run, depending on the list element type:</p>
+<div class="ready-for-wider-review">
+<dl class="switch">
+  <dt>{{SVGNumber}}</dt>
+  <dd>
+    <a href="#NumberAssociatedElement">Associate</a> the
+    {{SVGNumber}} with the element that the [=list interfaces|list interface=]
+    object is associated with.  Additionally, depending on which IDL attribute
+    the [=list interfaces|list interface=] object is reflected through:
+      <dl class="switch">
+        <dt>baseVal</dt>
+        <dd>Set the {{SVGNumber}} to <a href="#NumberMode">reflect an
+        element of the base value</a>.</dd>
+        <dt>animVal</dt>
+        <dd>Set the {{SVGNumber}} to <a href="#NumberMode">reflect an
+        element of the base value</a>.</dd>
+      </dl>
+  </dd>
+  <dt>{{SVGLength}}</dt>
+  <dd>
+    <a href="#LengthAssociatedElement">Associate</a> the
+    {{SVGLength}} with the element that the [=list interfaces|list interface=]
+    object is associated with and set its
+    <a href="#LengthAssociatedElement">directionality</a> to that
+    specified by the attribute being reflected.
+    Additionally, depending on which IDL attribute the [=list interfaces|list interface=]
+    object is reflected through:
+      <dl class="switch">
+        <dt>baseVal</dt>
+        <dd>Set the {{SVGLength}} to <a href="#LengthMode">reflect an
+        element of the base value</a>.</dd>
+        <dt>animVal</dt>
+        <dd>Set the {{SVGLength}} to <a href="#LengthMode">reflect an
+        element of the base value</a>. Set the {{SVGLength}} to be
+        <em>read only</em>.</dd>
+      </dl>
+  </dd>
+  <dt><a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a></dt>
+  <dd>
+    <a href="#PointAssociatedElement">Associate</a> the
+    <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> with the element that the [=list interfaces|list interface=]
+    object is associated with.
+    Additionally, depending on which IDL attribute the [=list interfaces|list interface=]
+    object is reflected through:
+      <dl class="switch">
+        <dt>baseVal</dt>
+        <dd>Set the <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> to <a href="#PointMode">reflect an
+        element of the base value</a>.</dd>
+        <dt>animVal</dt>
+        <dd>Set the <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> to <a href="#PointMode">reflect an
+        element of the base value</a>.</dd>
+      </dl>
+  </dd>
+  <dt>{{SVGTransform}}</dt>
+  <dd>
+    <a href="#TransformAssociatedElement">Associate</a> the
+    {{SVGTransform}} with the element that the [=list interfaces|list interface=]
+    object is associated with.
+    Set the {{SVGTransform}} to <a href="#TransformMode">reflect an
+    element of a presentation attribute value</a>.
+  </dd>
+  <dt><b>DOMString</b></dt>
+  <dd>Nothing is done.</dd>
+</dl>
+</div>
+
+<p>The <a href="https://webidl.spec.whatwg.org/#dfn-supported-property-indices">supported property indices</a>
+of a [=list interfaces|list interface=] object is the set of all non-negative integers
+less than the length of the list.</p>
+
+<p>The <dfn id="__svg__SVGNameList__length" data-dfn-type="attribute" data-dfn-for="SVGNumberList, SVGLengthList, SVGStringList, SVGTransformList, SVGPointList" data-lt="length" oldids="types-__svg__SVGNameList__length">length</dfn> and
+<dfn id="__svg__SVGNameList__numberOfItems" data-dfn-type="attribute" data-dfn-for="SVGNumberList, SVGLengthList, SVGStringList, SVGTransformList, SVGPointList" data-lt="numberOfItems" oldids="types-__svg__SVGNameList__numberOfItems">numberOfItems</dfn> IDL attributes
+represents the length of the list, and on getting simply return
+the length of the list.</p>
+
+<p>The <dfn id="__svg__SVGNameList__clear" data-dfn-type="method" data-dfn-for="SVGNumberList, SVGLengthList, SVGStringList, SVGTransformList, SVGPointList" data-lt="clear()" oldids="types-__svg__SVGNameList__clear">clear</dfn> method is used to
+remove all items in the list.  When clear() is called, the following steps are run:</p>
+<ol class="algorithm">
+  <li>If the list is <a href="#ReadOnlyList">read only</a>, then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a
+  <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>[=detached|Detach=] and then remove all elements in the list.</li>
+  <li>If the list [=reflect|reflects=] an attribute, or represents the
+  base value of an object that [=reflect|reflects=] an attribute, then
+  [=reserialized|reserialize=] the reflected attribute.</li>
+</ol>
+
+<p>The <dfn id="__svg__SVGNameList__initialize" data-dfn-type="method" data-dfn-for="SVGNumberList, SVGLengthList, SVGStringList, SVGTransformList, SVGPointList" data-lt="initialize(newItem)" oldids="types-__svg__SVGNameList__initialize">initialize</dfn> method
+is used to clear the list and add a single, specified value to it.
+When initialize(<var>newItem</var>) is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the list is <a href="#ReadOnlyList">read only</a>, then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a
+  <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>[=detached|Detach=] and then remove all elements in the list.</li>
+  <li>If <var>newItem</var> is an object type, and <var>newItem</var>
+  is not a detached object,  then set <var>newItem</var> to be
+  a newly created object of the same type as <var>newItem</var>
+  and which has the same (number or length) value.</li>
+  <li>[=attached|Attach=] <var>newItem</var> to the [=list interfaces|list interface=] object.</li>
+  <li>Append <var>newItem</var> to this list.</li>
+  <li>If the list [=reflect|reflects=] an attribute, or represents the
+  base value of an object that [=reflect|reflects=] an attribute, then
+  [=reserialized|reserialize=] the reflected attribute.</li>
+  <li>Return <var>newItem</var>.</li>
+</ol>
+
+<p>The <dfn id="__svg__SVGNameList__getItem" data-dfn-type="method" data-dfn-for="SVGNumberList, SVGLengthList, SVGStringList, SVGTransformList, SVGPointList" data-lt="getItem(index)" oldids="types-__svg__SVGNameList__getItem">getItem</dfn> method is used
+to get an item from the list at the specified position.  When
+getItem(<var>index</var>) is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If <var>index</var> is greater than or equal to the length
+  of the list, then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> an <a href="https://webidl.spec.whatwg.org/#indexsizeerror">IndexSizeError</a>.</li>
+  <li>Return the element in the list at position <var>index</var>.
+    <p class="note">Note that if the list's element type is an object type,
+    such as {{SVGLength}}, then a reference to that object and not
+    a copy of it is returned.</p></li>
+</ol>
+
+<p>The <dfn id="__svg__SVGNameList__insertItemBefore" data-dfn-type="method" data-dfn-for="SVGNumberList, SVGLengthList, SVGStringList, SVGTransformList, SVGPointList" data-lt="insertItemBefore(newItem, index)" oldids="types-__svg__SVGNameList__insertItemBefore">insertItemBefore</dfn>
+method is used to insert an element into the list at a specific position.
+When insertItemBefore(<var>newItem</var>, <var>index</var>) is called,
+the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the list is <a href="#ReadOnlyList">read only</a>, then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a
+  <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>If <var>newItem</var> is an object type, and <var>newItem</var>
+  is not a detached object,  then set <var>newItem</var> to be
+  a newly created object of the same type as <var>newItem</var>
+  and which has the same (number or length) value.</li>
+  <li>If <var>index</var> is greater than the length of the list, then
+  set <var>index</var> to be the list length.</li>
+  <li>Insert <var>newItem</var> into the list at index <var>index</var>.</li>
+  <li>Attach <var>newItem</var> to the [=list interfaces|list interface=] object.</li>
+  <li>If the list [=reflect|reflects=] an attribute, or represents the
+  base value of an object that [=reflect|reflects=] an attribute, then
+  [=reserialized|reserialize=] the reflected attribute.</li>
+  <li>Return <var>newItem</var>.</li>
+</ol>
+
+<p>The <dfn id="__svg__SVGNameList__replaceItem" data-dfn-type="method" data-dfn-for="SVGNumberList, SVGLengthList, SVGStringList, SVGTransformList, SVGPointList" data-lt="replaceItem(newItem, index)" oldids="types-__svg__SVGNameList__replaceItem">replaceItem</dfn> method
+is used to replace an existing item in the list with a new item.
+When replaceItem(<var>newItem</var>, <var>index</var>) is called, the
+following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the list is <a href="#ReadOnlyList">read only</a>, then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a
+  <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>If <var>index</var> is greater than or equal to the length of
+  the list, then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> an <a href="https://webidl.spec.whatwg.org/#indexsizeerror">IndexSizeError</a>.</li>
+  <li>If <var>newItem</var> is an object type, and <var>newItem</var>
+  is not a detached object, then set <var>newItem</var> to be
+  a newly created object of the same type as <var>newItem</var>
+  and which has the same (number or length) value.</li>
+  <li>[=detached|Detach=] the element in the list at index <var>index</var>.</li>
+  <li>Replace the element in the list at index <var>index</var>
+  with <var>newItem</var>.</li>
+  <li>[=attached|Attach=] <var>newItem</var> to the [=list interfaces|list interface=] object.</li>
+  <li>If the list [=reflect|reflects=] an attribute, or represents the
+  base value of an object that [=reflect|reflects=] an attribute, then
+  [=reserialized|reserialize=] the reflected attribute.</li>
+  <li>Return <var>newItem</var>.</li>
+</ol>
+
+<p>The <dfn id="__svg__SVGNameList__removeItem" data-dfn-type="method" data-dfn-for="SVGNumberList, SVGLengthList, SVGStringList, SVGTransformList, SVGPointList" data-lt="removeItem(index)" oldids="types-__svg__SVGNameList__removeItem">removeItem</dfn> method
+is used to remove an item from the list.  When removeItem(<var>index</var>)
+is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the list is <a href="#ReadOnlyList">read only</a>, then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a
+  <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>If <var>index</var> is greater than or equal to the length of
+  the list, then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> an <a href="https://webidl.spec.whatwg.org/#indexsizeerror">IndexSizeError</a> with code.</li>
+  <li>Let <var>item</var> be the list element at index <var>index</var>.</li>
+  <li>[=detached|Detach=] <var>item</var>.</li>
+  <li>Remove the list element at index <var>index</var>.</li>
+  <li>Return <var>item</var>.</li>
+</ol>
+
+<p>The <dfn id="__svg__SVGNameList__appendItem" data-dfn-type="method" data-dfn-for="SVGNumberList, SVGLengthList, SVGStringList, SVGTransformList, SVGPointList" data-lt="appendItem(newItem)" oldids="types-__svg__SVGNameList__appendItem">appendItem</dfn> method
+is used to append an item to the end of the list.  When appendItem(<var>newItem</var>)
+is called, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the list is <a href="#ReadOnlyList">read only</a>, then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a
+  <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
+  <li>If <var>newItem</var> is an object type, and <var>newItem</var>
+  is not a detached object, then set <var>newItem</var> to be
+  a newly created object of the same type as <var>newItem</var>
+  and which has the same (number or length) value.</li>
+  <li>Let <var>index</var> be the length of the list.</li>
+  <li>Append <var>newItem</var> to the end of the list.</li>
+  <li>[=attached|Attach=] <var>newItem</var> to the [=list interfaces|list interface=] object.</li>
+  <li>If the list [=reflect|reflects=] an attribute, or represents the
+  base value of an object that [=reflect|reflects=] an attribute, then
+  [=reserialized|reserialize=] the reflected attribute.</li>
+  <li>Return <var>newItem</var>.</li>
+</ol>
+
+<p>The behavior of the <dfn id="__svg__SVGNameList__setter" data-dfn-type="method" data-dfn-for="SVGNumberList, SVGLengthList, SVGStringList, SVGTransformList, SVGPointList" data-lt="__setter__(index, newItem)" oldids="types-__svg__SVGNameList__setter">indexed property setter</dfn>
+is the same as that for the {{SVGNumberList/replaceItem(newItem, index)|replaceItem}}
+method.</p>
+
+<h4 id="InterfaceSVGNumberList" oldids="types-InterfaceSVGNumberList">Interface SVGNumberList</h4>
+
+<p>The {{SVGNumberList}} interface is a [=list interfaces|list interface=] whose
+elements are {{SVGNumber}} objects.  An {{SVGNumberList}} object
+represents a list of numbers.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGNumberList {
+
+  readonly attribute unsigned long length;
+  readonly attribute unsigned long numberOfItems;
+
+  undefined clear();
+  SVGNumber initialize(SVGNumber newItem);
+  getter SVGNumber getItem(unsigned long index);
+  SVGNumber insertItemBefore(SVGNumber newItem, unsigned long index);
+  SVGNumber replaceItem(SVGNumber newItem, unsigned long index);
+  SVGNumber removeItem(unsigned long index);
+  SVGNumber appendItem(SVGNumber newItem);
+  setter undefined (unsigned long index, SVGNumber newItem);
+};</pre>
+
+<p>The behavior of all of the interface members of {{SVGNumberList}} are
+defined in the <a href="#ListInterfaces">List interfaces</a> section above.</p>
+
+
+<h4 id="InterfaceSVGLengthList" oldids="types-InterfaceSVGLengthList">Interface SVGLengthList</h4>
+
+<p>The {{SVGLengthList}} interface is a [=list interfaces|list interface=] whose
+elements are {{SVGLength}} objects.  An {{SVGLengthList}} object
+represents a list of lengths.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGLengthList {
+
+  readonly attribute unsigned long length;
+  readonly attribute unsigned long numberOfItems;
+
+  undefined clear();
+  SVGLength initialize(SVGLength newItem);
+  getter SVGLength getItem(unsigned long index);
+  SVGLength insertItemBefore(SVGLength newItem, unsigned long index);
+  SVGLength replaceItem(SVGLength newItem, unsigned long index);
+  SVGLength removeItem(unsigned long index);
+  SVGLength appendItem(SVGLength newItem);
+  setter undefined (unsigned long index, SVGLength newItem);
+};</pre>
+
+<p>The behavior of all of the interface members of {{SVGLengthList}} are
+defined in the <a href="#ListInterfaces">List interfaces</a> section above.</p>
+
+
+<h4 id="InterfaceSVGStringList" oldids="types-InterfaceSVGStringList">Interface SVGStringList</h4>
+
+<p>The {{SVGStringList}} interface is a [=list interfaces|list interface=] whose
+elements are <b>DOMString</b> values.  An {{SVGStringList}} object
+represents a list of strings.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGStringList {
+
+  readonly attribute unsigned long length;
+  readonly attribute unsigned long numberOfItems;
+
+  undefined clear();
+  DOMString initialize(DOMString newItem);
+  getter DOMString getItem(unsigned long index);
+  DOMString insertItemBefore(DOMString newItem, unsigned long index);
+  DOMString replaceItem(DOMString newItem, unsigned long index);
+  DOMString removeItem(unsigned long index);
+  DOMString appendItem(DOMString newItem);
+  setter undefined (unsigned long index, DOMString newItem);
+};</pre>
+
+<p>The behavior of all of the interface members of {{SVGStringList}} are
+defined in the <a href="#ListInterfaces">List interfaces</a> section above.</p>
+
+
+<h3 id="DOMInterfacesForReflectingSVGAttributes" oldids="types-DOMInterfacesForReflectingSVGAttributes">DOM interfaces for reflecting animatable SVG attributes</h3>
+
+<p>
+  The following interfaces are used to represent the reflected value
+  of animatable content attributes.
+  They each consist of two component objects, representing the same data:
+  <code>baseVal</code> and <code>animVal</code>.
+  The <code>baseVal</code> (base value) object is modifiable,
+  to update the corresponding attribute value.
+</p>
+
+<p class="note">
+  In SVG 1.1, the <code>animVal</code> attribute of the SVG DOM interfaces represented the
+  current animated value of the reflected attribute. In this version of SVG,
+  <code>animVal</code> no longer represents the current animated value and is instead an
+  alias of <code>baseVal</code>.
+</p>
+
+
+<h4 id="InterfaceSVGAnimatedBoolean" oldids="types-InterfaceSVGAnimatedBoolean">Interface SVGAnimatedBoolean</h4>
+
+<p>An {{SVGAnimatedBoolean}} object is used to [=reflect=] an
+animatable attribute that takes a boolean value.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGAnimatedBoolean {
+           attribute boolean baseVal;
+  readonly attribute boolean animVal;
+};</pre>
+
+<p class="ready-for-wider-review">The <dfn id="__svg__SVGAnimatedBoolean__baseVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedBoolean" data-lt="baseVal" oldids="types-__svg__SVGAnimatedBoolean__baseVal">baseVal</dfn> and
+<dfn id="__svg__SVGAnimatedBoolean__animVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedBoolean" data-lt="animVal" oldids="types-__svg__SVGAnimatedBoolean__animVal">animVal</dfn> IDL attributes
+both represent the current non-animated value of the reflected attribute.
+On getting {{SVGAnimatedBoolean/baseVal}}
+or {{SVGAnimatedBoolean/animVal}},
+the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the value of the reflected attribute,
+  or the empty string if it is not present.</li>
+  <li>If <var>value</var> is not "true" or "false", then set <var>value</var>
+  to the reflected attribute's [=initial value=].</li>
+  <li>Return true if <var>value</var> is "true", and false otherwise.</li>
+</ol>
+
+<p>On setting {{SVGAnimatedBoolean/baseVal}},
+the reflected attribute is set to "true" if the value is true, and "false"
+otherwise.</p>
+
+<h4 id="InterfaceSVGAnimatedEnumeration" oldids="types-InterfaceSVGAnimatedEnumeration">Interface SVGAnimatedEnumeration</h4>
+
+<p>An {{SVGAnimatedEnumeration}} object is used to [=reflect=]
+an animatable attribute that takes a keyword value (such as
+the <span class="attr-name">‘<a href="#TextPathElementMethodAttribute" data-link-type="element-attr">method</a>’</span> attribute on <span class="element-name">‘<{textPath}>’</span>) or to reflect
+the type of value that an animatable attribute has (done
+only by the {{SVGMarkerElement/orientType}}
+IDL attribute for the <span class="element-name">‘<{marker}>’</span> element's
+<span class="attr-name">‘<{marker/orient}>’</span> attribute).</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGAnimatedEnumeration {
+           attribute unsigned short baseVal;
+  readonly attribute unsigned short animVal;
+};</pre>
+
+<p class="ready-for-wider-review">For {{SVGAnimatedEnumeration}} objects that [=reflect=] an
+animatable attribute that takes only a keyword value, the
+<dfn id="__svg__SVGAnimatedEnumeration__baseVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedEnumeration" data-lt="baseVal" oldids="types-__svg__SVGAnimatedEnumeration__baseVal">baseVal</dfn> and
+<dfn id="__svg__SVGAnimatedEnumeration__animVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedEnumeration" data-lt="animVal" oldids="types-__svg__SVGAnimatedEnumeration__animVal">animVal</dfn> IDL attributes
+represents the current non-animated value of the reflected attribute.
+For {{SVGMarkerElement/orientType}},
+they represent the type of the current non-animated value of the
+reflected <span class="attr-name">‘<{marker/orient}>’</span> attribute.  On getting
+{{SVGAnimatedEnumeration/baseVal}} or
+{{SVGAnimatedEnumeration/animVal}}, the
+following steps are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the value of the reflected attribute
+  (using the attribute's [=initial value=] if it is not present
+  or invalid).</li>
+  <li>Return the <dfn id="TermNumericTypeValue" data-export="" data-dfn-type="dfn" oldids="types-TermNumericTypeValue">numeric type value</dfn>
+  for <var>value</var>, according to the reflecting IDL attribute's
+  definition.</li>
+</ol>
+
+<p>On setting {{SVGAnimatedEnumeration/baseVal}},
+the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the value being assigned to
+  {{SVGAnimatedEnumeration/baseVal}}.</li>
+  <li>If <var>value</var> is 0 or is not the [=numeric type value=]
+  for any value of the reflected attribute, then throw a <a href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror">TypeError</a>.</li>
+  <li>Otherwise, if the reflecting IDL attribute is
+  {{SVGMarkerElement/orientType}}
+  and <var>value</var> is {{SVGMarkerElement/SVG_MARKER_ORIENT_ANGLE}},
+  then set the reflected attribute to the string "0".</li>
+  <li>Otherwise, <var>value</var> is the [=numeric type value=]
+  for a specific, single keyword value for the reflected attribute.
+  Set the reflected attribute to that value.</li>
+</ol>
+
+<h4 id="InterfaceSVGAnimatedInteger" oldids="types-InterfaceSVGAnimatedInteger">Interface SVGAnimatedInteger</h4>
+
+<p>An {{SVGAnimatedInteger}} object is used to [=reflect=] an
+animatable attribute that takes an integer value (such as
+<span class="attr-name">‘<a href="https://drafts.csswg.org/filter-effects-1/#element-attrdef-feturbulence-numoctaves" data-link-type="element-attr">numOctaves</a>’</span> on <span class="element-name">‘<a href="https://drafts.csswg.org/filter-effects-1/#feTurbulenceElement" data-link-type="element">feTurbulence</a>’</span>).  It is also
+used to reflect one part of an animatable attribute that takes
+an integer followed by an optional second integer (such as
+<span class="attr-name">‘<a href="https://drafts.csswg.org/filter-effects-1/#element-attrdef-order" data-link-type="element-attr">order</a>’</span> on <span class="element-name">‘<a href="https://drafts.csswg.org/filter-effects-1/#feConvolveMatrixElement" data-link-type="element">feConvolveMatrix</a>’</span>).</p>
+
+<p class="note">This {{SVGAnimatedInteger}} interface
+is not used in this specification, however the
+<a href="https://www.w3.org/TR/filter-effects/">Filter Effects</a>
+specification has a number of uses of it.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGAnimatedInteger {
+           attribute long baseVal;
+  readonly attribute long animVal;
+};</pre>
+
+<p class="ready-for-wider-review">For {{SVGAnimatedInteger}} objects that [=reflect=]
+an animatable attribute that takes a single integer value, the
+<dfn id="__svg__SVGAnimatedInteger__baseVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedInteger" data-lt="baseVal" oldids="types-__svg__SVGAnimatedInteger__baseVal">baseVal</dfn> and
+<dfn id="__svg__SVGAnimatedInteger__animVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedInteger" data-lt="animVal" oldids="types-__svg__SVGAnimatedInteger__animVal">animVal</dfn> IDL attributes
+represent the current non-animated value of the reflected attribute.
+For those that reflect one integer of an attribute that takes an
+integer followed by an optional second integer, they represent the
+current non-animated value of one of the two integers.  On getting
+{{SVGAnimatedInteger/baseVal}} or
+{{SVGAnimatedInteger/animVal}}, the
+following steps are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the value of the reflected attribute
+  (using the attribute's [=initial value=] if it is not present
+  or invalid).</li>
+  <li>If the reflected attribute is defined to take an integer
+  followed by an optional second integer, then:
+    <ol>
+      <li>If this {{SVGAnimatedInteger}} object reflects the
+      first integer, then return the first value in <var>value</var>.</li>
+      <li>Otherwise, this {{SVGAnimatedInteger}} object reflects the
+      second integer.  Return the second value in <var>value</var> if it has been
+      explicitly specified, and if not, return the implicit value
+      as described in the definition of the attribute.
+      <p class="note">For example, the definition of <span class="attr-name">‘<a href="https://drafts.csswg.org/filter-effects-1/#element-attrdef-order" data-link-type="element-attr">order</a>’</span>
+      says that the implicit second integer is the same as the explicit
+      first integer.</p></li>
+    </ol>
+  </li>
+  <li>Otherwise, the reflected attribute is defined to take a single
+  integer value.  Return <var>value</var>.</li>
+</ol>
+
+<p>On setting {{SVGAnimatedInteger/baseVal}},
+the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the value being assigned to
+  {{SVGAnimatedInteger/baseVal}}.</li>
+  <li>Let <var>new</var> be a list of integers.</li>
+  <li>If the reflected attribute is defined to take an integer
+  followed by an optional second integer, then:
+    <ol>
+      <li>Let <var>current</var> be the value of the reflected attribute
+      (using the attribute's [=initial value=] if it is not present
+      or invalid).</li>
+      <li>Let <var>first</var> be the first integer in <var>current</var>.</li>
+      <li>Let <var>second</var> be the second integer in <var>current</var>
+      if it has been explicitly specified, and if not, the implicit value
+      as described in the definition of the attribute.</li>
+      <li>If this {{SVGAnimatedInteger}} object reflects the
+      first integer, then set <var>first</var> to <var>value</var>.
+      Otherwise, set <var>second</var> to <var>value</var>.</li>
+      <li>Append <var>first</var> to <var>new</var>.</li>
+      <li>Append <var>second</var> to <var>new</var>.</li>
+    </ol>
+  </li>
+  <li>Otherwise, the reflected attribute is defined to take a single
+  integer value.  Append <var>value</var> to <var>new</var>.</li>
+  <li>Set the content attribute to a string consisting of each integer
+  in <var>new</var> serialized to an implementation specific string that,
+  if parsed as an <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> using CSS syntax, would return that
+  integer, joined and separated by a single U+0020 SPACE character.</li>
+</ol>
+
+<h4 id="InterfaceSVGAnimatedNumber" oldids="types-InterfaceSVGAnimatedNumber">Interface SVGAnimatedNumber</h4>
+
+<p>An {{SVGAnimatedNumber}} object is used to [=reflect=] an
+animatable attribute that takes a number value (such as
+<span class="attr-name">‘<a href="#PathLengthAttribute" data-link-type="element-attr">pathLength</a>’</span> on <span class="element-name">‘<{path}>’</span>).  It is also
+used to reflect one part of an animatable attribute that takes
+an number followed by an optional second number (such as
+<span class="attr-name">‘<a href="https://drafts.csswg.org/filter-effects-1/#element-attrdef-fediffuselighting-kernelunitlength" data-link-type="element-attr">kernelUnitLength</a>’</span> on <span class="element-name">‘<a href="https://drafts.csswg.org/filter-effects-1/#feDiffuseLightingElement" data-link-type="element">feDiffuseLighting</a>’</span>).</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGAnimatedNumber {
+           attribute float baseVal;
+  readonly attribute float animVal;
+};</pre>
+
+<p class="ready-for-wider-review">For {{SVGAnimatedNumber}} objects that [=reflect=]
+an animatable attribute that takes a single number value, the
+<dfn id="__svg__SVGAnimatedNumber__baseVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedNumber" data-lt="baseVal" oldids="types-__svg__SVGAnimatedNumber__baseVal">baseVal</dfn> and
+<dfn id="__svg__SVGAnimatedNumber__animVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedNumber" data-lt="animVal" oldids="types-__svg__SVGAnimatedNumber__animVal">animVal</dfn> IDL attributes
+represent the current non-animated value of the reflected attribute.
+For those that reflect one number of an attribute that takes a
+number followed by an optional second number, they represent the
+current non-animated value of one of the two numbers.  On getting
+{{SVGAnimatedNumber/baseVal}} or
+{{SVGAnimatedNumber/animVal}}, the
+following steps are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the value of the reflected attribute
+  (using the attribute's [=initial value=] if it is not present
+  or invalid).</li>
+  <li>If the reflected attribute is defined to take an number
+  followed by an optional second number, then:
+    <ol>
+      <li>If this {{SVGAnimatedNumber}} object reflects the
+      first number, then return the first value in <var>value</var>.</li>
+      <li>Otherwise, this {{SVGAnimatedNumber}} object reflects the
+      second number.  Return the second value in <var>value</var> if it has been
+      explicitly specified, and if not, return the implicit value
+      as described in the definition of the attribute.
+      <p class="note">For example, the definition of <span class="attr-name">‘<a href="https://drafts.csswg.org/filter-effects-1/#element-attrdef-fediffuselighting-kernelunitlength" data-link-type="element-attr">kernelUnitLength</a>’</span>
+      says that the implicit second number is the same as the explicit
+      first number.</p></li>
+    </ol>
+  </li>
+  <li>Otherwise, the reflected attribute is defined to take a single
+  number value.  Return <var>value</var>.</li>
+</ol>
+
+<p>On setting {{SVGAnimatedNumber/baseVal}},
+the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the value being assigned to
+  {{SVGAnimatedNumber/baseVal}}.</li>
+  <li>Let <var>new</var> be a list of numbers.</li>
+  <li>If the reflected attribute is defined to take an number
+  followed by an optional second number, then:
+    <ol>
+      <li>Let <var>current</var> be the value of the reflected attribute
+      (using the attribute's [=initial value=] if it is not present
+      or invalid).</li>
+      <li>Let <var>first</var> be the first number in <var>current</var>.</li>
+      <li>Let <var>second</var> be the second number in <var>current</var>
+      if it has been explicitly specified, and if not, the implicit value
+      as described in the definition of the attribute.</li>
+      <li>If this {{SVGAnimatedNumber}} object reflects the
+      first number, then set <var>first</var> to <var>value</var>.
+      Otherwise, set <var>second</var> to <var>value</var>.</li>
+      <li>Append <var>first</var> to <var>new</var>.</li>
+      <li>Append <var>second</var> to <var>new</var>.</li>
+    </ol>
+  </li>
+  <li>Otherwise, the reflected attribute is defined to take a single
+  number value.  Append <var>value</var> to <var>new</var>.</li>
+  <li>Set the content attribute to a string consisting of each number
+  in <var>new</var> serialized to an implementation specific string that,
+  if parsed as an <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> using CSS syntax, would return the
+  value closest to the number (given the implementation's supported
+  <a href="#Precision">Precision</a>real number precision),
+  joined and separated by a single U+0020 SPACE character.</li>
+</ol>
+
+<h4 id="InterfaceSVGAnimatedLength" oldids="types-InterfaceSVGAnimatedLength">Interface SVGAnimatedLength</h4>
+
+<!--
+<div class="annotation svg2-requirement">
+  <table>
+    <tr><th>SVG 2 Requirement:</th>
+    <td>Make it easier to read and write to attributes in the SVG DOM.</td></tr>
+    <tr><th>Resolution:</th>
+    <td><a href="https://www.w3.org/2011/10/27-svg-irc#T18-19-13">We will make it easier to read and write to attributes in the SVG DOM in SVG2.</a></td></tr>
+    <tr><th>Purpose:</th>
+    <td>To avoid the awkward access to the base values of <a>SVGAnimatedLength</a>s.</td></tr>
+    <tr><th>Owner:</th>
+    <td>Cameron (<a href="https://www.w3.org/Graphics/SVG/WG/track/actions/3414">ACTION-3414</a>)</td></tr>
+  </table>
+</div>
+-->
+<p class="ready-for-wider-review">An {{SVGAnimatedLength}} object is used to [=reflect=] either
+(a) an animatable attribute that takes a <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>,
+<a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a> or <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> value, or (b) a
+CSS property that takes one of these values and its corresponding
+presentation attribute.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGAnimatedLength {
+  [SameObject] readonly attribute SVGLength baseVal;
+  [SameObject] readonly attribute SVGLength animVal;
+};</pre>
+
+<p class="ready-for-wider-review">The <dfn id="__svg__SVGAnimatedLength__baseVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedLength" data-lt="baseVal" oldids="types-__svg__SVGAnimatedLength__baseVal">baseVal</dfn> and
+<dfn id="__svg__SVGAnimatedLength__animVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedLength" data-lt="animVal" oldids="types-__svg__SVGAnimatedLength__animVal">animVal</dfn> IDL attributes
+represent the current value of the reflected content attribute.
+On getting {{SVGAnimatedLength/baseVal}} or
+{{SVGAnimatedLength/animVal}},
+an {{SVGLength}} object is returned that:</p>
+
+<ul>
+  <li>either <a href="#LengthMode">reflects the base value</a> of the
+  reflected attribute or <a href="#LengthMode">reflects the
+  given presentation attribute</a>,</li>
+  <li>is <a href="#LengthAssociatedElement">associated with</a> the SVG element that
+  the object with the reflecting IDL attribute of type {{SVGAnimatedLength}}
+  was obtained from, and</li>
+  <li>has a <a href="#LengthAssociatedElement">directionality</a> as defined by the
+  specific reflected attribute.</li>
+</ul>
+
+<h4 id="InterfaceSVGAnimatedAngle" oldids="types-InterfaceSVGAnimatedAngle">Interface SVGAnimatedAngle</h4>
+
+<p>An {{SVGAnimatedAngle}} object is used to [=reflect=]
+the <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> value of the animated <span class="attr-name">‘<{marker/orient}>’</span>
+attribute on <span class="element-name">‘<{marker}>’</span>, through the
+{{SVGMarkerElement/orientAngle}}
+IDL attribute.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGAnimatedAngle {
+  [SameObject] readonly attribute SVGAngle baseVal;
+  [SameObject] readonly attribute SVGAngle animVal;
+};</pre>
+
+<p class="ready-for-wider-review">The <dfn id="__svg__SVGAnimatedAngle__baseVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedAngle" data-lt="baseVal" oldids="types-__svg__SVGAnimatedAngle__baseVal">baseVal</dfn> and
+<dfn id="__svg__SVGAnimatedAngle__animVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedAngle" data-lt="animVal" oldids="types-__svg__SVGAnimatedAngle__animVal">animVal</dfn> IDL attributes represent
+the current non-animated <a href="https://www.w3.org/TR/css-values/#angles">&lt;angle></a> value of the
+reflected <span class="attr-name">‘<{marker/orient}>’</span> attribute.  On getting
+{{SVGAnimatedAngle/baseVal}} or
+{{SVGAnimatedAngle/animVal}}, an
+{{SVGAngle}} object is returned that:</p>
+
+<ul>
+  <li><a href="#AngleMode">reflects the base value</a> of the
+  reflected <span class="attr-name">‘<{marker/orient}>’</span> attribute, and</li>
+  <li>is <a href="#AngleAssociatedElement">associated with</a> the SVG <span class="element-name">‘<{marker}>’</span>
+  element that the object with the reflecting IDL attribute of type
+  {{SVGAnimatedAngle}} was obtained from.</li>
+</ul>
+
+<h4 id="InterfaceSVGAnimatedString" oldids="types-InterfaceSVGAnimatedString">Interface SVGAnimatedString</h4>
+
+<p>An {{SVGAnimatedString}} object is used to [=reflect=] an
+animatable attribute that takes a string value.  It can optionally
+be defined to additionally reflect a second, deprecated attribute.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGAnimatedString {
+           attribute (DOMString or TrustedScriptURL) baseVal;
+  readonly attribute DOMString animVal;
+};</pre>
+
+<p class="ready-for-wider-review">The <dfn id="__svg__SVGAnimatedString__baseVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedString" data-lt="baseVal" oldids="types-__svg__SVGAnimatedString__baseVal">baseVal</dfn>
+and <dfn id="__svg__SVGAnimatedString__animVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedString" data-lt="animVal" oldids="types-__svg__SVGAnimatedString__animVal">animVal</dfn> IDL attributes
+represent the current non-animated value of the reflected attribute.
+On getting {{SVGAnimatedString/baseVal}}
+or {{SVGAnimatedString/animVal}},
+the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the reflected attribute is not present, then:
+    <ol>
+      <li>If the {{SVGAnimatedString}} object is defined to additionally
+      reflect a second, deprecated attribute, and that attribute is present,
+      then return its value.</li>
+      <li>Otherwise, if the reflected attribute has an [=initial value=],
+      then return it.</li>
+      <li>Otherwise, return the empty string.</li>
+    </ol>
+  </li>
+  <li>Otherwise, the reflected attribute is present.  Return its value.</li>
+</ol>
+
+<p class="note">For the {{SVGURIReference/href}}
+member on the {{SVGURIReference}} interface, this will result in
+the deprecated <span class="attr-name">‘<{a/xlink:href}>’</span> attribute being returned if it is
+present and the <span class="attr-name">‘href’</span> attribute is not,
+and in the <span class="attr-name">‘href’</span> attribute being
+returned in all other cases.</p>
+
+<p>On setting {{SVGAnimatedString/baseVal}},
+the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>If the reflected attribute’s element is an {{SVGScriptElement}}, let <var>value</var> be the result of
+    executing the <a href="https://www.w3.org/TR/trusted-types/#get-trusted-type-compliant-string-algorithm">Get Trusted Type compliant string</a>
+    algorithm, with <a href="https://www.w3.org/TR/trusted-types/#trustedscripturl">TrustedScriptURL</a>,
+    reflected attribute’s Document's relevant global object, 'SVGScriptElement href', and \'script'.</li>
+  <li>Otherwise, let value be the specified value.</li>
+  <li>If the reflected attribute is not present,
+  the {{SVGAnimatedString}} object is defined to additionally reflect
+  a second, deprecated attribute, and that deprecated attribute is present,
+  then set that deprecated attribute to value.</li>
+  <li>Otherwise, set the reflected attribute to value.</li>
+</ol>
+
+<p class="note"> SVG does not have a complete script processing model <a href="https://github.com/w3c/svgwg/issues/196">yet</a>.
+<a href="https://www.w3.org/TR/trusted-types/">Trusted Types</a> assumes that the attribute and
+text body modification protections behave similarly to ones for HTML scripts.</p>
+
+<p class="note">For the {{SVGURIReference/href}}
+member on the {{SVGURIReference}} interface, this will result in
+the deprecated <span class="attr-name">‘<{a/xlink:href}>’</span> attribute being set if it is
+present and the <span class="attr-name">‘href’</span> attribute is not,
+and in the <span class="attr-name">‘href’</span> attribute being
+set in all other cases.</p>
+
+<h4 id="InterfaceSVGAnimatedRect" oldids="types-InterfaceSVGAnimatedRect">Interface SVGAnimatedRect</h4>
+
+<p>An {{SVGAnimatedRect}} object is used to [=reflect=] an
+animatable attribute that takes a rectangle value as specified
+by an <var>x</var>, <var>y</var>, <var>width</var> and <var>height</var>.</p>
+
+<p class="note">In this specification the only attribute to be
+reflected as an {{SVGAnimatedRect}} is <span class="attr-name">‘<a href="#ViewBoxAttribute" data-link-type="element-attr">viewBox</a>’</span>.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGAnimatedRect {
+  [SameObject] readonly attribute SVGRect baseVal;
+  [SameObject] readonly attribute SVGRect animVal;
+};</pre>
+
+<p class="ready-for-wider-review">The <dfn id="__svg__SVGAnimatedRect__baseVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedRect" data-lt="baseVal" oldids="types-__svg__SVGAnimatedRect__baseVal">baseVal</dfn>
+and <dfn id="__svg__SVGAnimatedRect__animVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedRect" data-lt="animVal" oldids="types-__svg__SVGAnimatedRect__animVal">animVal</dfn> IDL
+attributes represent the current non-animated rectangle value of
+the reflected attribute.  On getting {{SVGAnimatedRect/baseVal}}
+or {{SVGAnimatedRect/animVal}},
+a <a href="https://drafts.csswg.org/geometry-1/#domrect" class="idlinterface">SVGRect</a> object is returned.</p>
+
+<p class="ready-for-wider-review">Upon creation of the {{SVGAnimatedRect/baseVal}}
+or {{SVGAnimatedRect/animVal}}
+<a href="https://drafts.csswg.org/geometry-1/#domrect" class="idlinterface">SVGRect</a> objects, and afterwards whenever the reflected content attribute
+is added, removed, or changed, the following steps are run:</p>
+
+<ol class="algorithm">
+  <li>Let <var>value</var> be the value of the reflected attribute
+  (using the attribute's [=initial value=] if it is not present
+  or invalid).</li>
+  <li>Let <var>x</var>, <var>y</var>, <var>width</var> and <var>height</var>
+  be those corresponding components of <var>value</var>.</li>
+  <li>Set the <a href="https://drafts.csswg.org/geometry-1/#domrect" class="idlinterface">SVGRect</a> object's
+  <a href="https://drafts.csswg.org/geometry-1/#rectangle-x-coordinate">x coordinate</a>,
+  <a href="https://drafts.csswg.org/geometry-1/#rectangle-y-coordinate">y coordinate</a>,
+  <a href="https://drafts.csswg.org/geometry-1/#rectangle-width-dimension">width</a> and
+  <a href="https://drafts.csswg.org/geometry-1/#rectangle-height-dimension">height</a>
+  to <var>x</var>, <var>y</var>, <var>width</var> and <var>height</var>,
+  respectively.</li>
+</ol>
+
+<p class="ready-for-wider-review">Whenever the
+<a href="https://drafts.csswg.org/geometry-1/#rectangle-x-coordinate">x coordinate</a>,
+<a href="https://drafts.csswg.org/geometry-1/#rectangle-y-coordinate">y coordinate</a>,
+<a href="https://drafts.csswg.org/geometry-1/#rectangle-width-dimension">width</a> or
+<a href="https://drafts.csswg.org/geometry-1/#rectangle-height-dimension">height</a> property
+of the {{SVGAnimatedRect/baseVal}} or
+{{SVGAnimatedRect/animVal}}
+<a href="https://drafts.csswg.org/geometry-1/#domrect" class="idlinterface">SVGRect</a> object changes, except as part of the previous algorithm that
+reflects the value of the content attribute into the <a href="https://drafts.csswg.org/geometry-1/#domrect" class="idlinterface">SVGRect</a>, the reflected
+content attribute must be [=reserialized=].</p>
+
+<h4 id="InterfaceSVGAnimatedNumberList" oldids="types-InterfaceSVGAnimatedNumberList">Interface SVGAnimatedNumberList</h4>
+
+<p>An {{SVGAnimatedNumberList}} object is used to [=reflect=] an animatable
+attribute that takes a list of <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> values.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGAnimatedNumberList {
+  [SameObject] readonly attribute SVGNumberList baseVal;
+  [SameObject] readonly attribute SVGNumberList animVal;
+};</pre>
+
+<p class="ready-for-wider-review">The <dfn id="__svg__SVGAnimatedNumberList__baseVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedNumberList" data-lt="baseVal" oldids="types-__svg__SVGAnimatedNumberList__baseVal">baseVal</dfn>
+and <dfn id="__svg__SVGAnimatedNumberList__animVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedNumberList" data-lt="animVal" oldids="types-__svg__SVGAnimatedNumberList__animVal">animVal</dfn> IDL attributes
+represent the current non-animated value of the reflected attribute.
+On getting {{SVGAnimatedNumberList/baseVal}} or
+{{SVGAnimatedNumberList/animVal}},
+an {{SVGNumberList}} object is returned that reflects the base value
+of the reflected attribute.</p>
+
+<h4 id="InterfaceSVGAnimatedLengthList" oldids="types-InterfaceSVGAnimatedLengthList">Interface SVGAnimatedLengthList</h4>
+
+<p>An {{SVGAnimatedLengthList}} object is used to [=reflect=] an animatable
+attribute that takes a list of <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>, <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a>
+or <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> values.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGAnimatedLengthList {
+  [SameObject] readonly attribute SVGLengthList baseVal;
+  [SameObject] readonly attribute SVGLengthList animVal;
+};</pre>
+
+<p class="ready-for-wider-review">The <dfn id="__svg__SVGAnimatedLengthList__baseVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedLengthList" data-lt="baseVal" oldids="types-__svg__SVGAnimatedLengthList__baseVal">baseVal</dfn>
+or <dfn id="__svg__SVGAnimatedLengthList__animVal" data-dfn-type="attribute" data-dfn-for="SVGAnimatedLengthList" data-lt="animVal" oldids="types-__svg__SVGAnimatedLengthList__animVal">animVal</dfn> IDL attributes
+represent the current non-animated value of the reflected attribute.
+On getting {{SVGAnimatedLengthList/baseVal}} or
+{{SVGAnimatedLengthList/animVal}},
+an {{SVGLengthList}} object is returned that reflects the base value
+of the reflected attribute.</p>
+
+
+<h3 id="OtherDOMInterfaces" oldids="types-OtherDOMInterfaces">Other DOM interfaces</h3>
+
+
+<h4 id="InterfaceSVGUnitTypes" oldids="types-InterfaceSVGUnitTypes">Interface SVGUnitTypes</h4>
+
+<p>The {{SVGUnitTypes}} interface defines a commonly used set of constants
+used for reflecting <span class="attr-name">‘<a href="#LinearGradientElementGradientUnitsAttribute" data-link-type="element-attr">gradientUnits</a>’</span>, <span class="attr-name">‘<a href="#PatternElementPatternContentUnitsAttribute" data-link-type="element-attr">patternContentUnits</a>’</span> and
+other similar attributes.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGUnitTypes {
+  // Unit Types
+  const unsigned short SVG_UNIT_TYPE_UNKNOWN = 0;
+  const unsigned short SVG_UNIT_TYPE_USERSPACEONUSE = 1;
+  const unsigned short SVG_UNIT_TYPE_OBJECTBOUNDINGBOX = 2;
+};</pre>
+
+<p>The unit type constants defined on {{SVGUnitTypes}} have the following meanings:</p>
+
+<table class="vert">
+  <tr><th>Constant</th><th>Meaning</th></tr>
+  <tr><td><dfn id="__svg__SVGUnitTypes__SVG_UNIT_TYPE_USERSPACEONUSE" data-dfn-type="const" data-dfn-for="SVGUnitTypes" data-lt="SVG_UNIT_TYPE_USERSPACEONUSE" oldids="types-__svg__SVGUnitTypes__SVG_UNIT_TYPE_USERSPACEONUSE">SVG_UNIT_TYPE_USERSPACEONUSE</dfn></td><td>Corresponds to the <span class="attr-value">\'userSpaceOnUse'</span> attribute value.</td></tr>
+  <tr><td><dfn id="__svg__SVGUnitTypes__SVG_UNIT_TYPE_OBJECTBOUNDINGBOX" data-dfn-type="const" data-dfn-for="SVGUnitTypes" data-lt="SVG_UNIT_TYPE_OBJECTBOUNDINGBOX" oldids="types-__svg__SVGUnitTypes__SVG_UNIT_TYPE_OBJECTBOUNDINGBOX">SVG_UNIT_TYPE_OBJECTBOUNDINGBOX</dfn></td><td>Corresponds to the <span class="attr-value">\'objectBoundingBox'</span> attribute value.</td></tr>
+  <tr><td><dfn id="__svg__SVGUnitTypes__SVG_UNIT_TYPE_UNKNOWN" data-dfn-type="const" data-dfn-for="SVGUnitTypes" data-lt="SVG_UNIT_TYPE_UNKNOWN" oldids="types-__svg__SVGUnitTypes__SVG_UNIT_TYPE_UNKNOWN">SVG_UNIT_TYPE_UNKNOWN</dfn></td><td>Some other type of value.</td></tr>
+</table>
+
+
+<h4 id="InterfaceSVGTests" data-dfn-type="interface" data-lt="SVGTests" oldids="types-InterfaceSVGTests">Mixin SVGTests</h4>
+
+<p>The {{SVGTests}} interface is used to reflect
+[=conditional processing attribute|conditional processing attributes=], and is mixed in to other
+interfaces for elements that support these attributes.</p>
+
+<pre class="idl">interface mixin SVGTests {
+  [SameObject] readonly attribute SVGStringList requiredExtensions;
+  [SameObject] readonly attribute SVGStringList systemLanguage;
+};</pre>
+
+<p>The <dfn id="__svg__SVGTests__requiredExtensions" data-dfn-type="attribute" data-dfn-for="SVGTests" data-lt="requiredExtensions" oldids="types-__svg__SVGTests__requiredExtensions">requiredExtensions</dfn> IDL attribute
+[=reflect|reflects=] the <span class="attr-name">‘<a data-link-type="element-attr" data-link-for="conditional processing" data-lt="requiredExtensions">requiredExtensions</a>’</span> content attribute.</p>
+
+<p>The <dfn id="__svg__SVGTests__systemLanguage" data-dfn-type="attribute" data-dfn-for="SVGTests" data-lt="systemLanguage" oldids="types-__svg__SVGTests__systemLanguage">systemLanguage</dfn> IDL attribute
+[=reflect|reflects=] the <span class="attr-name">‘<a data-link-type="element-attr" data-link-for="conditional processing" data-lt="systemLanguage">systemLanguage</a>’</span> content attribute.</p>
+
+
+<h4 id="InterfaceSVGFitToViewBox" data-dfn-type="interface" data-lt="SVGFitToViewBox" oldids="types-InterfaceSVGFitToViewBox">Mixin SVGFitToViewBox</h4>
+
+<p>The {{SVGFitToViewBox}} interface is used to reflect
+the <span class="attr-name">‘<a href="#ViewBoxAttribute" data-link-type="element-attr">viewBox</a>’</span> and <span class="attr-name">‘<a href="#PreserveAspectRatioAttribute" data-link-type="element-attr">preserveAspectRatio</a>’</span> attributes,
+and is mixed in to other interfaces for elements that support
+these two attributes.</p>
+
+<pre class="idl">interface mixin SVGFitToViewBox {
+  [SameObject] readonly attribute SVGAnimatedRect viewBox;
+  [SameObject] readonly attribute SVGAnimatedPreserveAspectRatio preserveAspectRatio;
+};</pre>
+
+<p>The <dfn id="__svg__SVGFitToViewBox__viewBox" data-dfn-type="attribute" data-dfn-for="SVGFitToViewBox" data-lt="viewBox" oldids="types-__svg__SVGFitToViewBox__viewBox">viewBox</dfn> IDL attribute
+[=reflect|reflects=] the <span class="attr-name">‘<a href="#ViewBoxAttribute" data-link-type="element-attr">viewBox</a>’</span> content attribute.</p>
+
+<p>The <dfn id="__svg__SVGFitToViewBox__preserveAspectRatio" data-dfn-type="attribute" data-dfn-for="SVGFitToViewBox" data-lt="preserveAspectRatio" oldids="types-__svg__SVGFitToViewBox__preserveAspectRatio">preserveAspectRatio</dfn> IDL attribute
+[=reflect|reflects=] the <span class="attr-name">‘<a href="#PreserveAspectRatioAttribute" data-link-type="element-attr">preserveAspectRatio</a>’</span> content attribute.</p>
+
+
+<h4 id="InterfaceSVGURIReference" data-dfn-type="interface" data-lt="SVGURIReference" oldids="types-InterfaceSVGURIReference">Mixin SVGURIReference</h4>
+
+<p>The {{SVGURIReference}} interface is used to reflect
+the <span class="attr-name">‘href’</span> attribute and the deprecated
+<span class="attr-name">‘<{a/xlink:href}>’</span> attribute.</p>
+
+<pre class="idl">interface mixin SVGURIReference {
+  [SameObject] readonly attribute SVGAnimatedString href;
+};</pre>
+
+<p>The <dfn id="__svg__SVGURIReference__href" data-dfn-type="attribute" data-dfn-for="SVGURIReference" data-lt="href" oldids="types-__svg__SVGURIReference__href">href</dfn> IDL attribute
+represents the value of the <span class="attr-name">‘href’</span>
+attribute, and, on elements that are defined to support it,
+the deprecated <span class="attr-name">‘<{a/xlink:href}>’</span> attribute.  On getting
+{{SVGURIReference/href}}, an
+{{SVGAnimatedString}} object is returned that:</p>
+
+<ul>
+  <li>reflects the <span class="attr-name">‘href’</span> attribute, and</li>
+  <li>if the element is defined to support the deprecated
+  <span class="attr-name">‘<{a/xlink:href}>’</span> attribute, additionally reflects that deprecated attribute.</li>
+</ul>
+
+<p class="note">The {{SVGAnimatedString}} interface is defined
+to reflect, through its {{SVGAnimatedString/baseVal}}
+and {{SVGAnimatedString/animVal}} members, the deprecated
+<span class="attr-name">‘<{a/xlink:href}>’</span> attribute, if that attribute is
+present and the <span class="attr-name">‘href’</span> is not, and to
+reflect the <span class="attr-name">‘href’</span> attribute in all
+other circumstances. <a href="https://w3c.github.io/svgwg/specs/animations/">Animation elements</a>
+treat <span class="attr-value">attributeName='xlink:href'</span>
+as being an alias for targeting the <span class="attr-name">‘href’</span> attribute.</p>

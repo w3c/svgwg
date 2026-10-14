@@ -1,0 +1,825 @@
+<h2 id="chapter-shapes" data-bs-page="shapes">Basic Shapes</h2>
+
+
+<h3 id="shapes-Introduction" data-multipage-id="Introduction">Introduction and definitions</h3>
+
+<dl class="definitions">
+  <dt id="TermBasicShapeElement"><span id="shapes-TermBasicShapeElement" class="bs-old-id"></span><dfn id="basic-shape" data-export="" data-dfn-type="dfn" oldids="shapes-basic-shape">basic shape</dfn></dt>
+  <dt>shape</dt>
+  <dt><dfn id="TermShapeElement" data-export="" data-dfn-type="dfn" oldids="shapes-TermShapeElement">shape elements</dfn></dt><!--keep that for Bikeshed! -->
+  <dd>A graphics element that is defined by some combination of
+  straight lines and curves. Specifically:
+  <span data-svg-fill="element-category" data-name="shape"></span>.</dd>
+</dl>
+
+<p>SVG contains the following set of basic shape elements:</p>
+
+<ul>
+  <li>rectangles (including optional rounded corners), created with the <span class="element-name">‘<{rect}>’</span> element,</li>
+  <li>circles, created with the <span class="element-name">‘<{circle}>’</span> element,</li>
+  <li>ellipses, created with the <span class="element-name">‘<{ellipse}>’</span> element,</li>
+  <li>straight lines, created with the <span class="element-name">‘<{line}>’</span> element,</li>
+  <li>polylines, created with the <span class="element-name">‘<{polyline}>’</span> element, and</li>
+  <li>polygons, created with the <span class="element-name">‘<{polygon}>’</span> element</li>
+</ul>
+
+<p>Mathematically, these shape elements are equivalent to a
+<span class="element-name">‘<{path}>’</span> element that would construct the same shape. The basic
+shapes may be stroked, filled and used as clip paths. All of the
+properties available for <span class="element-name">‘<{path}>’</span> elements also apply to the basic
+shapes.</p>
+
+<p>The [=equivalent path=] and algorithm to compute the stroke for each shape
+  are defined in the shape sections below.</p>
+
+<p class="note">
+  The [=equivalent path|equivalent paths=] of <span class="element-name">‘<{rect}>’</span>, <span class="element-name">‘<{circle}>’</span> and <span class="element-name">‘<{ellipse}>’</span> below
+  each end with a <a href="#PathDataClosePathCommand">closepath</a>
+  that draws a line of zero length,
+  because the command before it already ends at the [=initial point=].
+  A zero-length line does not change how the shape is filled or stroked.
+  It can affect where [=vertex markers=] go,
+  but markers on these elements are placed by the rules in
+  <a href="#VertexMarkerProperties">Vertex markers</a>,
+  not by counting the commands listed for each shape.
+</p>
+
+<h3 id="RectElement" oldids="shapes-RectElement">The <span class="element-name">‘rect’</span> element</h3>
+
+<div link-for-hint="rect">
+
+<p>The <span class="element-name">‘<{rect}>’</span> element defines a rectangle which is axis-aligned
+with the current <a href="https://drafts.csswg.org/css-transforms/#user-coordinate-system">user coordinate system</a>. Rounded rectangles can be achieved by setting
+non-zero values for the 'rx' and 'ry' geometric properties.</p>
+
+<div data-svg-fill="element-summary" data-name="rect"></div>
+
+<p>The 'x' and 'y' coordinates refer to the left and top edges of the rectangle,
+in the current user coordinate system.</p>
+
+<p>The <a href="#Sizing" class="property">width</a> and <a href="#Sizing" class="property">height</a> properties define the overall width and height of the rectangle.
+A negative value for either property is [=invalid value|invalid=] and must be <a href="https://drafts.csswg.org/css-syntax/#css-ignored">ignored</a>.
+A computed value of zero for either dimension disables rendering of the element.</p>
+
+<p>For rounded rectangles,
+the computed values of the 'rx' and 'ry' properties define
+the x- and y-axis radii of elliptical arcs used to round off the corners of the rectangle.
+The arc are always symmetrical along both horizontal and vertical axis; to create a rectangle with uneven corner rounding, define the shape explicitly with a <span class="element-name">‘<{path}>’</span>.
+A negative value for either property is [=invalid value|invalid=] and must be <a href="https://drafts.csswg.org/css-syntax/#css-ignored">ignored</a>.
+A computed value of zero for either dimension,
+or a computed value of <code>auto</code> for <em>both</em> dimensions,
+results in a rectangle without corner rounding.
+</p>
+
+<p>The used values for the x- and y-axis rounded corner radii
+may be determined implicitly from the other dimension (using the <code>auto</code> value),
+and are also subject to clamping so that the lengths of
+the straight segments of the rectangle are never negative.
+The used values for 'rx' and 'ry' are determined
+from the computed values by following these steps in order:</p>
+
+<ol>
+  <li>If both 'rx' and 'ry' have a computed value of <code>auto</code>
+  (since <code>auto</code> is the initial value for both properties, this will also occur if neither are specified by the author or if all author-supplied values are invalid),
+  then the used value of both 'rx' and 'ry' is 0.  (This will result in square corners.)</li>
+ <li>Otherwise, convert specified values to absolute values as follows:
+   <ol>
+  <li>If 'rx' is set to a length value or a percentage,
+  but 'ry' is <code>auto</code>,
+  calculate an absolute length equivalent for 'rx', resolving percentages against the used <a href="#Sizing" class="property">width</a> of the rectangle;
+  the absolute value for 'ry' is the same.</li>
+
+  <li>If 'ry' is set to a length value or a percentage,
+  but 'rx' is <code>auto</code>,
+  calculate the absolute length equivalent for 'ry', resolving percentages against the used <a href="#Sizing" class="property">height</a> of the rectangle;
+  the absolute value for 'rx' is the same.</li>
+
+  <li>If both 'rx' and 'ry' were set to lengths or percentages,
+  absolute values are generated individually,
+  resolving 'rx' percentages against the used <a href="#Sizing" class="property">width</a>,
+  and resolving 'ry' percentages against the used <a href="#Sizing" class="property">height</a>.</li>
+ </ol></li>
+ <li>Finally, apply clamping to generate the used values:
+   <ol>
+  <li>If the absolute 'rx' (after the above steps)
+  is greater than half of the used <a href="#Sizing" class="property">width</a>,
+  then the used value of 'rx' is half of the used <a href="#Sizing" class="property">width</a>.</li>
+
+  <li>If the absolute 'ry' (after the above steps)
+  is greater than half of the used <a href="#Sizing" class="property">height</a>,
+  then the used value of 'ry' is half of the used <a href="#Sizing" class="property">height</a>.</li>
+
+  <li>Otherwise, the used values of 'rx' and 'ry' are the absolute values computed previously.</li>
+ </ol></li>
+</ol>
+
+<p>Mathematically, a <span class="element-name">‘<{rect}>’</span> element is mapped to an
+equivalent <span class="element-name">‘<{path}>’</span> element as follows,
+after generating absolute used values
+<var>x</var>, <var>y</var>, <var>width</var>, <var>height</var>,
+<var>rx</var>, and <var>rx</var>
+in user units for the user coordinate system,
+for each of the equivalent geometric properties
+following the rules specified above and in <a href="#Units">Units</a>: </p>
+
+<ol class="algorithm ready-for-wider-review">
+  <li>perform an absolute <a href="#PathDataMovetoCommands">moveto</a> operation to
+  location (<var>x+rx</var>,<var>y</var>);</li>
+
+  <li>perform an absolute horizontal <a href="#PathDataLinetoCommands">lineto</a>
+  with parameter <var>x+width-rx</var>;</li>
+
+  <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
+  perform an absolute <a href="#PathDataEllipticalArcCommands">elliptical arc</a>
+  operation to coordinate (<var>x+width</var>,<var>y+ry</var>),
+  where <var>rx</var> and <var>ry</var> are used as the equivalent parameters to
+  the <a href="#PathDataEllipticalArcCommands">elliptical arc</a> command,
+  the <var>x-axis-rotation</var> and <var>large-arc-flag</var> are set to zero,
+  the <var>sweep-flag</var> is set to one;</li>
+
+  <li>perform an absolute vertical <a href="#PathDataLinetoCommands">lineto</a>
+  parameter <var>y+height-ry</var>;</li>
+
+  <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
+  perform an absolute <a href="#PathDataEllipticalArcCommands">elliptical arc</a>
+  operation to coordinate (<var>x+width-rx</var>,<var>y+height</var>),
+  using the same parameters as previously;</li>
+
+  <li>perform an absolute horizontal <a href="#PathDataLinetoCommands">lineto</a>
+  parameter <var>x+rx</var>;</li>
+
+  <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
+  perform an absolute <a href="#PathDataEllipticalArcCommands">elliptical arc</a>
+  operation to coordinate (<var>x</var>,<var>y+height-ry</var>),
+  using the same parameters as previously;</li>
+
+  <li>perform an absolute vertical <a href="#PathDataLinetoCommands">lineto</a>
+  parameter <var>y+ry</var></li>
+
+  <li><em>if</em> both <var>rx</var> and <var>ry</var> are greater than zero,
+  perform an absolute <a href="#PathDataEllipticalArcCommands">elliptical arc</a>
+  operation to coordinate (<var>x+rx</var>,<var>y</var>),
+  using the same parameters as previously;</li>
+
+  <li>perform a <a href="#PathDataClosePathCommand">closepath</a>
+  command.</li>
+</ol>
+
+<p class="annotation">
+  Path decomposition resolved during teleconference on
+  <a href="https://www.w3.org/2013/06/03-svg-minutes.html#item03">June
+  3rd, 2013</a>.
+</p>
+
+<p id="ExampleRect01"><span id="shapes-ExampleRect01" class="bs-old-id"></span><span class="example-ref">Example rect01</span> shows a
+rectangle with sharp corners. The <span class="element-name">‘<{rect}>’</span> element is filled with yellow
+and stroked with navy.</p>
+
+<div class="example"><pre class="include-code xml">path: images/shapes/rect01.svg</pre><div class="figure"><img alt="Example rect01 — rectangle with sharp corners" src="images/shapes/rect01.png"><p class="caption">Example rect01</p></div><p class="view-as-svg"><a href="images/shapes/rect01.svg">View this example as SVG (SVG-enabled browsers only)</a></p></div>
+
+<p id="ExampleRect02"><span id="shapes-ExampleRect02" class="bs-old-id"></span><span class="example-ref">Example rect02</span> shows
+two rounded rectangles. The 'rx' specifies how to round the corners of
+the rectangles. Note that since no value has been specified for the 'ry'
+attribute, the used value will be derived from the 'rx' attribute.</p>
+
+<div class="example"><pre class="include-code xml">path: images/shapes/rect02.svg</pre><div class="figure"><img alt="Example rect02 — rounded rectangles expressed in user coordinates" src="images/shapes/rect02.png"><p class="caption">Example rect02</p></div><p class="view-as-svg"><a href="images/shapes/rect02.svg">View this example as SVG (SVG-enabled browsers only)</a></p></div>
+
+</div>
+
+<h3 id="CircleElement" oldids="shapes-CircleElement">The <span class="element-name">‘circle’</span> element</h3>
+
+<div link-for-hint="circle">
+
+<p>The <span class="element-name">‘<{circle}>’</span> element defines a circle based on a center point and a
+radius.</p>
+
+<div data-svg-fill="element-summary" data-name="circle"></div>
+<p>
+  The 'cx' and 'cy' attributes define the coordinates of the center of the circle.
+</p>
+
+<p>
+  The 'r' attribute defines the radius of the circle.
+  A negative value is [=invalid value|invalid=] and must be <a href="https://drafts.csswg.org/css-syntax/#css-ignored">ignored</a>.
+  A computed value of zero disables rendering of the element.
+</p>
+
+<p>
+  Mathematically, a <span class="element-name">‘<{circle}>’</span> element is mapped to an
+  equivalent <span class="element-name">‘<{path}>’</span> element that consists of four
+  <a href="#PathDataEllipticalArcCommands">elliptical
+  arc</a> segments, each covering a quarter of the circle. The path
+  begins at the "3 o'clock" point on the radius and proceeds in a
+  clock-wise direction (before any transformations).
+  The <var>rx</var> and <var>ry</var> parameters to the arc commands
+  are both equal to the used value of the 'r' property, after conversion to local user units,
+  while the <var>x-axis-rotation</var>
+  and the <var>large-arc-flag</var> are set to zero,
+  and the <var>sweep-flag</var> is set to one.
+  The coordinates are computed as follows,
+  where <var>cx</var>, <var>cy</var>, and <var>r</var> are the used values of the equivalent properties, converted to user units:
+</p>
+<ol>
+  <li>A move-to command to the point
+  <var>cx+r</var>,<var>cy</var>;</li>
+  <li>arc to <var>cx</var>,<var>cy+r</var>;</li>
+  <li>arc to <var>cx-r</var>,<var>cy</var>;</li>
+  <li>arc to <var>cx</var>,<var>cy-r</var>;</li>
+  <li>arc to <var>cx+r</var>,<var>cy</var>;</li>
+  <li>a <a href="#PathDataClosePathCommand">closepath</a> command.</li>
+</ol>
+
+<p class="annotation">
+  Path decomposition resolved during teleconference on
+  <a href="https://www.w3.org/2013/06/03-svg-minutes.html#item03">June
+  3rd, 2013</a>.
+</p>
+
+<p id="ExampleCircle01"><span id="shapes-ExampleCircle01" class="bs-old-id"></span><span class="example-ref">Example
+circle01</span> consists of a <span class="element-name">‘<{circle}>’</span> element that is filled
+with red and stroked with blue.</p>
+
+<div class="example"><pre class="include-code xml">path: images/shapes/circle01.svg</pre><div class="figure"><img alt="Example circle01 — circle filled with red and stroked with blue" src="images/shapes/circle01.png"><p class="caption">Example circle01</p></div><p class="view-as-svg"><a href="images/shapes/circle01.svg">View this example as SVG (SVG-enabled browsers only)</a></p></div>
+
+</div>
+
+<h3 id="EllipseElement" oldids="shapes-EllipseElement">The <span class="element-name">‘ellipse’</span> element</h3>
+
+<div link-for-hint="ellipse">
+
+<p>The <span class="element-name">‘<{ellipse}>’</span> element defines an ellipse which is axis-aligned
+with the current <a href="https://drafts.csswg.org/css-transforms/#user-coordinate-system">user coordinate system</a> based on a center point and two radii.</p>
+
+<div data-svg-fill="element-summary" data-name="ellipse"></div>
+<p>
+  The 'cx' and 'cy' coordinates define the center of the ellipse.
+</p>
+
+<p>
+  The 'rx' and 'ry' properties define the x- and y-axis radii of the
+  ellipse.
+  A negative value for either property is [=invalid value|invalid=] and must be <a href="https://drafts.csswg.org/css-syntax/#css-ignored">ignored</a>.
+  A computed value of zero for either dimension,
+  or a computed value of <code>auto</code> for <em>both</em> dimensions,
+  disables rendering of the element.
+</p>
+
+<p>
+  An <code>auto</code> value for <em>either</em> 'rx' or 'ry'
+  is converted to a used value, following the rules given above for rectangles
+  (but without any clamping based on <a href="#Sizing" class="property">width</a> or <a href="#Sizing" class="property">height</a>).
+  Effectively, an <code>auto</code> value creates a circular shape
+  whose radius is defined by a value expressed solely in one dimension;
+  this allows for creating a circle with a radius defined in terms of one of the following:
+</p>
+<ul>
+  <li>a percentage of the coordinate system <b>width</b>; that is, a percentage value for 'rx' and an <code>auto</code> value for 'ry'.</li>
+  <li>a percentage of the coordinate system <b>height</b>; that is, an <code>auto</code> value for 'rx' and a percentage value for 'ry'.</li>
+</ul>
+
+<p class="note">
+  New in SVG 2.
+  The <code>auto</code> value for 'rx' and 'ry' was added to allow consistent
+  parsing of these properties for both ellipses and rectangles.
+  Previously, if either 'rx' or 'ry' was unspecified,
+  the ellipse would not render.
+</p>
+
+<p>
+  Mathematically, an <span class="element-name">‘<{ellipse}>’</span> element is mapped to an
+  equivalent <span class="element-name">‘<{path}>’</span> element that consists of four
+  <a href="#PathDataEllipticalArcCommands">elliptical
+  arc</a> segments, each covering a quarter of the ellipse. The path
+  begins at the "3 o'clock" point on the radius and proceeds in a
+  clock-wise direction (before any transformation).
+  The <var>rx</var> and <var>ry</var> parameters to the arc commands
+  are the used values of the equivalent properties after conversion to local user units,
+  while the <var>x-axis-rotation</var>
+  and the <var>large-arc-flag</var> are set to zero,
+  and the <var>sweep-flag</var> is set to one.
+  The coordinates are computed as follows,
+  where <var>cx</var>, <var>cy</var>, <var>rx</var>, and <var>ry</var>
+  are the used values of the equivalent properties, converted to user units:
+</p>
+<ol>
+  <li>A move-to command to the point
+  <var>cx+rx</var>,<var>cy</var>;</li>
+  <li>arc to <var>cx</var>,<var>cy+ry</var>;</li>
+  <li>arc to <var>cx-rx</var>,<var>cy</var>;</li>
+  <li>arc to <var>cx</var>,<var>cy-ry</var>;</li>
+  <li>arc to <var>cx+rx</var>,<var>cy</var>;</li>
+  <li>a <a href="#PathDataClosePathCommand">closepath</a> command.</li>
+</ol>
+
+<p class="annotation">
+  Path decomposition resolved during teleconference on
+  <a href="https://www.w3.org/2013/06/03-svg-minutes.html#item03">June
+  3rd, 2013</a>.
+</p>
+
+<p><span class="example-ref">Example ellipse01</span> below specifies
+the coordinates of the two ellipses in the user coordinate system
+established by the <span class="attr-name">‘<a href="#ViewBoxAttribute" data-link-type="element-attr">viewBox</a>’</span> attribute on the <span class="element-name">‘<{svg}>’</span>
+element and the <a href="#TransformProperty" class="property">transform</a> property on the <span class="element-name">‘<{g}>’</span> and
+<span class="element-name">‘<{ellipse}>’</span> elements. Both ellipses use the default values of
+zero for the 'cx' and 'cy' attributes (the center of the
+ellipse). The second ellipse is rotated.</p>
+
+<div class="example"><pre class="include-code xml">path: images/shapes/ellipse01.svg</pre><div class="figure"><img alt="Example ellipse01 — ellipses expressed in user coordinates" src="images/shapes/ellipse01.png"><p class="caption">Example ellipse01</p></div><p class="view-as-svg"><a href="images/shapes/ellipse01.svg">View this example as SVG (SVG-enabled browsers only)</a></p></div>
+
+</div>
+
+<h3 id="LineElement" oldids="shapes-LineElement">The <span class="element-name">‘line’</span> element</h3>
+
+<div link-for-hint="line">
+
+<p>The <span class="element-name">‘<{line}>’</span> element defines a line segment that starts at one point
+and ends at another.</p>
+
+<div data-svg-fill="element-summary" data-name="line"></div>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="LineElementX1Attribute" data-export="" data-dfn-type="element-attr" data-dfn-for="line" oldids="shapes-LineElementX1Attribute">x1</dfn>, <dfn id="LineElementY1Attribute" data-export="" data-dfn-type="element-attr" data-dfn-for="line" oldids="shapes-LineElementY1Attribute">y1</dfn></td>
+        <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a></td>
+        <td>0</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    The x- and y-axis coordinates of the start of the line.
+  </dd>
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="LineElementX2Attribute" data-export="" data-dfn-type="element-attr" data-dfn-for="line" oldids="shapes-LineElementX2Attribute">x2</dfn>, <dfn id="LineElementY2Attribute" data-export="" data-dfn-type="element-attr" data-dfn-for="line" oldids="shapes-LineElementY2Attribute">y2</dfn></td>
+        <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a></td>
+        <td>0</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    The x- and y-axis coordinates of the end of the line.
+  </dd>
+</dl>
+
+<p class="note">
+  A future specification may convert the <span class="attr-name">‘<{line/x1}>’</span>, <span class="attr-name">‘<{line/y1}>’</span>, <span class="attr-name">‘<{line/x2}>’</span>, and <span class="attr-name">‘<{line/y2}>’</span> attributes to geometric properties.
+  Currently, they can only be specified via element attributes, and not CSS.
+</p>
+
+<p>Mathematically, a <span class="element-name">‘<{line}>’</span> element can be mapped to an
+equivalent <span class="element-name">‘<{path}>’</span> element as follows,
+after converting coordinates into user coordinate system user units according
+to <a href="#Units">Units</a>
+to generate values <var>x1</var>, <var>y1</var>, <var>x2</var>, and <var>y2</var>:</p>
+
+<ul>
+  <li>perform an absolute <a href="#PathDataMovetoCommands">moveto</a>
+  operation to absolute location (<var>x1</var>,<var>y1</var>)</li>
+
+  <li>perform an absolute <a href="#PathDataLinetoCommands">lineto</a>
+  operation to absolute location (<var>x2</var>,<var>y2</var>)</li>
+</ul>
+
+<p>Because <span class="element-name">‘<{line}>’</span> elements are single lines and thus are geometrically
+one-dimensional, they have no interior; thus, <span class="element-name">‘<{line}>’</span> elements are never
+filled (see the 'fill' property).</p>
+
+<p id="ExampleLine01"><span id="shapes-ExampleLine01" class="bs-old-id"></span><span class="example-ref">Example line01</span> below
+specifies the coordinates of the five lines in the user coordinate system
+established by the <span class="attr-name">‘<a href="#ViewBoxAttribute" data-link-type="element-attr">viewBox</a>’</span> attribute on the <span class="element-name">‘<{svg}>’</span> element. The
+lines have different thicknesses.</p>
+
+<div class="example"><pre class="include-code xml">path: images/shapes/line01.svg</pre><div class="figure"><img alt="Example line01 — lines expressed in user coordinates" src="images/shapes/line01.png"><p class="caption">Example line01</p></div><p class="view-as-svg"><a href="images/shapes/line01.svg">View this example as SVG (SVG-enabled browsers only)</a></p></div>
+
+</div>
+
+<h3 id="PolylineElement" oldids="shapes-PolylineElement">The <span class="element-name">‘polyline’</span> element</h3>
+
+<div link-for-hint="polyline">
+
+<p>The <span class="element-name">‘<{polyline}>’</span> element defines a set of connected straight
+line segments. Typically, <span class="element-name">‘<{polyline}>’</span> elements define open
+shapes.</p>
+
+<div data-svg-fill="element-summary" data-name="polyline"></div>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="PolylineElementPointsAttribute" data-export="" data-dfn-type="element-attr" data-dfn-for="polyline" oldids="shapes-PolylineElementPointsAttribute">points</dfn></td>
+	<td><a data-link-type="type" data-lt="&lt;points>">&lt;points></a></td>
+        <td>(none)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>where:</p>
+    <div class="definition svg-prod">
+      <dfn id="DataTypePoints" data-export="" data-dfn-type="type" oldids="shapes-DataTypePoints">&lt;points></dfn> =
+      <div style="margin-left: 4em">[ <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>+ ]#</div>
+    </div>
+    <p>The points that make up the polyline. All coordinate
+    values are in the user coordinate system.</p>
+    <p>If an odd number of coordinates is provided, then the element is in
+    error, with the same user agent behavior as occurs with an incorrectly
+    specified <span class="element-name">‘<{path}>’</span> element. In such error cases the user agent will drop
+    the last, odd coordinate and otherwise render the shape.</p>
+    <p class="ready-for-wider-review">The initial value, (none), indicates that the polyline element
+    is valid but does not render.</p>
+  </dd>
+</dl>
+
+<p class="note">
+  A future specification may convert the <span class="attr-name">‘<{polyline/points}>’</span> attribute to a geometric property.
+  Currently, it can only be specified via an element attribute, and not CSS.
+</p>
+
+<p>Mathematically, a <span class="element-name">‘<{polyline}>’</span> element can be mapped to an
+equivalent <span class="element-name">‘<{path}>’</span> element as follows:</p>
+
+<ul>
+  <li>perform an absolute <a href="#PathDataMovetoCommands">moveto</a>
+  operation to the first coordinate pair in the list of points</li>
+
+  <li>for each subsequent coordinate pair, perform an absolute
+  <a href="#PathDataLinetoCommands">lineto</a> operation to that
+  coordinate pair.</li>
+</ul>
+
+<p id="ExamplePolyline01"><span id="shapes-ExamplePolyline01" class="bs-old-id"></span><span class="example-ref">Example polyline01</span>
+below specifies a polyline in the user coordinate system established by the
+<span class="attr-name">‘<a href="#ViewBoxAttribute" data-link-type="element-attr">viewBox</a>’</span> attribute on the <span class="element-name">‘<{svg}>’</span> element.</p>
+
+<div class="example"><pre class="include-code xml">path: images/shapes/polyline01.svg</pre><div class="figure"><img alt="Example polyline01 — increasingly larger bars" src="images/shapes/polyline01.png"><p class="caption">Example polyline01</p></div><p class="view-as-svg"><a href="images/shapes/polyline01.svg">View this example as SVG (SVG-enabled browsers only)</a></p></div>
+
+</div>
+
+<h3 id="PolygonElement" oldids="shapes-PolygonElement">The <span class="element-name">‘polygon’</span> element</h3>
+
+<div link-for-hint="polygon">
+
+<p>The <span class="element-name">‘<{polygon}>’</span> element defines a closed shape consisting of a
+set of connected straight line segments.</p>
+
+<div data-svg-fill="element-summary" data-name="polygon"></div>
+
+<p><em>Attribute definitions:</em></p>
+
+<dl class="attrdef-list">
+  <dt>
+    <table class="attrdef def">
+      <tr>
+        <th>Name</th>
+        <th>Value</th>
+        <th>Initial value</th>
+        <th>Animatable</th>
+      </tr>
+      <tr>
+        <td><dfn id="PolygonElementPointsAttribute" data-export="" data-dfn-type="element-attr" data-dfn-for="polygon" oldids="shapes-PolygonElementPointsAttribute">points</dfn></td>
+	<td><a data-link-type="type" data-lt="&lt;points>">&lt;points></a></td>
+        <td>(none)</td>
+        <td>yes</td>
+      </tr>
+    </table>
+  </dt>
+  <dd>
+    <p>The points that make up the polygon. All coordinate
+    values are in the user coordinate system.</p>
+    <p>If an odd number of coordinates is provided, then the element is in
+    error, with the same user agent behavior as occurs with an incorrectly
+    specified <span class="element-name">‘<{path}>’</span> element.</p>
+    <p class="ready-for-wider-review">The initial value, (none), indicates that the polygon element
+    is valid, but does not render.</p>
+  </dd>
+</dl>
+
+<p class="note">
+  A future specification may convert the <span class="attr-name">‘<{polygon/points}>’</span> attribute to a geometric property.
+  Currently, it can only be specified via an element attribute, and not CSS.
+</p>
+
+<p>Mathematically, a <span class="element-name">‘<{polygon}>’</span> element can be mapped to an
+equivalent <span class="element-name">‘<{path}>’</span> element as follows:</p>
+
+<ul>
+  <li>perform an absolute <a href="#PathDataMovetoCommands">moveto</a>
+  operation to the first coordinate pair in the list of points</li>
+
+  <li>for each subsequent coordinate pair, perform an absolute
+  <a href="#PathDataLinetoCommands">lineto</a> operation to that
+  coordinate pair</li>
+
+  <li>perform a <a href="#PathDataClosePathCommand">closepath</a>
+  command</li>
+</ul>
+
+<p id="ExamplePolygon01"><span id="shapes-ExamplePolygon01" class="bs-old-id"></span><span class="example-ref">Example
+polygon01</span> below specifies two polygons (a star and a hexagon) in
+the user coordinate system established by the <span class="attr-name">‘<a href="#ViewBoxAttribute" data-link-type="element-attr">viewBox</a>’</span> attribute
+on the <span class="element-name">‘<{svg}>’</span> element.</p>
+
+<div class="example"><pre class="include-code xml">path: images/shapes/polygon01.svg</pre><div class="figure"><img alt="Example polygon01 — star and hexagon" src="images/shapes/polygon01.png"><p class="caption">Example polygon01</p></div><p class="view-as-svg"><a href="images/shapes/polygon01.svg">View this example as SVG (SVG-enabled browsers only)</a></p></div>
+
+</div>
+
+<div class="ready-for-wider-review">
+<h3 id="shapes-DOMInterfaces" data-multipage-id="DOMInterfaces">DOM interfaces</h3>
+
+<h4 id="InterfaceSVGRectElement" oldids="shapes-InterfaceSVGRectElement">Interface SVGRectElement</h4>
+
+<div link-for-hint="rect">
+
+<p>An {{SVGRectElement}} object represents a <span class="element-name">‘<{rect}>’</span> element in the DOM.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGRectElement : SVGGeometryElement {
+  [SameObject] readonly attribute SVGAnimatedLength x;
+  [SameObject] readonly attribute SVGAnimatedLength y;
+  [SameObject] readonly attribute SVGAnimatedLength width;
+  [SameObject] readonly attribute SVGAnimatedLength height;
+  [SameObject] readonly attribute SVGAnimatedLength rx;
+  [SameObject] readonly attribute SVGAnimatedLength ry;
+};</pre>
+
+<p>The
+<dfn id="__svg__SVGRectElement__x" data-dfn-type="attribute" data-dfn-for="SVGRectElement" data-lt="x" oldids="shapes-__svg__SVGRectElement__x">x</dfn>,
+<dfn id="__svg__SVGRectElement__y" data-dfn-type="attribute" data-dfn-for="SVGRectElement" data-lt="y" oldids="shapes-__svg__SVGRectElement__y">y</dfn>,
+<dfn id="__svg__SVGRectElement__width" data-dfn-type="attribute" data-dfn-for="SVGRectElement" data-lt="width" oldids="shapes-__svg__SVGRectElement__width">width</dfn>,
+<dfn id="__svg__SVGRectElement__height" data-dfn-type="attribute" data-dfn-for="SVGRectElement" data-lt="height" oldids="shapes-__svg__SVGRectElement__height">height</dfn>,
+<dfn id="__svg__SVGRectElement__rx" data-dfn-type="attribute" data-dfn-for="SVGRectElement" data-lt="rx" oldids="shapes-__svg__SVGRectElement__rx">rx</dfn> and
+<dfn id="__svg__SVGRectElement__ry" data-dfn-type="attribute" data-dfn-for="SVGRectElement" data-lt="ry" oldids="shapes-__svg__SVGRectElement__ry">ry</dfn> IDL attributes
+[=reflect=] the computed values of the 'x', 'y',
+<a href="#Sizing" class="property">width</a>, <a href="#Sizing" class="property">height</a>, 'rx' and 'ry'
+properties and their corresponding presentation attributes,
+respectively.</p>
+
+</div>
+
+
+<h4 id="InterfaceSVGCircleElement" oldids="shapes-InterfaceSVGCircleElement">Interface SVGCircleElement</h4>
+
+<div link-for-hint="circle">
+
+<p>An {{SVGCircleElement}} object represents a <span class="element-name">‘<{circle}>’</span> element in the DOM.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGCircleElement : SVGGeometryElement {
+  [SameObject] readonly attribute SVGAnimatedLength cx;
+  [SameObject] readonly attribute SVGAnimatedLength cy;
+  [SameObject] readonly attribute SVGAnimatedLength r;
+};</pre>
+
+<p>The
+<dfn id="__svg__SVGCircleElement__cx" data-dfn-type="attribute" data-dfn-for="SVGCircleElement" data-lt="cx" oldids="shapes-__svg__SVGCircleElement__cx">cx</dfn>,
+<dfn id="__svg__SVGCircleElement__cy" data-dfn-type="attribute" data-dfn-for="SVGCircleElement" data-lt="cy" oldids="shapes-__svg__SVGCircleElement__cy">cy</dfn> and
+<dfn id="__svg__SVGCircleElement__r" data-dfn-type="attribute" data-dfn-for="SVGCircleElement" data-lt="r" oldids="shapes-__svg__SVGCircleElement__r">r</dfn> IDL attributes
+[=reflect=] the computed values of the 'cx', 'cy'
+and 'r' properties and their corresponding presentation attributes,
+respectively.</p>
+
+</div>
+
+
+<h4 id="InterfaceSVGEllipseElement" oldids="shapes-InterfaceSVGEllipseElement">Interface SVGEllipseElement</h4>
+
+<div link-for-hint="ellipse">
+
+<p>An {{SVGEllipseElement}} object represents a <span class="element-name">‘<{ellipse}>’</span> element in the DOM.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGEllipseElement : SVGGeometryElement {
+  [SameObject] readonly attribute SVGAnimatedLength cx;
+  [SameObject] readonly attribute SVGAnimatedLength cy;
+  [SameObject] readonly attribute SVGAnimatedLength rx;
+  [SameObject] readonly attribute SVGAnimatedLength ry;
+};</pre>
+
+<p>The
+<dfn id="__svg__SVGEllipseElement__cx" data-dfn-type="attribute" data-dfn-for="SVGEllipseElement" data-lt="cx" oldids="shapes-__svg__SVGEllipseElement__cx">cx</dfn>,
+<dfn id="__svg__SVGEllipseElement__cy" data-dfn-type="attribute" data-dfn-for="SVGEllipseElement" data-lt="cy" oldids="shapes-__svg__SVGEllipseElement__cy">cy</dfn>,
+<dfn id="__svg__SVGEllipseElement__rx" data-dfn-type="attribute" data-dfn-for="SVGEllipseElement" data-lt="rx" oldids="shapes-__svg__SVGEllipseElement__rx">rx</dfn> and
+<dfn id="__svg__SVGEllipseElement__ry" data-dfn-type="attribute" data-dfn-for="SVGEllipseElement" data-lt="ry" oldids="shapes-__svg__SVGEllipseElement__ry">ry</dfn>
+IDL attributes [=reflect=] the computed values of the
+'cx', 'cy', 'rx' and 'ry' properties
+and their corresponding presentation attributes,
+respectively.</p>
+
+</div>
+
+<h4 id="InterfaceSVGLineElement" oldids="shapes-InterfaceSVGLineElement">Interface SVGLineElement</h4>
+
+<div link-for-hint="line">
+
+The {{SVGLineElement}} interface corresponds to the <span class="element-name">‘<{line}>’</span>
+element.
+
+<pre class="idl">[Exposed=Window]
+interface SVGLineElement : SVGGeometryElement {
+  [SameObject] readonly attribute SVGAnimatedLength x1;
+  [SameObject] readonly attribute SVGAnimatedLength y1;
+  [SameObject] readonly attribute SVGAnimatedLength x2;
+  [SameObject] readonly attribute SVGAnimatedLength y2;
+};</pre>
+
+<p>The
+<dfn id="__svg__SVGLineElement__x1" data-dfn-type="attribute" data-dfn-for="SVGLineElement" data-lt="x1" oldids="shapes-__svg__SVGLineElement__x1">x1</dfn>,
+<dfn id="__svg__SVGLineElement__y1" data-dfn-type="attribute" data-dfn-for="SVGLineElement" data-lt="y1" oldids="shapes-__svg__SVGLineElement__y1">y1</dfn>,
+<dfn id="__svg__SVGLineElement__x2" data-dfn-type="attribute" data-dfn-for="SVGLineElement" data-lt="x2" oldids="shapes-__svg__SVGLineElement__x2">x2</dfn> and
+<dfn id="__svg__SVGLineElement__y2" data-dfn-type="attribute" data-dfn-for="SVGLineElement" data-lt="y2" oldids="shapes-__svg__SVGLineElement__y2">y2</dfn> IDL attributes
+[=reflect=] the <span class="attr-name">‘<{line/x1}>’</span>, <span class="attr-name">‘<{line/y1}>’</span>, <span class="attr-name">‘<{line/x2}>’</span> and <span class="attr-name">‘<{line/y2}>’</span>
+content attributes, respectively</p>
+
+</div>
+
+<h4 id="InterfaceSVGAnimatedPoints" data-dfn-type="interface" data-lt="SVGAnimatedPoints" oldids="shapes-InterfaceSVGAnimatedPoints">Mixin SVGAnimatedPoints</h4>
+
+<p>The {{SVGAnimatedPoints}} interface is used to [=reflect=]
+a <span class="attr-name">‘<{polygon/points}>’</span> attribute on a <span class="element-name">‘<{polygon}>’</span> or <span class="element-name">‘<{polyline}>’</span>
+element.  It is mixed in to the {{SVGPolygonElement}} and {{SVGPolylineElement}}
+interfaces.</p>
+
+<pre class="idl">interface mixin SVGAnimatedPoints {
+  [SameObject] readonly attribute SVGPointList points;
+  [SameObject] readonly attribute SVGPointList animatedPoints;
+};</pre>
+
+<p class="ready-for-wider-review">The <dfn id="__svg__SVGAnimatedPoints__points" data-dfn-type="attribute" data-dfn-for="SVGAnimatedPoints" data-lt="points" oldids="shapes-__svg__SVGAnimatedPoints__points">points</dfn> IDL attribute
+represents the current non-animated value of the reflected attribute.
+On getting {{SVGAnimatedPoints/points}},
+an {{SVGPointList}} object is returned that reflects the base
+value of the reflected attribute.</p>
+
+<p>The <dfn id="__svg__SVGAnimatedPoints__animatedPoints" data-dfn-type="attribute" data-dfn-for="SVGAnimatedPoints" data-lt="animatedPoints" oldids="shapes-__svg__SVGAnimatedPoints__animatedPoints">animatedPoints</dfn> IDL attribute
+represents the current non-animated value of the reflected attribute.
+On getting {{SVGAnimatedPoints/animatedPoints}},
+an {{SVGPointList}} object is returned that reflects the animated
+value of the reflected attribute.</p>
+
+<p>The objects returned from {{SVGAnimatedPoints/points}}
+and {{SVGAnimatedPoints/animatedPoints}} must be distinct, even
+if there is no animation currently affecting the attribute.</p>
+
+<h4 id="InterfaceSVGPointList" oldids="shapes-InterfaceSVGPointList">Interface SVGPointList</h4>
+
+<p>The {{SVGPointList}} interface is a [=list interfaces|list interface=] whose
+elements are <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> objects.  An {{SVGPointList}}
+object represents a list of points.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGPointList {
+
+  readonly attribute unsigned long length;
+  readonly attribute unsigned long numberOfItems;
+
+  undefined clear();
+  SVGPoint initialize(SVGPoint newItem);
+  getter SVGPoint getItem(unsigned long index);
+  SVGPoint insertItemBefore(SVGPoint newItem, unsigned long index);
+  SVGPoint replaceItem(SVGPoint newItem, unsigned long index);
+  SVGPoint removeItem(unsigned long index);
+  SVGPoint appendItem(SVGPoint newItem);
+  setter undefined (unsigned long index, SVGPoint newItem);
+};</pre>
+
+<p>The behavior of all of the interface members of {{SVGPointList}} are
+defined in <a href="#ListInterfaces">List interfaces</a>.</p>
+
+<p>This specification imposes additional requirements on the behaviour of <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a>
+objects beyond those described in the
+<a href="https://drafts.csswg.org/geometry-1/">Geometry Interfaces</a>
+specification, so that they can be used to reflect <span class="attr-name">‘<{polygon/points}>’</span> attributes.</p>
+
+<p id="PointMode"><span id="shapes-PointMode" class="bs-old-id"></span>Every <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> object operates in one of four modes. It
+can:</p>
+
+<div class="ready-for-wg-review">
+<ol>
+  <li><em>reflect an element of the base value</em> of a [=reflect|reflected=] animatable
+  attribute (being exposed through the methods on the
+  {{SVGAnimatedPoints/points}} member of
+  an {{SVGAnimatedPoints}}),</li>
+  <li><em>reflect an element of the animated value</em> of a [=reflect|reflected=] animatable
+  attribute (being exposed through the methods on the
+  {{SVGAnimatedPoints/animatedPoints}} member of
+  an {{SVGAnimatedPoints}}),</li>
+  <li><em>represent the current translation</em> of a given <span class="element-name">‘<{svg}>’</span> element
+  (being exposed through the
+  {{SVGSVGElement/currentTranslate}}
+  member on {{SVGSVGElement}}), or</li>
+  <li><em>be detached</em>, which is the case for <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> objects created
+  using their constructor or with
+  {{SVGSVGElement/createSVGPoint()|createSVGPoint}}.</li>
+</ol>
+</div>
+
+<p id="PointAssociatedElement"><span id="shapes-PointAssociatedElement" class="bs-old-id"></span>A <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> object can be <em>associated</em>
+with a particular element.  The associated element is used to
+determine which element's content attribute to update if the object [=reflect|reflects=]
+an attribute.  Unless otherwise described, a <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> object is not
+associated with any element.</p>
+
+<p id="ReadOnlyPoint"><span id="shapes-ReadOnlyPoint" class="bs-old-id"></span>A <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> object can be designated as <em>read only</em>,
+which means that attempts to modify the object will result in an exception
+being thrown.  When assigning to a read only <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a>'s
+<a href="https://drafts.csswg.org/geometry-1/#dom-dompointreadonly-x">x</a>,
+<a href="https://drafts.csswg.org/geometry-1/#dom-dompointreadonly-y">y</a>,
+<a href="https://drafts.csswg.org/geometry-1/#dom-dompointreadonly-w">w</a> or
+<a href="https://drafts.csswg.org/geometry-1/#dom-dompointreadonly-z">z</a>
+IDL attribute, a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a> must be
+<a href="https://webidl.spec.whatwg.org/#dfn-throw">thrown</a> instead of updating the internal coordinate value.</p>
+
+<p class="note">Note that per <a href="https://github.com/w3c/svgwg/issues/706">svgwg#706</a>
+(2019-10 WG resolutions) SVG 2 reverts to the SVG 1.1 idiom: there is no
+separate read-only-variant interface. An <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> may be designated
+read-only via an internal flag; writes throw <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>
+on the same interface.</p>
+
+<p id="AssignToDOMPoint"><span id="shapes-AssignToDOMPoint" class="bs-old-id"></span>When assigning to a writable <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a>'s
+<a href="https://drafts.csswg.org/geometry-1/#dom-dompointreadonly-x">x</a>,
+<a href="https://drafts.csswg.org/geometry-1/#dom-dompointreadonly-y">y</a>,
+<a href="https://drafts.csswg.org/geometry-1/#dom-dompointreadonly-w">w</a> or
+<a href="https://drafts.csswg.org/geometry-1/#dom-dompointreadonly-z">z</a>
+IDL attribute, the following steps are run after updating
+the internal coordinate value:</p>
+
+<ol class="algorithm">
+  <li>If the <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> <a href="#PointMode">reflects an element of the
+  base value</a> of a [=reflect|reflected=] attribute, then [=reserialized|reserialize=]
+  the reflected attribute using the {{SVGPointList}} that reflects
+  the attribute's base value.
+  </li>
+  <li>Otherwise, if the <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> <a href="#PointMode">represents
+  the current translation</a> of an <span class="element-name">‘<{svg}>’</span> element and that
+  element is the [=outermost svg element=], then:
+    <ol>
+      <li>Let [<var>a</var> <var>b</var> <var>c</var> <var>d</var> <var>e</var> <var>f</var>]
+      be the 2x3 matrix that represents the document's magnification and panning
+      transform.</li>
+      <li>Let <var>x</var> and <var>y</var> be the x and y coordinates of the
+      <a href="https://drafts.csswg.org/geometry-1/#dompoint" class="idlinterface">SVGPoint</a> object, respectively.</li>
+      <li>Set the document's magnification and panning transform to
+      [<var>a</var> 0 0 <var>d</var> <var>x</var> <var>y</var>].</li>
+    </ol>
+  </li>
+</ol>
+
+
+<h4 id="InterfaceSVGPolylineElement" oldids="shapes-InterfaceSVGPolylineElement">Interface SVGPolylineElement</h4>
+
+<div link-for-hint="polyline">
+
+<p>An {{SVGPolylineElement}} object represents a <span class="element-name">‘<{polyline}>’</span> element in the DOM.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGPolylineElement : SVGGeometryElement {
+};
+
+SVGPolylineElement includes SVGAnimatedPoints;</pre>
+
+</div>
+
+
+<h4 id="InterfaceSVGPolygonElement" oldids="shapes-InterfaceSVGPolygonElement">Interface SVGPolygonElement</h4>
+
+<div link-for-hint="polygon">
+
+<p>An {{SVGPolygonElement}} object represents a <span class="element-name">‘<{polygon}>’</span> element in the DOM.</p>
+
+<pre class="idl">[Exposed=Window]
+interface SVGPolygonElement : SVGGeometryElement {
+};
+
+SVGPolygonElement includes SVGAnimatedPoints;</pre>
+
+</div>
+</div>
