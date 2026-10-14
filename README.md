@@ -18,6 +18,12 @@ Editor's drafts:
 
 The SVG2 spec draft is automatically rebuilt on pushes to this repository.
 
+## Editing SVG 2
+
+SVG 2 is written in [Bikeshed](https://speced.github.io/bikeshed/): one file per chapter in `master/` (`master/shapes.bs`, ...), put together by `master/index.bs`. To build it, install Bikeshed 7.2.0 or later (`pip install bikeshed`) and run `make`; the pages go to `build/bikeshed/svg2-draft/`. `make check` fails if a published id went missing. How the source is written (link shorthands, generated element summaries, ids) is explained in [tools/svg2-build/README.md](tools/svg2-build/README.md). Every tool in the repository, and how each spec is built, is listed in [tools/README.md](tools/README.md).
+
+The modules under `specs/` still use the older HTML build (`make all-specs`, which needs Node.js).
+
 SVG-AAM is in the [ARIA repository](https://github.com/w3c/svg-aam/)
 
 The SVG working group welcomes contributions to their specifications.

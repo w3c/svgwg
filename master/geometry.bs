@@ -1,0 +1,510 @@
+<h2 id="chapter-geometry" data-bs-page="geometry">Geometry Properties</h2>
+
+
+<p>Beside SVG's styling properties, SVG also defines
+<dfn id="geometry-properties" data-export="" data-dfn-type="dfn" oldids="geometry-geometry-properties">geometry properties</dfn>. Geometry properties
+describe the position and dimension of the <a href="#TermGraphicsElement">graphics element</a>s <span class="element-name">‘<{circle}>’</span>,
+<span class="element-name">‘<{ellipse}>’</span>, <span class="element-name">‘<{rect}>’</span>, <span class="element-name">‘<{image}>’</span>, <span class="element-name">‘<{foreignObject}>’</span> and the
+<span class="element-name">‘<{svg}>’</span> element.</p>
+
+<p id="geometry-negative-values"><span id="geometry-geometry-negative-values" class="bs-old-id"></span>The 'cx', 'cy', 'x' and 'y'
+properties accept negative values. The 'r', 'rx', 'ry', <a href="#Sizing" class="property">width</a>
+and <a href="#Sizing" class="property">height</a> properties do not: a negative <a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> is
+[=invalid value|invalid=]. When an invalid negative value is specified for one of these properties,
+whether through a presentation attribute or a CSS declaration, it must be treated as if the
+property's [=initial value=] had been specified: <span class="prop-value">auto</span> for
+'rx', 'ry', <a href="#Sizing" class="property">width</a> and <a href="#Sizing" class="property">height</a>, and <span class="prop-value">0</span>
+for 'r'. A negative value therefore never puts the element into an error state; the
+<span class="xxx">@@ unknown term "used value"</span> is determined by the property's normal resolution rules. The following table
+summarizes this handling.</p>
+
+<table class="data">
+  <caption>Handling of negative values for the geometry properties</caption>
+  <thead>
+    <tr>
+      <th>Property</th>
+      <th>Value</th>
+      <th>Initial</th>
+      <th>Negative allowed?</th>
+      <th>Negative computes to</th>
+      <th>Used value of a negative value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>'cx', 'cy'</td>
+      <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a></td>
+      <td>0</td>
+      <td>yes</td>
+      <td>the specified value (kept as-is)</td>
+      <td>the negative value (translates the shape)</td>
+    </tr>
+    <tr>
+      <td>'r'</td>
+      <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a></td>
+      <td>0</td>
+      <td>no</td>
+      <td><span class="prop-value">0</span></td>
+      <td>0; a <span class="element-name">‘<{circle}>’</span> with 'r' = 0 is not rendered</td>
+    </tr>
+    <tr>
+      <td>'rx', 'ry'</td>
+      <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | auto</td>
+      <td>auto</td>
+      <td>no</td>
+      <td><span class="prop-value">auto</span></td>
+      <td>resolved as <span class="prop-value">auto</span>: equal to the used value of the
+          other radius, or 0 if the other radius is also <span class="prop-value">auto</span>
+          or negative. An <span class="element-name">‘<{ellipse}>’</span> with a resolved radius of 0 is not rendered.</td>
+    </tr>
+    <tr>
+      <td><a href="#Sizing" class="property">width</a>, <a href="#Sizing" class="property">height</a></td>
+      <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | auto</td>
+      <td>auto</td>
+      <td>no</td>
+      <td><span class="prop-value">auto</span></td>
+      <td>resolved as <span class="prop-value">auto</span> per the
+          <a href="#Sizing">sizing table</a>: <span class="prop-value">100%</span> for the
+          outermost <span class="element-name">‘<{svg}>’</span>, the intrinsic size for <span class="element-name">‘<{image}>’</span>, and
+          <span class="prop-value">0</span> for all other elements.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="CX" oldids="geometry-CX">Horizontal center coordinate: The
+‘<span class="property">cx</span>’ property</h3>
+<table class="svg-propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="CxProperty" data-export="" data-dfn-type="property" oldids="geometry-CxProperty">cx</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>0</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><span class="element-name">‘<{circle}>’</span> and <span class="element-name">‘<{ellipse}>’</span> elements
+    </td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>refer to the width of the current SVG viewport (see
+    <a href="#Units">Units</a>)</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>an absolute length or percentage</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p>The 'cx' property describes the horizontal center coordinate
+of the position of the element.</p>
+
+<p class="note">Negative values are permitted for 'cx'; a negative value translates the
+center of the shape and does not disable rendering, unlike 'r', 'rx' and
+'ry' (see the <a href="#geometry-negative-values">handling of negative values</a>).</p>
+
+<h3 id="CY" oldids="geometry-CY">Vertical center coordinate: The ‘<span class="property">cy</span>’
+property</h3>
+<table class="svg-propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="CyProperty" data-export="" data-dfn-type="property" oldids="geometry-CyProperty">cy</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>0</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><span class="element-name">‘<{circle}>’</span> and <span class="element-name">‘<{ellipse}>’</span> elements
+    </td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>refer to the height of the current SVG viewport (see
+    <a href="#Units">Units</a>)</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>an absolute length or percentage</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p>The 'cy' property describes the vertical center coordinate
+of the position of the element. </p>
+
+<p class="note">Negative values are permitted for 'cy'; a negative value translates the
+center of the shape and does not disable rendering (see the
+<a href="#geometry-negative-values">handling of negative values</a>).</p>
+
+<h3 id="R" oldids="geometry-R">Radius: The ‘<span class="property">r</span>’ property</h3>
+<table class="svg-propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="RProperty" data-export="" data-dfn-type="property" oldids="geometry-RProperty">r</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>0</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><span class="element-name">‘<{circle}>’</span> element</td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>refer to the normalized diagonal of the current SVG viewport (see
+    <a href="#Units">Units</a>)</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>an absolute length or percentage</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p>The 'r' property describes the radius of the <span class="element-name">‘<{circle}>’</span>
+element.</p>
+
+<p>A negative value for 'r' is [=invalid value|invalid=]; it is treated as if
+<span class="prop-value">0</span> had been specified (see the
+<a href="#geometry-negative-values">handling of negative values</a>), so the
+<span class="element-name">‘<{circle}>’</span> is not rendered.</p>
+
+<h3 id="RX" oldids="geometry-RX">Horizontal radius: The ‘<span class="property">rx</span>’
+property</h3>
+<table class="svg-propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="RxProperty" data-export="" data-dfn-type="property" oldids="geometry-RxProperty">rx</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | auto</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>auto</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><span class="element-name">‘<{ellipse}>’</span>, <span class="element-name">‘<{rect}>’</span> elements</td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>refer to the width of the current SVG viewport (see
+    <a href="#Units">Units</a>)</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>an absolute length or percentage</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p>The 'rx' property describes the horizontal radius of the
+<span class="element-name">‘<{ellipse}>’</span> element and the curve radius of the <span class="element-name">‘<{rect}>’</span>
+element.
+    When the computed value of ‘<span class="property">rx</span>’ is <span class="prop-value">auto</span>, the used radius is equal to the absolute length used for 'ry', creating a circular arc.
+    If both ‘<span class="property">rx</span>’ and ‘<span class="property">ry</span>’ have a computed value of <span class="prop-value">auto</span>, the used value is 0.
+</p>
+<p> Regardless of how the value is calculated, the used value of ‘<span class="property">rx</span>’ for a <span class="element-name">‘<{rect}>’</span> is never more than 50% of the used value of <a href="#Sizing" class="property">width</a> for the same shape.
+</p>
+
+<p class="note">
+    The <span class="prop-value">auto</span> behavior is new in SVG 2 for <span class="element-name">‘<{ellipse}>’</span>,
+    matching the behavior for <span class="element-name">‘<{rect}>’</span> elements when 'rx' was not specified.
+</p>
+
+<p>A negative value for 'rx' is [=invalid value|invalid=]; it is treated as if
+<span class="prop-value">auto</span> had been specified (see the
+<a href="#geometry-negative-values">handling of negative values</a>). It therefore resolves
+like <span class="prop-value">auto</span>: to the used value of 'ry', or to 0 if
+'ry' is also <span class="prop-value">auto</span> or negative.</p>
+
+<h3 id="RY" oldids="geometry-RY">Vertical radius: The ‘<span class="property">ry</span>’
+property</h3>
+<table class="svg-propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="RyProperty" data-export="" data-dfn-type="property" oldids="geometry-RyProperty">ry</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | auto</td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>auto</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><span class="element-name">‘<{ellipse}>’</span>, <span class="element-name">‘<{rect}>’</span></td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>refer to the height of the current SVG viewport (see
+    <a href="#Units">Units</a>)</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>an absolute length or percentage</td>
+  </tr>
+  <tr>
+    <th>Animatable type:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p>The 'ry' property describes the vertical radius of the
+<span class="element-name">‘<{ellipse}>’</span> element and the vertical curve radius of the <span class="element-name">‘<{rect}>’</span>
+    element.
+    When the computed value of ‘<span class="property">ry</span>’ is <span class="prop-value">auto</span>, the used radius is equal to the absolute length used for 'rx', creating a circular arc.
+    If both ‘<span class="property">rx</span>’ and ‘<span class="property">ry</span>’ have a computed value of <span class="prop-value">auto</span>, the used value is 0.
+</p>
+<p> Regardless of how the value is calculated, the used value of ‘<span class="property">ry</span>’ for a <span class="element-name">‘<{rect}>’</span> is never more than 50% of the used value of <a href="#Sizing" class="property">height</a> for the same shape.
+</p>
+
+<p class="note">
+    The <span class="prop-value">auto</span> behavior is new in SVG 2 for <span class="element-name">‘<{ellipse}>’</span>,
+    matching the behavior for <span class="element-name">‘<{rect}>’</span> elements when 'ry' was not specified.
+</p>
+
+<p>A negative value for 'ry' is [=invalid value|invalid=]; it is treated as if
+<span class="prop-value">auto</span> had been specified (see the
+<a href="#geometry-negative-values">handling of negative values</a>). It therefore resolves
+like <span class="prop-value">auto</span>: to the used value of 'rx', or to 0 if
+'rx' is also <span class="prop-value">auto</span> or negative.</p>
+
+<h3 id="X" oldids="geometry-X">Horizontal coordinate: The ‘<span class="property">x</span>’ property</h3>
+<table class="svg-propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="XProperty" data-export="" data-dfn-type="property" oldids="geometry-XProperty">x</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>0</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><span class="element-name">‘<{svg}>’</span>, <span class="element-name">‘<{rect}>’</span>,
+    <span class="element-name">‘<{image}>’</span>, <span class="element-name">‘<{foreignObject}>’</span> elements</td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>refer to the width of the current SVG viewport (see
+    <a href="#Units">Units</a>)</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>an absolute length or percentage</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p>The 'x' property describes the horizontal coordinate of
+the position of the element.</p>
+
+<h3 id="Y" oldids="geometry-Y">Vertical coordinate: The ‘<span class="property">y</span>’
+property</h3>
+<table class="svg-propdef def">
+  <tr>
+    <th>Name:</th>
+    <td><dfn id="YProperty" data-export="" data-dfn-type="property" oldids="geometry-YProperty">y</dfn></td>
+  </tr>
+  <tr>
+    <th>Value:</th>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a></td>
+  </tr>
+  <tr>
+    <th>Initial:</th>
+    <td>0</td>
+  </tr>
+  <tr>
+    <th>Applies to:</th>
+    <td><span class="element-name">‘<{svg}>’</span>, <span class="element-name">‘<{rect}>’</span>,
+    <span class="element-name">‘<{image}>’</span>, <span class="element-name">‘<{foreignObject}>’</span> elements</td>
+  </tr>
+  <tr>
+    <th>Inherited:</th>
+    <td>no</td>
+  </tr>
+  <tr>
+    <th>Percentages:</th>
+    <td>refer to the height of the current SVG viewport (see
+    <a href="#Units">Units</a>)</td>
+  </tr>
+  <tr>
+    <th>Media:</th>
+    <td>visual</td>
+  </tr>
+  <tr>
+    <th>Computed value:</th>
+    <td>an absolute length or percentage</td>
+  </tr>
+  <tr>
+    <th><a href="https://www.w3.org/TR/web-animations-1/#animation-type">Animation type</a>:</th>
+    <td>by computed value</td>
+  </tr>
+</table>
+
+<p>The 'y' property describes the vertical coordinate of
+the position of the element.</p>
+
+<h3 id="Sizing" oldids="geometry-Sizing">Sizing properties: the effect of the
+‘<span class="property">width</span>’ and ‘<span class="property">height</span>’
+properties</h3>
+
+<p class="note">See the CSS 2.1 specification for the definitions of
+<a href="https://www.w3.org/TR/CSS21/visudet.html#propdef-width"><span class="prop-name">width</span></a> and
+<a href="https://www.w3.org/TR/CSS21/visudet.html#propdef-height"><span class="prop-name">height</span></a>.</p>
+
+<p>The CSS <a href="#Sizing" class="property">width</a> and <a href="#Sizing" class="property">height</a> properties are used for
+sizing some SVG elements.  Specifically, they are used to size
+<span class="element-name">‘<{rect}>’</span>, <span class="element-name">‘<{image}>’</span>, <span class="element-name">‘<{foreignObject}>’</span>, and
+the outermost <span class="element-name">‘<{svg}>’</span> element.  All of these elements have <span class="attr-name">‘width’</span>
+and <span class="attr-name">‘height’</span> presentation attributes.
+The properties are also used for laying out embedded elements from the HTML namespace.
+</p>
+
+<p class="note">
+Other SVG elements, such as nested <span class="element-name">‘<{svg}>’</span> elements, the <span class="element-name">‘<{use}>’</span> element, and
+the <span class="element-name">‘<{symbol}>’</span> element, also have <span class="attr-name">‘width’</span> and
+<span class="attr-name">‘height’</span> attributes, but do not accept them as CSS properties.
+On these elements, the width and height must be specified as XML attributes; CSS properties
+with the same names are ignored.
+</p>
+
+<p>The used value of <a href="#Sizing" class="property">width</a>
+may be constrained by the value of the
+<a href="https://www.w3.org/TR/CSS21/visudet.html#propdef-max-width"><span class="prop-name">max-width</span></a> and
+<a href="https://www.w3.org/TR/CSS21/visudet.html#propdef-max-width"><span class="prop-name">min-width</span></a> properties.
+The used value of <a href="#Sizing" class="property">height</a>
+may be constrained by the value of the
+<a href="https://www.w3.org/TR/CSS21/visudet.html#propdef-max-height"><span class="prop-name">max-height</span></a> and
+<a href="https://www.w3.org/TR/CSS21/visudet.html#propdef-max-height"><span class="prop-name">min-height</span></a> properties.
+</p>
+
+<p>The following table summarizes how the value
+<span class="prop-value">auto</span> for <a href="#Sizing" class="property">width</a> and <a href="#Sizing" class="property">height</a>
+is treated on different elements:</p>
+
+<table class="data">
+  <thead>
+    <tr>
+      <th>Element</th>
+      <th>Value</th>
+      <th>Treated as</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="element-name">‘<{svg}>’</span></td>
+      <td><span class="prop-value">auto</span></td>
+      <td><span class="prop-value">100%</span></td>
+    </tr>
+    <tr>
+      <td><span class="element-name">‘<{image}>’</span></td>
+      <td><span class="prop-value">auto</span></td>
+      <td>Calculated from the referenced image's intrinsic dimensions and aspect ratio,
+        according to the CSS <a href="https://www.w3.org/TR/css3-images/#default-sizing-algorithm">Default Sizing Algorithm</a></td>
+    </tr>
+    <tr>
+      <td>All other elements</td>
+      <td><span class="prop-value">auto</span></td>
+      <td><span class="prop-value">0</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="note">
+    New in SVG 2.  Images embedded in SVG can now be auto-sized to the intrinsic size, or scaled to a fixed height or width according to the intrinsic aspect ratio.  This matches the behavior of embedded images in HTML.
+</p>
+
+<p class="note">This means that, for example, a <span class="element-name">‘<{foreignObject}>’</span>
+object element will not shrink-wrap to its contents if
+<span class="prop-value">auto</span> is used.</p>
