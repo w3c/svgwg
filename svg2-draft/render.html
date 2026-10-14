@@ -1,49 +1,757 @@
-<!DOCTYPE html>
-
-<!--
-  Scalable Vector Graphics (SVG) 2
-  Chapter 3: Rendering Model
-
-  Note: This document is generated from ../master/render.html.
-  Run "make" from the root of the repository to regenerate it.
-  -->
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head><meta charset="UTF-8"/>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <title>Rendering Model — SVG 2</title>
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <meta content="ED" name="w3c-status">
+  <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
+  <meta content="Bikeshed version 49e9fdd4f, updated Tue Oct 13 14:27:53 2026 -0700" name="generator">
+  <meta content="a9f1495d0097bc4afc162eb88ecdacd87922b244" name="revision">
+  <meta content="dark light" name="color-scheme">
+  <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
+<style>
+/* Bikeshed draws <...> around element links; SVG 2 already puts curly quotes around them. */
+.element-name a[data-link-type=element]::before, .element-name a[data-link-type=element]::after { content: none; }
+/* <{rect}> wraps the link in <code>; without this the element name would get the code size twice (90% of 90%). */
+.element-name > code { font-size: inherit; }
+</style>
+<style>/* Boilerplate: style-autolinks */
+.css.css, .property.property, .descriptor.descriptor {
+    color: var(--a-normal-text);
+    font-size: inherit;
+    font-family: inherit;
+}
+.css::before, .property::before, .descriptor::before {
+    content: "‘";
+}
+.css::after, .property::after, .descriptor::after {
+    content: "’";
+}
+.property, .descriptor {
+    /* Don't wrap property and descriptor names */
+    white-space: nowrap;
+}
+.type { /* CSS value <type> */
+    font-style: italic;
+}
+pre .property::before, pre .property::after {
+    content: "";
+}
+[data-link-type="property"]::before,
+[data-link-type="propdesc"]::before,
+[data-link-type="descriptor"]::before,
+[data-link-type="value"]::before,
+[data-link-type="function"]::before,
+[data-link-type="at-rule"]::before,
+[data-link-type="selector"]::before,
+[data-link-type="maybe"]::before {
+    content: "‘";
+}
+[data-link-type="property"]::after,
+[data-link-type="propdesc"]::after,
+[data-link-type="descriptor"]::after,
+[data-link-type="value"]::after,
+[data-link-type="function"]::after,
+[data-link-type="at-rule"]::after,
+[data-link-type="selector"]::after,
+[data-link-type="maybe"]::after {
+    content: "’";
+}
 
-  <!-- Style sheets for local dev. Will be standardized in processing.
-  Add attribute data-keep="" to any extra stylesheet link you do not want removed
-  (or use <style>), and include it before here. -->
-  
-  
-<link rel="stylesheet" title="Default" href="style/svg.css" type="text/css" media="screen"/><link rel="alternate stylesheet" title="Only annotations for publication" href="style/default_no_maturity.css" type="text/css" media="screen"/><link rel="alternate stylesheet" title="No issues/annotations" href="style/default_no_issues.css" type="text/css" media="screen"/><link rel="stylesheet" href="//www.w3.org/StyleSheets/TR/2021/W3C-ED" type="text/css" media="screen"/><script src="style/link-fixup.js"></script></head>
+[data-link-type].production::before,
+[data-link-type].production::after,
+.prod [data-link-type]::before,
+.prod [data-link-type]::after {
+    content: "";
+}
+
+[data-link-type=element],
+[data-link-type=element-attr] {
+    font-family: Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    font-size: .9em;
+}
+[data-link-type=element]::before { content: "<" }
+[data-link-type=element]::after  { content: ">" }
+
+[data-link-type=biblio] {
+    white-space: pre;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --selflink-text: black;
+        --selflink-bg: silver;
+        --selflink-hover-text: white;
+    }
+}
+</style>
+<style>/* Boilerplate: style-colors */
+/* Any --*-text not paired with a --*-bg is assumed to have a transparent bg */
+:root {
+    color-scheme: light dark;
+
+    --text: black;
+    --bg: white;
+
+    --unofficial-watermark: url(https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark);
+
+    --logo-bg: #1a5e9a;
+    --logo-active-bg: #c00;
+    --logo-text: white;
+
+    --tocnav-normal-text: #707070;
+    --tocnav-normal-bg: var(--bg);
+    --tocnav-hover-text: var(--tocnav-normal-text);
+    --tocnav-hover-bg: #f8f8f8;
+    --tocnav-active-text: #c00;
+    --tocnav-active-bg: var(--tocnav-normal-bg);
+
+    --tocsidebar-text: var(--text);
+    --tocsidebar-bg: #f7f8f9;
+    --tocsidebar-shadow: rgba(0,0,0,.1);
+    --tocsidebar-heading-text: hsla(203,20%,40%,.7);
+
+    --toclink-text: var(--text);
+    --toclink-underline: #3980b5;
+    --toclink-visited-text: var(--toclink-text);
+    --toclink-visited-underline: #054572;
+
+    --heading-text: #005a9c;
+
+    --hr-text: var(--text);
+
+    --algo-border: #def;
+
+    --del-text: red;
+    --del-bg: transparent;
+    --ins-text: #080;
+    --ins-bg: transparent;
+
+    --a-normal-text: #034575;
+    --a-normal-underline: #bbb;
+    --a-visited-text: var(--a-normal-text);
+    --a-visited-underline: #707070;
+    --a-hover-bg: rgba(75%, 75%, 75%, .25);
+    --a-active-text: #c00;
+    --a-active-underline: #c00;
+
+    --blockquote-border: silver;
+    --blockquote-bg: transparent;
+    --blockquote-text: currentcolor;
+
+    --issue-border: #e05252;
+    --issue-bg: #fbe9e9;
+    --issue-text: var(--text);
+    --issueheading-text: #831616;
+
+    --example-border: #e0cb52;
+    --example-bg: #fcfaee;
+    --example-text: var(--text);
+    --exampleheading-text: #574b0f;
+
+    --note-border: #52e052;
+    --note-bg: #e9fbe9;
+    --note-text: var(--text);
+    --noteheading-text: hsl(120, 70%, 30%);
+    --notesummary-underline: silver;
+
+    --assertion-border: #aaa;
+    --assertion-bg: #eee;
+    --assertion-text: black;
+
+    --advisement-border: orange;
+    --advisement-bg: #fec;
+    --advisement-text: var(--text);
+    --advisementheading-text: #b35f00;
+
+    --warning-border: red;
+    --warning-bg: hsla(40,100%,50%,0.95);
+    --warning-text: var(--text);
+
+    --amendment-border: #330099;
+    --amendment-bg: #F5F0FF;
+    --amendment-text: var(--text);
+    --amendmentheading-text: #220066;
+
+    --def-border: #8ccbf2;
+    --def-bg: #def;
+    --def-text: var(--text);
+    --defrow-border: #bbd7e9;
+
+    --datacell-border: silver;
+
+    --indexinfo-text: #707070;
+
+    --indextable-hover-text: black;
+    --indextable-hover-bg: #f7f8f9;
+
+    --outdatedspec-bg: rgba(0, 0, 0, .5);
+    --outdatedspec-text: black;
+    --outdated-bg: maroon;
+    --outdated-text: white;
+    --outdated-shadow: red;
+
+    --editedrec-bg: darkorange;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text: #ddd;
+        --bg: black;
+
+        --unofficial-watermark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cg fill='%23100808' transform='translate(200 200) rotate(-45) translate(-200 -200)' stroke='%23100808' stroke-width='3'%3E%3Ctext x='50%25' y='220' style='font: bold 70px sans-serif; text-anchor: middle; letter-spacing: 6px;'%3EUNOFFICIAL%3C/text%3E%3Ctext x='50%25' y='305' style='font: bold 70px sans-serif; text-anchor: middle; letter-spacing: 6px;'%3EDRAFT%3C/text%3E%3C/g%3E%3C/svg%3E");
+
+        --logo-bg: #1a5e9a;
+        --logo-active-bg: #c00;
+        --logo-text: white;
+
+        --tocnav-normal-text: #999;
+        --tocnav-normal-bg: var(--bg);
+        --tocnav-hover-text: var(--tocnav-normal-text);
+        --tocnav-hover-bg: #080808;
+        --tocnav-active-text: #f44;
+        --tocnav-active-bg: var(--tocnav-normal-bg);
+
+        --tocsidebar-text: var(--text);
+        --tocsidebar-bg: #080808;
+        --tocsidebar-shadow: rgba(255,255,255,.1);
+        --tocsidebar-heading-text: hsla(203,20%,40%,.7);
+
+        --toclink-text: var(--text);
+        --toclink-underline: #6af;
+        --toclink-visited-text: var(--toclink-text);
+        --toclink-visited-underline: #054572;
+
+        --heading-text: #8af;
+
+        --hr-text: var(--text);
+
+        --algo-border: #456;
+
+        --del-text: #f44;
+        --del-bg: transparent;
+        --ins-text: #4a4;
+        --ins-bg: transparent;
+
+        --a-normal-text: #6af;
+        --a-normal-underline: #555;
+        --a-visited-text: var(--a-normal-text);
+        --a-visited-underline: var(--a-normal-underline);
+        --a-hover-bg: rgba(25%, 25%, 25%, .2);
+        --a-active-text: #f44;
+        --a-active-underline: var(--a-active-text);
+
+        --borderedblock-bg: rgba(255, 255, 255, .05);
+
+        --blockquote-border: silver;
+        --blockquote-bg: var(--borderedblock-bg);
+        --blockquote-text: currentcolor;
+
+        --issue-border: #e05252;
+        --issue-bg: var(--borderedblock-bg);
+        --issue-text: var(--text);
+        --issueheading-text: hsl(0deg, 70%, 70%);
+
+        --example-border: hsl(50deg, 90%, 60%);
+        --example-bg: var(--borderedblock-bg);
+        --example-text: var(--text);
+        --exampleheading-text: hsl(50deg, 70%, 70%);
+
+        --note-border: hsl(120deg, 100%, 35%);
+        --note-bg: var(--borderedblock-bg);
+        --note-text: var(--text);
+        --noteheading-text: hsl(120, 70%, 70%);
+        --notesummary-underline: silver;
+
+        --assertion-border: #444;
+        --assertion-bg: var(--borderedblock-bg);
+        --assertion-text: var(--text);
+
+        --advisement-border: orange;
+        --advisement-bg: #222218;
+        --advisement-text: var(--text);
+        --advisementheading-text: #f84;
+
+        --warning-border: red;
+        --warning-bg: hsla(40,100%,20%,0.95);
+        --warning-text: var(--text);
+
+        --amendment-border: #330099;
+        --amendment-bg: #080010;
+        --amendment-text: var(--text);
+        --amendmentheading-text: #cc00ff;
+
+        --def-border: #8ccbf2;
+        --def-bg: #080818;
+        --def-text: var(--text);
+        --defrow-border: #136;
+
+        --datacell-border: silver;
+
+        --indexinfo-text: #aaa;
+
+        --indextable-hover-text: var(--text);
+        --indextable-hover-bg: #181818;
+
+        --outdatedspec-bg: rgba(255, 255, 255, .5);
+        --outdatedspec-text: black;
+        --outdated-bg: maroon;
+        --outdated-text: white;
+        --outdated-shadow: red;
+
+        --editedrec-bg: darkorange;
+    }
+    /* In case a transparent-bg image doesn't expect to be on a dark bg,
+       which is quite common in practice... */
+    img { background: white; }
+}
+</style>
+<style>/* Boilerplate: style-counters */
+body {
+    counter-reset: example figure issue table;
+}
+.issue {
+    counter-increment: issue;
+}
+.issue:not(.no-marker)::before {
+    content: "Issue " counter(issue);
+}
+
+.example {
+    counter-increment: example;
+}
+.example:not(.no-marker)::before {
+    content: "Example " counter(example);
+}
+.invalid.example:not(.no-marker)::before,
+.illegal.example:not(.no-marker)::before {
+    content: "Invalid Example " counter(example);
+}
+
+figcaption {
+    counter-increment: figure;
+}
+figcaption:not(.no-marker)::before {
+    content: "Figure " counter(figure) " ";
+}
+
+figure.table figcaption {
+    counter-increment: table;
+}
+figure.table figcaption:not(.no-marker)::before {
+    content: "Table " counter(table) " ";
+}
+</style>
+<style>/* Boilerplate: style-dfn-panel */
+:root {
+    --dfnpanel-bg: #ddd;
+    --dfnpanel-text: var(--text);
+    --dfnpanel-target-bg: #ffc;
+    --dfnpanel-target-outline: orange;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dfnpanel-bg: #222;
+        --dfnpanel-text: var(--text);
+        --dfnpanel-target-bg: #333;
+        --dfnpanel-target-outline: silver;
+    }
+}
+.dfn-panel {
+    position: absolute;
+    z-index: 35;
+    width: 20em;
+    width: 300px;
+    height: auto;
+    max-height: 500px;
+    overflow: auto;
+    padding: 0.5em 0.75em;
+    font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
+    background: var(--dfnpanel-bg);
+    color: var(--dfnpanel-text);
+    border: outset 0.2em;
+    white-space: normal; /* in case it's moved into a pre */
+}
+.dfn-panel:not(.on) { display: none; }
+.dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
+.dfn-panel > b { display: block; }
+.dfn-panel a { color: var(--dfnpanel-text); }
+.dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
+.dfn-panel a:focus {
+    outline: 5px auto Highlight;
+    outline: 5px auto -webkit-focus-ring-color;
+}
+.dfn-panel > b + b { margin-top: 0.25em; }
+.dfn-panel ul { padding: 0 0 0 1em; list-style: none; }
+.dfn-panel li a {
+    max-width: calc(300px - 1.5em - 1em);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dfn-panel.activated {
+    display: inline-block;
+    position: fixed;
+    left: 8px;
+    bottom: 2em;
+    margin: 0 auto;
+    max-width: calc(100vw - 1.5em - .4em - .5em);
+    max-height: 30vh;
+    transition: left 1s ease-out, bottom 1s ease-out;
+}
+
+.dfn-panel .link-item:hover {
+    text-decoration: underline;
+}
+.dfn-panel .link-item .copy-icon {
+    opacity: 0;
+}
+.dfn-panel .link-item:hover .copy-icon,
+.dfn-panel .link-item .copy-icon:focus {
+    opacity: 1;
+}
+
+.dfn-panel .copy-icon {
+    display: inline-block;
+    margin-right: 0.5em;
+    width: 0.85em;
+    height: 1em;
+    border-radius: 3px;
+    background-color: #ccc;
+    cursor: pointer;
+}
+
+.dfn-panel .copy-icon .icon {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.dfn-panel .copy-icon .icon::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    background-color: #ccc;
+    opacity: 0.25;
+    transform: translate(3px, -3px);
+}
+
+.dfn-panel .copy-icon:active .icon::before {
+    opacity: 1;
+}
+
+.dfn-paneled[role="button"] { cursor: help; }
+
+.highlighted {
+    animation: target-fade 3s;
+}
+
+@keyframes target-fade {
+    from {
+        background-color: var(--dfnpanel-target-bg);
+        outline: 5px solid var(--dfnpanel-target-outline);
+    }
+    to {
+        color: var(--a-normal-text);
+        background-color: transparent;
+        outline: transparent;
+    }
+}
+</style>
+<style>/* Boilerplate: style-idl-highlighting */
+pre.idl.highlight {
+    background: var(--borderedblock-bg, var(--def-bg));
+}
+</style>
+<style>/* Boilerplate: style-issues */
+a[href].issue-return {
+    float: right;
+    float: inline-end;
+    color: var(--issueheading-text);
+    font-weight: bold;
+    text-decoration: none;
+}
+</style>
+<style>/* Boilerplate: style-md-lists */
+/* This is a weird hack for me not yet following the commonmark spec
+   regarding paragraph and lists. */
+[data-md] > :first-child {
+    margin-top: 0;
+}
+[data-md] > :last-child {
+    margin-bottom: 0;
+}
+</style>
+<style>/* Boilerplate: style-ref-hints */
+:root {
+    --ref-hint-bg: #ddd;
+    --ref-hint-text: var(--text);
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --ref-hint-bg: #222;
+        --ref-hint-text: var(--text);
+    }
+}
+
+.ref-hint {
+    display: inline-block;
+    position: absolute;
+    z-index: 35;
+    width: 20em;
+    width: 300px;
+    height: auto;
+    max-height: 500px;
+    overflow: auto;
+    padding: 0.5em 0.5em;
+    font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
+    background: var(--ref-hint-bg);
+    color: var(--ref-hint-text);
+    border: outset 0.2em;
+    white-space: normal; /* in case it's moved into a pre */
+}
+
+.ref-hint * { margin: 0; padding: 0; text-indent: 0; }
+
+.ref-hint ul { padding: 0 0 0 1em; list-style: none; }
+</style>
+<style>/* Boilerplate: style-selflinks */
+:root {
+    --selflink-text: white;
+    --selflink-bg: gray;
+    --selflink-hover-text: black;
+}
+.heading, .issue, .note, .example, li, dt {
+    position: relative;
+}
+a.self-link {
+    position: absolute;
+    top: 0;
+    left: calc(-1 * (3.5rem - 26px));
+    width: calc(3.5rem - 26px);
+    height: 2em;
+    text-align: center;
+    border: none;
+    transition: opacity .2s;
+    opacity: .5;
+}
+a.self-link:hover {
+    opacity: 1;
+}
+.heading > a.self-link {
+    font-size: 83%;
+}
+.example > a.self-link,
+.note > a.self-link,
+.issue > a.self-link {
+    /* These blocks are overflow:auto, so positioning outside
+       doesn't work. */
+    left: auto;
+    right: 0;
+}
+li > a.self-link {
+    left: calc(-1 * (3.5rem - 26px) - 2em);
+}
+dfn > a.self-link {
+    top: auto;
+    left: auto;
+    opacity: 0;
+    width: 1.5em;
+    height: 1.5em;
+    background: var(--selflink-bg);
+    color: var(--selflink-text);
+    font-style: normal;
+    transition: opacity .2s, background-color .2s, color .2s;
+}
+dfn:hover > a.self-link {
+    opacity: 1;
+}
+dfn > a.self-link:hover {
+    color: var(--selflink-hover-text);
+}
+
+a.self-link::before            { content: "¶"; }
+.heading > a.self-link::before { content: "§"; }
+dfn > a.self-link::before      { content: "#"; }
+</style>
+<style>/* Boilerplate: style-syntax-highlighting */
+code.highlight { padding: .1em; border-radius: .3em; }
+pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em 0; overflow: auto; border-radius: 0; }
+
+.highlight:not(.idl) { background: rgba(0, 0, 0, .03); }
+c-[a] { color: #990055 } /* Keyword.Declaration */
+c-[b] { color: #990055 } /* Keyword.Type */
+c-[c] { color: #708090 } /* Comment */
+c-[d] { color: #708090 } /* Comment.Multiline */
+c-[e] { color: #0077aa } /* Name.Attribute */
+c-[f] { color: #669900 } /* Name.Tag */
+c-[g] { color: #222222 } /* Name.Variable */
+c-[k] { color: #990055 } /* Keyword */
+c-[l] { color: #000000 } /* Literal */
+c-[m] { color: #000000 } /* Literal.Number */
+c-[n] { color: #0077aa } /* Name */
+c-[o] { color: #999999 } /* Operator */
+c-[p] { color: #999999 } /* Punctuation */
+c-[s] { color: #a67f59 } /* Literal.String */
+c-[t] { color: #a67f59 } /* Literal.String.Single */
+c-[u] { color: #a67f59 } /* Literal.String.Double */
+c-[cp] { color: #708090 } /* Comment.Preproc */
+c-[c1] { color: #708090 } /* Comment.Single */
+c-[cs] { color: #708090 } /* Comment.Special */
+c-[kc] { color: #990055 } /* Keyword.Constant */
+c-[kn] { color: #990055 } /* Keyword.Namespace */
+c-[kp] { color: #990055 } /* Keyword.Pseudo */
+c-[kr] { color: #990055 } /* Keyword.Reserved */
+c-[ld] { color: #000000 } /* Literal.Date */
+c-[nc] { color: #0077aa } /* Name.Class */
+c-[no] { color: #0077aa } /* Name.Constant */
+c-[nd] { color: #0077aa } /* Name.Decorator */
+c-[ni] { color: #0077aa } /* Name.Entity */
+c-[ne] { color: #0077aa } /* Name.Exception */
+c-[nf] { color: #0077aa } /* Name.Function */
+c-[nl] { color: #0077aa } /* Name.Label */
+c-[nn] { color: #0077aa } /* Name.Namespace */
+c-[py] { color: #0077aa } /* Name.Property */
+c-[ow] { color: #999999 } /* Operator.Word */
+c-[mb] { color: #000000 } /* Literal.Number.Bin */
+c-[mf] { color: #000000 } /* Literal.Number.Float */
+c-[mh] { color: #000000 } /* Literal.Number.Hex */
+c-[mi] { color: #000000 } /* Literal.Number.Integer */
+c-[mo] { color: #000000 } /* Literal.Number.Oct */
+c-[sb] { color: #a67f59 } /* Literal.String.Backtick */
+c-[sc] { color: #a67f59 } /* Literal.String.Char */
+c-[sd] { color: #a67f59 } /* Literal.String.Doc */
+c-[se] { color: #a67f59 } /* Literal.String.Escape */
+c-[sh] { color: #a67f59 } /* Literal.String.Heredoc */
+c-[si] { color: #a67f59 } /* Literal.String.Interpol */
+c-[sx] { color: #a67f59 } /* Literal.String.Other */
+c-[sr] { color: #a67f59 } /* Literal.String.Regex */
+c-[ss] { color: #a67f59 } /* Literal.String.Symbol */
+c-[vc] { color: #0077aa } /* Name.Variable.Class */
+c-[vg] { color: #0077aa } /* Name.Variable.Global */
+c-[vi] { color: #0077aa } /* Name.Variable.Instance */
+c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
+
+@media (prefers-color-scheme: dark) {
+    .highlight:not(.idl) { background: rgba(255, 255, 255, .05); }
+
+    c-[a] { color: #d33682 } /* Keyword.Declaration */
+    c-[b] { color: #d33682 } /* Keyword.Type */
+    c-[c] { color: #2aa198 } /* Comment */
+    c-[d] { color: #2aa198 } /* Comment.Multiline */
+    c-[e] { color: #268bd2 } /* Name.Attribute */
+    c-[f] { color: #b58900 } /* Name.Tag */
+    c-[g] { color: #cb4b16 } /* Name.Variable */
+    c-[k] { color: #d33682 } /* Keyword */
+    c-[l] { color: #657b83 } /* Literal */
+    c-[m] { color: #657b83 } /* Literal.Number */
+    c-[n] { color: #268bd2 } /* Name */
+    c-[o] { color: #657b83 } /* Operator */
+    c-[p] { color: #657b83 } /* Punctuation */
+    c-[s] { color: #6c71c4 } /* Literal.String */
+    c-[t] { color: #6c71c4 } /* Literal.String.Single */
+    c-[u] { color: #6c71c4 } /* Literal.String.Double */
+    c-[ch] { color: #2aa198 } /* Comment.Hashbang */
+    c-[cp] { color: #2aa198 } /* Comment.Preproc */
+    c-[cpf] { color: #2aa198 } /* Comment.PreprocFile */
+    c-[c1] { color: #2aa198 } /* Comment.Single */
+    c-[cs] { color: #2aa198 } /* Comment.Special */
+    c-[kc] { color: #d33682 } /* Keyword.Constant */
+    c-[kn] { color: #d33682 } /* Keyword.Namespace */
+    c-[kp] { color: #d33682 } /* Keyword.Pseudo */
+    c-[kr] { color: #d33682 } /* Keyword.Reserved */
+    c-[ld] { color: #657b83 } /* Literal.Date */
+    c-[nc] { color: #268bd2 } /* Name.Class */
+    c-[no] { color: #268bd2 } /* Name.Constant */
+    c-[nd] { color: #268bd2 } /* Name.Decorator */
+    c-[ni] { color: #268bd2 } /* Name.Entity */
+    c-[ne] { color: #268bd2 } /* Name.Exception */
+    c-[nf] { color: #268bd2 } /* Name.Function */
+    c-[nl] { color: #268bd2 } /* Name.Label */
+    c-[nn] { color: #268bd2 } /* Name.Namespace */
+    c-[py] { color: #268bd2 } /* Name.Property */
+    c-[ow] { color: #657b83 } /* Operator.Word */
+    c-[mb] { color: #657b83 } /* Literal.Number.Bin */
+    c-[mf] { color: #657b83 } /* Literal.Number.Float */
+    c-[mh] { color: #657b83 } /* Literal.Number.Hex */
+    c-[mi] { color: #657b83 } /* Literal.Number.Integer */
+    c-[mo] { color: #657b83 } /* Literal.Number.Oct */
+    c-[sa] { color: #6c71c4 } /* Literal.String.Affix */
+    c-[sb] { color: #6c71c4 } /* Literal.String.Backtick */
+    c-[sc] { color: #6c71c4 } /* Literal.String.Char */
+    c-[dl] { color: #6c71c4 } /* Literal.String.Delimiter */
+    c-[sd] { color: #6c71c4 } /* Literal.String.Doc */
+    c-[se] { color: #6c71c4 } /* Literal.String.Escape */
+    c-[sh] { color: #6c71c4 } /* Literal.String.Heredoc */
+    c-[si] { color: #6c71c4 } /* Literal.String.Interpol */
+    c-[sx] { color: #6c71c4 } /* Literal.String.Other */
+    c-[sr] { color: #6c71c4 } /* Literal.String.Regex */
+    c-[ss] { color: #6c71c4 } /* Literal.String.Symbol */
+    c-[fm] { color: #268bd2 } /* Name.Function.Magic */
+    c-[vc] { color: #cb4b16 } /* Name.Variable.Class */
+    c-[vg] { color: #cb4b16 } /* Name.Variable.Global */
+    c-[vi] { color: #cb4b16 } /* Name.Variable.Instance */
+    c-[vm] { color: #cb4b16 } /* Name.Variable.Magic */
+    c-[il] { color: #657b83 } /* Literal.Number.Integer.Long */
+}
+
+@media print {
+    /* Darken colors for print that would otherwise print too faintly */
+    c-[c]  { color: #555555 } /* Comment */
+    c-[d]  { color: #555555 } /* Comment.Multiline */
+    c-[cp] { color: #555555 } /* Comment.Preproc */
+    c-[c1] { color: #555555 } /* Comment.Single */
+    c-[cs] { color: #555555 } /* Comment.Special */
+    c-[o]  { color: #222222 } /* Operator */
+    c-[p]  { color: #222222 } /* Punctuation */
+    c-[ow] { color: #222222 } /* Operator.Word */
+    c-[s]  { color: #664400 } /* Literal.String */
+    c-[t]  { color: #664400 } /* Literal.String.Single */
+    c-[u]  { color: #664400 } /* Literal.String.Double */
+    c-[sb] { color: #664400 } /* Literal.String.Backtick */
+    c-[sc] { color: #664400 } /* Literal.String.Char */
+    c-[sd] { color: #664400 } /* Literal.String.Doc */
+    c-[se] { color: #664400 } /* Literal.String.Escape */
+    c-[sh] { color: #664400 } /* Literal.String.Heredoc */
+    c-[si] { color: #664400 } /* Literal.String.Interpol */
+    c-[sx] { color: #664400 } /* Literal.String.Other */
+    c-[sr] { color: #664400 } /* Literal.String.Regex */
+    c-[ss] { color: #664400 } /* Literal.String.Symbol */
+}
+</style>
+ </head>
 <body class="chapter-render">
-
-<h1>Chapter 3: Rendering Model</h1><nav id="toc"><div class="header {{side}}"><a href="./">Overview</a> · <a href="conform.html">Previous</a> · <a href="types.html">Next</a> · <a href="eltindex.html">Elements</a> · <a href="attindex.html">Attributes</a> · <a href="propidx.html">Properties</a></div><h2 id="Contents" class="contents">Contents</h2><ol class="toc"><li><ol class="toc"><li><a href="render.html#Introduction"><span class="secno">3.1.</span> Introduction</a></li><li><a href="render.html#RenderingTree"><span class="secno">3.2.</span> The rendering tree</a><ol class="toc"><li><a href="render.html#Definitions"><span class="secno">3.2.1.</span> Definitions</a></li><li><a href="render.html#Rendered-vs-NonRendered"><span class="secno">3.2.2.</span> Rendered versus non-rendered elements</a></li><li><a href="render.html#VisibilityControl"><span class="secno">3.2.3.</span> Controlling visibility: the effect of the ‘<span class="property">display</span>’ and ‘<span class="property">visibility</span>’
+<h1><span class="bs-old-id" id="chapter-render"></span>Chapter 3: Rendering Model</h1><nav id="toc"><div class="header"><a href="./">Overview</a> · <a href="conform.html">Previous</a> · <a href="types.html">Next</a> · <a href="eltindex.html">Elements</a> · <a href="attindex.html">Attributes</a> · <a href="propidx.html">Properties</a></div><h2 id="Contents" class="contents">Contents</h2><ol class="toc"><li><ol class="toc"><li><a href="render.html#Introduction"><span class="secno">3.1.</span> Introduction</a></li><li><a href="render.html#RenderingTree"><span class="secno">3.2.</span> The rendering tree</a><ol class="toc"><li><a href="render.html#Definitions"><span class="secno">3.2.1.</span> Definitions</a></li><li><a href="render.html#Rendered-vs-NonRendered"><span class="secno">3.2.2.</span> Rendered versus non-rendered elements</a></li><li><a href="render.html#VisibilityControl"><span class="secno">3.2.3.</span> Controlling visibility: the effect of the ‘<span class="property">display</span>’ and ‘<span class="property">visibility</span>’
 properties</a></li><li><a href="render.html#ReusedGraphics"><span class="secno">3.2.4.</span> Re-used graphics</a></li></ol></li><li><a href="render.html#PaintersModel"><span class="secno">3.3.</span> The painters model</a></li><li><a href="render.html#RenderingOrder"><span class="secno">3.4.</span> Rendering order</a><ol class="toc"><li><a href="render.html#EstablishingStackingContex"><span class="secno">3.4.1.</span> Establishing a stacking context in SVG</a></li></ol></li><li><a href="render.html#Elements"><span class="secno">3.5.</span> How elements are rendered</a></li><li><a href="render.html#Grouping"><span class="secno">3.6.</span> How groups are rendered</a><ol class="toc"><li><a href="render.html#ObjectAndGroupOpacityProperties"><span class="secno">3.6.1.</span> Object and group opacity: the
 effect of the ‘<span class="property">opacity</span>’ property</a></li></ol></li><li><a href="render.html#TypesOfGraphicsElements"><span class="secno">3.7.</span> Types of graphics elements</a><ol class="toc"><li><a href="render.html#PaintingShapesAndText"><span class="secno">3.7.1.</span> Painting shapes and text</a></li><li><a href="render.html#PaintingRasterImages"><span class="secno">3.7.2.</span> Painting raster images</a></li></ol></li><li><a href="render.html#FilteringPaintRegions"><span class="secno">3.8.</span> Filtering painted regions</a></li><li><a href="render.html#ClippingAndMasking"><span class="secno">3.9.</span> Clipping and masking</a></li><li><a href="render.html#ParentCompositing"><span class="secno">3.10.</span> Parent compositing</a></li><li><a href="render.html#OverflowAndClipProperties"><span class="secno">3.11.</span> The effect of the ‘<span class="property">overflow</span>’
 property</a></li></ol></li></ol></nav>
+<main>
 
-<div class="annotation">
-  <p>
+   <div class="annotation">
+    <p>
     The SVG 2 rendering model will follow the rules defined by the <a href="https://www.w3.org/TR/compositing/">Compositing and Blending specification</a>.
   </p>
-  <p>
+    <p>
     Resolution: <a href="https://www.w3.org/2012/07/24-svg-minutes.html#item09">Seattle/Paris 2012 F2F day 3</a>.
   </p>
-  <p>
+    <p>
     Owner: Nikos (Action 3332).
   </p>
-  <p>
+    <p>
     Status: Done.
   </p>
-</div>
-
-<h2 id="Introduction" class="heading">3.1. Introduction<a class="self-link" href="#Introduction"></a></h2>
-<p>
+   </div>
+   <h2 class="heading settled" data-level="3.1" data-multipage-id="Introduction" id="Introduction"><span class="bs-old-id" id="render-Introduction"></span><span class="secno">3.1. </span><span class="content">Introduction</span><a class="self-link" href="#Introduction"></a></h2>
+   <p>
 Implementations of SVG must implement the rendering model as described in this
 chapter, as modified in the appendix on <a href="conform.html">conformance
 requirements</a> which describes
@@ -54,8 +762,7 @@ limitations in implementing a precise mathematical model (e.g. for realistic
 performance curves are approximated by straight lines, the approximation need
 only be sufficiently precise to match the conformance requirements).
 </p>
-
-<p>The appendix on <a href="conform.html">conformance
+   <p>The appendix on <a href="conform.html">conformance
 requirements</a> describes the extent to which an actual
 implementation may deviate from this description. In practice
 an actual implementation <span class="ready-for-wider-review">may</span>
@@ -66,20 +773,16 @@ in implementing a precise mathematical model (e.g. for
 realistic performance curves are approximated by straight
 lines, the approximation need only be sufficiently precise to
 match the conformance requirements).</p>
-
-
-<div class="ready-for-wider-review">
-<h2 id="RenderingTree" class="heading">3.2. The rendering tree<a class="self-link" href="#RenderingTree"></a></h2>
-
-<p> The components of the final rendered representation of an SVG document
+   <div class="ready-for-wider-review">
+    <h2 class="heading settled" data-level="3.2" id="RenderingTree"><span class="secno">3.2. </span><span class="bs-old-id" id="render-RenderingTree"></span><span class="content">The rendering tree</span><a class="self-link" href="#RenderingTree"></a></h2>
+    <p> The components of the final rendered representation of an SVG document
     do not have a one-to-one relationship with the underlying
     elements in the document model.
     The appearance of the graphic instead reflects a parallel structure,
     the rendering tree,
     in which some elements are excluded and others are repeated.
 </p>
-
-<p> Many elements in the SVG namespace do not directly represent
+    <p> Many elements in the SVG namespace do not directly represent
     a component of the graphical document.
     Instead, they define graphical effects, metadata,
     content to be used to represent other elements,
@@ -87,285 +790,250 @@ match the conformance requirements).</p>
     In dynamic documents, certain components of the graphic
     may be rendered or not, depending on interaction or animation.
     These non-rendered elements are not directly included
-    in the <a href="render.html#RenderingTree">rendering tree</a>.
+    in the <a href="#RenderingTree">rendering tree</a>.
 </p>
-<p>
+    <p>
     Because SVG supports the reuse of graphical sub-components,
     some elements are rendered multiple times.
     The individual renderings may have context-dependent styling
     and may be rasterized at different scales or transformations.
 </p>
-
-<h3 id="Definitions" class="heading">3.2.1. Definitions<a class="self-link" href="#Definitions"></a></h3>
-
-<dl class="definitions">
-    <dt><dfn id="TermRenderingTree" data-dfn-type="dfn" data-export="">rendering tree</dfn></dt>
-    <dd>
-    <p>
+    <h3 class="heading settled" data-level="3.2.1" data-multipage-id="Definitions" id="Definitions"><span class="bs-old-id" id="render-Definitions"></span><span class="secno">3.2.1. </span><span class="content">Definitions</span><a class="self-link" href="#Definitions"></a></h3>
+    <dl class="definitions">
+     <dt><dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="TermRenderingTree"><span class="bs-old-id" id="render-TermRenderingTree"></span>rendering tree</dfn>
+     <dd>
+      <p>
         The rendering tree is the set of elements being rendered
-        in an <a href="struct.html#TermSVGDocumentFragment">SVG document fragment</a>.
+        in an <a data-link-type="dfn" href="struct.html#TermSVGDocumentFragment" id="ref-for-TermSVGDocumentFragment②">SVG document fragment</a>.
         It is generated from the document tree
-        by excluding <a href="render.html#TermNonRenderedElement">non-rendered elements</a>
-        and inserting additional fragments for <a href="render.html#TermReusedGraphics">re-used graphics</a>.
+        by excluding <a data-link-type="dfn" href="#TermNonRenderedElement" id="ref-for-TermNonRenderedElement">non-rendered elements</a>
+        and inserting additional fragments for <a data-link-type="dfn" href="#TermReusedGraphics" id="ref-for-TermReusedGraphics">re-used graphics</a>.
         Graphics are painted and composited in rendering-tree order,
         subject to re-ordering based on the
-        <a class="property" href="painting.html#PaintOrderProperty">paint-order</a> property.
+        <a class="css property" data-link-type="property" href="painting.html#PaintOrderProperty" id="ref-for-PaintOrderProperty">paint-order</a> property.
         Note that elements that have no visual paint may still be in the rendering tree.
     </p>
-  </dd>
-  <dt><dfn id="TermRenderedElement" data-dfn-type="dfn" data-export="">rendered element</dfn></dt>
-  <dd>
-    <p>
+     <dt><dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="TermRenderedElement"><span class="bs-old-id" id="render-TermRenderedElement"></span>rendered element</dfn>
+     <dd>
+      <p>
         An element that has a direct representation in the
-        <a href="render.html#RenderingTree">rendering tree</a> for the current document.
-        Includes a rendered <a href="struct.html#TermElementInstance">instance</a> of an element in a <a href="struct.html#TermUseElementShadowTree">use-element shadow tree</a>.
+        <a href="#RenderingTree">rendering tree</a> for the current document.
+        Includes a rendered <a data-link-type="dfn" href="struct.html#TermElementInstance" id="ref-for-TermElementInstance①">instance</a> of an element in a <a data-link-type="dfn" href="struct.html#TermUseElementShadowTree" id="ref-for-TermUseElementShadowTree">use-element shadow tree</a>.
         Does not include elements that affect rendering
         as the source definition of re-used graphics
         but are not directly rendered themselves.
         See <a href="#Rendered-vs-NonRendered">Rendered versus non-rendered elements</a>
     </p>
-  </dd>
-  <dt><dfn id="TermNonRenderedElement" data-dfn-type="dfn" data-export="">non-rendered element</dfn></dt>
-  <dd>
-    <p>
+     <dt><dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="TermNonRenderedElement"><span class="bs-old-id" id="render-TermNonRenderedElement"></span>non-rendered element</dfn>
+     <dd>
+      <p>
         An element that does not have a direct representation in the
-        <a href="render.html#RenderingTree">rendering tree</a> for the current document.
+        <a href="#RenderingTree">rendering tree</a> for the current document.
         It may nonetheless affect the rendering tree as re-used graphics
         or graphical effects.
         See <a href="#Rendered-vs-NonRendered">Rendered versus non-rendered elements</a>.
     </p>
-  </dd>
-  <dt><dfn id="TermReusedGraphics" data-dfn-type="dfn" data-export="">re-used graphics</dfn></dt>
-  <dd>
-    <p>
+     <dt><dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="TermReusedGraphics"><span class="bs-old-id" id="render-TermReusedGraphics"></span>re-used graphics</dfn>
+     <dd>
+      <p>
         Graphical components that are included in the rendering tree
         but do not have a single direct equivalent element
         in the document model.
         They may be represented through shadow DOM elements
-        (as in graphics re-used with a <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> element),
+        (as in graphics re-used with a <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-use" id="ref-for-elementdef-use③">use</a></code>’</span> element),
         or as image fragments generated as part of a graphical effect
         (as in patterns or masks).
     </p>
-  </dd>
-
-  <dt><dfn id="TermNeverRenderedElement" data-dfn-type="dfn" data-export="">never-rendered element</dfn></dt>
-  <dd>
+     <dt><dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="TermNeverRenderedElement"><span class="bs-old-id" id="render-TermNeverRenderedElement"></span>never-rendered element</dfn>
+     <dd>
       <p>
           Any element type that is <em>never directly rendered</em>,
-          regardless of context or <a class="property" href="render.html#VisibilityControl">display</a> style value.
+          regardless of context or <a class="property" href="#VisibilityControl">display</a> style value.
           It includes the following elements:
-          <span class="element-name">‘<a href="https://drafts.csswg.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a>’</span>, <span class="element-name">‘<a href="struct.html#DefsElement"><span>defs</span></a>’</span>, <span class="element-name">‘<a href="struct.html#DescElement"><span>desc</span></a>’</span>, <span class="element-name">‘<a href="pservers.html#LinearGradientElement"><span>linearGradient</span></a>’</span>, <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span>, <span class="element-name">‘<a href="https://drafts.csswg.org/css-masking-1/#MaskElement"><span>mask</span></a>’</span>, <span class="element-name">‘<a href="struct.html#MetadataElement"><span>metadata</span></a>’</span>, <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span>, <span class="element-name">‘<a href="pservers.html#RadialGradientElement"><span>radialGradient</span></a>’</span>, <span class="element-name">‘<a href="interact.html#ScriptElement"><span>script</span></a>’</span>, <span class="element-name">‘<a href="styling.html#StyleElement"><span>style</span></a>’</span> and <span class="element-name">‘<a href="struct.html#TitleElement"><span>title</span></a>’</span>;
-          it also includes a <span class="element-name">‘<a href="struct.html#SymbolElement"><span>symbol</span></a>’</span> element that is not
-          the <a href="struct.html#TermInstanceRoot">instance root</a> of a <a href="struct.html#TermUseElementShadowTree">use-element shadow tree</a>.
+          <span class="element-name">‘<a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#ClipPathElement">clipPath</a>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-defs" id="ref-for-elementdef-defs">defs</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-desc" id="ref-for-elementdef-desc①">desc</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="pservers.html#elementdef-linearGradient" id="ref-for-elementdef-linearGradient">linearGradient</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="painting.html#elementdef-marker" id="ref-for-elementdef-marker">marker</a></code>’</span>, <span class="element-name">‘<a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#MaskElement">mask</a>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-metadata" id="ref-for-elementdef-metadata">metadata</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="pservers.html#elementdef-pattern" id="ref-for-elementdef-pattern">pattern</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="pservers.html#elementdef-radialGradient" id="ref-for-elementdef-radialGradient">radialGradient</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="interact.html#elementdef-script" id="ref-for-elementdef-script②">script</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="styling.html#elementdef-style" id="ref-for-elementdef-style">style</a></code>’</span> and <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-title" id="ref-for-elementdef-title①">title</a></code>’</span>;
+          it also includes a <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-symbol" id="ref-for-elementdef-symbol">symbol</a></code>’</span> element that is not
+          the <a data-link-type="dfn" href="struct.html#TermInstanceRoot" id="ref-for-TermInstanceRoot">instance root</a> of a <a data-link-type="dfn" href="struct.html#TermUseElementShadowTree" id="ref-for-TermUseElementShadowTree①">use-element shadow tree</a>.
       </p>
-  </dd>
-  <dt><dfn id="TermRenderableElement" data-dfn-type="dfn" data-export="">renderable element</dfn></dt>
-  <dd>
-    <p>
+     <dt><dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="TermRenderableElement"><span class="bs-old-id" id="render-TermRenderableElement"></span>renderable element</dfn>
+     <dd>
+      <p>
         Any element type that <em>can</em> have a direct representation
-        in the <a href="render.html#RenderingTree">rendering tree</a>,
+        in the <a href="#RenderingTree">rendering tree</a>,
         as a graphic, container, text, audio, or animation.
         It includes the following elements:
-        <span class="element-name">‘<a href="linking.html#AElement"><span>a</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#CircleElement"><span>circle</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#EllipseElement"><span>ellipse</span></a>’</span>, <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span>, <span class="element-name">‘<a href="struct.html#GElement"><span>g</span></a>’</span>, <span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#LineElement"><span>line</span></a>’</span>, <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#PolygonElement"><span>polygon</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#PolylineElement"><span>polyline</span></a>’</span>, <span class="element-name">‘<a href="shapes.html#RectElement"><span>rect</span></a>’</span>, <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span>, <span class="element-name">‘<a href="struct.html#SwitchElement"><span>switch</span></a>’</span>, <span class="element-name">‘<a href="text.html#TextElement"><span>text</span></a>’</span>, <span class="element-name">‘<a href="text.html#TextPathElement"><span>textPath</span></a>’</span>, <span class="element-name">‘<a href="text.html#TextElement"><span>tspan</span></a>’</span> and <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span>;
-        it also includes a <span class="element-name">‘<a href="struct.html#SymbolElement"><span>symbol</span></a>’</span> element that <em>is</em>
-        the <a href="struct.html#TermInstanceRoot">instance root</a> of a <a href="struct.html#TermUseElementShadowTree">use-element shadow tree</a>.
+        <span class="element-name">‘<code><a data-link-type="element" href="linking.html#elementdef-a" id="ref-for-elementdef-a">a</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="shapes.html#elementdef-circle" id="ref-for-elementdef-circle">circle</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="shapes.html#elementdef-ellipse" id="ref-for-elementdef-ellipse">ellipse</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="embedded.html#elementdef-foreignObject" id="ref-for-elementdef-foreignObject③">foreignObject</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-g" id="ref-for-elementdef-g">g</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="embedded.html#elementdef-image" id="ref-for-elementdef-image③">image</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="shapes.html#elementdef-line" id="ref-for-elementdef-line">line</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="paths.html#elementdef-path" id="ref-for-elementdef-path">path</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="shapes.html#elementdef-polygon" id="ref-for-elementdef-polygon">polygon</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="shapes.html#elementdef-polyline" id="ref-for-elementdef-polyline">polyline</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="shapes.html#elementdef-rect" id="ref-for-elementdef-rect">rect</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-svg" id="ref-for-elementdef-svg④">svg</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-switch" id="ref-for-elementdef-switch①">switch</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="text.html#elementdef-text" id="ref-for-elementdef-text">text</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="text.html#elementdef-textPath" id="ref-for-elementdef-textPath">textPath</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="text.html#elementdef-tspan" id="ref-for-elementdef-tspan">tspan</a></code>’</span> and <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-use" id="ref-for-elementdef-use④">use</a></code>’</span>;
+        it also includes a <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-symbol" id="ref-for-elementdef-symbol①">symbol</a></code>’</span> element that <em>is</em>
+        the <a data-link-type="dfn" href="struct.html#TermInstanceRoot" id="ref-for-TermInstanceRoot①">instance root</a> of a <a data-link-type="dfn" href="struct.html#TermUseElementShadowTree" id="ref-for-TermUseElementShadowTree②">use-element shadow tree</a>.
     </p>
-    <p> A renderable element may or may not be rendered
+      <p> A renderable element may or may not be rendered
         in a given document or point in time.
     </p>
-  </dd>
-
-</dl>
-
-<h3 id="Rendered-vs-NonRendered" class="heading">3.2.2. Rendered versus non-rendered elements<a class="self-link" href="#Rendered-vs-NonRendered"></a></h3>
-
-<p> At any given time, every SVG element
-    (or <a href="struct.html#TermElementInstance">element instance</a> in a <a href="struct.html#TermUseElementShadowTree">use-element shadow tree</a>)
+    </dl>
+    <h3 class="heading settled" data-level="3.2.2" id="Rendered-vs-NonRendered"><span class="secno">3.2.2. </span><span class="bs-old-id" id="render-Rendered-vs-NonRendered"></span><span class="content">Rendered versus non-rendered elements</span><a class="self-link" href="#Rendered-vs-NonRendered"></a></h3>
+    <p> At any given time, every SVG element
+    (or <a data-link-type="dfn" href="struct.html#TermElementInstance" id="ref-for-TermElementInstance②">element instance</a> in a <a data-link-type="dfn" href="struct.html#TermUseElementShadowTree" id="ref-for-TermUseElementShadowTree③">use-element shadow tree</a>)
     is either rendered or non-rendered.
     Whether an element is currently rendered or not affects
     not only its visual display but also interactivity
     and geometric calculations.
 </p>
-
-<p>
+    <p>
     An element is <em>not rendered</em> in any of these five situations:
 </p>
-<ul>
-    <li><a href="render.html#TermNeverRenderedElement">never-rendered element</a> types</li>
-    <li>elements excluded because of <a href="struct.html#TermConditionalProcessingAttribute">conditional processing attributes</a>
-        or <span class="element-name">‘<a href="struct.html#SwitchElement"><span>switch</span></a>’</span> structures
-    </li>
-    <li>elements with a computed style value of <code>none</code>
-        for the <a class="property" href="render.html#VisibilityControl">display</a> property
-    </li>
-    <li>detached from the DOM tree</li>
-    <li>descendent elements of other non-rendered elements
-    </li>
-</ul>
-
-<p> Non-rendered elements:
+    <ul>
+     <li><a data-link-type="dfn" href="#TermNeverRenderedElement" id="ref-for-TermNeverRenderedElement">never-rendered element</a> types
+     <li>elements excluded because of <a data-link-type="dfn" href="struct.html#TermConditionalProcessingAttribute" id="ref-for-TermConditionalProcessingAttribute">conditional processing attributes</a>
+        or <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-switch" id="ref-for-elementdef-switch②">switch</a></code>’</span> structures
+    
+     <li>elements with a computed style value of <code>none</code>
+        for the <a class="property" href="#VisibilityControl">display</a> property
+    
+     <li>detached from the DOM tree
+     <li>descendent elements of other non-rendered elements
+    
+    </ul>
+    <p> Non-rendered elements:
 </p>
-<ul>
-  <li>have no visual effect on the graphic,
+    <ul>
+     <li>have no visual effect on the graphic,
       except when they are used in the rendering of another element
-      that references them.</li>
-
-  <li>do not contribute to the net geometry of
+      that references them.
+     <li>do not contribute to the net geometry of
       <a href="https://drafts.csswg.org/css-masking-1/#clipping-path">clipping paths</a> or <a href="https://drafts.csswg.org/css-masking-1/#masking">masks</a>
       when they are descendants of a
-      <span class="element-name">‘<a href="https://drafts.csswg.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a>’</span> or <span class="element-name">‘<a href="https://drafts.csswg.org/css-masking-1/#MaskElement"><span>mask</span></a>’</span> </li>
-
-  <li>are not sensitive to <a href="interact.html#UIEvents">pointer events</a></li>
-
-  <li>cannot receive <a href="interact.html#Focus">focus</a></li>
-
-  <li>do not contribute to <a href="coords.html#ObjectBoundingBox">bounding box
-  calculations</a></li>
-
-  <li>are not considered when performing <a href="text.html#TextLayout">text layout</a></li>
-</ul>
-
-<p> Non-rendered elements are not represented in the document accessibility tree.
+      <span class="element-name">‘<a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#ClipPathElement">clipPath</a>’</span> or <span class="element-name">‘<a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#MaskElement">mask</a>’</span> 
+     <li>are not sensitive to <a href="interact.html#UIEvents">pointer events</a>
+     <li>cannot receive <a href="interact.html#Focus">focus</a>
+     <li>do not contribute to <a href="coords.html#ObjectBoundingBox">bounding box
+  calculations</a>
+     <li>are not considered when performing <a href="text.html#TextLayout">text layout</a>
+    </ul>
+    <p> Non-rendered elements are not represented in the document accessibility tree.
     Nonetheless, they remain part of the document model, and
     participate in <a href="styling.html">style inheritance and cascade</a>.
 </p>
-
-
-<h3 id="VisibilityControl" class="heading">3.2.3. Controlling visibility: the effect of the ‘<span class="property">display</span>’ and ‘<span class="property">visibility</span>’
-properties<a class="self-link" href="#VisibilityControl"></a></h3>
-
-<p>
+    <h3 class="heading settled" data-level="3.2.3" id="VisibilityControl"><span class="secno">3.2.3. </span><span class="bs-old-id" id="render-VisibilityControl"></span><span class="content">Controlling visibility: the effect of the ‘<span class="property">display</span>’ and ‘<span class="property">visibility</span>’
+properties</span><a class="self-link" href="#VisibilityControl"></a></h3>
+    <p>
     SVG uses two properties to toggle the visible display of
     elements that are normally rendered:
-    <a class="property" href="render.html#VisibilityControl">display</a> and <a class="property" href="render.html#VisibilityControl">visibility</a>.
+    <a class="property" href="#VisibilityControl">display</a> and <a class="property" href="#VisibilityControl">visibility</a>.
     Although they have a similar visible effect in static documents,
     they are conceptually distinct.
 </p>
-
-<p class="note">See the CSS 2.1 specification for the definitions
-of <a class="property" href="render.html#VisibilityControl">display</a> and <a class="property" href="render.html#VisibilityControl">visibility</a>.
+    <p class="note" role="note">See the CSS 2.1 specification for the definitions
+of <a class="property" href="#VisibilityControl">display</a> and <a class="property" href="#VisibilityControl">visibility</a>.
 [<a href="refs.html#ref-css2">CSS2</a>]</p>
-
-<p>
-    Setting  <a class="property" href="render.html#VisibilityControl">display</a> to <span class="prop-value">none</span>
+    <p>
+    Setting  <a class="property" href="#VisibilityControl">display</a> to <span class="prop-value">none</span>
     results in the element not being rendered.
     When applied to
     <a href="struct.html#TermGraphicsElement">graphics elements</a>,
-    <a href="text.html#TermTextContentElement">text content elements</a>,
+    <a data-link-type="dfn" href="text.html#TermTextContentElement" id="ref-for-TermTextContentElement">text content elements</a>,
     and <a href="struct.html#TermContainerElement">container elements</a> that are normally rendered,
-    setting <a class="property" href="render.html#VisibilityControl">display</a> to <span class="prop-value">none</span>
+    setting <a class="property" href="#VisibilityControl">display</a> to <span class="prop-value">none</span>
     results in the element (and all its descendents)
-    not becoming part of the <a href="render.html#RenderingTree">rendering tree</a>.
-    Note that <a class="property" href="render.html#VisibilityControl">display</a> is not an inherited property.
+    not becoming part of the <a href="#RenderingTree">rendering tree</a>.
+    Note that <a class="property" href="#VisibilityControl">display</a> is not an inherited property.
 </p>
-<p>
-    Elements that have any other <a class="property" href="render.html#VisibilityControl">display</a> value than
+    <p>
+    Elements that have any other <a class="property" href="#VisibilityControl">display</a> value than
 <span class="prop-value">none</span> are rendered as normal.
 </p>
-<p>
-    The <a class="property" href="render.html#VisibilityControl">display</a> property only applies to <a href="render.html#TermRenderableElement">renderable elements</a>.
+    <p>
+    The <a class="property" href="#VisibilityControl">display</a> property only applies to <a data-link-type="dfn" href="#TermRenderableElement" id="ref-for-TermRenderableElement">renderable elements</a>.
     Setting <code>display: none</code> on an element
-    that is <a href="render.html#TermNeverRenderedElement">never directly rendered</a>
-    or <a href="render.html#Rendered-vs-NonRendered">not rendered</a> based on conditional processing
+    that is <a data-link-type="dfn" href="#TermNeverRenderedElement" id="ref-for-TermNeverRenderedElement①">never directly rendered</a>
+    or <a href="#Rendered-vs-NonRendered">not rendered</a> based on conditional processing
     has no effect.
 </p>
-
-<p>
-    The <a class="property" href="render.html#VisibilityControl">display</a> property affects the direct processing
+    <p>
+    The <a class="property" href="#VisibilityControl">display</a> property affects the direct processing
     of a given element, but it does not prevent it from
     being referenced by other elements.
     For example, setting
-    <span class="prop-value">display: none</span> on a <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> element
+    <span class="prop-value">display: none</span> on a <span class="element-name">‘<code><a data-link-type="element" href="paths.html#elementdef-path" id="ref-for-elementdef-path①">path</a></code>’</span> element
     will prevent that element from getting rendered directly onto the
-    canvas, but the <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span> element can still be referenced by a
-    <span class="element-name">‘<a href="text.html#TextPathElement"><span>textPath</span></a>’</span> element and its geometry will be used
+    canvas, but the <span class="element-name">‘<code><a data-link-type="element" href="paths.html#elementdef-path" id="ref-for-elementdef-path②">path</a></code>’</span> element can still be referenced by a
+    <span class="element-name">‘<code><a data-link-type="element" href="text.html#elementdef-textPath" id="ref-for-elementdef-textPath①">textPath</a></code>’</span> element and its geometry will be used
     in text-on-a-path processing.
 </p>
-
-<p>
-    When applied to a <a href="struct.html#TermGraphicsElement">graphics element</a> or <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> element,
-    setting <a class="property" href="render.html#VisibilityControl">visibility</a> to <span class="prop-value">hidden</span>
+    <p>
+    When applied to a <a href="struct.html#TermGraphicsElement">graphics element</a> or <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-use" id="ref-for-elementdef-use⑤">use</a></code>’</span> element,
+    setting <a class="property" href="#VisibilityControl">visibility</a> to <span class="prop-value">hidden</span>
     or <span class="prop-value">collapse</span>
     results in the element not being painted.
-    It is, however, still part of the <a href="render.html#RenderingTree">rendering tree</a>.
+    It is, however, still part of the <a href="#RenderingTree">rendering tree</a>.
     It may be sensitive to pointer events
-    (depending on the value of <a class="property" href="interact.html#PointerEventsProperty">pointer-events</a>),
-    may receive focus (depending on the value of <span class="attr-name">‘<a href="struct.html#SVGElementTabindexAttribute"><span>tabindex</span></a>’</span>),
+    (depending on the value of <a class="css property" data-link-type="property" href="interact.html#PointerEventsProperty" id="ref-for-PointerEventsProperty">pointer-events</a>),
+    may receive focus (depending on the value of <span class="attr-name">‘<code><a data-link-type="element-sub" href="struct.html#SVGElementTabindexAttribute" id="ref-for-SVGElementTabindexAttribute">tabindex</a></code>’</span>),
     contributes to bounding box calculations and clipping paths,
     and does affect text layout.
 </p>
-
-<p>
-    The <a class="property" href="render.html#VisibilityControl">visibility</a> property only directly affects the rendering of
-    <a href="struct.html#TermGraphicsElement">graphics elements</a>, <a href="text.html#TermTextContentElement">text content elements</a>, and the
-    <span class="element-name">‘<a href="linking.html#AElement"><span>a</span></a>’</span> element when it is a child of <a href="text.html#TermTextContentElement">text content element</a>.
-    Since <a class="property" href="render.html#VisibilityControl">visibility</a> is an inherited property, however,
-    although it has no effect on a <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> element or <a href="struct.html#TermContainerElement">container element</a> itself,
+    <p>
+    The <a class="property" href="#VisibilityControl">visibility</a> property only directly affects the rendering of
+    <a href="struct.html#TermGraphicsElement">graphics elements</a>, <a data-link-type="dfn" href="text.html#TermTextContentElement" id="ref-for-TermTextContentElement①">text content elements</a>, and the
+    <span class="element-name">‘<code><a data-link-type="element" href="linking.html#elementdef-a" id="ref-for-elementdef-a①">a</a></code>’</span> element when it is a child of <a data-link-type="dfn" href="text.html#TermTextContentElement" id="ref-for-TermTextContentElement②">text content element</a>.
+    Since <a class="property" href="#VisibilityControl">visibility</a> is an inherited property, however,
+    although it has no effect on a <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-use" id="ref-for-elementdef-use⑥">use</a></code>’</span> element or <a href="struct.html#TermContainerElement">container element</a> itself,
     its inherited value can affect descendant elements.
 </p>
-
-<h3 id="ReusedGraphics" class="heading">3.2.4. Re-used graphics<a class="self-link" href="#ReusedGraphics"></a></h3>
-
-<p> Graphical content defined in one part of the document
+    <h3 class="heading settled" data-level="3.2.4" id="ReusedGraphics"><span class="secno">3.2.4. </span><span class="bs-old-id" id="render-ReusedGraphics"></span><span class="content">Re-used graphics</span><a class="self-link" href="#ReusedGraphics"></a></h3>
+    <p> Graphical content defined in one part of the document
     (or in another document)
     may be used to render other elements.
     There are two types of re-used graphics from a rendering perspective:
 </p>
-<ul>
-  <li>
+    <ul>
+     <li>
     shadow DOM elements,
-    such as those generated by <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> elements
+    such as those generated by <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-use" id="ref-for-elementdef-use⑦">use</a></code>’</span> elements
     or by cross-references between paint servers;
-  </li>
-  <li>
+  
+     <li>
     content re-used as part of a graphical effect on another element,
     including the child content of
-    <a href="painting.html#Markers">markers</a>, <a href="painting.html#TermPaintServerElement">paint server elements</a>,
-    <span class="element-name">‘<a href="https://drafts.csswg.org/css-masking-1/#ClipPathElement"><span>clipPath</span></a>’</span>, and <span class="element-name">‘<a href="https://drafts.csswg.org/css-masking-1/#MaskElement"><span>mask</span></a>’</span>.
-  </li>
-</ul>
-
-<p>
+    <a href="painting.html#Markers">markers</a>, <a data-link-type="dfn" href="painting.html#TermPaintServerElement" id="ref-for-TermPaintServerElement①">paint server elements</a>,
+    <span class="element-name">‘<a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#ClipPathElement">clipPath</a>’</span>, and <span class="element-name">‘<a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#MaskElement">mask</a>’</span>.
+  
+    </ul>
+    <p>
   Shadow DOM elements are rendered in the same way as normal elements,
-  as if the host element (e.g., the <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> element)
+  as if the host element (e.g., the <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-use" id="ref-for-elementdef-use⑧">use</a></code>’</span> element)
   was a container and the shadow content was its descendents.
   Style and geometry properties on the shadow DOM elements
   are resolved independently from those on their source element
-  in the <a href="struct.html#TermReferencedDocumentSubtree">referenced document subtree</a>.
-  The <a class="property" href="render.html#VisibilityControl">display</a> property has its normal effect on shadow elements,
-  except for special rules that apply to the <span class="element-name">‘<a href="struct.html#SymbolElement"><span>symbol</span></a>’</span> element.
+  in the <a data-link-type="dfn" href="struct.html#TermReferencedDocumentSubtree" id="ref-for-TermReferencedDocumentSubtree">referenced document subtree</a>.
+  The <a class="property" href="#VisibilityControl">display</a> property has its normal effect on shadow elements,
+  except for special rules that apply to the <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-symbol" id="ref-for-elementdef-symbol②">symbol</a></code>’</span> element.
 </p>
-<p>
-  For blending purposes, the <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> element forms a <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#isolatedgroups">non-isolated group</a>.
+    <p>
+  For blending purposes, the <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-use" id="ref-for-elementdef-use⑨">use</a></code>’</span> element forms a <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#isolatedgroups">non-isolated group</a>.
 </p>
-
-<p>
+    <p>
   In contrast,
   graphical effects elements generate a self-contained SVG fragment
-  which is rendered independently as a <a href="render.html#TermStackingContext">stacking context</a>
+  which is rendered independently as a <a data-link-type="dfn" href="#TermStackingContext" id="ref-for-TermStackingContext">stacking context</a>
   and an <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#isolatedgroups">isolated group</a>.
   The canvas for this fragment is scaled
 
-  The graphical effect element's child content
+  The graphical effect element’s child content
   is rendered and composited into this canvas.
   The flattened canvas as a whole is treated as a vector image
   when compositing and blending with other paint layers
 </p>
-<p>
-  The <a class="property" href="render.html#VisibilityControl">display</a> property on any child content of a graphical effects element
+    <p>
+  The <a class="property" href="#VisibilityControl">display</a> property on any child content of a graphical effects element
   has its normal effect when set to <code>none</code>,
   excluding that subtree from being used in rendering.
   However, the graphical effect is not altered
   by a value of <code>display: none</code>
   on the graphical effect element or an ancestor.
 </p>
-</div>
-
-<div class="ready-for-wider-review">
-
-<h2 id="PaintersModel" class="heading">3.3. The painters model<a class="self-link" href="#PaintersModel"></a></h2>
-
-<p>SVG uses a "painters model" of rendering. <a href="painting.html#TermPaint">Paint</a>
+   </div>
+   <div class="ready-for-wider-review">
+    <h2 class="heading settled" data-level="3.3" id="PaintersModel"><span class="secno">3.3. </span><span class="bs-old-id" id="render-PaintersModel"></span><span class="content">The painters model</span><a class="self-link" href="#PaintersModel"></a></h2>
+    <p>SVG uses a "painters model" of rendering. <a data-link-type="dfn" href="painting.html#TermPaint" id="ref-for-TermPaint">Paint</a>
 is applied in successive operations to the output device such
 that each operation paints onto some area of the output device,
 possibly obscuring paint that has previously been laid down.
@@ -378,169 +1046,136 @@ control how each painting operation interacts with the background.
 The rules governing these painting operations are outlined in the
 <a href="https://www.w3.org/TR/compositing/">Compositing and Blending Specification</a>.
 </p>
-
-<h2 id="RenderingOrder" class="heading">3.4. Rendering order<a class="self-link" href="#RenderingOrder"></a></h2>
-<p>Elements in SVG are positioned on the x and y axes of
-the <a href="coords.html#TermSVGViewport">SVG viewport</a>. When elements overlap, the order in which they
+    <h2 class="heading settled" data-level="3.4" id="RenderingOrder"><span class="secno">3.4. </span><span class="bs-old-id" id="render-RenderingOrder"></span><span class="content">Rendering order</span><a class="self-link" href="#RenderingOrder"></a></h2>
+    <p>Elements in SVG are positioned on the x and y axes of
+the <a data-link-type="dfn" href="coords.html#TermSVGViewport" id="ref-for-TermSVGViewport">SVG viewport</a>. When elements overlap, the order in which they
 are painted determines which one appears in front. This front-to-back
 ordering is known as the z-axis.</p>
-
-<p>By default, elements are painted in document order: an element that
+    <p>By default, elements are painted in document order: an element that
 appears later in the markup is painted on top of an element that appears
 earlier. Elements are grouped into
-<dfn id="TermStackingContext" data-dfn-type="dfn" data-export="">stacking contexts</dfn>,
+<dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="TermStackingContext"><span class="bs-old-id" id="render-TermStackingContext"></span>stacking contexts</dfn>,
 which collect a set of elements and paint them as a unit.</p>
-
-<p>Stacking contexts determine the order in which elements are painted
+    <p>Stacking contexts determine the order in which elements are painted
 on top of each other, and which element is highest when determining the
 target of a pointer event. They do not affect the position of elements in
 the DOM tree, nor their size or orientation — only the order in which they
 are painted.</p>
-
-<p>Each element belongs to one stacking context. Elements in a given stacking
+    <p>Each element belongs to one stacking context. Elements in a given stacking
 context must be stacked according to document order.</p>
-
-<p>Stacking contexts can contain further stacking contexts. A stacking context is
+    <p>Stacking contexts can contain further stacking contexts. A stacking context is
 atomic from the point of view of its parent stacking context: when the parent
 determines paint order, the child stacking context is treated as a single
 indivisible item. No element from outside can be painted between elements
 inside it.</p>
-</div>
-
-<p>With the exception of the <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span> element, the back to front
+   </div>
+   <p>With the exception of the <span class="element-name">‘<code><a data-link-type="element" href="embedded.html#elementdef-foreignObject" id="ref-for-elementdef-foreignObject④">foreignObject</a></code>’</span> element, the back to front
 stacking order for a stacking context created by an SVG element is:</p>
-
-<ol>
-  <li>the background and borders of the element forming the stacking
-  context, if any</li>
-
-  <li>descendants, in tree order</li>
-</ol>
-
-<p>Since the <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span> element creates a "fixed position containing block" in
+   <ol>
+    <li>the background and borders of the element forming the stacking
+  context, if any
+    <li>descendants, in tree order
+   </ol>
+   <p>Since the <span class="element-name">‘<code><a data-link-type="element" href="embedded.html#elementdef-foreignObject" id="ref-for-elementdef-foreignObject⑤">foreignObject</a></code>’</span> element creates a "fixed position containing block" in
 CSS terms, the normative rules for the stacking order of the stacking context
-created by <span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span> elements are the rules in Appendix E of CSS 2.1.</p>
-
-<h3 id="EstablishingStackingContex" class="heading">3.4.1. Establishing a stacking context in SVG<a class="self-link" href="#EstablishingStackingContex"></a></h3>
-<p>A new stacking context must be established at an SVG element for its descendants if
+created by <span class="element-name">‘<code><a data-link-type="element" href="embedded.html#elementdef-foreignObject" id="ref-for-elementdef-foreignObject⑥">foreignObject</a></code>’</span> elements are the rules in Appendix E of CSS 2.1.</p>
+   <h3 class="heading settled" data-level="3.4.1" id="EstablishingStackingContex"><span class="secno">3.4.1. </span><span class="bs-old-id" id="render-EstablishingStackingContex"></span><span class="content">Establishing a stacking context in SVG</span><a class="self-link" href="#EstablishingStackingContex"></a></h3>
+   <p>A new stacking context must be established at an SVG element for its descendants if
 any of the following conditions are met. For the property-based conditions, the
 property must apply to the element and have the given computed value.</p>
-
-<table class="data">
-  <thead>
-    <tr>
-      <th scope="col">Condition</th>
-      <th scope="col">Value condition</th>
-      <th scope="col">Note</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>The <a href="https://dom.spec.whatwg.org/#document-element">document element</a></td>
-      <td>always</td>
-      <td>Only when it is an <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span> element, as in a standalone SVG document</td>
-    </tr>
-    <tr>
-      <td>An <a href="struct.html#TermOutermostSVGElement">outermost svg element</a></td>
-      <td>always</td>
-      <td>The <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span> element that starts an <a href="struct.html#TermSVGDocumentFragment">SVG document fragment</a>, that is,
-      one whose parent element is not in the SVG namespace</td>
-    </tr>
-    <tr>
-      <td><span class="element-name">‘<a href="embedded.html#ForeignObjectElement"><span>foreignObject</span></a>’</span></td>
-      <td>always</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><span class="element-name">‘<a href="embedded.html#ImageElement"><span>image</span></a>’</span></td>
-      <td>always</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span></td>
-      <td>always</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><span class="element-name">‘<a href="https://drafts.csswg.org/css-masking-1/#MaskElement"><span>mask</span></a>’</span></td>
-      <td>always</td>
-      <td>The mask element, not the mask property</td>
-    </tr>
-    <tr>
-      <td><span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span></td>
-      <td>always</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><span class="element-name">‘<a href="struct.html#SymbolElement"><span>symbol</span></a>’</span></td>
-      <td>always</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span></td>
-      <td>always</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>Inner <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span> with <a class="property" href="render.html#OverflowAndClipProperties">overflow</a></td>
-      <td>computed value other than <span class="prop-value">visible</span></td>
-      <td>Only applies to nested <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span> elements, not the <a href="struct.html#TermOutermostSVGElement">outermost svg element</a>.
+   <table class="data">
+    <thead>
+     <tr>
+      <th scope="col">Condition
+      <th scope="col">Value condition
+      <th scope="col">Note
+    <tbody>
+     <tr>
+      <td>The <a href="https://dom.spec.whatwg.org/#document-element">document element</a>
+      <td>always
+      <td>Only when it is an <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-svg" id="ref-for-elementdef-svg⑤">svg</a></code>’</span> element, as in a standalone SVG document
+     <tr>
+      <td>An <a data-link-type="dfn" href="struct.html#TermOutermostSVGElement" id="ref-for-TermOutermostSVGElement">outermost svg element</a>
+      <td>always
+      <td>The <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-svg" id="ref-for-elementdef-svg⑥">svg</a></code>’</span> element that starts an <a data-link-type="dfn" href="struct.html#TermSVGDocumentFragment" id="ref-for-TermSVGDocumentFragment③">SVG document fragment</a>, that is,
+      one whose parent element is not in the SVG namespace
+     <tr>
+      <td><span class="element-name">‘<code><a data-link-type="element" href="embedded.html#elementdef-foreignObject" id="ref-for-elementdef-foreignObject⑦">foreignObject</a></code>’</span>
+      <td>always
+      <td>
+     <tr>
+      <td><span class="element-name">‘<code><a data-link-type="element" href="embedded.html#elementdef-image" id="ref-for-elementdef-image④">image</a></code>’</span>
+      <td>always
+      <td>
+     <tr>
+      <td><span class="element-name">‘<code><a data-link-type="element" href="painting.html#elementdef-marker" id="ref-for-elementdef-marker①">marker</a></code>’</span>
+      <td>always
+      <td>
+     <tr>
+      <td><span class="element-name">‘<a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#MaskElement">mask</a>’</span>
+      <td>always
+      <td>The mask element, not the mask property
+     <tr>
+      <td><span class="element-name">‘<code><a data-link-type="element" href="pservers.html#elementdef-pattern" id="ref-for-elementdef-pattern①">pattern</a></code>’</span>
+      <td>always
+      <td>
+     <tr>
+      <td><span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-symbol" id="ref-for-elementdef-symbol③">symbol</a></code>’</span>
+      <td>always
+      <td>
+     <tr>
+      <td><span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-use" id="ref-for-elementdef-use①⓪">use</a></code>’</span>
+      <td>always
+      <td>
+     <tr>
+      <td>Inner <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-svg" id="ref-for-elementdef-svg⑦">svg</a></code>’</span> with <a class="property" href="#OverflowAndClipProperties">overflow</a>
+      <td>computed value other than <span class="prop-value">visible</span>
+      <td>Only applies to nested <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-svg" id="ref-for-elementdef-svg⑧">svg</a></code>’</span> elements, not the <a data-link-type="dfn" href="struct.html#TermOutermostSVGElement" id="ref-for-TermOutermostSVGElement①">outermost svg element</a>.
       Note that the <a href="styling.html#UAStyleSheet">user agent style sheet</a> sets
-      <span class="prop-value">overflow: hidden</span> on nested <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span> elements.</td>
-    </tr>
-    <tr>
-      <td><a class="property" href="https://drafts.csswg.org/css-masking-1/#propdef-clip">clip</a> property</td>
-      <td>computed value other than <span class="prop-value">auto</span></td>
+      <span class="prop-value">overflow: hidden</span> on nested <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-svg" id="ref-for-elementdef-svg⑨">svg</a></code>’</span> elements.
+     <tr>
+      <td><a class="property" href="https://drafts.csswg.org/css-masking-1/#propdef-clip">clip</a> property
+      <td>computed value other than <span class="prop-value">auto</span>
       <td>Element is subject to explicit clipping. In SVG, <a class="property" href="https://drafts.csswg.org/css-masking-1/#propdef-clip">clip</a> only applies to
       <a href="coords.html#EstablishingANewSVGViewport">elements which establish a new
-      viewport</a>, <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> elements and <span class="element-name">‘<a href="https://drafts.csswg.org/css-masking-1/#MaskElement"><span>mask</span></a>’</span> elements.</td>
-    </tr>
-    <tr>
-      <td><a class="property" href="https://drafts.csswg.org/css-masking-1/#the-clip-path">clip-path</a> property</td>
-      <td>computed value other than <span class="prop-value">none</span></td>
-      <td>Element is subject to explicit clipping</td>
-    </tr>
-    <tr>
-      <td><a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a> property</td>
-      <td>computed value other than <span class="prop-value">1</span></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><a class="property" href="https://drafts.csswg.org/css-masking-1/#propdef-mask">mask</a> property</td>
-      <td>computed value other than <span class="prop-value">none</span></td>
-      <td>The mask property, not the mask element</td>
-    </tr>
-    <tr>
-      <td><a class="property" href="https://drafts.csswg.org/filter-effects-1/#FilterProperty">filter</a> property</td>
-      <td>computed value other than <span class="prop-value">none</span></td>
-      <td></td>
-    </tr>
-    <tr class="ready-for-wider-review">
-      <td>Property defined in another specification</td>
-      <td>as defined by that specification</td>
-      <td>When the property is defined to establish a stacking context in SVG</td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 id="Elements" class="heading">3.5. How elements are rendered<a class="self-link" href="#Elements"></a></h2>
-<div class="ready-for-wider-review">
-<p>
+      viewport</a>, <span class="element-name">‘<code><a data-link-type="element" href="pservers.html#elementdef-pattern" id="ref-for-elementdef-pattern②">pattern</a></code>’</span> elements and <span class="element-name">‘<a data-link-type="element" href="https://drafts.csswg.org/css-masking-1/#MaskElement">mask</a>’</span> elements.
+     <tr>
+      <td><a class="property" href="https://drafts.csswg.org/css-masking-1/#the-clip-path">clip-path</a> property
+      <td>computed value other than <span class="prop-value">none</span>
+      <td>Element is subject to explicit clipping
+     <tr>
+      <td><a class="property" href="#ObjectAndGroupOpacityProperties">opacity</a> property
+      <td>computed value other than <span class="prop-value">1</span>
+      <td>
+     <tr>
+      <td><a class="property" href="https://drafts.csswg.org/css-masking-1/#propdef-mask">mask</a> property
+      <td>computed value other than <span class="prop-value">none</span>
+      <td>The mask property, not the mask element
+     <tr>
+      <td><a class="property" href="https://drafts.csswg.org/filter-effects-1/#FilterProperty">filter</a> property
+      <td>computed value other than <span class="prop-value">none</span>
+      <td>
+     <tr class="ready-for-wider-review">
+      <td>Property defined in another specification
+      <td>as defined by that specification
+      <td>When the property is defined to establish a stacking context in SVG
+   </table>
+   <h2 class="heading settled" data-level="3.5" id="Elements"><span class="secno">3.5. </span><span class="bs-old-id" id="render-Elements"></span><span class="content">How elements are rendered</span><a class="self-link" href="#Elements"></a></h2>
+   <div class="ready-for-wider-review">
+    <p>
 Individual <a href="struct.html#TermGraphicsElement">graphics elements</a> are treated as if they are a <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#isolatedgroups">non-isolated group</a>,
 the components (fill, stroke, etc) that make up a graphic element
 (See  <a href="#PaintingShapesAndText">Painting shapes and text</a>) being
 members of that group. See <a href="#Grouping">How groups are rendered</a>.
 </p>
-</div>
-
-<h2 id="Grouping" class="heading">3.6. How groups are rendered<a class="self-link" href="#Grouping"></a></h2>
-<div class="ready-for-wider-review">
-</div>
-<div class="ready-for-wider-review">
-<p>
-Grouping elements, such as the <span class="element-name">‘<a href="struct.html#GElement"><span>g</span></a>’</span> element (see <a href="struct.html#TermContainerElement">container elements</a>
+   </div>
+   <h2 class="heading settled" data-level="3.6" id="Grouping"><span class="secno">3.6. </span><span class="bs-old-id" id="render-Grouping"></span><span class="content">How groups are rendered</span><a class="self-link" href="#Grouping"></a></h2>
+   <div class="ready-for-wider-review"></div>
+   <div class="ready-for-wider-review">
+    <p>
+Grouping elements, such as the <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-g" id="ref-for-elementdef-g①">g</a></code>’</span> element (see <a href="struct.html#TermContainerElement">container elements</a>
 ) create a <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#groups">compositing group</a>.
-Similarly, a <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> element creates a compositing group for its shadow content.
+Similarly, a <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-use" id="ref-for-elementdef-use①①">use</a></code>’</span> element creates a compositing group for its shadow content.
 The <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113">Compositing and Blending</a>
 specification normatively describes how to render <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#groups">compositing groups</a>.
 In SVG, effects may be applied to a group. For example, opacity, filters
@@ -549,85 +1184,79 @@ immediately before any transforms on the group are applied, which are applied
 immediately before the group is blended and composited with the
 <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#groupbackdrop">group backdrop</a>. Applying any such effects to a group makes that
 group isolated.
-<br/><br/>
-Thus, rendering a <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#groups">compositing group</a> follows the following steps:<br/>
+<br><br>
+Thus, rendering a <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#groups">compositing group</a> follows the following steps:<br>
 If the group is isolated:
 </p>
-<ol>
-<li>The <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#initialbackdrop">initial backdrop</a> is set to a new buffer initialised with
-rgba(0,0,0,0)</li>
-<li>The contents of the group that are <a href="struct.html#TermGraphicsElement">graphics elements</a> or
-<span class="element-name">‘<a href="struct.html#GElement"><span>g</span></a>’</span> elements are rendered
+    <ol>
+     <li>The <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#initialbackdrop">initial backdrop</a> is set to a new buffer initialised with
+rgba(0,0,0,0)
+     <li>The contents of the group that are <a href="struct.html#TermGraphicsElement">graphics elements</a> or
+<span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-g" id="ref-for-elementdef-g②">g</a></code>’</span> elements are rendered
 <a href="#RenderingOrder">in order</a>, onto the
-<a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#initialbackdrop">initial backdrop</a></li>
-<li>filters and other effects that modify the group canvas are applied
-<div class="note">
-<p class="ready-for-wider-review">To provide for high quality rendering, filter
+<a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#initialbackdrop">initial backdrop</a>
+     <li>
+      filters and other effects that modify the group canvas are applied
+
+      <div class="note" role="note">
+       <p class="ready-for-wider-review">To provide for high quality rendering, filter
 primitives and other bitmap effects must be applied in the
 <a href="https://drafts.csswg.org/filter-effects-1/#operating-coordinate-space">operating coordinate space</a>.</p>
-</div>
-</li>
-<li>Group transforms are applied</li>
-<li>The group canvas is blended and composited with the <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#groupbackdrop">group backdrop</a></li>
-</ol>
+      </div>
+     <li>Group transforms are applied
+     <li>The group canvas is blended and composited with the <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#groupbackdrop">group backdrop</a>
+    </ol>
+    
 else (the group is not isolated):
-<ol>
-<li>The <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#initialbackdrop">initial backdrop</a> is set to the <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#groupbackdrop">group backdrop</a></li>
-<li>The contents of the group that are <a href="struct.html#TermGraphicsElement">graphics elements</a> or
-<span class="element-name">‘<a href="struct.html#GElement"><span>g</span></a>’</span> elements are rendered
+
+    <ol>
+     <li>The <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#initialbackdrop">initial backdrop</a> is set to the <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#groupbackdrop">group backdrop</a>
+     <li>The contents of the group that are <a href="struct.html#TermGraphicsElement">graphics elements</a> or
+<span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-g" id="ref-for-elementdef-g③">g</a></code>’</span> elements are rendered
 <a href="#RenderingOrder">in order</a>, onto the
 <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#initialbackdrop">initial backdrop</a>. The group transforms are applied to each element
-as they are rendered.</li>
-</ol>
-</div>
-
-<h3 id="ObjectAndGroupOpacityProperties" class="heading">3.6.1. Object and group opacity: the
-effect of the ‘<span class="property">opacity</span>’ property<a class="self-link" href="#ObjectAndGroupOpacityProperties"></a></h3>
-
-<p class="note">See the CSS Color Module Level 3 for the definition
-of <a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a>. [<a href="refs.html#ref-css-color-3">css-color-3</a>]</p>
-
-<p>The <a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a> property specifies how opaque a given
+as they are rendered.
+    </ol>
+   </div>
+   <h3 class="heading settled" data-level="3.6.1" id="ObjectAndGroupOpacityProperties"><span class="secno">3.6.1. </span><span class="bs-old-id" id="render-ObjectAndGroupOpacityProperties"></span><span class="content">Object and group opacity: the
+effect of the ‘<span class="property">opacity</span>’ property</span><a class="self-link" href="#ObjectAndGroupOpacityProperties"></a></h3>
+   <p class="note" role="note">See the CSS Color Module Level 3 for the definition
+of <a class="property" href="#ObjectAndGroupOpacityProperties">opacity</a>. [<a href="refs.html#ref-css-color-3">css-color-3</a>]</p>
+   <p>The <a class="property" href="#ObjectAndGroupOpacityProperties">opacity</a> property specifies how opaque a given
 graphical element or container element will be when it is
 painted to the canvas.  When applied to a container element,
 this is known as <em>group opacity</em>, and when applied to
 an individual rendering element, it is known as <em>object
 opacity</em>.  The principle for these two operations however
 is the same.</p>
-
-<p>There are several other opacity-related properties in SVG:</p>
-
-<ul>
-<li><a class="property" href="painting.html#FillOpacityProperty">fill-opacity</a>, which specifies the opacity of a fill
-operation;</li>
-
-<li><a class="property" href="painting.html#StrokeOpacityProperty">stroke-opacity</a>, which specifies the opacity of a stroking
-operation; and</li>
-
-<li><a class="property" href="pservers.html#StopOpacityProperty">stop-opacity</a>, which specifies the opacity of a gradient stop.</li>
-</ul>
-
-<p>These four opacity properties are involved in intermediate rendering operations.
+   <p>There are several other opacity-related properties in SVG:</p>
+   <ul>
+    <li><a class="css property" data-link-type="property" href="painting.html#FillOpacityProperty" id="ref-for-FillOpacityProperty">fill-opacity</a>, which specifies the opacity of a fill
+operation;
+    <li><a class="css property" data-link-type="property" href="painting.html#StrokeOpacityProperty" id="ref-for-StrokeOpacityProperty">stroke-opacity</a>, which specifies the opacity of a stroking
+operation; and
+    <li><a class="property" href="pservers.html#StopOpacityProperty">stop-opacity</a>, which specifies the opacity of a gradient stop.
+   </ul>
+   <p>These four opacity properties are involved in intermediate rendering operations.
 Object and group opacity however can be thought of as a post-processing operation.
-Conceptually, the object or group to which <a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a> applies
+Conceptually, the object or group to which <a class="property" href="#ObjectAndGroupOpacityProperties">opacity</a> applies
 is rendered into an RGBA offscreen image.  The offscreen image as whole is then blended
-into the canvas with the specified <a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a> value used uniformly
+into the canvas with the specified <a class="property" href="#ObjectAndGroupOpacityProperties">opacity</a> value used uniformly
 across the offscreen image.
 <span class="ready-for-wider-review">
-Thus, the presence of <a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a> causes the group to be
+Thus, the presence of <a class="property" href="#ObjectAndGroupOpacityProperties">opacity</a> causes the group to be
 <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#isolatedgroups">isolated</a>.
 </span>
 </p>
+   <p>The <a class="property" href="#ObjectAndGroupOpacityProperties">opacity</a> property applies to the following SVG elements:
+<span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-svg" id="ref-for-elementdef-svg①⓪">svg</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-g" id="ref-for-elementdef-g④">g</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-symbol" id="ref-for-elementdef-symbol④">symbol</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="painting.html#elementdef-marker" id="ref-for-elementdef-marker②">marker</a></code>’</span>,
+<span class="element-name">‘<code><a data-link-type="element" href="linking.html#elementdef-a" id="ref-for-elementdef-a②">a</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-switch" id="ref-for-elementdef-switch③">switch</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-use" id="ref-for-elementdef-use①②">use</a></code>’</span> and <a href="struct.html#TermGraphicsElement">graphics elements</a>.</p>
+   <div class="example" id="example-add1f3fd">
+    <a class="self-link" href="#example-add1f3fd"></a>
 
-<p>The <a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a> property applies to the following SVG elements:
-<span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span>, <span class="element-name">‘<a href="struct.html#GElement"><span>g</span></a>’</span>, <span class="element-name">‘<a href="struct.html#SymbolElement"><span>symbol</span></a>’</span>, <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span>,
-<span class="element-name">‘<a href="linking.html#AElement"><span>a</span></a>’</span>, <span class="element-name">‘<a href="struct.html#SwitchElement"><span>switch</span></a>’</span>, <span class="element-name">‘<a href="struct.html#UseElement"><span>use</span></a>’</span> and <a href="struct.html#TermGraphicsElement">graphics elements</a>.</p>
-
-<div class="example">
-<p>The following example illustrates various usage of the <a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a>
+    <p>The following example illustrates various usage of the <a class="property" href="#ObjectAndGroupOpacityProperties">opacity</a>
 property on objects and groups.</p>
-
-<pre>&lt;svg xmlns="http://www.w3.org/2000/svg"
+<pre class="include-code">&lt;svg xmlns="http://www.w3.org/2000/svg"
      width="600" height="175" viewBox="0 0 1200 350">
 
   &lt;!-- Background blue rectangle -->
@@ -665,67 +1294,58 @@ property on objects and groups.</p>
     &lt;circle cx="982.5" cy="250" r="50" fill="red" opacity=".5"/>
     &lt;circle cx="1017.5" cy="250" r="50" fill="green" opacity=".5"/>
   &lt;/g>
-&lt;/svg></pre>
+&lt;/svg>
+</pre>
+    <div class="figure">
+     
+<img alt="Image showing different groups of circles blended into the background." class="bordered" src="images/masking/opacity01.svg">
 
-<div class="figure">
-<img class="bordered" src="images/masking/opacity01.svg" alt="Image showing different groups of circles blended into the background."/>
-<p class="caption">Each group of red and green circles is first rendered
+     <p class="caption">Each group of red and green circles is first rendered
 to an offscreen image before being blended with the background
-blue rectangle as a whole, with the given <a class="property" href="render.html#ObjectAndGroupOpacityProperties">opacity</a> values.</p>
-</div>
-
-<p>In the example, the top row of circles have differing opacities,
-ranging from 1.0 to 0.2. The bottom row illustrates five <span class="element-name">‘<a href="struct.html#GElement"><span>g</span></a>’</span> elements,
+blue rectangle as a whole, with the given <a class="property" href="#ObjectAndGroupOpacityProperties">opacity</a> values.</p>
+    </div>
+    <p>In the example, the top row of circles have differing opacities,
+ranging from 1.0 to 0.2. The bottom row illustrates five <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-g" id="ref-for-elementdef-g⑤">g</a></code>’</span> elements,
 each of which contains overlapping red and green circles, as follows:</p>
-
-<ul>
-<li>The first group shows the opaque case for reference. The group has
-opacity of 1, as do the circles.</li>
-
-<li>The second group shows group opacity when the elements in the group are
-opaque.</li>
-
-<li>The third and fourth group show that opacity is not commutative. In the
+    <ul>
+     <li>The first group shows the opaque case for reference. The group has
+opacity of 1, as do the circles.
+     <li>The second group shows group opacity when the elements in the group are
+opaque.
+     <li>The third and fourth group show that opacity is not commutative. In the
 third group (which has opacity of 1), a semi-transparent green circle is
 drawn on top of a semi-transparent red circle, whereas in the fourth group a
 semi-transparent red circle is drawn on top of a semi-transparent green
 circle. Note that area where the two circles intersect display different
 colors. The third group shows more green color in the intersection area,
-whereas the fourth group shows more red color.</li>
-
-<li>The fifth group shows the multiplicative effect of opacity settings.
+whereas the fourth group shows more red color.
+     <li>The fifth group shows the multiplicative effect of opacity settings.
 Both the circles and the group itself have opacity settings of .5. The
 result is that the portion of the red circle which does not overlap with the
 green circle (i.e., the top/right of the red circle) will blend into the
 blue rectangle with accumulative opacity of .25 (i.e., .5*.5), which, after
 blending into the blue rectangle, results in a blended color which is 25%
-red and 75% blue.</li>
-</ul>
-</div>
-
-<h2 id="TypesOfGraphicsElements" class="heading">3.7. Types of graphics elements<a class="self-link" href="#TypesOfGraphicsElements"></a></h2>
-
-<p>SVG supports three fundamental types of <a href="struct.html#TermGraphicsElement">graphics elements</a>
+red and 75% blue.
+    </ul>
+   </div>
+   <h2 class="heading settled" data-level="3.7" id="TypesOfGraphicsElements"><span class="secno">3.7. </span><span class="bs-old-id" id="render-TypesOfGraphicsElements"></span><span class="content">Types of graphics elements</span><a class="self-link" href="#TypesOfGraphicsElements"></a></h2>
+   <p>SVG supports three fundamental types of <a href="struct.html#TermGraphicsElement">graphics elements</a>
 that can be rendered onto the canvas:</p>
-
-<ul>
-<li><a href="shapes.html#TermShapeElement">Shapes</a>, which represent some combination of straight line
-and curves</li>
-<li>Text, which represents some combination of character glyphs</li>
-<li>Raster images, which represent an array of values that
+   <ul>
+    <li><a data-link-type="dfn" href="shapes.html#TermShapeElement" id="ref-for-TermShapeElement">Shapes</a>, which represent some combination of straight line
+and curves
+    <li>Text, which represents some combination of character glyphs
+    <li>Raster images, which represent an array of values that
 specify the paint color and opacity (often termed alpha) at a
 series of points on a rectangular grid. (SVG requires support
 for specified raster image formats under
-<a href="conform.html">conformance requirements</a>.)</li>
-</ul>
-
-<h3 id="PaintingShapesAndText" class="heading">3.7.1. Painting shapes and text<a class="self-link" href="#PaintingShapesAndText"></a></h3>
-
-<p>Shapes and text can be <a href="painting.html#TermFill">filled</a> (i.e., apply paint to the
-interior of the shape) and <a href="painting.html#TermStroke">stroked</a> (i.e., apply paint
+<a href="conform.html">conformance requirements</a>.)
+   </ul>
+   <h3 class="heading settled" data-level="3.7.1" id="PaintingShapesAndText"><span class="secno">3.7.1. </span><span class="bs-old-id" id="render-PaintingShapesAndText"></span><span class="content">Painting shapes and text</span><a class="self-link" href="#PaintingShapesAndText"></a></h3>
+   <p>Shapes and text can be <a data-link-type="dfn" href="painting.html#TermFill" id="ref-for-TermFill">filled</a> (i.e., apply paint to the
+interior of the shape) and <a data-link-type="dfn" href="painting.html#TermStroke" id="ref-for-TermStroke">stroked</a> (i.e., apply paint
 along the outline of the shape).</p>
-
-<p>For certain types of shapes, <a href="painting.html#Markers">marker
+   <p>For certain types of shapes, <a href="painting.html#Markers">marker
 symbols</a> (which themselves can consist of any combination of shapes,
 text and images) can be drawn at positions along the
 shape boundary. Each marker symbol
@@ -734,167 +1354,184 @@ SVG document tree just after the shape object which is using
 the given marker symbol. The graphical contents of a marker
 symbol are rendered using the same methods as graphics
 elements. Marker symbols are not applicable to text.</p>
-
-<p>The order in which fill, stroke and markers are painted is determined
-by the <a class="property" href="painting.html#PaintOrderProperty">paint-order</a> property. The default is that
+   <p>The order in which fill, stroke and markers are painted is determined
+by the <a class="css property" data-link-type="property" href="painting.html#PaintOrderProperty" id="ref-for-PaintOrderProperty①">paint-order</a> property. The default is that
 fill is painted first, then the stroke, and then the
 marker symbols. The marker symbols are rendered in order along
 the outline of the shape, from the start of the shape to the
 end of the shape.</p>
-
-<p>The fill and stroke operations are entirely independent;
+   <p>The fill and stroke operations are entirely independent;
 for instance, each fill or stroke operation has its own opacity setting.</p>
-
-<p>SVG supports numerous built-in types of paint which can
+   <p>SVG supports numerous built-in types of paint which can
 be used in fill and stroke operations. These are described in
 <a href="pservers.html">Paint Servers</a>.</p>
-
-<h3 id="PaintingRasterImages" class="heading">3.7.2. Painting raster images<a class="self-link" href="#PaintingRasterImages"></a></h3>
-
-<p>When a raster image is rendered, the original samples are
+   <h3 class="heading settled" data-level="3.7.2" id="PaintingRasterImages"><span class="secno">3.7.2. </span><span class="bs-old-id" id="render-PaintingRasterImages"></span><span class="content">Painting raster images</span><a class="self-link" href="#PaintingRasterImages"></a></h3>
+   <p>When a raster image is rendered, the original samples are
 "resampled" using standard algorithms to produce samples at the
 positions required on the output device. Resampling
 requirements are discussed under
 <a href="conform.html">conformance requirements</a>.</p>
-<p class="ready-for-wider-review">
+   <p class="ready-for-wider-review">
 As in HTML [<a href="refs.html#ref-html">HTML</a>, 10.4.2],
 all animated images with the same absolute URL and the same image
 data are expected to be rendered synchronised to the same timeline as a group,
 with the timeline starting at the time of the least recent addition to the
 group.
 </p>
-<p class="ready-for-wider-review">
+   <p class="ready-for-wider-review">
 When a user agent is to restart the animation for an img element showing an
 animated image, all animated images with the same absolute URL and the same
-image data in that img element's node document are expected to restart their
+image data in that img element’s node document are expected to restart their
 animation from the beginning.
 </p>
-
-<h2 id="FilteringPaintRegions" class="heading">3.8. Filtering painted regions<a class="self-link" href="#FilteringPaintRegions"></a></h2>
-<p>SVG allows any painting operation to be filtered. (See
+   <h2 class="heading settled" data-level="3.8" id="FilteringPaintRegions"><span class="secno">3.8. </span><span class="bs-old-id" id="render-FilteringPaintRegions"></span><span class="content">Filtering painted regions</span><a class="self-link" href="#FilteringPaintRegions"></a></h2>
+   <p>SVG allows any painting operation to be filtered. (See
 <a href="https://www.w3.org/TR/filter-effects/">Filter Effects</a>.)</p>
-
-<p>In this case the result must be as though the paint
+   <p>In this case the result must be as though the paint
 operations had been applied to an intermediate canvas
 initialized to transparent black, of a size determined by the
 rules given in <a href="https://www.w3.org/TR/filter-effects/">Filter Effects</a> then
 filtered by the processes defined in
 <a href="https://www.w3.org/TR/filter-effects/">Filter Effects</a>.</p>
-
-<div class="ready-for-wider-review">
-<h2 id="ClippingAndMasking" class="heading">3.9. Clipping and masking<a class="self-link" href="#ClippingAndMasking"></a></h2>
-
-<p>SVG supports the following clipping/masking features:</p>
-
-<ul>
-<li>clipping paths, which either uses
-any combination of <span class="element-name">‘<a href="paths.html#PathElement"><span>path</span></a>’</span>, <span class="element-name">‘<a href="text.html#TextElement"><span>text</span></a>’</span> and
+   <div class="ready-for-wider-review">
+    <h2 class="heading settled" data-level="3.9" id="ClippingAndMasking"><span class="secno">3.9. </span><span class="bs-old-id" id="render-ClippingAndMasking"></span><span class="content">Clipping and masking</span><a class="self-link" href="#ClippingAndMasking"></a></h2>
+    <p>SVG supports the following clipping/masking features:</p>
+    <ul>
+     <li>clipping paths, which either uses
+any combination of <span class="element-name">‘<code><a data-link-type="element" href="paths.html#elementdef-path" id="ref-for-elementdef-path③">path</a></code>’</span>, <span class="element-name">‘<code><a data-link-type="element" href="text.html#elementdef-text" id="ref-for-elementdef-text①">text</a></code>’</span> and
 <a href="shapes.html#TermBasicShapeElement">basic shapes</a> or basic shapes to serve as
 the outline of a (in the absence of anti-aliasing) 1-bit
 mask, where everything on the "inside" of the outline is
 allowed to show through but everything on the outside is
-masked out</li>
-
-<li>masks, which are
+masked out
+     <li>masks, which are
 <a href="struct.html#TermContainerElement">container elements</a>
 which can contain <a href="struct.html#TermGraphicsElement">graphics elements</a>
 or other container elements which define a set of graphics
 that is to be used as a semi-transparent mask for compositing
-foreground objects into the current background.</li>
-</ul>
-
-<p>Both, clipping and masking, are specified in the module CSS Masking
+foreground objects into the current background.
+    </ul>
+    <p>Both, clipping and masking, are specified in the module CSS Masking
 [<a href="refs.html#ref-css-masking-1">css-masking-1</a>].</p>
-</div>
-
-<h2 id="ParentCompositing" class="heading">3.10. Parent compositing<a class="self-link" href="#ParentCompositing"></a></h2>
-<p>SVG document fragments can be semi-opaque.</p>
-<p class="ready-for-wider-review">
+   </div>
+   <h2 class="heading settled" data-level="3.10" id="ParentCompositing"><span class="secno">3.10. </span><span class="bs-old-id" id="render-ParentCompositing"></span><span class="content">Parent compositing</span><a class="self-link" href="#ParentCompositing"></a></h2>
+   <p>SVG document fragments can be semi-opaque.</p>
+   <p class="ready-for-wider-review">
 In accordance with the <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113">Compositing and Blending</a> specification,
-the <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span> element always creates an <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#isolatedgroups">isolated</a> group.
+the <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-svg" id="ref-for-elementdef-svg①①">svg</a></code>’</span> element always creates an <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#isolatedgroups">isolated</a> group.
 When an SVG document is a top-level document,
 meaning it is not embedded in another document,
-the root <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span> element
+the root <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-svg" id="ref-for-elementdef-svg①②">svg</a></code>’</span> element
 is considered to be the <a href="https://www.w3.org/TR/2015/CR-compositing-1-20150113/#pagebackdrop">page group</a> and is composited with
 a backdrop of white with 100% opacity.
 In all other cases, the SVG document or document fragment is composited into the parent
 document with opacity preserved.
 </p>
-
-<h2 id="OverflowAndClipProperties" class="heading">3.11. The effect of the ‘<span class="property">overflow</span>’
-property<a class="self-link" href="#OverflowAndClipProperties"></a></h2>
-
-<p class="note">See the Cascading Style Sheets Level 2 Revision 1 (CSS 2.1)
+   <h2 class="heading settled" data-level="3.11" id="OverflowAndClipProperties"><span class="secno">3.11. </span><span class="bs-old-id" id="render-OverflowAndClipProperties"></span><span class="content">The effect of the ‘<span class="property">overflow</span>’
+property</span><a class="self-link" href="#OverflowAndClipProperties"></a></h2>
+   <p class="note" role="note">See the Cascading Style Sheets Level 2 Revision 1 (CSS 2.1)
 Specification [<a href="refs.html#ref-css2">CSS2</a>] for the definition of
-<a class="property" href="render.html#OverflowAndClipProperties">overflow</a>.</p>
-<div class="ready-for-wider-review">
-<table class="data compact">
-<caption>A summary of the behavior of the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property in SVG.
+<a class="property" href="#OverflowAndClipProperties">overflow</a>.</p>
+   <div class="ready-for-wider-review">
+    <table class="compact data">
+     <caption>A summary of the behavior of the <a class="property" href="#OverflowAndClipProperties">overflow</a> property in SVG.
 </caption>
-<thead>
-<tr>
-<th>element</th>
-<th>initial</th>
-<th>ua stylesheet</th>
-<th>auto</th>
-<th>visible</th>
-<th>hidden</th>
-<th>scroll</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>document root svg</th><td>visible</td><td>n/a</td><td>visible | scroll</td><td>visible</td><td>hidden</td><td>scroll</td>
-</tr>
-<tr>
-<th>other svg</th><td>visible</td><td>hidden</td><td>visible | scroll</td><td>visible</td><td>hidden</td><td>scroll</td>
-</tr>
-<tr>
-<th>text</th><td>visible</td><td>hidden</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
-</tr>
-<tr>
-<th>pattern</th><td>visible</td><td>hidden</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
-</tr>
-<tr>
-<th>marker</th><td>visible</td><td>hidden</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
-</tr>
-<tr>
-<th>symbol</th><td>visible</td><td>hidden</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
-</tr>
-<tr>
-<th>image</th><td>visible</td><td>hidden</td><td>visible</td><td>visible</td><td>hidden</td><td>hidden</td>
-</tr>
-<tr>
-<th>foreignObject</th><td>visible</td><td>hidden</td><td>visible | scroll</td><td>visible</td><td>hidden</td><td>scroll</td>
-</tr>
-</tbody>
-</table>
-
-<p>The <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property has the same parameter values and has the
+     <thead>
+      <tr>
+       <th>element
+       <th>initial
+       <th>ua stylesheet
+       <th>auto
+       <th>visible
+       <th>hidden
+       <th>scroll
+     <tbody>
+      <tr>
+       <th>document root svg
+       <td>visible
+       <td>n/a
+       <td>visible | scroll
+       <td>visible
+       <td>hidden
+       <td>scroll
+      <tr>
+       <th>other svg
+       <td>visible
+       <td>hidden
+       <td>visible | scroll
+       <td>visible
+       <td>hidden
+       <td>scroll
+      <tr>
+       <th>text
+       <td>visible
+       <td>hidden
+       <td>visible
+       <td>visible
+       <td>hidden
+       <td>hidden
+      <tr>
+       <th>pattern
+       <td>visible
+       <td>hidden
+       <td>visible
+       <td>visible
+       <td>hidden
+       <td>hidden
+      <tr>
+       <th>marker
+       <td>visible
+       <td>hidden
+       <td>visible
+       <td>visible
+       <td>hidden
+       <td>hidden
+      <tr>
+       <th>symbol
+       <td>visible
+       <td>hidden
+       <td>visible
+       <td>visible
+       <td>hidden
+       <td>hidden
+      <tr>
+       <th>image
+       <td>visible
+       <td>hidden
+       <td>visible
+       <td>visible
+       <td>hidden
+       <td>hidden
+      <tr>
+       <th>foreignObject
+       <td>visible
+       <td>hidden
+       <td>visible | scroll
+       <td>visible
+       <td>hidden
+       <td>scroll
+    </table>
+    <p>The <a class="property" href="#OverflowAndClipProperties">overflow</a> property has the same parameter values and has the
 same meaning <a href="https://www.w3.org/TR/2011/REC-CSS2-20110607/visufx.html#propdef-overflow">as defined in CSS 2.1</a>
 ([<a href="refs.html#ref-css2">CSS2</a>], section 11.1.1);
 however, the following additional points apply:</p>
-
-<ul>
-  <li>
-  If the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property has a value of 'visible',
+    <ul>
+     <li>
+  If the <a class="property" href="#OverflowAndClipProperties">overflow</a> property has a value of 'visible',
   the property has no effect (i.e., a clipping rectangle is not created).
-  </li>
-
-  <li>For those elements to which the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property can apply.
-  If the <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> property has the value <span class="prop-value">
+  
+     <li>For those elements to which the <a class="property" href="#OverflowAndClipProperties">overflow</a> property can apply.
+  If the <a class="property" href="#OverflowAndClipProperties">overflow</a> property has the value <span class="prop-value">
   hidden</span> or <span class="prop-value">scroll</span>, a clip,
   the exact size of the SVG viewport is applied.
-  </li>
-
-  <li>
+  
+     <li>
   When <span class="prop-value">scroll</span> is specified on an
-  <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span> element and if the user agent uses a scrolling mechanism that
+  <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-svg" id="ref-for-elementdef-svg①③">svg</a></code>’</span> element and if the user agent uses a scrolling mechanism that
   is visible on the screen (such as a scroll bar or a panner), that mechanism
   should be displayed for the SVG viewport whether or not any of its content is clipped.
-  </li>
-
-  <li>
+  
+     <li>
   Within SVG content, the value <span class="prop-value">auto</span> implies
   that all rendered content for child elements must be
   <span class="prop-value">visible</span>, either through a scrolling
@@ -907,14 +1544,866 @@ however, the following additional points apply:</p>
   as <span class="prop-value">hidden</span>, then the value
   <span class="prop-value">auto</span> must be treated as
   <span class="prop-value">visible</span>
-  </li>
-</ul>
-
-<div class="note">
-Although the initial value for <a class="property" href="render.html#OverflowAndClipProperties">overflow</a> is auto. In the User Agent style sheet,
-overflow is overridden for the <span class="element-name">‘<a href="struct.html#SVGElement"><span>svg</span></a>’</span> element when it is not the root
-element of a stand-alone document, the <span class="element-name">‘<a href="pservers.html#PatternElement"><span>pattern</span></a>’</span> element, and the <span class="element-name">‘<a href="painting.html#MarkerElement"><span>marker</span></a>’</span> element to be hidden by default.
+  
+    </ul>
+    <div class="note" role="note">
+Although the initial value for <a class="property" href="#OverflowAndClipProperties">overflow</a> is auto. In the User Agent style sheet,
+overflow is overridden for the <span class="element-name">‘<code><a data-link-type="element" href="struct.html#elementdef-svg" id="ref-for-elementdef-svg①④">svg</a></code>’</span> element when it is not the root
+element of a stand-alone document, the <span class="element-name">‘<code><a data-link-type="element" href="pservers.html#elementdef-pattern" id="ref-for-elementdef-pattern③">pattern</a></code>’</span> element, and the <span class="element-name">‘<code><a data-link-type="element" href="painting.html#elementdef-marker" id="ref-for-elementdef-marker③">marker</a></code>’</span> element to be hidden by default.
 </div>
-</div> <!-- ready-for-wider-review -->
-<script src="//www.w3.org/scripts/TR/2021/fixup.js"></script></body>
+   </div>
+   
+</main>
+<script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
+<script>/* Boilerplate: script-dom-helper */
+"use strict";
+function query(sel) { return document.querySelector(sel); }
+
+function queryAll(sel) { return [...document.querySelectorAll(sel)]; }
+
+function iter(obj) {
+	if(!obj) return [];
+	var it = obj[Symbol.iterator];
+	if(it) return it;
+	return Object.entries(obj);
+}
+
+function mk(tagname, attrs, ...children) {
+	const el = document.createElement(tagname);
+	for(const [k,v] of iter(attrs)) {
+		if(k.slice(0,3) == "_on") {
+			const eventName = k.slice(3);
+			el.addEventListener(eventName, v);
+		} else if(k[0] == "_") {
+			// property, not attribute
+			el[k.slice(1)] = v;
+		} else {
+			if(v === false || v == null) {
+        continue;
+      } else if(v === true) {
+        el.setAttribute(k, "");
+        continue;
+      } else {
+  			el.setAttribute(k, v);
+      }
+		}
+	}
+	append(el, children);
+	return el;
+}
+
+/* Create shortcuts for every known HTML element */
+[
+  "a",
+  "abbr",
+  "acronym",
+  "address",
+  "applet",
+  "area",
+  "article",
+  "aside",
+  "audio",
+  "b",
+  "base",
+  "basefont",
+  "bdo",
+  "big",
+  "blockquote",
+  "body",
+  "br",
+  "button",
+  "canvas",
+  "caption",
+  "center",
+  "cite",
+  "code",
+  "col",
+  "colgroup",
+  "datalist",
+  "dd",
+  "del",
+  "details",
+  "dfn",
+  "dialog",
+  "div",
+  "dl",
+  "dt",
+  "em",
+  "embed",
+  "fieldset",
+  "figcaption",
+  "figure",
+  "font",
+  "footer",
+  "form",
+  "frame",
+  "frameset",
+  "head",
+  "header",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "hr",
+  "html",
+  "i",
+  "iframe",
+  "img",
+  "input",
+  "ins",
+  "kbd",
+  "label",
+  "legend",
+  "li",
+  "link",
+  "main",
+  "map",
+  "mark",
+  "meta",
+  "meter",
+  "nav",
+  "nobr",
+  "noscript",
+  "object",
+  "ol",
+  "optgroup",
+  "option",
+  "output",
+  "p",
+  "param",
+  "pre",
+  "progress",
+  "q",
+  "s",
+  "samp",
+  "script",
+  "section",
+  "select",
+  "small",
+  "source",
+  "span",
+  "strike",
+  "strong",
+  "style",
+  "sub",
+  "summary",
+  "sup",
+  "table",
+  "tbody",
+  "td",
+  "template",
+  "textarea",
+  "tfoot",
+  "th",
+  "thead",
+  "time",
+  "title",
+  "tr",
+  "u",
+  "ul",
+  "var",
+  "video",
+  "wbr",
+  "xmp",
+].forEach(tagname=>{
+	mk[tagname] = (...args) => mk(tagname, ...args);
+});
+
+function* nodesFromChildList(children) {
+	for(const child of children.flat(Infinity)) {
+		if(child instanceof Node) {
+			yield child;
+		} else {
+			yield new Text(child);
+		}
+	}
+}
+function append(el, ...children) {
+	for(const child of nodesFromChildList(children)) {
+		if(el instanceof Node) el.appendChild(child);
+		else el.push(child);
+	}
+	return el;
+}
+
+function insertAfter(el, ...children) {
+	for(const child of nodesFromChildList(children)) {
+		el.parentNode.insertBefore(child, el.nextSibling);
+	}
+	return el;
+}
+
+function clearContents(el) {
+	el.innerHTML = "";
+	return el;
+}
+
+function parseHTML(markup) {
+	if(markup.toLowerCase().trim().indexOf('<!doctype') === 0) {
+		const doc = document.implementation.createHTMLDocument("");
+		doc.documentElement.innerHTML = markup;
+		return doc;
+	} else {
+		const el = mk.template({});
+		el.innerHTML = markup;
+		return el.content;
+	}
+}</script>
+<script>/* Boilerplate: script-dfn-panel */
+"use strict";
+{
+let dfnPanelData = {
+"TermNeverRenderedElement": {"dfnID":"TermNeverRenderedElement","dfnText":"never-rendered element","external":false,"refSections":[{"refs":[{"id":"ref-for-TermNeverRenderedElement"}],"title":"3.2.2. Rendered versus non-rendered elements"},{"refs":[{"id":"ref-for-TermNeverRenderedElement\u2460"}],"title":"3.2.3. Controlling visibility: the effect of the \u2018display\u2019 and \u2018visibility\u2019 properties"},{"refs":[{"id":"ref-for-TermNeverRenderedElement\u2461","url":"struct.html#ref-for-TermNeverRenderedElement%E2%91%A1"}],"title":"5.3.2. The \u2018defs\u2019 element"},{"refs":[{"id":"ref-for-TermNeverRenderedElement\u2462","url":"struct.html#ref-for-TermNeverRenderedElement%E2%91%A2"}],"title":"5.5.1. The use-element shadow tree"},{"refs":[{"id":"ref-for-TermNeverRenderedElement\u2463","url":"struct.html#ref-for-TermNeverRenderedElement%E2%91%A3"}],"title":"5.6.1. Conditional processing overview"},{"refs":[{"id":"ref-for-TermNeverRenderedElement\u2464","url":"struct.html#ref-for-TermNeverRenderedElement%E2%91%A4"},{"id":"ref-for-TermNeverRenderedElement\u2465","url":"struct.html#ref-for-TermNeverRenderedElement%E2%91%A5"}],"title":"5.7.1. Definition"},{"refs":[{"id":"ref-for-TermNeverRenderedElement\u2466","url":"struct.html#ref-for-TermNeverRenderedElement%E2%91%A6"}],"title":"5.8. The \u2018metadata\u2019 element"},{"refs":[{"id":"ref-for-TermNeverRenderedElement\u2467","url":"styling.html#ref-for-TermNeverRenderedElement%E2%91%A7"}],"title":"6.2. Inline style sheets: the \u2018style\u2019 element"},{"refs":[{"id":"ref-for-TermNeverRenderedElement\u2468","url":"painting.html#ref-for-TermNeverRenderedElement%E2%91%A8"}],"title":"13.7.1. The \u2018marker\u2019 element"},{"refs":[{"id":"ref-for-TermNeverRenderedElement\u2460\u24ea","url":"pservers.html#ref-for-TermNeverRenderedElement%E2%91%A0%E2%93%AA"}],"title":"14.2.2. Linear gradients"},{"refs":[{"id":"ref-for-TermNeverRenderedElement\u2460\u2460","url":"pservers.html#ref-for-TermNeverRenderedElement%E2%91%A0%E2%91%A0"}],"title":"14.2.3. Radial gradients"},{"refs":[{"id":"ref-for-TermNeverRenderedElement\u2460\u2461","url":"pservers.html#ref-for-TermNeverRenderedElement%E2%91%A0%E2%91%A1"}],"title":"14.3. Patterns"},{"refs":[{"id":"ref-for-TermNeverRenderedElement\u2460\u2462","url":"interact.html#ref-for-TermNeverRenderedElement%E2%91%A0%E2%91%A2"}],"title":"15.9. The \u2018script\u2019 element"}],"url":"#TermNeverRenderedElement"},
+"TermNonRenderedElement": {"dfnID":"TermNonRenderedElement","dfnText":"non-rendered element","external":false,"refSections":[{"refs":[{"id":"ref-for-TermNonRenderedElement"}],"title":"3.2.1. Definitions"},{"refs":[{"id":"ref-for-TermNonRenderedElement\u2460","url":"types.html#ref-for-TermNonRenderedElement%E2%91%A0"},{"id":"ref-for-TermNonRenderedElement\u2461","url":"types.html#ref-for-TermNonRenderedElement%E2%91%A1"}],"title":"4.4.2. Interface SVGGraphicsElement"},{"refs":[{"id":"ref-for-TermNonRenderedElement\u2462","url":"types.html#ref-for-TermNonRenderedElement%E2%91%A2"},{"id":"ref-for-TermNonRenderedElement\u2463","url":"types.html#ref-for-TermNonRenderedElement%E2%91%A3"},{"id":"ref-for-TermNonRenderedElement\u2464","url":"types.html#ref-for-TermNonRenderedElement%E2%91%A4"},{"id":"ref-for-TermNonRenderedElement\u2465","url":"types.html#ref-for-TermNonRenderedElement%E2%91%A5"}],"title":"4.4.3. Interface SVGGeometryElement"},{"refs":[{"id":"ref-for-TermNonRenderedElement\u2466","url":"struct.html#ref-for-TermNonRenderedElement%E2%91%A6"}],"title":"5.7.1. Definition"},{"refs":[{"id":"ref-for-TermNonRenderedElement\u2467","url":"struct.html#ref-for-TermNonRenderedElement%E2%91%A7"}],"title":"5.12.2. Role attribute"},{"refs":[{"id":"ref-for-TermNonRenderedElement\u2468","url":"text.html#ref-for-TermNonRenderedElement%E2%91%A8"}],"title":"11.5. Text layout \u2013 Algorithm"},{"refs":[{"id":"ref-for-TermNonRenderedElement\u2460\u24ea","url":"interact.html#ref-for-TermNonRenderedElement%E2%91%A0%E2%93%AA"}],"title":"15.7. Focus"},{"refs":[{"id":"ref-for-TermNonRenderedElement\u2460\u2460","url":"changes.html#ref-for-TermNonRenderedElement%E2%91%A0%E2%91%A0"}],"title":"K.2.5. Basic Data Types and Interfaces chapter"}],"url":"#TermNonRenderedElement"},
+"TermRenderableElement": {"dfnID":"TermRenderableElement","dfnText":"renderable element","external":false,"refSections":[{"refs":[{"id":"ref-for-TermRenderableElement"}],"title":"3.2.3. Controlling visibility: the effect of the \u2018display\u2019 and \u2018visibility\u2019 properties"},{"refs":[{"id":"ref-for-TermRenderableElement\u2460","url":"struct.html#ref-for-TermRenderableElement%E2%91%A0"}],"title":"5.1.4. The \u2018svg\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2461","url":"struct.html#ref-for-TermRenderableElement%E2%91%A1"}],"title":"5.2.2. The \u2018g\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2462","url":"struct.html#ref-for-TermRenderableElement%E2%91%A2"}],"title":"5.5. The \u2018use\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2463","url":"struct.html#ref-for-TermRenderableElement%E2%91%A3"}],"title":"5.6.3. The \u2018switch\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2464","url":"struct.html#ref-for-TermRenderableElement%E2%91%A4"}],"title":"5.12.2. Role attribute"},{"refs":[{"id":"ref-for-TermRenderableElement\u2465","url":"paths.html#ref-for-TermRenderableElement%E2%91%A5"}],"title":"9.2. The \u2018path\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2466","url":"shapes.html#ref-for-TermRenderableElement%E2%91%A6"}],"title":"10.2. The \u2018rect\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2467","url":"shapes.html#ref-for-TermRenderableElement%E2%91%A7"}],"title":"10.3. The \u2018circle\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2468","url":"shapes.html#ref-for-TermRenderableElement%E2%91%A8"}],"title":"10.4. The \u2018ellipse\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2460\u24ea","url":"shapes.html#ref-for-TermRenderableElement%E2%91%A0%E2%93%AA"}],"title":"10.5. The \u2018line\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2460\u2460","url":"shapes.html#ref-for-TermRenderableElement%E2%91%A0%E2%91%A0"}],"title":"10.6. The \u2018polyline\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2460\u2461","url":"shapes.html#ref-for-TermRenderableElement%E2%91%A0%E2%91%A1"}],"title":"10.7. The \u2018polygon\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2460\u2462","url":"text.html#ref-for-TermRenderableElement%E2%91%A0%E2%91%A2"},{"id":"ref-for-TermRenderableElement\u2460\u2463","url":"text.html#ref-for-TermRenderableElement%E2%91%A0%E2%91%A3"}],"title":"11.2. The \u2018text\u2019 and \u2018tspan\u2019 elements"},{"refs":[{"id":"ref-for-TermRenderableElement\u2460\u2464","url":"text.html#ref-for-TermRenderableElement%E2%91%A0%E2%91%A4"}],"title":"11.8.1. The \u2018textPath\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2460\u2465","url":"embedded.html#ref-for-TermRenderableElement%E2%91%A0%E2%91%A5"}],"title":"12.3. The \u2018image\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2460\u2466","url":"embedded.html#ref-for-TermRenderableElement%E2%91%A0%E2%91%A6"}],"title":"12.4. The \u2018foreignObject\u2019 element"},{"refs":[{"id":"ref-for-TermRenderableElement\u2460\u2467","url":"linking.html#ref-for-TermRenderableElement%E2%91%A0%E2%91%A7"}],"title":"16.2. Links out of SVG content: the \u2018a\u2019 element"}],"url":"#TermRenderableElement"},
+"TermRenderedElement": {"dfnID":"TermRenderedElement","dfnText":"rendered element","external":false,"refSections":[{"refs":[{"id":"ref-for-TermRenderedElement","url":"struct.html#ref-for-TermRenderedElement"}],"title":"5.7.1. Definition"},{"refs":[{"id":"ref-for-TermRenderedElement\u2460","url":"interact.html#ref-for-TermRenderedElement%E2%91%A0"},{"id":"ref-for-TermRenderedElement\u2461","url":"interact.html#ref-for-TermRenderedElement%E2%91%A1"}],"title":"15.7. Focus"}],"url":"#TermRenderedElement"},
+"TermRenderingTree": {"dfnID":"TermRenderingTree","dfnText":"rendering tree","external":false,"refSections":[],"url":"#TermRenderingTree"},
+"TermReusedGraphics": {"dfnID":"TermReusedGraphics","dfnText":"re-used graphics","external":false,"refSections":[{"refs":[{"id":"ref-for-TermReusedGraphics"}],"title":"3.2.1. Definitions"},{"refs":[{"id":"ref-for-TermReusedGraphics\u2460","url":"struct.html#ref-for-TermReusedGraphics%E2%91%A0"}],"title":"5.4.2. Notes on symbols"},{"refs":[{"id":"ref-for-TermReusedGraphics\u2461","url":"struct.html#ref-for-TermReusedGraphics%E2%91%A1"}],"title":"5.5. The \u2018use\u2019 element"},{"refs":[{"id":"ref-for-TermReusedGraphics\u2462","url":"struct.html#ref-for-TermReusedGraphics%E2%91%A2"},{"id":"ref-for-TermReusedGraphics\u2463","url":"struct.html#ref-for-TermReusedGraphics%E2%91%A3"}],"title":"5.5.1. The use-element shadow tree"}],"url":"#TermReusedGraphics"},
+"TermStackingContext": {"dfnID":"TermStackingContext","dfnText":"stacking contexts","external":false,"refSections":[{"refs":[{"id":"ref-for-TermStackingContext"}],"title":"3.2.4. Re-used graphics"}],"url":"#TermStackingContext"},
+};
+
+document.addEventListener("DOMContentLoaded", ()=>{
+    genAllDfnPanels();
+
+    document.body.addEventListener("click", (e) => {
+        // If not handled already, just hide all dfn panels.
+        hideAllDfnPanels();
+    });
+});
+
+window.addEventListener("resize", () => {
+    // Pin any visible dfn panel
+    queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(el=>positionDfnPanel(el));
+});
+
+function genAllDfnPanels() {
+    for(const panelData of Object.values(dfnPanelData)) {
+        const dfnID = panelData.dfnID;
+        const dfn = document.getElementById(dfnID);
+        if(!dfn) {
+            console.log(`Can't find dfn#${dfnID}.`, panelData);
+            continue;
+        }
+        dfn.panelData = panelData;
+        insertDfnPopupAction(dfn);
+    }
+}
+
+function genDfnPanel(dfn, { dfnID, url, dfnText, refSections, external }) {
+    const dfnPanel = mk.aside({
+        class: "dfn-panel on",
+        id: `infopanel-for-${dfnID}`,
+        "data-for": dfnID,
+        "aria-labelled-by":`infopaneltitle-for-${dfnID}`,
+        },
+        mk.span({id:`infopaneltitle-for-${dfnID}`, style:"display:none"},
+            `Info about the '${dfnText}' ${external?"external":""} reference.`),
+        mk.a({href:url, class:"dfn-link"}, url),
+        refSections.length == 0 ? [] :
+            mk.b({}, "Referenced in:"),
+            mk.ul({},
+                ...refSections.map(section=>
+                    mk.li({},
+                        ...section.refs.map((ref, refI)=>
+                            [
+                                mk.a({ href: ref.url || `#${ref.id}` },
+                                    (refI == 0) ? section.title : `(${refI + 1})`
+                                ),
+                                " ",
+                            ]
+                        ),
+                    ),
+                ),
+            ),
+        genLinkingSyntaxes(dfn),
+    );
+
+    dfnPanel.addEventListener('click', (event) => {
+        if (event.target.nodeName == 'A') {
+            scrollToTargetAndHighlight(event);
+            pinDfnPanel(dfnPanel);
+        }
+        event.stopPropagation();
+        refocusOnTarget(event);
+    });
+    dfnPanel.addEventListener('keydown', (event) => {
+        if(event.keyCode == 27) { // Escape key
+            hideDfnPanel({dfnPanel});
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    });
+
+    dfnPanel.dfn = dfn;
+    dfn.dfnPanel = dfnPanel;
+    return dfnPanel;
+}
+
+
+
+function hideAllDfnPanels() {
+    // Delete the currently-active dfn panel.
+    queryAll(".dfn-panel").forEach(dfnPanel=>hideDfnPanel({dfnPanel}));
+}
+
+function showDfnPanel(dfn) {
+    hideAllDfnPanels(); // Only display one at a time.
+
+    dfn.setAttribute("aria-expanded", "true");
+
+    const dfnPanel = genDfnPanel(dfn, dfn.panelData);
+
+    // Give the dfn a unique tabindex, and then
+    // give all the tabbable panel bits successive indexes.
+    let tabIndex = 100;
+    dfn.tabIndex = tabIndex++;
+    const tabbable = dfnPanel.querySelectorAll(":is(a, button)");
+    for (const el of tabbable) {
+        el.tabIndex = tabIndex++;
+    }
+
+    append(document.body, dfnPanel);
+    positionDfnPanel(dfnPanel);
+}
+
+function positionDfnPanel(dfnPanel) {
+    const dfn = dfnPanel.dfn;
+    const dfnPos = getBounds(dfn);
+    dfnPanel.style.top = dfnPos.bottom + "px";
+    dfnPanel.style.left = dfnPos.left + "px";
+
+    const panelPos = dfnPanel.getBoundingClientRect();
+    const panelMargin = 8;
+    const maxRight = document.body.parentNode.clientWidth - panelMargin;
+    if (panelPos.right > maxRight) {
+        const overflowAmount = panelPos.right - maxRight;
+        const newLeft = Math.max(panelMargin, dfnPos.left - overflowAmount);
+        dfnPanel.style.left = newLeft + "px";
+    }
+}
+
+function pinDfnPanel(dfnPanel) {
+    // Switch it to "activated" state, which pins it.
+    dfnPanel.classList.add("activated");
+    dfnPanel.style.position = "fixed";
+    dfnPanel.style.left = null;
+    dfnPanel.style.top = null;
+}
+
+function hideDfnPanel({dfn, dfnPanel}) {
+    if(!dfnPanel) dfnPanel = dfn.dfnPanel;
+    if(!dfn) dfn = dfnPanel.dfn;
+    dfn.dfnPanel = undefined;
+    dfnPanel.dfn = undefined;
+    dfn.setAttribute("aria-expanded", "false");
+    dfn.tabIndex = undefined;
+    dfnPanel.remove()
+}
+
+function toggleDfnPanel(dfn) {
+    if(dfn.dfnPanel) {
+        hideDfnPanel(dfn);
+    } else {
+        showDfnPanel(dfn);
+    }
+}
+
+function insertDfnPopupAction(dfn) {
+    dfn.setAttribute('role', 'button');
+    dfn.setAttribute('aria-expanded', 'false')
+    dfn.tabIndex = 0;
+    dfn.classList.add('has-dfn-panel');
+    dfn.addEventListener('click', (event) => {
+        toggleDfnPanel(dfn);
+        event.stopPropagation();
+    });
+    dfn.addEventListener('keypress', (event) => {
+        const kc = event.keyCode;
+        // 32->Space, 13->Enter
+        if(kc == 32 || kc == 13) {
+            toggleDfnPanel(dfn);
+            event.stopPropagation();
+            event.preventDefault();
+        }
+    });
+}
+
+function refocusOnTarget(event) {
+    const target = event.target;
+    setTimeout(() => {
+        // Refocus on the event.target element.
+        // This is needed after browser scrolls to the destination.
+        target.focus();
+    });
+}
+
+// TODO: shared util
+// Returns the root-level absolute position {left and top} of element.
+function getBounds(el, relativeTo=document.body) {
+    const relativeRect = relativeTo.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const top = elRect.top - relativeRect.top;
+    const left = elRect.left - relativeRect.left;
+    return {
+        top,
+        left,
+        bottom: top + elRect.height,
+        right: left + elRect.width,
+    }
+}
+
+function scrollToTargetAndHighlight(event) {
+    let hash = event.target.hash;
+    if (hash) {
+        hash = decodeURIComponent(hash.substring(1));
+        const dest = document.getElementById(hash);
+        if (dest) {
+            dest.classList.add('highlighted');
+            setTimeout(() => dest.classList.remove('highlighted'), 1000);
+        }
+    }
+}
+
+// Functions, divided by link type, that wrap an autolink's
+// contents with the appropriate outer syntax.
+// Alternately, a string naming another type they format
+// the same as.
+function needsFor(type) {
+    switch(type) {
+        case "descriptor":
+        case "value":
+        case "element-attr":
+        case "attr-value":
+        case "element-state":
+        case "method":
+        case "constructor":
+        case "argument":
+        case "attribute":
+        case "const":
+        case "dict-member":
+        case "event":
+        case "enum-value":
+        case "stringifier":
+        case "serializer":
+        case "iterator":
+        case "maplike":
+        case "setlike":
+        case "state":
+        case "mode":
+        case "context":
+        case "facet": return true;
+
+        default: return false;
+    }
+}
+function refusesFor(type) {
+    switch(type) {
+        case "property":
+        case "element":
+        case "interface":
+        case "namespace":
+        case "callback":
+        case "dictionary":
+        case "enum":
+        case "exception":
+        case "typedef":
+        case "http-header":
+        case "permission": return true;
+
+        default: return false;
+    }
+}
+function linkFormatterFromType(type) {
+    switch(type) {
+        case 'scheme':
+        case 'permission':
+        case 'dfn': return (text) => `[=${text}=]`;
+
+        case 'abstract-op': return (text) => `[\$${text}\$]`;
+
+        case 'function':
+        case 'at-rule':
+        case 'selector':
+        case 'value': return (text) => `''${text}''`;
+
+        case 'http-header': return (text) => `[:${text}:]`;
+
+        case 'interface':
+        case 'constructor':
+        case 'method':
+        case 'argument':
+        case 'attribute':
+        case 'callback':
+        case 'dictionary':
+        case 'dict-member':
+        case 'enum':
+        case 'enum-value':
+        case 'exception':
+        case 'const':
+        case 'typedef':
+        case 'stringifier':
+        case 'serializer':
+        case 'iterator':
+        case 'maplike':
+        case 'setlike':
+        case 'extended-attribute':
+        case 'event':
+        case 'idl': return (text) => `{{${text}}}`;
+
+        case 'element-state':
+        case 'element-attr':
+        case 'attr-value':
+        case 'element': return (element) => `<{${element}}>`;
+
+        case 'grammar': return (text) => `${text} (within a <pre class=prod>)`;
+
+        case 'type': return (text)=> `<<${text}>>`;
+
+        case 'descriptor':
+        case 'property': return (text) => `'${text}'`;
+
+        default: return;
+    };
+};
+
+function genLinkingSyntaxes(dfn) {
+    if(dfn.tagName != "DFN") return;
+
+    const type = dfn.getAttribute('data-dfn-type');
+    if(!type) {
+        console.log(`<dfn> doesn't have a data-dfn-type:`, dfn);
+        return [];
+    }
+
+    // Return a function that wraps link text based on the type
+    const linkFormatter = linkFormatterFromType(type);
+    if(!linkFormatter) {
+        console.log(`<dfn> has an unknown data-dfn-type:`, dfn);
+        return [];
+    }
+
+    let ltAlts;
+    if(dfn.hasAttribute('data-lt')) {
+        ltAlts = dfn.getAttribute('data-lt')
+            .split("|")
+            .map(x=>x.trim());
+    } else {
+        ltAlts = [dfn.textContent.trim()];
+    }
+    if(type == "type") {
+        // lt of "<foo>", but "foo" is the interior;
+        // <<foo/bar>> is how you write it with a for,
+        // not <foo/<bar>> or whatever.
+        for(var i = 0; i < ltAlts.length; i++) {
+            const lt = ltAlts[i];
+            const match = /<(.*)>/.exec(lt);
+            if(match) { ltAlts[i] = match[1]; }
+        }
+    }
+
+    let forAlts;
+    if(dfn.hasAttribute('data-dfn-for')) {
+        forAlts = dfn.getAttribute('data-dfn-for')
+            .split(",")
+            .map(x=>x.trim());
+    } else {
+        forAlts = [''];
+    }
+
+    let linkingSyntaxes = [];
+    if(!needsFor(type)) {
+        for(const lt of ltAlts) {
+            linkingSyntaxes.push(linkFormatter(lt));
+        }
+    }
+    if(!refusesFor(type)) {
+        for(const f of forAlts) {
+            linkingSyntaxes.push(linkFormatter(`${f}/${ltAlts[0]}`))
+        }
+    }
+    return [
+        mk.b({}, 'Possible linking syntaxes:'),
+        mk.ul({},
+            ...linkingSyntaxes.map(link => {
+                const copyLink = async () =>
+                    await navigator.clipboard.writeText(link);
+                return mk.li({},
+                    mk.div({ class: 'link-item' },
+                        mk.button({
+                            class: 'copy-icon', title: 'Copy',
+                            type: 'button',
+                            _onclick: copyLink,
+                            tabindex: 0,
+                        }, mk.span({ class: 'icon' }) ),
+                        mk.span({}, link)
+                    )
+                );
+            })
+        )
+    ];
+}
+}
+</script>
+<script>/* Boilerplate: script-ref-hints */
+"use strict";
+{
+let refsData = {
+"painting.html#FillOpacityProperty": {"displayText":"fill-opacity","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"fill-opacity","type":"property","url":"painting.html#FillOpacityProperty"},
+"painting.html#PaintOrderProperty": {"displayText":"paint-order","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"paint-order","type":"property","url":"painting.html#PaintOrderProperty"},
+"interact.html#PointerEventsProperty": {"displayText":"pointer-events","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"pointer-events","type":"property","url":"interact.html#PointerEventsProperty"},
+"struct.html#SVGElementTabindexAttribute": {"displayText":"tabindex","export":true,"for_":["core-attributes"],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"tabindex","type":"element-attr","url":"struct.html#SVGElementTabindexAttribute"},
+"painting.html#StrokeOpacityProperty": {"displayText":"stroke-opacity","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"stroke-opacity","type":"property","url":"painting.html#StrokeOpacityProperty"},
+"struct.html#TermConditionalProcessingAttribute": {"displayText":"conditional processing attribute","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"conditional processing attribute","type":"dfn","url":"struct.html#TermConditionalProcessingAttribute"},
+"struct.html#TermElementInstance": {"displayText":"element instance","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"element instance","type":"dfn","url":"struct.html#TermElementInstance"},
+"painting.html#TermFill": {"displayText":"fill","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"fill","type":"dfn","url":"painting.html#TermFill"},
+"struct.html#TermInstanceRoot": {"displayText":"instance root","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"instance root","type":"dfn","url":"struct.html#TermInstanceRoot"},
+"#TermNeverRenderedElement": {"displayText":"never-rendered element","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"never-rendered element","type":"dfn","url":"#TermNeverRenderedElement"},
+"#TermNonRenderedElement": {"displayText":"non-rendered element","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"non-rendered element","type":"dfn","url":"#TermNonRenderedElement"},
+"struct.html#TermOutermostSVGElement": {"displayText":"outermost svg element","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"outermost svg element","type":"dfn","url":"struct.html#TermOutermostSVGElement"},
+"painting.html#TermPaint": {"displayText":"paint","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"paint","type":"dfn","url":"painting.html#TermPaint"},
+"painting.html#TermPaintServerElement": {"displayText":"paint server element","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"paint server element","type":"dfn","url":"painting.html#TermPaintServerElement"},
+"struct.html#TermReferencedDocumentSubtree": {"displayText":"referenced document subtree","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"referenced document subtree","type":"dfn","url":"struct.html#TermReferencedDocumentSubtree"},
+"#TermRenderableElement": {"displayText":"renderable element","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"renderable element","type":"dfn","url":"#TermRenderableElement"},
+"#TermReusedGraphics": {"displayText":"re-used graphics","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"re-used graphics","type":"dfn","url":"#TermReusedGraphics"},
+"struct.html#TermSVGDocumentFragment": {"displayText":"svg document fragment","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"svg document fragment","type":"dfn","url":"struct.html#TermSVGDocumentFragment"},
+"coords.html#TermSVGViewport": {"displayText":"svg viewports","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"svg viewports","type":"dfn","url":"coords.html#TermSVGViewport"},
+"shapes.html#TermShapeElement": {"displayText":"shape elements","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"shape elements","type":"dfn","url":"shapes.html#TermShapeElement"},
+"#TermStackingContext": {"displayText":"stacking contexts","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"stacking contexts","type":"dfn","url":"#TermStackingContext"},
+"painting.html#TermStroke": {"displayText":"stroke","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"stroke","type":"dfn","url":"painting.html#TermStroke"},
+"text.html#TermTextContentElement": {"displayText":"text content element","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"text content element","type":"dfn","url":"text.html#TermTextContentElement"},
+"struct.html#TermUseElementShadowTree": {"displayText":"use-element shadow tree","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"use-element shadow tree","type":"dfn","url":"struct.html#TermUseElementShadowTree"},
+"linking.html#elementdef-a": {"displayText":"a","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"a","type":"element","url":"linking.html#elementdef-a"},
+"shapes.html#elementdef-circle": {"displayText":"circle","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"circle","type":"element","url":"shapes.html#elementdef-circle"},
+"struct.html#elementdef-defs": {"displayText":"defs","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"defs","type":"element","url":"struct.html#elementdef-defs"},
+"struct.html#elementdef-desc": {"displayText":"desc","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"desc","type":"element","url":"struct.html#elementdef-desc"},
+"shapes.html#elementdef-ellipse": {"displayText":"ellipse","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"ellipse","type":"element","url":"shapes.html#elementdef-ellipse"},
+"embedded.html#elementdef-foreignObject": {"displayText":"foreignobject","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"foreignobject","type":"element","url":"embedded.html#elementdef-foreignObject"},
+"struct.html#elementdef-g": {"displayText":"g","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"g","type":"element","url":"struct.html#elementdef-g"},
+"embedded.html#elementdef-image": {"displayText":"image","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"image","type":"element","url":"embedded.html#elementdef-image"},
+"shapes.html#elementdef-line": {"displayText":"line","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"line","type":"element","url":"shapes.html#elementdef-line"},
+"pservers.html#elementdef-linearGradient": {"displayText":"lineargradient","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"lineargradient","type":"element","url":"pservers.html#elementdef-linearGradient"},
+"painting.html#elementdef-marker": {"displayText":"marker","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"marker","type":"element","url":"painting.html#elementdef-marker"},
+"struct.html#elementdef-metadata": {"displayText":"metadata","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"metadata","type":"element","url":"struct.html#elementdef-metadata"},
+"paths.html#elementdef-path": {"displayText":"path","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"path","type":"element","url":"paths.html#elementdef-path"},
+"pservers.html#elementdef-pattern": {"displayText":"pattern","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"pattern","type":"element","url":"pservers.html#elementdef-pattern"},
+"shapes.html#elementdef-polygon": {"displayText":"polygon","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"polygon","type":"element","url":"shapes.html#elementdef-polygon"},
+"shapes.html#elementdef-polyline": {"displayText":"polyline","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"polyline","type":"element","url":"shapes.html#elementdef-polyline"},
+"pservers.html#elementdef-radialGradient": {"displayText":"radialgradient","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"radialgradient","type":"element","url":"pservers.html#elementdef-radialGradient"},
+"shapes.html#elementdef-rect": {"displayText":"rect","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"rect","type":"element","url":"shapes.html#elementdef-rect"},
+"interact.html#elementdef-script": {"displayText":"script","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"script","type":"element","url":"interact.html#elementdef-script"},
+"styling.html#elementdef-style": {"displayText":"style","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"style","type":"element","url":"styling.html#elementdef-style"},
+"struct.html#elementdef-svg": {"displayText":"svg","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"svg","type":"element","url":"struct.html#elementdef-svg"},
+"struct.html#elementdef-switch": {"displayText":"switch","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"switch","type":"element","url":"struct.html#elementdef-switch"},
+"struct.html#elementdef-symbol": {"displayText":"symbol","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"symbol","type":"element","url":"struct.html#elementdef-symbol"},
+"text.html#elementdef-text": {"displayText":"text","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"text","type":"element","url":"text.html#elementdef-text"},
+"text.html#elementdef-textPath": {"displayText":"textpath","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"textpath","type":"element","url":"text.html#elementdef-textPath"},
+"struct.html#elementdef-title": {"displayText":"title","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"title","type":"element","url":"struct.html#elementdef-title"},
+"text.html#elementdef-tspan": {"displayText":"tspan","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"tspan","type":"element","url":"text.html#elementdef-tspan"},
+"struct.html#elementdef-use": {"displayText":"use","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"use","type":"element","url":"struct.html#elementdef-use"},
+};
+
+function mkRefHint(link, ref) {
+    const linkText = link.textContent;
+    let dfnTextElements = '';
+    if (ref.displayText.toLowerCase() != linkText.toLowerCase()) {
+        // Give the original term if it's being displayed in a different way.
+        // But allow casing differences, they're insignificant.
+        dfnTextElements =
+            mk.li({},
+                mk.b({}, "Term: "),
+                mk.span({}, ref.displayText)
+            );
+    }
+    const forList = ref.for_;
+    let forListElements;
+    if(forList.length == 0) {
+        forListElements = [];
+    } else if(forList.length == 1) {
+        forListElements = mk.li({},
+            mk.b({}, "For: "),
+            mk.span({}, forList[0]),
+        );
+    } else {
+        forListElements = mk.li({},
+            mk.b({}, "For: "),
+            mk.ul({},
+                ...forList.map(forItem =>
+                    mk.li({},
+                        mk.span({}, forItem)
+                    ),
+                ),
+            ),
+        );
+    }
+    const url = ref.url;
+    const safeUrl = encodeURIComponent(url);
+    const hintPanel = mk.aside({
+        class: "ref-hint",
+        id: `ref-hint-for-${safeUrl}`,
+        "data-for": url,
+        "aria-labelled-by": `ref-hint-for-${safeUrl}`,
+    },
+        mk.ul({},
+            dfnTextElements,
+            mk.li({},
+                mk.b({}, "URL: "),
+                mk.a({ href: url, class: "ref" }, url),
+            ),
+            mk.li({},
+                mk.b({}, "Type: "),
+                mk.span({}, `${ref.type}`),
+            ),
+            mk.li({},
+                mk.b({}, "Spec: "),
+                mk.span({}, `${ref.spec ? ref.spec : ''}`),
+            ),
+            forListElements
+        ),
+    );
+    hintPanel.forLink = link;
+    setupRefHintEventListeners(link, hintPanel);
+    return hintPanel;
+}
+
+function hideAllRefHints() {
+    queryAll(".ref-hint").forEach(el=>hideRefHint(el));
+}
+
+function hideRefHint(refHint) {
+    const link = refHint.forLink;
+    link.setAttribute("aria-expanded", "false");
+    if(refHint.teardownEventListeners) {
+        refHint.teardownEventListeners();
+    }
+    refHint.remove();
+}
+
+function showRefHint(link) {
+    if(link.classList.contains("dfn-link")) return;
+    const url = link.getAttribute("href");
+    const refHintKey = link.getAttribute("data-refhint-key");
+    let key = url;
+    if(refHintKey) {
+        key = refHintKey + "_" + url;
+    }
+    const ref = refsData[key];
+    if(!ref) return;
+
+    hideAllRefHints(); // Only display one at this time.
+
+    const refHint = mkRefHint(link, ref);
+    append(document.body, refHint);
+    link.setAttribute("aria-expanded", "true");
+    positionRefHint(refHint);
+}
+
+function setupRefHintEventListeners(link, refHint) {
+    if (refHint.teardownEventListeners) return;
+    // Add event handlers to hide the refHint after the user moves away
+    // from both the link and refHint, if not hovering either within one second.
+    let timeout = null;
+    const startHidingRefHint = (event) => {
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(() => {
+            hideRefHint(refHint);
+        }, 1000);
+    }
+    const resetHidingRefHint = (event) => {
+        if (timeout) clearTimeout(timeout);
+        timeout = null;
+    };
+    link.addEventListener("mouseleave", startHidingRefHint);
+    link.addEventListener("mouseenter", resetHidingRefHint);
+    link.addEventListener("blur", startHidingRefHint);
+    link.addEventListener("focus", resetHidingRefHint);
+    refHint.addEventListener("mouseleave", startHidingRefHint);
+    refHint.addEventListener("mouseenter", resetHidingRefHint);
+    refHint.addEventListener("blur", startHidingRefHint);
+    refHint.addEventListener("focus", resetHidingRefHint);
+
+    refHint.teardownEventListeners = () => {
+        // remove event listeners
+        resetHidingRefHint();
+        link.removeEventListener("mouseleave", startHidingRefHint);
+        link.removeEventListener("mouseenter", resetHidingRefHint);
+        link.removeEventListener("blur", startHidingRefHint);
+        link.removeEventListener("focus", resetHidingRefHint);
+        refHint.removeEventListener("mouseleave", startHidingRefHint);
+        refHint.removeEventListener("mouseenter", resetHidingRefHint);
+        refHint.removeEventListener("blur", startHidingRefHint);
+        refHint.removeEventListener("focus", resetHidingRefHint);
+    };
+}
+
+function positionRefHint(refHint) {
+    const link = refHint.forLink;
+    const linkPos = getBounds(link);
+    refHint.style.top = linkPos.bottom + "px";
+    refHint.style.left = linkPos.left + "px";
+
+    const panelPos = refHint.getBoundingClientRect();
+    const panelMargin = 8;
+    const maxRight = document.body.parentNode.clientWidth - panelMargin;
+    if (panelPos.right > maxRight) {
+        const overflowAmount = panelPos.right - maxRight;
+        const newLeft = Math.max(panelMargin, linkPos.left - overflowAmount);
+        refHint.style.left = newLeft + "px";
+    }
+}
+
+// TODO: shared util
+// Returns the root-level absolute position {left and top} of element.
+function getBounds(el, relativeTo=document.body) {
+    const relativeRect = relativeTo.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const top = elRect.top - relativeRect.top;
+    const left = elRect.left - relativeRect.left;
+    return {
+        top,
+        left,
+        bottom: top + elRect.height,
+        right: left + elRect.width,
+    }
+}
+
+function showRefHintListener(e) {
+    // If the target isn't in a link (or is a link),
+    // just ignore it.
+    let link = e.target.closest("a");
+    if(!link) return;
+
+    // If the target is in a ref-hint panel
+    // (aka a link in the already-open one),
+    // also just ignore it.
+    if(link.closest(".ref-hint")) return;
+
+    // Otherwise, show the panel for the link.
+    showRefHint(link);
+}
+
+function hideAllHintsListener(e) {
+    // If the click is inside a ref-hint panel, ignore it.
+    if(e.target.closest(".ref-hint")) return;
+    // Otherwise, close all the current panels.
+    hideAllRefHints();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.body.addEventListener("mousedown", showRefHintListener);
+    document.body.addEventListener("focus", showRefHintListener);
+
+    document.body.addEventListener("click", hideAllHintsListener);
+});
+
+window.addEventListener("resize", () => {
+    // Hide any open ref hint.
+    hideAllRefHints();
+});
+}
+</script>
+</body>
 </html>
