@@ -648,9 +648,19 @@ to an [=invalid value=] for the content attribute (e.g.,
 a negative number for an attribute that requires a non-negative
 number), unless
 this specification indicates otherwise, no exception shall be
-raised on setting, but the given document fragment shall become
-technically <em>in error</em> as described in
-<a href="#ErrorProcessing">Error processing</a>.</p>
+raised on setting. The content attribute is handled as if the same value
+had been written in the document markup:
+it is treated as having its [=initial value=]
+(see <a href="#syntax">Attribute syntax</a>),
+and the reflecting object is [=synchronized=] accordingly.</p>
+
+<p class="note">The content attribute is reserialized with the value the script set,
+so a script writing <code>-20</code> to <code>rect.rx.baseVal.value</code>
+leaves <code>rx="-20"</code> on the element,
+the rectangle is drawn as if <span class="attr-name">‘rx’</span> had its initial value,
+and <code>rect.rx.baseVal.value</code> reads back that initial value, not <code>-20</code>.
+Setting {{SVGLength/valueAsString}} still throws a <code>SyntaxError</code> when the string fails to parse
+as a length, but not when the string parses and is out of range for the attribute.</p>
 
 <p class="note">
 DOM attributes that reflect enumerated values using integer constants are an exception:
