@@ -7,7 +7,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version 49e9fdd4f, updated Tue Oct 13 14:27:53 2026 -0700" name="generator">
   <link href="https://www.w3.org/TR/SVG2/" rel="canonical">
-  <meta content="f846f12e3f504aec18f6ba3dacfb8db7ab7e0e36" name="revision">
+  <meta content="997b6e09e4384fe575f51664277553c33d629e6a" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -737,7 +737,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <span class="bs-old-id" id="Overview-pagetitle"></span>
    <h1 id="pagetitle">Scalable Vector Graphics (SVG) 2</h1>
    <p id="w3c-state"><span class="bs-old-id" id="Overview-w3c-state"></span><a href="https://www.w3.org/standards/types#ED">
-    W3C Editor’s Draft</a> <time class="dt-published" datetime="[ISODATE]">21 October 2026</time>
+    W3C Editor’s Draft</a> <time class="dt-published" datetime="[ISODATE]">26 October 2026</time>
   </p>
    <details open>
     <summary>More details about this document</summary>
@@ -794,7 +794,7 @@ and animations can be performed using declarative animation features or by using
 publication. A list of current W3C
 publications and the latest revision of this technical report can be found in
 the <a href="https://www.w3.org/TR/">W3C standards and drafts index</a>.</em></p>
-  <p>This document is the 21 October 2026 <strong>Editor’s Draft</strong> of SVG 2.  This version of SVG
+  <p>This document is the 26 October 2026 <strong>Editor’s Draft</strong> of SVG 2.  This version of SVG
 builds upon <a href="https://www.w3.org/TR/2011/REC-SVG11-20110816/">SVG 1.1 Second Edition</a>
 by improving the usability of the language and by adding new features commonly
 requested by authors.  The <a href="#chapter-changes">Changes</a> appendix lists all
@@ -4349,9 +4349,18 @@ to an <a data-link-type="dfn" href="#TermInvalidValue" id="ref-for-TermInvalidVa
 a negative number for an attribute that requires a non-negative
 number), unless
 this specification indicates otherwise, no exception shall be
-raised on setting, but the given document fragment shall become
-technically <em>in error</em> as described in
-<a href="#ErrorProcessing">Error processing</a>.</p>
+raised on setting. The content attribute is handled as if the same value
+had been written in the document markup:
+it is treated as having its <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③">initial value</a>
+(see <a href="#syntax">Attribute syntax</a>),
+and the reflecting object is <a data-link-type="dfn" href="#TermSynchronize" id="ref-for-TermSynchronize">synchronized</a> accordingly.</p>
+   <p class="note" role="note">The content attribute is reserialized with the value the script set,
+so a script writing <code>-20</code> to <code>rect.rx.baseVal.value</code>
+leaves <code>rx="-20"</code> on the element,
+the rectangle is drawn as if <span class="attr-name">‘rx’</span> had its initial value,
+and <code>rect.rx.baseVal.value</code> reads back that initial value, not <code>-20</code>.
+Setting <code class="idl"><a data-link-type="idl" href="#__svg__SVGLength__valueAsString" id="ref-for-__svg__SVGLength__valueAsString②">valueAsString</a></code> still throws a <code>SyntaxError</code> when the string fails to parse
+as a length, but not when the string parses and is out of range for the attribute.</p>
    <p class="note" role="note">
 DOM attributes that reflect enumerated values using integer constants are an exception:
 these throw a <a href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror">TypeError</a> when set to an out-of-range integer,
@@ -4713,7 +4722,7 @@ four modes.  It can:</p>
   <c- b>readonly</c-> <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short" id="ref-for-idl-unsigned-short①①"><c- b>unsigned</c-> <c- b>short</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="unsigned short" href="#__svg__SVGLength__unitType" id="ref-for-__svg__SVGLength__unitType"><c- g>unitType</c-></a>;
            <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-float" id="ref-for-idl-float③"><c- b>float</c-></a> <a class="idl-code" data-link-type="attribute" data-type="float" href="#__svg__SVGLength__value" id="ref-for-__svg__SVGLength__value"><c- g>value</c-></a>;
            <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-float" id="ref-for-idl-float④"><c- b>float</c-></a> <a class="idl-code" data-link-type="attribute" data-type="float" href="#__svg__SVGLength__valueInSpecifiedUnits" id="ref-for-__svg__SVGLength__valueInSpecifiedUnits"><c- g>valueInSpecifiedUnits</c-></a>;
-           <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <a class="idl-code" data-link-type="attribute" data-type="DOMString" href="#__svg__SVGLength__valueAsString" id="ref-for-__svg__SVGLength__valueAsString②"><c- g>valueAsString</c-></a>;
+           <c- b>attribute</c-> <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-DOMString" id="ref-for-idl-DOMString"><c- b>DOMString</c-></a> <a class="idl-code" data-link-type="attribute" data-type="DOMString" href="#__svg__SVGLength__valueAsString" id="ref-for-__svg__SVGLength__valueAsString③"><c- g>valueAsString</c-></a>;
 
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined"><c- b>undefined</c-></a> <a class="idl-code" data-link-type="method" href="#__svg__SVGLength__newValueSpecifiedUnits" id="ref-for-__svg__SVGLength__newValueSpecifiedUnits"><c- g>newValueSpecifiedUnits</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short" id="ref-for-idl-unsigned-short①②"><c- b>unsigned</c-> <c- b>short</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="SVGLength/newValueSpecifiedUnits(unitType, valueInSpecifiedUnits)" data-dfn-type="argument" data-export id="dom-svglength-newvaluespecifiedunits-unittype-valueinspecifiedunits-unittype"><code><c- g>unitType</c-></code></dfn>, <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-float" id="ref-for-idl-float⑤"><c- b>float</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="SVGLength/newValueSpecifiedUnits(unitType, valueInSpecifiedUnits)" data-dfn-type="argument" data-export id="dom-svglength-newvaluespecifiedunits-unittype-valueinspecifiedunits-valueinspecifiedunits"><code><c- g>valueInSpecifiedUnits</c-></code></dfn>);
   <a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-undefined" id="ref-for-idl-undefined①"><c- b>undefined</c-></a> <a class="idl-code" data-link-type="method" href="#__svg__SVGLength__convertToSpecifiedUnits" id="ref-for-__svg__SVGLength__convertToSpecifiedUnits"><c- g>convertToSpecifiedUnits</c-></a>(<a class="idl-code" data-link-type="interface" href="https://webidl.spec.whatwg.org/#idl-unsigned-short" id="ref-for-idl-unsigned-short①③"><c- b>unsigned</c-> <c- b>short</c-></a> <dfn class="dfn-paneled idl-code" data-dfn-for="SVGLength/convertToSpecifiedUnits(unitType)" data-dfn-type="argument" data-export id="dom-svglength-converttospecifiedunits-unittype-unittype"><code><c- g>unitType</c-></code></dfn>);
@@ -4886,7 +4895,7 @@ are run:</p>
    </ol>
    <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="SVGLength" data-dfn-type="attribute" data-export id="__svg__SVGLength__valueAsString"><code><span class="bs-old-id" id="types-__svg__SVGLength__valueAsString"></span><code>valueAsString</code></code></dfn> IDL attribute represents
 the <code class="idl"><a data-link-type="idl" href="#svglength" id="ref-for-svglength③⑤">SVGLength</a></code>’s <a data-link-type="dfn" href="#LengthValue" id="ref-for-LengthValue①②">value</a> as a string.
-On getting <code class="idl"><a data-link-type="idl" href="#__svg__SVGLength__valueAsString" id="ref-for-__svg__SVGLength__valueAsString③">valueAsString</a></code>, the following steps
+On getting <code class="idl"><a data-link-type="idl" href="#__svg__SVGLength__valueAsString" id="ref-for-__svg__SVGLength__valueAsString④">valueAsString</a></code>, the following steps
 are run:</p>
    <ol class="algorithm">
     <li>Let <var>value</var> be the <code class="idl"><a data-link-type="idl" href="#svglength" id="ref-for-svglength③⑥">SVGLength</a></code>’s <a data-link-type="dfn" href="#LengthValue" id="ref-for-LengthValue①③">value</a>.
@@ -4915,13 +4924,13 @@ are run:</p>
   length value to <var>value</var>, given the
   implementation’s supported <a href="#Precision">real number precision</a>.
    </ol>
-   <p>On setting <code class="idl"><a data-link-type="idl" href="#__svg__SVGLength__valueAsString" id="ref-for-__svg__SVGLength__valueAsString④">valueAsString</a></code>, the following steps
+   <p>On setting <code class="idl"><a data-link-type="idl" href="#__svg__SVGLength__valueAsString" id="ref-for-__svg__SVGLength__valueAsString⑤">valueAsString</a></code>, the following steps
 are run:</p>
    <ol class="algorithm">
     <li>If the <code class="idl"><a data-link-type="idl" href="#svglength" id="ref-for-svglength③⑦">SVGLength</a></code> object is <a href="#ReadOnlyLength">read only</a>, then
   <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.
     <li>Let <var>value</var> be the value being assigned to
-  <code class="idl"><a data-link-type="idl" href="#__svg__SVGLength__valueAsString" id="ref-for-__svg__SVGLength__valueAsString⑤">valueAsString</a></code>.
+  <code class="idl"><a data-link-type="idl" href="#__svg__SVGLength__valueAsString" id="ref-for-__svg__SVGLength__valueAsString⑥">valueAsString</a></code>.
     <li>Parse <var>value</var> using the CSS syntax
   [ <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> | <a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a> | <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a> ].
     <li>If parsing failed, then <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#syntaxerror">SyntaxError</a>.
@@ -5376,8 +5385,8 @@ the following steps:</p>
     <li class="ready-for-wider-review">Let <var>value</var> be the base value of the
     reflected content attribute. If the attribute is not present, or if its
     value cannot be parsed, let <var>value</var> be the attribute’s
-    <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③">initial value</a>, or an empty list if the attribute’s
-    <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④">initial value</a> is <span class="attr-value">(none)</span>.
+    <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④">initial value</a>, or an empty list if the attribute’s
+    <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑤">initial value</a> is <span class="attr-value">(none)</span>.
     <li>Let <var>length</var> be the number of items in the list.
     <li>Let <var>new length</var> be the number of values in <var>value</var>.
   If <var>value</var> is the keyword <span class="prop-value">none</span>
@@ -5755,7 +5764,7 @@ the following steps are run:</p>
     <li>Let <var>value</var> be the value of the reflected attribute,
   or the empty string if it is not present.
     <li>If <var>value</var> is not "true" or "false", then set <var>value</var>
-  to the reflected attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑤">initial value</a>.
+  to the reflected attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑥">initial value</a>.
     <li>Return true if <var>value</var> is "true", and false otherwise.
    </ol>
    <p>On setting <code class="idl"><a data-link-type="idl" href="#__svg__SVGAnimatedBoolean__baseVal" id="ref-for-__svg__SVGAnimatedBoolean__baseVal②">baseVal</a></code>,
@@ -5787,7 +5796,7 @@ reflected <span class="attr-name">‘<code><a data-link-type="element-sub" href=
 following steps are run:</p>
    <ol class="algorithm">
     <li>Let <var>value</var> be the value of the reflected attribute
-  (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑥">initial value</a> if it is not present
+  (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑦">initial value</a> if it is not present
   or invalid).
     <li>Return the <dfn class="dfn-paneled" data-dfn-type="dfn" data-export id="TermNumericTypeValue"><span class="bs-old-id" id="types-TermNumericTypeValue"></span>numeric type value</dfn>
   for <var>value</var>, according to the reflecting IDL attribute’s
@@ -5837,7 +5846,7 @@ current non-animated value of one of the two integers.  On getting
 following steps are run:</p>
    <ol class="algorithm">
     <li>Let <var>value</var> be the value of the reflected attribute
-  (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑦">initial value</a> if it is not present
+  (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑧">initial value</a> if it is not present
   or invalid).
     <li>
      If the reflected attribute is defined to take an integer
@@ -5871,7 +5880,7 @@ the following steps are run:</p>
     
      <ol>
       <li>Let <var>current</var> be the value of the reflected attribute
-      (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑧">initial value</a> if it is not present
+      (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑨">initial value</a> if it is not present
       or invalid).
       <li>Let <var>first</var> be the first integer in <var>current</var>.
       <li>Let <var>second</var> be the second integer in <var>current</var>
@@ -5915,7 +5924,7 @@ current non-animated value of one of the two numbers.  On getting
 following steps are run:</p>
    <ol class="algorithm">
     <li>Let <var>value</var> be the value of the reflected attribute
-  (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑨">initial value</a> if it is not present
+  (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①⓪">initial value</a> if it is not present
   or invalid).
     <li>
      If the reflected attribute is defined to take an number
@@ -5949,7 +5958,7 @@ the following steps are run:</p>
     
      <ol>
       <li>Let <var>current</var> be the value of the reflected attribute
-      (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①⓪">initial value</a> if it is not present
+      (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①①">initial value</a> if it is not present
       or invalid).
       <li>Let <var>first</var> be the first number in <var>current</var>.
       <li>Let <var>second</var> be the second number in <var>current</var>
@@ -6045,7 +6054,7 @@ the following steps are run:</p>
       <li>If the <code class="idl"><a data-link-type="idl" href="#svganimatedstring" id="ref-for-svganimatedstring⑤">SVGAnimatedString</a></code> object is defined to additionally
       reflect a second, deprecated attribute, and that attribute is present,
       then return its value.
-      <li>Otherwise, if the reflected attribute has an <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①①">initial value</a>,
+      <li>Otherwise, if the reflected attribute has an <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①②">initial value</a>,
       then return it.
       <li>Otherwise, return the empty string.
      </ol>
@@ -6103,7 +6112,7 @@ or <code class="idl"><a data-link-type="idl" href="#__svg__SVGAnimatedRect__anim
 is added, removed, or changed, the following steps are run:</p>
    <ol class="algorithm">
     <li>Let <var>value</var> be the value of the reflected attribute
-  (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①②">initial value</a> if it is not present
+  (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①③">initial value</a> if it is not present
   or invalid).
     <li>Let <var>x</var>, <var>y</var>, <var>width</var> and <var>height</var>
   be those corresponding components of <var>value</var>.
@@ -8556,7 +8565,7 @@ A valid role is a recognized, non-abstract role that is <a href="#implicit-aria-
     <a href="https://www.w3.org/TR/wai-aria-1.1/#role_definitions">Definition of Roles</a> ([<a href="#ref-wai-aria">wai-aria</a>], section 5.4).
     </p>
      <p>The role value is a set of white-space separated machine-extractable semantic information used to define the purpose of the element.</p>
-     <p>The <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①③">initial value</a> for the <span class="attr-name">‘<code><a data-link-type="element-sub" href="#RoleAttribute" id="ref-for-RoleAttribute⑦">role</a></code>’</span> attribute, for each SVG element, is the corresponding
+     <p>The <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①④">initial value</a> for the <span class="attr-name">‘<code><a data-link-type="element-sub" href="#RoleAttribute" id="ref-for-RoleAttribute⑦">role</a></code>’</span> attribute, for each SVG element, is the corresponding
     <a href="#implicit-aria-semantics">default implied ARIA semantic for SVG elements</a>.</p>
    </dl>
    <p>To be valid and useful, many element roles require additional information to be provided
@@ -10025,7 +10034,7 @@ properties accept negative values. The <a class="css property" data-link-type="p
 and <a class="property" href="#Sizing">height</a> properties do not: a negative <a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> is
 <a data-link-type="dfn" href="#TermInvalidValue" id="ref-for-TermInvalidValue⑦">invalid</a>. When an invalid negative value is specified for one of these properties,
 whether through a presentation attribute or a CSS declaration, it must be treated as if the
-property’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①④">initial value</a> had been specified: <span class="prop-value">auto</span> for
+property’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①⑤">initial value</a> had been specified: <span class="prop-value">auto</span> for
 <a class="css property" data-link-type="property" href="#RxProperty" id="ref-for-RxProperty②">rx</a>, <a class="css property" data-link-type="property" href="#RyProperty" id="ref-for-RyProperty③">ry</a>, <a class="property" href="#Sizing">width</a> and <a class="property" href="#Sizing">height</a>, and <span class="prop-value">0</span>
 for <a class="css property" data-link-type="property" href="#RProperty" id="ref-for-RProperty③">r</a>. A negative value therefore never puts the element into an error state; the
 <span class="xxx">@@ unknown term "used value"</span> is determined by the property’s normal resolution rules. The following table
@@ -10904,7 +10913,7 @@ of the following strings:</p>
    Align the midpoint Y value of the element’s <span class="attr-name">‘<a data-link-type="element-attr" href="#ViewBoxAttribute">viewBox</a>’</span>
    with the midpoint Y
   value of the SVG viewport.
-     <li><span class="attr-value">xMidYMid</span> (the <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①⑤">initial value</a>) -
+     <li><span class="attr-value">xMidYMid</span> (the <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①⑥">initial value</a>) -
   Force uniform scaling.<br>
    Align the midpoint X value of the element’s <span class="attr-name">‘<a data-link-type="element-attr" href="#ViewBoxAttribute">viewBox</a>’</span>
    with the midpoint X value of the SVG viewport.<br>
@@ -11449,7 +11458,7 @@ point (0,0) for the purposes of calculating a bounding box.</p>
 interface to request a bounding box.</p>
     <p>Elements in the <a href="#RenderingTree">rendering tree</a> which reference unresolved resources shall
 still have a bounding box, defined by the position and dimensions specified in
-their attributes, or by the <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①⑥">initial value</a> for those attributes if no
+their attributes, or by the <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①⑦">initial value</a> for those attributes if no
 values are supplied. For example, the element <code>&lt;use href="#bad" x="10" y="10"/></code>
 would have a bounding box with an x and y of 10 and a width and height of 0.</p>
     <p>The following algorithm defines how to compute a bounding box for a given
@@ -14006,7 +14015,7 @@ value.  On getting, the following steps are run:</p>
   <a href="#PreserveAspectRatioMode">reflect the base value</a>
   of a <span class="attr-name">‘<a data-link-type="element-attr" href="#PreserveAspectRatioAttribute">preserveAspectRatio</a>’</span> attribute.
   <var>value</var> is the current non-animated value of the attribute
-  (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①⑦">initial value</a> if it is not present or invalid).
+  (using the attribute’s <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①⑧">initial value</a> if it is not present or invalid).
   
       <li>Return the constant value as specified in the alignment
   constant table above for the alignment keyword in <var>value</var>.
@@ -17666,7 +17675,7 @@ the internal coordinate value:</p>
         computation exactly matched the value calculated by the user
         agent; thus, no advance adjustments are made.
         For the purpose of <a data-link-type="dfn" href="#TermReflect" id="ref-for-TermReflect⑦⑦">reflecting</a> the attribute in the DOM,
-        the <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①⑧">initial value</a> is the current user-agent calculated length,
+        the <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①⑨">initial value</a> is the current user-agent calculated length,
         expressed in implicit <a data-link-type="dfn" href="#TermUserUnits" id="ref-for-TermUserUnits③">user units</a>.
       </p>
     <dt>
@@ -20075,7 +20084,7 @@ the internal coordinate value:</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue①⑨">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②⓪">initial value</a>
       <dd>0
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -20124,7 +20133,7 @@ the internal coordinate value:</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd>align | stretch
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②⓪">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②①">initial value</a>
       <dd>align
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -20152,7 +20161,7 @@ the internal coordinate value:</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd>auto | exact
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②①">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②②">initial value</a>
       <dd>exact
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -20189,7 +20198,7 @@ the internal coordinate value:</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd>left | right
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②②">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②③">initial value</a>
       <dd>left
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -20217,7 +20226,7 @@ the internal coordinate value:</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd><a class="syntax" href="#PathDataBNF">path data</a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②③">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②④">initial value</a>
       <dd>(none)
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -20241,7 +20250,7 @@ the internal coordinate value:</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd>URL <a class="syntax" href="#attribute-url">[URL]</a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②④">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②⑤">initial value</a>
       <dd>See above.
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -26038,7 +26047,7 @@ Where, for each channel:
      <dl class="attrdef-svg2">
       <dt>Value
       <dd>userSpaceOnUse | objectBoundingBox
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②⑤">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②⑥">initial value</a>
       <dd>objectBoundingBox
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -26119,7 +26128,7 @@ Where, for each channel:
      <dl class="attrdef-svg2">
       <dt>Value
       <dd><a href="https://drafts.csswg.org/css-transforms/#typedef-transform-list">&lt;transform-list></a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②⑥">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②⑦">initial value</a>
       <dd>identity transform
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -26138,7 +26147,7 @@ Where, for each channel:
      <dl class="attrdef-svg2">
       <dt>Value
       <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②⑦">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②⑧">initial value</a>
       <dd>0%
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -26151,7 +26160,7 @@ Where, for each channel:
      <dl class="attrdef-svg2">
       <dt>Value
       <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②⑧">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②⑨">initial value</a>
       <dd>0%
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -26164,7 +26173,7 @@ Where, for each channel:
      <dl class="attrdef-svg2">
       <dt>Value
       <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue②⑨">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③⓪">initial value</a>
       <dd>100%
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -26177,7 +26186,7 @@ Where, for each channel:
      <dl class="attrdef-svg2">
       <dt>Value
       <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③⓪">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③①">initial value</a>
       <dd>0%
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -26193,7 +26202,7 @@ Where, for each channel:
      <dl class="attrdef-svg2">
       <dt>Value
       <dd>pad | reflect | repeat
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③①">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③②">initial value</a>
       <dd>pad
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -26258,7 +26267,7 @@ Where, for each channel:
      <dl class="attrdef-svg2">
       <dt>Value
       <dd>URL <a class="syntax" href="#attribute-url">[URL]</a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③②">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③③">initial value</a>
       <dd>empty
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -26362,7 +26371,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
         <span class="attr-name">‘<a data-link-type="element-attr" href="#RadialGradientElementCXAttribute">cx</a>’</span>, <span class="attr-name">‘<a data-link-type="element-attr" href="#RadialGradientElementCYAttribute">cy</a>’</span>, <span class="attr-name">‘<a data-link-type="element-attr" href="#RadialGradientElementRAttribute">r</a>’</span>, <span class="attr-name">‘<a data-link-type="element-attr" href="#RadialGradientElementFXAttribute">fx</a>’</span>, <span class="attr-name">‘<a data-link-type="element-attr" href="#RadialGradientElementFYAttribute">fy</a>’</span>, and <span class="attr-name">‘<a data-link-type="element-attr" href="#RadialGradientElementFRAttribute">fr</a>’</span>.
       </p>
       <dl class="attrdef-svg2">
-       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③③">initial value</a>
+       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③④">initial value</a>
        <dd>objectBoundingBox
        <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
        <dd>yes
@@ -26440,7 +26449,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
         box units</a> to user coordinate system.
       </p>
       <dl class="attrdef-svg2">
-       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③④">initial value</a>
+       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③⑤">initial value</a>
        <dd>identity transform
        <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
        <dd>yes
@@ -26457,7 +26466,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
         to the perimeter of this end circle.
       </p>
       <dl class="attrdef-svg2">
-       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③⑤">initial value</a>
+       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③⑥">initial value</a>
        <dd>50%
        <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
        <dd>yes
@@ -26471,7 +26480,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
 	See <span class="attr-name">‘<a data-link-type="element-attr" href="#RadialGradientElementCXAttribute">cx</a>’</span>.
       </p>
       <dl class="attrdef-svg2">
-       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③⑥">initial value</a>
+       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③⑦">initial value</a>
        <dd>50%
        <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
        <dd>yes
@@ -26490,7 +26499,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
         processing</a>).
       </p>
       <dl class="attrdef-svg2">
-       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③⑦">initial value</a>
+       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③⑧">initial value</a>
        <dd>50%
        <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
        <dd>yes
@@ -26508,7 +26517,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
         to the perimeter of this start circle.
       </p>
       <dl class="attrdef-svg2">
-       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③⑧">initial value</a>
+       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③⑨">initial value</a>
        <dd>50%
        <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
        <dd>yes
@@ -26544,7 +26553,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
 	See <span class="attr-name">‘<a data-link-type="element-attr" href="#RadialGradientElementFXAttribute">fx</a>’</span>.
       </p>
       <dl class="attrdef-svg2">
-       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue③⑨">initial value</a>
+       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④⓪">initial value</a>
        <dd>50%
        <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
        <dd>yes
@@ -26569,7 +26578,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
         processing</a>).
       </p>
       <dl class="attrdef-svg2">
-       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④⓪">initial value</a>
+       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④①">initial value</a>
        <dd>0%, see below
        <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
        <dd>yes
@@ -26611,7 +26620,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
         attribute on <span class="element-name">‘<code><a data-link-type="element" href="#elementdef-linearGradient" id="ref-for-elementdef-linearGradient②⑦">linearGradient</a></code>’</span> element.
       </p>
       <dl class="attrdef-svg2">
-       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④①">initial value</a>
+       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④②">initial value</a>
        <dd>pad
        <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
        <dd>yes
@@ -26651,7 +26660,7 @@ shows how to fill a rectangle by referencing a linear gradient paint server.</p>
         <a href="#XLinkRefAttrs">deprecated XLink attributes</a>.
       </p>
       <dl class="attrdef-svg2">
-       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④②">initial value</a>
+       <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④③">initial value</a>
        <dd>empty
        <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
        <dd>yes
@@ -26813,7 +26822,7 @@ colors..." but "ramp" is used nowhere else in this section.</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd><a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> | <a href="https://www.w3.org/TR/css3-values/#percentages">&lt;percentage></a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④③">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④④">initial value</a>
       <dd>0
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -27017,7 +27026,7 @@ and <em>n</em>.</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd>userSpaceOnUse | objectBoundingBox
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④④">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④⑤">initial value</a>
       <dd>objectBoundingBox
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -27069,7 +27078,7 @@ and <em>n</em>.</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd>userSpaceOnUse | objectBoundingBox
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④⑤">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④⑥">initial value</a>
       <dd>userSpaceOnUse
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -27125,7 +27134,7 @@ and <em>n</em>.</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd><a href="https://drafts.csswg.org/css-transforms/#typedef-transform-list">&lt;transform-list></a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④⑥">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④⑦">initial value</a>
       <dd>identity transform
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -27143,7 +27152,7 @@ and <em>n</em>.</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④⑦">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④⑧">initial value</a>
       <dd>0
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -27156,7 +27165,7 @@ and <em>n</em>.</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④⑧">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④⑨">initial value</a>
       <dd>0
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -27169,7 +27178,7 @@ and <em>n</em>.</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue④⑨">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑤⓪">initial value</a>
       <dd>0
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -27188,7 +27197,7 @@ and <em>n</em>.</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd><a href="https://www.w3.org/TR/css3-values/#lengths">&lt;length></a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑤⓪">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑤①">initial value</a>
       <dd>0
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -27226,7 +27235,7 @@ and <em>n</em>.</p>
      <dl class="attrdef-svg2">
       <dt>Value
       <dd>URL <a class="syntax" href="#attribute-url">[URL]</a>
-      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑤①">initial value</a>
+      <dt><a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑤②">initial value</a>
       <dd>empty
       <dt><a href="https://w3c.github.io/svgwg/specs/animations/#Animatable">Animatable</a>
       <dd>yes
@@ -34456,9 +34465,9 @@ have been made.</p>
     <li>Clarified step 1 of the algorithm for
     <a data-link-type="dfn" href="#TermSynchronizeList" id="ref-for-TermSynchronizeList②">synchronizing a list interface
     object</a>, so that an attribute which is absent or unparsable gives an
-    empty list when its <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑤②">initial value</a> is
+    empty list when its <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑤③">initial value</a> is
     <span class="attr-value">(none)</span>. Previously the step asked for the
-    <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑤③">initial value</a> with no answer for the
+    <a data-link-type="dfn" href="#TermInitialValue" id="ref-for-TermInitialValue⑤④">initial value</a> with no answer for the
     <span class="attr-value">(none)</span> case, which left the reflected list
     undefined for an attribute that had been removed by script.
     <a href="https://github.com/w3c/svgwg/issues/1168">Issue #1168</a>
@@ -34472,6 +34481,14 @@ have been made.</p>
     for the same index. SVG 1.1 said this for each list; SVG 2 had kept it
     only as a note.
     <a href="https://github.com/w3c/svgwg/issues/1169">Issue #1169</a>
+  
+   </ul>
+   <ul>
+    <li>Changed what happens when a script sets a reflected attribute to a value that is invalid for the content attribute,
+    such as a negative number where the attribute requires a non-negative one.
+    No exception is raised, and the attribute is treated as it is in markup, as its initial value,
+    instead of making the document fragment <em>in error</em>.
+    <a href="https://github.com/w3c/svgwg/issues/1210">Issue #1210</a>
   
    </ul>
    <h4 class="heading settled" id="structure"><span class="secno">K.2.6. </span><span class="bs-old-id" id="changes-structure"></span><span class="content">Document Structure chapter</span><a class="self-link" href="#structure"></a></h4>
@@ -36686,7 +36703,7 @@ let dfnPanelData = {
 "TermImageRenderingRectangle": {"dfnID":"TermImageRenderingRectangle","dfnText":"image-rendering rectangle","external":false,"refSections":[{"refs":[{"id":"ref-for-TermImageRenderingRectangle"},{"id":"ref-for-TermImageRenderingRectangle\u2460"},{"id":"ref-for-TermImageRenderingRectangle\u2461"},{"id":"ref-for-TermImageRenderingRectangle\u2462"},{"id":"ref-for-TermImageRenderingRectangle\u2463"}],"title":"12.3. The \u2018image\u2019 element"}],"url":"#TermImageRenderingRectangle"},
 "TermInclusionCriteria": {"dfnID":"TermInclusionCriteria","dfnText":"inclusion criteria","external":false,"refSections":[{"refs":[{"id":"ref-for-TermInclusionCriteria"},{"id":"ref-for-TermInclusionCriteria\u2460"},{"id":"ref-for-TermInclusionCriteria\u2461"},{"id":"ref-for-TermInclusionCriteria\u2462"},{"id":"ref-for-TermInclusionCriteria\u2463"},{"id":"ref-for-TermInclusionCriteria\u2464"},{"id":"ref-for-TermInclusionCriteria\u2465"},{"id":"ref-for-TermInclusionCriteria\u2466"},{"id":"ref-for-TermInclusionCriteria\u2467"},{"id":"ref-for-TermInclusionCriteria\u2468"},{"id":"ref-for-TermInclusionCriteria\u2460\u24ea"},{"id":"ref-for-TermInclusionCriteria\u2460\u2460"},{"id":"ref-for-TermInclusionCriteria\u2460\u2461"}],"title":"5.12.4. Implicit and Allowed ARIA Semantics"}],"url":"#TermInclusionCriteria"},
 "TermInitialPoint": {"dfnID":"TermInitialPoint","dfnText":"initial point","external":false,"refSections":[{"refs":[{"id":"ref-for-TermInitialPoint"},{"id":"ref-for-TermInitialPoint\u2460"},{"id":"ref-for-TermInitialPoint\u2461"},{"id":"ref-for-TermInitialPoint\u2462"},{"id":"ref-for-TermInitialPoint\u2463"},{"id":"ref-for-TermInitialPoint\u2464"}],"title":"9.3.4. The \"closepath\" command"},{"refs":[{"id":"ref-for-TermInitialPoint\u2465"}],"title":"10.1. Introduction and definitions"}],"url":"#TermInitialPoint"},
-"TermInitialValue": {"dfnID":"TermInitialValue","dfnText":"initial value","external":false,"refSections":[{"refs":[{"id":"ref-for-TermInitialValue"},{"id":"ref-for-TermInitialValue\u2460"}],"title":"4.2. Attribute syntax"},{"refs":[{"id":"ref-for-TermInitialValue\u2461"}],"title":"4.3.5. Synchronizing reflected values"},{"refs":[{"id":"ref-for-TermInitialValue\u2462"},{"id":"ref-for-TermInitialValue\u2463"}],"title":"4.5.4. List interfaces"},{"refs":[{"id":"ref-for-TermInitialValue\u2464"}],"title":"4.6.1. Interface SVGAnimatedBoolean"},{"refs":[{"id":"ref-for-TermInitialValue\u2465"}],"title":"4.6.2. Interface SVGAnimatedEnumeration"},{"refs":[{"id":"ref-for-TermInitialValue\u2466"},{"id":"ref-for-TermInitialValue\u2467"}],"title":"4.6.3. Interface SVGAnimatedInteger"},{"refs":[{"id":"ref-for-TermInitialValue\u2468"},{"id":"ref-for-TermInitialValue\u2460\u24ea"}],"title":"4.6.4. Interface SVGAnimatedNumber"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2460"}],"title":"4.6.7. Interface SVGAnimatedString"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2461"}],"title":"4.6.8. Interface SVGAnimatedRect"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2462"}],"title":"5.12.2. Role attribute"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2463"}],"title":"7. Geometry Properties"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2464"}],"title":"8.7. The \u2018preserveAspectRatio\u2019 attribute"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2465"}],"title":"8.10. Bounding boxes"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2466"}],"title":"8.14.4. Interface SVGPreserveAspectRatio"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2467"}],"title":"11.2.1. Attributes"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2468"},{"id":"ref-for-TermInitialValue\u2461\u24ea"},{"id":"ref-for-TermInitialValue\u2461\u2460"},{"id":"ref-for-TermInitialValue\u2461\u2461"},{"id":"ref-for-TermInitialValue\u2461\u2462"},{"id":"ref-for-TermInitialValue\u2461\u2463"}],"title":"11.8.2. Attributes"},{"refs":[{"id":"ref-for-TermInitialValue\u2461\u2464"},{"id":"ref-for-TermInitialValue\u2461\u2465"},{"id":"ref-for-TermInitialValue\u2461\u2466"},{"id":"ref-for-TermInitialValue\u2461\u2467"},{"id":"ref-for-TermInitialValue\u2461\u2468"},{"id":"ref-for-TermInitialValue\u2462\u24ea"},{"id":"ref-for-TermInitialValue\u2462\u2460"},{"id":"ref-for-TermInitialValue\u2462\u2461"}],"title":"14.2.2.1. Attributes"},{"refs":[{"id":"ref-for-TermInitialValue\u2462\u2462"},{"id":"ref-for-TermInitialValue\u2462\u2463"},{"id":"ref-for-TermInitialValue\u2462\u2464"},{"id":"ref-for-TermInitialValue\u2462\u2465"},{"id":"ref-for-TermInitialValue\u2462\u2466"},{"id":"ref-for-TermInitialValue\u2462\u2467"},{"id":"ref-for-TermInitialValue\u2462\u2468"},{"id":"ref-for-TermInitialValue\u2463\u24ea"},{"id":"ref-for-TermInitialValue\u2463\u2460"},{"id":"ref-for-TermInitialValue\u2463\u2461"}],"title":"14.2.3.1. Attributes"},{"refs":[{"id":"ref-for-TermInitialValue\u2463\u2462"}],"title":"14.2.4.1. Attributes"},{"refs":[{"id":"ref-for-TermInitialValue\u2463\u2463"},{"id":"ref-for-TermInitialValue\u2463\u2464"},{"id":"ref-for-TermInitialValue\u2463\u2465"},{"id":"ref-for-TermInitialValue\u2463\u2466"},{"id":"ref-for-TermInitialValue\u2463\u2467"},{"id":"ref-for-TermInitialValue\u2463\u2468"},{"id":"ref-for-TermInitialValue\u2464\u24ea"},{"id":"ref-for-TermInitialValue\u2464\u2460"}],"title":"14.3.1. Attributes"},{"refs":[{"id":"ref-for-TermInitialValue\u2464\u2461"},{"id":"ref-for-TermInitialValue\u2464\u2462"}],"title":"Basic Data Types and Interfaces chapter"}],"url":"#TermInitialValue"},
+"TermInitialValue": {"dfnID":"TermInitialValue","dfnText":"initial value","external":false,"refSections":[{"refs":[{"id":"ref-for-TermInitialValue"},{"id":"ref-for-TermInitialValue\u2460"}],"title":"4.2. Attribute syntax"},{"refs":[{"id":"ref-for-TermInitialValue\u2461"}],"title":"4.3.5. Synchronizing reflected values"},{"refs":[{"id":"ref-for-TermInitialValue\u2462"}],"title":"4.3.7. Invalid values"},{"refs":[{"id":"ref-for-TermInitialValue\u2463"},{"id":"ref-for-TermInitialValue\u2464"}],"title":"4.5.4. List interfaces"},{"refs":[{"id":"ref-for-TermInitialValue\u2465"}],"title":"4.6.1. Interface SVGAnimatedBoolean"},{"refs":[{"id":"ref-for-TermInitialValue\u2466"}],"title":"4.6.2. Interface SVGAnimatedEnumeration"},{"refs":[{"id":"ref-for-TermInitialValue\u2467"},{"id":"ref-for-TermInitialValue\u2468"}],"title":"4.6.3. Interface SVGAnimatedInteger"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u24ea"},{"id":"ref-for-TermInitialValue\u2460\u2460"}],"title":"4.6.4. Interface SVGAnimatedNumber"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2461"}],"title":"4.6.7. Interface SVGAnimatedString"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2462"}],"title":"4.6.8. Interface SVGAnimatedRect"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2463"}],"title":"5.12.2. Role attribute"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2464"}],"title":"7. Geometry Properties"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2465"}],"title":"8.7. The \u2018preserveAspectRatio\u2019 attribute"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2466"}],"title":"8.10. Bounding boxes"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2467"}],"title":"8.14.4. Interface SVGPreserveAspectRatio"},{"refs":[{"id":"ref-for-TermInitialValue\u2460\u2468"}],"title":"11.2.1. Attributes"},{"refs":[{"id":"ref-for-TermInitialValue\u2461\u24ea"},{"id":"ref-for-TermInitialValue\u2461\u2460"},{"id":"ref-for-TermInitialValue\u2461\u2461"},{"id":"ref-for-TermInitialValue\u2461\u2462"},{"id":"ref-for-TermInitialValue\u2461\u2463"},{"id":"ref-for-TermInitialValue\u2461\u2464"}],"title":"11.8.2. Attributes"},{"refs":[{"id":"ref-for-TermInitialValue\u2461\u2465"},{"id":"ref-for-TermInitialValue\u2461\u2466"},{"id":"ref-for-TermInitialValue\u2461\u2467"},{"id":"ref-for-TermInitialValue\u2461\u2468"},{"id":"ref-for-TermInitialValue\u2462\u24ea"},{"id":"ref-for-TermInitialValue\u2462\u2460"},{"id":"ref-for-TermInitialValue\u2462\u2461"},{"id":"ref-for-TermInitialValue\u2462\u2462"}],"title":"14.2.2.1. Attributes"},{"refs":[{"id":"ref-for-TermInitialValue\u2462\u2463"},{"id":"ref-for-TermInitialValue\u2462\u2464"},{"id":"ref-for-TermInitialValue\u2462\u2465"},{"id":"ref-for-TermInitialValue\u2462\u2466"},{"id":"ref-for-TermInitialValue\u2462\u2467"},{"id":"ref-for-TermInitialValue\u2462\u2468"},{"id":"ref-for-TermInitialValue\u2463\u24ea"},{"id":"ref-for-TermInitialValue\u2463\u2460"},{"id":"ref-for-TermInitialValue\u2463\u2461"},{"id":"ref-for-TermInitialValue\u2463\u2462"}],"title":"14.2.3.1. Attributes"},{"refs":[{"id":"ref-for-TermInitialValue\u2463\u2463"}],"title":"14.2.4.1. Attributes"},{"refs":[{"id":"ref-for-TermInitialValue\u2463\u2464"},{"id":"ref-for-TermInitialValue\u2463\u2465"},{"id":"ref-for-TermInitialValue\u2463\u2466"},{"id":"ref-for-TermInitialValue\u2463\u2467"},{"id":"ref-for-TermInitialValue\u2463\u2468"},{"id":"ref-for-TermInitialValue\u2464\u24ea"},{"id":"ref-for-TermInitialValue\u2464\u2460"},{"id":"ref-for-TermInitialValue\u2464\u2461"}],"title":"14.3.1. Attributes"},{"refs":[{"id":"ref-for-TermInitialValue\u2464\u2462"},{"id":"ref-for-TermInitialValue\u2464\u2463"}],"title":"Basic Data Types and Interfaces chapter"}],"url":"#TermInitialValue"},
 "TermInitialViewport": {"dfnID":"TermInitialViewport","dfnText":"initial viewport","external":false,"refSections":[],"url":"#TermInitialViewport"},
 "TermInlineBaseDirection": {"dfnID":"TermInlineBaseDirection","dfnText":"inline-base direction","external":false,"refSections":[{"refs":[{"id":"ref-for-TermInlineBaseDirection"}],"title":"11.1.1. Definitions"},{"refs":[{"id":"ref-for-TermInlineBaseDirection\u2460"},{"id":"ref-for-TermInlineBaseDirection\u2461"}],"title":"11.1.3. Glyph metrics and layout"},{"refs":[{"id":"ref-for-TermInlineBaseDirection\u2462"}],"title":"11.2.1. Attributes"},{"refs":[{"id":"ref-for-TermInlineBaseDirection\u2463"},{"id":"ref-for-TermInlineBaseDirection\u2464"},{"id":"ref-for-TermInlineBaseDirection\u2465"},{"id":"ref-for-TermInlineBaseDirection\u2466"}],"title":"11.8.3. Text on a path layout rules"},{"refs":[{"id":"ref-for-TermInlineBaseDirection\u2467"}],"title":"11.10.2.3. The \u2018writing-mode\u2019 property"},{"refs":[{"id":"ref-for-TermInlineBaseDirection\u2468"},{"id":"ref-for-TermInlineBaseDirection\u2460\u24ea"},{"id":"ref-for-TermInlineBaseDirection\u2460\u2460"}],"title":"11.10.2.4. The \u2018direction\u2019 property"}],"url":"#TermInlineBaseDirection"},
 "TermInstanceRoot": {"dfnID":"TermInstanceRoot","dfnText":"instance root","external":false,"refSections":[{"refs":[{"id":"ref-for-TermInstanceRoot"},{"id":"ref-for-TermInstanceRoot\u2460"}],"title":"3.2.1. Definitions"},{"refs":[{"id":"ref-for-TermInstanceRoot\u2461"},{"id":"ref-for-TermInstanceRoot\u2462"}],"title":"5.5.1. The use-element shadow tree"},{"refs":[{"id":"ref-for-TermInstanceRoot\u2463"}],"title":"5.5.2. Layout of re-used graphics"}],"url":"#TermInstanceRoot"},
@@ -36742,7 +36759,7 @@ let dfnPanelData = {
 "TermStrokeShape": {"dfnID":"TermStrokeShape","dfnText":"stroke shape","external":false,"refSections":[{"refs":[{"id":"ref-for-TermStrokeShape"},{"id":"ref-for-TermStrokeShape\u2460"}],"title":"8.10. Bounding boxes"},{"refs":[{"id":"ref-for-TermStrokeShape\u2461"}],"title":"13.5.1. Specifying stroke paint: the \u2018stroke\u2019 property"},{"refs":[{"id":"ref-for-TermStrokeShape\u2462"}],"title":"13.5.7. Computing the shape of the stroke"}],"url":"#TermStrokeShape"},
 "TermStructuralElement": {"dfnID":"TermStructuralElement","dfnText":"structural element","external":false,"refSections":[{"refs":[{"id":"ref-for-TermStructuralElement"},{"id":"ref-for-TermStructuralElement\u2460"}],"title":"5.1.4. The \u2018svg\u2019 element"},{"refs":[{"id":"ref-for-TermStructuralElement\u2461"},{"id":"ref-for-TermStructuralElement\u2462"}],"title":"5.2.2. The \u2018g\u2019 element"},{"refs":[{"id":"ref-for-TermStructuralElement\u2463"},{"id":"ref-for-TermStructuralElement\u2464"}],"title":"5.3.2. The \u2018defs\u2019 element"},{"refs":[{"id":"ref-for-TermStructuralElement\u2465"},{"id":"ref-for-TermStructuralElement\u2466"}],"title":"5.4. The \u2018symbol\u2019 element"},{"refs":[{"id":"ref-for-TermStructuralElement\u2467"}],"title":"5.5. The \u2018use\u2019 element"},{"refs":[{"id":"ref-for-TermStructuralElement\u2468"}],"title":"13.7.1. The \u2018marker\u2019 element"},{"refs":[{"id":"ref-for-TermStructuralElement\u2460\u24ea"}],"title":"14.3. Patterns"}],"url":"#TermStructuralElement"},
 "TermStructurallyExternalElement": {"dfnID":"TermStructurallyExternalElement","dfnText":"structurally external element","external":false,"refSections":[{"refs":[{"id":"ref-for-TermStructurallyExternalElement"}],"title":"5.5. The \u2018use\u2019 element"},{"refs":[{"id":"ref-for-TermStructurallyExternalElement\u2460"}],"title":"12.3. The \u2018image\u2019 element"},{"refs":[{"id":"ref-for-TermStructurallyExternalElement\u2461"}],"title":"12.4. The \u2018foreignObject\u2019 element"},{"refs":[{"id":"ref-for-TermStructurallyExternalElement\u2462"},{"id":"ref-for-TermStructurallyExternalElement\u2463"},{"id":"ref-for-TermStructurallyExternalElement\u2464"}],"title":"15.2. Supported events"},{"refs":[{"id":"ref-for-TermStructurallyExternalElement\u2465"}],"title":"15.9. The \u2018script\u2019 element"},{"refs":[{"id":"ref-for-TermStructurallyExternalElement\u2466"}],"title":"16.1.7. Processing of URL references"},{"refs":[{"id":"ref-for-TermStructurallyExternalElement\u2467"}],"title":"Scripting and Interactivity chapter (separate chapters in SVG 1.1)"}],"url":"#TermStructurallyExternalElement"},
-"TermSynchronize": {"dfnID":"TermSynchronize","dfnText":"synchronized","external":false,"refSections":[],"url":"#TermSynchronize"},
+"TermSynchronize": {"dfnID":"TermSynchronize","dfnText":"synchronized","external":false,"refSections":[{"refs":[{"id":"ref-for-TermSynchronize"}],"title":"4.3.7. Invalid values"}],"url":"#TermSynchronize"},
 "TermSynchronizeList": {"dfnID":"TermSynchronizeList","dfnText":"synchronized","external":false,"refSections":[{"refs":[{"id":"ref-for-TermSynchronizeList"}],"title":"4.3.5. Synchronizing reflected values"},{"refs":[{"id":"ref-for-TermSynchronizeList\u2460"}],"title":"4.5.4. List interfaces"},{"refs":[{"id":"ref-for-TermSynchronizeList\u2461"}],"title":"Basic Data Types and Interfaces chapter"}],"url":"#TermSynchronizeList"},
 "TermTextChunk": {"dfnID":"TermTextChunk","dfnText":"text chunk","external":false,"refSections":[{"refs":[{"id":"ref-for-TermTextChunk"},{"id":"ref-for-TermTextChunk\u2460"},{"id":"ref-for-TermTextChunk\u2461"}],"title":"11.1.1. Definitions"},{"refs":[{"id":"ref-for-TermTextChunk\u2462"}],"title":"11.1.2. Fonts and glyphs"},{"refs":[{"id":"ref-for-TermTextChunk\u2463"}],"title":"11.1.3. Glyph metrics and layout"},{"refs":[{"id":"ref-for-TermTextChunk\u2464"},{"id":"ref-for-TermTextChunk\u2465"},{"id":"ref-for-TermTextChunk\u2466"},{"id":"ref-for-TermTextChunk\u2467"},{"id":"ref-for-TermTextChunk\u2468"}],"title":"11.10.1.1. Text alignment, the \u2018text-anchor\u2019 property"}],"url":"#TermTextChunk"},
 "TermTextContentBlockElement": {"dfnID":"TermTextContentBlockElement","dfnText":"text content block element","external":false,"refSections":[{"refs":[{"id":"ref-for-TermTextContentBlockElement"},{"id":"ref-for-TermTextContentBlockElement\u2460"},{"id":"ref-for-TermTextContentBlockElement\u2461"}],"title":"11.5. Text layout \u2013 Algorithm"},{"refs":[{"id":"ref-for-TermTextContentBlockElement\u2462"},{"id":"ref-for-TermTextContentBlockElement\u2463"}],"title":"11.10.2.10. The \u2018text-overflow\u2019 property"}],"url":"#TermTextContentBlockElement"},
@@ -36873,7 +36890,7 @@ let dfnPanelData = {
 "__svg__SVGLength__newValueSpecifiedUnits": {"dfnID":"__svg__SVGLength__newValueSpecifiedUnits","dfnText":"newValueSpecifiedUnits","external":false,"refSections":[{"refs":[{"id":"ref-for-__svg__SVGLength__newValueSpecifiedUnits"}],"title":"4.5.2. Interface SVGLength"}],"url":"#__svg__SVGLength__newValueSpecifiedUnits"},
 "__svg__SVGLength__unitType": {"dfnID":"__svg__SVGLength__unitType","dfnText":"unitType","external":false,"refSections":[{"refs":[{"id":"ref-for-__svg__SVGLength__unitType"},{"id":"ref-for-__svg__SVGLength__unitType\u2460"}],"title":"4.5.2. Interface SVGLength"}],"url":"#__svg__SVGLength__unitType"},
 "__svg__SVGLength__value": {"dfnID":"__svg__SVGLength__value","dfnText":"value","external":false,"refSections":[{"refs":[{"id":"ref-for-__svg__SVGLength__value"},{"id":"ref-for-__svg__SVGLength__value\u2460"},{"id":"ref-for-__svg__SVGLength__value\u2461"},{"id":"ref-for-__svg__SVGLength__value\u2462"},{"id":"ref-for-__svg__SVGLength__value\u2463"}],"title":"4.5.2. Interface SVGLength"}],"url":"#__svg__SVGLength__value"},
-"__svg__SVGLength__valueAsString": {"dfnID":"__svg__SVGLength__valueAsString","dfnText":"valueAsString","external":false,"refSections":[{"refs":[{"id":"ref-for-__svg__SVGLength__valueAsString"},{"id":"ref-for-__svg__SVGLength__valueAsString\u2460"}],"title":"4.3.5. Synchronizing reflected values"},{"refs":[{"id":"ref-for-__svg__SVGLength__valueAsString\u2461"},{"id":"ref-for-__svg__SVGLength__valueAsString\u2462"},{"id":"ref-for-__svg__SVGLength__valueAsString\u2463"},{"id":"ref-for-__svg__SVGLength__valueAsString\u2464"}],"title":"4.5.2. Interface SVGLength"}],"url":"#__svg__SVGLength__valueAsString"},
+"__svg__SVGLength__valueAsString": {"dfnID":"__svg__SVGLength__valueAsString","dfnText":"valueAsString","external":false,"refSections":[{"refs":[{"id":"ref-for-__svg__SVGLength__valueAsString"},{"id":"ref-for-__svg__SVGLength__valueAsString\u2460"}],"title":"4.3.5. Synchronizing reflected values"},{"refs":[{"id":"ref-for-__svg__SVGLength__valueAsString\u2461"}],"title":"4.3.7. Invalid values"},{"refs":[{"id":"ref-for-__svg__SVGLength__valueAsString\u2462"},{"id":"ref-for-__svg__SVGLength__valueAsString\u2463"},{"id":"ref-for-__svg__SVGLength__valueAsString\u2464"},{"id":"ref-for-__svg__SVGLength__valueAsString\u2465"}],"title":"4.5.2. Interface SVGLength"}],"url":"#__svg__SVGLength__valueAsString"},
 "__svg__SVGLength__valueInSpecifiedUnits": {"dfnID":"__svg__SVGLength__valueInSpecifiedUnits","dfnText":"valueInSpecifiedUnits","external":false,"refSections":[{"refs":[{"id":"ref-for-__svg__SVGLength__valueInSpecifiedUnits"},{"id":"ref-for-__svg__SVGLength__valueInSpecifiedUnits\u2460"},{"id":"ref-for-__svg__SVGLength__valueInSpecifiedUnits\u2461"},{"id":"ref-for-__svg__SVGLength__valueInSpecifiedUnits\u2462"},{"id":"ref-for-__svg__SVGLength__valueInSpecifiedUnits\u2463"}],"title":"4.5.2. Interface SVGLength"}],"url":"#__svg__SVGLength__valueInSpecifiedUnits"},
 "__svg__SVGLineElement__x1": {"dfnID":"__svg__SVGLineElement__x1","dfnText":"x1","external":false,"refSections":[{"refs":[{"id":"ref-for-__svg__SVGLineElement__x1"}],"title":"10.8.4. Interface SVGLineElement"}],"url":"#__svg__SVGLineElement__x1"},
 "__svg__SVGLineElement__x2": {"dfnID":"__svg__SVGLineElement__x2","dfnText":"x2","external":false,"refSections":[{"refs":[{"id":"ref-for-__svg__SVGLineElement__x2"}],"title":"10.8.4. Interface SVGLineElement"}],"url":"#__svg__SVGLineElement__x2"},
@@ -37831,6 +37848,7 @@ let refsData = {
 "#TermStrokeShape": {"displayText":"stroke shape","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"stroke shape","type":"dfn","url":"#TermStrokeShape"},
 "#TermStructuralElement": {"displayText":"structural element","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"structural element","type":"dfn","url":"#TermStructuralElement"},
 "#TermStructurallyExternalElement": {"displayText":"structurally external element","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"structurally external element","type":"dfn","url":"#TermStructurallyExternalElement"},
+"#TermSynchronize": {"displayText":"synchronized","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"synchronized","type":"dfn","url":"#TermSynchronize"},
 "#TermSynchronizeList": {"displayText":"synchronized (termsynchronizelist)","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"synchronized (termsynchronizelist)","type":"dfn","url":"#TermSynchronizeList"},
 "#TermTextChunk": {"displayText":"text chunk","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"text chunk","type":"dfn","url":"#TermTextChunk"},
 "#TermTextContentBlockElement": {"displayText":"text content block element","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"text content block element","type":"dfn","url":"#TermTextContentBlockElement"},
