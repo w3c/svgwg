@@ -1174,8 +1174,15 @@ are run:</p>
   <a href="https://webidl.spec.whatwg.org/#dfn-throw">throw</a> a <a href="https://webidl.spec.whatwg.org/#nomodificationallowederror">NoModificationAllowedError</a>.</li>
   <li>Let <var>value</var> be the value being assigned to
   {{SVGLength/value}}.</li>
-  <li>Set the {{SVGLength}}'s [=value (LengthValue)|value=] to a
+  <li>Let <var>unit type</var> be the value that would be returned from the
+  {{SVGLength/unitType}} member.</li>
+  <li>If <var>unit type</var> is {{SVGLength/SVG_LENGTHTYPE_UNKNOWN}}, then set the {{SVGLength}}'s
+  [=value (LengthValue)|value=] to a
   <a href="https://www.w3.org/TR/css3-values/#numbers">&lt;number></a> whose value is <var>value</var>.</li>
+  <li>Otherwise, set the {{SVGLength}}'s [=value (LengthValue)|value=] to what
+  {{SVGLength/convertToSpecifiedUnits()}} would set it to when called with <var>unit type</var>,
+  if the value returned from the {{SVGLength/value}} member were <var>value</var>.
+  The unit type does not change.</li>
   <li>If the {{SVGLength}}
   <a href="#LengthMode">reflects the base value</a> of a [=reflect|reflected=] attribute,
   <a href="#LengthMode">reflects a presentation attribute</a>, or
@@ -1183,6 +1190,15 @@ are run:</p>
   then [=reserialized|reserialize=] the reflected attribute.
   </li>
 </ol>
+
+<p class="note">Setting {{SVGLength/value}} changes the number and keeps the unit,
+as in SVG 1.1. After <code>rect.x.baseVal.valueAsString = "1in"</code> and
+<code>rect.x.baseVal.value = 5</code>, {{SVGLength/unitType}} is still {{SVGLength/SVG_LENGTHTYPE_IN}},
+{{SVGLength/valueInSpecifiedUnits}} is 5 / 96 (about 0.0520833),
+and the content attribute is reserialized as <span class="attr-value">0.0520833in</span>.
+For a length in <span class="prop-value">em</span>, <span class="prop-value">ex</span>
+or <span class="prop-value">%</span> the result depends on the font size or the viewport size of the
+<a href="#LengthAssociatedElement">associated element</a>.</p>
 
 <p>The <dfn id="__svg__SVGLength__valueInSpecifiedUnits" data-dfn-type="attribute" data-dfn-for="SVGLength" data-lt="valueInSpecifiedUnits" oldids="types-__svg__SVGLength__valueInSpecifiedUnits">valueInSpecifiedUnits</dfn> IDL attribute represents
 the numeric factor of the {{SVGLength}}'s [=value (LengthValue)|value=].
