@@ -6,8 +6,8 @@
   <title>Changes from SVG 1.1 — SVG 2</title>
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version 49e9fdd4f, updated Tue Oct 13 14:27:53 2026 -0700" name="generator">
-  <meta content="7d2a72609cbf3cc6d8478ffb25ee5ed87a30ace0" name="revision">
+  <meta content="Bikeshed version e0b165ae4, updated Mon Nov 2 15:16:49 2026 -0800" name="generator">
+  <meta content="5521f1e24096b7c8860fef5a95d2c321fa252bea" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>
@@ -366,14 +366,17 @@ figure.table figcaption:not(.no-marker)::before {
     height: auto;
     max-height: 500px;
     overflow: auto;
+    margin: 0;
     padding: 0.5em 0.75em;
     font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
     background: var(--dfnpanel-bg);
     color: var(--dfnpanel-text);
     border: outset 0.2em;
     white-space: normal; /* in case it's moved into a pre */
+    inset: auto;
+    position-area: bottom span-right;
+    position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
 }
-.dfn-panel:not(.on) { display: none; }
 .dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
 .dfn-panel > b { display: block; }
 .dfn-panel a { color: var(--dfnpanel-text); }
@@ -393,6 +396,9 @@ figure.table figcaption:not(.no-marker)::before {
 .dfn-panel.activated {
     display: inline-block;
     position: fixed;
+    position-area: none;
+    top: auto;
+    right: auto;
     left: 8px;
     bottom: 2em;
     margin: 0 auto;
@@ -449,7 +455,8 @@ figure.table figcaption:not(.no-marker)::before {
     opacity: 1;
 }
 
-.dfn-paneled[role="button"] { cursor: help; }
+.dfn-paneled { cursor: help; }
+.dfn-paneled > .dfn-panelbutton { all: unset; }
 
 .highlighted {
     animation: target-fade 3s;
@@ -1102,7 +1109,7 @@ have been made.</p>
    </ul>
    <div class="changed-since-cr1">
     <ul>
-     <li>Corrected incorrect interface name for definition of <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/svgwg/svg2-draft/struct.html#InterfaceSVGUseElementShadowRoot" id="ref-for-InterfaceSVGUseElementShadowRoot">SVGUseElementShadowRoot</a></code>.
+     <li>Corrected incorrect interface name for definition of <code class="idl"><u class="link-error" data-lt="SVGUseElementShadowRoot" title="LINK ERROR: No &apos;idl&apos; refs found for &apos;SVGUseElementShadowRoot&apos;.">SVGUseElementShadowRoot</u></code>.
     <a href="https://github.com/w3c/svgwg/issues/290">Issue discussion</a>
     <a href="https://github.com/w3c/svgwg/pull/296">Edits</a>
     </ul>
@@ -1461,6 +1468,16 @@ have been made.</p>
     <li>Added the <a class="css property" data-link-type="property" href="painting.html#PaintOrderProperty" id="ref-for-PaintOrderProperty⑨">paint-order</a> property.
     <li>Moved the <span class="property">color-interpolation-filters</span> property
   to the Filter Effects specification.
+    <li>Removed <a href="render.html#PaintersModel">compositing and blending</a>
+  from the list of operations that <a class="css property" data-link-type="property" href="painting.html#ColorInterpolationProperty" id="ref-for-ColorInterpolationProperty⑨">color-interpolation</a> affects, and
+  defined the values of the property by reference to the
+  <a href="https://drafts.csswg.org/css-color-4/#interpolation-color-space">interpolation
+  color space</a> definitions of CSS Color 4.
+  [<a href="refs.html#ref-css-color-4">css-color-4</a>]
+    <li>Added <a href="https://drafts.csswg.org/css-color-4/#color-interpolation-method">&lt;color-interpolation-method></a> to the values of
+  <a class="css property" data-link-type="property" href="painting.html#ColorInterpolationProperty" id="ref-for-ColorInterpolationProperty①⓪">color-interpolation</a>, so that an author can ask for any of the
+  interpolation color spaces of CSS Color 4 and not only the two sRGB ones.
+  [<a href="refs.html#ref-css-color-4">css-color-4</a>]
     <li>Added the <span class="prop-value">context-fill</span> and <span class="prop-value">context-stroke</span>
   paint values.
     <li>Allowed <a href="painting.html#SpecifyingPaint">&lt;paint></a> values and marker properties to take the
@@ -1528,6 +1545,10 @@ have been made.</p>
     <li>Added the solidcolor element and its two properties solid-color
     and solid-opacity, ported over from SVG Tiny 1.2. (Renamed 'solidColor' to
   'solidcolor'.)
+    <li>Said that gradient stop interpolation happens in the interpolation color
+  space given by <a class="css property" data-link-type="property" href="painting.html#ColorInterpolationProperty" id="ref-for-ColorInterpolationProperty①①">color-interpolation</a>, which is now defined by
+  reference to CSS Color 4.
+  [<a href="refs.html#ref-css-color-4">css-color-4</a>]
     <li>Added an <span class="attr-name">‘<a data-link-type="element-attr" href="pservers.html#RadialGradientElementFRAttribute">fr</a>’</span> attribute to the <span class="element-name">‘<code><a data-link-type="element" href="pservers.html#elementdef-radialGradient" id="ref-for-elementdef-radialGradient①①⑥">radialGradient</a></code>’</span> element,
   which allows specifying the radius of the focal circle.
     <li>Added a section for mesh gradients, defining the mesh, meshrow
@@ -2091,16 +2112,6 @@ let dfnPanelData = {
 
 document.addEventListener("DOMContentLoaded", ()=>{
     genAllDfnPanels();
-
-    document.body.addEventListener("click", (e) => {
-        // If not handled already, just hide all dfn panels.
-        hideAllDfnPanels();
-    });
-});
-
-window.addEventListener("resize", () => {
-    // Pin any visible dfn panel
-    queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(el=>positionDfnPanel(el));
 });
 
 function genAllDfnPanels() {
@@ -2112,16 +2123,17 @@ function genAllDfnPanels() {
             continue;
         }
         dfn.panelData = panelData;
-        insertDfnPopupAction(dfn);
+        genDfnPanel(dfn, panelData);
     }
 }
 
 function genDfnPanel(dfn, { dfnID, url, dfnText, refSections, external }) {
-    const dfnPanel = mk.aside({
-        class: "dfn-panel on",
+    const dfnPanel = mk.dialog({
+        class: "dfn-panel",
         id: `infopanel-for-${dfnID}`,
+        popover: "hint",
         "data-for": dfnID,
-        "aria-labelled-by":`infopaneltitle-for-${dfnID}`,
+        "aria-labelledby": `infopaneltitle-for-${dfnID}`,
         },
         mk.span({id:`infopaneltitle-for-${dfnID}`, style:"display:none"},
             `Info about the '${dfnText}' ${external?"external":""} reference.`),
@@ -2153,106 +2165,34 @@ function genDfnPanel(dfn, { dfnID, url, dfnText, refSections, external }) {
         event.stopPropagation();
         refocusOnTarget(event);
     });
-    dfnPanel.addEventListener('keydown', (event) => {
-        if(event.keyCode == 27) { // Escape key
-            hideDfnPanel({dfnPanel});
-            event.stopPropagation();
-            event.preventDefault();
+
+    dfnPanel.addEventListener('toggle', event=>{
+        if(event.newState == "closed") {
+            unpinDfnPanel(dfnPanel);
         }
     });
 
     dfnPanel.dfn = dfn;
     dfn.dfnPanel = dfnPanel;
+    dfn.after(dfnPanel);
+    const button = mk.button(
+        {
+            class:"dfn-panelbutton",
+            "popovertarget":dfnPanel.id
+        },
+        ...dfn.childNodes
+    );
+    dfn.append(button);
     return dfnPanel;
-}
-
-
-
-function hideAllDfnPanels() {
-    // Delete the currently-active dfn panel.
-    queryAll(".dfn-panel").forEach(dfnPanel=>hideDfnPanel({dfnPanel}));
-}
-
-function showDfnPanel(dfn) {
-    hideAllDfnPanels(); // Only display one at a time.
-
-    dfn.setAttribute("aria-expanded", "true");
-
-    const dfnPanel = genDfnPanel(dfn, dfn.panelData);
-
-    // Give the dfn a unique tabindex, and then
-    // give all the tabbable panel bits successive indexes.
-    let tabIndex = 100;
-    dfn.tabIndex = tabIndex++;
-    const tabbable = dfnPanel.querySelectorAll(":is(a, button)");
-    for (const el of tabbable) {
-        el.tabIndex = tabIndex++;
-    }
-
-    append(document.body, dfnPanel);
-    positionDfnPanel(dfnPanel);
-}
-
-function positionDfnPanel(dfnPanel) {
-    const dfn = dfnPanel.dfn;
-    const dfnPos = getBounds(dfn);
-    dfnPanel.style.top = dfnPos.bottom + "px";
-    dfnPanel.style.left = dfnPos.left + "px";
-
-    const panelPos = dfnPanel.getBoundingClientRect();
-    const panelMargin = 8;
-    const maxRight = document.body.parentNode.clientWidth - panelMargin;
-    if (panelPos.right > maxRight) {
-        const overflowAmount = panelPos.right - maxRight;
-        const newLeft = Math.max(panelMargin, dfnPos.left - overflowAmount);
-        dfnPanel.style.left = newLeft + "px";
-    }
 }
 
 function pinDfnPanel(dfnPanel) {
     // Switch it to "activated" state, which pins it.
     dfnPanel.classList.add("activated");
-    dfnPanel.style.position = "fixed";
-    dfnPanel.style.left = null;
-    dfnPanel.style.top = null;
 }
 
-function hideDfnPanel({dfn, dfnPanel}) {
-    if(!dfnPanel) dfnPanel = dfn.dfnPanel;
-    if(!dfn) dfn = dfnPanel.dfn;
-    dfn.dfnPanel = undefined;
-    dfnPanel.dfn = undefined;
-    dfn.setAttribute("aria-expanded", "false");
-    dfn.tabIndex = undefined;
-    dfnPanel.remove()
-}
-
-function toggleDfnPanel(dfn) {
-    if(dfn.dfnPanel) {
-        hideDfnPanel(dfn);
-    } else {
-        showDfnPanel(dfn);
-    }
-}
-
-function insertDfnPopupAction(dfn) {
-    dfn.setAttribute('role', 'button');
-    dfn.setAttribute('aria-expanded', 'false')
-    dfn.tabIndex = 0;
-    dfn.classList.add('has-dfn-panel');
-    dfn.addEventListener('click', (event) => {
-        toggleDfnPanel(dfn);
-        event.stopPropagation();
-    });
-    dfn.addEventListener('keypress', (event) => {
-        const kc = event.keyCode;
-        // 32->Space, 13->Enter
-        if(kc == 32 || kc == 13) {
-            toggleDfnPanel(dfn);
-            event.stopPropagation();
-            event.preventDefault();
-        }
-    });
+function unpinDfnPanel(dfnPanel) {
+    dfnPanel.classList.remove("activated");
 }
 
 function refocusOnTarget(event) {
@@ -2262,21 +2202,6 @@ function refocusOnTarget(event) {
         // This is needed after browser scrolls to the destination.
         target.focus();
     });
-}
-
-// TODO: shared util
-// Returns the root-level absolute position {left and top} of element.
-function getBounds(el, relativeTo=document.body) {
-    const relativeRect = relativeTo.getBoundingClientRect();
-    const elRect = el.getBoundingClientRect();
-    const top = elRect.top - relativeRect.top;
-    const left = elRect.left - relativeRect.left;
-    return {
-        top,
-        left,
-        bottom: top + elRect.height,
-        right: left + elRect.width,
-    }
 }
 
 function scrollToTargetAndHighlight(event) {
@@ -2480,6 +2405,7 @@ let refsData = {
 "linking.html#AElementPingAttribute": {"displayText":"ping","export":true,"for_":["a"],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"ping","type":"element-attr","url":"linking.html#AElementPingAttribute"},
 "linking.html#AElementReferrerpolicyAttribute": {"displayText":"referrerpolicy","export":true,"for_":["a"],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"referrerpolicy","type":"element-attr","url":"linking.html#AElementReferrerpolicyAttribute"},
 "linking.html#AElementTargetAttribute": {"displayText":"target","export":true,"for_":["a"],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"target","type":"element-attr","url":"linking.html#AElementTargetAttribute"},
+"painting.html#ColorInterpolationProperty": {"displayText":"color-interpolation","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"color-interpolation","type":"property","url":"painting.html#ColorInterpolationProperty"},
 "paths.html#DProperty": {"displayText":"d","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"d","type":"property","url":"paths.html#DProperty"},
 "painting.html#FillProperty": {"displayText":"fill","export":true,"for_":[],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"fill","type":"property","url":"painting.html#FillProperty"},
 "struct.html#IDAttribute": {"displayText":"id","export":true,"for_":["core-attributes"],"level":"","normative":true,"shortname":"svg2","spec":"svg2","status":"local","text":"id","type":"element-attr","url":"struct.html#IDAttribute"},
@@ -2595,7 +2521,6 @@ let refsData = {
 "https://drafts.csswg.org/geometry-1/#domrect": {"displayText":"SVGRect","export":true,"for_":[],"level":"1","normative":true,"shortname":"geometry","spec":"geometry-1","status":"anchor-block","text":"SVGRect","type":"interface","url":"https://drafts.csswg.org/geometry-1/#domrect"},
 "https://html.spec.whatwg.org/multipage/dom.html#htmlorsvgelement": {"displayText":"HTMLOrSVGOrMathMLElement","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"HTMLOrSVGOrMathMLElement","type":"interface","url":"https://html.spec.whatwg.org/multipage/dom.html#htmlorsvgelement"},
 "https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers": {"displayText":"GlobalEventHandlers","export":true,"for_":[],"level":"1","normative":true,"shortname":"html","spec":"html","status":"current","text":"GlobalEventHandlers","type":"interface","url":"https://html.spec.whatwg.org/multipage/webappapis.html#globaleventhandlers"},
-"https://w3c.github.io/svgwg/svg2-draft/struct.html#InterfaceSVGUseElementShadowRoot": {"displayText":"SVGUseElementShadowRoot","export":true,"for_":[],"level":"2","normative":true,"shortname":"svg","spec":"svg2","status":"current","text":"SVGUseElementShadowRoot","type":"interface","url":"https://w3c.github.io/svgwg/svg2-draft/struct.html#InterfaceSVGUseElementShadowRoot"},
 "https://www.w3.org/TR/cssom-1/#the-linkstyle-interface": {"displayText":"LinkStyle","export":true,"for_":[],"level":"1","normative":true,"shortname":"cssom","spec":"cssom-1","status":"anchor-block","text":"LinkStyle","type":"interface","url":"https://www.w3.org/TR/cssom-1/#the-linkstyle-interface"},
 };
 
