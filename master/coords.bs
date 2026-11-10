@@ -1361,11 +1361,88 @@ provided by David Vest.</p>
 <p>When an <span class="element-name">‘<{svg}>’</span> element is the [=outermost svg element=] of an SVG document
 that is processed as an image
 (see <a href="conform.html#image-document-mode">Processing modes for SVG sub-resource documents</a>),
-has no <span class="attr-name">‘<a href="#ViewBoxAttribute" data-link-type="element-attr">viewBox</a>’</span> attribute,
-and has a <span class="prop-name">width</span> and a <span class="prop-name">height</span> specified,
-a viewBox is synthesized from them:
-its <var>min-x</var> and <var>min-y</var> are zero,
-and its <var>width</var> and <var>height</var> are the specified width and height.</p>
+the user agent runs the following steps, where <var>element</var> is that
+<span class="element-name">‘<{svg}>’</span> element and <var>image width</var> and <var>image height</var>
+are the width and height of the image's
+<a href="https://drafts.csswg.org/css-images-3/#concrete-object-size">concrete object size</a>:</p>
+
+<ol class="algorithm">
+  <li>If <var>element</var> has a
+  <span class="attr-name">‘<a href="#ViewBoxAttribute" data-link-type="element-attr">viewBox</a>’</span>
+  attribute, then return: no viewBox is synthesized.</li>
+  <li>Let <var>w</var> and <var>h</var> be the computed values of the
+  <a href="geometry.html#Sizing" class="property">width</a> and
+  <a href="geometry.html#Sizing" class="property">height</a> properties of <var>element</var>.
+  <p class="note">A missing or negative <span class="attr-name">‘width’</span> or
+  <span class="attr-name">‘height’</span> attribute gives <span class="prop-value">auto</span>
+  (see <a href="geometry.html#geometry-negative-values">the handling of negative values</a>).</p></li>
+  <li>If <var>w</var> or <var>h</var> is zero (<span class="prop-value">0</span> or
+  <span class="prop-value">0%</span>), then return: no viewBox is synthesized.</li>
+  <li>Let <var>vw</var> be:
+    <ul>
+      <li><var>w</var>, if <var>w</var> is a length;</li>
+      <li><var>w</var> multiplied by <var>image width</var>, if <var>w</var> is a percentage;</li>
+      <li><var>image width</var>, if <var>w</var> is <span class="prop-value">auto</span>.</li>
+    </ul>
+  </li>
+  <li>Let <var>vh</var> be determined the same way from <var>h</var> and <var>image height</var>.</li>
+  <li>Use a viewBox of (0, 0, <var>vw</var>, <var>vh</var>) for <var>element</var>.</li>
+  <li>If <var>element</var> has no
+  <span class="attr-name">‘<a href="#PreserveAspectRatioAttribute" data-link-type="element-attr">preserveAspectRatio</a>’</span>
+  attribute, then use it as if <span class="attr-name">‘preserveAspectRatio’</span> were
+  <span class="attr-value">none</span>, so each axis is scaled on its own.</li>
+</ol>
+
+<div class="example">
+<p>Each SVG document below has no viewBox and the same content, a circle,
+and is used as an image of 120 by 80. The gray frame shows the image.</p>
+
+<pre>
+&lt;img src="image.svg" width="120" height="80">
+</pre>
+
+<table>
+  <caption>Synthesized viewBox for three image.svg files</caption>
+  <tr>
+    <th>image.svg</th>
+    <th>Synthesized viewBox</th>
+    <th>Rendering</th>
+  </tr>
+  <tr>
+    <td><pre>
+&lt;svg xmlns="http://www.w3.org/2000/svg"
+     width="60">
+  &lt;circle cx="30" cy="20" r="15"
+          fill="#c3e6cb"/>
+&lt;/svg></pre></td>
+    <td><code>0 0 60 80</code>: the height is <span class="prop-value">auto</span>, so it
+    is the image height. The content is scaled by 2 horizontally and by 1 vertically,
+    and the circle is stretched.</td>
+    <td><img alt="A light green ellipse twice as wide as it is high, in the top half of the frame" src="images/coords/SynthesizedViewBox-width-only.svg" width="120" height="80"></td>
+  </tr>
+  <tr>
+    <td><pre>
+&lt;svg xmlns="http://www.w3.org/2000/svg"
+     width="50%" height="50%">
+  &lt;circle cx="30" cy="20" r="15"
+          fill="#c3e6cb"/>
+&lt;/svg></pre></td>
+    <td><code>0 0 60 40</code>: half of the image width and height. The content is
+    scaled by 2 on both axes.</td>
+    <td><img alt="A light green circle of radius 30 in the middle of the frame" src="images/coords/SynthesizedViewBox-percentages.svg" width="120" height="80"></td>
+  </tr>
+  <tr>
+    <td><pre>
+&lt;svg xmlns="http://www.w3.org/2000/svg"
+     width="60" height="0">
+  &lt;circle cx="30" cy="20" r="15"
+          fill="#c3e6cb"/>
+&lt;/svg></pre></td>
+    <td>None: the height is zero. The content is not scaled.</td>
+    <td><img alt="A small light green circle of radius 15 near the top left of the frame" src="images/coords/SynthesizedViewBox-zero.svg" width="120" height="80"></td>
+  </tr>
+</table>
+</div>
 
 <h3 id="VectorEffects" oldids="coords-VectorEffects">Vector effects</h3>
 <div class="annotation svg2-requirement">
