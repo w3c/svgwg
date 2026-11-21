@@ -971,8 +971,8 @@ locate resources of MIME media type "image/svg+xml".</p>
 <pre class="grammar">
 SVGFragmentIdentifier ::= BareName *( "&amp;" <a href="https://www.w3.org/TR/media-frags/#timesegment">timesegment</a> ) |
                           SVGViewSpec *( "&amp;" <a href="https://www.w3.org/TR/media-frags/#timesegment">timesegment</a> ) |
-                          <a href="https://www.w3.org/TR/media-frags/#spacesegment">spacesegment</a> *( "&amp;" timesegment ) |
-                          <a href="https://www.w3.org/TR/media-frags/#timesegment">timesegment</a> *( "&amp;" spacesegment )
+                          *( timesegment "&amp;" ) <a href="https://www.w3.org/TR/media-frags/#spacesegment">spacesegment</a> *( "&amp;" timesegment ) |
+                          <a href="https://www.w3.org/TR/media-frags/#timesegment">timesegment</a> *( "&amp;" timesegment )
 
 BareName ::= XML_Name
 SVGViewSpec ::= 'svgView(' SVGViewAttributes ')'
@@ -1033,6 +1033,13 @@ and semicolons are used to separate attributes (e.g.,
 <p>The four types of <em>SVGViewAttribute</em> may occur
 in any order, but each type may only occur at most one time in a correctly
 formed <em>SVGViewSpec</em>.</p>
+
+<p>A time segment may be combined with any other part of an SVG fragment identifier,
+and with other time segments. A space segment may not be combined with a
+<em>BareName</em>, an <em>SVGViewSpec</em> or another space segment.
+If the fragment identifier is not a correctly formed SVG fragment identifier
+as defined by the grammar above, the user agent must ignore the fragment
+and render the document with its authored attributes.</p>
 
 <p>When a source document performs a link into an SVG document, for example
 via an <a href="https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-a-element">HTML anchor element</a>
