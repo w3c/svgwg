@@ -8,54 +8,69 @@ describe the position and dimension of the <a href="#TermGraphicsElement">graphi
 <span class="element-name">‘<{svg}>’</span> element.</p>
 
 <p id="geometry-negative-values"><span id="geometry-geometry-negative-values" class="bs-old-id"></span>The 'cx', 'cy', 'x' and 'y'
-properties accept negative values. The 'r', 'rx', 'ry', <a href="#Sizing" class="property">width</a>
-and <a href="#Sizing" class="property">height</a> properties do not: a negative <a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> is
-[=invalid value|invalid=]. When an invalid negative value is specified for one of these properties,
-whether through a presentation attribute or a CSS declaration, it must be treated as if the
-property's [=initial value=] had been specified: <span class="prop-value">auto</span> for
-'rx', 'ry', <a href="#Sizing" class="property">width</a> and <a href="#Sizing" class="property">height</a>, and <span class="prop-value">0</span>
-for 'r'. A negative value therefore never puts the element into an error state; the
-<span class="xxx">@@ unknown term "used value"</span> is determined by the property's normal resolution rules. The following table
-summarizes this handling.</p>
+properties accept negative values. The 'r', 'rx' and 'ry' properties do not: their value
+definitions limit lengths and percentages to the range [0,∞]. Neither do <a href="#Sizing" class="property">width</a> and
+<a href="#Sizing" class="property">height</a>, whose value definitions in
+<a href="https://drafts.csswg.org/css-sizing-3/#preferred-size-properties">CSS Sizing</a> do the same.</p>
+
+<div class="note">
+<p>A negative value for these properties is handled by the general rules, as for any CSS property:</p>
+<ul>
+  <li>In a CSS declaration, a negative length or percentage, such as <code>-5px</code>, is
+  <a href="https://drafts.csswg.org/css-values-4/#numeric-ranges">out of range</a>: the declaration
+  is invalid and ignored, and the property gets its value from the rest of the cascade (another
+  declaration, the presentation attribute, or the initial value).</li>
+  <li>In a [=presentation attributes|presentation attribute=], it fails to parse, so the
+  attribute is treated as if the property's [=initial value=] had been specified (see
+  <a href="#syntax">Attribute syntax</a>): <span class="prop-value">auto</span> for 'rx', 'ry',
+  <a href="#Sizing" class="property">width</a> and <a href="#Sizing" class="property">height</a>, and <span class="prop-value">0</span> for 'r'.</li>
+  <li>A negative result of a math function, such as <code>calc(-5px)</code>, is not invalid, in a
+  presentation attribute or in a CSS declaration: like any
+  <a href="https://drafts.csswg.org/css-values-4/#numeric-function">numeric function</a>, it is
+  clamped to the range, so it is used as <span class="prop-value">0</span>. For 'rx' and 'ry'
+  that is 0, not <span class="prop-value">auto</span>.</li>
+</ul>
+<p>The following table summarizes the result for a negative length or percentage in a
+presentation attribute.</p>
 
 <table class="data">
-  <caption>Handling of negative values for the geometry properties</caption>
+  <caption>Negative values of the geometry properties in presentation attributes</caption>
   <thead>
     <tr>
       <th>Property</th>
       <th>Value</th>
       <th>Initial</th>
       <th>Negative allowed?</th>
-      <th>Negative computes to</th>
-      <th>Used value of a negative value</th>
+      <th>A negative value is treated as</th>
+      <th>Result</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>'cx', 'cy'</td>
+      <td>'cx', 'cy', 'x', 'y'</td>
       <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a></td>
       <td>0</td>
       <td>yes</td>
-      <td>the specified value (kept as-is)</td>
-      <td>the negative value (translates the shape)</td>
+      <td>the negative value</td>
+      <td>the element is moved</td>
     </tr>
     <tr>
       <td>'r'</td>
-      <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a></td>
+      <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage [0,∞]></a></td>
       <td>0</td>
       <td>no</td>
       <td><span class="prop-value">0</span></td>
-      <td>0; a <span class="element-name">‘<{circle}>’</span> with 'r' = 0 is not rendered</td>
+      <td>the <span class="element-name">‘<{circle}>’</span> is not rendered</td>
     </tr>
     <tr>
       <td>'rx', 'ry'</td>
-      <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | auto</td>
+      <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage [0,∞]></a> | auto</td>
       <td>auto</td>
       <td>no</td>
       <td><span class="prop-value">auto</span></td>
-      <td>resolved as <span class="prop-value">auto</span>: equal to the used value of the
-          other radius, or 0 if the other radius is also <span class="prop-value">auto</span>
-          or negative. An <span class="element-name">‘<{ellipse}>’</span> with a resolved radius of 0 is not rendered.</td>
+      <td>the radius is the used value of the other radius, or 0 if the other radius is also
+          <span class="prop-value">auto</span>. An <span class="element-name">‘<{ellipse}>’</span>
+          with a radius of 0 is not rendered.</td>
     </tr>
     <tr>
       <td><a href="#Sizing" class="property">width</a>, <a href="#Sizing" class="property">height</a></td>
@@ -63,13 +78,14 @@ summarizes this handling.</p>
       <td>auto</td>
       <td>no</td>
       <td><span class="prop-value">auto</span></td>
-      <td>resolved as <span class="prop-value">auto</span> per the
-          <a href="#Sizing">sizing table</a>: <span class="prop-value">100%</span> for the
-          outermost <span class="element-name">‘<{svg}>’</span>, the intrinsic size for <span class="element-name">‘<{image}>’</span>, and
-          <span class="prop-value">0</span> for all other elements.</td>
+      <td>as in the <a href="#Sizing">sizing table</a>: <span class="prop-value">100%</span> for the
+          outermost <span class="element-name">‘<{svg}>’</span>, the intrinsic size for
+          <span class="element-name">‘<{image}>’</span>, and <span class="prop-value">0</span>
+          for all other elements.</td>
     </tr>
   </tbody>
 </table>
+</div>
 
 <h3 id="CX" oldids="geometry-CX">Horizontal center coordinate: The
 ‘<span class="property">cx</span>’ property</h3>
@@ -179,7 +195,7 @@ center of the shape and does not disable rendering (see the
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a></td>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage [0,∞]></a></td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -215,9 +231,9 @@ center of the shape and does not disable rendering (see the
 <p>The 'r' property describes the radius of the <span class="element-name">‘<{circle}>’</span>
 element.</p>
 
-<p>A negative value for 'r' is [=invalid value|invalid=]; it is treated as if
-<span class="prop-value">0</span> had been specified (see the
-<a href="#geometry-negative-values">handling of negative values</a>), so the
+<p class="note">A negative length or percentage for 'r' is [=invalid value|invalid=] (see the
+<a href="#geometry-negative-values">handling of negative values</a>). In a presentation
+attribute it is treated as <span class="prop-value">0</span>, so the
 <span class="element-name">‘<{circle}>’</span> is not rendered.</p>
 
 <h3 id="RX" oldids="geometry-RX">Horizontal radius: The ‘<span class="property">rx</span>’
@@ -229,7 +245,7 @@ property</h3>
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | auto</td>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage [0,∞]></a> | auto</td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -276,11 +292,10 @@ element.
     matching the behavior for <span class="element-name">‘<{rect}>’</span> elements when 'rx' was not specified.
 </p>
 
-<p>A negative value for 'rx' is [=invalid value|invalid=]; it is treated as if
-<span class="prop-value">auto</span> had been specified (see the
-<a href="#geometry-negative-values">handling of negative values</a>). It therefore resolves
-like <span class="prop-value">auto</span>: to the used value of 'ry', or to 0 if
-'ry' is also <span class="prop-value">auto</span> or negative.</p>
+<p class="note">A negative length or percentage for 'rx' is [=invalid value|invalid=] (see the
+<a href="#geometry-negative-values">handling of negative values</a>). In a presentation
+attribute it is treated as <span class="prop-value">auto</span>, so the radius is the used
+value of 'ry', or 0 if 'ry' is also <span class="prop-value">auto</span>.</p>
 
 <h3 id="RY" oldids="geometry-RY">Vertical radius: The ‘<span class="property">ry</span>’
 property</h3>
@@ -291,7 +306,7 @@ property</h3>
   </tr>
   <tr>
     <th>Value:</th>
-    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage></a> | auto</td>
+    <td><a href="https://www.w3.org/TR/css-values/#typedef-length-percentage">&lt;length-percentage [0,∞]></a> | auto</td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -338,11 +353,10 @@ property</h3>
     matching the behavior for <span class="element-name">‘<{rect}>’</span> elements when 'ry' was not specified.
 </p>
 
-<p>A negative value for 'ry' is [=invalid value|invalid=]; it is treated as if
-<span class="prop-value">auto</span> had been specified (see the
-<a href="#geometry-negative-values">handling of negative values</a>). It therefore resolves
-like <span class="prop-value">auto</span>: to the used value of 'rx', or to 0 if
-'rx' is also <span class="prop-value">auto</span> or negative.</p>
+<p class="note">A negative length or percentage for 'ry' is [=invalid value|invalid=] (see the
+<a href="#geometry-negative-values">handling of negative values</a>). In a presentation
+attribute it is treated as <span class="prop-value">auto</span>, so the radius is the used
+value of 'rx', or 0 if 'rx' is also <span class="prop-value">auto</span>.</p>
 
 <h3 id="X" oldids="geometry-X">Horizontal coordinate: The ‘<span class="property">x</span>’ property</h3>
 <table class="svg-propdef def">
