@@ -157,7 +157,7 @@ describe the syntax of a given path command:</p>
   </tr>
   <tr>
     <th>Value:</th>
-    <td>none | <a href="https://www.w3.org/TR/css3-values/#strings">&lt;string></a></td>
+    <td>none | <a href="https://www.w3.org/TR/css-shapes-1/#funcdef-basic-shape-path">path</a>(<a href="https://www.w3.org/TR/css3-values/#strings">&lt;string></a>)</td>
   </tr>
   <tr>
     <th>Initial:</th>
@@ -203,17 +203,49 @@ defines one <dfn id="TermPathSegment" data-dfn-type="dfn" data-noexport="" oldid
 <p>All coordinates and lengths specified within path data must be treated as
 being in [=user units=] in the current user coordinate system.</p>
 
-<p>The <span class="prop-value"><a href="https://www.w3.org/TR/css3-values/#strings">&lt;string></a></span> value
-specifies a shape using a path data string.  The contents of the
-<a href="https://www.w3.org/TR/css3-values/#strings">&lt;string></a> value must match the <a href="#PathDataBNF">svg-path</a>
-<a href="#syntax">EBNF grammar</a> defined below, and errors within the string are handled according to
-the rules in the <a href="#PathDataErrorHandling">Path Data Error Handling</a> section.
-If the path data string contains no valid commands, then the behavior
-is the same as the <span class="prop-value">none</span> value.</p>
+<p>A <dfn id="TermPathDataString" data-dfn-type="dfn" data-export="">path data string</dfn>
+is a string of path data commands, as described in the following sections,
+interpreted according to the <a href="#PathDataBNF">svg-path</a> EBNF grammar
+defined below. A [=path data string=] may contain no commands at all,
+for example when it is empty.</p>
+
+<p>The <span class="prop-value"><a href="https://www.w3.org/TR/css-shapes-1/#funcdef-basic-shape-path">path()</a></span> value
+specifies a shape using the [=path data string=] given as its <a href="https://www.w3.org/TR/css3-values/#strings">&lt;string></a> argument.
+In the 'd' property, <a href="https://www.w3.org/TR/css-shapes-1/#funcdef-basic-shape-path">path()</a> takes only that <a href="https://www.w3.org/TR/css3-values/#strings">&lt;string></a> argument:
+the optional <a href="#FillRuleProperty">&lt;\'fill-rule'></a>
+argument that [<a href="#ref-css-shapes-1">css-shapes-1</a>] allows in
+<a href="https://www.w3.org/TR/css-shapes-1/#funcdef-basic-shape-path">path()</a> is not permitted, and the fill rule of the path is
+determined by the 'fill-rule' property. If the <a href="https://www.w3.org/TR/css3-values/#strings">&lt;string></a> argument does not match the
+<a href="#PathDataBNF">svg-path</a> grammar, the
+<a href="https://www.w3.org/TR/css-shapes-1/#funcdef-basic-shape-path">path()</a> function, and therefore the declaration, is invalid;
+the <a href="#PathDataErrorHandling">Path Data Error Handling</a> rules do not apply
+to the property. Unlike <a href="https://www.w3.org/TR/css-shapes-1/#funcdef-basic-shape-path">path()</a> in [<a href="#ref-css-shapes-1">css-shapes-1</a>],
+a [=path data string=] that contains no commands, such as an empty string, is valid
+in the 'd' property, and, as for the <span class="prop-value">none</span> value,
+the path is not rendered.</p>
+
+<p>When 'd' is specified as a [=presentation attribute=], the attribute value is
+<em>not</em> parsed as a sequence of CSS tokens, and is not written using the
+<a href="https://www.w3.org/TR/css-shapes-1/#funcdef-basic-shape-path">path()</a> functional notation. Instead, the entire attribute
+value is used as a [=path data string=], as if it were the <a href="https://www.w3.org/TR/css3-values/#strings">&lt;string></a> argument of a
+<a href="https://www.w3.org/TR/css-shapes-1/#funcdef-basic-shape-path">path()</a> function. Errors within the string are handled according to
+the rules in the <a href="#PathDataErrorHandling">Path Data Error Handling</a> section:
+the presentation attribute is not invalid when the string contains an error, and the
+path is rendered up to the first error. If the [=path data string=] contains no
+valid commands (for example, if the attribute value is empty), then the behavior
+is the same as the <span class="prop-value">none</span> value.
+See also <a href="#presentation-attribute-css-value">Attribute syntax</a>.</p>
+
+<p class="example">The presentation attribute
+<code>&lt;path d="M 10 10 L 90 90"/></code> and the style declaration
+<code>path { d: path("M 10 10 L 90 90") }</code> specify the same path.
+The declaration <code>d: M 10 10 L 90 90</code> is invalid in a style sheet.
+The attribute value <code>path("M 10 10 L 90 90")</code> is an error at its
+first character, so it contains no valid commands and the path is not rendered.</p>
 
 <p id="PathDataAnimation">
   For animation, two 'd' property values can only be
-  interpolated smoothly when the path data strings contain have the
+  interpolated smoothly when the [=path data strings=] have the
   same structure, (i.e. exactly the same number and types of path data
   commands which are in the same order). If an animation is specified
   and the lists of path data commands do not have the same structure,
@@ -254,6 +286,11 @@ is the same as the <span class="prop-value">none</span> value.</p>
   change) with path data string as value" at
   <a href="https://www.w3.org/2016/04/21-svg-minutes.html">London
   Editor's Meeting</a>.
+  Resolved that "the d property will support the shape function path()
+  only for now. The d attribute will only support SVG path string and no
+  functional notation" at the
+  <a href="https://github.com/w3c/svgwg/issues/320#issuecomment-414462645">20 August 2018
+  SVG WG teleconference</a>.
 </p>
 
 </div>
@@ -888,9 +925,9 @@ disallowing the relaxed grammar for numbers. However, user agents may continue
 to accept numbers with trailing decimal points when parsing is unambiguous.
 Authors and authoring tools must not use the disallowed number format.</p>
 
-<p>The EBNF allows the path data string in the
-'d' property to be empty. An empty path data string
-disables rendering of the path.
+<p>The EBNF allows a [=path data string=] to be empty.
+An empty [=path data string=], whether in the 'd' property or in the
+'d' presentation attribute, disables rendering of the path.
 Rendering is also disabled when the 'd' property
 has the value <span class="prop-value">none</span>.</p>
 
