@@ -1371,6 +1371,7 @@ single command within a path data specification.
 <pre class="idl">dictionary <b>SVGPathSegment</b> {
   required DOMString type;
   required sequence&lt;unrestricted float> values;
+  unsigned long index;
 };</pre>
 
 <dl class="interface">
@@ -1384,6 +1385,15 @@ single command within a path data specification.
       <dt id="__svg__SVGPathSegment__values" class="attribute"><b>values</b><span class="idl-type-parenthetical"> (sequence&lt;unrestricted float>)</span></dt>
       <dd class="attribute">
         <div>The values corresponding to the path segment.</div>
+      </dd>
+      <dt id="__svg__SVGPathSegment__index" class="attribute"><b>index</b><span class="idl-type-parenthetical"> (unsigned long)</span></dt>
+      <dd class="attribute">
+        <div>The zero-based position of the path segment in the sequence returned by
+        <a href="#__svg__SVGPathData__getPathData">getPathData</a> without
+        normalization. Only <a href="#__svg__SVGPathElement__getPathSegmentAtLength">getPathSegmentAtLength</a>
+        sets this member. <a href="#__svg__SVGPathData__getPathData">getPathData</a>
+        does not set it, and <a href="#__svg__SVGPathData__setPathData">setPathData</a>
+        ignores it.</div>
       </dd>
     </dl>
   </dd>
@@ -1540,6 +1550,10 @@ not the CSS resolved value or any animated value.
         [0, <em>total-length-of-path</em>] before passing it to the distance-along-a-path algorithm.
         If the clamped distance falls exactly on the boundary between two segments,
         the earlier segment shall be returned.
+        The <a href="#__svg__SVGPathSegment__index">index</a> member of the
+        returned segment is set to the position of that segment in the sequence
+        returned by <a href="#__svg__SVGPathData__getPathData">getPathData</a>
+        without normalization.
           <p>If no valid path data exists, returns null.</p>
           <p class="note">Because <var>distance</var> is a
           <a href="https://webidl.spec.whatwg.org/#idl-float">float</a>, not an
